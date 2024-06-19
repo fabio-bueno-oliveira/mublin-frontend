@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=MuseoModerno:wght@300;500;600&display=swap');
+
+body {
+    margin: 0;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+button,
+select {
+    text-transform: none;
+}
