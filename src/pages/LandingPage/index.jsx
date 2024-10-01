@@ -1,11 +1,17 @@
 import React from 'react';
 import Header from '../../components/public/header';
-// import { HeaderMegaMenu } from '../../components/public/header2';
 import { Footer } from '../../components/public/footer';
 import { Container, Text, Title, Button, Group, Grid, Image, Flex } from '@mantine/core';
 import AstronautImage1 from '../../assets/img/astronaut-musician-1.png';
 import AstronautImage2 from '../../assets/img/astronaut-musician-2.png';
-// import { ThumbsUp } from "lucide-react";
+import { 
+  IconAutomaticGearbox, 
+  IconCalendarSmile, 
+  IconPlaylist,
+  IconUserSearch,
+  IconLayoutDashboard,
+  IconUsersGroup
+} from '@tabler/icons-react';
 import s from './HeroTitle.module.css';
 
 function LandingPage () {
@@ -61,9 +67,17 @@ function LandingPage () {
         <div className={s.wrapperFeatured}>
           <Container size={'lg'} className={s.innerSmall}>
             <Title size="h1" mb={'lg'}>Organize suas gigs!</Title>
-            <Text className={s.description} fz="xl" lh="sm" mb={'xs'}>
+            <Text className={s.description} fz="xl" lh="sm" mb={'xl'}>
               O Mublin foi desenvolvido para a organização de projetos musicais, facilitando as necessidades de músicos e produtores. O Mublin permite que os usuários organizem cadastrem seus projetos em um único lugar e acompanhem as atualizações como anotações, cronogramas, oportunidades de gigs. Além disso, você pode acompanhar as datas de gravações, ensaios e apresentações.
             </Text>
+            <Grid justify="space-between" align="center" gutter={{ base: 5, xs: 'md', md: 'xl', xl: 50 }}>
+              <Grid.Col className={s.gridFeaturedItem} span={4}><IconAutomaticGearbox /> Gerenciar projetos</Grid.Col>
+              <Grid.Col className={s.gridFeaturedItem} span={4}><IconCalendarSmile /> Compartilhe informações e datas</Grid.Col>
+              <Grid.Col className={s.gridFeaturedItem} span={4}><IconPlaylist /> Confira a playlist dos eventos</Grid.Col>
+              <Grid.Col className={s.gridFeaturedItem} span={4}><IconUserSearch /> Encontre músicos disponíveis</Grid.Col>
+              <Grid.Col className={s.gridFeaturedItem} span={4}><IconLayoutDashboard /> Cadastre seus equipamentos</Grid.Col>
+              <Grid.Col className={s.gridFeaturedItem} span={4}><IconUsersGroup /> Encontre projetos em busca de músicos</Grid.Col>
+            </Grid>
           </Container>
         </div>
         <div className={s.wrapperFeaturedMini}>

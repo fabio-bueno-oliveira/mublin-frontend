@@ -94,3 +94,13 @@
     flex: 1;
   }
 }
+
+.gridFeaturedItem {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.gridFeaturedItem svg {
+  margin-right: 12px;
+}
