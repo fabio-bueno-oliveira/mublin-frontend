@@ -31,7 +31,14 @@ export function Footer() {
         <Group className={classes.links}>{items}</Group>
 
         <Group gap="xs" justify="flex-end" wrap="nowrap">
-          <ActionIcon size="lg" variant="default" radius="xl" href="https://instagram.com/mublin">
+          <ActionIcon 
+            size="lg"
+            variant="default"
+            radius="xl"
+            component="a"
+            target="blank"
+            href="https://instagram.com/mublin"
+          >
             <IconBrandInstagram style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
           </ActionIcon>
         </Group>
