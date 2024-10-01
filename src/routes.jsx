@@ -9,9 +9,9 @@ import {
   } from 'react-router-dom';
 // import { useSelector } from 'react-redux'
 // import NotFound from './pages/NotFound'
-import Landing from './pages/LandingPage'
-import Login from './pages/Login'
-// import Home from './pages/Home'
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/Login';
+import Home from './pages/Home';
 
 function AppRoutes () {
 
@@ -31,7 +31,9 @@ function AppRoutes () {
     return(
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/home" element={<Home />} />
                 {/* <Route element={<RequireAuth />}>
                     <Route path="/home" element={<Home />} />
                 </Route>
