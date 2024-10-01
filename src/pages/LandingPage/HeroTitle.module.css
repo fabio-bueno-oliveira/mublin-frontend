@@ -21,10 +21,10 @@
 .inner {
   position: relative;
   padding-top: rem(60px);
-  padding-bottom: rem(120px);
+  padding-bottom: 70px;
 
   @media (max-width: 768px) {
-    padding-bottom: rem(80px);
+    padding-bottom: 20px;
     padding-top: rem(30px);
   }
 }
@@ -35,9 +35,13 @@
   padding-bottom: rem(30px);
 
   @media (max-width: 768px) {
-    padding-bottom: rem(80px);
-    padding-top: rem(30px);
+    padding-bottom: 40px;
+    padding-top: 40px;
   }
+}
+
+.textWithImage {
+  display: flex;
 }
 
 .featuredContainer {
@@ -45,9 +49,9 @@
 }
 
 .title {
-  /* font-family:
+  font-family:
     Greycliff CF,
-    var(--mantine-font-family); */
+    var(--mantine-font-family);
   font-size: rem(62px);
   font-weight: 900;
   line-height: 1.1;

@@ -61,28 +61,23 @@ function LandingPage () {
         <div className={s.wrapperFeatured}>
           <Container size={'lg'} className={s.innerSmall}>
             <Title size="h1" mb={'lg'}>Organize suas gigs!</Title>
-            <Text className={s.description} fz="xl" lh="sm" mb={'lg'}>
+            <Text className={s.description} fz="xl" lh="sm" mb={'xs'}>
               O Mublin foi desenvolvido para a organização de projetos musicais, facilitando as necessidades de músicos e produtores. O Mublin permite que os usuários organizem cadastrem seus projetos em um único lugar e acompanhem as atualizações como anotações, cronogramas, oportunidades de gigs. Além disso, você pode acompanhar as datas de gravações, ensaios e apresentações.
             </Text>
           </Container>
         </div>
         <div className={s.wrapperFeaturedMini}>
           <Container size={'lg'} className={s.innerSmall}>
-            <Grid>
-              <Grid.Col span={3}>
-                <Image
-                  h={160}
-                  src={AstronautImage2}
-                  fit={'contain'}
-                  align={'left'}
-                />
-              </Grid.Col>
-              <Grid.Col span={9}>
-                <Text className={s.description} fz="xl" lh="sm" pt={'lg'}>
-                  Com uma interface simples e visual, o Mublin também integra ferramentas de armazenamento em nuvem e sincronização automática, facilitando o acesso aos arquivos em qualquer dispositivo e promovendo uma colaboração eficiente entre os membros do projeto.
-                </Text>
-              </Grid.Col>
-            </Grid>
+            <div className={s.textWithImage}>
+              <Image
+                h={160}
+                src={AstronautImage2}
+                fit={'contain'}
+              />
+              <Text className={s.description} fz="xl" lh="sm" pt={'lg'}>
+                Com uma interface simples e visual, o Mublin também integra ferramentas de armazenamento em nuvem e sincronização automática, facilitando o acesso aos arquivos em qualquer dispositivo e promovendo uma colaboração eficiente entre os membros do projeto.
+              </Text>
+            </div>
           </Container>
         </div>
         <Footer />

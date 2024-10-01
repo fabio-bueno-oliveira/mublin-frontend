@@ -1,15 +1,15 @@
 .headerContainer {
   top: 0;
   z-index: 2;
-  background-color: #FFF;
-  /* width: 100%; */
-  /* max-width: 100%!important;
-  margin-top: 0!important; */
+  /* background-color: #FFF; */
 }
 
 .mulinLogo {
-  font-family: "Raleway"!important;
+  text-decoration: none;
+}
+
+.mulinLogo h1 {
   font-optical-sizing: auto;
   font-weight: 800!important;
-  color: rgb(53, 53, 53);
+  /* color: rgb(0, 0, 0); */
 }

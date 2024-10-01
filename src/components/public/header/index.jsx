@@ -20,7 +20,9 @@ function Header () {
         align="center"
         direction="row"
       >
-        <Title className={s.mulinLogo}>Mublin</Title>
+        <Link to={{ pathname: '/' }} className={s.mulinLogo}>
+          <Title>Mublin</Title>
+        </Link>
           <div>
             <Button size="md" variant="transparent" color="violet">Cadastro</Button>
             <Link to={{ pathname: '/login' }}>
