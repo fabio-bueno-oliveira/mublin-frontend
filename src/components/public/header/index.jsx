@@ -24,7 +24,11 @@ function Header () {
           <Title>Mublin</Title>
         </Link>
           <div>
-            <Button size="md" variant="transparent" color="violet">Cadastro</Button>
+            <Link to={{ pathname: '/signup' }}>
+              <Button size="md" variant="transparent" color="violet">
+                Cadastro
+              </Button>
+            </Link>
             <Link to={{ pathname: '/login' }}>
               <Button
                 size="md"

@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { emailCheckInfos } from '../../store/actions/emailCheck';
 import { usernameCheckInfos } from '../../store/actions/usernameCheck';
 import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/public/header';
 import { Footer } from '../../components/public/footer';
 import { 
-  Container, Button, Group, Badge,
-  Title, Space, PasswordInput, TextInput
+  Alert, Container, Button, Group, Badge,
+  Title, Text, Space, PasswordInput, TextInput
 } from '@mantine/core';
 import { useForm, isEmail, isNotEmpty, hasLength } from '@mantine/form';
 import { useDebouncedCallback } from '@mantine/hooks';
-import { IconAt, IconCheck, IconX } from '@tabler/icons-react';
+import { IconInfoCircle, IconCheck, IconX } from '@tabler/icons-react';
 
 function SignupPage () {
 
@@ -20,6 +20,7 @@ function SignupPage () {
     document.title = 'Mublin - Cadastrar';
 
     let dispatch = useDispatch();
+    let navigate = useNavigate();
 
     const emailAvailability = useSelector(state => state.emailCheck);
     const usernameAvailability = useSelector(state => state.usernameCheck);
@@ -33,8 +34,7 @@ function SignupPage () {
         email: '',
         username: '',
         password: '',
-        confirmPassword: '',
-        // termsOfService: false,
+        confirmPassword: ''
       },
 
       validate: {
@@ -55,7 +55,7 @@ function SignupPage () {
     });
 
     const checkEmail = useDebouncedCallback(async (string) => {
-      if (!form?.errors?.email) {
+      if (string.length && !form?.errors?.email) {
         dispatch(emailCheckInfos.checkEmailByString(string));
       }
     }, 900);
@@ -63,75 +63,79 @@ function SignupPage () {
     const [usernameChoosen, setUsernameChoosen] = useState('')
     const checkUsername = useDebouncedCallback(async (string) => {
       if (string.length) {
-          dispatch(usernameCheckInfos.checkUsernameByString(string));
+        dispatch(usernameCheckInfos.checkUsernameByString(string));
       }
     }, 900);
 
     const handleSubmit = (values) => {
-      console.log(66, values);
-      if (emailAvailability.available === false) {
-        return <Notification icon={<IconX />} color="red" title="Bummer!">
-          Something went wrong
-        </Notification>
+      if (emailAvailability.available === false || usernameAvailability.available === false) {
+        return false;
       }
-      if (usernameAvailability.available === false) {
-        return <Notification icon={<IconX />} color="red" title="Bummer!">
-          Something went wrong
-        </Notification>
-      }
-      // fetch('https://mublin.herokuapp.com/user/create/', {
-      //     method: 'post',
-      //     headers: {
-      //       'Accept': 'application/json, text/plain, */*',
-      //       'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify({name: values.name, lastname: values.lastname, email: values.email, username: values.username, password: values.password})
-      // })
-      // .then(res => res.json())
-      // // .then(res => localStorage.setItem('user', JSON.stringify(res)))
-      // .then(
-      //     history.push("/?info=firstAccess")
-      // )
+      fetch('https://mublin.herokuapp.com/user/create/', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({name: values.name, lastname: values.lastname, email: values.email, username: values.username, password: values.password})
+      })
+      .then(res => res.json())
+      // .then(res => localStorage.setItem('user', JSON.stringify(res)))
+      .then(
+        navigate("/login?info=firstAccess")
+      )
     }
 
     return (
       <>
         <Header />
-        <Container size={'xs'} pt='xl'>
-          <Title order={1}>Crie sua conta grátis</Title>
-          <Title order={3}>Preencha os dados abaixo</Title>
-          <Space h="md" />
+        <Container size={420} my={40}>
+          <Title ta="center" order={1}>
+            Crie sua conta grátis
+          </Title>
+          <Text c="dimmed" size="md" ta="center" mt={5}>
+            Preencha os dados abaixo
+          </Text>
+          <Space h="lg" />
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <TextInput
-              size="md"
-              withAsterisk
+              size="lg"
+              mb="sm"
               label="Nome"
               placeholder="Informe seu nome"
               key={form.key('name')}
               {...form.getInputProps('name')}
             />
             <TextInput
-              size="md"
-              withAsterisk
+              size="lg"
+              mb="sm"
               label="Sobrenome"
               placeholder="Informe seu sobrenome"
               key={form.key('lastname')}
               {...form.getInputProps('lastname')}
             />
             <TextInput
-              size="md"
-              withAsterisk
+              size="lg"
               label="Email"
               placeholder="seu@email.com"
+              disabled={emailAvailability.requesting}
               key={form.key('email')}
               {...form.getInputProps('email')}
               onKeyUp={e => {
                 checkEmail(e.target.value)
               }}
             />
+            {(emailAvailability.available === false) && 
+              <Badge 
+                leftSection={<IconX style={{ width: '12px', height: '12px' }} />} 
+                color="red"
+                size='sm'
+                mt='xs'
+              >Email já cadastrado!</Badge>
+            }
             <TextInput
-              size="md"
-              withAsterisk
+              size="lg"
+              mt="md"
               label="Username"
               description={
                 usernameAvailability.requesting ? 
@@ -145,7 +149,6 @@ function SignupPage () {
                 checkUsername(e.target.value)
                 setUsernameChoosen(e.target.value)
               }}
-              // error={(usernameChoosen && usernameAvailability.available === false)}
             />
             {(usernameChoosen && usernameAvailability.available) && 
               <Badge 
@@ -163,35 +166,44 @@ function SignupPage () {
                 mt='xs'
               >Usuário indisponível!</Badge>
             }
-            {/* <TextInput
-              size="md"
-              type='password'
-              withAsterisk
-              label="Senha"
-              key={form.key('password')}
-              {...form.getInputProps('password')}
-            /> */}
             <PasswordInput
-              size="md"
+              size="lg"
+              mt="md"
+              mb="sm"
               label="Senha"
               key={form.key('password')}
               {...form.getInputProps('password')}
             />
             <PasswordInput
-              size="md"
+              size="lg"
+              mb="sm"
               label="Confirme a senha"
               key={form.key('confirmPassword')}
               {...form.getInputProps('confirmPassword')}
             />
-            {/* <Checkbox
-              mt="md"
-              label="I agree to sell my privacy"
-              key={form.key('termsOfService')}
-              {...form.getInputProps('termsOfService', { type: 'checkbox' })}
-            /> */}
+            {(usernameChoosen && usernameAvailability.available === false) && 
+              <Alert 
+                variant="light" 
+                color="red" 
+                title="Username já existente!" 
+                icon={<IconInfoCircle />}
+              >
+                O username que você informou já está em uso. Por gentileza escolha outro nome de usuário.
+              </Alert>
+            }
+            {(emailAvailability.available === false) && 
+              <Alert 
+                variant="light" 
+                color="red" 
+                title="Email já cadastrado!" 
+                icon={<IconInfoCircle />}
+              >
+                O email que você informou já está cadastrado.
+              </Alert>
+            }
             <Group justify="flex-end" mt="md">
               <Button 
-                size='md'
+                size="lg"
                 color='violet'
                 type="submit"
                 // disabled={(usernameChoosen && usernameAvailability.available && emailAvailability.available) ? false : true}
