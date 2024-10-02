@@ -12,6 +12,7 @@ import {
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/Login';
 import Home from './pages/Home';
+import PublicProfilePage from './pages/Profile/Public';
 
 function AppRoutes () {
 
@@ -34,6 +35,8 @@ function AppRoutes () {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/home" element={<Home />} />
+                {/* <Route path="/profile/public" element={<PublicProfilePage />} /> */}
+                <Route exact path="/:username/public" element={<PublicProfilePage />} />
                 {/* <Route element={<RequireAuth />}>
                     <Route path="/home" element={<Home />} />
                 </Route>

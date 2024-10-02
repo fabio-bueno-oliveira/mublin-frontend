@@ -1,3 +1,9 @@
+.footerWrapper {
+  position: absolute;
+  bottom: 0;
+  width: -webkit-fill-available;
+}
+
 .footer {
   margin-top: 20px;
   border-top: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));

@@ -5,8 +5,8 @@ import { Container, Text, Title, Button, Group, Grid, Image, Flex } from '@manti
 import AstronautImage1 from '../../assets/img/astronaut-musician-1.png';
 import AstronautImage2 from '../../assets/img/astronaut-musician-2.png';
 import { 
-  IconAutomaticGearbox, 
-  IconCalendarSmile, 
+  IconAutomaticGearbox,
+  IconCalendarSmile,
   IconPlaylist,
   IconUserSearch,
   IconLayoutDashboard,

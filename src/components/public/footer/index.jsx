@@ -23,6 +23,7 @@ export function Footer() {
   ));
 
   return (
+    <div className={classes.footerWrapper}>
     <Container size={'lg'}>
     <div className={classes.footer}>
       <div className={classes.inner}>
@@ -45,5 +46,6 @@ export function Footer() {
       </div>
     </div>
     </Container>
+    </div>
   );
 }
