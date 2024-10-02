@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import Header from '../../../components/public/header';
 import { Footer } from '../../../components/public/footer';
 import { 
@@ -21,12 +22,12 @@ function PublicProfilePage () {
     let dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(profileInfos.getProfileInfo(username));
-        dispatch(profileInfos.getProfileProjects(username));
-        dispatch(profileInfos.getProfileRoles(username));
-        dispatch(profileInfos.getProfileFollowers(username));
-        dispatch(profileInfos.getProfileFollowing(username));
-        dispatch(profileInfos.getProfileAvailabilityItems(username));
+      dispatch(profileInfos.getProfileInfo(username));
+      dispatch(profileInfos.getProfileProjects(username));
+      dispatch(profileInfos.getProfileRoles(username));
+      dispatch(profileInfos.getProfileFollowers(username));
+      dispatch(profileInfos.getProfileFollowing(username));
+      dispatch(profileInfos.getProfileAvailabilityItems(username));
     }, [dispatch, username]);
 
     const profile = useSelector(state => state.profile);
@@ -55,17 +56,27 @@ function PublicProfilePage () {
                 align="flex-start"
                 direction="row"
                 pt="xl"
-                pb="md"
+                pb="sm"
               >
-                <Image
-                  h={140}
-                  w="auto"
-                  fit="contain"
-                  radius="lg"
-                  src={profile.pictureLarge}
-                  alt={`${profile.name} ${profile.lastname}`} 
-                  caption={profile.username}
-                />
+                {!profile.pictureLarge ? (
+                  <Image
+                    h={140}
+                    w={140}
+                    fit="contain"
+                    radius="lg"
+                    src={`https://placehold.co/140x140?text=${username}`}
+                  />
+                ) : (
+                  <Image
+                    h={140}
+                    w="auto"
+                    fit="contain"
+                    radius="lg"
+                    src={profile.pictureLarge}
+                    alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
+                    fallbackSrc="https://placehold.co/140x140?text=Placeholder"
+                  />
+                )}
                 <div>
                   <Text size="xl">{username}</Text>
                   <Group gap="xs">
@@ -96,8 +107,12 @@ function PublicProfilePage () {
                   </Indicator>
                 </div>
               </Flex>
-              {profile.bio && <Text>{profile.bio}</Text>}
-              <Space h="sm" />
+              {(profile.bio && profile.bio !== "null") && 
+                <>
+                  <Space h="sm" />
+                  <Text mb='sm'>{profile.bio}</Text>
+                </>
+              }
               <Text size="sm" c="dimmed">Instrumentos e habilidades:</Text>
               <Group gap="xs" mb='xl' mt='xs'>
                 {profile.roles.map((role, key) =>
@@ -106,21 +121,29 @@ function PublicProfilePage () {
                   </Badge>
                 )}
               </Group>
-              <Center h={100} mt='xl'>
+              <Space h="md" />
+              <Center h={100}>
                 <Box>
                   <Text align="center" fw={500} size="xl">{profile.name+' está no Mublin!'}</Text>
-                  <Text align="center">Faça login para visualizar o perfil completo</Text>
+                  <Text align="center">Faça login para visualizar o perfil completo ou entrar em contato</Text>
                 </Box>
               </Center>
               <Group justify="center">
-                <Button color="violet">Fazer login</Button>
+                <Link to={{ pathname: '/login' }}>
+                  <Button color="violet">Fazer login</Button>
+                </Link>
                 ou
-                <Button color="violet" variant="outline">Cadastrar</Button>
+                <Link to={{ pathname: '/signup' }}>
+                <Button 
+                  color="violet" 
+                  variant="outline"
+                >Cadastrar</Button>
+                </Link>
               </Group>
             </>
           }
 
-          {(!profile.requesting && !profile.id) && 
+          {(!profile.requesting && !profile.id && profile.requested) && 
             <Center h={100} mt='xl'>
               <Box>
                 <Title mt='xl'>Ops!</Title>

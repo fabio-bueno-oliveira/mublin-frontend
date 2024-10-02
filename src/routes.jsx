@@ -11,6 +11,7 @@ import {
 // import NotFound from './pages/NotFound'
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/Login';
+import SignupPage from './pages/Signup';
 import Home from './pages/Home';
 import PublicProfilePage from './pages/Profile/Public';
 
@@ -34,6 +35,7 @@ function AppRoutes () {
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
                 <Route path="/home" element={<Home />} />
                 {/* <Route path="/profile/public" element={<PublicProfilePage />} /> */}
                 <Route exact path="/:username/public" element={<PublicProfilePage />} />
