@@ -31,7 +31,7 @@ function Header () {
                 color="violet"
                 rightSection={<IconArrowRight size={14}/>}
               >
-                Login
+                Entrar
               </Button>
             </Link>
           </div>
