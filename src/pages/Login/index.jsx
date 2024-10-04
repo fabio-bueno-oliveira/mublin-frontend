@@ -101,7 +101,7 @@ function LoginPage () {
             color='violet'
             mt='xl'
           >
-            Entrar
+            {loggedIn ? "Acessando..." : "Entrar"}
           </Button>
         </form>
         <Text c="dimmed" size="sm" ta="center" mt={20}>

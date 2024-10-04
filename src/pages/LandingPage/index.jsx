@@ -66,13 +66,17 @@ function LandingPage () {
         <div className={s.wrapperFeatured}>
           <Container size={'lg'} className={s.innerSmall}>
             <Title size="h1" mb={'lg'}>Organize suas gigs!</Title>
+            <Text className={s.description} fz="lg" lh="sm" mb={'sm'}>
+              O Mublin foi desenvolvido para a organização de projetos musicais, facilitando as necessidades de músicos e produtores.
+            </Text>
             <Text className={s.description} fz="lg" lh="sm" mb={'xl'}>
-              O Mublin foi desenvolvido para a organização de projetos musicais, facilitando as necessidades de músicos e produtores. O Mublin permite que os usuários organizem cadastrem seus projetos em um único lugar e acompanhem as atualizações como anotações, cronogramas, oportunidades de gigs. Além disso, você pode acompanhar as datas de gravações, ensaios e apresentações.
+              Organize seus projetos em um único lugar e acompanha atualizações como anotações, cronogramas e oportunidades de gigs. Além disso, você pode acompanhar as datas de gravações, ensaios e apresentações.
             </Text>
             <Grid 
               justify="space-between" 
               align="center" 
               columns={12}
+              fz="sm"
             >
               <Grid.Col 
                 className={s.gridFeaturedItem} span="6"
