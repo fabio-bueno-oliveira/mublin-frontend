@@ -36,25 +36,15 @@ function LandingPage () {
                 <Text className={s.description} fz="xl" lh="sm">
                   O Mublin é a plataforma onde músicos, produtores e profissionais da música podem gerenciar todos os seus projetos, além de se conectar com outras pessoas do mercado musical
                 </Text>
-                <Group className={s.controls}>
-                  <Button
-                    size="lg"
-                    className={s.control}
-                    color="violet"
-                    rightSection={<IconArrowRight size={14}/>}
-                  >
-                    Começar
-                  </Button> 
-                  {/* <Button
-                    component="a"
-                    href="https://github.com/mantinedev/mantine"
-                    size="lg"
-                    variant="default"
-                    className={s.control}
-                  >
-                    Saber mais
-                  </Button> */}
-                </Group>
+                <Button
+                  size="lg"
+                  mt="xl"
+                  className={s.control}
+                  color="violet"
+                  rightSection={<IconArrowRight size={14}/>}
+                >
+                  Começar grátis
+                </Button>
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
                 <Image

@@ -37,7 +37,7 @@ function Header () {
                 size="md" 
                 color="violet"
               >
-                Cadastrar grátis
+                Cadastrar
               </Button>
             </Link>
           </div>
