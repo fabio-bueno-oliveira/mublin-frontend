@@ -56,7 +56,7 @@ function PublicProfilePage () {
                 justify="flex-start"
                 align="flex-start"
                 direction="row"
-                pt="xl"
+                pt="md"
                 pb="sm"
               >
                 {!profile.pictureLarge ? (
@@ -125,7 +125,6 @@ function PublicProfilePage () {
                   </>
                 )}
               </Group>
-              <Space h="md" />
               <Center h={100}>
                 <Box>
                   <Text align="center" fw={500} size="xl">{profile.name+' está no Mublin!'}</Text>
