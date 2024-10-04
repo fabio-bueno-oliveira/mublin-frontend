@@ -51,4 +51,4 @@ jobs:
           port: ${{ secrets.FTP_PORT }} # (optional) FTP port, defaults to 21
           path: dist # Folder to deploy Ex: apps/frontend/dist or dist
           into: public_html # Where to place the files in your ftp
-          cleanupExisting: true # (Optional), Remove already existing files inside FTP destination folder (`into` parameter)
+          cleanupExisting: false # (Optional), Remove already existing files inside FTP destination folder (`into` parameter)
