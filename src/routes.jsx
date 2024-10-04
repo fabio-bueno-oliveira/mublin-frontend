@@ -8,7 +8,7 @@ import {
   Outlet
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// import NotFound from './pages/NotFound'
+import NotFound from './pages/NotFound';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
@@ -39,7 +39,7 @@ function AppRoutes () {
           <Route element={<RequireAuth />}>
             <Route path="/home" element={<Home />} />
           </Route>
-          {/* <Route path="*" element={<NotFound />} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     )

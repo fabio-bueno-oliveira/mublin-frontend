@@ -19,6 +19,8 @@ import s from './HeroTitle.module.css';
 
 function LandingPage () {
 
+    document.title = 'Mublin';
+
     const loggedIn = useSelector(state => state.authentication.loggedIn);
 
     return (
@@ -32,13 +34,13 @@ function LandingPage () {
             <Grid justify="space-between" align="flex-start">
               <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
                 <h1 className={s.title}>
-                  Acompanhe{' '}
+                  Gerencie{' '}
                   <Text component="span" c="violet" inherit>
                     projetos de música
                   </Text>{' '}
                   com facilidade
                 </h1>
-                <Text className={s.description} fz="xl" lh="sm">
+                <Text className={s.description} fz="lg" lh="sm">
                   O Mublin é a plataforma onde músicos, produtores e profissionais da música podem gerenciar todos os seus projetos, além de se conectar com outras pessoas do mercado musical
                 </Text>
                 <Button
@@ -64,7 +66,7 @@ function LandingPage () {
         <div className={s.wrapperFeatured}>
           <Container size={'lg'} className={s.innerSmall}>
             <Title size="h1" mb={'lg'}>Organize suas gigs!</Title>
-            <Text className={s.description} fz="xl" lh="sm" mb={'xl'}>
+            <Text className={s.description} fz="lg" lh="sm" mb={'xl'}>
               O Mublin foi desenvolvido para a organização de projetos musicais, facilitando as necessidades de músicos e produtores. O Mublin permite que os usuários organizem cadastrem seus projetos em um único lugar e acompanhem as atualizações como anotações, cronogramas, oportunidades de gigs. Além disso, você pode acompanhar as datas de gravações, ensaios e apresentações.
             </Text>
             <Grid 
