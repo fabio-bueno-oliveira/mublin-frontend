@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from '../../components/header/public';
 import Footer from '../../components/footer/public';
-import { Container, Text, Title, Button, Grid, Image } from '@mantine/core';
+import { Container, Flex, Text, Title, Button, Grid, Image } from '@mantine/core';
 import AstronautImage1 from '../../assets/img/astronaut-musician-1.png';
 import AstronautImage2 from '../../assets/img/astronaut-musician-2.png';
 import { 
@@ -107,20 +107,23 @@ function LandingPage () {
             </Grid>
           </Container>
         </div>
-        <div className={s.wrapperFeaturedMini}>
           <Container size={'lg'} className={s.innerSmall}>
-            <div className={s.textWithImage}>
-              <Image
-                h={160}
-                src={AstronautImage2}
-                fit={'contain'}
-              />
-              <Text className={s.description} fz="xl" lh="sm" pt={'lg'}>
-                Com uma interface simples e visual, o Mublin também integra ferramentas de armazenamento em nuvem e sincronização automática, facilitando o acesso aos arquivos em qualquer dispositivo e promovendo uma colaboração eficiente entre os membros do projeto.
-              </Text>
-            </div>
+          <Flex
+            direction={{ base: 'column', sm: 'row' }}
+            gap={{ base: 'sm', sm: 'lg' }}
+            justify={{ sm: 'center' }}
+            align={'center'}
+          >
+            <Text className={s.description} fz="md" lh="sm" pt={'lg'}>
+              Com uma interface simples e visual, o Mublin também integra ferramentas de armazenamento em nuvem e sincronização automática, facilitando o acesso aos arquivos em qualquer dispositivo e promovendo uma colaboração eficiente entre os membros do projeto.
+            </Text>
+            <Image
+              h={'160'}
+              src={AstronautImage2}
+              fit={'contain'}
+            />
+          </Flex>
           </Container>
-        </div>
         <Footer />
       </>
     );

@@ -14,7 +14,6 @@ function Header () {
     >
       <Flex
         mih={50}
-        gap="md"
         justify="space-between"
         align="center"
         direction="row"
@@ -25,7 +24,7 @@ function Header () {
           <div>
             <Link to={{ pathname: '/login' }}>
               <Button
-                size="md"
+                size="compact-md"
                 color="violet"
                 variant="transparent"
               >
@@ -37,7 +36,7 @@ function Header () {
                 size="md" 
                 color="violet"
               >
-                Cadastrar
+                Cadastro
               </Button>
             </Link>
           </div>
