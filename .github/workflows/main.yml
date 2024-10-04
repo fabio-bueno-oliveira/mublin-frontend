@@ -1,5 +1,3 @@
-# - name: dist-to-ft
-#   uses: isthatcentered/dist-to-ftp@v1
 name: Deploy app
 on:
   push:
@@ -24,16 +22,14 @@ jobs:
       - name: Install Dependencies
         run: yarn install
       - name: Build
-        run: CI= yarn build
-      - name: dist-to-ft
+        run: yarn build
+      - name: Upload bundle
         uses: actions/upload-artifact@master
         with:
           name: my_artifact_name # Upload artifact with name `dist`
-          path: build # Upload content of `dist` folder
+          path: dist # Upload content of `dist` folder
       - name: Debug Files
         run: ls
-      - name: Debug Build Files
-        run: ls build
   deploy:
     name: Deploy App
     runs-on: [ubuntu-latest]
@@ -49,10 +45,10 @@ jobs:
       - name: Upload to FTP
         uses: isthatcentered/dist-to-ftp@master
         with:
-          user: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          host: ${{ secrets.FTP_HOST }}
+          user: ${{ secrets.FTP_USER }} # Ftp user Ex:
+          password: ${{ secrets.FTP_PASSWORD }} # Ftp password Ex:
+          host: ${{ secrets.FTP_HOST }} # Ftp host Ex:
           port: ${{ secrets.FTP_PORT }} # (optional) FTP port, defaults to 21
           path: dist # Folder to deploy Ex: apps/frontend/dist or dist
-          into: / # Where to place the files in your ftp
-          cleanupExisting: false # (Optional), Remove already existing files inside FTP destination folder (`into` parameter)
+          into: web # Where to place the files in your ftp
+          cleanupExisting: true # (Optional), Remove already existing files inside FTP destination folder (`into` parameter)
