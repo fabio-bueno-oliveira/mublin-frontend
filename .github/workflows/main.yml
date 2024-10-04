@@ -1,4 +1,4 @@
-name: Deploy app
+name: Deploy app 🚀
 on:
   push:
     branches:
@@ -26,7 +26,7 @@ jobs:
       - name: Upload bundle
         uses: actions/upload-artifact@master
         with:
-          name: my_artifact_name # Upload artifact with name `dist`
+          name: app_artifact # Upload artifact with name `dist`
           path: dist # Upload content of `dist` folder
       - name: Debug Files
         run: ls
@@ -38,7 +38,7 @@ jobs:
       - name: Download bundle
         uses: actions/download-artifact@master
         with:
-          name: my_artifact_name # Download artifact named `my_artifact_name` (matches build step: Upload bundle)
+          name: app_artifact # Download artifact named `my_artifact_name` (matches build step: Upload bundle)
           path: dist # Optional, downloads to current working directory under folder {artifact_name} if not specified
       - name: Debug Files
         run: ls
