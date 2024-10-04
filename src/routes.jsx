@@ -12,6 +12,7 @@ import NotFound from './pages/NotFound';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
+import MyAccountPage from './pages/MyAccount';
 import Home from './pages/Home';
 import PublicProfilePage from './pages/Profile/Public';
 
@@ -38,6 +39,7 @@ function AppRoutes () {
           <Route exact path="/:username/public" element={<PublicProfilePage />} />
           <Route element={<RequireAuth />}>
             <Route path="/home" element={<Home />} />
+            <Route path="/my-account" element={<MyAccountPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

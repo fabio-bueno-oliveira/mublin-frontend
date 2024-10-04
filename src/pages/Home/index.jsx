@@ -22,7 +22,7 @@ function Home () {
   const projects = useSelector(state => state.userProjects);
 
   const rows = projects?.list.map((p) => (
-    <Table.Tr key={p.id} c={p.yearLeftTheProject ? 'dimmed' : 'black'}>
+    <Table.Tr key={p.id} c={p.yearLeftTheProject ? 'dimmed' : ''}>
       <Table.Td>{!!p.featured && <IconStarFilled color='black' height={10} w={0} />}{p.name}</Table.Td>
       <Table.Td>{p.ptname}</Table.Td>
       <Table.Td>{p.joined_in}</Table.Td>
