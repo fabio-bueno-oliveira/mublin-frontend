@@ -93,7 +93,7 @@ function SignupPage () {
           <Title ta="center" order={1}>
             Crie sua conta grátis
           </Title>
-          <Text c="dimmed" size="md" ta="center" mt={5}>
+          <Text c="dimmed" size="md" ta="center" mt={5} mb={7}>
             Preencha os dados abaixo
           </Text>
           <Space h="lg" />

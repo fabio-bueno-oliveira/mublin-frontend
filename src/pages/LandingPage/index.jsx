@@ -12,6 +12,7 @@ import {
   IconLayoutDashboard,
   IconUsersGroup
 } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
 import s from './HeroTitle.module.css';
 
 function LandingPage () {
@@ -40,10 +41,11 @@ function LandingPage () {
                     size="lg"
                     className={s.control}
                     color="violet"
+                    rightSection={<IconArrowRight size={14}/>}
                   >
                     Começar
                   </Button> 
-                  <Button
+                  {/* <Button
                     component="a"
                     href="https://github.com/mantinedev/mantine"
                     size="lg"
@@ -51,7 +53,7 @@ function LandingPage () {
                     className={s.control}
                   >
                     Saber mais
-                  </Button>
+                  </Button> */}
                 </Group>
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>

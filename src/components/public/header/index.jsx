@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Flex, Title, Button } from '@mantine/core';
-import { IconArrowRight } from '@tabler/icons-react';
 import s from './header.module.css';
 
 function Header () {
@@ -24,18 +23,21 @@ function Header () {
           <Title>Mublin</Title>
         </Link>
           <div>
-            <Link to={{ pathname: '/signup' }}>
-              <Button size="md" variant="transparent" color="violet">
-                Cadastro
-              </Button>
-            </Link>
             <Link to={{ pathname: '/login' }}>
               <Button
                 size="md"
                 color="violet"
-                rightSection={<IconArrowRight size={14}/>}
+                variant="transparent"
               >
                 Entrar
+              </Button>
+            </Link>
+            <Link to={{ pathname: '/signup' }}>
+              <Button 
+                size="md" 
+                color="violet"
+              >
+                Cadastrar grátis
               </Button>
             </Link>
           </div>
