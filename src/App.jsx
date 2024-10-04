@@ -26,7 +26,7 @@ function App() {
     <>
       <ColorSchemeScript />
       <MantineProvider theme={theme}>
-      <AppRoutes />
+        <AppRoutes />
       </MantineProvider>
     </>
   );

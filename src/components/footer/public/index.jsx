@@ -8,7 +8,7 @@ const links = [
   { link: '#', label: 'Trabalhe no Mublin' },
 ];
 
-export function Footer() {
+function Footer () {
   const items = links.map((link) => (
     <Anchor
       c="dimmed"
@@ -49,3 +49,5 @@ export function Footer() {
     </div>
   );
 }
+
+export default Footer;

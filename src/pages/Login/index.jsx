@@ -16,7 +16,7 @@ import {
   Button,
 } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
-import Header from '../../components/public/header';
+import Header from '../../components/header/public';
 import { IconCheck } from '@tabler/icons-react';
 
 function LoginPage () {

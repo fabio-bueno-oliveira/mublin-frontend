@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import Header from '../../../components/public/header';
-import { Footer } from '../../../components/public/footer';
+import { useDispatch, useSelector } from 'react-redux';
+import { profileInfos } from '../../../store/actions/profile';
+import Header from '../../../components/header/public';
+import Footer from '../../../components/footer/public';
 import { 
   Container, Box, Button, Center, 
   Flex, Group, Image, 
@@ -10,14 +12,13 @@ import {
   Skeleton, Space, 
   Pill, Indicator 
 } from '@mantine/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { profileInfos } from '../../../store/actions/profile';
 
 function PublicProfilePage () {
 
     const params = useParams();
     const username = params.username;
     // const loggedIn = useSelector(state => state.authentication.loggedIn);
+    const cdnBaseURL = 'https://ik.imagekit.io/mublin';
 
     let dispatch = useDispatch();
 
@@ -40,10 +41,10 @@ function PublicProfilePage () {
         <Container size={'lg'}>
           {profile.requesting &&
             <>
-              <Skeleton height={50} circle mb="xl" />
-              <Skeleton height={8} radius="xl" />
-              <Skeleton height={8} mt={6} radius="xl" />
-              <Skeleton height={8} mt={6} width="70%" radius="xl" />
+              <Skeleton height={100} circle mb="xl" />
+              <Skeleton height={24} radius="xl" />
+              <Skeleton height={24} mt={6} radius="xl" />
+              <Skeleton height={24} mt={6} width="70%" radius="xl" />
             </>
           }
 
@@ -116,9 +117,12 @@ function PublicProfilePage () {
               <Text size="sm" c="dimmed">Instrumentos e habilidades:</Text>
               <Group gap="xs" mb='xl' mt='xs'>
                 {profile.roles.map((role, key) =>
-                  <Badge color="#d0d4d7" autoContrast key={key}>
-                    <nobr key={key}>{role.name}</nobr>
-                  </Badge>
+                  <>
+                    <Badge color="#d0d4d7" autoContrast key={key}>
+                      <span key={key}>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
+                      {/* <nobr key={key}>{role.name}</nobr> */}
+                    </Badge>
+                  </>
                 )}
               </Group>
               <Space h="md" />

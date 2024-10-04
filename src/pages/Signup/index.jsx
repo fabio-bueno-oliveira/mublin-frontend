@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { emailCheckInfos } from '../../store/actions/emailCheck';
 import { usernameCheckInfos } from '../../store/actions/usernameCheck';
 import { useDispatch, useSelector } from 'react-redux';
-import Header from '../../components/public/header';
-import { Footer } from '../../components/public/footer';
+import Header from '../../components/header/public';
+import Footer from '../../components/footer/public';
 import { 
   Alert, Container, Button, Group, Badge,
   Title, Text, Space, PasswordInput, TextInput

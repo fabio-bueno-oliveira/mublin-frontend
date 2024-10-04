@@ -1,8 +1,8 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Header from '../../components/public/header';
-import { Footer } from '../../components/public/footer';
+import Header from '../../components/header/public';
+import Footer from '../../components/footer/public';
 import { Container, Text, Title, Button, Grid, Image } from '@mantine/core';
 import AstronautImage1 from '../../assets/img/astronaut-musician-1.png';
 import AstronautImage2 from '../../assets/img/astronaut-musician-2.png';
@@ -24,7 +24,6 @@ function LandingPage () {
     return (
       <>
         {loggedIn &&
-          // <Redirect to={{ pathname: '/home' }} />
           <Navigate to="/home" />
         }
         <Header />
@@ -33,7 +32,7 @@ function LandingPage () {
             <Grid justify="space-between" align="flex-start">
               <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
                 <h1 className={s.title}>
-                  Gerencie{' '}
+                  Acompanhe{' '}
                   <Text component="span" c="violet" inherit>
                     projetos de música
                   </Text>{' '}
