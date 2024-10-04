@@ -15,11 +15,11 @@ jobs:
       
     - name: 🔨 Build Project
       run: |
-        npm install
+        # npm install
         npm run build
     
     - name: List output files
-      run: find build/ -print
+      run: find dist/ -print
       
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.1.0
@@ -27,4 +27,4 @@ jobs:
         server: ftp.mublin.com
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: build/
+        local-dir: dist/
