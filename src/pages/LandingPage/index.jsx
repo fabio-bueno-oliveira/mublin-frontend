@@ -1,7 +1,9 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Header from '../../components/public/header';
 import { Footer } from '../../components/public/footer';
-import { Container, Text, Title, Button, Group, Grid, Image, Flex } from '@mantine/core';
+import { Container, Text, Title, Button, Grid, Image } from '@mantine/core';
 import AstronautImage1 from '../../assets/img/astronaut-musician-1.png';
 import AstronautImage2 from '../../assets/img/astronaut-musician-2.png';
 import { 
@@ -17,10 +19,14 @@ import s from './HeroTitle.module.css';
 
 function LandingPage () {
 
-    document.title = 'Mublin';
+    const loggedIn = useSelector(state => state.authentication.loggedIn);
 
     return (
       <>
+        {loggedIn &&
+          // <Redirect to={{ pathname: '/home' }} />
+          <Navigate to="/home" />
+        }
         <Header />
         <div className={s.wrapper}>
           <Container size={'lg'} className={s.inner}>
@@ -38,7 +44,7 @@ function LandingPage () {
                 </Text>
                 <Button
                   size="lg"
-                  mt="xl"
+                  mt="lg"
                   className={s.control}
                   color="violet"
                   rightSection={<IconArrowRight size={14}/>}

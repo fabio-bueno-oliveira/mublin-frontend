@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { authentication } from './authentication';
 import { user } from './user';
+import { userProjects } from './userProjects';
 import { profile } from './profile';
 import { emailCheck } from './emailCheck';
 import { usernameCheck } from './usernameCheck';
@@ -8,6 +9,7 @@ import { usernameCheck } from './usernameCheck';
 const rootReducer = combineReducers({
   authentication,
   user,
+  userProjects,
   profile,
   emailCheck,
   usernameCheck
