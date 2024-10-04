@@ -14,6 +14,11 @@ import LoginPage from './pages/Login';
 import SignupPage from './pages/Signup';
 import MyAccountPage from './pages/MyAccount';
 import Home from './pages/Home';
+import StartIntroPage from './pages/Start/intro';
+import StartStep1Page from './pages/Start/step1';
+import StartStep2Page from './pages/Start/step2';
+import StartStep3Page from './pages/Start/step3';
+import StartStep4Page from './pages/Start/step4';
 import PublicProfilePage from './pages/Profile/Public';
 
 function AppRoutes () {
@@ -40,6 +45,11 @@ function AppRoutes () {
           <Route element={<RequireAuth />}>
             <Route path="/home" element={<Home />} />
             <Route path="/my-account" element={<MyAccountPage />} />
+            <Route path="/start/intro" element={<StartIntroPage />} />
+            <Route path="/start/step1" element={<StartStep1Page />} />
+            <Route path="/start/step2" element={<StartStep2Page />} />
+            <Route path="/start/step3" element={<StartStep3Page />} />
+            <Route path="/start/step4" element={<StartStep4Page />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
