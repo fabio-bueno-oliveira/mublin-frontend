@@ -1,6 +1,8 @@
 import React from 'react';
 import AppRoutes from './routes';
 import { MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
 
 const theme = createTheme({
@@ -26,6 +28,7 @@ function App() {
     <>
       <ColorSchemeScript />
       <MantineProvider theme={theme}>
+        <Notifications />
         <AppRoutes />
       </MantineProvider>
     </>

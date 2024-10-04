@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useLocation  } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
@@ -14,10 +15,12 @@ import {
   Container,
   Group,
   Button,
+  Notification
 } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import Header from '../../components/header/public';
 import { IconCheck } from '@tabler/icons-react';
+import { notifications } from '@mantine/notifications';
 
 function LoginPage () {
 
@@ -40,6 +43,18 @@ function LoginPage () {
 
   const loggingIn = useSelector(state => state.authentication.loggingIn);
   const loggedIn = useSelector(state => state.authentication.loggedIn);
+  const error = useSelector(state => state.authentication.error);
+
+  useEffect(() => {
+    if (error) {
+      notifications.show({
+        title: 'Ops!',
+        message: "Login inválido",
+        autoClose: '4000',
+        color: "red"
+      })
+    }
+  }, [error]);
 
   const handleSubmit = (values) => {
     dispatch(userActions.login(values.email, values.password));
@@ -65,9 +80,11 @@ function LoginPage () {
         </Title>
         <Text c="dimmed" size="md" ta="center" mt={5} mb={7}>
           Ainda não tem cadastro?{' '}
-          <Anchor size="md" component="button">
-            Criar conta
-          </Anchor>
+          <Link to={{ pathname: '/signup' }}>
+            <Anchor size="md" component="button">
+              Criar conta
+            </Anchor>
+          </Link>
         </Text>
         <Space h="lg" />
         <form onSubmit={form.onSubmit(handleSubmit)}>

@@ -47,7 +47,7 @@ function SignupPage () {
         //   return null;
         // }
         email: isEmail('Email inválido'),
-        username: hasLength({ min: 2, max: 10 }, 'É necessário informar o username desejado com no mínimo 2 caracteres e no máximo 10'),
+        username: hasLength({ min: 2, max: 14 }, 'Informe o username desejado com no mínimo 2 caracteres e no máximo 14'),
         password: (value) => (value.length < 4 ? 'Senha muito curta' : null),
         confirmPassword: (value, values) =>
           value !== values.password ? 'As senhas informadas estão diferentes' : null
@@ -146,8 +146,9 @@ function SignupPage () {
               key={form.key('username')}
               {...form.getInputProps('username')}
               onKeyUp={e => {
-                checkUsername(e.target.value)
-                setUsernameChoosen(e.target.value)
+                checkUsername(e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase())
+                setUsernameChoosen(e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase())
+                form.setFieldValue('username', e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase());
               }}
             />
             {(usernameChoosen && usernameAvailability.available) && 
