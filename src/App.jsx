@@ -7,6 +7,7 @@ import '@mantine/core/styles.css';
 
 const theme = createTheme({
   colorScheme: 'light',
+  primaryColor: 'dark',
   breakpoints: {
     xs: '30em',
     sm: '48em',

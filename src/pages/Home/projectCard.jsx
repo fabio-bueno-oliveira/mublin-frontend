@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Group, Text, Card, Image, Badge, Menu, Avatar, Indicator, ActionIcon, Flex } from '@mantine/core';
-import { IconDots, IconEye, IconFileZip, IconTrash , IconMapPin, IconFolder, IconIdBadge2, IconSettings } from '@tabler/icons-react';
+import { Group, Text, Card, Image, Badge, Menu, Avatar, Indicator, ActionIcon, Flex, rem } from '@mantine/core';
+import { IconDots, IconEye, IconFileZip, IconTrash , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -36,15 +36,20 @@ function ProjectCard (props) {
           <Group justify="space-between">
             <div>
               <Text fw={500} lineClamp={1}>{project?.name}</Text>
-              <Text size="sm" c="dimmed" lineClamp={1}>
-                {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
-              </Text>
-              {/* <Text size="xs" c="dimmed">
-                {project.cityName ? <>
-                  <IconMapPin style={{ width: '12px', height: '12px' }} /> {project.cityName}, {project.regionUf}
-                  </> : null
+              <Group gap={4}>
+                {project?.ptname === "Projeto solo" &&
+                  <IconUser style={{ width: rem(14), height: rem(14) }} stroke={1.5} /> 
                 }
-              </Text> */}
+                {project?.ptname === "Banda" &&
+                  <IconUsersGroup style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
+                } 
+                {project?.ptname === "Ideia de projeto" &&
+                  <IconBulb style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
+                }
+                <Text size="xs" c="dimmed" lineClamp={1}>
+                  {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
+                </Text>
+              </Group>
             </div>
             <Menu withinPortal position="bottom-end" shadow="sm">
               <Menu.Target>
@@ -102,7 +107,7 @@ function ProjectCard (props) {
               wrap="wrap"
               rowGap={3}
             >
-              <Text size="xs" display={'flex'} lineClamp={1}>
+              <Text size="xs" lineClamp={1}>
                 {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
               </Text>
               {project.yearEnd && 

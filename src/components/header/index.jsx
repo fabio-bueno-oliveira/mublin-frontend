@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, ActionIcon, rem } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, rem } from '@mantine/core';
 import { IconUser, IconMoon, IconBrightnessUp } from '@tabler/icons-react';
 import s from './header.module.css';
 
@@ -22,6 +22,8 @@ function Header () {
     dispatch(userActions.logout());
   }
 
+  const cdnBaseURL = 'https://ik.imagekit.io/mublin';
+
   return (
     <Container 
       size={'lg'} 
@@ -39,15 +41,22 @@ function Header () {
         <Link to={{ pathname: '/home' }} className={s.mulinLogo}>
           <Title order={3}>Mublin</Title>
         </Link>
-        <Flex>
+        <Flex align={"center"}>
+          <Link to={{ pathname: '/my-account' }}>
+            <Avatar
+              size="sm"
+              src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
+              alt={user.username}
+            />
+          </Link>
           <Link to={{ pathname: '/my-account' }}>
             <Button 
               size="sm" 
               variant='transparent'
               color="violet"
-              leftSection={<IconUser size={14} />}
+              p={'xs'}
             >
-              {user.username}
+              Olá, {user.name}
             </Button>
           </Link>
           <Button 
