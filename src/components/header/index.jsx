@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button } from '@mantine/core';
-import { IconUser, IconBulb, IconMoon } from '@tabler/icons-react';
+import { useMantineColorScheme, Container, Flex, Title, Button, ActionIcon, rem } from '@mantine/core';
+import { IconUser, IconMoon, IconBrightnessUp } from '@tabler/icons-react';
 import s from './header.module.css';
 
 function Header () {
@@ -39,44 +39,41 @@ function Header () {
         <Link to={{ pathname: '/home' }} className={s.mulinLogo}>
           <Title order={3}>Mublin</Title>
         </Link>
-          <div>
-            <Button 
-              size="sm" 
-              variant={colorScheme === 'light' ? 'outline' : 'transparent'}
-              color="violet"
-              leftSection={<IconBulb size={14} />}
-              onClick={() => setColorScheme('light')}
-            >
-              Claro
-            </Button>
-            <Button 
-              size="sm" 
-              variant={colorScheme === 'dark' ? 'outline' : 'transparent'}
-              color="violet"
-              leftSection={<IconMoon size={14} />}
-              onClick={() => setColorScheme('dark')}
-            >
-              Escuro
-            </Button>
-            <Link to={{ pathname: '/my-account' }}>
-              <Button 
-                size="sm" 
-                variant='transparent'
-                color="violet"
-                leftSection={<IconUser size={14} />}
-              >
-                {user.username}
-              </Button>
-            </Link>
+        <Flex>
+          <Link to={{ pathname: '/my-account' }}>
             <Button 
               size="sm" 
               variant='transparent'
               color="violet"
-              onClick={() => logout()}
+              leftSection={<IconUser size={14} />}
             >
-              Sair
+              {user.username}
             </Button>
-          </div>
+          </Link>
+          <Button 
+            size="sm" 
+            variant='transparent'
+            color="violet"
+            onClick={() => logout()}
+          >
+            Sair
+          </Button>
+          {colorScheme === 'dark' && 
+            <ActionIcon 
+              variant="transparent" size="lg" color="violet" 
+              onClick={() => {setColorScheme('light')}}
+            >
+              <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
+            </ActionIcon>
+          }
+          {colorScheme === 'light' && 
+            <ActionIcon variant="transparent" size="lg" color="violet" 
+              onClick={() => {setColorScheme('dark')}}
+            >
+              <IconMoon style={{ width: rem(20) }} stroke={1.5} />
+            </ActionIcon>
+          }
+        </Flex>
       </Flex>
     </Container>
   );
