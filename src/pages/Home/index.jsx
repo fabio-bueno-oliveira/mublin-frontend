@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, ActionIcon, Box, Title, Table } from '@mantine/core';
-import { IconStarFilled, IconDots } from '@tabler/icons-react';
+import { Container, ActionIcon, Box, Title, Table, Grid } from '@mantine/core';
+import { IconStarFilled, IconDots, IconList, IconLayoutGrid } from '@tabler/icons-react';
 import Header from '../../components/header';
+import ProjectCard from './projectCard';
 
 function Home () {
 
@@ -20,6 +21,7 @@ function Home () {
 
   const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
+  const [layoutDisplay, setLayoutdisplay] = useState('cards');
 
   const rows = projects?.list.map((p) => (
     <Table.Tr 
@@ -44,26 +46,56 @@ function Home () {
     <>
       <Header />
       <Container size={'lg'}>
-        <Box mb={24}>
+        <Box mb={14}>
           <Title order={3}>Olá, {user.name}</Title>
           <Title order={4}>Meus projetos ({projects?.list.length})</Title>
         </Box>
-        <Table.ScrollContainer minWidth={500} type="native">
-          <Table striped highlightOnHover stickyHeader>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Projeto</Table.Th>
-                <Table.Th>Tipo do projeto</Table.Th>
-                <Table.Th>Ano entrada</Table.Th>
-                <Table.Th>Estilo/Gênero</Table.Th>
-                <Table.Th>Papéis</Table.Th>
-                <Table.Th>Atuação</Table.Th>
-                <Table.Th></Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>{rows}</Table.Tbody>
-          </Table>
-        </Table.ScrollContainer>
+        <Box mb={22}>
+          <ActionIcon 
+            variant={layoutDisplay === "cards" ? "outline" : "light"}
+            color="violet"
+            onClick={() => setLayoutdisplay('cards')}
+            size="lg"
+            mr={4} 
+          >
+            <IconLayoutGrid style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+          <ActionIcon 
+            variant={layoutDisplay === "list" ? "outline" : "light"}
+            color="violet"
+            onClick={() => setLayoutdisplay('list')}
+            size="lg"
+          >
+            <IconList style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+        </Box>
+        {layoutDisplay === 'list' && 
+          <Table.ScrollContainer minWidth={500} type="native">
+            <Table striped highlightOnHover stickyHeader>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Projeto</Table.Th>
+                  <Table.Th>Tipo do projeto</Table.Th>
+                  <Table.Th>Ano entrada</Table.Th>
+                  <Table.Th>Estilo/Gênero</Table.Th>
+                  <Table.Th>Papéis</Table.Th>
+                  <Table.Th>Atuação</Table.Th>
+                  <Table.Th></Table.Th>
+                </Table.Tr>
+              </Table.Thead>
+              <Table.Tbody>{rows}</Table.Tbody>
+            </Table>
+          </Table.ScrollContainer>
+        }
+        {layoutDisplay === 'cards' && 
+          <Grid>
+            {projects?.list.map((p) => (
+              <Grid.Col span={3} key={p.id}>
+                <ProjectCard project={p} />
+              </Grid.Col>
+            ))}
+          </Grid>
+        }
       </Container>
     </>
   );
