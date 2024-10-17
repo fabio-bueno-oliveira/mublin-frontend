@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, rem } from '@mantine/core';
-import { IconUser, IconMoon, IconBrightnessUp } from '@tabler/icons-react';
+import { IconMoon, IconBrightnessUp } from '@tabler/icons-react';
 import s from './header.module.css';
 
 function Header () {
@@ -38,7 +38,7 @@ function Header () {
         align="center"
         direction="row"
       >
-        <Link to={{ pathname: '/home' }} className={s.mulinLogo}>
+        <Link to={{ pathname: '/home' }} className='mublinLogo'>
           <Title order={3}>Mublin</Title>
         </Link>
         <Flex align={"center"}>
@@ -53,7 +53,7 @@ function Header () {
             <Button 
               size="sm" 
               variant='transparent'
-              color="violet"
+              color="dark"
               p={'xs'}
             >
               Olá, {user.name}
@@ -62,21 +62,22 @@ function Header () {
           <Button 
             size="sm" 
             variant='transparent'
-            color="violet"
+            color="dark"
             onClick={() => logout()}
+            p={'xs'}
           >
             Sair
           </Button>
           {colorScheme === 'dark' && 
             <ActionIcon 
-              variant="transparent" size="lg" color="violet" 
+              variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('light')}}
             >
               <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
             </ActionIcon>
           }
           {colorScheme === 'light' && 
-            <ActionIcon variant="transparent" size="lg" color="violet" 
+            <ActionIcon variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('dark')}}
             >
               <IconMoon style={{ width: rem(20) }} stroke={1.5} />

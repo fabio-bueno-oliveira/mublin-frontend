@@ -1,15 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Group, Text, Card, Image, Badge, Menu, Avatar, Indicator, ActionIcon, Flex, rem } from '@mantine/core';
-import { IconDots, IconEye, IconFileZip, IconTrash , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings } from '@tabler/icons-react';
+import { Group, Text, Card, Image, Badge, Menu, Avatar, Indicator, ActionIcon, Flex, Tooltip, rem } from '@mantine/core';
+import { IconDots, IconEye, IconFileZip, IconTrash , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings, IconUserOff } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
   const project = props?.project;
+  const activeMembers = props?.activeMembers;
+
   const user = useSelector(state => state.user);
-  const cdnBaseURL = 'https://ik.imagekit.io/mublin/'
+  const cdnBaseURL = 'https://ik.imagekit.io/mublin/';
   const cdnProjectPath = cdnBaseURL+'projects/tr:h-250,w-410,fo-top,c-maintain_ratio/';
-  const currentYear = new Date().getFullYear();
+  // const currentYear = new Date().getFullYear();
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
 
   const indicatorColor = () => {
@@ -26,30 +28,36 @@ function ProjectCard (props) {
 
   return (
     <Indicator 
-      processing={isActiveOnProject}
-      color={indicatorColor(project)}
-      position="top-start" 
-      disabled={!isActiveOnProject}
+      // processing={isActiveOnProject}
+      // color={indicatorColor(project)}
+      // position="top-start" 
+      // disabled={!isActiveOnProject}
+      disabled
     >
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section withBorder inheritPadding py="xs">
-          <Group justify="space-between">
+          <Group justify="space-between" align="flex-start">
             <div>
               <Text fw={500} lineClamp={1}>{project?.name}</Text>
               <Group gap={4}>
                 {project?.ptname === "Projeto solo" &&
-                  <IconUser style={{ width: rem(14), height: rem(14) }} stroke={1.5} /> 
+                  <IconUser style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} /> 
                 }
                 {project?.ptname === "Banda" &&
-                  <IconUsersGroup style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
+                  <IconUsersGroup style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
                 } 
                 {project?.ptname === "Ideia de projeto" &&
-                  <IconBulb style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
+                  <IconBulb style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
                 }
                 <Text size="xs" c="dimmed" lineClamp={1}>
                   {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
                 </Text>
               </Group>
+              <Text size="xs" c="dimmed" lineClamp={1} mt={5}>
+                <Badge variant='dot' color={project?.activityStatusColor} size='xs'>
+                  {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
+                </Badge>
+              </Text>
             </div>
             <Menu withinPortal position="bottom-end" shadow="sm">
               <Menu.Target>
@@ -79,20 +87,28 @@ function ProjectCard (props) {
             src={cdnProjectPath+project?.picture}
             height={160}
             alt="Norway"
-            fit="contain"
           />
         </Card.Section>
-        {/* <Group justify="flex-start" mt="md" mb="xs">
+        <Card.Section withBorder inheritPadding py="xs">
+          <Text size="xs">
+            Minha participação
+          </Text>
           {isActiveOnProject && 
-            <Badge color="green" size="sm" variant="light"> Ativo atualmente neste projeto</Badge>
+            <Badge size='xs' variant='light' color={indicatorColor()}>
+              {`Ativo desde ${project.joined_in}`}
+            </Badge>
           }
-        </Group> */}
-        {/* <Text size="xs" c="dimmed">
-          {project.cityName ? <>
-            <IconMapPin style={{ width: '12px', height: '12px' }} /> {project.cityName}, {project.regionUf}
-            </> : null
+          {project.yearLeftTheProject && 
+            <Badge size='xs' variant='light' color="red">
+              deixei o projeto em {project.yearLeftTheProject}
+            </Badge>
           }
-        </Text> */}
+          {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
+            <Badge size='xs' variant='light' color="red">
+              estive até o encerramento em {project.yearEnd}
+            </Badge>
+          }
+        </Card.Section>
         <Card.Section withBorder inheritPadding py="xs">
           <Flex
             justify="flex-start"
@@ -101,7 +117,25 @@ function ProjectCard (props) {
             wrap="nowrap"
             columnGap="md"
           >
-            <Avatar variant="filled" radius="sm" size="sm" src={cdnBaseURL+'tr:h-36,w-36,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} />
+            <Indicator 
+              processing={isActiveOnProject}
+              color={indicatorColor(project)}
+              size={8}
+              position="top-end"
+              // display={'inline-table'}
+              // style={{ display: 'inline-table' }}
+            >
+              <Avatar 
+                variant="filled" 
+                radius="sm" 
+                size="md" 
+                src={
+                  (user.id && user.picture) ? 
+                    cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
+                  : null
+                 } 
+              />
+            </Indicator>
             <Flex
               direction="column"
               wrap="wrap"
@@ -110,21 +144,6 @@ function ProjectCard (props) {
               <Text size="xs" lineClamp={1}>
                 {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
               </Text>
-              {project.yearEnd && 
-                <Badge size='xs' variant='outline' color={indicatorColor()}>
-                  Projeto encerrado em {project.yearEnd}
-                </Badge>
-              }
-              {(project.id && project.yearLeftTheProject) && 
-                <Badge size='xs' variant='outline' color="yellow">
-                  deixei o projeto em {project.yearLeftTheProject}
-                </Badge>
-              }
-              {(project.id && !project.yearLeftTheProject && !project.yearEnd) && 
-                <Badge size='xs' variant='outline' color={indicatorColor()}>
-                  {(project.id && !project.yearLeftTheProject && !project.yearEnd) ? 'desde ' + project.joined_in : null}
-                </Badge>
-              }
               <Text size="xs" display={'flex'} lineClamp={1}>
                 <IconIdBadge2 style={{ width: '15px', height: '15px', marginRight: '3px' }} stroke={1.2} /> {project.workTitle}
               </Text>
@@ -133,17 +152,51 @@ function ProjectCard (props) {
               </Text>
             </Flex>
           </Flex>
-          {/* {isActiveOnProject && 
-            <Badge leftSection={<IconIdBadge2 style={{ width: '13px', height: '13px' }} stroke={1.2} />} size="md" variant="light">{project.workTitle}</Badge>
-          } */}
+        </Card.Section>
+        <Card.Section withBorder inheritPadding py="xs">
+          <Text size="xs" c="dimmed" mb={5}>
+            {activeMembers?.length} Integrantes/equipe ativos
+          </Text>
+          <Group gap={5}>
+            {activeMembers?.map((member) => (
+              <Tooltip 
+                label={`${member.userName} ${member.userLastname} - ${member.role1}`} 
+                key={member.userId} 
+                withArrow
+              >
+                <Avatar 
+                  variant="filled" 
+                  radius="sm" 
+                  size="sm" 
+                  src={
+                    (member.userId && member.userPicture) ? 
+                      cdnBaseURL+'tr:h-26,w-26,r-max,c-maintain_ratio/users/avatars/'+member.userId+'/'+member.userPicture
+                    : null
+                  } 
+                />
+              </Tooltip>
+            ))}
+            {!activeMembers?.length && 
+              <Avatar 
+                variant="filled" 
+                radius="xl" 
+                size="sm"
+              >
+                <IconUserOff size="1rem" />
+              </Avatar>
+            }
+          </Group>
         </Card.Section>
         <Card.Section withBorder inheritPadding py="xs">
           <Flex align="center" justify="flex-start" direction="row" c="dimmed">
+            <Text style={{ fontSize: '11px' }}>
+              Categoria: 
+            </Text>
             <IconFolder 
-              style={{ width: '15px', height: '15px', marginRight: '3px' }}
+              style={{ width: '14px', height: '14px', marginLeft: '3px', marginRight: '3px' }}
             />
-            <Text size="xs">
-              {project.portfolio ? 'Portfolio' : 'Projetos Principais'}
+            <Text style={{ fontSize: '11px' }}>
+              {project.portfolio ? 'Portfolio' : 'Principais'}
             </Text>
           </Flex>
         </Card.Section>

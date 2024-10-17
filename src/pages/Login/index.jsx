@@ -14,8 +14,7 @@ import {
   Text,
   Container,
   Group,
-  Button,
-  Notification
+  Button
 } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import Header from '../../components/header/public';
@@ -92,6 +91,7 @@ function LoginPage () {
             label="Nome de usuário ou email" 
             placeholder="seu@email.com" 
             size="lg"
+            autoFocus
             key={form.key('email')}
             {...form.getInputProps('email')}
           />

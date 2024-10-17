@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, ActionIcon, Box, Avatar, Tooltip, Title, Text, Table, Grid, Paper } from '@mantine/core';
+import { Container, ActionIcon, Box, Avatar, Tooltip, Text, Table, Grid, Paper, Skeleton } from '@mantine/core';
 import { IconStarFilled, IconDots, IconList, IconLayoutGrid } from '@tabler/icons-react';
 import Header from '../../components/header';
 import ProjectCard from './projectCard';
@@ -47,43 +47,57 @@ function Home () {
     <>
       <Header />
       <Container size={'sm'} mb={'md'}>
-        <Paper shadow="sm" radius="md" withBorder p='sm' mb='sm'>
-          {/* <Title size="1rem">{projects?.list.length} projetos no total</Title> */}
-          <Text size="sm" mb='sm'>{projects?.list.length} projetos atualmente</Text>
-          <Avatar.Group>
-            {projects?.list.map((p) => (
-              <Tooltip label={p.name} withArrow>
-                <Avatar src={'https://ik.imagekit.io/mublin/projects/tr:h-80,w-80,c-maintain_ratio/'+p.picture} />
-              </Tooltip>
-            ))}
-          </Avatar.Group>
-        </Paper>
-        <Grid grow gutter="xs">
-          <Grid.Col span={6}>
-            <Paper shadow="sm" radius="md" withBorder p='sm'>
-              <Text size="sm">Principais</Text>
-              <Text size="xs" c="dimmed">4 projetos</Text>
+        {projects.requesting ? (
+          <>
+            <Skeleton height={110} radius="xl" />
+            <Skeleton height={58} mt={6} radius="xl" />
+            <Skeleton height={58} mt={6} width="70%" radius="xl" />
+          </>
+        ) : (
+          <>
+            <Paper shadow="sm" radius="md" withBorder p='sm' mb='sm'>
+              <Text size="sm" mb='sm'>
+                Você está cadastrado em {projects?.list.length} projetos
+              </Text>
+              <Avatar.Group>
+                {projects?.list.map((p) => (
+                  <Tooltip label={p.name} key={p.id} withArrow>
+                    <Avatar 
+                      size='lg'
+                      src={'https://ik.imagekit.io/mublin/projects/tr:h-80,w-80,c-maintain_ratio/'+p.picture} 
+                    />
+                  </Tooltip>
+                ))}
+              </Avatar.Group>
             </Paper>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Paper shadow="sm" radius="md" withBorder p='sm'>
-              <Text size="sm">Temporários</Text>
-              <Text size="xs" c="dimmed">4 projetos</Text>
-            </Paper>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Paper shadow="sm" radius="md" withBorder p='sm'>
-              <Text size="sm">Ativo em</Text>
-              <Text size="xs" c="dimmed">4 projetos</Text>
-            </Paper>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Paper shadow="sm" radius="md" withBorder p='sm'>
-              <Text size="sm">Encerrados</Text>
-              <Text size="xs" c="dimmed">{projectsTerminated?.length} projetos</Text>
-            </Paper>
-          </Grid.Col>
-        </Grid>
+            <Grid grow gutter="xs">
+              <Grid.Col span={6}>
+                <Paper shadow="sm" radius="md" withBorder p='sm'>
+                  <Text size="sm">Principais</Text>
+                  <Text size="xs" c="dimmed">4 projetos</Text>
+                </Paper>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <Paper shadow="sm" radius="md" withBorder p='sm'>
+                  <Text size="sm">Temporários</Text>
+                  <Text size="xs" c="dimmed">4 projetos</Text>
+                </Paper>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <Paper shadow="sm" radius="md" withBorder p='sm'>
+                  <Text size="sm">Ativo em</Text>
+                  <Text size="xs" c="dimmed">4 projetos</Text>
+                </Paper>
+              </Grid.Col>
+              <Grid.Col span={6}>
+                <Paper shadow="sm" radius="md" withBorder p='sm'>
+                  <Text size="sm">Encerrados</Text>
+                  <Text size="xs" c="dimmed">{projectsTerminated?.length} projetos</Text>
+                </Paper>
+              </Grid.Col>
+            </Grid>
+          </>
+        )}
       </Container>
       <Container size={'lg'}>
         <Box mb={22}>
@@ -127,7 +141,17 @@ function Home () {
           <Grid>
             {projects?.list.map((p) => (
               <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={p.id}>
-                <ProjectCard project={p} />
+                <ProjectCard 
+                  project={p}
+                  activeMembers={
+                    projects?.members?.filter(
+                      (member) => { 
+                        return member.projectId === p.projectid 
+                        && !member.leftIn 
+                      }
+                    ).sort((a, b) => b.leader - a.leader)
+                  }
+                />
               </Grid.Col>
             ))}
           </Grid>

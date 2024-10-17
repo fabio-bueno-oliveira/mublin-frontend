@@ -12,6 +12,9 @@ const initialState = {
       confirmed: '',
       status: '',
       active: '',
+      activityStatusId: '',
+      activityStatus: '',
+      activityStatusColor: '',
       admin: '',
       joined_in: '',
       yearLeftTheProject: '',
@@ -97,7 +100,8 @@ export function userProjects(state = initialState, action) {
         success: true,
         error: '',
         list: action.list[0],
-        summary: action.list[1]
+        summary: action.list[1],
+        members: action.list[2],
       };
     case userProjectsTypes.GET_USER_PROJECTS_FAILURE:
       return {
