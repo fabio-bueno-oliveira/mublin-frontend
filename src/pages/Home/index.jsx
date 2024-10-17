@@ -86,6 +86,7 @@ function Home () {
           {projects?.list.map((p) => (
             <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={p.id}>
               <ProjectCard 
+                loading={projects.requesting}
                 project={p}
                 activeMembers={
                   projects?.members?.filter(
