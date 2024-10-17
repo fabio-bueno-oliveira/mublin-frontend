@@ -2,7 +2,7 @@ footer.menuMobile {
   position: fixed;
   bottom: 0;
   background-color: #FFF;
-  height: 58px;
+  height: 64px;
   width: 100%;
   z-index: 99;
 }
@@ -13,7 +13,7 @@ footer.menuMobile a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 14px;
+  padding-top: 16px;
   opacity: 0.6;
 }
 footer.menuMobile a.active {
@@ -32,13 +32,14 @@ footer.menuMobile > div {
 
   div {
     color: #3a3a3a;
+    cursor: pointer;
     padding: 0 10px;
     font-size: 1.6rem;
     display: flex;
     flex-direction: column;
     flex-basis: 100%;
     align-items: center;
-    padding-top: 12px;
+    padding-top: 14px;
 
     // &:not(.userPicture) {
     //   opacity: 0.6;
@@ -46,8 +47,8 @@ footer.menuMobile > div {
 
     &.active {
       opacity: 1;
-      border-top: 4px solid #3a3a3a;
-      padding-top: 8px;
+      border-top: 3px solid #3a3a3a;
+      padding-top: 11px;
     }
 
     span {

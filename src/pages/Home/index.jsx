@@ -83,7 +83,7 @@ function Home () {
         )}
       </Container>
       <Container size={'lg'}>
-        <Grid mb={65}>
+        <Grid mb={74}>
           {projects?.list.map((p) => (
             <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={p.id}>
               <ProjectCard 
