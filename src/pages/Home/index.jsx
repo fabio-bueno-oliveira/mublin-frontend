@@ -4,6 +4,7 @@ import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { Container, Avatar, Tooltip, Text, Grid, Paper, Skeleton } from '@mantine/core';
 import Header from '../../components/header';
+import FooterMenuMobile from '../../components/footerMenuMobile';
 import ProjectCard from './projectCard';
 
 function Home () {
@@ -101,6 +102,7 @@ function Home () {
           ))}
         </Grid>
       </Container>
+      <FooterMenuMobile />
     </>
   );
 };

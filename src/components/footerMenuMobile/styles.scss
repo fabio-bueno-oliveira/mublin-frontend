@@ -1,0 +1,58 @@
+footer.menuMobile {
+  border-top: 1px solid #dadada;
+  position: fixed;
+  bottom: 0;
+  background-color: #FFF;
+  height: 58px;
+  width: 100%;
+  z-index: 99;
+}
+footer.menuMobile a {
+  color: #3a3a3a;
+  padding: 0 14px;
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 14px;
+  opacity: 0.6;
+}
+footer.menuMobile a.active {
+  opacity: 1;
+  border-top: 2px solid #3a3a3a;
+  padding-top: 12px;
+}
+footer.menuMobile a span {
+  font-size:10px;
+}
+footer.menuMobile > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 100%;
+
+  div {
+    color: #3a3a3a;
+    padding: 0 10px;
+    font-size: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    align-items: center;
+    padding-top: 14px;
+
+    // &:not(.userPicture) {
+    //   opacity: 0.6;
+    // }
+
+    &.active {
+      opacity: 1;
+      border-top: 2px solid #3a3a3a;
+      padding-top: 12px;
+    }
+
+    span {
+      font-size:10px;
+    }
+  }
+}
