@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Avatar, Modal, NavLink } from '@mantine/core';
-import { IconHome, IconBell, IconRocket, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp } from '@tabler/icons-react';
+import { useMantineColorScheme, Modal, NavLink } from '@mantine/core';
+import { IconHome, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconMenu2 } from '@tabler/icons-react';
 import './styles.scss';
 
 const FooterMenuMobile = () => {
@@ -54,19 +54,19 @@ const FooterMenuMobile = () => {
             <IconPlus stroke={1.5} />
             <span>Novo</span>
           </div>
-          <div className={currentPath === '/notifications' && 'active'} onClick={() => navigate("/notifications")}>
+          {/* <div className={currentPath === '/notifications' && 'active'} onClick={() => navigate("/notifications")}>
             <IconBell stroke={1.5} />
             <span>Notificações</span>
+          </div> */}
+          <div  
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <IconMenu2 stroke={1.5} style={{ marginTop: 4 }} />
           </div>
-          <div 
+          {/* <div 
             className='userPicture'
             onClick={() => setMobileMenuOpen(true)}
           >
-            {/* {userInfo.picture ? (
-              <Image size='mini' circular src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture} alt="Foto de perfil" />
-            ) : (
-              <Image size='mini' circular src='https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' alt="Foto de perfil" />
-            )} */}
             {userInfo.picture && 
             <Avatar 
               // variant="filled" 
@@ -76,7 +76,7 @@ const FooterMenuMobile = () => {
               alt="Foto de perfil"
             />
             }
-          </div>
+          </div> */}
         </div>
       </footer>
       <Modal 

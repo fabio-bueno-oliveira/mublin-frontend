@@ -1,5 +1,4 @@
 footer.menuMobile {
-  border-top: 1px solid #dadada;
   position: fixed;
   bottom: 0;
   background-color: #FFF;
@@ -47,7 +46,7 @@ footer.menuMobile > div {
 
     &.active {
       opacity: 1;
-      border-top: 2px solid #3a3a3a;
+      border-top: 4px solid #3a3a3a;
       padding-top: 12px;
     }
 

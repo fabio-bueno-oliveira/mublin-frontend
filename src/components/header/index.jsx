@@ -65,6 +65,7 @@ function Header () {
             color="dark"
             onClick={() => logout()}
             p={'xs'}
+            visibleFrom="md"
           >
             Sair
           </Button>
@@ -72,6 +73,7 @@ function Header () {
             <ActionIcon 
               variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('light')}}
+              visibleFrom="md"
             >
               <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
             </ActionIcon>
@@ -79,6 +81,7 @@ function Header () {
           {colorScheme === 'light' && 
             <ActionIcon variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('dark')}}
+              visibleFrom="md"
             >
               <IconMoon style={{ width: rem(20) }} stroke={1.5} />
             </ActionIcon>
