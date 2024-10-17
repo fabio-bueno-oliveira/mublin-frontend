@@ -56,7 +56,7 @@ function Header () {
               color="dark"
               p={'xs'}
             >
-              Olá, {user.name}
+              Olá, {user.name}!
             </Button>
           </Link>
           <Button 

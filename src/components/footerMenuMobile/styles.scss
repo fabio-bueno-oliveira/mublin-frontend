@@ -38,7 +38,7 @@ footer.menuMobile > div {
     flex-direction: column;
     flex-basis: 100%;
     align-items: center;
-    padding-top: 14px;
+    padding-top: 12px;
 
     // &:not(.userPicture) {
     //   opacity: 0.6;
@@ -47,7 +47,7 @@ footer.menuMobile > div {
     &.active {
       opacity: 1;
       border-top: 4px solid #3a3a3a;
-      padding-top: 12px;
+      padding-top: 8px;
     }
 
     span {
