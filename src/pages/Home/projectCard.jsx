@@ -40,7 +40,7 @@ function ProjectCard (props) {
         <Card.Section withBorder inheritPadding py="xs">
           <Group justify="space-between" align="flex-start">
             <div>
-              <Title fw={500} lineClamp={1} size="h4">{project?.name}</Title>
+              <Title fw={500} lineClamp={1} size="1.2rem">{project?.name}</Title>
               <Group gap={4}>
                 {project?.ptname === "Projeto solo" &&
                   <IconUser style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} /> 
@@ -115,25 +115,16 @@ function ProjectCard (props) {
             columnGap="md"
             mt={6}
           >
-            <Indicator 
-              processing={isActiveOnProject}
-              color={indicatorColor(project)}
-              size={8}
-              position="top-end"
-              // display={'inline-table'}
-              // style={{ display: 'inline-table' }}
-            >
-              <Avatar 
-                variant="filled" 
-                radius="sm" 
-                size="md" 
-                src={
-                  (user.id && user.picture) ? 
-                    cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
-                  : null
-                  } 
-              />
-            </Indicator>
+            <Avatar 
+              variant="filled" 
+              radius="sm" 
+              size="md" 
+              src={
+                (user.id && user.picture) ? 
+                  cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
+                : null
+                } 
+            />
             <Flex
               direction="column"
               wrap="wrap"

@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { Avatar, Modal, NavLink } from '@mantine/core';
-import { IconHome, IconBell, IconRocket, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings } from '@tabler/icons-react';
+import { useMantineColorScheme, Avatar, Modal, NavLink } from '@mantine/core';
+import { IconHome, IconBell, IconRocket, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp } from '@tabler/icons-react';
 import './styles.scss';
 
 const FooterMenuMobile = () => {
@@ -12,14 +12,13 @@ const FooterMenuMobile = () => {
   let navigate = useNavigate();
   let currentPath = window.location.pathname
   const dispatch = useDispatch();
+  const userInfo = useSelector(state => state.user)
+  const [mobilMenuOpen, setMobileMenuOpen] = useState(false)
+  const { colorScheme, setColorScheme,  } = useMantineColorScheme();
 
   useEffect(() => { 
     dispatch(userInfos.getInfo());
   }, [dispatch]);
-
-  const userInfo = useSelector(state => state.user)
-
-  const [mobilMenuOpen, setMobileMenuOpen] = useState(false)
 
   const goToProfile = () => {
     setMobileMenuOpen(false)
@@ -83,7 +82,8 @@ const FooterMenuMobile = () => {
       <Modal 
         opened={mobilMenuOpen} 
         onClose={() => setMobileMenuOpen(false)} 
-        title="Teste"
+        centered
+        withCloseButton={false}
       >
         <NavLink
           label="Ver meu perfil"
@@ -95,6 +95,20 @@ const FooterMenuMobile = () => {
           leftSection={<IconSettings size="1rem" stroke={1.5} />}
           onClick={goToSettings}
         />
+        {colorScheme === 'dark' && 
+          <NavLink
+            label="Mudar para o tema claro"
+            leftSection={<IconBrightnessUp size="1rem" stroke={1.5} />}
+            onClick={() => {setColorScheme('light')}}
+          />
+        }
+        {colorScheme === 'light' && 
+          <NavLink
+            label="Mudar para o tema escuro"
+            leftSection={<IconMoon size="1rem" stroke={1.5} />}
+            onClick={() => {setColorScheme('dark')}}
+          />
+        }
         <NavLink
           label="Sair"
           leftSection={<IconLogout size="1rem" stroke={1.5} />}
