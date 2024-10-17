@@ -47,7 +47,9 @@ function Home () {
                     />
                   </Tooltip>
                 ))}
-                <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
+                {projects?.list.length > 5 && 
+                  <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
+                }
               </Avatar.Group>
             </Paper>
             <Grid grow gutter="xs">

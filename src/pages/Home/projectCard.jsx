@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Group, Title, Text, Card, Image, Badge, Menu, Avatar, Indicator, ActionIcon, Flex, Tooltip, rem } from '@mantine/core';
-import { IconDots, IconEye, IconFileZip, IconTrash , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings, IconUserOff } from '@tabler/icons-react';
+import { IconDots, IconEye, IconFileZip, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings, IconUserOff } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -59,15 +59,15 @@ function ProjectCard (props) {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
+              <Menu.Item leftSection={<IconEye style={{ width: '14px', height: '14px' }} />}>
+                Página do Projeto
+              </Menu.Item>
               <Menu.Item leftSection={<IconFileZip style={{ width: '14px', height: '14px' }} />}>
                 Painel do Projeto
               </Menu.Item>
-              <Menu.Item leftSection={<IconEye style={{ width: '14px', height: '14px' }} />}>
-                Perfil do Projeto
-              </Menu.Item>
+              <Menu.Divider />
               <Menu.Item
-                leftSection={<IconTrash style={{ width: '14px', height: '14px' }} />}
-                color="red"
+                leftSection={<IconUserCog style={{ width: '14px', height: '14px' }} />}
               >
                 Gerenciar participação
               </Menu.Item>
@@ -83,7 +83,7 @@ function ProjectCard (props) {
         />
       </Card.Section>
       <Card.Section withBorder inheritPadding py="xs">
-        <Text size="xs">
+        <Text size="sm">
           Minha participação
         </Text>
         {isActiveOnProject && 
@@ -101,14 +101,13 @@ function ProjectCard (props) {
             estive até o encerramento em {project.yearEnd}
           </Badge>
         }
-      </Card.Section>
-      <Card.Section withBorder inheritPadding py="xs">
         <Flex
           justify="flex-start"
           align="center"
           direction="row"
           wrap="nowrap"
           columnGap="md"
+          mt={6}
         >
           <Indicator 
             processing={isActiveOnProject}
