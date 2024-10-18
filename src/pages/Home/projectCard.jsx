@@ -37,30 +37,28 @@ function ProjectCard (props) {
       </>
     ) : ( 
       <Card shadow="sm" padding="lg" radius="md" withBorder>
-        <Card.Section withBorder inheritPadding py="xs">
-          <Group justify="space-between" align="flex-start">
-            <div>
-              <Title fw={500} lineClamp={1} size="1.2rem">{project?.name}</Title>
-              <Group gap={4}>
-                {project?.ptname === "Projeto solo" &&
-                  <IconUser style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} /> 
-                }
-                {project?.ptname === "Banda" &&
-                  <IconUsersGroup style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
-                } 
-                {project?.ptname === "Ideia de projeto" &&
-                  <IconBulb style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
-                }
-                <Text size="xs" c="dimmed" lineClamp={1}>
-                  {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
-                </Text>
-              </Group>
-              <Text size="xs" c="dimmed" lineClamp={1} mt={5}>
-                <Badge variant='dot' color={project?.activityStatusColor} size='xs'>
-                  {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
-                </Badge>
-              </Text>
-            </div>
+        <Card.Section withBorder inheritPadding py="xs" px="xs">
+          <Group justify="space-between" align="flex-start" wrap='nowrap' style={{ justify: 'space-between' }}>
+            <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
+              <Avatar variant="filled" radius="md" size="md" src={cdnProjectPath+project?.picture} />
+              <div>
+                <Title fw={500} lineClamp={1} size="1.2rem">{project?.name}</Title>
+                <Group gap={4}>
+                  {project?.ptname === "Projeto solo" &&
+                    <IconUser style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} /> 
+                  }
+                  {project?.ptname === "Banda" &&
+                    <IconUsersGroup style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
+                  } 
+                  {project?.ptname === "Ideia de projeto" &&
+                    <IconBulb style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
+                  }
+                  <Text size="xs" c="dimmed" lineClamp={1}>
+                    {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
+                  </Text>
+                </Group>
+              </div>
+            </Group>
             <Menu withinPortal position="bottom-end" shadow="sm">
               <Menu.Target>
                 <ActionIcon variant="subtle" color="gray">
@@ -83,14 +81,13 @@ function ProjectCard (props) {
               </Menu.Dropdown>
             </Menu>
           </Group>
+          <Text size="xs" c="dimmed" lineClamp={1} mt={5}>
+            <Badge variant='dot' color={project?.activityStatusColor} size='xs'>
+              {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
+            </Badge>
+          </Text>
         </Card.Section>
-        <Card.Section>
-          <Image
-            src={cdnProjectPath+project?.picture}
-            height={160}
-            alt={project?.name}
-          />
-        </Card.Section>
+        
         <Card.Section withBorder inheritPadding py="xs">
           {isActiveOnProject && 
             <Badge size='xs' variant='light' color={indicatorColor()}>
@@ -144,7 +141,7 @@ function ProjectCard (props) {
         </Card.Section>
         <Card.Section withBorder inheritPadding py="xs">
           <Text size="xs" c="dimmed" mb={5}>
-            {activeMembers?.length} Integrantes/equipe ativos
+            Integrantes ativos ({activeMembers?.length})
           </Text>
           <Group gap={5}>
             {activeMembers?.map((member) => (

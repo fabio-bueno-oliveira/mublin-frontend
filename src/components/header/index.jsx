@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, rem } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, rem } from '@mantine/core';
 import { IconMoon, IconBrightnessUp } from '@tabler/icons-react';
 import s from './header.module.css';
 
@@ -12,6 +12,7 @@ function Header () {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const { colorScheme, setColorScheme,  } = useMantineColorScheme();
+  let currentPath = window.location.pathname
 
   useEffect(() => { 
     dispatch(userInfos.getInfo());
@@ -42,21 +43,27 @@ function Header () {
           <Title order={3}>Mublin</Title>
         </Link>
         <Flex align={"center"}>
-          <Link to={{ pathname: '/my-account' }}>
-            <Avatar
-              size="sm"
-              src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
-              alt={user.username}
-            />
-          </Link>
-          <Link to={{ pathname: '/my-account' }}>
+          <Text fw={400} size='sm' ml={6} mr={8} c='dimmed'>Olá, {user.name}!</Text>
+          <Link to={{ pathname: '/home' }}>
             <Button 
               size="sm" 
               variant='transparent'
-              color="dark"
+              color={currentPath === '/home' ? 'violet' : 'dark'}
               p={'xs'}
+              visibleFrom="md"
             >
-              Olá, {user.name}!
+              Início
+            </Button>
+          </Link>
+          <Link to={{ pathname: '/my-projects' }}>
+            <Button 
+              size="sm" 
+              variant='transparent'
+              color={currentPath === '/my-projects' ? 'violet' : 'dark'}
+              p={'xs'}
+              visibleFrom="md"
+            >
+              Meus Projetos
             </Button>
           </Link>
           <Button 
@@ -69,6 +76,15 @@ function Header () {
           >
             Sair
           </Button>
+          <Link to={{ pathname: '/my-account' }}>
+            <Avatar
+              size="sm"
+              src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
+              alt={user.username}
+              ml={8}
+              mr={10}
+            />
+          </Link>
           {colorScheme === 'dark' && 
             <ActionIcon 
               variant="transparent" size="lg" color="default" 

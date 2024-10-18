@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Avatar, Tooltip, Text, Grid, Paper, Skeleton } from '@mantine/core';
+import { Container, Avatar, Tooltip, Title, Text, Grid, Paper, Skeleton } from '@mantine/core';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import ProjectCard from './projectCard';
@@ -18,9 +18,7 @@ function Home () {
     dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
   }, [loggedUser.id, dispatch]);
 
-  // const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
-
   const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
 
   return (
@@ -35,24 +33,22 @@ function Home () {
           </>
         ) : (
           <>
-            <Paper shadow="sm" radius="md" withBorder p='sm' mb='sm'>
-              <Text size="sm" mb='sm'>
-                Você está cadastrado em {projects?.list.length} projetos
-              </Text>
-              <Avatar.Group>
-                {projects?.list.slice(0, 5).map((p) => (
-                  <Tooltip label={p.name} key={p.id} withArrow>
-                    <Avatar 
-                      size='lg'
-                      src={'https://ik.imagekit.io/mublin/projects/tr:h-80,w-80,c-maintain_ratio/'+p.picture} 
-                    />
-                  </Tooltip>
-                ))}
-                {projects?.list.length > 5 && 
-                  <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
-                }
-              </Avatar.Group>
-            </Paper>
+            <Title size="h4" mb={16}>
+              Você está cadastrado em {projects?.list.length} projetos
+            </Title>
+            <Avatar.Group mb={16}>
+              {projects?.list.slice(0, 5).map((p) => (
+                <Tooltip label={p.name} key={p.id} withArrow>
+                  <Avatar 
+                    size='lg'
+                    src={'https://ik.imagekit.io/mublin/projects/tr:h-80,w-80,c-maintain_ratio/'+p.picture} 
+                  />
+                </Tooltip>
+              ))}
+              {projects?.list.length > 5 && 
+                <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
+              }
+            </Avatar.Group>
             <Grid grow gutter="xs">
               <Grid.Col span={6}>
                 <Paper shadow="sm" radius="md" withBorder p='sm'>
