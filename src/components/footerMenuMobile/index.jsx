@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Modal, NavLink, Text } from '@mantine/core';
+import { useMantineColorScheme, Modal, NavLink, Text, Divider } from '@mantine/core';
 import { IconHome, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconMenu2, IconMusic } from '@tabler/icons-react';
 import './styles.scss';
 
@@ -39,33 +39,33 @@ const FooterMenuMobile = () => {
       <footer className="menuMobile mantine-hidden-from-sm">
         <div>
           <div className={currentPath === '/home' && 'active'} onClick={() => navigate("/home")}>
-            <IconHome stroke={currentPath === '/home' ? 1.9 : 1.5} />
-            <Text size="xs" fw={currentPath === '/home' && 500}>Home</Text>
+            <IconHome />
+            <Text size="xs">Home</Text>
           </div>
           {/* <div className={currentPath.includes("/career") && 'active'} onClick={() => navigate("/career")}>
-            <IconBell stroke={1.5} />
+            <IconBell />
             <span>Carreira</span>
           </div> */}
           <div className={currentPath === '/my-projects' && 'active'} onClick={() => navigate("/my-projects")}>
-            <IconMusic stroke={currentPath === '/my-projects' ? 1.9 : 1.5} />
-            <Text size="xs" fw={currentPath === '/my-projects' && 500}>Projetos</Text>
+            <IconMusic />
+            <Text size="xs">Projetos</Text>
           </div>
           <div className={currentPath === '/search' && 'active'} onClick={() => navigate("/search")}>
-            <IconSearch stroke={currentPath === '/search' ? 1.9 : 1.5} />
-            <Text size="xs" fw={currentPath === '/search' && 500}>Buscar</Text>
+            <IconSearch />
+            <Text size="xs">Buscar</Text>
           </div>
           <div className={currentPath === '/new' && 'active'} onClick={() => navigate("/new")}>
-            <IconPlus stroke={currentPath === '/new' ? 1.9 : 1.5} />
-            <Text size="xs" fw={currentPath === '/new' && 500}>Novo</Text>
+            <IconPlus />
+            <Text size="xs">Novo</Text>
           </div>
           {/* <div className={currentPath === '/notifications' && 'active'} onClick={() => navigate("/notifications")}>
-            <IconBell stroke={1.5} />
+            <IconBell />
             <span>Notificações</span>
           </div> */}
           <div  
             onClick={() => setMobileMenuOpen(true)}
           >
-            <IconMenu2 stroke={1.5} style={{ marginTop: 6 }} />
+            <IconMenu2 style={{ marginTop: 6 }} />
           </div>
           {/* <div 
             className='userPicture'
@@ -87,13 +87,15 @@ const FooterMenuMobile = () => {
         opened={mobilMenuOpen} 
         onClose={() => setMobileMenuOpen(false)} 
         centered
-        withCloseButton={false}
+        title="Opções"
+        // withCloseButton={false}
       >
         <NavLink
           label="Ver meu perfil"
           leftSection={<IconUserCircle size="1rem" stroke={1.5} />}
           onClick={goToProfile}
         />
+        <Divider my="xs" />
         <NavLink
           label="Configurações"
           leftSection={<IconSettings size="1rem" stroke={1.5} />}
@@ -113,6 +115,7 @@ const FooterMenuMobile = () => {
             onClick={() => {setColorScheme('dark')}}
           />
         }
+        <Divider my="xs" />
         <NavLink
           label="Sair"
           leftSection={<IconLogout size="1rem" stroke={1.5} />}
