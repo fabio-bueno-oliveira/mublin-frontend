@@ -42,7 +42,7 @@ function ProjectCard (props) {
             <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
               <Avatar variant="filled" radius="md" size="md" src={cdnProjectPath+project?.picture} />
               <div>
-                <Title fw={500} lineClamp={1} size="1.2rem">{project?.name}</Title>
+                <Title fw={500} lineClamp={1} size="1rem">{project?.name}</Title>
                 <Group gap={4}>
                   {project?.ptname === "Projeto solo" &&
                     <IconUser style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} /> 
@@ -82,28 +82,13 @@ function ProjectCard (props) {
             </Menu>
           </Group>
           <Text size="xs" c="dimmed" lineClamp={1} mt={5}>
-            <Badge variant='dot' color={project?.activityStatusColor} size='xs'>
+            <Badge variant='light' color={project?.activityStatusColor} size='xs'>
               {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
             </Badge>
           </Text>
         </Card.Section>
         
         <Card.Section withBorder inheritPadding py="xs">
-          {isActiveOnProject && 
-            <Badge size='xs' variant='light' color={indicatorColor()}>
-              {`Ativo desde ${project.joined_in}`}
-            </Badge>
-          }
-          {project.yearLeftTheProject && 
-            <Badge size='xs' variant='light' color="red">
-              deixei o projeto em {project.yearLeftTheProject}
-            </Badge>
-          }
-          {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-            <Badge size='xs' variant='light' color="red">
-              estive até o encerramento em {project.yearEnd}
-            </Badge>
-          }
           <Flex
             justify="flex-start"
             align="center"
@@ -130,7 +115,22 @@ function ProjectCard (props) {
               <Text size="xs" fw={500} lineClamp={1}> 
                 {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
               </Text>
-              <Text size="xs" display={'flex'} lineClamp={1}>
+              {isActiveOnProject && 
+                <Badge size='xs' variant='light' color={indicatorColor()}>
+                  {`Ativo desde ${project.joined_in}`}
+                </Badge>
+              }
+              {project.yearLeftTheProject && 
+                <Badge size='xs' variant='light' color="red">
+                  deixei o projeto em {project.yearLeftTheProject}
+                </Badge>
+              }
+              {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
+                <Badge size='xs' variant='light' color="red">
+                  estive até o encerramento em {project.yearEnd}
+                </Badge>
+              }
+              <Text size="xs" display={'flex'} lineClamp={1} mt={6}>
                 <IconIdBadge2 style={{ width: '15px', height: '15px', marginRight: '3px' }} stroke={1.2} /> {project.workTitle}
               </Text>
               <Text size="xs" display={'flex'} lineClamp={1}>
@@ -138,9 +138,7 @@ function ProjectCard (props) {
               </Text>
             </Flex>
           </Flex>
-        </Card.Section>
-        <Card.Section withBorder inheritPadding py="xs">
-          <Text size="xs" c="dimmed" mb={5}>
+          <Text size="xs" c="dimmed" mb={5} mt={14}>
             Integrantes ativos ({activeMembers?.length})
           </Text>
           <Group gap={5}>
