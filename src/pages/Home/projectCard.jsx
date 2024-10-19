@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Group, Title, Text, Card, Image, Badge, Menu, Avatar, Indicator, ActionIcon, Flex, Tooltip, Skeleton, rem } from '@mantine/core';
-import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings, IconUserOff } from '@tabler/icons-react';
+import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -12,20 +12,10 @@ function ProjectCard (props) {
   const user = useSelector(state => state.user);
   const cdnBaseURL = 'https://ik.imagekit.io/mublin/';
   const cdnProjectPath = cdnBaseURL+'projects/tr:h-250,w-410,fo-top,c-maintain_ratio/';
-  // const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear();
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
 
-  const indicatorColor = () => {
-    if (isActiveOnProject) {
-      return 'lime';
-    }
-    if (project.yearLeftTheProject && !project.yearEnd) {
-      return 'red';
-    }
-    if (!project.active || project.yearEnd) {
-      return 'red';
-    }
-  }
+  const iconProjectActivityStyles = { width: '16px', height: '16px' };
 
   return (
     loading ? (
@@ -39,21 +29,21 @@ function ProjectCard (props) {
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section withBorder inheritPadding py="xs" px="xs">
           <Group justify="space-between" align="flex-start" wrap='nowrap' style={{ justify: 'space-between' }}>
-            <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
+            <Group justify="flex-start" align="center" wrap='nowrap' gap={8}>
               <Avatar variant="filled" radius="md" size="md" src={cdnProjectPath+project?.picture} />
               <div>
                 <Title fw={500} lineClamp={1} size="1rem">{project?.name}</Title>
                 <Group gap={4}>
                   {project?.ptname === "Projeto solo" &&
-                    <IconUser style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} /> 
+                    <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   }
                   {project?.ptname === "Banda" &&
-                    <IconUsersGroup style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
+                    <IconUsersGroup style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   } 
                   {project?.ptname === "Ideia de projeto" &&
-                    <IconBulb style={{ width: rem(13), height: rem(13) }} color='grey' stroke={1.5} />
+                    <IconBulb style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   }
-                  <Text size="xs" c="dimmed" lineClamp={1}>
+                  <Text size="11px" lineClamp={1} pt={1}>
                     {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
                   </Text>
                 </Group>
@@ -81,20 +71,22 @@ function ProjectCard (props) {
               </Menu.Dropdown>
             </Menu>
           </Group>
-          <Text size="xs" c="dimmed" lineClamp={1} mt={5}>
-            <Badge variant='light' color={project?.activityStatusColor} size='xs'>
+          <Group justify="flex-start" align="center" mt={5} wrap='nowrap' gap={3}>
+            {project?.activityStatusColor === 'green' && <IconToggleRightFilled style={iconProjectActivityStyles} color='green' />}
+            {project?.activityStatusColor === 'gray' && <IconToggleLeftFilled style={iconProjectActivityStyles} color='gray' />}
+            <Text size={'10px'} lineClamp={1} c={project?.activityStatusColor}>
               {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
-            </Badge>
-          </Text>
+            </Text>
+          </Group>
         </Card.Section>
         
-        <Card.Section withBorder inheritPadding py="xs">
+        <Card.Section withBorder inheritPadding py="xs" px="xs">
           <Flex
             justify="flex-start"
             align="center"
             direction="row"
             wrap="nowrap"
-            columnGap="md"
+            columnGap="xs"
             mt={6}
           >
             <Avatar 
@@ -116,19 +108,19 @@ function ProjectCard (props) {
                 {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
               </Text>
               {isActiveOnProject && 
-                <Badge size='xs' variant='light' color={indicatorColor()}>
-                  {`Ativo desde ${project.joined_in}`}
-                </Badge>
+                <Text size='10px' c="green">
+                  {`${project.joined_in} - Atualmente (${currentYear - project.joined_in} anos)`}
+                </Text>
               }
               {project.yearLeftTheProject && 
-                <Badge size='xs' variant='light' color="red">
+                <Text size='10px' c="red">
                   deixei o projeto em {project.yearLeftTheProject}
-                </Badge>
+                </Text>
               }
               {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-                <Badge size='xs' variant='light' color="red">
-                  estive até o encerramento em {project.yearEnd}
-                </Badge>
+                <Text size='10px' c="red">
+                  {project.joined_in} até o encerramento em {project.yearEnd}
+                </Text>
               }
               <Text size="xs" display={'flex'} lineClamp={1} mt={6}>
                 <IconIdBadge2 style={{ width: '15px', height: '15px', marginRight: '3px' }} stroke={1.2} /> {project.workTitle}
@@ -171,8 +163,8 @@ function ProjectCard (props) {
             }
           </Group>
         </Card.Section>
-        <Card.Section withBorder inheritPadding py="xs">
-          <Flex align="center" justify="flex-start" direction="row" c="dimmed">
+        {/* <Card.Section withBorder inheritPadding py="xs">
+          <Flex align="center" justify="flex-start" direction="row">
             <Text style={{ fontSize: '11px' }}>
               Categoria: 
             </Text>
@@ -183,7 +175,7 @@ function ProjectCard (props) {
               {project.portfolio ? 'Portfolio' : 'Principais'}
             </Text>
           </Flex>
-        </Card.Section>
+        </Card.Section> */}
         {/* <Card.Section withBorder inheritPadding py="xs">
           {!!project.id && 
             <div>
