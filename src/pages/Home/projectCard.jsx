@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Group, Title, Text, Card, Image, Badge, Menu, Avatar, Indicator, ActionIcon, Flex, Tooltip, Skeleton, rem } from '@mantine/core';
-import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconFolder, IconIdBadge2, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled } from '@tabler/icons-react';
+import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Skeleton } from '@mantine/core';
+import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconCheck, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -30,9 +30,16 @@ function ProjectCard (props) {
         <Card.Section withBorder inheritPadding py="xs" px="xs">
           <Group justify="space-between" align="flex-start" wrap='nowrap' style={{ justify: 'space-between' }}>
             <Group justify="flex-start" align="center" wrap='nowrap' gap={8}>
-              <Avatar variant="filled" radius="md" size="md" src={cdnProjectPath+project?.picture} />
+              <Avatar variant="filled" radius="md" size="lg" src={cdnProjectPath+project?.picture} />
               <div>
-                <Title fw={500} lineClamp={1} size="1rem">{project?.name}</Title>
+                <Title fw={500} lineClamp={1} size="0.9rem" mb={!project?.regionName ? 0 : 0}>
+                  {project?.name}
+                </Title>
+                {project?.regionName && 
+                  <Text size="10px" truncate="end" mb={5} c='dimmed'>
+                    {`${project.regionName}/${project.regionUf}`}
+                  </Text>
+                }
                 <Group gap={4}>
                   {project?.ptname === "Projeto solo" &&
                     <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
@@ -43,7 +50,7 @@ function ProjectCard (props) {
                   {project?.ptname === "Ideia de projeto" &&
                     <IconBulb style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   }
-                  <Text size="11px" lineClamp={1} pt={1}>
+                  <Text size="12px" truncate="end" pt={1}>
                     {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
                   </Text>
                 </Group>
@@ -74,13 +81,12 @@ function ProjectCard (props) {
           <Group justify="flex-start" align="center" mt={5} wrap='nowrap' gap={3}>
             {project?.activityStatusColor === 'green' && <IconToggleRightFilled style={iconProjectActivityStyles} color='green' />}
             {project?.activityStatusColor === 'gray' && <IconToggleLeftFilled style={iconProjectActivityStyles} color='gray' />}
-            <Text size={'10px'} lineClamp={1} c={project?.activityStatusColor}>
+            <Text size={'11.5px'} lineClamp={1}>
               {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
             </Text>
           </Group>
         </Card.Section>
-        
-        <Card.Section withBorder inheritPadding py="xs" px="xs">
+        <Card.Section withBorder inheritPadding py="6px" px="xs">
           <Flex
             justify="flex-start"
             align="center"
@@ -104,33 +110,46 @@ function ProjectCard (props) {
               wrap="wrap"
               rowGap={3}
             >
-              <Text size="xs" fw={500} lineClamp={1}> 
+              <Text size="12.5px" fw={500} lineClamp={1}> 
                 {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
               </Text>
-              {isActiveOnProject && 
-                <Text size='10px' c="green">
-                  {`${project.joined_in} - Atualmente (${currentYear - project.joined_in} anos)`}
+              <Flex align="end" justify="flex-start" direction="row" mb={1}>
+                {project.workTitle === "Membro oficial" && 
+                  <IconCircleDashedCheck style={{ width: '14px', height: '14px', marginRight: '3px' }} stroke={1.2} />
+                }
+                {project.workTitle === "Convidado" && 
+                  <IconIdBadge2 style={{ width: '14px', height: '14px', marginRight: '3px' }} stroke={1.2} />
+                }
+                <Text size={'11.5px'} truncate="end">
+                  {project.workTitle}
                 </Text>
+                {!!project.admin && 
+                  <>
+                    <IconSettings style={{ width: '14px', height: '14px', marginLeft: '5px' }} stroke={1.2} />
+                    <Text size={'11.5px'} truncate="end">
+                      Admin
+                    </Text>
+                  </>
+                }
+              </Flex>
+              {isActiveOnProject && 
+                <Badge size={'xs'} variant='light' color="green">
+                  {`${project.joined_in} - Atualmente (${currentYear - project.joined_in} anos)`}
+                </Badge>
               }
               {project.yearLeftTheProject && 
-                <Text size='10px' c="red">
+                <Badge size={'xs'} variant='light' color="red">
                   deixei o projeto em {project.yearLeftTheProject}
-                </Text>
+                </Badge>
               }
               {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-                <Text size='10px' c="red">
+                <Badge size={'xs'} variant='light' color='red'>
                   {project.joined_in} até o encerramento em {project.yearEnd}
-                </Text>
+                </Badge>
               }
-              <Text size="xs" display={'flex'} lineClamp={1} mt={6}>
-                <IconIdBadge2 style={{ width: '15px', height: '15px', marginRight: '3px' }} stroke={1.2} /> {project.workTitle}
-              </Text>
-              <Text size="xs" display={'flex'} lineClamp={1}>
-                <IconSettings style={{ width: '15px', height: '15px', marginRight: '3px' }} stroke={1.2} /> Administrador
-              </Text>
             </Flex>
           </Flex>
-          <Text size="xs" c="dimmed" mb={5} mt={14}>
+          <Text size="xs" mb={5} mt={14}>
             Integrantes ativos ({activeMembers?.length})
           </Text>
           <Group gap={5}>
