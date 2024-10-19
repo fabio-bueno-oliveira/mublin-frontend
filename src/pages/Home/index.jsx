@@ -82,22 +82,35 @@ function Home () {
       </Container>
       <Container size={'lg'}>
         <Grid mb={largeScreen ? 30 : 86}>
-          {projects?.list.map((p) => (
-            <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={p.id}>
-              <ProjectCard 
-                loading={projects.requesting}
-                project={p}
-                activeMembers={
-                  projects?.members?.filter(
-                    (member) => { 
-                      return member.projectId === p.projectid 
-                      && !member.leftIn 
-                    }
-                  ).sort((a, b) => b.leader - a.leader)
-                }
-              />
-            </Grid.Col>
-          ))}
+          {projects.requesting ? ( 
+            Array.apply(null, { length: 4 }).map((e, i) => (
+              <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={i}>
+                <>
+                  <Skeleton height={50} circle mb="xl" mt="lg" />
+                  <Skeleton height={8} radius="xl" />
+                  <Skeleton height={8} mt={6} radius="xl" />
+                  <Skeleton height={8} mt={6} width="70%" radius="xl" />
+                </>
+              </Grid.Col>
+            ))
+          ) : (
+            projects?.list.map((p) => (
+              <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={p.id}>
+                <ProjectCard 
+                  loading={projects.requesting}
+                  project={p}
+                  activeMembers={
+                    projects?.members?.filter(
+                      (member) => { 
+                        return member.projectId === p.projectid 
+                        && !member.leftIn 
+                      }
+                    ).sort((a, b) => b.leader - a.leader)
+                  }
+                />
+              </Grid.Col>
+            ))
+          )}
         </Grid>
       </Container>
       <FooterMenuMobile />
