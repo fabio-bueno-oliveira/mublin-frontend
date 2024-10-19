@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { Container, Avatar, Tooltip, Title, Text, Grid, Paper, Skeleton } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import ProjectCard from './projectCard';
@@ -10,6 +11,7 @@ import ProjectCard from './projectCard';
 function Home () {
 
   let dispatch = useDispatch();
+  const largeScreen = useMediaQuery('(min-width: 60em)');
 
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
@@ -79,7 +81,7 @@ function Home () {
         )}
       </Container>
       <Container size={'lg'}>
-        <Grid mb={74}>
+        <Grid mb={largeScreen ? 30 : 86}>
           {projects?.list.map((p) => (
             <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={p.id}>
               <ProjectCard 

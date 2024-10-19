@@ -10,15 +10,15 @@ function ProjectCard (props) {
   const project = props?.project;
   const activeMembers = props?.activeMembers;
 
+  const largeScreen = useMediaQuery('(min-width: 60em)');
   const user = useSelector(state => state.user);
+
   const cdnBaseURL = 'https://ik.imagekit.io/mublin/';
   const cdnProjectPath = cdnBaseURL+'projects/tr:h-250,w-410,fo-top,c-maintain_ratio/';
+  
   const currentYear = new Date().getFullYear();
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
-
   const iconProjectActivityStyles = { width: '16px', height: '16px' };
-
-  const largeScreen = useMediaQuery('(min-width: 60em)');
 
   return (
     loading ? (
