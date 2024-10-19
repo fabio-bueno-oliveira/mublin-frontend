@@ -32,13 +32,13 @@ function ProjectCard (props) {
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section withBorder inheritPadding py="xs" px="xs">
           <Group justify="space-between" align="flex-start" wrap='nowrap' style={{ justify: 'space-between' }}>
-            <Group justify="flex-start" align="center" wrap='nowrap' gap={8}>
+            <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
               <Avatar variant="filled" radius="md" size="lg" src={cdnProjectPath+project?.picture} />
               <div>
                 <Title 
-                  fw={500}
+                  fw={largeScreen ? 600 : 600}
                   lineClamp={1} 
-                  size={largeScreen ? '1rem' : '1.2rem'}
+                  size={largeScreen ? '0.9rem' : '1rem'}
                   mb={!project?.regionName ? 0 : 0}
                 >
                   {project?.name}
@@ -48,17 +48,17 @@ function ProjectCard (props) {
                     {`de ${project.regionName}, ${project.regionUf}`}
                   </Text>
                 }
-                <Group gap={2}>
+                <Group gap={2} truncate="start" >
                   {project?.ptname === "Projeto solo" &&
                     <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   }
                   {project?.ptname === "Banda" &&
                     <IconUsersGroup style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   } 
-                  {project?.ptname === "Ideia de projeto" &&
+                  {project?.ptname === "Ideia" &&
                     <IconBulb style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   }
-                  <Text size="12px" truncate="end" pt={1}>
+                  <Text size="12px" pt={1} lineClamp={1}>
                     {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
                   </Text>
                 </Group>
