@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Skeleton } from '@mantine/core';
+import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Anchor, Skeleton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconCheck, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled } from '@tabler/icons-react';
+import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -33,16 +34,22 @@ function ProjectCard (props) {
         <Card.Section withBorder inheritPadding py="xs" px="xs">
           <Group justify="space-between" align="flex-start" wrap='nowrap' style={{ justify: 'space-between' }}>
             <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
-              <Avatar variant="filled" radius="md" size="lg" src={cdnProjectPath+project?.picture} />
+              <Link to={{ pathname: `/project/${project?.username}` }}>
+                <Avatar variant="filled" radius="md" size="lg" src={cdnProjectPath+project?.picture} />
+              </Link>
               <div>
-                <Title 
-                  fw={largeScreen ? 600 : 600}
-                  lineClamp={1} 
-                  size={largeScreen ? '0.9rem' : '1rem'}
-                  mb={!project?.regionName ? 0 : 0}
+                <Anchor
+                  href={`/project/${project?.username}`}
                 >
-                  {project?.name}
-                </Title>
+                  <Title 
+                    fw={largeScreen ? 600 : 600}
+                    lineClamp={1} 
+                    size={largeScreen ? '0.9rem' : '1rem'}
+                    mb={!project?.regionName ? 0 : 0}
+                  >
+                    {project?.name}
+                  </Title>
+                </Anchor>
                 {project?.regionName && 
                   <Text size="10px" truncate="end" mb={5} c='dimmed'>
                     {`de ${project.regionName}, ${project.regionUf}`}
@@ -59,8 +66,16 @@ function ProjectCard (props) {
                     <IconBulb style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   }
                   <Text size="12px" pt={1} lineClamp={1}>
-                    {project?.ptname} {project.genre1 ? ' · '+project.genre1 : null }
+                    {project?.ptname} {project.genre1 && ' · '}
                   </Text>
+                  {project.genre1 && 
+                    <>
+                      <IconMusic style={{ width: '12px', height: '12px' }} />
+                      <Text size="12px" pt={1} lineClamp={1} truncate="end">
+                        {project.genre1 ? project.genre1 : null }
+                      </Text>
+                    </>
+                  }
                 </Group>
               </div>
             </Group>
@@ -86,7 +101,7 @@ function ProjectCard (props) {
               </Menu.Dropdown>
             </Menu>
           </Group>
-          <Group justify="flex-start" align="center" mt={5} wrap='nowrap' gap={3}>
+          <Group justify="flex-start" align="center" mt={7} wrap='nowrap' gap={3}>
             {project?.activityStatusColor === 'green' && <IconToggleRightFilled style={iconProjectActivityStyles} color='green' />}
             {project?.activityStatusColor === 'gray' && <IconToggleLeftFilled style={iconProjectActivityStyles} color='gray' />}
             <Text size={'12px'} lineClamp={1}>

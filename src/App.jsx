@@ -1,6 +1,6 @@
 import React from 'react';
 import AppRoutes from './routes';
-import { MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
+import { MantineProvider, ColorSchemeScript, Anchor, createTheme } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import '@mantine/core/styles.css';
@@ -14,6 +14,13 @@ const theme = createTheme({
     md: '64em',
     lg: '74em',
     xl: '90em',
+  },
+  components: {
+    Anchor: Anchor.extend({
+      defaultProps: {
+        underline: 'never',
+      },
+    }),
   },
   colors: {
     // dark: [

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Modal, NavLink, Text, Divider } from '@mantine/core';
 import { IconHome, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconMenu2, IconMusic } from '@tabler/icons-react';
@@ -15,10 +14,6 @@ const FooterMenuMobile = () => {
   const userInfo = useSelector(state => state.user)
   const [mobilMenuOpen, setMobileMenuOpen] = useState(false)
   const { colorScheme, setColorScheme,  } = useMantineColorScheme();
-
-  useEffect(() => { 
-    dispatch(userInfos.getInfo());
-  }, [dispatch]);
 
   const goToProfile = () => {
     setMobileMenuOpen(false)
@@ -46,7 +41,7 @@ const FooterMenuMobile = () => {
             <IconBell />
             <span>Carreira</span>
           </div> */}
-          <div className={currentPath === '/my-projects' && 'active'} onClick={() => navigate("/my-projects")}>
+          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) && 'active'} onClick={() => navigate("/my-projects")}>
             <IconMusic />
             <Text size="xs">Projetos</Text>
           </div>

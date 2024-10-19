@@ -22,6 +22,7 @@ import StartStep4Page from './pages/Start/step4';
 import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search';
 import New from './pages/New';
+import ProjectPage from './pages/ProjectPage';
 import PublicProfilePage from './pages/Profile/Public';
 
 function AppRoutes () {
@@ -54,6 +55,7 @@ function AppRoutes () {
             <Route path="/start/step3" element={<StartStep3Page />} />
             <Route path="/start/step4" element={<StartStep4Page />} />
             <Route path="/my-projects" element={<MyProjectsPage />} />
+            <Route path="/project/:username" element={<ProjectPage />} />
             <Route path="/search" element={<SearchPage />} />
             <Route path="/new" element={<New />} />
           </Route>
