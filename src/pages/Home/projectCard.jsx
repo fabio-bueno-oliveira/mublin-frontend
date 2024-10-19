@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Skeleton } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconCheck, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled } from '@tabler/icons-react';
 
 function ProjectCard (props) {
@@ -17,6 +18,8 @@ function ProjectCard (props) {
 
   const iconProjectActivityStyles = { width: '16px', height: '16px' };
 
+  const largeScreen = useMediaQuery('(min-width: 60em)');
+
   return (
     loading ? (
       <>
@@ -32,15 +35,20 @@ function ProjectCard (props) {
             <Group justify="flex-start" align="center" wrap='nowrap' gap={8}>
               <Avatar variant="filled" radius="md" size="lg" src={cdnProjectPath+project?.picture} />
               <div>
-                <Title fw={500} lineClamp={1} size="0.9rem" mb={!project?.regionName ? 0 : 0}>
+                <Title 
+                  fw={500}
+                  lineClamp={1} 
+                  size={largeScreen ? '1rem' : '1.2rem'}
+                  mb={!project?.regionName ? 0 : 0}
+                >
                   {project?.name}
                 </Title>
                 {project?.regionName && 
                   <Text size="10px" truncate="end" mb={5} c='dimmed'>
-                    {`${project.regionName}/${project.regionUf}`}
+                    {`de ${project.regionName}, ${project.regionUf}`}
                   </Text>
                 }
-                <Group gap={4}>
+                <Group gap={2}>
                   {project?.ptname === "Projeto solo" &&
                     <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                   }
@@ -81,7 +89,7 @@ function ProjectCard (props) {
           <Group justify="flex-start" align="center" mt={5} wrap='nowrap' gap={3}>
             {project?.activityStatusColor === 'green' && <IconToggleRightFilled style={iconProjectActivityStyles} color='green' />}
             {project?.activityStatusColor === 'gray' && <IconToggleLeftFilled style={iconProjectActivityStyles} color='gray' />}
-            <Text size={'11.5px'} lineClamp={1}>
+            <Text size={'12px'} lineClamp={1}>
               {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
             </Text>
           </Group>
