@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Anchor, Skeleton } from '@mantine/core';
+import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Anchor } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled, IconRoad } from '@tabler/icons-react';
+import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconPower, IconRoad } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -18,7 +18,7 @@ function ProjectCard (props) {
   
   const currentYear = new Date().getFullYear();
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
-  const iconProjectActivityStyles = { width: '16px', height: '16px' };
+  const iconProjectActivityStyles = { width: '15px', height: '15px' };
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -77,7 +77,11 @@ function ProjectCard (props) {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item leftSection={<IconEye style={{ width: '14px', height: '14px' }} />}>
+              <Menu.Item 
+                leftSection={<IconEye style={{ width: '14px', height: '14px' }} />}
+                href={'/project/'+project.username}
+                component="a"
+              >
                 Página do Projeto
               </Menu.Item>
               <Menu.Item leftSection={<IconSettings style={{ width: '14px', height: '14px' }} />}>
@@ -93,8 +97,8 @@ function ProjectCard (props) {
           </Menu>
         </Group>
         <Group justify="flex-start" align="center" mt={7} wrap='nowrap' gap={3}>
-          {project?.activityStatusColor === 'green' && <IconToggleRightFilled style={iconProjectActivityStyles} color='green' />}
-          {project?.activityStatusColor === 'gray' && <IconToggleLeftFilled style={iconProjectActivityStyles} color='gray' />}
+          {project?.activityStatusColor === 'green' && <IconPower style={iconProjectActivityStyles} color='green' />}
+          {project?.activityStatusColor === 'gray' && <IconPower style={iconProjectActivityStyles} color='gray' />}
           <Text size={'12px'} lineClamp={1}>
             {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
           </Text>
