@@ -76,7 +76,7 @@ function Header () {
           >
             Sair
           </Button>
-          <Link to={{ pathname: '/my-account' }}>
+          <Link to={{ pathname: '/' + user.username }}>
             <Avatar
               size="sm"
               src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}

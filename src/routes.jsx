@@ -23,6 +23,7 @@ import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search';
 import New from './pages/New';
 import ProjectPage from './pages/ProjectPage';
+import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
 
 function AppRoutes () {
@@ -38,31 +39,33 @@ function AppRoutes () {
 
     return <Outlet />;
   }
-  
-    return(
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route exact path="/:username/public" element={<PublicProfilePage />} />
-          <Route element={<RequireAuth />}>
-            <Route path="/my-account" element={<MyAccountPage />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/start/intro" element={<StartIntroPage />} />
-            <Route path="/start/step1" element={<StartStep1Page />} />
-            <Route path="/start/step2" element={<StartStep2Page />} />
-            <Route path="/start/step3" element={<StartStep3Page />} />
-            <Route path="/start/step4" element={<StartStep4Page />} />
-            <Route path="/my-projects" element={<MyProjectsPage />} />
-            <Route path="/project/:username" element={<ProjectPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/new" element={<New />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    )
+
+  return(
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route exact path="/:username/public" element={<PublicProfilePage />} />
+        <Route element={<RequireAuth />}>
+          <Route path="/my-account" element={<MyAccountPage />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/start/intro" element={<StartIntroPage />} />
+          <Route path="/start/step1" element={<StartStep1Page />} />
+          <Route path="/start/step2" element={<StartStep2Page />} />
+          <Route path="/start/step3" element={<StartStep3Page />} />
+          <Route path="/start/step4" element={<StartStep4Page />} />
+          <Route path="/my-projects" element={<MyProjectsPage />} />
+          <Route path="/project/:username" element={<ProjectPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/new" element={<New />} />
+          <Route exact path="/:username" element={<ProfilePage />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+        {/* <Route path="/:username" element={loggedIn ? <ProfilePage /> : <PublicProfilePage />} /> */}
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
 export default AppRoutes

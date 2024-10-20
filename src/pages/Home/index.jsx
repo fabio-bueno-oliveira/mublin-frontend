@@ -17,7 +17,7 @@ function Home () {
 
   useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
-    dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+    // dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
   }, [loggedUser.id, dispatch]);
 
   const projects = useSelector(state => state.userProjects);

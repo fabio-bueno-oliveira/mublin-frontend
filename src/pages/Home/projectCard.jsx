@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Anchor, Skeleton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled } from '@tabler/icons-react';
+import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconToggleRightFilled, IconToggleLeftFilled, IconRoad } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -43,7 +43,7 @@ function ProjectCard (props) {
               </Anchor>
               {project?.regionName && 
                 <Text size="10px" truncate="end" mb={5} c='dimmed'>
-                  {`de ${project.regionName}, ${project.regionUf}`}
+                  {`de ${project.cityName}, ${project.regionUf}`} 
                 </Text>
               }
               <Group gap={2} truncate="start" >
@@ -98,6 +98,9 @@ function ProjectCard (props) {
           <Text size={'12px'} lineClamp={1}>
             {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
           </Text>
+        </Group>
+        <Group gap={3} mt={6}>
+          <Badge size='xs' variant='light' color='gray'>Fundado em {project.yearFoundation}</Badge> {project.projectCurrentlyOnTour && <Badge size='xs' variant='light' color='blue' leftSection={<IconRoad style={{ width: '11px', height: '11px' }} />}>Em turnê</Badge>}
         </Group>
       </Card.Section>
       <Card.Section withBorder inheritPadding py="6px" px="xs">
@@ -173,16 +176,18 @@ function ProjectCard (props) {
               key={member.userId} 
               withArrow
             >
-              <Avatar 
-                variant="filled" 
-                radius="sm" 
-                size="sm" 
-                src={
-                  (member.userId && member.userPicture) ? 
-                    cdnBaseURL+'tr:h-26,w-26,r-max,c-maintain_ratio/users/avatars/'+member.userId+'/'+member.userPicture
-                  : null
-                } 
-              />
+              <Link to={{ pathname: `/${member.userUsername}` }}>
+                <Avatar 
+                  variant="filled" 
+                  radius="sm" 
+                  size="sm" 
+                  src={
+                    (member.userId && member.userPicture) ? 
+                      cdnBaseURL+'tr:h-26,w-26,r-max,c-maintain_ratio/users/avatars/'+member.userId+'/'+member.userPicture
+                    : null
+                  } 
+                />
+              </Link>
             </Tooltip>
           ))}
           {!activeMembers?.length && 
