@@ -1,11 +1,14 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { projectInfos } from '../../store/actions/project';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Box, Flex, Title, Card, Text, Image, Skeleton, Group, Center, Avatar, Paper } from '@mantine/core';
-import { Carousel } from '@mantine/carousel';
+import { Container, Box, Flex, Title, Card, Text, Image, Skeleton, Avatar, Paper } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
+import useEmblaCarousel from 'embla-carousel-react';
+import './styles.scss';
 
 function ProjectPage () {
 
@@ -23,6 +26,18 @@ function ProjectPage () {
   document.title = project.name+' | Mublin';
 
   const members = project.members.filter((member) => { return member.confirmed === 1 });
+  const largeScreen = useMediaQuery('(min-width: 60em)');
+
+  const [emblaRef] = useEmblaCarousel(
+    {
+      active: (
+        (largeScreen && members.length < 10) || (!largeScreen && members.length < 4)
+      ) ? false : true,
+      loop: false, 
+      dragFree: true, 
+      align: 'start' 
+    }
+  )
 
   return (
     <>
@@ -90,32 +105,33 @@ function ProjectPage () {
             }
           </>
         }
-        <Title size="h4" mt={24} mb={14}>Integrantes</Title>
-        <Carousel 
-          align="start" 
-          slideSize="20%"
-          slideGap="md" 
-          // slidesToScroll={5}
-          dragFree 
-          withControls={true}
-        >
-          {members.map((member, key) =>
-            <Carousel.Slide key={key}>
-              <Card>
-                <Flex
-                  justify="center"
-                  align="center"
-                  direction="column"
-                >
-                  <Avatar size="lg" name={member.name} src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture} />
-                  <Text ta="center" size={'sm'} mt={8}>{member.name+' '+member.lastname}</Text>
-                  <Text ta="center" size={'xs'}>{member.role1}</Text>
-                  <Text ta="center" c="dimmed" size={'10px'} mt={4}>Desde {member.joinedIn}</Text>
-                </Flex>
-              </Card>
-            </Carousel.Slide>
-          )}
-        </Carousel>
+        <Title size="h4" mt={24} mb={14}>Integrantes e Equipe</Title>
+        <div className="embla" ref={emblaRef}>
+          <div className="embla__container">
+            {members.map((member, key) =>
+              <div className="embla__slide">
+                <Card withBorder style={{ backgroundColor: 'transparent' }}>
+                  <Flex
+                    justify="center"
+                    align="center"
+                    direction="column"
+                  >
+                    <Link to={{ pathname: `/${member.username}` }}>
+                      <Avatar size="lg" name={member.name} src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture} />
+                    </Link>
+                    <Text ta="center" size={'12px'} fw={500} mt={8} mb={3} lineClamp={1}>
+                      {member.name+' '+member.lastname}
+                    </Text>
+                    <Text ta="center" size={'11px'} lineClamp={1}>
+                      {member.role1}{member.role2 && ', '+member.role2}{member.role3 && ', '+member.role3}
+                    </Text>
+                    <Text ta="center" c="dimmed" size={'10px'} mt={4}>Desde {member.joinedIn}</Text>
+                  </Flex>
+                </Card>
+              </div>
+            )}
+          </div>
+        </div>
       </Container>
       <FooterMenuMobile />
     </>

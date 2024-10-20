@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { profileInfos } from '../../store/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Box, Flex, Title, Text, Image, Skeleton } from '@mantine/core';
+import { Container, Box, Flex, Title, Text, Image, Skeleton, Center } from '@mantine/core';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 
@@ -24,42 +24,30 @@ function ProfilePage () {
     <>
       <Header />
       <Container size={'lg'}>
-        <Box mb={24}>
-          {profile.requesting && 
-            <>
-              <Skeleton height={50} circle mb="xl" />
-              <Skeleton height={18} radius="xl" />
-              <Skeleton height={18} mt={6} radius="xl" />
-              <Skeleton height={18} mt={6} width="70%" radius="xl" />
-            </>
-            
-          }
-          {!profile.requesting && 
-            <>
-              <Flex
-                justify="flex-start"
-                align="center"
-                direction="row"
-                wrap="nowrap"
-                columnGap="xs"
-                mt={6}
-              >
-                <Image
-                  radius="xl"
-                  h={130}
-                  w="auto"
-                  fit="contain"
-                  src={profile.picture}
-                />
-                <Box>
-                  <Text size='sm' c='dimmed'>{username}</Text>
-                  <Title order={3}>{profile.name} {profile.lastname}</Title>
-                  <Text>{profile.bio}</Text>
-                </Box>
-              </Flex>
-            </>
-          }
-        </Box>
+        <Center>
+          <Image
+            radius="xl"
+            h={130}
+            w="auto"
+            fit="contain"
+            src={profile.picture}
+          />
+        </Center>
+        {/* {profile.requesting && 
+          <>
+            <Skeleton height={50} circle mb="xl" />
+            <Skeleton height={18} radius="xl" />
+            <Skeleton height={18} mt={6} radius="xl" />
+            <Skeleton height={18} mt={6} width="70%" radius="xl" />
+          </>
+        } */}
+        {!profile.requesting && 
+          <Container size={'sm'} mt={20}>
+            <Text size='sm' c='dimmed' align='center'>{username}</Text>
+            <Title order={3} align='center'>{profile.name} {profile.lastname}</Title>
+            <Text align='center'>{profile.bio}</Text>
+          </Container>
+        }
       </Container>
       <FooterMenuMobile />
     </>
