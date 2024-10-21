@@ -1,0 +1,16 @@
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+}
+.embla__slide {
+  flex: 0 0 130px;
+  min-width: 0;
+  margin-right: 5px;
+}
+@media (min-width: 768px) {
+  .embla__slide {
+    margin-right: 4px;
+  }
+}

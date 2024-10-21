@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userInfos } from '../../store/actions/user';
+import { eventsInfos } from '../../store/actions/events';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { Container, Avatar, Tooltip, Title, Text, Grid, Paper, Skeleton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
@@ -12,12 +12,11 @@ function Home () {
 
   let dispatch = useDispatch();
   const largeScreen = useMediaQuery('(min-width: 60em)');
-
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
-    // dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+    dispatch(eventsInfos.getUserEvents(loggedUser.id));
   }, [loggedUser.id, dispatch]);
 
   const projects = useSelector(state => state.userProjects);
@@ -26,7 +25,7 @@ function Home () {
   return (
     <>
       <Header />
-      <Container size={'sm'} mb={'md'}>
+      <Container size={'lg'} mb={'md'}>
         {projects.requesting ? (
           <>
             <Skeleton height={110} radius="md" />
@@ -35,46 +34,52 @@ function Home () {
           </>
         ) : (
           <>
-            <Title size="h4" mb={16}>
-              Você está cadastrado em {projects?.list.length} projetos
-            </Title>
-            <Avatar.Group mb={16}>
-              {projects?.list.slice(0, 5).map((p) => (
-                <Tooltip label={p.name} key={p.id} withArrow>
-                  <Avatar 
-                    size='lg'
-                    src={'https://ik.imagekit.io/mublin/projects/tr:h-80,w-80,c-maintain_ratio/'+p.picture} 
-                  />
-                </Tooltip>
-              ))}
-              {projects?.list.length > 5 && 
-                <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
-              }
-            </Avatar.Group>
-            <Grid grow gutter="xs">
-              <Grid.Col span={6}>
-                <Paper shadow="sm" radius="md" withBorder p='sm'>
-                  <Text size="xs">Principais</Text>
-                  <Text size="xs" c="dimmed">4 projetos</Text>
-                </Paper>
+            <Grid align="center">
+              <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
+                <Title size="h5" mb={4}>
+                  Você está cadastrado em {projects?.list.length} projetos
+                </Title>
+                <Avatar.Group mb={16}>
+                  {projects?.list.slice(0, 5).map((p) => (
+                    <Tooltip label={p.name} key={p.id} withArrow>
+                      <Avatar 
+                        size='lg'
+                        src={'https://ik.imagekit.io/mublin/projects/tr:h-80,w-80,c-maintain_ratio/'+p.picture} 
+                      />
+                    </Tooltip>
+                  ))}
+                  {projects?.list.length > 5 && 
+                    <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
+                  }
+                </Avatar.Group>
               </Grid.Col>
-              <Grid.Col span={6}>
-                <Paper shadow="sm" radius="md" withBorder p='sm'>
-                  <Text size="xs">Temporários</Text>
-                  <Text size="xs" c="dimmed">4 projetos</Text>
-                </Paper>
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <Paper shadow="sm" radius="md" withBorder p='sm'>
-                  <Text size="xs">Ativo em</Text>
-                  <Text size="xs" c="dimmed">4 projetos</Text>
-                </Paper>
-              </Grid.Col>
-              <Grid.Col span={6}>
-                <Paper shadow="sm" radius="md" withBorder p='sm'>
-                  <Text size="xs">Encerrados</Text>
-                  <Text size="xs" c="dimmed">{projectsTerminated?.length} projetos</Text>
-                </Paper>
+              <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
+                <Grid grow gutter="xs">
+                  <Grid.Col span={6}>
+                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
+                      <Text size="xs" fw={500}>Principais</Text>
+                      <Text size="xs" c="dimmed">4 projetos</Text>
+                    </Paper>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
+                      <Text size="xs" fw={500}>Temporários</Text>
+                      <Text size="xs" c="dimmed">4 projetos</Text>
+                    </Paper>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
+                      <Text size="xs" fw={500}>Ativo em</Text>
+                      <Text size="xs" c="dimmed">4 projetos</Text>
+                    </Paper>
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
+                      <Text size="xs" fw={500}>Encerrados</Text>
+                      <Text size="xs" c="dimmed">{projectsTerminated?.length} projetos</Text>
+                    </Paper>
+                  </Grid.Col>
+                </Grid>
               </Grid.Col>
             </Grid>
           </>

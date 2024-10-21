@@ -23,6 +23,7 @@ import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search';
 import New from './pages/New';
 import ProjectPage from './pages/ProjectPage';
+import ProjectDashboardPage from './pages/ProjectDashboard';
 import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
 
@@ -57,6 +58,7 @@ function AppRoutes () {
           <Route path="/start/step4" element={<StartStep4Page />} />
           <Route path="/my-projects" element={<MyProjectsPage />} />
           <Route path="/project/:username" element={<ProjectPage />} />
+          <Route path="/project/:username/dashboard" element={<ProjectDashboardPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/new" element={<New />} />
           <Route exact path="/:username" element={<ProfilePage />} />

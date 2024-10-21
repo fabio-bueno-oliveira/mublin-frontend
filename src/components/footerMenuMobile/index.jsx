@@ -33,7 +33,7 @@ const FooterMenuMobile = () => {
     <>
       <footer className="menuMobile mantine-hidden-from-sm">
         <div>
-          <div className={currentPath === '/home' && 'active'} onClick={() => navigate("/home")}>
+          <div className={currentPath === '/home' ? 'active' : undefined} onClick={() => navigate("/home")}>
             <IconHome />
             <Text size="xs">Home</Text>
           </div>
@@ -41,15 +41,15 @@ const FooterMenuMobile = () => {
             <IconBell />
             <span>Carreira</span>
           </div> */}
-          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) && 'active'} onClick={() => navigate("/my-projects")}>
+          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/my-projects")}>
             <IconMusic />
             <Text size="xs">Projetos</Text>
           </div>
-          <div className={currentPath === '/search' && 'active'} onClick={() => navigate("/search")}>
+          <div className={currentPath === '/search' ? 'active' : undefined} onClick={() => navigate("/search")}>
             <IconSearch />
             <Text size="xs">Buscar</Text>
           </div>
-          <div className={currentPath === '/new' && 'active'} onClick={() => navigate("/new")}>
+          <div className={currentPath === '/new' ? 'active' : undefined} onClick={() => navigate("/new")}>
             <IconPlus />
             <Text size="xs">Novo</Text>
           </div>

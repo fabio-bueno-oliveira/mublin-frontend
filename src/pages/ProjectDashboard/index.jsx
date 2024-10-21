@@ -11,7 +11,7 @@ import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
 import './styles.scss';
 
-function ProjectPage () {
+function ProjectDashboardPage () {
 
   const params = useParams();
   const username = params?.username;
@@ -100,7 +100,7 @@ function ProjectPage () {
                   </Box>
                 </Group>
                 <Button color='violet' leftSection={<IconLayoutDashboardFilled size={14} />}>
-                  Ir para o painel do projeto
+                  Ir para o perfil do projeto
                 </Button>
               </Flex>
             </Paper>
@@ -149,4 +149,4 @@ function ProjectPage () {
   );
 };
 
-export default ProjectPage;
+export default ProjectDashboardPage;
