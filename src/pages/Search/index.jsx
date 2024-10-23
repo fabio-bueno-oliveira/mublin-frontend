@@ -48,9 +48,9 @@ function Search () {
   return (
     <>
       <Header />
-      <Container size={'lg'}>
+      <Container size={'lg'} mb={largeScreen ? 30 : 82}>
         {!largeScreen && 
-          <Group mb={20}>
+          <Group mb={20} gap={2}>
             <form
               onSubmit={(e) => handleSearch(e, searchQuery, null)}
               onFocus={() => setShowMobileMenu(false)}
@@ -59,7 +59,8 @@ function Search () {
               <Input 
                 variant="filled" 
                 size="sm"
-                placeholder='Busque por pessoa, instrumento, cidade...'
+                w={'250px'}
+                placeholder='Pessoa, instrumento ou cidade'
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.currentTarget.value)}
                 rightSectionPointerEvents="all"

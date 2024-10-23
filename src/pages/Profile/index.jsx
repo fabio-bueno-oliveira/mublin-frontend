@@ -14,6 +14,7 @@ function ProfilePage () {
   const params = useParams();
   const username = params?.username;
   const profile = useSelector(state => state.profile);
+  const largeScreen = useMediaQuery('(min-width: 60em)');
 
   let dispatch = useDispatch();
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
@@ -36,12 +37,17 @@ function ProfilePage () {
   const gear = gearTotal.filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
 
   // Carousel
-  const largeScreen = useMediaQuery('(min-width: 60em)');
-  const [emblaRef] = useEmblaCarousel(
+  const [emblaRef1] = useEmblaCarousel(
     {
-      active: (
-        (largeScreen && gear.length < 10) || (!largeScreen && gear.length < 3)
-      ) ? false : true,
+      active: true,
+      loop: false, 
+      dragFree: true, 
+      align: 'start' 
+    }
+  )
+  const [emblaRef2] = useEmblaCarousel(
+    {
+      active: true,
       loop: false, 
       dragFree: true, 
       align: 'start' 
@@ -51,7 +57,7 @@ function ProfilePage () {
   return (
     <>
       <Header />
-      <Container size={'lg'}>
+      <Container size={'lg'} mb={largeScreen ? 30 : 82}>
         <Box mb={24}>
           {profile.requesting && 
             <>
@@ -111,7 +117,7 @@ function ProfilePage () {
           ) : (
             <>
               {(profile.strengths[0].strengthId && profile.strengths[0].idUserTo === profile.id) ? ( 
-                <div className="embla" ref={emblaRef}>
+                <div className="embla" ref={emblaRef1}>
                   <div className="embla__container">
                     {profile.strengths.map((strength, key) =>
                       <Flex 
@@ -124,7 +130,7 @@ function ProfilePage () {
                       >
                         <i className={strength.icon}></i>
                         <Title order={6} fw={500} mb={2} mt={3}>{strength.strengthTitle}</Title>
-                        <Badge variant='default'>{strength.percent}</Badge>
+                        {/* <Badge variant='default'>{strength.percent}</Badge> */}
                       </Flex>
                     )}
                   </div>
@@ -175,7 +181,7 @@ function ProfilePage () {
                   </NativeSelect>
                 </Group>
                 {profile.gear[0]?.brandId ? ( 
-                  <div className="embla" ref={emblaRef}>
+                  <div className="embla" ref={emblaRef2}>
                     <div className="embla__container">
                       {gear.map((product, key) =>
                         <div className="embla__slide" key={key}>
