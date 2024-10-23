@@ -1,18 +1,23 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, CloseButton, rem, Group, Badge } from '@mantine/core';
 import { IconMoon, IconBrightnessUp, IconSearch } from '@tabler/icons-react';
 import s from './header.module.css';
 
 function Header () {
 
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+
   const user = useSelector(state => state.user);
+
   const { colorScheme, setColorScheme,  } = useMantineColorScheme();
-  let currentPath = window.location.pathname
+  const [searchParams] = useSearchParams();
+  const searchedKeywords = searchParams.get('keywords');
+  let currentPath = window.location.pathname;
 
   useEffect(() => { 
     dispatch(userInfos.getInfo());
@@ -24,6 +29,17 @@ function Header () {
   }
 
   const cdnBaseURL = 'https://ik.imagekit.io/mublin';
+
+  const [searchQuery, setSearchQuery] = useState(searchedKeywords);
+
+  const handleSearch = (query) => {
+    navigate({
+      pathname: '/search',
+      search: createSearchParams({
+        keywords: query ? query : ''
+      }).toString()
+    });
+  }
 
   return (
     <Container 
@@ -39,17 +55,22 @@ function Header () {
         align="center"
         direction="row"
       >
-        
         <Group>
-        <Link to={{ pathname: '/home' }} className='mublinLogo'>
-          <Title order={3}>Mublin</Title>
-        </Link>
-        <Input 
-            placeholder="Buscar" 
+          <Link to={{ pathname: '/home' }} className='mublinLogo'>
+            <Title order={3}>Mublin</Title>
+          </Link>
+          <Input 
             variant="filled" 
             size="sm"
+            placeholder='Busque por pessoa, instrumento, cidade...'
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.currentTarget.value)}
+            rightSectionPointerEvents="all"
           />
-          <ActionIcon c='dimmed' variant="transparent" aria-label="Buscar">
+          <ActionIcon 
+            c='dimmed' variant="transparent" aria-label="Buscar"
+            onClick={() => handleSearch(searchQuery)}
+          >
             <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>
         </Group>
@@ -97,7 +118,9 @@ function Header () {
           <Text fw={400} size='sm' ml={4} c='dimmed'>
             {user.name}
           </Text>
-          {user.plan === 'Pro' && <Badge size='xs' color="violet" ml={9}>PRO</Badge>}
+          {user.plan === 'Pro' && 
+            <Badge size='xs' variant='light' color="violet" ml={9}>PRO</Badge>
+          }
           {colorScheme === 'dark' && 
             <ActionIcon 
               variant="transparent" size="lg" color="default" 
