@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Anchor } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconPower, IconRoad } from '@tabler/icons-react';
+import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconPower, IconRoad, IconCircleFilled } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -18,7 +18,9 @@ function ProjectCard (props) {
   
   const currentYear = new Date().getFullYear();
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
+
   const iconProjectActivityStyles = { width: '15px', height: '15px' };
+  const iconCircleStyles = { width: '8px', height: '8px', marginLeft: '3px', marginRight: '3px' };
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -154,19 +156,19 @@ function ProjectCard (props) {
               }
             </Flex>
             {isActiveOnProject && 
-              <Badge size={'xs'} variant='light' color="green">
-                {`${project.joined_in} - Atualmente (${currentYear - project.joined_in} anos)`}
-              </Badge>
+              <Flex align='center' mt={3}>
+                <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='10px'>{`${project.joined_in} - atualmente (${currentYear - project.joined_in} anos)`}</Text>
+              </Flex>
             }
             {project.yearLeftTheProject && 
-              <Badge size={'xs'} variant='light' color="red">
-                deixei o projeto em {project.yearLeftTheProject}
-              </Badge>
+              <Flex align='center' mt={3}>
+                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>deixei o projeto em {project.yearLeftTheProject}</Text>
+              </Flex>
             }
             {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-              <Badge size={'xs'} variant='light' color='red'>
-                {project.joined_in} até o encerramento em {project.yearEnd}
-              </Badge>
+              <Flex align='center' mt={3}>
+                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>{project.joined_in} até o encerramento em {project.yearEnd}</Text>
+              </Flex>
             }
           </Flex>
         </Flex>
