@@ -174,7 +174,7 @@ function ProfilePage () {
                     )}
                   </NativeSelect>
                 </Group>
-                {profile.gear[0].brandId ? ( 
+                {profile.gear[0]?.brandId ? ( 
                   <div className="embla" ref={emblaRef}>
                     <div className="embla__container">
                       {gear.map((product, key) =>
