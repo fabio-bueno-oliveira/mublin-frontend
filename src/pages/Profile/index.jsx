@@ -99,7 +99,7 @@ function ProfilePage () {
             </>
           }
         </Box>
-        <Paper shadow="md" radius="md" withBorder p="md" mb={18}
+        <Paper radius="md" withBorder p="md" mb={18}
           style={{ backgroundColor: 'transparent' }}
         >
           <Group justify="flex-start" align="center" mb={18}>
@@ -138,7 +138,7 @@ function ProfilePage () {
           )}
         </Paper>
         {profile.plan === "Pro" && 
-          <Paper shadow="md" radius="md" withBorder p="md" mb={25}
+          <Paper radius="md" withBorder p="md" mb={25}
             style={{ backgroundColor: 'transparent' }}
           >
             <Title order={4} mb={8}>Equipamento</Title>
