@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge } from '@mantine/core';
 import { IconMoon, IconBrightnessUp, IconSearch } from '@tabler/icons-react';
 import s from './header.module.css';
 
@@ -54,7 +54,6 @@ function Header () {
           </ActionIcon>
         </Group>
         <Flex align={"center"}>
-          {/* <Text fw={400} size='sm' ml={23} mr={8} c='dimmed'>Olá, {user.name}!</Text> */}
           <Link to={{ pathname: '/home' }}>
             <Button 
               size="sm" 
@@ -93,14 +92,18 @@ function Header () {
               src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
               alt={user.username}
               ml={8}
-              mr={10}
             />
           </Link>
+          <Text fw={400} size='sm' ml={4} c='dimmed'>
+            {user.name}
+          </Text>
+          {user.plan === 'Pro' && <Badge size='xs' color="violet" ml={9}>PRO</Badge>}
           {colorScheme === 'dark' && 
             <ActionIcon 
               variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('light')}}
               visibleFrom="md"
+              ml={14}
             >
               <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
             </ActionIcon>
@@ -109,6 +112,7 @@ function Header () {
             <ActionIcon variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('dark')}}
               visibleFrom="md"
+              ml={14}
             >
               <IconMoon style={{ width: rem(20) }} stroke={1.5} />
             </ActionIcon>
