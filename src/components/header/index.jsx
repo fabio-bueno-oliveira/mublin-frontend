@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group } from '@mantine/core';
 import { IconMoon, IconBrightnessUp, IconSearch } from '@tabler/icons-react';
 import s from './header.module.css';
 
@@ -39,19 +39,21 @@ function Header () {
         align="center"
         direction="row"
       >
+        
+        <Group>
         <Link to={{ pathname: '/home' }} className='mublinLogo'>
           <Title order={3}>Mublin</Title>
         </Link>
-        <Flex align={"center"}>
-          <Input 
+        <Input 
             placeholder="Buscar" 
             variant="filled" 
-            // leftSection={<IconSearch size={16} />} 
-            size="md"
+            size="sm"
           />
-          <ActionIcon c='dimmed' variant="transparent" aria-label="Buscar" mr={8}>
+          <ActionIcon c='dimmed' variant="transparent" aria-label="Buscar">
             <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
           </ActionIcon>
+        </Group>
+        <Flex align={"center"}>
           {/* <Text fw={400} size='sm' ml={23} mr={8} c='dimmed'>Olá, {user.name}!</Text> */}
           <Link to={{ pathname: '/home' }}>
             <Button 
