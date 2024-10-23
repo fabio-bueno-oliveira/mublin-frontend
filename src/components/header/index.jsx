@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, CloseButton, rem, Group, Badge } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { IconMoon, IconBrightnessUp, IconSearch } from '@tabler/icons-react';
 import s from './header.module.css';
 
@@ -15,6 +16,7 @@ function Header () {
   const user = useSelector(state => state.user);
 
   const { colorScheme, setColorScheme,  } = useMantineColorScheme();
+  const largeScreen = useMediaQuery('(min-width: 60em)');
   const [searchParams] = useSearchParams();
   const searchedKeywords = searchParams.get('keywords');
   let currentPath = window.location.pathname;
@@ -32,11 +34,13 @@ function Header () {
 
   const [searchQuery, setSearchQuery] = useState(searchedKeywords);
 
-  const handleSearch = (query) => {
+  const handleSearch = (e, query, tab) => {
+    e.preventDefault();
     navigate({
       pathname: '/search',
       search: createSearchParams({
-        keywords: query ? query : ''
+        keywords: query ? query : '',
+        tab: tab ? tab : ''
       }).toString()
     });
   }
@@ -59,20 +63,30 @@ function Header () {
           <Link to={{ pathname: '/home' }} className='mublinLogo'>
             <Title order={3}>Mublin</Title>
           </Link>
-          <Input 
-            variant="filled" 
-            size="sm"
-            placeholder='Busque por pessoa, instrumento, cidade...'
-            value={searchQuery}
-            onChange={(event) => setSearchQuery(event.currentTarget.value)}
-            rightSectionPointerEvents="all"
-          />
-          <ActionIcon 
-            c='dimmed' variant="transparent" aria-label="Buscar"
-            onClick={() => handleSearch(searchQuery)}
-          >
-            <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
-          </ActionIcon>
+          {largeScreen && 
+            <>
+              <form
+                onSubmit={(e) => handleSearch(e, searchQuery, null)}
+                onFocus={() => setShowMobileMenu(false)}
+                onBlur={() => setShowMobileMenu(true)}
+              >
+                <Input 
+                  variant="filled" 
+                  size="sm"
+                  placeholder='Busque por pessoa, instrumento, cidade...'
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.currentTarget.value)}
+                  rightSectionPointerEvents="all"
+                />
+              </form>
+              <ActionIcon 
+                c='dimmed' variant="transparent" aria-label="Buscar"
+                onClick={(e) => handleSearch(e, searchQuery, null)}
+              >
+                <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
+              </ActionIcon>
+            </>
+          }
         </Group>
         <Flex align={"center"}>
           <Link to={{ pathname: '/home' }}>

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Flex, Group, Skeleton, SimpleGrid, Divider, Tabs, Box, Title, Card, Text, Image, Badge, Avatar, rem } from '@mantine/core';
-import { IconPlaylist, IconBox, IconUsers, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
+import { Container, Grid, Flex, Group, Skeleton, SimpleGrid, Divider, Tabs, Box, Title, Card, Text, Image, Badge, Avatar, Input, ActionIcon, Center, Loader, rem } from '@mantine/core';
+import { IconPlaylist, IconBox, IconUsers, IconRosetteDiscountCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -13,11 +13,15 @@ function Search () {
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const dispatch = useDispatch();
+  let navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const searchedKeywords = searchParams.get('keywords');
   const searchResults = useSelector(state => state.search);
   const suggestedUsers = useSelector(state => state.search.suggestedUsers);
   const largeScreen = useMediaQuery('(min-width: 60em)');
+  const [searchQuery, setSearchQuery] = useState(searchedKeywords);
+  const [showMobileMenu, setShowMobileMenu] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -30,12 +34,47 @@ function Search () {
   const iconStyle = { width: rem(12), height: rem(12) };
   const iconVerifiedStyle = { width: rem(15), height: rem(15) };
 
+  const handleSearch = (e, query, tab) => {
+    e.preventDefault();
+    navigate({
+      pathname: '/search',
+      search: createSearchParams({
+        keywords: query ? query : '',
+        tab: tab ? tab : ''
+      }).toString()
+    });
+  }
+
   return (
     <>
       <Header />
       <Container size={'lg'}>
+        {!largeScreen && 
+          <Group mb={20}>
+            <form
+              onSubmit={(e) => handleSearch(e, searchQuery, null)}
+              onFocus={() => setShowMobileMenu(false)}
+              onBlur={() => setShowMobileMenu(true)}
+            >
+              <Input 
+                variant="filled" 
+                size="sm"
+                placeholder='Busque por pessoa, instrumento, cidade...'
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.currentTarget.value)}
+                rightSectionPointerEvents="all"
+              />
+            </form>
+            <ActionIcon 
+              c='dimmed' variant="transparent" aria-label="Buscar"
+              onClick={(e) => handleSearch(e, searchQuery, null)}
+            >
+              <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
+            </ActionIcon>
+          </Group>
+        }
         <Box mb={24}>
-          <Title order={4}>Sugestões para se conectar</Title>
+          <Title order={4}>{!searchedKeywords ? 'Sugestões para se conectar' : 'Resultados da pesquisa por "'+searchedKeywords+'"'}</Title>
         </Box>
         {!searchedKeywords && 
           <>
@@ -83,7 +122,10 @@ function Search () {
             )}
           </>
         }
-        {searchedKeywords && 
+        {searchResults.requesting && 
+          <Center><Loader  mt={76} size={50} color="violet" /></Center>
+        }
+        {(searchedKeywords && !searchResults.requesting) && 
           <Tabs defaultValue="people">
             <Tabs.List>
               <Tabs.Tab value="people" leftSection={<IconUsers style={iconStyle} />}>
@@ -103,78 +145,87 @@ function Search () {
               </Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value="people">
-              Pessoas tab content
-              <Grid mb={largeScreen ? 30 : 86}>
-                {searchResults.users.map((user, key) =>
-                  <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={user.id}>
-                    <Card
-                      shadow="sm"
-                      padding="xl"
-                      component="a"
-                      href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                      target="_blank"
-                      key={key}
-                    >
-                      <Card.Section withBorder inheritPadding py="xs" px="xs">
-                        <Image
-                          src={user.picture}
-                          h={160}
-                          alt={user.username}
-                        />
-                      </Card.Section>
-                      <Text fw={500} size="xs" mt="md">
-                        {user.name} {user.id !== loggedUser.id ? user.lastname : '(Você)'}
-                      </Text>
-                      {user.instrumentalist && 
+              {searchResults.users[0].id && 
+                <Grid mb={largeScreen ? 30 : 86}>
+                  {searchResults.users.map((user, key) =>
+                    <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={user.id}>
+                      <Card
+                        shadow="sm"
+                        padding="xl"
+                        component="a"
+                        href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        target="_blank"
+                        key={key}
+                      >
                         <Card.Section withBorder inheritPadding py="xs" px="xs">
-                          <span style={{color:'darkgray '}}>{user.mainRole}</span>{user.plan === 'Pro' && <Badge size="tiny" className="ml-1 p-1" style={{cursor:"default"}}>Pro</Badge>}
+                          <Image
+                            src={user.picture}
+                            h={160}
+                            alt={user.username}
+                          />
                         </Card.Section>
-                      }
-                      {user.city &&
-                        <Card.Section withBorder inheritPadding py="xs" px="xs">
-                            {user.city+' - '+user.region}
-                        </Card.Section>
-                      }
-                      <Text mt="xs" c="dimmed" size="sm">
-                        Please click anywhere on this card to claim your reward, this is not a fraud, trust us
-                      </Text>
-                    </Card>
-                  </Grid.Col>
-                )}
-              </Grid>
+                        <Text fw={500} size="xs" mt="md">
+                          {user.name} {user.id !== loggedUser.id ? user.lastname : '(Você)'}
+                        </Text>
+                        {user.instrumentalist && 
+                          <Card.Section withBorder inheritPadding py="xs" px="xs">
+                            <span style={{color:'darkgray '}}>{user.mainRole}</span>{user.plan === 'Pro' && <Badge size="tiny" className="ml-1 p-1" style={{cursor:"default"}}>Pro</Badge>}
+                          </Card.Section>
+                        }
+                        {user.city &&
+                          <Card.Section withBorder inheritPadding py="xs" px="xs">
+                              {user.city+' - '+user.region}
+                          </Card.Section>
+                        }
+                        {!!(user.projectRelated && user.projectPublic && searchResults.projects[0].id) &&
+                          <Card.Section withBorder inheritPadding py="xs" px="xs">
+                            <Text size="xs">
+                              Projeto relacionado: <strong>{user.projectRelated} {'('+user.projectType+')'}</strong>
+                            </Text>
+                          </Card.Section>
+                        }
+                        {/* <Text mt="xs" c="dimmed" size="sm">
+                          Please click anywhere on this card to claim your reward, this is not a fraud, trust us
+                        </Text> */}
+                      </Card>
+                    </Grid.Col>
+                  )}
+                </Grid>
+              }
             </Tabs.Panel>
             <Tabs.Panel value="projects">
-              Projetos tab content
-              <Grid mb={largeScreen ? 30 : 86}>
-                {searchResults.projects.map((project, key) =>
-                  <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={project.id}>
-                    <Card
-                      shadow="sm"
-                      padding="xl"
-                      component="a"
-                      href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                      target="_blank"
-                      key={key}
-                    >
-                      <Card.Section>
-                        <Image
-                          src={project.picture}
-                          h={160}
-                          alt="No way!"
-                        />
-                      </Card.Section>
-                
-                      <Text fw={500} size="lg" mt="md">
-                        {project.name}
-                      </Text>
-                
-                      <Text mt="xs" c="dimmed" size="sm">
-                        Please click anywhere on this card to claim your reward, this is not a fraud, trust us
-                      </Text>
-                    </Card>
-                  </Grid.Col>
-                )}
-              </Grid>
+              {searchResults.projects[0].id && 
+                <Grid mb={largeScreen ? 30 : 86}>
+                  {searchResults.projects.map((project, key) =>
+                    <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={project.id}>
+                      <Card
+                        shadow="sm"
+                        padding="xl"
+                        component="a"
+                        href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        target="_blank"
+                        key={key}
+                      >
+                        <Card.Section>
+                          <Image
+                            src={project.picture}
+                            h={160}
+                            alt="No way!"
+                          />
+                        </Card.Section>
+                  
+                        <Text fw={500} size="lg" mt="md">
+                          {project.name}
+                        </Text>
+                  
+                        {/* <Text mt="xs" c="dimmed" size="sm">
+                          Please click anywhere on this card to claim your reward, this is not a fraud, trust us
+                        </Text> */}
+                      </Card>
+                    </Grid.Col>
+                  )}
+                </Grid>
+              }
             </Tabs.Panel>
             <Tabs.Panel value="gear">
               Equipamentos tab content
@@ -182,7 +233,9 @@ function Search () {
           </Tabs>
         }
       </Container>
-      <FooterMenuMobile />
+      {showMobileMenu && 
+        <FooterMenuMobile />
+      }
     </>
   );
 };

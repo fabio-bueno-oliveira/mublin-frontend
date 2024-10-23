@@ -98,6 +98,34 @@ export function search(state = initialState, action) {
       return {
         ...state,
         requesting: false,
+        users: [
+          {
+            id: '',
+            name: '',
+            lastname: '',
+            username: '',
+            picture: '',
+            publicProfile: '',
+            plan: '',
+            status: '',
+            city: '',
+            region: '',
+            verified: '',
+            country: '',
+            roleName: '',
+            mainRole: '',
+            projectRelated: '',
+            projectType: '',
+            availabilityStatus: '',
+            availability_color: '',
+            legend: '',
+            totalProjects: '',
+            instrumentalist: '',
+            projects: [
+              { id: '', name: '', username: '', picture: '' }
+            ]
+          }
+        ],
         error: 'Nenhum resultado encontrado'
       };
     // PROJECTS
