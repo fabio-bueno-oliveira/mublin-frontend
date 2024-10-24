@@ -289,12 +289,12 @@ function ProfilePage () {
           }
           <Box mt={12}>
             {followedByMe?.requesting ? (
-              <Button size="compact-xs" disabled>Carregando...</Button>
+              <Button size="xs" disabled>Carregando...</Button>
             ) : (
               loggedUser.id !== profile.id ? (
                 <Button 
-                  size="compact-xs" 
-                  color={colorScheme === "light" ? "dark" : "white"}
+                  size="xs" 
+                  color={colorScheme === "light" ? "dark" : "violet"}
                   loading={loadingFollow} 
                   variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
                   onClick={() => followUnfollow()}
@@ -303,7 +303,7 @@ function ProfilePage () {
                 </Button>
               ) : (
                 <Button 
-                  size="compact-xs" 
+                  size="xs" 
                   variant='outline'
                   color={colorScheme === "light" ? "dark" : "white"}
                   onClick={() => navigate('/settings/profile')}
@@ -355,7 +355,7 @@ function ProfilePage () {
             {profile.id !== loggedUser.id && 
               <Button 
                 size="compact-xs" 
-                variant="default" 
+                color="violet"
                 onClick={() => setModalStrengthsOpen(true)}
               >
                 Votar
@@ -576,7 +576,7 @@ function ProfilePage () {
               />
               <label for={'strengthsGroup_'+strength.id} className={myVotes.filter((x) => { return x.strengthId === strength.id}).length && 'voted'}>
                 <span style={{fontSize: '13px'}}><i className={strength.icon+' fa-fw ml-1'}></i> {strength.title}</span> {!!myVotes.filter((x) => { return x.strengthId === strength.id}).length && 
-                  <Button size="compact-xs" variant="filled" color='red'
+                  <Button size="compact-xs" variant="outline" color='red'
                     onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}
                   >
                     Retirar
@@ -586,9 +586,9 @@ function ProfilePage () {
             </div>
           </div>
         )}
-        <Group mt="xs">
-          <Button size='xs' variant='outline' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
-          <Button size='xs' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
+        <Group mt="xs" gap={8}>
+          <Button variant='outline' size='xs' color='violet' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
+          <Button size='xs' color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
         </Group>
       </Modal>
       <FooterMenuMobile />
