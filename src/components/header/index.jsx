@@ -67,8 +67,12 @@ function Header (props) {
             <Link to={{ pathname: '/home' }} className='mublinLogo'>
               <Title order={3}>Mublin</Title>
             </Link>
-            <Divider size="xs" orientation="vertical" />
-            <Text mr={34}>{props.username}</Text>
+            {props.pageType === 'profile' &&
+              <>
+                <Divider size="xs" orientation="vertical" />
+                <Text mr={34}>{props.username}</Text>
+              </>
+            }
           </>
           {largeScreen && 
             <>
@@ -165,7 +169,7 @@ function Header (props) {
               }
             </>
           }
-          {!largeScreen && 
+          {(!largeScreen && props.pageType === 'profile') && 
             <ActionIcon 
               onClick={open} 
               variant="transparent" 
