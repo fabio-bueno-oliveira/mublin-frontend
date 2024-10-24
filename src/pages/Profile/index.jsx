@@ -3,8 +3,8 @@ import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea } from '@mantine/core';
-import { IconCircleFilled, IconCheck } from '@tabler/icons-react';
+import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert } from '@mantine/core';
+import { IconCircleFilled, IconCheck, IconInfoCircle } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -152,7 +152,7 @@ function ProfilePage () {
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + user.token
+            'Authorization': 'Bearer ' + loggedUser.token
         }
     })
     .then((response) => {
@@ -175,14 +175,14 @@ function ProfilePage () {
           {profile.requesting && 
             <>
             <Group justify='flex-start'>
-              <Skeleton height={80} width={80} />
+              <Skeleton height={56} circle />
               <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                <Skeleton height={11} width={380} radius="xl" />
-                <Skeleton height={14} width={380} radius="xl" />
-                <Skeleton height={12} width={380} radius="xl" />
+                <Skeleton height={10} width={240} radius="xl" />
+                <Skeleton height={13} width={240} radius="xl" />
+                <Skeleton height={11} width={240} radius="xl" />
               </SimpleGrid>
             </Group>
-            <Skeleton height={18} width={380} mt={16} radius="xl" />
+            <Skeleton height={15} width={312} mt={16} radius="xl" />
             </>
           }
           {!profile.requesting && 
@@ -200,7 +200,7 @@ function ProfilePage () {
                   src={profile.picture}
                 />
                 <Box style={{ overflow: 'hidden' }}>
-                  <Title order={3}>{profile.name} {profile.lastname}</Title>
+                  <Title order={4}>{profile.name} {profile.lastname}</Title>
                   <Flex className='rolesList'>
                     {profile.roles.map((role, key) =>
                       <Flex gap={2} align={'center'} key={key}>
@@ -208,22 +208,22 @@ function ProfilePage () {
                       </Flex>
                     )}
                   </Flex>
-                  <Group gap={8} mt={7}>
+                  <Group gap={8} mt={6}>
                     {profile.followers.length ? (
-                      <Text size={'xs'} onClick={() => setModalFollowersOpen(true)}>
+                      <Text size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
                         {profile.followers.length} seguidores
                       </Text>
                     ) : (
-                      <Text size={'xs'}>
+                      <Text size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
                         {profile.followers.length} seguidores
                       </Text>
                     )}
                     {profile.following.length ? (
-                      <Text size={'xs'} onClick={() => setModalFollowingOpen(true)}>
+                      <Text size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
                         {profile.following.length} seguindo
                       </Text>
                     ) : (
-                      <Text size={'xs'}>
+                      <Text size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
                         {profile.following.length} seguindo
                       </Text>
                     )}
@@ -241,14 +241,14 @@ function ProfilePage () {
         >
           {profile.requesting ? ( 
             <>
-              <Title order={4}>Disponibilidade</Title>
+              <Title order={5}>Disponibilidade</Title>
               <Text size='sm'>Carregando...</Text>
             </>
           ) : (
             <>
               <Flex align='center' gap={3}>
                 <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
-                <Title order={4}>{profile.availabilityTitle}</Title>
+                <Title order={5}>{profile.availabilityTitle}</Title>
               </Flex>
               {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
                 <>
@@ -272,8 +272,8 @@ function ProfilePage () {
         <Paper radius="md" withBorder px="sm" py="xs" mb={18}
           style={{ backgroundColor: 'transparent' }}
         >
-          <Group justify="flex-start" align="center" mb={18}>
-            <Title order={4}>Pontos Fortes</Title>
+          <Group justify="flex-start" align="center" gap={5} mb={18}>
+            <Title order={5}>Pontos Fortes ({profile?.strengths?.length})</Title>
             {profile.id !== loggedUser.id && 
               <Button 
                 size="compact-xs" 
@@ -321,7 +321,7 @@ function ProfilePage () {
           style={{ backgroundColor: 'transparent' }}
         >
           <Group justify="flex-start" align="center" mb={18}>
-            <Title order={4}>Projetos</Title>
+            <Title order={5}>Projetos ({profile?.projects?.length})</Title>
           </Group>
           {profile.requesting ? ( 
               <Text size='sm'>Carregando...</Text>
@@ -364,7 +364,7 @@ function ProfilePage () {
           <Paper radius="md" withBorder px="sm" py="xs" mb={25}
             style={{ backgroundColor: 'transparent' }}
           >
-            <Title order={4} mb={8}>Equipamento</Title>
+            <Title order={5} mb={8}>Equipamento</Title>
             {profile.requesting ? ( 
               <Text size='sm'>Carregando...</Text>
             ) : (
@@ -467,6 +467,9 @@ function ProfilePage () {
         centered
         // fullScreen
       >
+        <Alert variant="light" mb={10} p={'xs'} color="yellow" icon={<IconInfoCircle />}>
+          <Text size="xs">Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter o Mublin uma comunidade com credibilidade!</Text>
+        </Alert>
         {strengths.map((strength,key) =>
           <div key={key}>
             <div className={myVotes.filter((x) => { return x.strengthId === strength.id}).length ? 'ui radio checkbox voted' : 'ui radio checkbox' }>
@@ -484,23 +487,20 @@ function ProfilePage () {
                 }}
               />
               <label for={'strengthsGroup_'+strength.id} className={myVotes.filter((x) => { return x.strengthId === strength.id}).length && 'voted'}>
-                <span><i className={strength.icon+' fa-fw ml-1'}></i> {strength.title}</span> {!!myVotes.filter((x) => { return x.strengthId === strength.id}).length && 
-                  <>
-                    {/* <IconX style={{ width: '8px', height: '8px', marginLeft: '3px', marginRight: '3px' }} onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)} /> */}
-                    <Button size="compact-xs" variant="filled" color='red'
-                      onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}
-                    >
-                      Retirar
-                    </Button>
-                  </>
+                <span style={{fontSize: '13px'}}><i className={strength.icon+' fa-fw ml-1'}></i> {strength.title}</span> {!!myVotes.filter((x) => { return x.strengthId === strength.id}).length && 
+                  <Button size="compact-xs" variant="filled" color='red'
+                    onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}
+                  >
+                    Retirar
+                  </Button>
                 }
               </label>
             </div>
           </div>
         )}
-        <Group mt="md">
-          <Button variant='outline' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
-          <Button onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
+        <Group mt="xs">
+          <Button size='xs' variant='outline' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
+          <Button size='xs' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
         </Group>
       </Modal>
       <FooterMenuMobile />
