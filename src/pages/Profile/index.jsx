@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge } from '@mantine/core';
+import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea } from '@mantine/core';
 import { IconCircleFilled, IconCheck } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -12,6 +13,7 @@ import './styles.scss';
 
 function ProfilePage () {
 
+  let navigate = useNavigate();
   const params = useParams();
   const username = params?.username;
   const loggedUser = JSON.parse(localStorage.getItem('user'));
@@ -25,6 +27,8 @@ function ProfilePage () {
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username));
     dispatch(profileInfos.getProfileAvailabilityItems(username));
+    dispatch(profileInfos.getProfileFollowers(username));
+    dispatch(profileInfos.getProfileFollowing(username));
     dispatch(profileInfos.getProfileProjects(username));
     dispatch(profileInfos.getProfileRoles(username));
     dispatch(profileInfos.getProfileGear(username));
@@ -89,6 +93,17 @@ function ProfilePage () {
       align: 'start' 
     }
   )
+
+  // Modal Followers
+  const [modalFollowersOpen, setModalFollowersOpen] = useState(false);
+  // Modal Following
+  const [modalFollowingOpen, setModalFollowingOpen] = useState(false);
+
+  const goToProfile = (username) => {
+    setModalFollowersOpen(false);
+    setModalFollowingOpen(false);
+    navigate('/'+username);
+  }
 
   // Strentgth points
   const [modalStrengthsOpen, setModalStrengthsOpen] = useState(false)
@@ -193,7 +208,26 @@ function ProfilePage () {
                       </Flex>
                     )}
                   </Flex>
-                  
+                  <Group gap={8} mt={7}>
+                    {profile.followers.length ? (
+                      <Text size={'xs'} onClick={() => setModalFollowersOpen(true)}>
+                        {profile.followers.length} seguidores
+                      </Text>
+                    ) : (
+                      <Text size={'xs'}>
+                        {profile.followers.length} seguidores
+                      </Text>
+                    )}
+                    {profile.following.length ? (
+                      <Text size={'xs'} onClick={() => setModalFollowingOpen(true)}>
+                        {profile.following.length} seguindo
+                      </Text>
+                    ) : (
+                      <Text size={'xs'}>
+                        {profile.following.length} seguindo
+                      </Text>
+                    )}
+                  </Group>
                 </Box>
               </Flex>
               {(profile.bio && profile.bio !== 'null') && 
@@ -388,6 +422,44 @@ function ProfilePage () {
           </Paper>
         }
       </Container>
+      <Modal 
+        centered
+        opened={modalFollowersOpen} 
+        onClose={() => setModalFollowersOpen(false)} 
+        title={profile.followers.length+' seguidores'}
+        scrollAreaComponent={ScrollArea.Autosize}
+      >
+        {profile.followers.map((follower, key) => 
+          <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(follower.username)}>
+            <Avatar radius="xl" />
+            <Flex direction={'column'}>
+              <Text size={'sm'}>{follower.name}</Text>
+              <Text size={'10px'} key={key}>
+                {'@'+follower.username}
+              </Text>
+            </Flex>
+          </Flex>
+        )}
+      </Modal>
+      <Modal 
+        centered
+        opened={modalFollowingOpen} 
+        onClose={() => setModalFollowingOpen(false)} 
+        title={'Seguindo '+profile.following.length}
+        scrollAreaComponent={ScrollArea.Autosize}
+      >
+        {profile.following.map((following, key) => 
+          <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)}>
+            <Avatar radius="xl" />
+            <Flex direction={'column'}>
+              <Text size={'sm'}>{following.name}</Text>
+              <Text size={'10px'} key={key}>
+                {'@'+following.username}
+              </Text>
+            </Flex>
+          </Flex>
+        )}
+      </Modal>
       <Modal 
         opened={modalStrengthsOpen} 
         onClose={() => setModalStrengthsOpen(false)} 
