@@ -3,12 +3,12 @@ import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-ro
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import { IconMoon, IconBrightnessUp, IconSearch, IconArrowLeft } from '@tabler/icons-react';
+import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer } from '@mantine/core';
+import { useMediaQuery, useDisclosure } from '@mantine/hooks';
+import { IconMoon, IconBrightnessUp, IconSearch, IconDotsVertical } from '@tabler/icons-react';
 import s from './header.module.css';
 
-function Header () {
+function Header (props) {
 
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -45,10 +45,13 @@ function Header () {
     });
   }
 
+  const [openedDrawer, { open, close }] = useDisclosure(false);
+
   return (
+    <>
     <Container 
       size={'lg'} 
-      mt={14} 
+      mt={8} 
       mb={8} 
       className={s.headerContainer}
     >
@@ -60,9 +63,13 @@ function Header () {
         direction="row"
       >
         <Group>
-          <Link to={{ pathname: '/home' }} className='mublinLogo'>
-            <Title order={3}>Mublin</Title>
-          </Link>
+          <>
+            <Link to={{ pathname: '/home' }} className='mublinLogo'>
+              <Title order={3}>Mublin</Title>
+            </Link>
+            <Divider size="xs" orientation="vertical" />
+            <Text mr={34}>{props.username}</Text>
+          </>
           {largeScreen && 
             <>
               <form
@@ -73,7 +80,7 @@ function Header () {
                 <Input 
                   variant="filled" 
                   size="sm"
-                  placeholder='Busque por pessoa, instrumento, cidade...'
+                  placeholder='Pessoa, instrumento, cidade...'
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.currentTarget.value)}
                   rightSectionPointerEvents="all"
@@ -121,44 +128,66 @@ function Header () {
           >
             Sair
           </Button>
-          <Link to={{ pathname: '/' + user.username }}>
-            <Avatar
-              size="sm"
-              src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
-              alt={user.username}
-              ml={8}
-            />
-          </Link>
           {largeScreen && 
-            <Text fw={400} size='sm' ml={4} c='dimmed'>
-              {user.name}
-            </Text>
+            <>
+              <Link to={{ pathname: `/${user.username}`}}>
+                <Avatar
+                  size="md"
+                  src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
+                  alt={user.username}
+                  ml={8}
+                />
+              </Link>
+              <Text fw={400} size='sm' ml={4} c='dimmed'>
+                {user.name}
+              </Text>
+              {user.plan === 'Pro' && 
+                <Badge size='xs' variant='light' color="violet" ml={9}>PRO</Badge>
+              }
+              {colorScheme === 'dark' && 
+                <ActionIcon 
+                  variant="transparent" size="lg" color="default" 
+                  onClick={() => {setColorScheme('light')}}
+                  visibleFrom="md"
+                  ml={14}
+                >
+                  <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
+                </ActionIcon>
+              }
+              {colorScheme === 'light' && 
+                <ActionIcon variant="transparent" size="lg" color="default" 
+                  onClick={() => {setColorScheme('dark')}}
+                  visibleFrom="md"
+                  ml={14}
+                >
+                  <IconMoon style={{ width: rem(20) }} stroke={1.5} />
+                </ActionIcon>
+              }
+            </>
           }
-          {user.plan === 'Pro' && 
-            <Badge size='xs' variant='light' color="violet" ml={9}>PRO</Badge>
-          }
-          {colorScheme === 'dark' && 
+          {!largeScreen && 
             <ActionIcon 
-              variant="transparent" size="lg" color="default" 
-              onClick={() => {setColorScheme('light')}}
-              visibleFrom="md"
-              ml={14}
+              onClick={open} 
+              variant="transparent" 
+              size="lg" 
+              color='violet'
+              aria-label="Menu"
             >
-              <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
-            </ActionIcon>
-          }
-          {colorScheme === 'light' && 
-            <ActionIcon variant="transparent" size="lg" color="default" 
-              onClick={() => {setColorScheme('dark')}}
-              visibleFrom="md"
-              ml={14}
-            >
-              <IconMoon style={{ width: rem(20) }} stroke={1.5} />
+              <IconDotsVertical style={{ width: '70%', height: '70%' }} stroke={1.5} />
             </ActionIcon>
           }
         </Flex>
       </Flex>
     </Container>
+    <Drawer 
+      opened={openedDrawer} 
+      onClose={close} 
+      title={props.username}
+      position="bottom"
+    >
+      {/* <h1>Teste</h1> */}
+    </Drawer>
+    </>
   );
 };
 

@@ -22,6 +22,7 @@ function ProfilePage () {
 
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username));
+    dispatch(profileInfos.getProfileProjects(username));
     dispatch(profileInfos.getProfileRoles(username));
     dispatch(profileInfos.getProfileGear(username));
     dispatch(profileInfos.getProfileGearSetups(username));
@@ -57,9 +58,9 @@ function ProfilePage () {
 
   return (
     <>
-      <Header pageType='profile' />
+      <Header pageType='profile' username={username} />
       <Container size={'lg'} mb={largeScreen ? 30 : 82} className='profilePage'>
-        <Box mb={24}>
+        <Box mb={17}>
           {profile.requesting && 
             <>
             <Group justify='flex-start'>
@@ -75,7 +76,6 @@ function ProfilePage () {
           }
           {!profile.requesting && 
             <>
-              <Text size='md' c='dimmed'>{username}</Text>
               <Flex
                 justify="flex-start"
                 align="center"
@@ -100,7 +100,7 @@ function ProfilePage () {
                 </Box>
               </Flex>
               {(profile.bio && profile.bio !== 'null') && 
-                <Text size='sm' mt={14}>{profile.bio}</Text>
+                <Text size='xs' mt={14}>{profile.bio}</Text>
               }
             </>
           }
@@ -129,9 +129,9 @@ function ProfilePage () {
                         key={key}
                       >
                         <i className={strength.icon}></i>
-                        <Title order={6} fw={500} mb={2} mt={3} size={'sm'} align='center'>
+                        <Text order={6} fw={500} mb={2} mt={3} size={'xs'} align='center' truncate="end">
                           {strength.strengthTitle}
-                        </Title>
+                        </Text>
                         {/* <Badge variant='default'>{strength.percent}</Badge> */}
                       </Flex>
                     )}
@@ -140,6 +140,41 @@ function ProfilePage () {
               ) : (
                 <Text size='11px'>
                   Nenhum ponto forte votado para {profile.name} até o momento
+                </Text>
+              )}
+            </>
+          )}
+        </Paper>
+        <Paper radius="md" withBorder p="md" mb={18}
+          style={{ backgroundColor: 'transparent' }}
+        >
+          <Group justify="flex-start" align="center" mb={18}>
+            <Title order={4}>Projetos</Title>
+          </Group>
+          {profile.requesting ? ( 
+              <Text size='sm'>Carregando...</Text>
+          ) : (
+            <>
+              {profile.projects[0].id ? ( 
+                <div className="embla strengths" ref={emblaRef1}>
+                  <div className="embla__container">
+                    {mainProjects.map((projeto, key) =>
+                      <Flex 
+                        justify="flex-start"
+                        align="center"
+                        direction="column"
+                        wrap="wrap"
+                        className="embla__slide"
+                        key={key}
+                      >
+                        <Image src={projeto.picture} />
+                      </Flex>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <Text size='11px'>
+                  Nenhum projeto cadastrado
                 </Text>
               )}
             </>

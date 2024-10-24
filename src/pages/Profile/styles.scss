@@ -6,9 +6,9 @@
       display: flex;
 
       .embla__slide {
-        flex: 0 0 100px;
+        flex: 0 0 auto;
         min-width: 0;
-        margin-right: 5px;
+        margin-right: 12px;
       }
       @media (min-width: 768px) {
         .embla__slide {
@@ -55,6 +55,11 @@
     width: 97%;
     scrollbar-width: none;
     overflow: scroll;
+
+    div {
+      width: fit-content;
+      white-space: nowrap;
+    }
 
     &::-webkit-scrollbar, &:hover { 
       scrollbar-width: 2px;
