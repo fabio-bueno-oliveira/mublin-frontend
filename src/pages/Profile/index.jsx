@@ -157,7 +157,7 @@ function ProfilePage () {
                 <Group mb={20}>
                   <NativeSelect 
                     size="xs"
-                    w={200}
+                    w={120}
                     onChange={(e) => getSetupProducts(e.target.options[e.target.selectedIndex].value)}
                   >
                     <option>Setup completo</option>
@@ -169,7 +169,7 @@ function ProfilePage () {
                   </NativeSelect>
                   <NativeSelect 
                     size="xs"
-                    w={200}
+                    w={132}
                     onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
                   >
                     <option value=''>
@@ -193,7 +193,7 @@ function ProfilePage () {
                             mb={10}
                             onClick={() => history.push('/gear/product/'+product.productId)}
                           />
-                          <Text size='12px' fw={500} mb={3}>{product.brandName}</Text>
+                          <Text size='13px' fw={500} mb={3}>{product.brandName}</Text>
                           <Text size='12px'>{product.productName}</Text>
                         </div>
                       )}
