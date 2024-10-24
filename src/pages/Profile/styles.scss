@@ -36,4 +36,14 @@
       }
     }
   }
+
+  .rolesList {
+    width: 97%;
+    scrollbar-width: none;
+    overflow: scroll;
+
+    &::-webkit-scrollbar, &:hover { 
+      scrollbar-width: 2px;
+    }
+  }
 }

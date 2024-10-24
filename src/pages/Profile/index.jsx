@@ -89,16 +89,15 @@ function ProfilePage () {
                   fit="contain"
                   src={profile.picture}
                 />
-                <Box>
+                <Box style={{ overflow: 'hidden' }}>
                   <Text size='sm' c='dimmed'>{username}</Text>
                   <Title order={3}>{profile.name} {profile.lastname}</Title>
-                  <Flex style={{ overflow: 'scroll', width: '78%', overflowY: 'hidden' }}>
+                  <Flex className='rolesList'>
                     {profile.roles.map((role, key) =>
                       <Flex gap={2} align={'center'} key={key}>
                         {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' />} <Text size='11px' mr={13}>{role.name}</Text>
                       </Flex>
                     )}
-
                   </Flex>
                 </Box>
               </Flex>
