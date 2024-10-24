@@ -175,7 +175,7 @@ function Header (props) {
               onClick={open} 
               variant="transparent" 
               size="lg" 
-              color='violet'
+              color='gray'
               aria-label="Menu"
             >
               <IconDotsVertical style={{ width: '70%', height: '70%' }} stroke={1.5} />
