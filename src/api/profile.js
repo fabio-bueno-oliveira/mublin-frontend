@@ -28,6 +28,7 @@ export const profileService = {
     getProfilePartners,
     getProfileAvailabilityItems,
     getProfileStrengths,
+    getProfileStrengthsTotalVotes,
     getProfileStrengthsRaw,
     getProfileTestimonials,
     logout
@@ -127,6 +128,14 @@ function getProfileStrengths(username) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/profile/${username}/strengths`, requestOptions).then(handleResponse);
+}
+
+function getProfileStrengthsTotalVotes(username) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/profile/${username}/strengthsTotalVotes`, requestOptions).then(handleResponse);
 }
 
 function getProfileStrengthsRaw(username) {

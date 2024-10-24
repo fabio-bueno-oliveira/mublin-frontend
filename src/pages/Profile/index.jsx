@@ -36,6 +36,7 @@ function ProfilePage () {
     dispatch(profileInfos.getProfileGear(username));
     dispatch(profileInfos.getProfileGearSetups(username));
     dispatch(profileInfos.getProfileStrengths(username));
+    dispatch(profileInfos.getProfileStrengthsTotalVotes(username));
     dispatch(profileInfos.getProfileStrengthsRaw(username));
 
     fetch('https://mublin.herokuapp.com/strengths/getAllStrengths', {
@@ -216,6 +217,12 @@ function ProfilePage () {
     })
   }
 
+  const checkTotalVotes = (strengthId) => {
+    let x = profile?.strengthsTotalVotes?.
+      filter((x) => { return x.strengthId === strengthId});
+    return x[0]?.totalVotes + (x[0]?.totalVotes > 1 ? ' votos' : ' voto');
+  }
+
   return (
     <>
       <Header pageType='profile' username={username} />
@@ -384,6 +391,7 @@ function ProfilePage () {
                 <div className="embla strengths" ref={emblaRef1}>
                   <div className="embla__container">
                     {profile.strengths.map((strength, key) =>
+                    <>
                       <Flex 
                         justify="flex-start"
                         align="center"
@@ -396,8 +404,11 @@ function ProfilePage () {
                         <Text order={6} fw={500} mb={2} mt={3} size={'xs'} align='center' truncate="end">
                           {strength.strengthTitle}
                         </Text>
-                        {/* <Badge variant='default'>{strength.percent}</Badge> */}
+                        <Text size='10px'>
+                          {checkTotalVotes(strength.strengthId)}
+                        </Text>
                       </Flex>
+                    </>
                     )}
                   </div>
                 </div>

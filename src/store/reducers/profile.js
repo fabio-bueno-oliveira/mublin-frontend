@@ -88,6 +88,13 @@ const initialState = {
       icon: ''
     }
   ],
+  strengthsTotalVotes: [
+    {
+      idUserTo: '',
+      strengthId: '',
+      totalVotes: '',
+    }
+  ],
   strengthsRaw: [
     { 
       id: '',
@@ -455,6 +462,31 @@ export function profile(state = initialState, action) {
             strengthTitle: '',
             percent: '',
             icon: ''
+          }
+        ],
+        requesting: false,
+        error: "A solicitação falhou"
+      };
+    // STRENGTHS GROUPED BY TOTAL VOTES
+    case profileTypes.GET_PROFILE_STRENGTHSTOTALVOTES_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+    case profileTypes.GET_PROFILE_STRENGTHSTOTALVOTES_SUCCESS:
+      return {
+        ...state,
+        strengthsTotalVotes: action.list,
+        requesting: false,
+      };
+    case profileTypes.GET_PROFILE_STRENGTHSTOTALVOTES_FAILURE:
+      return {
+        ...state,
+        strengthsTotalVotes: [
+          {
+            idUserTo: '',
+            strengthId: '',
+            totalVotes: '',
           }
         ],
         requesting: false,

@@ -13,6 +13,7 @@ export const profileInfos = {
     getProfileGearSetups: getProfileGearSetups,
     getProfilePartners: getProfilePartners,
     getProfileStrengths: getProfileStrengths,
+    getProfileStrengthsTotalVotes: getProfileStrengthsTotalVotes,
     getProfileStrengthsRaw: getProfileStrengthsRaw,
     getProfileAvailabilityItems: getProfileAvailabilityItems,
     getProfileTestimonials: getProfileTestimonials
@@ -208,6 +209,22 @@ function getProfileStrengths(username) {
     function request(username) { return { type: profileTypes.GET_PROFILE_STRENGTHS_REQUEST, username } }
     function success(list) { return { type: profileTypes.GET_PROFILE_STRENGTHS_SUCCESS, list } }
     function failure(username, error) { return { type: profileTypes.GET_PROFILE_STRENGTHS_FAILURE, username, error } }
+}
+
+function getProfileStrengthsTotalVotes(username) {
+    return dispatch => {
+        dispatch(request(username));
+
+        profileService.getProfileStrengthsTotalVotes(username)
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(username, error.toString()))
+            );
+    };
+  
+    function request(username) { return { type: profileTypes.GET_PROFILE_STRENGTHSTOTALVOTES_REQUEST, username } }
+    function success(list) { return { type: profileTypes.GET_PROFILE_STRENGTHSTOTALVOTES_SUCCESS, list } }
+    function failure(username, error) { return { type: profileTypes.GET_PROFILE_STRENGTHSTOTALVOTES_FAILURE, username, error } }
 }
 
 function getProfileStrengthsRaw(username) {
