@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { profileInfos } from '../../store/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button } from '@mantine/core';
-import { IconX } from '@tabler/icons-react';
+import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Button, Box, Skeleton, SimpleGrid, useMantineColorScheme } from '@mantine/core';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -14,7 +13,6 @@ function ProfilePage () {
 
   const params = useParams();
   const username = params?.username;
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
   const profile = useSelector(state => state.profile);
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const { colorScheme } = useMantineColorScheme();
@@ -30,23 +28,6 @@ function ProfilePage () {
     dispatch(profileInfos.getProfileGearSetups(username));
     dispatch(profileInfos.getProfileStrengths(username));
     dispatch(profileInfos.getProfileStrengthsRaw(username));
-
-    fetch('https://mublin.herokuapp.com/strengths/getAllStrengths', {
-      method: 'GET',
-      headers: new Headers({
-          'Authorization': 'Bearer '+loggedUser.token
-      }),
-    })
-      .then(res => res.json())
-      .then(
-        (result) => {
-            setStrengthsLoaded(true)
-            setStrengths(result)
-        },
-        (error) => {
-            setStrengthsLoaded(true)
-        }
-      )
   }, []);
 
   document.title = `${profile.name} ${profile.lastname} | Mublin`;
@@ -74,67 +55,6 @@ function ProfilePage () {
       align: 'start' 
     }
   )
-
-  const [modalStrengthsOpen, setModalStrengthsOpen] = useState(false)
-  const [strengthsLoaded, setStrengthsLoaded] = useState(false)
-  const [strengths, setStrengths] = useState([])
-  const [strengthVoted, setStrengthVoted] = useState(null)
-  const [strengthVotedName, setStrengthVotedName] = useState('')
-
-  const myVotes = profile.strengthsRaw.filter((x) => { return x.idUserFrom === loggedUser.id})
-    .map(x => ({ 
-      id: x.id,
-      idUserTo: x.idUserTo,
-      idUserFrom: x.idUserFrom,
-      strengthId: x.strengthId,
-      icon: x.icon,
-      strengthTitle: x.strengthTitle
-    }))
-
-  const voteProfileStrength = (strengthId, strengthTitle) => {
-    setStrengthsLoaded(false)
-    fetch('https://mublin.herokuapp.com/profile/voteStrength', {
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
-      },
-      body: JSON.stringify({strengthId: strengthId, profileId: profile.id, nameTo: profile.name, emailTo: profile.email, strengthTitle: strengthTitle})
-    })
-    .then((response) => {
-      dispatch(profileInfos.getProfileStrengths(username));
-      dispatch(profileInfos.getProfileStrengthsRaw(username));
-      setStrengthsLoaded(true)
-      setStrengthVoted(null)
-      setStrengthVotedName(null)
-    }).catch(err => {
-      console.error(err)
-      alert("Ocorreu um erro. Tente novamente em instantes")
-    })
-  }
-
-  const unVoteProfileStrength = (voteId) => {
-    setStrengthsLoaded(false)
-    fetch('https://mublin.herokuapp.com/profile/'+voteId+'/unvoteStrength', {
-        method: 'DELETE',
-        headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + user.token
-        }
-    })
-    .then((response) => {
-        dispatch(profileInfos.getProfileStrengths(username));
-        dispatch(profileInfos.getProfileStrengthsRaw(username));
-        setStrengthsLoaded(true)
-        setStrengthVoted(null)
-        setStrengthVotedName(null)
-    }).catch(err => {
-        console.error(err)
-        alert("Ocorreu um erro ao remover o voto. Tente novamente em instantes")
-    })
-  }
 
   return (
     <>
@@ -190,9 +110,7 @@ function ProfilePage () {
         >
           <Group justify="flex-start" align="center" mb={18}>
             <Title order={4}>Pontos Fortes</Title>
-            <Button size="compact-xs" variant="default" onClick={() => setModalStrengthsOpen(true)}>
-              Votar
-            </Button>
+            <Button size="compact-xs" variant="default">Votar</Button>
           </Group>
           {profile.requesting ? ( 
               <Text size='sm'>Carregando...</Text>
@@ -324,49 +242,6 @@ function ProfilePage () {
           </Paper>
         }
       </Container>
-      <Modal 
-        opened={modalStrengthsOpen} 
-        onClose={() => setModalStrengthsOpen(false)} 
-        title={`Votar pontos fortes de ${profile.name} ${profile.lastname}`}
-        centered
-        // fullScreen
-      >
-        {strengths.map((strength,key) =>
-          <div key={key}>
-            <div className={myVotes.filter((x) => { return x.strengthId === strength.id}).length ? 'ui radio checkbox voted' : 'ui radio checkbox' }>
-              <input 
-                disabled={myVotes.filter((x) => { return x.strengthId === strength.id}).length}
-                id={'strengthsGroup_'+strength.id}
-                name={!myVotes.filter((x) => { return x.strengthId === strength.id}).length ? 'strengthsGroup' : ''} 
-                type="radio" 
-                className="hidden" 
-                value={strength.id}
-                checked={(strength.id === strengthVoted || myVotes.filter((x) => { return x.strengthId === strength.id}).length) ? true : false}
-                onChange={() => {
-                  setStrengthVoted(strength.id);
-                  setStrengthVotedName(strength.title);
-                }}
-              />
-              <label for={'strengthsGroup_'+strength.id} className={myVotes.filter((x) => { return x.strengthId === strength.id}).length && 'voted'}>
-                <span><i className={strength.icon+' fa-fw ml-1'}></i> {strength.title}</span> {!!myVotes.filter((x) => { return x.strengthId === strength.id}).length && 
-                  <>
-                    {/* <IconX style={{ width: '8px', height: '8px', marginLeft: '3px', marginRight: '3px' }} onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)} /> */}
-                    <Button size="compact-xs" variant="filled" color='red'
-                      onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}
-                    >
-                      Retirar
-                    </Button>
-                  </>
-                }
-              </label>
-            </div>
-          </div>
-        )}
-        <Group mt="md">
-          <Button variant='outline' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
-          <Button onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
-        </Group>
-      </Modal>
       <FooterMenuMobile />
     </>
   );

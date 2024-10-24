@@ -30,14 +30,17 @@
         border-radius: 8px;
         flex: 0 0 130px;
         min-width: 0;
-        margin-left: 5px;
-        margin-right: 5px;
-        padding: 10px 10px 10px 10px;
+        // margin-right: 5px;
+        padding: 6px 10px 6px 10px;
         text-align: center;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+
+        &:not(:first-child) {
+          margin-left: 6px;
+        }
 
         p {
           color: #000;
