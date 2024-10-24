@@ -57,7 +57,7 @@ function ProfilePage () {
   return (
     <>
       <Header />
-      <Container size={'lg'} mb={largeScreen ? 30 : 82}>
+      <Container size={'lg'} mb={largeScreen ? 30 : 82} className='profilePage'>
         <Box mb={24}>
           {profile.requesting && 
             <>
@@ -92,16 +92,19 @@ function ProfilePage () {
                 <Box>
                   <Text size='sm' c='dimmed'>{username}</Text>
                   <Title order={3}>{profile.name} {profile.lastname}</Title>
-                  <Flex>
+                  <Flex style={{ overflow: 'scroll', width: '78%', overflowY: 'hidden' }}>
                     {profile.roles.map((role, key) =>
-                      <Group gap={3} key={key}>
-                        {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' />} <Text size='12px' mr={13}>{role.name}</Text>
-                      </Group>
+                      <Flex gap={2} align={'center'} key={key}>
+                        {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' />} <Text size='11px' mr={13}>{role.name}</Text>
+                      </Flex>
                     )}
+
                   </Flex>
                 </Box>
               </Flex>
-              <Text size='sm' mt={14}>{profile.bio}</Text>
+              {(profile.bio && profile.bio !== 'null') && 
+                <Text size='sm' mt={14}>{profile.bio}</Text>
+              }
             </>
           }
         </Box>
@@ -117,11 +120,11 @@ function ProfilePage () {
           ) : (
             <>
               {(profile.strengths[0].strengthId && profile.strengths[0].idUserTo === profile.id) ? ( 
-                <div className="embla" ref={emblaRef1}>
+                <div className="embla strengths" ref={emblaRef1}>
                   <div className="embla__container">
                     {profile.strengths.map((strength, key) =>
                       <Flex 
-                        justify="center"
+                        justify="flex-start"
                         align="center"
                         direction="column"
                         wrap="wrap"
@@ -129,7 +132,9 @@ function ProfilePage () {
                         key={key}
                       >
                         <i className={strength.icon}></i>
-                        <Title order={6} fw={500} mb={2} mt={3}>{strength.strengthTitle}</Title>
+                        <Title order={6} fw={500} mb={2} mt={3} size={'sm'} align='center'>
+                          {strength.strengthTitle}
+                        </Title>
                         {/* <Badge variant='default'>{strength.percent}</Badge> */}
                       </Flex>
                     )}
@@ -181,7 +186,7 @@ function ProfilePage () {
                   </NativeSelect>
                 </Group>
                 {profile.gear[0]?.brandId ? ( 
-                  <div className="embla" ref={emblaRef2}>
+                  <div className="embla gear" ref={emblaRef2}>
                     <div className="embla__container">
                       {gear.map((product, key) =>
                         <div className="embla__slide" key={key}>
