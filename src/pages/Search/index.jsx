@@ -74,7 +74,7 @@ function Search () {
             </ActionIcon>
           </Group>
         }
-        <Box mb={24}>
+        <Box mb={14}>
           <Title order={4}>{!searchedKeywords ? 'Sugestões para se conectar' : 'Resultados da pesquisa por "'+searchedKeywords+'"'}</Title>
         </Box>
         {!searchedKeywords && 
@@ -127,110 +127,102 @@ function Search () {
           <Center><Loader  mt={76} size={50} color="violet" /></Center>
         }
         {(searchedKeywords && !searchResults.requesting) && 
-          <Tabs defaultValue="people">
+          <Tabs defaultValue="people" orientation="vertical" >
             <Tabs.List>
-              <Tabs.Tab value="people" leftSection={<IconUsers style={iconStyle} />}>
+              <Tabs.Tab value="people" p={4} mb={15}>
                 {searchResults.users[0].id
                   ?  'Pessoas ('+searchResults.users.length+')' 
                   : 'Pessoas (0)'
                 }
               </Tabs.Tab>
-              <Tabs.Tab value="projects" leftSection={<IconPlaylist style={iconStyle} />}>
+              <Tabs.Tab value="projects" p={4} mb={15}>
                 {searchResults.projects[0].id 
                   ? 'Projetos ('+searchResults.projects.length+')' 
                   : 'Projetos (0)'
                 }
               </Tabs.Tab>
-              <Tabs.Tab value="gear" leftSection={<IconBox style={iconStyle} />}>
+              {/* <Tabs.Tab value="gear" p={3}>
                 Equipamentos
-              </Tabs.Tab>
+              </Tabs.Tab> */}
             </Tabs.List>
-            <Tabs.Panel value="people">
+            <Tabs.Panel value="people" pl={10}>
               {searchResults.users[0].id && 
-                <Grid mb={largeScreen ? 30 : 86}>
+                <Box>
                   {searchResults.users.map((user, key) =>
-                    <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={user.id}>
-                      <Card
-                        shadow="sm"
-                        padding="xl"
-                        component="a"
-                        href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                        target="_blank"
-                        key={key}
-                      >
-                        <Card.Section withBorder inheritPadding py="xs" px="xs">
-                          <Image
-                            src={user.picture}
-                            h={160}
-                            alt={user.username}
+                    <>
+                      <Flex align={'center'} key={key} mb={8} gap={6}>
+                        <Link to={{ pathname: `/${user.username}` }}>
+                          <Avatar 
+                            src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
+                            size='md'
                           />
-                        </Card.Section>
-                        <Text fw={500} size="xs" mt="md">
-                          {user.name} {user.id !== loggedUser.id ? user.lastname : '(Você)'}
-                        </Text>
-                        {user.instrumentalist && 
-                          <Card.Section withBorder inheritPadding py="xs" px="xs">
-                            <span style={{color:'darkgray '}}>{user.mainRole}</span>{user.plan === 'Pro' && <Badge size="tiny" className="ml-1 p-1" style={{cursor:"default"}}>Pro</Badge>}
-                          </Card.Section>
-                        }
-                        {user.city &&
-                          <Card.Section withBorder inheritPadding py="xs" px="xs">
-                              {user.city+' - '+user.region}
-                          </Card.Section>
-                        }
-                        {!!(user.projectRelated && user.projectPublic && searchResults.projects[0].id) &&
-                          <Card.Section withBorder inheritPadding py="xs" px="xs">
-                            <Text size="xs">
-                              Projeto relacionado: <strong>{user.projectRelated} {'('+user.projectType+')'}</strong>
+                        </Link>
+                        <Flex
+                          justify="flex-start"
+                          align="flex-start"
+                          direction="column"
+                          wrap="wrap"
+                        >
+                          <Flex gap={3}>
+                            <Text size='xs' fw={500}>
+                              {user.name+' '+user.lastname}
                             </Text>
-                          </Card.Section>
-                        }
-                        {/* <Text mt="xs" c="dimmed" size="sm">
-                          Please click anywhere on this card to claim your reward, this is not a fraud, trust us
-                        </Text> */}
-                      </Card>
-                    </Grid.Col>
+                            {!!user.verified && 
+                              <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                            }
+                          </Flex>
+                          <Text size='11px'>
+                            {user.mainRole ? user.mainRole : user.bio}
+                          </Text>
+                          <Text size='11px' c='dimmed'>
+                            {user.city && user.city+' - '+user.region}
+                          </Text>
+                        </Flex>
+                      </Flex>
+                      <Divider my="xs" />
+                    </>
                   )}
-                </Grid>
+                </Box>
               }
             </Tabs.Panel>
-            <Tabs.Panel value="projects">
-              {searchResults.projects[0].id && 
-                <Grid mb={largeScreen ? 30 : 86}>
-                  {searchResults.projects.map((project, key) =>
-                    <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={project.id}>
-                      <Card
-                        shadow="sm"
-                        padding="xl"
-                        component="a"
-                        href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                        target="_blank"
-                        key={key}
-                      >
-                        <Card.Section>
-                          <Image
-                            src={project.picture}
-                            h={160}
-                            alt="No way!"
+            <Tabs.Panel value="projects" pl={10}>
+              {searchResults.users[0].id && 
+                <Box>
+                  {searchResults.projects.map((project, key) => 
+                    <>
+                      <Flex align={'center'} key={key} mb={8} gap={6}>
+                        <Link to={{ pathname: `/project/${project.username}` }}>
+                          <Avatar 
+                            src={project.picture ? project.picture : undefined} 
+                            size='md'
                           />
-                        </Card.Section>
-                  
-                        <Text fw={500} size="lg" mt="md">
-                          {project.name}
-                        </Text>
-                  
-                        {/* <Text mt="xs" c="dimmed" size="sm">
-                          Please click anywhere on this card to claim your reward, this is not a fraud, trust us
-                        </Text> */}
-                      </Card>
-                    </Grid.Col>
+                        </Link>
+                        <Flex
+                          justify="flex-start"
+                          align="flex-start"
+                          direction="column"
+                          wrap="wrap"
+                        >
+                          <Text size='xs' fw={500}>
+                            {project.name}
+                          </Text>
+                          <Text size='11px'>
+                            {project.type} · {project.mainGenre}
+                          </Text>
+                          <Text size='11px' c='dimmed'>
+                            {project.city && project.city+' - '+project.region}
+                          </Text>
+                        </Flex>
+                      </Flex>
+                      <Divider my="xs" />
+                    </>
                   )}
-                </Grid>
+                </Box>
               }
             </Tabs.Panel>
-            <Tabs.Panel value="gear">
+            {/* <Tabs.Panel value="gear">
               Equipamentos tab content
-            </Tabs.Panel>
+            </Tabs.Panel> */}
           </Tabs>
         }
       </Container>
