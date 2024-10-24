@@ -59,7 +59,7 @@ function Search () {
               <Input 
                 variant="filled" 
                 size="sm"
-                w={'250px'}
+                w={'280px'}
                 placeholder='Pessoa, instrumento ou cidade'
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.currentTarget.value)}
@@ -75,7 +75,7 @@ function Search () {
           </Group>
         }
         <Box mb={14}>
-          <Title order={4}>{!searchedKeywords ? 'Sugestões para se conectar' : 'Resultados da pesquisa por "'+searchedKeywords+'"'}</Title>
+          <Title order={5}>{!searchedKeywords ? 'Sugestões para se conectar' : 'Resultados da pesquisa por "'+searchedKeywords+'"'}</Title>
         </Box>
         {!searchedKeywords && 
           <>
@@ -117,7 +117,7 @@ function Search () {
                       </Text>
                     </Flex>
                   </Flex>
-                  <Divider my="xs" />
+                  {/* <Divider my="xs" /> */}
                 </>
               )
             )}
@@ -127,21 +127,21 @@ function Search () {
           <Center><Loader  mt={76} size={50} color="violet" /></Center>
         }
         {(searchedKeywords && !searchResults.requesting) && 
-          <Tabs defaultValue="people" orientation="vertical" >
+          <Tabs defaultValue="people" orientation="horizontal">
             <Tabs.List>
-              <Tabs.Tab value="people" p={4} mb={15}>
+              <Tabs.Tab value="people" mb={15}>
                 {searchResults.users[0].id
                   ?  'Pessoas ('+searchResults.users.length+')' 
                   : 'Pessoas (0)'
                 }
               </Tabs.Tab>
-              <Tabs.Tab value="projects" p={4} mb={15}>
+              <Tabs.Tab value="projects" mb={15}>
                 {searchResults.projects[0].id 
                   ? 'Projetos ('+searchResults.projects.length+')' 
                   : 'Projetos (0)'
                 }
               </Tabs.Tab>
-              {/* <Tabs.Tab value="gear" p={3}>
+              {/* <Tabs.Tab value="gear">
                 Equipamentos
               </Tabs.Tab> */}
             </Tabs.List>
@@ -164,14 +164,14 @@ function Search () {
                           wrap="wrap"
                         >
                           <Flex gap={3}>
-                            <Text size='xs' fw={500}>
+                            <Text size='sm' fw={500}>
                               {user.name+' '+user.lastname}
                             </Text>
                             {!!user.verified && 
                               <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
                             }
                           </Flex>
-                          <Text size='11px'>
+                          <Text size='xs'>
                             {user.mainRole ? user.mainRole : user.bio}
                           </Text>
                           <Text size='11px' c='dimmed'>
@@ -179,7 +179,7 @@ function Search () {
                           </Text>
                         </Flex>
                       </Flex>
-                      <Divider my="xs" />
+                      {/* <Divider my="xs" /> */}
                     </>
                   )}
                 </Box>
@@ -203,10 +203,10 @@ function Search () {
                           direction="column"
                           wrap="wrap"
                         >
-                          <Text size='xs' fw={500}>
+                          <Text size='sm' fw={500}>
                             {project.name}
                           </Text>
-                          <Text size='11px'>
+                          <Text size='xs'>
                             {project.type} · {project.mainGenre}
                           </Text>
                           <Text size='11px' c='dimmed'>
@@ -214,7 +214,7 @@ function Search () {
                           </Text>
                         </Flex>
                       </Flex>
-                      <Divider my="xs" />
+                      {/* <Divider my="xs" /> */}
                     </>
                   )}
                 </Box>

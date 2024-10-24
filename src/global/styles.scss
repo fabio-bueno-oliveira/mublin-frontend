@@ -62,3 +62,9 @@ a {
 .mantine-Badge-label {
   font-weight: 500;
 }
+
+.mantine-Tabs-list {
+  &:before {
+    border: none;
+  }
+}
