@@ -45,5 +45,9 @@
     &::-webkit-scrollbar, &:hover { 
       scrollbar-width: 2px;
     }
+
+    .imgToWhite {
+      filter: brightness(0) invert(1);
+    }
   }
 }

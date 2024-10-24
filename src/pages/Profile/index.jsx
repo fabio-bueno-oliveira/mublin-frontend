@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { profileInfos } from '../../store/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Badge, Button, Box, Skeleton, SimpleGrid } from '@mantine/core';
+import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Button, Box, Skeleton, SimpleGrid, useMantineColorScheme } from '@mantine/core';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -15,6 +15,7 @@ function ProfilePage () {
   const username = params?.username;
   const profile = useSelector(state => state.profile);
   const largeScreen = useMediaQuery('(min-width: 60em)');
+  const { colorScheme } = useMantineColorScheme();
 
   let dispatch = useDispatch();
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
@@ -56,7 +57,7 @@ function ProfilePage () {
 
   return (
     <>
-      <Header />
+      <Header pageType='profile' />
       <Container size={'lg'} mb={largeScreen ? 30 : 82} className='profilePage'>
         <Box mb={24}>
           {profile.requesting && 
@@ -74,6 +75,7 @@ function ProfilePage () {
           }
           {!profile.requesting && 
             <>
+              <Text size='md' c='dimmed'>{username}</Text>
               <Flex
                 justify="flex-start"
                 align="center"
@@ -82,20 +84,16 @@ function ProfilePage () {
                 columnGap="xs"
                 mt={6}
               >
-                <Image
-                  radius="md"
-                  h={80}
-                  w="auto"
-                  fit="contain"
+                <Avatar
+                  size={'lg'}
                   src={profile.picture}
                 />
                 <Box style={{ overflow: 'hidden' }}>
-                  <Text size='sm' c='dimmed'>{username}</Text>
                   <Title order={3}>{profile.name} {profile.lastname}</Title>
                   <Flex className='rolesList'>
                     {profile.roles.map((role, key) =>
                       <Flex gap={2} align={'center'} key={key}>
-                        {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' />} <Text size='11px' mr={13}>{role.name}</Text>
+                        {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />} <Text size='11px' mr={13}>{role.name}</Text>
                       </Flex>
                     )}
                   </Flex>

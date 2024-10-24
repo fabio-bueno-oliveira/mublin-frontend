@@ -3,9 +3,9 @@ import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-ro
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, CloseButton, rem, Group, Badge } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconMoon, IconBrightnessUp, IconSearch } from '@tabler/icons-react';
+import { IconMoon, IconBrightnessUp, IconSearch, IconArrowLeft } from '@tabler/icons-react';
 import s from './header.module.css';
 
 function Header () {
@@ -15,7 +15,7 @@ function Header () {
 
   const user = useSelector(state => state.user);
 
-  const { colorScheme, setColorScheme,  } = useMantineColorScheme();
+  const { colorScheme, setColorScheme } = useMantineColorScheme();
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const [searchParams] = useSearchParams();
   const searchedKeywords = searchParams.get('keywords');
@@ -49,7 +49,7 @@ function Header () {
     <Container 
       size={'lg'} 
       mt={14} 
-      mb={16} 
+      mb={8} 
       className={s.headerContainer}
     >
       <Flex
@@ -129,9 +129,11 @@ function Header () {
               ml={8}
             />
           </Link>
-          <Text fw={400} size='sm' ml={4} c='dimmed'>
-            {user.name}
-          </Text>
+          {largeScreen && 
+            <Text fw={400} size='sm' ml={4} c='dimmed'>
+              {user.name}
+            </Text>
+          }
           {user.plan === 'Pro' && 
             <Badge size='xs' variant='light' color="violet" ml={9}>PRO</Badge>
           }
