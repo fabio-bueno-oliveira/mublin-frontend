@@ -19,6 +19,7 @@ function Home () {
     dispatch(eventsInfos.getUserEvents(loggedUser.id));
   }, [loggedUser.id, dispatch]);
 
+  const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
   const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
 
@@ -36,10 +37,13 @@ function Home () {
           <>
             <Grid align="center">
               <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
+                <Title size="h3" mb={1}>
+                  Olá, {user?.name}
+                </Title>
                 <Title size="h5" mb={4}>
                   Você está cadastrado em {projects?.list.length} projetos
                 </Title>
-                <Avatar.Group mb={16}>
+                {/* <Avatar.Group mb={16}>
                   {projects?.list.slice(0, 5).map((p) => (
                     <Tooltip label={p.name} key={p.id} withArrow>
                       <Avatar 
@@ -51,7 +55,7 @@ function Home () {
                   {projects?.list.length > 5 && 
                     <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
                   }
-                </Avatar.Group>
+                </Avatar.Group> */}
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
                 <Grid grow gutter="xs">

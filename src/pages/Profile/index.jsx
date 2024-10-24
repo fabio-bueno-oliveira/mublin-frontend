@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { profileInfos } from '../../store/actions/profile';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button } from '@mantine/core';
-import { IconX } from '@tabler/icons-react';
+import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge } from '@mantine/core';
+import { IconCircleFilled, IconCheck } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -24,6 +24,7 @@ function ProfilePage () {
 
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username));
+    dispatch(profileInfos.getProfileAvailabilityItems(username));
     dispatch(profileInfos.getProfileProjects(username));
     dispatch(profileInfos.getProfileRoles(username));
     dispatch(profileInfos.getProfileGear(username));
@@ -45,11 +46,17 @@ function ProfilePage () {
         },
         (error) => {
             setStrengthsLoaded(true)
+            console.error(error)
         }
       )
-  }, []);
+  }, [username]);
 
   document.title = `${profile.name} ${profile.lastname} | Mublin`;
+
+  const iconCircleStyles = { width: '10px', height: '10px', marginLeft: '3px', marginRight: '3px' };
+
+  // Projects
+  const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 })
 
   // Gear
   const [gearSetupProducts, setGearSetupProducts] = useState('');
@@ -57,7 +64,7 @@ function ProfilePage () {
   const gearTotal = useSelector(state => state.profile.gear).filter((product) => { return (gearSetupProducts) ? gearSetupProducts.find(x => x.productId === product.productId) : product.productId > 0 });
   const gear = gearTotal.filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
 
-  // Carousel
+  // Carousels
   const [emblaRef1] = useEmblaCarousel(
     {
       active: true,
@@ -74,7 +81,16 @@ function ProfilePage () {
       align: 'start' 
     }
   )
+  const [emblaRefprojects] = useEmblaCarousel(
+    {
+      active: true,
+      loop: false, 
+      dragFree: true, 
+      align: 'start' 
+    }
+  )
 
+  // Strentgth points
   const [modalStrengthsOpen, setModalStrengthsOpen] = useState(false)
   const [strengthsLoaded, setStrengthsLoaded] = useState(false)
   const [strengths, setStrengths] = useState([])
@@ -177,22 +193,62 @@ function ProfilePage () {
                       </Flex>
                     )}
                   </Flex>
+                  
                 </Box>
               </Flex>
               {(profile.bio && profile.bio !== 'null') && 
-                <Text size='xs' mt={14}>{profile.bio}</Text>
+                <Text size={largeScreen ? 'sm' : 'xs'} mt={14}>{profile.bio}</Text>
               }
             </>
           }
         </Box>
-        <Paper radius="md" withBorder p="md" mb={18}
+        <Paper radius="md" withBorder p="sm" mb={18}
+          style={{ backgroundColor: 'transparent' }}
+        >
+          {profile.requesting ? ( 
+            <>
+              <Title order={4}>Disponibilidade</Title>
+              <Text size='sm'>Carregando...</Text>
+            </>
+          ) : (
+            <>
+              <Flex align='center' gap={3}>
+                <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
+                <Title order={4}>{profile.availabilityTitle}</Title>
+              </Flex>
+              {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
+                <>
+                  <Text size='xs' mt={6}>
+                    {profile.availabilityFocus === 1 && <span><IconCheck style={iconCircleStyles} />Projetos autorais</span>} 
+                    {profile.availabilityFocus === 2 && <span><IconCheck style={iconCircleStyles} />Sideman</span>}
+                    {profile.availabilityFocus === 3 && <><span><IconCheck style={iconCircleStyles} />Projetos autorais</span> <span><IconCheck style={iconCircleStyles} />Sideman</span></>}
+                  </Text>
+                  <Group gap={4} mt={5}>
+                    {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                      <Badge size='xs' color='gray' key={key}>
+                        {item.itemName}
+                      </Badge>
+                    )}  
+                  </Group>
+                </>
+              }
+            </>
+          )}
+        </Paper>
+        <Paper radius="md" withBorder px="sm" py="xs" mb={18}
           style={{ backgroundColor: 'transparent' }}
         >
           <Group justify="flex-start" align="center" mb={18}>
             <Title order={4}>Pontos Fortes</Title>
-            <Button size="compact-xs" variant="default" onClick={() => setModalStrengthsOpen(true)}>
-              Votar
-            </Button>
+            {profile.id !== loggedUser.id && 
+              <Button 
+                size="compact-xs" 
+                variant="default" 
+                onClick={() => setModalStrengthsOpen(true)}
+              >
+                Votar
+              </Button>
+            }
           </Group>
           {profile.requesting ? ( 
               <Text size='sm'>Carregando...</Text>
@@ -220,14 +276,14 @@ function ProfilePage () {
                   </div>
                 </div>
               ) : (
-                <Text size='11px'>
+                <Text size='xs'>
                   Nenhum ponto forte votado para {profile.name} até o momento
                 </Text>
               )}
             </>
           )}
         </Paper>
-        <Paper radius="md" withBorder p="md" mb={18}
+        <Paper radius="md" withBorder px="sm" py="xs" mb={18}
           style={{ backgroundColor: 'transparent' }}
         >
           <Group justify="flex-start" align="center" mb={18}>
@@ -238,9 +294,9 @@ function ProfilePage () {
           ) : (
             <>
               {profile.projects[0].id ? ( 
-                <div className="embla strengths" ref={emblaRef1}>
+                <div className="embla projects" ref={emblaRefprojects}>
                   <div className="embla__container">
-                    {mainProjects.map((projeto, key) =>
+                    {mainProjects.map((project, key) =>
                       <Flex 
                         justify="flex-start"
                         align="center"
@@ -249,7 +305,15 @@ function ProfilePage () {
                         className="embla__slide"
                         key={key}
                       >
-                        <Image src={projeto.picture} />
+                        <Image 
+                            src={project.picture} 
+                            w={80}
+                            mb={10}
+                            radius={3}
+                        />
+                        <Text size='13px' fw={500} mb={3}>{project.name}</Text>
+                        <Text size='12px'>{project.type}</Text>
+                        <Text size='12px'>{project.workTitle}</Text>
                       </Flex>
                     )}
                   </div>
@@ -263,7 +327,7 @@ function ProfilePage () {
           )}
         </Paper>
         {profile.plan === "Pro" && 
-          <Paper radius="md" withBorder p="md" mb={25}
+          <Paper radius="md" withBorder px="sm" py="xs" mb={25}
             style={{ backgroundColor: 'transparent' }}
           >
             <Title order={4} mb={8}>Equipamento</Title>
@@ -272,7 +336,7 @@ function ProfilePage () {
             ) : (
               <>
                 <Group mb={20}>
-                  <NativeSelect 
+                  {/* <NativeSelect 
                     size="xs"
                     w={138}
                     onChange={(e) => getSetupProducts(e.target.options[e.target.selectedIndex].value)}
@@ -283,14 +347,14 @@ function ProfilePage () {
                         {setup.name}
                       </option>
                     )}
-                  </NativeSelect>
+                  </NativeSelect> */}
                   <NativeSelect 
                     size="xs"
                     w={132}
                     onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
                   >
                     <option value=''>
-                      {'Exibir tudo ('+gear.length+')'}
+                      {'Exibir tudo ('+gearTotal.length+')'}
                     </option>
                     {profile.gearCategories.map((gearCategory, key) =>
                       <option key={key} value={gearCategory.category}>

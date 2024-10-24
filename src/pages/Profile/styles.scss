@@ -6,13 +6,15 @@
       display: flex;
 
       .embla__slide {
+        cursor: default;
+        user-select: none;
         flex: 0 0 auto;
         min-width: 0;
-        margin-right: 12px;
+        margin-right: 14px;
       }
       @media (min-width: 768px) {
         .embla__slide {
-          margin-right: 4px;
+          margin-right: 14px;
         }
       }
     }
@@ -54,12 +56,50 @@
     }
   }
 
+  .embla.projects {
+    overflow: hidden;
+
+    .embla__container {
+      display: flex;
+
+      .embla__slide {
+        // background-color: #FFF;
+        // border: 1px solid #dee2e6;
+        // border-radius: 8px;
+        // flex: 0 0 130px;
+        // min-width: 0;
+        // // margin-right: 5px;
+        // padding: 6px 10px 6px 10px;
+        // text-align: center;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        // align-items: center;
+
+        // &:not(:first-child) {
+        //   margin-left: 6px;
+        // }
+
+        // p {
+        //   color: #000;
+        // }
+      }
+      @media (min-width: 768px) {
+        .embla__slide {
+          margin-right: 4px;
+        }
+      }
+    }
+  }
+
   .rolesList {
     width: 97%;
     scrollbar-width: none;
     overflow: scroll;
 
     div {
+      cursor: default;
+      user-select: none;
       width: fit-content;
       white-space: nowrap;
     }

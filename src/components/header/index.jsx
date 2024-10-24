@@ -19,6 +19,7 @@ function Header (props) {
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const [searchParams] = useSearchParams();
   const searchedKeywords = searchParams.get('keywords');
+  // const [showMobileMenu, setShowMobileMenu] = useState(true)
   let currentPath = window.location.pathname;
 
   useEffect(() => { 
@@ -78,14 +79,14 @@ function Header (props) {
             <>
               <form
                 onSubmit={(e) => handleSearch(e, searchQuery, null)}
-                onFocus={() => setShowMobileMenu(false)}
-                onBlur={() => setShowMobileMenu(true)}
+                // onFocus={() => setShowMobileMenu(false)}
+                // onBlur={() => setShowMobileMenu(true)}
               >
                 <Input 
                   variant="filled" 
                   size="sm"
                   placeholder='Pessoa, instrumento, cidade...'
-                  value={searchQuery}
+                  value={searchQuery ? searchQuery : undefined}
                   onChange={(event) => setSearchQuery(event.currentTarget.value)}
                   rightSectionPointerEvents="all"
                 />
@@ -142,9 +143,9 @@ function Header (props) {
                   ml={8}
                 />
               </Link>
-              <Text fw={400} size='sm' ml={4} c='dimmed'>
+              {/* <Text fw={400} size='sm' ml={4} c='dimmed'>
                 {user.name}
-              </Text>
+              </Text> */}
               {user.plan === 'Pro' && 
                 <Badge size='xs' variant='light' color="violet" ml={9}>PRO</Badge>
               }
