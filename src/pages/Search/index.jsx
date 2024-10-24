@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Flex, Group, Skeleton, SimpleGrid, Divider, Tabs, Box, Title, Card, Text, Image, Badge, Avatar, Input, ActionIcon, Center, Loader, rem } from '@mantine/core';
-import { IconPlaylist, IconBox, IconUsers, IconRosetteDiscountCheckFilled, IconSearch } from '@tabler/icons-react';
+import { Container, Flex, Group, Skeleton, SimpleGrid, Tabs, Box, Title, Text, Avatar, Input, ActionIcon, Center, Loader, rem } from '@mantine/core';
+import { IconRosetteDiscountCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 
 function Search () {
 
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
+  // const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -31,7 +31,6 @@ function Search () {
     // dispatch(miscInfos.getFeed());
   }, [dispatch, searchedKeywords]);
 
-  const iconStyle = { width: rem(12), height: rem(12) };
   const iconVerifiedStyle = { width: rem(15), height: rem(15) };
 
   const handleSearch = (e, query, tab) => {

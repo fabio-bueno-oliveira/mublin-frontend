@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert } from '@mantine/core';
-import { IconCircleFilled, IconCheck, IconInfoCircle, IconBulb, IconIdBadge2 } from '@tabler/icons-react';
+import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem } from '@mantine/core';
+import { IconCircleFilled, IconCheck, IconInfoCircle, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -62,6 +62,8 @@ function ProfilePage () {
   const followedByMe = useSelector(state => state.followedByMe);
   const [loadingFollow, setLoadingFollow] = useState(false);
 
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '2px' };
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '2px' };
   const iconCircleStyles = { width: '10px', height: '10px', marginLeft: '3px', marginRight: '3px' };
 
   // Projects
@@ -247,7 +249,19 @@ function ProfilePage () {
                   src={profile.picture}
                 />
                 <Box style={{ overflow: 'hidden' }}>
-                  <Title order={4}>{profile.name} {profile.lastname}</Title>
+                  <Flex align={'center'}>
+                    <Title order={4}>{profile.name} {profile.lastname}</Title>
+                    {!!profile.verified && 
+                      <Tooltip label="Usuário Verificado">
+                        <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                      </Tooltip>
+                    }
+                    {!!profile.legend && 
+                      <Tooltip label={`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante no cenário musical`} multiline withArrow w={180}>
+                        <IconShieldCheckFilled style={iconLegendStyle} />
+                      </Tooltip>
+                    }
+                  </Flex>
                   <Flex className='rolesList'>
                     {profile.roles.map((role, key) =>
                       <Flex gap={2} align={'center'} key={key}>
