@@ -508,7 +508,7 @@ function ProfilePage () {
         scrollAreaComponent={ScrollArea.Autosize}
         fullScreen
       >
-        <Text size={'xs'}>{profile.bio}</Text>
+        <Text size={'sm'}>{profile.bio}</Text>
       </Modal>
       <Modal 
         centered
