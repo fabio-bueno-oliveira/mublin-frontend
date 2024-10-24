@@ -25,7 +25,13 @@ const FooterMenuMobile = () => {
     navigate('/settings')
   }
 
+  const setNewColorTheme = (option) => {
+    setColorScheme(option);
+    setMobileMenuOpen(false);
+  }
+
   const logout = () => {
+    setColorScheme('light');
     dispatch(userActions.logout());
   }
 
@@ -100,14 +106,14 @@ const FooterMenuMobile = () => {
           <NavLink
             label="Mudar para o tema claro"
             leftSection={<IconBrightnessUp size="1rem" stroke={1.5} />}
-            onClick={() => {setColorScheme('light')}}
+            onClick={() => setNewColorTheme('light')}
           />
         }
         {colorScheme === 'light' && 
           <NavLink
             label="Mudar para o tema escuro"
             leftSection={<IconMoon size="1rem" stroke={1.5} />}
-            onClick={() => {setColorScheme('dark')}}
+            onClick={() => setNewColorTheme('dark')}
           />
         }
         <Divider my="xs" />

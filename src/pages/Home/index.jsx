@@ -37,10 +37,10 @@ function Home () {
           <>
             <Grid align="center">
               <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
-                <Title size="h3" mb={1}>
+                <Title order={4} mb={1}>
                   Olá, {user?.name}
                 </Title>
-                <Title size="h5" mb={4}>
+                <Title order={6} mb={4}>
                   Você está cadastrado em {projects?.list.length} projetos
                 </Title>
                 {/* <Avatar.Group mb={16}>
@@ -57,7 +57,7 @@ function Home () {
                   }
                 </Avatar.Group> */}
               </Grid.Col>
-              <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
+              {/* <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
                 <Grid grow gutter="xs">
                   <Grid.Col span={6}>
                     <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
@@ -84,7 +84,7 @@ function Home () {
                     </Paper>
                   </Grid.Col>
                 </Grid>
-              </Grid.Col>
+              </Grid.Col> */}
             </Grid>
           </>
         )}

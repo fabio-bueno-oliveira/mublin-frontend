@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
+import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert } from '@mantine/core';
-import { IconCircleFilled, IconCheck, IconInfoCircle } from '@tabler/icons-react';
+import { IconCircleFilled, IconCheck, IconInfoCircle, IconBulb, IconIdBadge2 } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -26,6 +27,7 @@ function ProfilePage () {
 
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username));
+    dispatch(followInfos.checkProfileFollowing(username));
     dispatch(profileInfos.getProfileAvailabilityItems(username));
     dispatch(profileInfos.getProfileFollowers(username));
     dispatch(profileInfos.getProfileFollowing(username));
@@ -56,6 +58,9 @@ function ProfilePage () {
   }, [username]);
 
   document.title = `${profile.name} ${profile.lastname} | Mublin`;
+
+  const followedByMe = useSelector(state => state.followedByMe);
+  const [loadingFollow, setLoadingFollow] = useState(false);
 
   const iconCircleStyles = { width: '10px', height: '10px', marginLeft: '3px', marginRight: '3px' };
 
@@ -98,6 +103,46 @@ function ProfilePage () {
   const [modalFollowersOpen, setModalFollowersOpen] = useState(false);
   // Modal Following
   const [modalFollowingOpen, setModalFollowingOpen] = useState(false);
+
+  const followUnfollow = () => {
+    if (!followedByMe.following || followedByMe.following === 'false') {
+        setLoadingFollow(true)
+        fetch('https://mublin.herokuapp.com/profile/'+profile.id+'/follow', {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + loggedUser.token
+            }
+        })
+        .then((response) => {
+            dispatch(followInfos.checkProfileFollowing(username));
+            dispatch(profileInfos.getProfileFollowers(username));
+            setLoadingFollow(false)
+        }).catch(err => {
+            console.error(err)
+            alert("Ocorreu um erro ao tentar seguir o usuário")
+        })
+    } else if (followedByMe.following === 'true') {
+        setLoadingFollow(true)
+        fetch('https://mublin.herokuapp.com/profile/'+profile.id+'/follow', {
+            method: 'delete',
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            }
+        })
+        .then((response) => {
+            dispatch(followInfos.checkProfileFollowing(username));
+            dispatch(profileInfos.getProfileFollowers(username));
+            setLoadingFollow(false)
+        }).catch(err => {
+            console.error(err)
+            alert("Ocorreu um erro ao deixar de seguir o usuário")
+        })
+    }
+  }
 
   const goToProfile = (username) => {
     setModalFollowersOpen(false);
@@ -171,7 +216,7 @@ function ProfilePage () {
     <>
       <Header pageType='profile' username={username} />
       <Container size={'lg'} mb={largeScreen ? 30 : 82} className='profilePage'>
-        <Box mb={17}>
+        <Box mb={15}>
           {profile.requesting && 
             <>
             <Group justify='flex-start'>
@@ -208,7 +253,7 @@ function ProfilePage () {
                       </Flex>
                     )}
                   </Flex>
-                  <Group gap={8} mt={6}>
+                  <Group gap={8} mt={4}>
                     {profile.followers.length ? (
                       <Text size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
                         {profile.followers.length} seguidores
@@ -231,10 +276,38 @@ function ProfilePage () {
                 </Box>
               </Flex>
               {(profile.bio && profile.bio !== 'null') && 
-                <Text size={largeScreen ? 'sm' : 'xs'} mt={14}>{profile.bio}</Text>
+                <ScrollArea h={largeScreen ? 200 : 54} scrollbars="y">
+                  <Text size={largeScreen ? 'sm' : 'xs'} mt={14}>{profile.bio}</Text>
+                </ScrollArea>
               }
             </>
           }
+          <Box mt={12}>
+            {followedByMe?.requesting ? (
+              <Button size="compact-xs" disabled>Carregando...</Button>
+            ) : (
+              loggedUser.id !== profile.id ? (
+                <Button 
+                  size="compact-xs" 
+                  color={colorScheme === "light" ? "dark" : "white"}
+                  loading={loadingFollow} 
+                  variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
+                  onClick={() => followUnfollow()}
+                >
+                  {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
+                </Button>
+              ) : (
+                <Button 
+                  size="compact-xs" 
+                  variant='outline'
+                  color={colorScheme === "light" ? "dark" : "white"}
+                  onClick={() => navigate('/settings/profile')}
+                >
+                  Editar meu perfil
+                </Button>
+              )
+            )}
+          </Box>
         </Box>
         <Paper radius="md" withBorder p="sm" mb={18}
           style={{ backgroundColor: 'transparent' }}
@@ -253,13 +326,13 @@ function ProfilePage () {
               {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
                 <>
                   <Text size='xs' mt={6}>
-                    {profile.availabilityFocus === 1 && <span><IconCheck style={iconCircleStyles} />Projetos autorais</span>} 
-                    {profile.availabilityFocus === 2 && <span><IconCheck style={iconCircleStyles} />Sideman</span>}
-                    {profile.availabilityFocus === 3 && <><span><IconCheck style={iconCircleStyles} />Projetos autorais</span> <span><IconCheck style={iconCircleStyles} />Sideman</span></>}
+                    {profile.availabilityFocus === 1 && <span><IconBulb style={iconCircleStyles} />Projetos autorais</span>} 
+                    {profile.availabilityFocus === 2 && <span><IconIdBadge2 style={iconCircleStyles} />Sideman</span>}
+                    {profile.availabilityFocus === 3 && <><span><IconBulb style={iconCircleStyles} />Projetos autorais</span> <span><IconIdBadge2 style={iconCircleStyles} />Sideman</span></>}
                   </Text>
                   <Group gap={4} mt={5}>
                     {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                      <Badge size='xs' color='gray' key={key}>
+                      <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' color='gray' key={key} mx={0}>
                         {item.itemName}
                       </Badge>
                     )}  
@@ -431,7 +504,7 @@ function ProfilePage () {
       >
         {profile.followers.map((follower, key) => 
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(follower.username)}>
-            <Avatar radius="xl" />
+            <Avatar radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
             <Flex direction={'column'}>
               <Text size={'sm'}>{follower.name}</Text>
               <Text size={'10px'} key={key}>
@@ -450,7 +523,7 @@ function ProfilePage () {
       >
         {profile.following.map((following, key) => 
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)}>
-            <Avatar radius="xl" />
+            <Avatar radius="xl" size="md" src={following.picture ? following.picture : undefined} />
             <Flex direction={'column'}>
               <Text size={'sm'}>{following.name}</Text>
               <Text size={'10px'} key={key}>
