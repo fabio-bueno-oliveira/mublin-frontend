@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Modal, NavLink, Text, Divider } from '@mantine/core';
+import { useMantineColorScheme, Modal, NavLink, Text, Divider, Group, Avatar } from '@mantine/core';
 import { IconHome, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconMenu2, IconMusic } from '@tabler/icons-react';
 import './styles.scss';
 
@@ -88,7 +88,16 @@ const FooterMenuMobile = () => {
         opened={mobilMenuOpen} 
         onClose={() => setMobileMenuOpen(false)} 
         centered
-        title="Opções"
+        title={
+          <Group gap={10}>
+            <Avatar 
+              size="sm" 
+              src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture}
+              alt="Foto de perfil"
+            />
+            <Text>{userInfo.username}</Text>
+          </Group>
+        }
         // withCloseButton={false}
       >
         <NavLink

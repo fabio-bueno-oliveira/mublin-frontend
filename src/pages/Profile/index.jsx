@@ -99,6 +99,8 @@ function ProfilePage () {
     }
   )
 
+  // Modal Bio
+  const [modalBioOpen, setModalBioOpen] = useState(false);
   // Modal Followers
   const [modalFollowersOpen, setModalFollowersOpen] = useState(false);
   // Modal Following
@@ -276,9 +278,12 @@ function ProfilePage () {
                 </Box>
               </Flex>
               {(profile.bio && profile.bio !== 'null') && 
-                <ScrollArea h={largeScreen ? 200 : 54} scrollbars="y">
-                  <Text size={largeScreen ? 'sm' : 'xs'} mt={14}>{profile.bio}</Text>
-                </ScrollArea>
+                <Text 
+                  size={largeScreen ? 'sm' : 'xs'} mt={14} lineClamp={3}
+                  onClick={() => setModalBioOpen(true)}
+                >
+                  {profile.bio}
+                </Text>
               }
             </>
           }
@@ -495,6 +500,16 @@ function ProfilePage () {
           </Paper>
         }
       </Container>
+      <Modal 
+        centered
+        opened={modalBioOpen} 
+        onClose={() => setModalBioOpen(false)} 
+        title={'Sobre '+profile.name}
+        scrollAreaComponent={ScrollArea.Autosize}
+        fullScreen
+      >
+        <Text size={'xs'}>{profile.bio}</Text>
+      </Modal>
       <Modal 
         centered
         opened={modalFollowersOpen} 
