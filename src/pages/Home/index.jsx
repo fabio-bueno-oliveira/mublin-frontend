@@ -26,7 +26,7 @@ function Home () {
   return (
     <>
       <Header />
-      <Container size={'lg'} mb={'md'}>
+      <Container size={'lg'} mb={'md'} mt={largeScreen ? 20 : 0}>
         {projects.requesting ? (
           <>
             <Skeleton height={110} radius="md" />

@@ -4,6 +4,7 @@ import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Flex, Group, Center, Box, Title, Text, Image, Avatar, Divider, Badge, Modal, ScrollArea } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 
@@ -12,6 +13,7 @@ function GearProductPage () {
   const params = useParams();
   const productId = params?.productId;
   const product = useSelector(state => state.gear);
+  const largeScreen = useMediaQuery('(min-width: 60em)');
 
   let dispatch = useDispatch();
 
@@ -25,7 +27,7 @@ function GearProductPage () {
   return (
     <>
       <Header />
-      <Container size={'lg'} mt={20}>
+      <Container size={'lg'} mt={largeScreen ? 20 : 0}>
         <Box mb={20}>
           <Text>
             {product.requesting ? 'Carregando marca...' : product.categoryName + ' • ' + product.brandName}
