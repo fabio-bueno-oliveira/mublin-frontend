@@ -3,7 +3,7 @@ import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-ro
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
 import { Container, Flex, Group, Skeleton, SimpleGrid, Tabs, Box, Title, Text, Avatar, Input, ActionIcon, Center, Loader, rem } from '@mantine/core';
-import { IconRosetteDiscountCheckFilled, IconSearch } from '@tabler/icons-react';
+import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -162,14 +162,21 @@ function Search () {
                           direction="column"
                           wrap="wrap"
                         >
-                          <Flex gap={3}>
-                            <Text size='sm' fw={500}>
-                              {user.name+' '+user.lastname}
-                            </Text>
-                            {!!user.verified && 
-                              <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
-                            }
-                          </Flex>
+                          <Link to={{ pathname: `/${user.username}` }}>
+                            <Flex gap={3} align={'center'}>
+                              <Text size='sm' fw={500}>
+                                {user.name+' '+user.lastname}
+                              </Text>
+                              {!!user.verified && 
+                                <IconRosetteDiscountCheckFilled color='blue' 
+                                style={iconVerifiedStyle} />
+                              }
+                              {!!user.legend && 
+                                <IconShieldCheckFilled color='#DAA520' 
+                                style={iconVerifiedStyle} />
+                              }
+                            </Flex>
+                          </Link>
                           <Text size='xs'>
                             {user.mainRole ? user.mainRole : user.bio}
                           </Text>

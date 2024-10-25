@@ -26,6 +26,7 @@ import ProjectPage from './pages/ProjectPage';
 import ProjectDashboardPage from './pages/ProjectDashboard';
 import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
+import GearProductPage from './pages/Gear/';
 
 function AppRoutes () {
 
@@ -59,6 +60,7 @@ function AppRoutes () {
           <Route path="/my-projects" element={<MyProjectsPage />} />
           <Route path="/project/:username" element={<ProjectPage />} />
           <Route path="/project/:username/dashboard" element={<ProjectDashboardPage />} />
+          <Route path="/gear/product/:productId" element={<GearProductPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/new" element={<New />} />
           <Route exact path="/:username" element={<ProfilePage />} />

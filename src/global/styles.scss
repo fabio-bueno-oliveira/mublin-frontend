@@ -68,3 +68,22 @@ a {
     border: none;
   }
 }
+
+.point {
+  cursor: pointer;
+}
+
+.gearProductImage {
+  background-color: #FFF;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  flex: 0 0 130px;
+  min-width: 0;
+  // margin-right: 5px;
+  padding: 6px 10px 6px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

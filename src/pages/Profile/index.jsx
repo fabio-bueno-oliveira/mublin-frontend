@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem } from '@mantine/core';
+import { Container, Flex, Grid, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, em } from '@mantine/core';
 import { IconCircleFilled, IconCheck, IconInfoCircle, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -20,6 +20,7 @@ function ProfilePage () {
   const loggedUser = JSON.parse(localStorage.getItem('user'));
   const profile = useSelector(state => state.profile);
   const largeScreen = useMediaQuery('(min-width: 60em)');
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
   const { colorScheme } = useMantineColorScheme();
 
   let dispatch = useDispatch();
@@ -63,12 +64,15 @@ function ProfilePage () {
   const followedByMe = useSelector(state => state.followedByMe);
   const [loadingFollow, setLoadingFollow] = useState(false);
 
-  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '2px' };
-  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '2px' };
-  const iconCircleStyles = { width: '10px', height: '10px', marginLeft: '3px', marginRight: '3px' };
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '5px' };
+  const iconCircleStyles = { width: '11px', height: '11px', marginLeft: '3px', marginRight: '3px' };
+  const iconAvailabilityStyles = { width: '14px', height: '14px', marginLeft: '3px', marginRight: '3px' };
 
   // Projects
-  const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 })
+  const allProjects = profile.projects;
+  const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
+  const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
   // Gear
   const [gearSetupProducts, setGearSetupProducts] = useState('');
@@ -104,6 +108,8 @@ function ProfilePage () {
 
   // Modal Bio
   const [modalBioOpen, setModalBioOpen] = useState(false);
+  // Modal Contact
+  const [modalContactOpen, setModalContactOpen] = useState(false);
   // Modal Followers
   const [modalFollowersOpen, setModalFollowersOpen] = useState(false);
   // Modal Following
@@ -227,303 +233,366 @@ function ProfilePage () {
     <>
       <Header pageType='profile' username={username} />
       <Container size={'lg'} mb={largeScreen ? 30 : 82} className='profilePage'>
-        <Box mb={15}>
-          {profile.requesting && 
-            <>
-            <Group justify='flex-start'>
-              <Skeleton height={56} circle />
-              <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                <Skeleton height={10} width={240} radius="xl" />
-                <Skeleton height={13} width={240} radius="xl" />
-                <Skeleton height={11} width={240} radius="xl" />
-              </SimpleGrid>
-            </Group>
-            <Skeleton height={15} width={312} mt={16} radius="xl" />
-            </>
-          }
-          {!profile.requesting && 
-            <>
-              <Flex
-                justify="flex-start"
-                align="center"
-                direction="row"
-                wrap="nowrap"
-                columnGap="xs"
-                mt={6}
-              >
-                <Avatar
-                  size={'lg'}
-                  src={profile.picture}
-                />
-                <Box style={{ overflow: 'hidden' }}>
-                  <Flex align={'center'}>
-                    <Title order={4}>{profile.name} {profile.lastname}</Title>
-                    {!!profile.verified && 
-                      <Tooltip label="Usuário Verificado">
-                        <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
-                      </Tooltip>
-                    }
-                    {!!profile.legend && 
-                      <Tooltip label={`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante no cenário musical`} multiline withArrow w={180}>
-                        <IconShieldCheckFilled style={iconLegendStyle} />
-                      </Tooltip>
-                    }
-                  </Flex>
-                  <Flex className='rolesList'>
-                    {profile.roles.map((role, key) =>
-                      <Flex gap={2} align={'center'} key={key}>
-                        {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />} <Text size='11px' mr={13}>{role.name}</Text>
-                      </Flex>
-                    )}
-                  </Flex>
-                  <Group gap={8} mt={4}>
-                    {profile.followers.length ? (
-                      <Text size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
-                        {profile.followers.length} seguidores
-                      </Text>
-                    ) : (
-                      <Text size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
-                        {profile.followers.length} seguidores
-                      </Text>
-                    )}
-                    {profile.following.length ? (
-                      <Text size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
-                        {profile.following.length} seguindo
-                      </Text>
-                    ) : (
-                      <Text size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
-                        {profile.following.length} seguindo
-                      </Text>
-                    )}
-                  </Group>
-                </Box>
-              </Flex>
-              {(profile.bio && profile.bio !== 'null') && 
-                <Text 
-                  size={largeScreen ? 'sm' : 'xs'} mt={14} lineClamp={3}
-                  onClick={() => setModalBioOpen(true)}
-                >
-                  {profile.bio}
-                </Text>
+        <Grid>
+          <Grid.Col span={{ base: 12, md: 12, lg: 9 }}>
+            <Box mb={15}>
+              {profile.requesting && 
+                <>
+                <Group justify='flex-start'>
+                  <Skeleton height={56} circle />
+                  <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
+                    <Skeleton height={10} width={240} radius="xl" />
+                    <Skeleton height={13} width={240} radius="xl" />
+                    <Skeleton height={11} width={240} radius="xl" />
+                  </SimpleGrid>
+                </Group>
+                <Skeleton height={15} width={312} mt={16} radius="xl" />
+                </>
               }
-            </>
-          }
-          <Box mt={12}>
-            {followedByMe?.requesting ? (
-              <Button size="xs" disabled>Carregando...</Button>
-            ) : (
-              loggedUser.id !== profile.id ? (
-                <Button 
-                  size="xs" 
-                  color={colorScheme === "light" ? "dark" : "violet"}
-                  loading={loadingFollow} 
-                  variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
-                  onClick={() => followUnfollow()}
-                >
-                  {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
-                </Button>
-              ) : (
+              {!profile.requesting && 
+                <>
+                  <Flex
+                    justify="flex-start"
+                    align="center"
+                    direction="row"
+                    wrap="nowrap"
+                    columnGap="xs"
+                    mt={6}
+                  >
+                    <Avatar
+                      size={largeScreen ? 'xl' : 'lg'}
+                      src={profile.picture}
+                    />
+                    <Box style={{ overflow: 'hidden' }}>
+                      <Flex align={'center'}>
+                        <Title order={largeScreen ? 3 : 4}>{profile.name} {profile.lastname}</Title>
+                        {!!profile.verified && 
+                          <Tooltip label="Usuário Verificado">
+                            <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                          </Tooltip>
+                        }
+                        {!!profile.legend && 
+                          <Tooltip label={`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante no cenário musical`} multiline withArrow w={180}>
+                            <IconShieldCheckFilled style={iconLegendStyle} />
+                          </Tooltip>
+                        }
+                      </Flex>
+                      <Flex className='rolesList'>
+                        {profile.roles.map((role, key) =>
+                          <Flex gap={2} align={'center'} key={key}>
+                            {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />} <Text size='11px' mr={13}>{role.name}</Text>
+                          </Flex>
+                        )}
+                      </Flex>
+                      <Group gap={8} mt={4}>
+                        {profile.followers.length ? (
+                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
+                            {profile.followers.length} seguidores
+                          </Text>
+                        ) : (
+                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
+                            {profile.followers.length} seguidores
+                          </Text>
+                        )}
+                        {profile.following.length ? (
+                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
+                            {profile.following.length} seguindo
+                          </Text>
+                        ) : (
+                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
+                            {profile.following.length} seguindo
+                          </Text>
+                        )}
+                      </Group>
+                    </Box>
+                  </Flex>
+                  {(profile.bio && profile.bio !== 'null') && 
+                    <Text 
+                      size={largeScreen ? 'sm' : 'xs'} mt={14} lineClamp={3}
+                      onClick={!largeScreen ? () => setModalBioOpen(true) : undefined}
+                    >
+                      {profile.bio}
+                    </Text>
+                  }
+                </>
+              }
+              <Group gap={5} mt={12}>
+                {followedByMe?.requesting ? (
+                  <Button size="xs" disabled>Carregando...</Button>
+                ) : (
+                  loggedUser.id !== profile.id ? (
+                    <Button 
+                      size="xs" 
+                      color={colorScheme === "light" ? "dark" : "violet"}
+                      loading={loadingFollow} 
+                      variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
+                      onClick={() => followUnfollow()}
+                    >
+                      {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
+                    </Button>
+                  ) : (
+                    <Button 
+                      size="xs" 
+                      variant='outline'
+                      color={colorScheme === "light" ? "dark" : "white"}
+                      onClick={() => navigate('/settings/profile')}
+                    >
+                      Editar meu perfil
+                    </Button>
+                  )
+                )}
                 <Button 
                   size="xs" 
                   variant='outline'
                   color={colorScheme === "light" ? "dark" : "white"}
-                  onClick={() => navigate('/settings/profile')}
+                  onClick={() => setModalContactOpen(true)}
                 >
-                  Editar meu perfil
+                  Contato
                 </Button>
-              )
-            )}
-          </Box>
-        </Box>
-        <Paper radius="md" withBorder p="sm" mb={18}
-          style={{ backgroundColor: 'transparent' }}
-        >
-          {profile.requesting ? ( 
-            <>
-              <Title order={5}>Disponibilidade</Title>
-              <Text size='sm'>Carregando...</Text>
-            </>
-          ) : (
-            <>
-              <Flex align='center' gap={3}>
-                <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
-                <Title order={5}>{profile.availabilityTitle}</Title>
-              </Flex>
-              {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
+              </Group>
+            </Box>
+            <Paper radius="md" withBorder p="sm" mb={18}
+              style={{ backgroundColor: 'transparent' }}
+            >
+              {profile.requesting ? ( 
                 <>
-                  <Text size='xs' mt={6}>
-                    {profile.availabilityFocus === 1 && <span><IconBulb style={iconCircleStyles} />Projetos autorais</span>} 
-                    {profile.availabilityFocus === 2 && <span><IconIdBadge2 style={iconCircleStyles} />Sideman</span>}
-                    {profile.availabilityFocus === 3 && <><span><IconBulb style={iconCircleStyles} />Projetos autorais</span> <span><IconIdBadge2 style={iconCircleStyles} />Sideman</span></>}
-                  </Text>
-                  <Group gap={4} mt={5}>
-                    {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                      <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' color='gray' key={key} mx={0}>
-                        {item.itemName}
-                      </Badge>
-                    )}  
-                  </Group>
+                  <Title order={5}>Disponibilidade</Title>
+                  <Text size='sm'>Carregando...</Text>
                 </>
-              }
-            </>
-          )}
-        </Paper>
-        <Paper radius="md" withBorder px="sm" py="xs" mb={18}
-          style={{ backgroundColor: 'transparent' }}
-        >
-          <Group justify="flex-start" align="center" gap={5} mb={18}>
-            <Title order={5}>Pontos Fortes ({profile?.strengths?.length})</Title>
-            {profile.id !== loggedUser.id && 
-              <Button 
-                size="compact-xs" 
-                color="violet"
-                onClick={() => setModalStrengthsOpen(true)}
-              >
-                Votar
-              </Button>
-            }
-          </Group>
-          {profile.requesting ? ( 
-              <Text size='sm'>Carregando...</Text>
-          ) : (
-            <>
-              {(profile.strengths[0].strengthId && profile.strengths[0].idUserTo === profile.id) ? ( 
-                <div className="embla strengths" ref={emblaRef1}>
-                  <div className="embla__container">
-                    {profile.strengths.map((strength, key) =>
+              ) : (
+                <>
+                  <Flex align='center' gap={3}>
+                    <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
+                    <Title order={5}>{profile.availabilityTitle}</Title>
+                  </Flex>
+                  {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
                     <>
-                      <Flex 
-                        justify="flex-start"
-                        align="center"
-                        direction="column"
-                        wrap="wrap"
-                        className="embla__slide"
-                        key={key}
-                      >
-                        <i className={strength.icon}></i>
-                        <Text order={6} fw={500} mb={2} mt={3} size={'xs'} align='center' truncate="end">
-                          {strength.strengthTitle}
-                        </Text>
-                        <Text size='10px'>
-                          {checkTotalVotes(strength.strengthId)}
-                        </Text>
+                      <Flex align='normal' mt={6}>
+                        {profile.availabilityFocus === 1 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text></>} 
+                        {profile.availabilityFocus === 2 && <><IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
+                        {profile.availabilityFocus === 3 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text>  <IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
                       </Flex>
+                      <Group gap={4} mt={5}>
+                        {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                          <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant='light' color='dark' key={key} mx={0}>
+                            {item.itemName}
+                          </Badge>
+                        )}  
+                      </Group>
                     </>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <Text size='xs'>
-                  Nenhum ponto forte votado para {profile.name} até o momento
-                </Text>
+                  }
+                </>
               )}
-            </>
-          )}
-        </Paper>
-        <Paper radius="md" withBorder px="sm" py="xs" mb={18}
-          style={{ backgroundColor: 'transparent' }}
-        >
-          <Group justify="flex-start" align="center" mb={18}>
-            <Title order={5}>Projetos ({profile?.projects?.length})</Title>
-          </Group>
-          {profile.requesting ? ( 
-              <Text size='sm'>Carregando...</Text>
-          ) : (
-            <>
-              {profile.projects[0].id ? ( 
-                <div className="embla projects" ref={emblaRefprojects}>
-                  <div className="embla__container">
-                    {mainProjects.map((project, key) =>
-                      <Flex 
-                        justify="flex-start"
-                        align="center"
-                        direction="column"
-                        wrap="wrap"
-                        className="embla__slide"
-                        key={key}
-                      >
-                        <Image 
-                            src={project.picture} 
-                            w={80}
-                            mb={10}
-                            radius={3}
-                        />
-                        <Text size='13px' fw={500} mb={3}>{project.name}</Text>
-                        <Text size='12px'>{project.type}</Text>
-                        <Text size='12px'>{project.workTitle}</Text>
-                      </Flex>
-                    )}
-                  </div>
-                </div>
+            </Paper>
+            <Paper radius="md" withBorder px="sm" py="xs" mb={18}
+              style={{ backgroundColor: 'transparent' }}
+            >
+              <Group justify="flex-start" align="center" gap={5} mb={18}>
+                <Title order={5}>Pontos Fortes ({profile?.strengths?.length})</Title>
+                {profile.id !== loggedUser.id && 
+                  <Button 
+                    size="compact-xs" 
+                    color="violet"
+                    onClick={() => setModalStrengthsOpen(true)}
+                  >
+                    Votar
+                  </Button>
+                }
+              </Group>
+              {profile.requesting ? ( 
+                  <Text size='sm'>Carregando...</Text>
               ) : (
-                <Text size='11px'>
-                  Nenhum projeto cadastrado
-                </Text>
-              )}
-            </>
-          )}
-        </Paper>
-        {profile.plan === "Pro" && 
-          <Paper radius="md" withBorder px="sm" py="xs" mb={25}
-            style={{ backgroundColor: 'transparent' }}
-          >
-            <Title order={5} mb={8}>Equipamento</Title>
-            {profile.requesting ? ( 
-              <Text size='sm'>Carregando...</Text>
-            ) : (
-              <>
-                <Group mb={20}>
-                  {/* <NativeSelect 
-                    size="xs"
-                    w={138}
-                    onChange={(e) => getSetupProducts(e.target.options[e.target.selectedIndex].value)}
-                  >
-                    <option>Setup completo</option>
-                    {profile.gearSetups[0].id && profile.gearSetups.map((setup, key) =>
-                      <option key={key} value={setup.id}>
-                        {setup.name}
-                      </option>
-                    )}
-                  </NativeSelect> */}
-                  <NativeSelect 
-                    size="xs"
-                    w={132}
-                    onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
-                  >
-                    <option value=''>
-                      {'Exibir tudo ('+gearTotal.length+')'}
-                    </option>
-                    {profile.gearCategories.map((gearCategory, key) =>
-                      <option key={key} value={gearCategory.category}>
-                        {gearCategory.category + '(' + gearCategory.total + ')'}
-                      </option>
-                    )}
-                  </NativeSelect>
-                </Group>
-                {profile.gear[0]?.brandId ? ( 
-                  <div className="embla gear" ref={emblaRef2}>
-                    <div className="embla__container">
-                      {gear.map((product, key) =>
-                        <div className="embla__slide" key={key}>
-                          <Image 
-                            src={product.picture} 
-                            w={80}
-                            mb={10}
-                            onClick={() => history.push('/gear/product/'+product.productId)}
-                          />
-                          <Text size='13px' fw={500} mb={3}>{product.brandName}</Text>
-                          <Text size='12px'>{product.productName}</Text>
-                        </div>
-                      )}
+                <>
+                  {(profile.strengths[0].strengthId && profile.strengths[0].idUserTo === profile.id) ? ( 
+                    <div className="embla strengths" ref={emblaRef1}>
+                      <div className="embla__container">
+                        {profile.strengths.map((strength, key) =>
+                        <>
+                          <Flex 
+                            justify="flex-start"
+                            align="center"
+                            direction="column"
+                            wrap="wrap"
+                            className="embla__slide"
+                            key={key}
+                          >
+                            <i className={strength.icon}></i>
+                            <Text order={6} fw={500} mb={2} mt={3} size={'xs'} align='center' truncate="end">
+                              {strength.strengthTitle}
+                            </Text>
+                            <Text size='10px'>
+                              {checkTotalVotes(strength.strengthId)}
+                            </Text>
+                          </Flex>
+                        </>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <Text size='xs'>
+                      Nenhum ponto forte votado para {profile.name} até o momento
+                    </Text>
+                  )}
+                </>
+              )}
+            </Paper>
+            {isMobile && 
+              <Paper radius="md" withBorder px="sm" py="xs" mb={18}
+                style={{ backgroundColor: 'transparent' }}
+              >
+                <Group justify="flex-start" align="center" mb={18}>
+                  <Title order={5}>Projetos ({profile?.projects?.length})</Title>
+                </Group>
+                {profile.requesting ? ( 
+                    <Text size='sm'>Carregando...</Text>
                 ) : (
-                  <Text size='11px'>Nenhum equipamento cadastrado</Text>
+                  <>
+                    {profile.projects[0].id ? ( 
+                      <div className="embla projects" ref={emblaRefprojects}>
+                        <div className="embla__container">
+                          {allProjects.map((project, key) =>
+                            <Flex 
+                              justify="flex-start"
+                              align="center"
+                              direction="column"
+                              wrap="wrap"
+                              className="embla__slide"
+                              key={key}
+                            >
+                              <Image 
+                                  src={project.picture} 
+                                  w={80}
+                                  mb={10}
+                                  radius={3}
+                              />
+                              <Text size='13px' fw={500} mb={3}>{project.name}</Text>
+                              <Text size='12px'>{project.type}</Text>
+                              <Text size='12px'>{project.workTitle}</Text>
+                            </Flex>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <Text size='11px'>
+                        Nenhum projeto cadastrado
+                      </Text>
+                    )}
+                  </>
                 )}
-              </>
-            )}
-          </Paper>
-        }
+              </Paper>
+            }
+            {profile.plan === "Pro" && 
+              <Paper radius="md" withBorder px="sm" py="xs" mb={25}
+                style={{ backgroundColor: 'transparent' }}
+              >
+                <Title order={5} mb={8}>Equipamento</Title>
+                {profile.requesting ? ( 
+                  <Text size='sm'>Carregando...</Text>
+                ) : (
+                  <>
+                    <Group mb={20}>
+                      {/* <NativeSelect 
+                        size="xs"
+                        w={138}
+                        onChange={(e) => getSetupProducts(e.target.options[e.target.selectedIndex].value)}
+                      >
+                        <option>Setup completo</option>
+                        {profile.gearSetups[0].id && profile.gearSetups.map((setup, key) =>
+                          <option key={key} value={setup.id}>
+                            {setup.name}
+                          </option>
+                        )}
+                      </NativeSelect> */}
+                      <NativeSelect 
+                        size="xs"
+                        w={132}
+                        onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
+                      >
+                        <option value=''>
+                          {'Exibir tudo ('+gearTotal.length+')'}
+                        </option>
+                        {profile.gearCategories.map((gearCategory, key) =>
+                          <option key={key} value={gearCategory.category}>
+                            {gearCategory.category + '(' + gearCategory.total + ')'}
+                          </option>
+                        )}
+                      </NativeSelect>
+                    </Group>
+                    {profile.gear[0]?.brandId ? ( 
+                      <div className="embla gear" ref={emblaRef2}>
+                        <div className="embla__container">
+                          {gear.map((product, key) =>
+                            <div className="embla__slide" key={key}>
+                              <Link to={{ pathname: `/gear/product/${product.productId}` }}>
+                                <Image 
+                                  src={product.picture} 
+                                  w={80}
+                                  mb={10}
+                                  onClick={() => history.push('/gear/product/'+product.productId)}
+                                />
+                              </Link>
+                              <Text size='13px' fw={500} mb={3}>{product.brandName}</Text>
+                              <Text size='12px'>{product.productName}</Text>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <Text size='11px'>Nenhum equipamento cadastrado</Text>
+                    )}
+                  </>
+                )}
+              </Paper>
+            }
+          </Grid.Col>
+          {largeScreen && 
+            <Grid.Col span={{ base: 12, md: 12, lg: 3 }}>
+              <Paper radius="md" withBorder px="md" py="md" mb={18}
+                style={{ backgroundColor: 'transparent' }}
+              >
+                <ScrollArea h={660}>
+                  <Group justify="flex-start" align="center" mb={18}>
+                    <Title order={5}>Projetos que {profile.name} está cadastrado ({profile?.projects?.length})</Title>
+                  </Group>
+                  {profile.requesting ? ( 
+                      <Text size='sm'>Carregando...</Text>
+                  ) : (
+                    <>
+                      {profile.projects[0].id ? ( 
+                        <>
+                          {allProjects.map((project, key) =>
+                            <Group gap={10} mb={10}>
+                              <Image 
+                                src={project.picture} 
+                                w={80}
+                                radius='md'
+                              />
+                              <Flex 
+                                direction={'column'}
+                                justify="flex-start"
+                                align="flex-start"
+                                wrap="wrap"
+                                key={key}
+                              >
+                                <Text size='13px' fw={500} mb={3}>{project.name}</Text>
+                                <Text size='12px'>{project.type}</Text>
+                                <Text size='12px'>{project.workTitle}</Text>
+                              </Flex>
+                            </Group>
+                          )}
+                        </>
+                      ) : (
+                        <Text size='11px'>
+                          Nenhum projeto cadastrado
+                        </Text>
+                      )}
+                    </>
+                  )}
+                </ScrollArea>
+              </Paper>
+            </Grid.Col>
+          }
+        </Grid>
       </Container>
       <Modal 
         centered
@@ -537,6 +606,15 @@ function ProfilePage () {
       </Modal>
       <Modal 
         centered
+        opened={modalContactOpen} 
+        onClose={() => setModalContactOpen(false)} 
+        title={'Contactar '+profile.name}
+      >
+        <Text size={'sm'}><strong>Localidade:</strong> {profile.city}, {profile.region}</Text>
+        <Text size={'sm'}><strong>E-mail:</strong> {profile.email}</Text>
+      </Modal>
+      <Modal 
+        centered
         opened={modalFollowersOpen} 
         onClose={() => setModalFollowersOpen(false)} 
         title={profile.followers.length+' seguidores'}
@@ -544,8 +622,8 @@ function ProfilePage () {
       >
         {profile.followers.map((follower, key) => 
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(follower.username)}>
-            <Avatar radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
-            <Flex direction={'column'}>
+            <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
+            <Flex direction={'column'} className='point'>
               <Text size={'sm'}>{follower.name}</Text>
               <Text size={'10px'} key={key}>
                 {'@'+follower.username}
@@ -563,8 +641,8 @@ function ProfilePage () {
       >
         {profile.following.map((following, key) => 
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)}>
-            <Avatar radius="xl" size="md" src={following.picture ? following.picture : undefined} />
-            <Flex direction={'column'}>
+            <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
+            <Flex direction={'column'} className='point'>
               <Text size={'sm'}>{following.name}</Text>
               <Text size={'10px'} key={key}>
                 {'@'+following.username}
@@ -613,7 +691,7 @@ function ProfilePage () {
         )}
         <Group mt="xs" gap={8}>
           <Button variant='outline' size='xs' color='violet' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
-          <Button size='xs' color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
+          <Button loading={!strengthsLoaded} size='xs' color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
         </Group>
       </Modal>
       <FooterMenuMobile />
