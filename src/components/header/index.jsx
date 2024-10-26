@@ -101,28 +101,32 @@ function Header (props) {
           }
         </Group>
         <Flex align={"center"}>
-          <Link to={{ pathname: '/home' }}>
-            <Button 
-              size="sm" 
-              variant='transparent'
-              color={currentPath === '/home' ? 'violet' : 'dark'}
-              p={'xs'}
-              visibleFrom="md"
-            >
-              Início
-            </Button>
-          </Link>
-          <Link to={{ pathname: '/my-projects' }}>
-            <Button 
-              size="sm" 
-              variant='transparent'
-              color={currentPath === '/my-projects' ? 'violet' : 'dark'}
-              p={'xs'}
-              visibleFrom="md"
-            >
-              Meus Projetos
-            </Button>
-          </Link>
+          {user.first_access === 0 && 
+            <Link to={{ pathname: '/home' }}>
+              <Button 
+                size="sm" 
+                variant='transparent'
+                color={currentPath === '/home' ? 'violet' : 'dark'}
+                p={'xs'}
+                visibleFrom="md"
+              >
+                Início
+              </Button>
+            </Link>
+          }
+          {user.first_access === 0 && 
+            <Link to={{ pathname: '/my-projects' }}>
+              <Button 
+                size="sm" 
+                variant='transparent'
+                color={currentPath === '/my-projects' ? 'violet' : 'dark'}
+                p={'xs'}
+                visibleFrom="md"
+              >
+                Meus Projetos
+              </Button>
+            </Link>
+          }
           <Button 
             size="sm" 
             variant='transparent'

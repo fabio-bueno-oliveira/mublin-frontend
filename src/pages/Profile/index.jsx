@@ -71,8 +71,8 @@ function ProfilePage () {
 
   // Projects
   const allProjects = profile.projects;
-  const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
-  const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
+  // const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
+  // const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
   // Gear
   const [gearSetupProducts, setGearSetupProducts] = useState('');

@@ -78,6 +78,7 @@ export function user(state = initialState, action) {
         lastname: action.info.lastname,
         email: action.info.email,
         username: action.info.username,
+        first_access: action.info.first_access,
         gender: action.info.gender,
         verified: action.info.verified,
         bio: action.info.bio,
