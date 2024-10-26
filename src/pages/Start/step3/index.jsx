@@ -1,45 +1,56 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Container, Box, Title, Avatar, Stepper, Button, Group } from '@mantine/core';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { miscInfos } from '../../../store/actions/misc';
+import { Container, Box, Title, Select, Stepper, Button, Group, rem } from '@mantine/core';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../../components/header';
 
 function StartThirdStep () {
 
-  const user = useSelector(state => state.user);
+  document.title = "Passo 3 de 4";
 
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const largeScreen = useMediaQuery('(min-width: 60em)');
+  const user = useSelector(state => state.user);
   const imageCDNPath = 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/';
+
+  useEffect(() => { 
+    dispatch(miscInfos.getMusicGenres());
+  }, [dispatch, user.id]);
+
+  const goToStep2 = () => {
+    navigate('/start/step2');
+  }
+
+  const goToStep4 = () => {
+    navigate('/start/step4');
+  }
 
   return (
     <>
       <Header />
-      <Container size={'lg'}>
-        <Box mb={24}>
-          {user.picture ? (
-            <Avatar src={`${imageCDNPath}/users/avatars/${+user.id}/${user.picture}`} alt="Foto de perfil" />
-          ) : (
-            <Avatar src={`${imageCDNPath}/sample-folder/avatar-undefined_Kblh5CBKPp.jpg`} alt="Foto de perfil" />
-          )}
-          <Title order={3}>Intro - Cadastro</Title>
-          <Title order={4}>{user.name} {user.lastname} ({user.username})</Title>
-        </Box>
-
-        <Stepper active={2}>
-          <Stepper.Step label="Passo 1" description="Defina sua foto de perfil">
-            Passo 1: Defina sua foto de perfil
-          </Stepper.Step>
-          <Stepper.Step label="Passo 2" description="Conte um pouco sobre você">
-            Passo 2: Conte um pouco sobre você
-          </Stepper.Step>
-          <Stepper.Step label="Passo 3" description="Sua ligação com a música">
-            Passo 3: Sua ligação com a música
-          </Stepper.Step>
-          <Stepper.Step label="Passo 4" description="Seus projetos musicais">
-            Passo 4: Seus projetos musicais
-          </Stepper.Step>
-          <Stepper.Completed>
-            Completed, click back button to get to previous step
-          </Stepper.Completed>
+      <Container size={'lg'} mt={largeScreen ? 20 : 8}>
+        <Stepper color='violet' active={2} size={largeScreen ? "sm" : "xs"} >
+          <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber2 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
+        <Title order={5} my={14}>Sua ligação com a música</Title>
+
+        <Select
+          label="Quais os principais estilos musicais relacionados à sua atuação na música?"
+          placeholder="Escolha um País"
+          data={['Brasil', 'Estados Unidos']}
+        />
+
+        <Group justify="center" mt="xl">
+          <Button variant="default" onClick={() => goToStep2()}>Voltar</Button>
+          <Button color='violet' onClick={() => goToStep4()}>Avançar</Button>
+        </Group>
       </Container>
     </>
   );

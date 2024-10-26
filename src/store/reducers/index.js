@@ -10,6 +10,7 @@ import { project } from './project';
 import { events } from './events';
 import { emailCheck } from './emailCheck';
 import { usernameCheck } from './usernameCheck';
+import { musicGenres } from './musicGenres';
 
 const rootReducer = combineReducers({
   authentication,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   project,
   events,
   emailCheck,
-  usernameCheck
+  usernameCheck,
+  musicGenres
 });
 
 export default rootReducer;

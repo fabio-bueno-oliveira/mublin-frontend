@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../../store/actions/user';
-import { Container, Stepper, Group, Center, Image, Button, Loader } from '@mantine/core';
+import { Container, Stepper, Group, Center, Title, Image, Button, Loader, rem } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
 import {IKUpload} from "imagekitio-react";
 import Header from '../../../components/header';
 
@@ -65,22 +66,14 @@ function StartFirstStep () {
   return (
     <>
       <Header />
-      <Container size={'lg'} mt={20}>
-        <Stepper color="violet" active={0} size={largeScreen ? "sm" : "xs"} orientation={largeScreen ? "horizontal" : "vertical"}>
-          <Stepper.Step label="Passo 1" description="Defina sua foto de perfil" />
-          <Stepper.Step label="Passo 2" description="Conte um pouco sobre você">
-            Passo 2: Conte um pouco sobre você
-          </Stepper.Step>
-          <Stepper.Step label="Passo 3" description="Sua ligação com a música">
-            Passo 3: Sua ligação com a música
-          </Stepper.Step>
-          <Stepper.Step label="Passo 4" description="Seus projetos musicais">
-            Passo 4: Seus projetos musicais
-          </Stepper.Step>
-          <Stepper.Completed>
-            Completed, click back button to get to previous step
-          </Stepper.Completed>
+      <Container size={'lg'} mt={largeScreen ? 20 : 8}>
+        <Stepper color='violet' active={0} size={largeScreen ? "sm" : "xs"} >
+          <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber2 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
+        <Title order={5} my={14}>Defina sua foto de perfil</Title>
         <Center mt={30}>
           {!user.picture ? (
             <Image radius={'md'} src='https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' w={100} />

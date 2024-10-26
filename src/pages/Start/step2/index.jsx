@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../../store/actions/user';
 import { useForm } from '@mantine/form';
-import { Container, Stepper, Box, Group, Radio, Textarea, Select, Center, Image, NumberInput, TextInput, Button, Loader } from '@mantine/core';
+import { Container, Stepper, Box, Group, Title, Radio, Textarea, Select, Center, Image, NumberInput, TextInput, Button, Loader, rem } from '@mantine/core';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../../components/header';
 
@@ -104,20 +105,15 @@ function StartSecondStep () {
   return (
     <>
       <Header />
-      <Container size={'lg'} mt={20}>
-        <Stepper color="violet" active={1} size={largeScreen ? "sm" : "xs"} orientation={largeScreen ? "horizontal" : "vertical"}>
-          <Stepper.Step label="Passo 1" description="Defina sua foto de perfil" />
-          <Stepper.Step label="Passo 2" description="Conte um pouco sobre você" />
-          <Stepper.Step label="Passo 3" description="Sua ligação com a música" />
-          <Stepper.Step label="Passo 4" description="Seus projetos musicais">
-            Passo 4: Seus projetos musicais
-          </Stepper.Step>
-          <Stepper.Completed>
-            Completed, click back button to get to previous step
-          </Stepper.Completed>
+      <Container size={'lg'} mt={largeScreen ? 20 : 8}>
+        <Stepper color='violet' active={1} size={largeScreen ? "sm" : "xs"} >
+          <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber2 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
-
-        <Container size={'xs'} mt={20}>
+        <Title order={5} my={14}>Conte um pouco sobre você</Title>
+        <Container size={'xs'} mt={10}>
           <form onSubmit={form.onSubmit(console.log)}>
             <Radio.Group
               name="gender"
