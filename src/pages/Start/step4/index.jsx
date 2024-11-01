@@ -8,7 +8,7 @@ import Header from '../../../components/header';
 
 function StartFourthStep () {
 
-  document.title = "Passo 4 de 4";
+  document.title = "Passo 44";
 
   let navigate = useNavigate();
   const largeScreen = useMediaQuery('(min-width: 60em)');

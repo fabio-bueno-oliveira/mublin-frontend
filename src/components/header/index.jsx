@@ -75,7 +75,7 @@ function Header (props) {
               </>
             }
           </>
-          {largeScreen && 
+          {(largeScreen && user.first_access === 0) &&
             <>
               <form
                 onSubmit={(e) => handleSearch(e, searchQuery, null)}

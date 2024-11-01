@@ -9,7 +9,7 @@ import Header from '../../../components/header';
 
 function StartThirdStep () {
 
-  document.title = "Passo 3 de 4";
+  document.title = "Passo 3";
 
   let navigate = useNavigate();
   const dispatch = useDispatch();

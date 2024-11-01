@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../../store/actions/user';
 import { Container, Stepper, Group, Center, Title, Image, Button, Loader, rem } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowRight } from '@tabler/icons-react';
 import {IKUpload} from "imagekitio-react";
 import Header from '../../../components/header';
 
 function StartFirstStep () {
 
-  document.title = "Passo 1 de 4";
+  document.title = "Passo 1";
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const user = useSelector(state => state.user);
 
   let navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // useEffect(() => { 
-  //   dispatch(userInfos.getInfo());
-  // }, []);
 
   // Image Upload to ImageKit.io
   const userAvatarPath = "/users/avatars/"+user.id+"/"
@@ -46,7 +42,7 @@ function StartFirstStep () {
       }).catch(err => {
         SetIsLoading(false)
         console.error(err)
-    })
+      })
   };
 
   const onUploadError = err => {
@@ -73,7 +69,7 @@ function StartFirstStep () {
           <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
           <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
-        <Title order={5} my={14}>Defina sua foto de perfil</Title>
+        <Title ta="center" order={5} my={14}>Defina sua foto de perfil</Title>
         <Center mt={30}>
           {!user.picture ? (
             <Image radius={'md'} src='https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' w={100} />
@@ -95,9 +91,22 @@ function StartFirstStep () {
         <Group justify="center" mt="xl">
           {isLoading && <Loader size={23} />}
           {user.picture ? (
-            <Button color='violet'  onClick={() => goToStep2()} disabled={!user.picture}>Avançar</Button>
+            <Button 
+              color='violet' 
+              onClick={() => goToStep2()} 
+              disabled={!user.picture}
+              rightSection={<IconArrowRight size={14} />}
+            >
+              Avançar
+            </Button>
           ) : (
-            <Button variant="default" onClick={() => goToStep2()}>Pular por enquanto</Button>
+            <Button 
+              variant="default" 
+              onClick={() => goToStep2()}
+              rightSection={<IconArrowRight size={14} />}
+            >
+              Pular por enquanto
+            </Button>
           )}
         </Group>
       </Container>

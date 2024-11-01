@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { eventsInfos } from '../../store/actions/events';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { Container, Avatar, Tooltip, Title, Text, Grid, Paper, Skeleton } from '@mantine/core';
@@ -11,6 +12,8 @@ import ProjectCard from './projectCard';
 function Home () {
 
   let dispatch = useDispatch();
+  let navigate = useNavigate();
+
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
@@ -21,7 +24,11 @@ function Home () {
 
   const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
-  const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
+  // const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
+
+  if (user.first_access !== 0) {
+    navigate("/start/intro/")
+  }
 
   return (
     <>

@@ -2,38 +2,60 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../../store/actions/user';
-import { useForm } from '@mantine/form';
-import { Container, Stepper, Box, Group, Title, Radio, Textarea, Select, Center, Image, NumberInput, TextInput, Button, Loader, rem } from '@mantine/core';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
-import { useMediaQuery } from '@mantine/hooks';
+import { useForm, isNotEmpty } from '@mantine/form';
+import { Container, Stepper, Group, Text, Title, Radio, Textarea, TextInput, Button, rem } from '@mantine/core';
+import { NativeSelect } from '@mantine/core';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../../components/header';
 
 function StartSecondStep () {
 
-  document.title = "Passo 2 de 4";
+  document.title = "Passo 2";
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
   let loggedUser = JSON.parse(localStorage.getItem('user'));
-  const user = useSelector(state => state.user);
   let navigate = useNavigate();
 
-  const [bio, setBio] = useState(user?.bio)
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const [gender, setGender] = useState(user.gender);
+  const [bio, setBio] = useState(user.bio);
+  const [country, setCountry] = useState(user.country);
+  const [region, setRegion] = useState(user.region);
+  const [city, setCity] = useState(user.city);
+
+  useEffect(() => { 
+    dispatch(userInfos.getInfo());
+  }, []);
+
+  useEffect(() => { 
+    setGender(user.gender);
+    setBio(user.bio);
+    setCountry({
+      value: String(user.country),
+      label: "Brasil"
+    });
+    setRegion(user.region);
+    setCity(user.city);
+    searchCity(user.cityName);
+  }, [user.id]);
   
   const form = useForm({
     mode: 'uncontrolled',
-    initialValues: { name: '', email: '', age: 0 },
+    initialValues: { gender: '', bio: '', country: '', region: '', city: '' },
+    validateInputOnChange: true,
 
-    // functions will be used to validate values at corresponding key
     validate: {
-      name: (value) => (value.length < 2 ? 'Name must have at least 2 letters' : null),
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      age: (value) => (value < 18 ? 'You must be at least 18 to register' : null),
+      gender: isNotEmpty('Enter your current gender'),
+      bio: isNotEmpty('Enter your current bio'),
+      country: isNotEmpty('Enter your current country'),
     },
   });
-
-  const countryOptions = [
-    { key: 'br', text: 'Brasil', value: '27' },
-  ]
 
   const regionOptions = [
     { key: '', text: 'Selecione...', value: '' },
@@ -66,40 +88,67 @@ function StartSecondStep () {
     { key: 'TO', text: 'Tocantins', value: '420' },
   ]
 
-  const dispatch = useDispatch();
-
-  useEffect(() => { 
-    dispatch(userInfos.getInfo());
-  }, []);
-
   const submitForm = () => {
+    setIsLoading(true);
     fetch('https://mublin.herokuapp.com/user/step2', {
       method: 'PUT',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + loggedUser.token
       },
-      body: JSON.stringify({userId: user.id, gender: gender, bio: bio, id_country_fk: id_country_fk, id_region_fk: id_region_fk, id_city_fk: id_city_fk})
+      body: JSON.stringify({
+        userId: user.id, gender: gender, bio: bio, id_country_fk: country.value, id_region_fk: region, id_city_fk: city
+      })
+    }).then((response) => {
+      response.json().then((response) => {
+        navigate('/start/step3')
+        setIsLoading(false);
+        setError(false);
+      })
+    }).catch(err => {
+      setIsLoading(false);
+      setError(true);
+      console.error(err)
     })
-      .then(res => res.json())
-      .then(() => navigate('/start/step3'))
   }
 
-  const checkLength = (value, maxLength) => {
-    if (value.length === maxLength) {
-      setMaxLengthReached(true)
-    } else {
-      setMaxLengthReached(false)
-    }
-  }
+  const [queryCities, setQueryCities] = useState([]);
+  const [citySearchIsLoading, setCitySearchIsLoading] = useState(false)
+
+  // const [searchValue, setSearchValue] = useState('');
+
+  // const typeSearchValue = (query) => {
+  //   setSearchValue(query);
+  //   searchCity(query);
+  // }
+
+  const searchCity = useDebouncedCallback(async (query) => {
+    if (query.length > 1) {
+      setCitySearchIsLoading(true)
+      fetch('https://mublin.herokuapp.com/search/cities/'+query+'/'+region, {
+        method: 'GET'
+      })
+        .then(res => res.json())
+        .then(
+          (result) => {
+            if (result.length) {
+              setQueryCities(result);
+              // setQueryCities(
+              //   result.map(e => { return { value: String(e.value), label: e.text }})
+              // );
+            }
+            setCitySearchIsLoading(false)
+          },
+          (error) => {
+            setCitySearchIsLoading(false)
+            alert("Ocorreu um erro ao tentar pesquisar a cidade")
+        })
+      }
+  },500);
 
   const goToStep1 = () => {
     navigate('/start/step1');
-  }
-
-  const goToStep3 = () => {
-    navigate('/start/step3');
   }
 
   return (
@@ -112,13 +161,16 @@ function StartSecondStep () {
           <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
           <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
-        <Title order={5} my={14}>Conte um pouco sobre você</Title>
+        <Title ta="center" order={5} my={14}>Conte um pouco sobre você</Title>
         <Container size={'xs'} mt={10}>
-          <form onSubmit={form.onSubmit(console.log)}>
+          <form onSubmit={form.onSubmit(submitForm)}>
             <Radio.Group
               name="gender"
               label="Gênero"
               mb={12}
+              value={String(gender)}
+              onChange={setGender}
+              withAsterisk
             >
               <Group mt="xs">
                 <Radio value="m" label="Masculino" />
@@ -130,27 +182,84 @@ function StartSecondStep () {
               label="Bio"
               placeholder="Escreva pouco sobre você..."
               value={bio}
-              onChange={(e, { value }) => {
-                setBio(value)
-                checkLength(value, 220)
-              }}
+              maxLength='220'
+              onChange={(e) => setBio(e.target.value)}
             />
-            <Select
+            <NativeSelect
               label="País"
               placeholder="Escolha um País"
-              data={['Brasil', 'Estados Unidos']}
+              data={[{ value: '27', label: 'Brasil' }]}
+              value={country ? country.value : null}
+              onChange={(_value, option) => setCountry(option)}
+              allowDeselect={false}
+              withAsterisk
             />
-            <Select
+            <NativeSelect
               label="Estado"
               placeholder="Escolha o Estado"
-              data={['São Paulo', 'Rio de Janeiro']}
+              value={region ? region : null}
+              withAsterisk
+            >
+              {regionOptions.map((region, key) =>
+                <option key={key} value={region.value} selected={user.region === region.value ? "selected" : ""}>
+                  {region.text}
+                </option>
+              )}
+            </NativeSelect>
+            {/* <Select
+              label="Cidade"
+              searchable
+              searchValue={searchValue}
+              onSearchChange={typeSearchValue}
+              onChange={() => console.log(searchValue)}
+              data={queryCities}
+              allowDeselect={false}
+            /> */}
+             <TextInput
+              label="Pesquisar cidades"
+              onChange={(e) => searchCity(e.currentTarget.value)}
             />
+            <NativeSelect
+              label="Escolha a Cidade na lista abaixo"
+              placeholder="Escolha a Cidade"
+              value={city ? city : null}
+              disabled={!region ? true : false}
+              withAsterisk
+            >
+              {citySearchIsLoading ? ( 
+                <option>Carregando...</option>
+              ) : (
+                <option>Escolha a Cidade na lista abaixo</option>
+              )}
+              {queryCities.map((city, key) =>
+                <option 
+                  key={key} 
+                  value={city.value} 
+                >
+                  {city.text}
+                </option>
+              )}
+            </NativeSelect>
           </form>
         </Container>
-
+        {error && 
+          <Text ta="center" mt="md" size='xs'>
+            Ocorreu um erro! Tente novamente em alguns instantes
+          </Text>
+        }
         <Group justify="center" mt="xl">
-          <Button variant="default" onClick={() => goToStep1()}>Voltar</Button>
-          <Button color='violet' onClick={() => goToStep3()}>Avançar</Button>
+          <Button variant="default" onClick={() => goToStep1()}
+            leftSection={<IconArrowLeft size={14} />}  
+          >
+            Voltar
+          </Button>
+          <Button 
+            color='violet' onClick={submitForm}
+            rightSection={<IconArrowRight size={14} />}
+            disabled={!region || !city || !country || !gender || isLoading}
+          >
+            {isLoading ? "Enviando..." : "Avançar"}
+          </Button>
         </Group>
       </Container>
     </>
