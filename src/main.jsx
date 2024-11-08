@@ -33,7 +33,7 @@ const authenticator = async () => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={Store}>
       <IKContext
         publicKey={publicKey}
@@ -44,5 +44,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
       </IKContext>
     </Provider>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )

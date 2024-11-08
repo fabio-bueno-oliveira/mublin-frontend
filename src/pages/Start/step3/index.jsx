@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Box, Title, Select, Stepper, Button, Group, rem } from '@mantine/core';
+import { Container, Input, Title, Select, Stepper, Button, Group, rem } from '@mantine/core';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
-import Header from '../../../components/header';
+import HeaderWelcome from '../../../components/header/welcome';
 
 function StartThirdStep () {
 
@@ -14,12 +14,56 @@ function StartThirdStep () {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const largeScreen = useMediaQuery('(min-width: 60em)');
+
+  let loggedUser = JSON.parse(localStorage.getItem('user'));
   const user = useSelector(state => state.user);
-  const imageCDNPath = 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/';
+  const genres = useSelector(state => state.musicGenres);
+  const roles = useSelector(state => state.roles);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => { 
     dispatch(miscInfos.getMusicGenres());
-  }, [dispatch, user.id]);
+    dispatch(miscInfos.getRoles());
+  }, []);
+
+  const userSelectedGenres = user.genres.map(item => item.idGenre);
+  const musicGenresList = genres?.list.filter(e => !userSelectedGenres.includes(e.id)).map(genre => ({ 
+    label: genre.name,
+    value: String(genre.id)
+  }));
+
+  const userSelectedRoles = user.roles.map(item => item.idRole);
+  const rolesList = roles?.list.filter(e => !userSelectedRoles.includes(e.id)).map(role => ({ 
+    label: role.name,
+    value: String(role.id)
+  }));
+
+  const addGenre = (musicGenreId) => {
+    setIsLoading(true)
+    let setMainGenre
+    if (!user.genres[0].idGenre) { setMainGenre = 1 } else { setMainGenre = 0 }
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/user/add/musicGenre', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({
+          userId: loggedUser.id, musicGenreId: musicGenreId, musicGenreMain: setMainGenre
+        })
+      }).then((response) => {
+        //console.log(response);
+        dispatch(user.getUserGenresInfoById(loggedUser.id))
+        setIsLoading(false)
+      }).catch(err => {
+        console.error(err)
+        alert("Ocorreu um erro ao adicionar o gênero")
+      })
+    }, 400);
+  }
 
   const goToStep2 = () => {
     navigate('/start/step2');
@@ -31,7 +75,7 @@ function StartThirdStep () {
 
   return (
     <>
-      <Header />
+      <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
         <Stepper color='violet' active={2} size={largeScreen ? "sm" : "xs"} >
           <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
@@ -39,13 +83,30 @@ function StartThirdStep () {
           <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
           <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
-        <Title order={5} my={14}>Sua ligação com a música</Title>
+        <Title ta="center" order={5} my={14}>Sua ligação com a música</Title>
 
-        <Select
-          label="Quais os principais estilos musicais relacionados à sua atuação na música?"
-          placeholder="Escolha um País"
-          data={['Brasil', 'Estados Unidos']}
-        />
+        <Container size={'xs'} mt={10} mb={130}>
+
+          <Select
+            mt={20}
+            label="Estilos musicais" 
+            description="Quais os principais estilos musicais relacionados à sua atuação na música?"
+            placeholder="Selecione ou digite"
+            data={musicGenresList}
+            onChange={(e, { value }) => addGenre(value)}
+            searchable
+          />
+
+          <Select
+            mt={20}
+            label="Atuação na música" 
+            description="Quais suas principais atividades/atuações na música?"
+            placeholder="Selecione ou digite"
+            data={rolesList}
+            searchable
+          />
+
+        </Container>
 
         <Group justify="center" mt="xl">
           <Button variant="default" onClick={() => goToStep2()}>Voltar</Button>

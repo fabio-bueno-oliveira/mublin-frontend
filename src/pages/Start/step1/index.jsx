@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../../store/actions/user';
 import { Container, Stepper, Group, Center, Title, Image, Button, Loader, rem } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowRight } from '@tabler/icons-react';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import {IKUpload} from "imagekitio-react";
-import Header from '../../../components/header';
+import HeaderWelcome from '../../../components/header/welcome';
 
 function StartFirstStep () {
 
@@ -59,9 +59,13 @@ function StartFirstStep () {
     navigate('/start/step2');
   }
 
+  const goToIntro = () => {
+    navigate('/start/intro/');
+  }
+
   return (
     <>
-      <Header />
+      <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
         <Stepper color='violet' active={0} size={largeScreen ? "sm" : "xs"} >
           <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
@@ -88,8 +92,15 @@ function StartFirstStep () {
             onSuccess={onUploadSuccess}
           />
         </div>
-        <Group justify="center" mt="xl">
+      </Container>
+      <footer className='onFooter'>
+        <Group justify="center">
           {isLoading && <Loader size={23} />}
+          <Button variant="default" onClick={() => goToIntro()}
+            leftSection={<IconArrowLeft size={14} />}  
+          >
+            Voltar
+          </Button>
           {user.picture ? (
             <Button 
               color='violet' 
@@ -109,7 +120,7 @@ function StartFirstStep () {
             </Button>
           )}
         </Group>
-      </Container>
+      </footer>
     </>
   );
 };
