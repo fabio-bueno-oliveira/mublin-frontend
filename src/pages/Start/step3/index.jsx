@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { userInfos } from '../../../store/actions/user';
 import { useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Input, Title, Select, Stepper, Button, Group, rem } from '@mantine/core';
+import { Container, Input, Title, MultiSelect, Select, Stepper, Button, Group, rem } from '@mantine/core';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
@@ -24,10 +25,13 @@ function StartThirdStep () {
 
   useEffect(() => { 
     dispatch(miscInfos.getMusicGenres());
+    dispatch(userInfos.getUserGenresInfoById(loggedUser.id));
     dispatch(miscInfos.getRoles());
+    dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
   }, []);
 
   const userSelectedGenres = user.genres.map(item => item.idGenre);
+  const userSelectedGenres2 = user.genres.map(e => { return { value: String(e.value), label: e.text }});
   const musicGenresList = genres?.list.filter(e => !userSelectedGenres.includes(e.id)).map(genre => ({ 
     label: genre.name,
     value: String(genre.id)
@@ -56,11 +60,12 @@ function StartThirdStep () {
         })
       }).then((response) => {
         //console.log(response);
-        dispatch(user.getUserGenresInfoById(loggedUser.id))
-        setIsLoading(false)
+        dispatch(userInfos.getUserGenresInfoById(loggedUser.id));
+        setIsLoading(false);
       }).catch(err => {
-        console.error(err)
-        alert("Ocorreu um erro ao adicionar o gênero")
+        console.error(err);
+        alert("Ocorreu um erro ao adicionar o gênero");
+        setIsLoading(false);
       })
     }, 400);
   }
@@ -72,6 +77,15 @@ function StartThirdStep () {
   const goToStep4 = () => {
     navigate('/start/step4');
   }
+
+  const [value, setValue] = useState([]);
+  console.log(80, value)
+
+  useEffect(() => { 
+    if (value.length) {
+      addGenre(value.at(-1));
+    }
+  }, [value]);
 
   return (
     <>
@@ -86,6 +100,18 @@ function StartThirdStep () {
         <Title ta="center" order={5} my={14}>Sua ligação com a música</Title>
 
         <Container size={'xs'} mt={10} mb={130}>
+
+          <MultiSelect
+            label="Estilos musicais"
+            description="Quais os principais estilos musicais relacionados à sua atuação na música?"
+            placeholder="Selecione até 4"
+            data={musicGenresList}
+            maxValues={4}
+            searchable
+            // onChange={(e, { value }) => addGenre(value)}
+            onChange={setValue}
+            disabled={isLoading}
+          />
 
           <Select
             mt={20}
