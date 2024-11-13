@@ -134,6 +134,9 @@ function StartThirdStep () {
             searchable
             withCheckIcon={false}
             disabled={isAddingGenre || isDeletingGenre}
+            comboboxProps={
+              { height: 200, position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }
+            }
           />
           <Group my={14} gap={5}>
             {user.requesting ? (
@@ -189,6 +192,9 @@ function StartThirdStep () {
             searchable
             withCheckIcon={false}
             disabled={isAddingGenre || isDeletingGenre}
+            comboboxProps={
+              { height: 200, position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }
+            }
           />
           <Group my={14} gap={5}>
             {user.requesting ? (
