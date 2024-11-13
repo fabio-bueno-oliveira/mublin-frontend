@@ -1,33 +1,29 @@
-import { musicGenresTypes } from '../types/musicGenres';
+import { rolesTypes } from '../types/roles';
 
 const initialState = {
   requesting: false,
-  success: false,
   list: [
-    { id: '', name: '' }
+    { id: '', name: '', description: '', instrumentalist: '', icon: '' }
   ]
 }
 
-export function musicGenres(state = initialState, action) {
+export function roles(state = initialState, action) {
   switch (action.type) {
-    case musicGenresTypes.GET_MUSIC_GENRES_REQUEST:
+    case rolesTypes.GET_ROLES_REQUEST:
       return {
         ...state,
-        success: false,
         requesting: true
       };
-    case musicGenresTypes.GET_MUSIC_GENRES_SUCCESS:
+    case rolesTypes.GET_ROLES_SUCCESS:
       return {
         ...state,
         list: action.list,
-        success: true,
         requesting: false,
       };
-    case musicGenresTypes.GET_MUSIC_GENRES_FAILURE:
+    case rolesTypes.GET_ROLES_FAILURE:
       return {
         ...state,
         requesting: false,
-        success: false,
         error: "A solicitação falhou"
       };
     default:

@@ -21,7 +21,7 @@ function StartFirstStep () {
         <Title ta="center" order={3}>Vamos lá, {user.name}!</Title>
         <Text ta="center" order={4}>Você está a alguns passos de tornar sua vida de artista mais produtiva.</Text>
         <Center>
-          <Blockquote color="blue" cite="– Fabio Bueno, CTO do Mublin" icon={<IconBubble />} mt="xl" p={23}>
+          <Blockquote color="violet" cite="– Fabio Bueno, CTO do Mublin" mt="xl" p={23}>
             <Text size={'sm'}>Olá! Estamos felizes que tenha dado uma chance de conhecer nossa plataforma. O Mublin foi desenvolvido para ser uma comunidade focada na vida de quem trabalha com música. Estamos em fase inicial de lançamento e buscando evoluir diariamente. Esperamos que goste do Mublin!</Text>
           </Blockquote>
         </Center>
@@ -29,6 +29,7 @@ function StartFirstStep () {
       <footer className='onFooter'>
         <Button 
           color='violet' 
+          size='lg'
           onClick={() => goToStep1()}
           rightSection={<IconArrowRight size={14} />}  
         >

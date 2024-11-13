@@ -1,6 +1,8 @@
 import { userTypes } from '../types/users';
 
 const initialState = {
+  requesting: false,
+  success: false,
   id: '',
   name: '',
   lastname: '',
@@ -28,6 +30,7 @@ const initialState = {
   genres: [
     { id: '', idGenre:'', name: '', mainGenre: '' }
   ],
+  genresLoadingSuccess: false,
   gear: [
     {
       brandId: '',
@@ -67,11 +70,13 @@ export function user(state = initialState, action) {
     case userTypes.GET_USER_INFO_REQUEST:
       return {
         ...state,
+        success: false,
         requesting: true
       };
     case userTypes.GET_USER_INFO_SUCCESS:
       return {
         ...state,
+        success: true,
         requesting: false,
         id: action.info.id,
         name: action.info.name,
@@ -102,6 +107,7 @@ export function user(state = initialState, action) {
     case userTypes.GET_USER_INFO_FAILURE:
       return {
         ...state,
+        success: false,
         requesting: false,
         error: "A solicitação falhou"
       };
@@ -109,18 +115,21 @@ export function user(state = initialState, action) {
     case userTypes.GET_USER_GENRES_INFO_REQUEST:
       return {
         ...state,
+        genresLoadingSuccess: false,
         requesting: true
       };
     case userTypes.GET_USER_GENRES_INFO_SUCCESS:
       return {
         ...state,
         requesting: false,
+        genresLoadingSuccess: true,
         genres: action.list
       };
     case userTypes.GET_USER_GENRES_INFO_FAILURE:
       return {
         ...state,
         requesting: false,
+        genresLoadingSuccess: false,
         error: "A solicitação falhou"
       };
     // get user´s roles musicwise

@@ -11,6 +11,7 @@ import { events } from './events';
 import { emailCheck } from './emailCheck';
 import { usernameCheck } from './usernameCheck';
 import { musicGenres } from './musicGenres';
+import { roles } from './roles';
 
 const rootReducer = combineReducers({
   authentication,
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   events,
   emailCheck,
   usernameCheck,
-  musicGenres
+  musicGenres,
+  roles
 });
 
 export default rootReducer;

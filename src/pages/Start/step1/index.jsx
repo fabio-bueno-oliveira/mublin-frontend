@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../../store/actions/user';
 import { Container, Stepper, Group, Center, Title, Image, Button, Loader, rem } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import {IKUpload} from "imagekitio-react";
@@ -17,13 +18,9 @@ function StartFirstStep () {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Image Upload to ImageKit.io
   const userAvatarPath = "/users/avatars/"+user.id+"/"
-  const [isLoading, SetIsLoading] = useState(false)
 
-  // Update avatar filename in bd
   const updatePicture = (userId, value) => {
-    SetIsLoading(true)
     let user = JSON.parse(localStorage.getItem('user'));
     fetch('https://mublin.herokuapp.com/user/'+userId+'/picture', {
         method: 'PUT',
@@ -35,24 +32,15 @@ function StartFirstStep () {
         body: JSON.stringify({picture: value})
     }).then((response) => {
         response.json().then((response) => {
-          //console.log(response);
-          SetIsLoading(false)
           dispatch(userInfos.getInfo());
         })
       }).catch(err => {
-        SetIsLoading(false)
         console.error(err)
       })
   };
 
   const onUploadError = err => {
     alert("Ocorreu um erro. Tente novamente em alguns minutos.");
-  };
-
-  const onUploadSuccess = res => {
-    let n = res.filePath.lastIndexOf('/');
-    let fileName = res.filePath.substring(n + 1);
-    updatePicture(user.id,fileName)
   };
 
   const goToStep2 = () => {
@@ -62,6 +50,26 @@ function StartFirstStep () {
   const goToIntro = () => {
     navigate('/start/intro/');
   }
+
+  const [uploading, setUploading] = useState(false);
+
+  const onUploadStart = evt => {
+    console.log("Start uplading", evt);
+    setUploading(true);
+  };
+
+  const onUploadSuccess = res => {
+    notifications.show({
+      title: 'Sucesso!',
+      message: 'Foto de perfil carregada com sucesso',
+      color: 'lime',
+      position: 'top-right'
+    })
+    let n = res.filePath.lastIndexOf('/');
+    let fileName = res.filePath.substring(n + 1);
+    updatePicture(user.id,fileName);
+    setUploading(false);
+  };
 
   return (
     <>
@@ -75,10 +83,19 @@ function StartFirstStep () {
         </Stepper>
         <Title ta="center" order={5} my={14}>Defina sua foto de perfil</Title>
         <Center mt={30}>
-          {!user.picture ? (
-            <Image radius={'md'} src='https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' w={100} />
+          {uploading ? (
+            <Loader size={62} />
           ) : (
-            <Image radius={'md'} src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} w={100} />
+            <>
+              {!user.picture ? (
+                <Image 
+                  radius={'md'} 
+                  src='https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' w={100} 
+                />
+              ) : (
+                <Image radius={'md'} src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} w={100} />
+              )}
+            </>
           )}
         </Center>
         <div className="customFileUpload">
@@ -90,13 +107,16 @@ function StartFirstStep () {
             isPrivateFile= {false}
             onError={onUploadError}
             onSuccess={onUploadSuccess}
+            onUploadStart={onUploadStart}
           />
         </div>
       </Container>
       <footer className='onFooter'>
         <Group justify="center">
-          {isLoading && <Loader size={23} />}
-          <Button variant="default" onClick={() => goToIntro()}
+          <Button 
+            variant="default" 
+            size='lg'
+            onClick={() => goToIntro()}
             leftSection={<IconArrowLeft size={14} />}  
           >
             Voltar
@@ -104,15 +124,17 @@ function StartFirstStep () {
           {user.picture ? (
             <Button 
               color='violet' 
+              size='lg'
               onClick={() => goToStep2()} 
-              disabled={!user.picture}
+              disabled={uploading}
               rightSection={<IconArrowRight size={14} />}
             >
               Avançar
             </Button>
           ) : (
             <Button 
-              variant="default" 
+              color='violet'
+              size='lg'
               onClick={() => goToStep2()}
               rightSection={<IconArrowRight size={14} />}
             >

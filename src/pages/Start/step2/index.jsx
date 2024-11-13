@@ -147,16 +147,20 @@ function StartSecondStep () {
         <Title ta="center" order={5} my={14}>Conte um pouco sobre você</Title>
         <Container size={'xs'} mt={10} mb={130}>
           <Radio.Group
-            label={<Group gap={2}>Gênero: {gender && <IconCheck size={16} color='green' />}</Group>}
+            label={
+              <Group gap={2}>
+                Gênero: {gender && <IconCheck size={16} color='green' />}
+              </Group>
+            }
             name="gender"
             mb={12}
             value={String(gender)}
             onChange={setGender}
           >
             <Group mt={3}>
-              <Radio value="m" label="Masculino" />
-              <Radio value="f" label="Feminino" />
-              <Radio value="n" label="Não informar" />
+              <Radio color='violet' value="m" label="Masculino" />
+              <Radio color='violet' value="f" label="Feminino" />
+              <Radio color='violet' value="n" label="Não informar" />
             </Group>
           </Radio.Group>
           <Textarea
@@ -249,17 +253,23 @@ function StartSecondStep () {
       </Container>
       <footer className='onFooter'>
         <Group justify="center">
-          <Button variant="default" onClick={() => goToStep1()}
+          <Button 
+            variant="default" 
+            size='lg'
+            onClick={() => goToStep1()}
             leftSection={<IconArrowLeft size={14} />}  
           >
             Voltar
           </Button>
           <Button 
-            color='violet' onClick={submitForm}
+            color='violet' 
+            size='lg'
+            onClick={submitForm}
             rightSection={<IconArrowRight size={14} />}
             disabled={!region || !city || !country.value || !gender || isLoading}
+            loading={isLoading}
           >
-            {isLoading ? "Enviando..." : "Avançar"}
+            Avançar
           </Button>
         </Group>
       </footer>
