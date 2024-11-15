@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../../store/actions/user';
 import { useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Title, MultiSelect, Select, Stepper, Button, Group, Autocomplete, Paper, Pill, rem } from '@mantine/core';
+import { Container, Title, Text, Select, Stepper, Button, Group, Pill, Divider, rem } from '@mantine/core';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
@@ -23,6 +23,8 @@ function StartThirdStep () {
 
   const [isAddingGenre, setIsAddingGenre] = useState(false);
   const [isDeletingGenre, setIsDeletingGenre] = useState(false);
+  const [isAddingRole, setIsAddingRole] = useState(false);
+  const [isDeletingRole, setIsDeletingRole] = useState(false);
 
   useEffect(() => { 
     dispatch(miscInfos.getMusicGenres());
@@ -30,8 +32,6 @@ function StartThirdStep () {
     dispatch(miscInfos.getRoles());
     dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
   }, []);
-
-  const [value, setValue] = useState('');
 
   const userGenres = user.genres;
   const userRoles = user.roles;
@@ -46,8 +46,15 @@ function StartThirdStep () {
     }));
 
   const userSelectedRoles = user.roles.map(item => item.idRole);
-  const rolesList = roles?.list
-    // .filter(e => !userSelectedRoles.includes(e.id))
+  const rolesListMusicians = roles?.list
+    .filter(e => e.instrumentalist)
+    .map(role => ({ 
+      label: role.name,
+      value: String(role.id),
+      disabled: userSelectedRoles.includes(role.id)
+    }));
+  const rolesListManagement = roles?.list
+    .filter(e => !e.instrumentalist)
     .map(role => ({ 
       label: role.name,
       value: String(role.id),
@@ -60,7 +67,7 @@ function StartThirdStep () {
     if (!user.genres[0].idGenre) { setMainGenre = 1 } else { setMainGenre = 0 }
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/user/add/musicGenre', {
-        method: 'post',
+        method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
@@ -84,7 +91,7 @@ function StartThirdStep () {
   const deleteGenre = (value) => {
     setIsDeletingGenre(true)
     fetch('https://mublin.herokuapp.com/user/delete/musicGenre', {
-      method: 'delete',
+      method: 'DELETE',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
@@ -102,6 +109,54 @@ function StartThirdStep () {
     })
   }
 
+  const addRole = (value) => {
+    setIsAddingRole(true)
+    let setMainActivity
+    if (!user.roles[0].idRole) { setMainActivity = 1 } else { setMainActivity = 0 }
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/user/add/role', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({
+          userId: loggedUser.id, roleId: value, roleMain: setMainActivity
+        })
+      }).then((response) => {
+        //console.log(response);
+        dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+        setIsAddingRole(false);
+      }).catch(err => {
+        console.error(err);
+        alert("Ocorreu um erro ao adicionar a atividade");
+        setIsAddingRole(false);
+      })
+    }, 400);
+  }
+
+  const deleteRole = (value) => {
+    setIsDeletingRole(true)
+    fetch('https://mublin.herokuapp.com/user/delete/role', {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + loggedUser.token
+      },
+      body: JSON.stringify({userId: loggedUser.id, userRoleId: value})
+    }).then((response) => {
+      //console.log(response);
+      dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+      setIsDeletingRole(false);
+    }).catch(err => {
+      console.error(err);
+      alert("Ocorreu um erro ao remover a atividade");
+      setIsDeletingRole(false);
+    })
+  }
+
   const goToStep2 = () => {
     navigate('/start/step2');
   }
@@ -109,8 +164,6 @@ function StartThirdStep () {
   const goToStep4 = () => {
     navigate('/start/step4');
   }
-
-  const loadedGenresInfos = (user.genresLoadingSuccess && user.success && genres.success);
 
   return (
     <>
@@ -122,7 +175,7 @@ function StartThirdStep () {
           <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
           <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
-        <Title ta="center" order={5} my={14}>Sua ligação com a música</Title>
+        <Title ta="center" order={3} my={14}>Sua ligação com a música</Title>
         <Container size={'xs'} mt={10} mb={130}>
           <Select
             label="Estilos musicais"
@@ -133,107 +186,103 @@ function StartThirdStep () {
             onChange={(_value) => addGenre(_value)}
             searchable
             withCheckIcon={false}
+            withScrollArea={false}
+            styles={{ 
+              dropdown: { maxHeight: 130, overflowY: 'auto' } 
+            }}
             disabled={isAddingGenre || isDeletingGenre}
-            comboboxProps={
-              { height: 200, position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }
-            }
           />
-          <Group my={14} gap={5}>
-            {user.requesting ? (
-              <Pill c={'dimmed'}>
-                Carregando estilos selecionados...
-              </Pill>
-            ) : (
-              <>
-                {userGenres.map((genre, key) =>
-                  <Pill 
-                    key={key} 
-                    withRemoveButton 
-                    onRemove={() => deleteGenre(genre.id)} 
-                  >
-                    {genre.name}
+          {userGenres[0].id && 
+            <>
+              <Text size={'xs'} mt='xs' mb={6}>
+                {userGenres.length} {userGenres.length === 1 ? "selecionado:" : "selecionados:"}
+              </Text>
+              <Group mb={14} gap={5}>
+                {user.requesting ? (
+                  <Pill c={'dimmed'}>
+                    Carregando estilos selecionados...
                   </Pill>
+                ) : (
+                  <>
+                    {userGenres.map((genre, key) =>
+                      <Pill 
+                        key={key} 
+                        withRemoveButton 
+                        onRemove={() => deleteGenre(genre.id)} 
+                      >
+                        {genre.name}
+                      </Pill>
+                    )}
+                    {isAddingGenre &&
+                      <Pill c={'blue'}>
+                        Salvando...
+                      </Pill>
+                    }
+                    {isDeletingGenre &&
+                      <Pill c={'red'}>
+                        Removendo...
+                      </Pill>
+                    }
+                  </>
                 )}
-                {isAddingGenre &&
-                  <Pill c={'blue'}>
-                    Salvando...
-                  </Pill>
-                }
-                {isDeletingGenre &&
-                  <Pill c={'red'}>
-                    Removendo...
-                  </Pill>
-                }
-              </>
-            )}
-          </Group>
-          {/* <MultiSelect
-            label="Estilos musicais"
-            description="Quais os principais estilos musicais relacionados à sua atuação na música?"
-            placeholder={loadedGenresInfos ? "Selecione até 10" : "Carregando..."}
-            data={musicGenresList}
-            maxValues={10}
-            searchable
-            // onChange={(_value) => addGenre(_value, 'add')}
-            onRemove={(_value) => deleteGenre(_value, 'delete')}
-            onSelect={(_value, option) => console.log(option)}
-            disabled={isLoading}
-            value={loadedGenresInfos ? userSavedGenres : []}
-            defaultValue={loadedGenresInfos ? userSavedGenres : []}
-          /> */}
-          
+              </Group>
+            </>
+          }
+          <Divider my="md" />
           <Select
             label="Atuação na música" 
-            description="Quais suas principais atividades/atuações na música?"
+            description="Quais suas principais atividades na música?"
             placeholder="Selecione a atividade"
-            data={rolesList}
+            data={[
+              { group: 'Gestão, produção e outros', items: rolesListManagement },
+              { group: 'Instrumentos', items: rolesListMusicians },
+            ]}
             // value={value ? value.value : null}
-            onChange={(_value) => addGenre(_value)}
+            onChange={(_value) => addRole(_value)}
             searchable
             withCheckIcon={false}
-            disabled={isAddingGenre || isDeletingGenre}
-            comboboxProps={
-              { height: 200, position: 'bottom', middlewares: { flip: false, shift: false }, offset: 0 }
-            }
+            withScrollArea={false}
+            styles={{ 
+              dropdown: { maxHeight: 130, overflowY: 'auto' } 
+            }}
+            disabled={isAddingRole || isDeletingRole}
           />
-          <Group my={14} gap={5}>
-            {user.requesting ? (
-              <Pill c={'dimmed'}>
-                Carregando atividades selecionadas...
-              </Pill>
-            ) : (
-              <>
-                {userRoles.map((role, key) =>
-                  <Pill 
-                    key={key} 
-                    withRemoveButton 
-                    onRemove={() => deleteGenre(role.id)} 
-                  >
-                    {role.name}
+          {userRoles[0].id && 
+            <>
+              <Text size={'xs'} mt='xs' mb={6}>
+                {userRoles.length} {userRoles.length === 1 ? "selecionado:" : "selecionados:"}
+              </Text>
+              <Group mb={14} gap={5}>
+                {user.requesting ? (
+                  <Pill c={'dimmed'}>
+                    Carregando atividades selecionadas...
                   </Pill>
+                ) : (
+                  <>
+                    {userRoles.map((role, key) =>
+                      <Pill 
+                        key={key} 
+                        withRemoveButton 
+                        onRemove={() => deleteRole(role.id)} 
+                      >
+                        {role.name}
+                      </Pill>
+                    )}
+                    {isAddingRole &&
+                      <Pill c={'blue'}>
+                        Salvando...
+                      </Pill>
+                    }
+                    {isDeletingRole &&
+                      <Pill c={'red'}>
+                        Removendo...
+                      </Pill>
+                    }
+                  </>
                 )}
-                {isAddingGenre &&
-                  <Pill c={'blue'}>
-                    Salvando...
-                  </Pill>
-                }
-                {isDeletingGenre &&
-                  <Pill c={'red'}>
-                    Removendo...
-                  </Pill>
-                }
-              </>
-            )}
-          </Group>
-
-          {/* <Select
-            mt={20}
-            label="Atuação na música" 
-            description="Quais suas principais atividades/atuações na música?"
-            placeholder="Selecione ou digite"
-            data={rolesList}
-            searchable
-          /> */}
+              </Group>
+            </>
+          }
         </Container>
       </Container>
       <footer className='onFooter'>

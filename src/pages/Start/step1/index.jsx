@@ -81,7 +81,7 @@ function StartFirstStep () {
           <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
           <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
-        <Title ta="center" order={5} my={14}>Defina sua foto de perfil</Title>
+        <Title ta="center" order={3} my={14}>Defina sua foto de perfil</Title>
         <Center mt={30}>
           {uploading ? (
             <Loader size={62} />

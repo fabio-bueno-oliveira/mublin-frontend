@@ -144,7 +144,7 @@ function StartSecondStep () {
           <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
           <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
-        <Title ta="center" order={5} my={14}>Conte um pouco sobre você</Title>
+        <Title ta="center" order={3} my={14}>Conte um pouco sobre você</Title>
         <Container size={'xs'} mt={10} mb={130}>
           <Radio.Group
             label={

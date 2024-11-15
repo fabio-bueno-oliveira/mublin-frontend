@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Center, Blockquote, Title, Text, Button } from '@mantine/core';
-import { IconBubble, IconArrowRight } from '@tabler/icons-react';
+import { userInfos } from '../../../store/actions/user';
+import { Container, Modal, Center, Blockquote, Title, Text, Group, Button } from '@mantine/core';
+import { IconArrowRight, IconMessage } from '@tabler/icons-react';
 import HeaderWelcome from '../../../components/header/welcome';
 
 function StartFirstStep () {
@@ -13,6 +14,14 @@ function StartFirstStep () {
   const goToStep1 = () => {
     navigate('/start/step1');
   }
+  
+  const [modalOpen, setModaOpen] = useState(false);
+
+  useEffect(() => { 
+    if (user.previously_registered || user.bio || user.gender || user.picture) {
+      setModaOpen(true);
+    }
+  }, [user.id]);
 
   return (
     <>
@@ -26,12 +35,31 @@ function StartFirstStep () {
           </Blockquote>
         </Center>
       </Container>
+      <Modal 
+        opened={modalOpen} 
+        onClose={() => setModaOpen(false)} 
+        title="Você já possui alguns dados salvos" 
+        centered
+        size={'md'}
+      >
+        <IconMessage /> 
+        <Title order={5} mb={10}>Alguns dados do seu cadastro já foram preenchidos anteriormente.</Title>
+        <Title order={5} mb={10}>Isto pode ocorrer por dois motivos:</Title>
+        <Text size='sm'>1) Você iniciou os primeiros passos mas não concluiu</Text>
+        <Text size='sm'>2) Alguns dos seus dados foram previamente cadastrado por outro usuário para facilitar sua jornada</Text>
+        <Group mt="lg" justify="flex-end">
+          <Button onClick={() => setModaOpen(false)}  color="violet">
+            Entendi
+          </Button>
+        </Group>
+      </Modal>
       <footer className='onFooter'>
         <Button 
           color='violet' 
           size='lg'
           onClick={() => goToStep1()}
-          rightSection={<IconArrowRight size={14} />}  
+          rightSection={<IconArrowRight size={14} />}
+          disabled={user.requesting}
         >
           Avançar
         </Button>
