@@ -39,7 +39,7 @@ function HeaderWelcome () {
         align="center"
         direction="row"
       >
-        <Title order={3} style={{flex:'1', cursor:'default'}}>Mublin</Title>
+        <Title order={2} style={{flex:'1', cursor:'default'}}>Mublin</Title>
         <Flex align={"center"} justify="flex-end" style={{flex:'1'}}>   
           <Avatar
             size="md"
@@ -65,7 +65,7 @@ function HeaderWelcome () {
             </ActionIcon>
           }
           <Button 
-            size="sm" 
+            size="md" 
             variant='transparent'
             color="dark"
             onClick={() => logout()}

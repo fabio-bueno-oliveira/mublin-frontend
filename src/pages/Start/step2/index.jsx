@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Stepper, Group, Text, Title, Radio, Textarea, Select, Button, Loader, rem } from '@mantine/core';
+import { Container, Stepper, Grid, Group, Text, Title, Radio, Textarea, Select, Button, Loader, rem } from '@mantine/core';
 import { NativeSelect } from '@mantine/core';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowLeft, IconArrowRight, IconCheck } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
@@ -22,17 +22,17 @@ function StartSecondStep () {
 
   const [gender, setGender] = useState(user.gender);
   const [bio, setBio] = useState(user.bio);
-  const [country, setCountry] = useState(user.country);
+  // const [country, setCountry] = useState(user.country);
   const [region, setRegion] = useState(user.region);
   const [city, setCity] = useState(user.city);
 
   useEffect(() => { 
     setGender(user.gender);
     setBio(user.bio ? user.bio : "");
-    setCountry({
-      value: String(user.country),
-      label: "Brasil"
-    });
+    // setCountry({
+    //   value: String(user.country),
+    //   label: "Brasil"
+    // });
     setRegion(user.region);
     setCity(user.city);
     searchCity(user.cityName);
@@ -79,7 +79,12 @@ function StartSecondStep () {
         'Authorization': 'Bearer ' + loggedUser.token
       },
       body: JSON.stringify({
-        userId: user.id, gender: gender, bio: bio, id_country_fk: country.value, id_region_fk: region, id_city_fk: city
+        userId: user.id, 
+        gender: gender, 
+        bio: bio, 
+        id_country_fk: 27, 
+        id_region_fk: region, 
+        id_city_fk: city
       })
     }).then((response) => {
       response.json().then((response) => {
@@ -147,6 +152,7 @@ function StartSecondStep () {
         <Title ta="center" order={3} my={14}>Conte um pouco sobre você</Title>
         <Container size={'xs'} mt={10} mb={130}>
           <Radio.Group
+            size='md'
             label={
               <Group gap={2}>
                 Gênero: {gender && <IconCheck size={16} color='green' />}
@@ -157,63 +163,79 @@ function StartSecondStep () {
             value={String(gender)}
             onChange={setGender}
           >
-            <Group mt={3}>
+            <Group mt={3} gap={9}>
               <Radio color='violet' value="m" label="Masculino" />
               <Radio color='violet' value="f" label="Feminino" />
               <Radio color='violet' value="n" label="Não informar" />
             </Group>
           </Radio.Group>
           <Textarea
+            mt={14}
+            size='md'
             label={<Group gap={2}>Bio (opcional): {bio && <IconCheck size={16} color='green' />}</Group>}
             description={"("+bio?.length+"/220)"}
             placeholder="Escreva pouco sobre você..."
             value={bio}
             maxLength='220'
+            autosize
+            minRows={2}
+            maxRows={4}
             onChange={(e) => setBio(e.target.value)}
           />
-          <NativeSelect
+          {/* <NativeSelect
+            mt={8}
+            size='md'
             label={<Group gap={2}>País: {country && <IconCheck size={16} color='green' />}</Group>}
             placeholder="Escolha um País"
             data={[{ value: '27', label: 'Brasil' }]}
             defaultValue='27'
             onChange={(e) => setCountry(e.currentTarget.value)}
-          />
-          <NativeSelect
-            label={<Group gap={2}>Estado: {region && <IconCheck size={16} color='green' />}</Group>}
-            placeholder="Escolha o Estado"
-            value={region ? region : ""}
-            onChange={(e) => {
-              setRegion(e.currentTarget.value);
-              setSearchValue('');
-              setCity('');
-              setQueryCities([]);
-            }}
-          >
-            {regionOptions.map((region, key) =>
-              <option key={key} value={region.value}>
-                {region.text}
-              </option>
-            )}
-          </NativeSelect>
-          <Select
-            label={
-              <Group gap={2}>
-                Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {city && <IconCheck size={16} color='green' />}
-              </Group>
-            }
-            placeholder={region ? "Digite e selecione uma cidade" : "Selecione o Estado antes"}
-            readOnly={!region}
-            searchable
-            searchValue={searchValue}
-            onSearchChange={typeSearchValue}
-            onChange={(_value, option) => { 
-              setCity(option?.value); 
-            }}
-            data={queryCities}
-            allowDeselect={false}
-            value={String(city)}
-            nothingFoundMessage="Nenhuma cidade encontrada..."
-          />
+          /> */}
+          <Grid mt={14}>
+            <Grid.Col span={6}>
+              <NativeSelect
+                size='md'
+                label={<Group gap={2}>Estado: {region && <IconCheck size={16} color='green' />}</Group>}
+                placeholder="Escolha o Estado"
+                value={region ? region : ""}
+                onChange={(e) => {
+                  setRegion(e.currentTarget.value);
+                  setSearchValue('');
+                  setCity('');
+                  setQueryCities([]);
+                }}
+              >
+                {regionOptions.map((region, key) =>
+                  <option key={key} value={region.value}>
+                    {region.text}
+                  </option>
+                )}
+              </NativeSelect>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <Select
+                size='md'
+                label={
+                  <Group gap={2}>
+                    Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {city && <IconCheck size={16} color='green' />}
+                  </Group>
+                }
+                placeholder={region ? "Digite e selecione uma cidade" : "Selecione o Estado antes"}
+                readOnly={!region}
+                searchable
+                searchValue={searchValue}
+                onSearchChange={typeSearchValue}
+                onChange={(_value, option) => { 
+                  setCity(option?.value); 
+                }}
+                data={queryCities}
+                allowDeselect={false}
+                value={String(city)}
+                nothingFoundMessage="Nenhuma cidade encontrada..."
+              />
+            </Grid.Col>
+          </Grid>
+
           {/* <TextInput
             label="Pesquise a cidade e selecione no menu"
             onChange={(e) => searchCity(e.currentTarget.value)}
@@ -266,7 +288,7 @@ function StartSecondStep () {
             size='lg'
             onClick={submitForm}
             rightSection={<IconArrowRight size={14} />}
-            disabled={!region || !city || !country.value || !gender || isLoading || citySearchIsLoading}
+            disabled={!region || !city || !gender || isLoading || citySearchIsLoading}
             loading={isLoading}
           >
             Avançar

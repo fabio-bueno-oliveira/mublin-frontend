@@ -199,8 +199,9 @@ function StartThirdStep () {
           /> */}
 
           <NativeSelect
+            size='md'
             label="Estilos musicais"
-            description="Quais os principais estilos musicais relacionados à sua atuação na música?"
+            description="Quais os principais estilos relacionados à sua atuação na música?"
             placeholder="Selecione o gênero/estilo"
             value={value}
             onChange={(event) => addGenre(event.currentTarget.value)}
@@ -280,6 +281,7 @@ function StartThirdStep () {
           /> */}
 
           <NativeSelect
+            size='md'
             label="Atuação na música" 
             description="Quais suas principais atividades na música?"
             placeholder="Selecione a atividade"
