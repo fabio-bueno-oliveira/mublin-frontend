@@ -51,7 +51,6 @@ function HeaderWelcome () {
             <ActionIcon 
               variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('light')}}
-              visibleFrom="md"
               ml={14}
             >
               <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
@@ -60,7 +59,6 @@ function HeaderWelcome () {
           {colorScheme === 'light' && 
             <ActionIcon variant="transparent" size="lg" color="default" 
               onClick={() => {setColorScheme('dark')}}
-              visibleFrom="md"
               ml={14}
             >
               <IconMoon style={{ width: rem(20) }} stroke={1.5} />

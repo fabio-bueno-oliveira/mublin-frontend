@@ -7,7 +7,7 @@ import { Container, Modal, Center, Title, Text, Input, Stepper, Button, Group, T
 import { useForm } from '@mantine/form';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
-import Header from '../../../components/header';
+import HeaderWelcome from '../../../components/header/welcome';
 
 function StartFourthStep () {
 
@@ -90,7 +90,7 @@ function StartFourthStep () {
 
   return (
     <>
-      <Header />
+      <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
         <Stepper color='violet' active={3} size={largeScreen ? "sm" : "xs"} >
           <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
