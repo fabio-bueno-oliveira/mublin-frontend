@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../../store/actions/user';
+import { userProjectsInfos } from '../../../store/actions/userProjects';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Modal, Center, Title, Text, Input, Stepper, Button, Group, TextInput, NativeSelect, Radio, Autocomplete, Avatar, rem } from '@mantine/core';
+import { Container, Modal, Flex, Center, Title, Text, Input, Stepper, Button, Group, TextInput, NativeSelect, Radio, Avatar, ActionIcon, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock } from '@tabler/icons-react';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
+import useEmblaCarousel from 'embla-carousel-react';
+import './styles.scss';
 
 function StartFourthStep () {
 
@@ -19,14 +22,25 @@ function StartFourthStep () {
   const largeScreen = useMediaQuery('(min-width: 60em)');
   let loggedUser = JSON.parse(localStorage.getItem('user'));
   const user = useSelector(state => state.user);
-  const imageCDNPath = 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/';
+  const userProjects = useSelector(state => state.userProjects);
+  // const imageCDNPath = 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/';
+  const cdnPath = 'https://ik.imagekit.io/mublin/projects/tr:h-200,w-200,c-maintain_ratio/';
 
   useEffect(() => { 
-    // dispatch(userInfos.getUserProjects(loggedUser.id));
+    dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
     dispatch(miscInfos.getRoles());
-  }, [loggedUser.id, dispatch]);
+  }, [loggedUser.id]);
 
   const [modalNewProjectOpen, setModalNewProjectOpen] = useState(false);
+
+  const [emblaRef1] = useEmblaCarousel(
+    {
+      active: true,
+      loop: false, 
+      dragFree: false, 
+      align: 'center' 
+    }
+  )
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -53,33 +67,6 @@ function StartFourthStep () {
     }
   }
 
-  const usersData = {
-    'Rolling Stones': {
-      image: 'https://akamai.sscdn.co/tb/letras-blog/wp-content/uploads/2020/11/bfc87c9-rolling-stones.jpg',
-      projectType: 'Banda',
-    },
-    'Beatles': {
-      image: 'https://upload.wikimedia.org/wikipedia/commons/9/9f/Beatles_ad_1965_just_the_beatles_crop.jpg',
-      projectType: 'Banda',
-    },
-    'Korn': {
-      image: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Korn%2C_2013.jpg',
-      projectType: 'Banda',
-    }
-  };
-
-  const renderAutocompleteOption = ({ option }) => (
-    <Group gap="sm">
-      <Avatar src={usersData[option.value].image} size={36} radius="xl" />
-      <div>
-        <Text size="sm">{option.value}</Text>
-        <Text size="xs" opacity={0.5}>
-          {usersData[option.value].projectType}
-        </Text>
-      </div>
-    </Group>
-  );
-
   const goToStep3 = () => {
     navigate('/start/step3');
   }
@@ -103,7 +90,7 @@ function StartFourthStep () {
           De quais projetos ou bandas você participa ou já participou?
         </Text>
         <Center>
-          <Group align="end">
+          <Group align="end" gap={10}>
             <Text>Pesquise abaixo</Text>
             <Button 
               variant='outline' 
@@ -112,29 +99,23 @@ function StartFourthStep () {
               mt={10}
               onClick={() => setModalNewProjectOpen(true)}
             >
-              ou cadastre um novo projeto
+              ou cadastrar novo projeto
             </Button>
           </Group>
         </Center>
         <Center mt={18}>
-          {/* <Input 
-            w={300} 
-            placeholder="Digite o nome do projeto ou banda..." 
+          <Input
+            w={370}
+            size='md'
+            leftSection={<IconSearch size={16} />}
+            placeholder="Digite o nome do projeto ou banda..."
             onChange={e => handleSearchChange(e.target.value)}
-          /> */}
-          <Autocomplete
-            w={300} 
-            data={[
-              'Rolling Stones', 'Beatles', 'Korn'
-            ]}
-            renderOption={renderAutocompleteOption}
-            maxDropdownHeight={116}
-            placeholder="Digite o nome do projeto ou banda..." 
           />
         </Center>
         <Container size={'md'} mt={10} mb={130}>
           
         </Container>
+        
       </Container>
       <Modal 
         opened={modalNewProjectOpen} 
@@ -201,7 +182,32 @@ function StartFourthStep () {
           </Group>
         </form>
       </Modal>
-      <footer className='onFooter'>
+      <footer className='onFooter step4Page'>
+        <Container className="embla projects" ref={emblaRef1}>
+          <div className="embla__container">
+            {userProjects.list.map((project, key) =>
+              <Flex gap={3} align={'center'} key={key} className="embla__slide">
+                <Avatar 
+                  src={project.picture ? cdnPath+project.picture : undefined} 
+                  alt={project.name}
+                />
+                <Flex 
+                  direction={'column'}
+                  justify="flex-start"
+                  align="flex-start"
+                  wrap="wrap"
+                >
+                  <Text size='13px' fw={500}>{project.name}</Text>
+                  <Text size='11px' c="dimmed">{project.ptname}</Text>
+                  <Text size='10px' c="dimmed">{project.workTitle}</Text>
+                  <ActionIcon variant="filled" color="red" size="xs" mt={4}>
+                    <IconX style={{ width: '70%', height: '70%' }} stroke={1.9} />
+                  </ActionIcon>
+                </Flex>
+              </Flex>
+            )}
+          </div>
+        </Container>
         <Group justify="center" mt="xl">
           <Button variant='default' size='lg' onClick={() => goToStep3()}>Voltar</Button>
           <Button color='violet' size='lg' onClick={() => goToHome()}>Concluir</Button>

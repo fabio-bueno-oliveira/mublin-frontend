@@ -1,0 +1,23 @@
+.step4Page {
+  .embla.projects {
+    overflow: hidden;
+    background-color: transparent;
+
+    .embla__container {
+      display: flex;
+
+      .embla__slide {
+        cursor: default;
+        user-select: none;
+        flex: 0 0 auto;
+        min-width: 0;
+        margin-right: 24px;
+      }
+      @media (min-width: 768px) {
+        .embla__slide {
+          margin-right: 14px;
+        }
+      }
+    }
+  }
+}
