@@ -6,6 +6,7 @@ export const miscInfos = {
 //   getNotifications: getNotifications,
 //   getFeed: getFeed,
   getMusicGenres: getMusicGenres,
+  getMusicGenresCategories: getMusicGenresCategories,
   getRoles: getRoles,
 //   getGearBrands: getGearBrands,
 //   getAvailabilityStatuses: getAvailabilityStatuses,
@@ -27,6 +28,22 @@ function getMusicGenres() {
   function request() { return { type: musicGenresTypes.GET_MUSIC_GENRES_REQUEST} }
   function success(list) { return { type: musicGenresTypes.GET_MUSIC_GENRES_SUCCESS, list } }
   function failure(error) { return { type: musicGenresTypes.GET_MUSIC_GENRES_FAILURE, error } }
+}
+
+function getMusicGenresCategories() {
+  return dispatch => {
+    dispatch(request());
+
+    miscService.getAllMusicGenresCategories()
+      .then(
+        list => dispatch(success(list)),
+        error => dispatch(failure(error.toString()))
+      );
+    };
+
+  function request() { return { type: musicGenresTypes.GET_MUSIC_GENRESCATEGORIES_REQUEST} }
+  function success(list) { return { type: musicGenresTypes.GET_MUSIC_GENRESCATEGORIES_SUCCESS, list } }
+  function failure(error) { return { type: musicGenresTypes.GET_MUSIC_GENRESCATEGORIES_FAILURE, error } }
 }
 
 function getRoles() {

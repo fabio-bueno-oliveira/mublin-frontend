@@ -5,6 +5,9 @@ const initialState = {
   success: false,
   list: [
     { id: '', name: '' }
+  ],
+  categories: [
+    { id: '', name_ptbr: '', name: '' }
   ]
 }
 
@@ -29,6 +32,29 @@ export function musicGenres(state = initialState, action) {
         requesting: false,
         success: false,
         error: "A solicitação falhou"
+      };
+      case musicGenresTypes.GET_MUSIC_GENRESCATEGORIES_REQUEST:
+      return {
+        ...state,
+        success: false,
+        requesting: true
+      };
+    case musicGenresTypes.GET_MUSIC_GENRESCATEGORIES_SUCCESS:
+      return {
+        ...state,
+        categories: action.list,
+        success: true,
+        requesting: false,
+      };
+    case musicGenresTypes.GET_MUSIC_GENRESCATEGORIES_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        success: false,
+        error: "A solicitação falhou",
+        categories: [
+          { id: '', name_ptbr: '', name: '' }
+        ]
       };
     default:
       return state

@@ -19,6 +19,7 @@ export const miscService = {
   getNotifications,
   getFeed,
   getAllMusicGenres,
+  getAllMusicGenresCategories,
   getAllRoles,
   getAllGearBrands,
   getAvailabilityStatuses,
@@ -49,6 +50,14 @@ function getAllMusicGenres() {
     headers: authHeader()
   };
   return fetch(`${BASE_URL}/music/genres`, requestOptions).then(handleResponse);
+}
+
+function getAllMusicGenresCategories() {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  };
+  return fetch(`${BASE_URL}/music/genresCategories`, requestOptions).then(handleResponse);
 }
 
 function getAllRoles() {

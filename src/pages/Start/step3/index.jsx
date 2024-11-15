@@ -18,6 +18,7 @@ function StartThirdStep () {
 
   let loggedUser = JSON.parse(localStorage.getItem('user'));
   const user = useSelector(state => state.user);
+  const genresCategories = useSelector(state => state.musicGenres.categories);
   const genres = useSelector(state => state.musicGenres);
   const roles = useSelector(state => state.roles);
 
@@ -28,6 +29,7 @@ function StartThirdStep () {
 
   useEffect(() => { 
     dispatch(miscInfos.getMusicGenres());
+    dispatch(miscInfos.getMusicGenresCategories());
     dispatch(userInfos.getUserGenresInfoById(loggedUser.id));
     dispatch(miscInfos.getRoles());
     dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
@@ -42,7 +44,8 @@ function StartThirdStep () {
     .map(genre => ({ 
       label: genre.name,
       value: String(genre.id),
-      disabled: userSelectedGenres.includes(genre.id)
+      disabled: userSelectedGenres.includes(genre.id),
+      categoryId: genre.categoryId
     }));
 
   const userSelectedRoles = user.roles.map(item => item.idRole);
@@ -179,7 +182,7 @@ function StartThirdStep () {
         </Stepper>
         <Title ta="center" order={3} my={14}>Sua ligação com a música</Title>
         <Container size={'xs'} mt={10} mb={130}>
-          <Select
+          {/* <Select
             label="Estilos musicais"
             description="Quais os principais estilos musicais relacionados à sua atuação na música?"
             placeholder="Selecione o gênero/estilo"
@@ -193,18 +196,33 @@ function StartThirdStep () {
               dropdown: { maxHeight: 96, overflowY: 'auto' } 
             }}
             disabled={isAddingGenre || isDeletingGenre}
-          />
-          <Container my={10} p={0}>
-            <NativeSelect
-              label="Estilos musicais"
-              description="Quais os principais estilos musicais relacionados à sua atuação na música?"
-              placeholder="Selecione o gênero/estilo"
-              value={value}
-              onChange={(event) => addGenre(event.currentTarget.value)}
-              data={musicGenresList}
-              disabled={isAddingGenre || isDeletingGenre}
-            />
-          </Container>
+          /> */}
+
+          <NativeSelect
+            label="Estilos musicais"
+            description="Quais os principais estilos musicais relacionados à sua atuação na música?"
+            placeholder="Selecione o gênero/estilo"
+            value={value}
+            onChange={(event) => addGenre(event.currentTarget.value)}
+            // data={musicGenresList}
+            disabled={isAddingGenre || isDeletingGenre || genres.requesting}
+          >
+            <option value=''>
+              {genres.requesting ? "Carregando..." : "Selecione"}
+            </option>
+            {genresCategories.map((category, key) => 
+              <optgroup label={category.name_ptbr} key={key}>
+                {musicGenresList
+                  .filter(e => e.categoryId === category.id)
+                  .map((genre, key) => 
+                    <option key={key} disabled={genre.disabled} value={genre.value}>
+                      {genre.label}
+                    </option>
+                )}
+              </optgroup>
+            )}
+          </NativeSelect>
+
           {userGenres[0].id && 
             <>
               <Text size={'xs'} mt='xs' mb={6}>
@@ -242,7 +260,7 @@ function StartThirdStep () {
             </>
           }
           <Divider my="sm" />
-          <Select
+          {/* <Select
             label="Atuação na música" 
             description="Quais suas principais atividades na música?"
             placeholder="Selecione a atividade"
@@ -259,21 +277,21 @@ function StartThirdStep () {
               dropdown: { maxHeight: 96, overflowY: 'auto' } 
             }}
             disabled={isAddingRole || isDeletingRole}
+          /> */}
+
+          <NativeSelect
+            label="Atuação na música" 
+            description="Quais suas principais atividades na música?"
+            placeholder="Selecione a atividade"
+            value={value}
+            onChange={(event) => addRole(event.currentTarget.value)}
+            data={[
+              { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
+              { group: 'Gestão, produção e outros', items: rolesListManagement },
+              { group: 'Instrumentos', items: rolesListMusicians },
+            ]}
+            disabled={isAddingRole || isDeletingRole || roles.requesting}
           />
-          <Container my={10} p={0}>
-            <NativeSelect
-              label="Atuação na música" 
-              description="Quais suas principais atividades na música?"
-              placeholder="Selecione a atividade"
-              value={value}
-              onChange={(event) => addRole(event.currentTarget.value)}
-              data={[
-                { group: 'Gestão, produção e outros', items: rolesListManagement },
-                { group: 'Instrumentos', items: rolesListMusicians },
-              ]}
-              disabled={isAddingRole || isDeletingRole}
-            />
-          </Container>
           {userRoles[0].id && 
             <>
               <Text size={'xs'} mt='xs' mb={6}>

@@ -43,7 +43,7 @@ function StartFirstStep () {
           >
             <Text size='sm' mb={10}><strong>Isto pode ocorrer por dois motivos:</strong></Text>
             <Text size='sm'>1) Você iniciou os primeiros passos mas não concluiu</Text>
-            <Text size='sm'>2) Alguns dos seus dados foram previamente cadastrado por outro usuário para facilitar sua jornada</Text>
+            <Text size='sm'>2) Alguns dos seus dados foram previamente cadastrados por outro usuário para facilitar sua jornada</Text>
           </Alert>
         }
       </Container>
