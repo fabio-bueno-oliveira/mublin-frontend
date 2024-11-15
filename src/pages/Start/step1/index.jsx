@@ -83,8 +83,8 @@ function StartFirstStep () {
         </Stepper>
         <Title ta="center" order={3} my={14}>Defina sua foto de perfil</Title>
         <Center mt={30}>
-          {uploading ? (
-            <Loader size={62} />
+          {uploading || user.requesting ? (
+            <Loader size={61} />
           ) : (
             <>
               {!user.picture ? (

@@ -120,12 +120,12 @@ function StartSecondStep () {
               setQueryCities(
                 result.map(e => { return { value: String(e.value), label: e.text }})
               );
-            }
-            setCitySearchIsLoading(false)
+            };
+            setCitySearchIsLoading(false);
           },
           (error) => {
-            setCitySearchIsLoading(false)
-            alert("Ocorreu um erro ao tentar pesquisar a cidade")
+            setCitySearchIsLoading(false);
+            alert("Ocorreu um erro ao tentar pesquisar a cidade");
         })
       }
   },500);
@@ -266,7 +266,7 @@ function StartSecondStep () {
             size='lg'
             onClick={submitForm}
             rightSection={<IconArrowRight size={14} />}
-            disabled={!region || !city || !country.value || !gender || isLoading}
+            disabled={!region || !city || !country.value || !gender || isLoading || citySearchIsLoading}
             loading={isLoading}
           >
             Avançar

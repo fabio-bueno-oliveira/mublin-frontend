@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../../store/actions/user';
 import { useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Title, Text, Select, Stepper, Button, Group, Pill, Divider, rem } from '@mantine/core';
+import { Container, Title, Text, Select, NativeSelect, Stepper, Button, Group, Pill, Divider, rem } from '@mantine/core';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
@@ -165,6 +165,8 @@ function StartThirdStep () {
     navigate('/start/step4');
   }
 
+  const [value, setValue] = useState('');
+
   return (
     <>
       <HeaderWelcome />
@@ -188,16 +190,27 @@ function StartThirdStep () {
             withCheckIcon={false}
             withScrollArea={false}
             styles={{ 
-              dropdown: { maxHeight: 130, overflowY: 'auto' } 
+              dropdown: { maxHeight: 96, overflowY: 'auto' } 
             }}
             disabled={isAddingGenre || isDeletingGenre}
           />
+          <Container my={10} p={0}>
+            <NativeSelect
+              label="Estilos musicais"
+              description="Quais os principais estilos musicais relacionados à sua atuação na música?"
+              placeholder="Selecione o gênero/estilo"
+              value={value}
+              onChange={(event) => addGenre(event.currentTarget.value)}
+              data={musicGenresList}
+              disabled={isAddingGenre || isDeletingGenre}
+            />
+          </Container>
           {userGenres[0].id && 
             <>
               <Text size={'xs'} mt='xs' mb={6}>
                 {userGenres.length} {userGenres.length === 1 ? "selecionado:" : "selecionados:"}
               </Text>
-              <Group mb={14} gap={5}>
+              <Group mb={12} gap={5}>
                 {user.requesting ? (
                   <Pill c={'dimmed'}>
                     Carregando estilos selecionados...
@@ -228,7 +241,7 @@ function StartThirdStep () {
               </Group>
             </>
           }
-          <Divider my="md" />
+          <Divider my="sm" />
           <Select
             label="Atuação na música" 
             description="Quais suas principais atividades na música?"
@@ -243,10 +256,24 @@ function StartThirdStep () {
             withCheckIcon={false}
             withScrollArea={false}
             styles={{ 
-              dropdown: { maxHeight: 130, overflowY: 'auto' } 
+              dropdown: { maxHeight: 96, overflowY: 'auto' } 
             }}
             disabled={isAddingRole || isDeletingRole}
           />
+          <Container my={10} p={0}>
+            <NativeSelect
+              label="Atuação na música" 
+              description="Quais suas principais atividades na música?"
+              placeholder="Selecione a atividade"
+              value={value}
+              onChange={(event) => addRole(event.currentTarget.value)}
+              data={[
+                { group: 'Gestão, produção e outros', items: rolesListManagement },
+                { group: 'Instrumentos', items: rolesListMusicians },
+              ]}
+              disabled={isAddingRole || isDeletingRole}
+            />
+          </Container>
           {userRoles[0].id && 
             <>
               <Text size={'xs'} mt='xs' mb={6}>
