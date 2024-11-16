@@ -53,7 +53,7 @@ function getSearchProjectResults(query) {
         method: 'GET',
         headers: authHeader()
     };
-    return fetch(`${BASE_URL}/semanticSearch/project/${query}`, requestOptions).then(handleResponse);
+    return fetch(`${BASE_URL}/quickSearch/project/${query}`, requestOptions).then(handleResponse);
 }
 
 function getSuggestedUsersResults(query) {

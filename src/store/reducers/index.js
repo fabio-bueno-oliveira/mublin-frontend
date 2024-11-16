@@ -3,6 +3,7 @@ import { authentication } from './authentication';
 import { user } from './user';
 import { userProjects } from './userProjects';
 import { search } from './search';
+import { searchProject } from './searchProject';
 import { profile } from './profile';
 import { followedByMe } from './follow';
 import { gear } from './gear';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   user,
   userProjects,
   search,
+  searchProject,
   profile,
   followedByMe,
   gear,

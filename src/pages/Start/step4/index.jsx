@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { userInfos } from '../../../store/actions/user';
+import { searchInfos } from '../../../store/actions/search';
 import { userProjectsInfos } from '../../../store/actions/userProjects';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Modal, Flex, Center, Title, Text, Input, Stepper, Button, Group, TextInput, NativeSelect, Radio, Avatar, ActionIcon, rem } from '@mantine/core';
+import { projectInfos } from '../../../store/actions/project';
+import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, NativeSelect, Radio, Avatar,  ActionIcon, Loader, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX } from '@tabler/icons-react';
-import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge, IconInfoCircle } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 import useEmblaCarousel from 'embla-carousel-react';
 import './styles.scss';
@@ -21,8 +22,26 @@ function StartFourthStep () {
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
   let loggedUser = JSON.parse(localStorage.getItem('user'));
+
   const user = useSelector(state => state.user);
   const userProjects = useSelector(state => state.userProjects);
+  const searchProject = useSelector(state => state.searchProject);
+  const roles = useSelector(state => state.roles);
+  const project = useSelector(state => state.project);
+
+  const rolesListMusicians = roles?.list
+    .filter(e => e.instrumentalist)
+    .map(role => ({ 
+      label: role.name,
+      value: String(role.id),
+    }));
+  const rolesListManagement = roles?.list
+    .filter(e => !e.instrumentalist)
+    .map(role => ({ 
+      label: role.name,
+      value: String(role.id),
+    }));
+
   // const imageCDNPath = 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/';
   const cdnPath = 'https://ik.imagekit.io/mublin/projects/tr:h-200,w-200,c-maintain_ratio/';
 
@@ -32,12 +51,20 @@ function StartFourthStep () {
   }, [loggedUser.id]);
 
   const [modalNewProjectOpen, setModalNewProjectOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalProjectInfo, setModalProjectInfo] = useState('');
+  const [modalProjectTitle, setModalProjectTitle] = useState('');
+  const [modalProjectImage, setModalProjectImage] = useState('');
+  const [modalProjectFoundationYear, setModalFoundationYear] = useState('');
+  const [modalProjectEndYear, setModalEndYear] = useState('');
+
+  const members = project.members.filter((member) => { return member.confirmed === 1 });
 
   const [emblaRef1] = useEmblaCarousel(
     {
       active: true,
       loop: false, 
-      dragFree: false, 
+      dragFree: true, 
       align: 'center' 
     }
   )
@@ -57,14 +84,63 @@ function StartFourthStep () {
   const [query, setQuery] = useState('')
   const [lastQuery, setLastQuery] = useState('')
 
-  const handleSearchChange = (e) => {
-    setQuery(e)
-    if (e.length > 1 && query !== lastQuery) {
-        setTimeout(() => {
-            dispatch(searchInfos.getSearchProjectResults(e))
-        }, 700)
-        setLastQuery(e)
+  const handleSearchChange = () => {
+    if (query.length > 1 && query !== lastQuery) {
+      dispatch(searchInfos.getSearchProjectResults(query))
+      setLastQuery(query)
+    } else {
+      alert("Digite ao menos 2 caracteres!");
     }
+  }
+
+  const formSearch = useForm({
+    mode: 'uncontrolled'
+  });
+
+  // campos do form para relacionar usuário a um projeto
+  const [projectId, setProjectId] = useState('')
+  const [projectUsername, setProjectUsername] = useState('')
+  const [active, setActive] = useState('1')
+  const [checkbox, setCheckbox] = useState(true)
+  const [status, setStatus] = useState('1')
+  const [main_role_fk, setMain_role_fk] = useState('')
+  const [joined_in, setJoined_in] = useState('')
+  const [left_in, setLeft_in] = useState(null)
+  const [portfolio, setPortfolio] = useState('0')
+
+  const handleResultSelect = (result) => {
+    dispatch(projectInfos.getProjectMembers(projectUsername));
+    setProjectId(result.id)
+    setProjectUsername(result.username)
+    setModalProjectInfo(result.description)
+    setModalProjectTitle(result.title)
+    setModalFoundationYear(result.foundation_year)
+    setJoined_in(result.foundation_year)
+    setModalEndYear(result.end_year)
+    setModalProjectImage(result.image)
+    setModalOpen(true)
+  }
+
+  const handleSubmitParticipation = () => {
+    setIsLoading(true)
+    fetch('https://mublin.herokuapp.com/user/add/project', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + user.token
+      },
+      body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: main_role_fk, joined_in: joined_in, left_in: left_in, leader: '0', confirmed: '2', admin: '0', portfolio: portfolio })
+    }).then((response) => {
+      //console.log(153, response)
+      dispatch(userInfos.getUserProjects(user.id))
+      setIsLoading(false)
+      setModalOpen(false)
+    }).catch(err => {
+      console.error(err)
+      alert("Ocorreu um erro ao criar o projeto. Tente novamente em alguns minutos.")
+      setModalOpen(false)
+    })
   }
 
   const goToStep3 = () => {
@@ -86,12 +162,12 @@ function StartFourthStep () {
           <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
         </Stepper>
         <Title ta="center" order={3} mt={14} mb={1}>Seus projetos musicais</Title>
-        <Text ta="center" order={5} mb={20}>
+        <Text ta="center" order={5} mb={11}>
           De quais projetos ou bandas você participa ou já participou?
         </Text>
         <Center>
           <Group align="end" gap={10}>
-            <Text>Pesquise abaixo</Text>
+            <Text>Pesquise abaixo ou</Text>
             <Button 
               variant='outline' 
               color='violet' 
@@ -99,23 +175,79 @@ function StartFourthStep () {
               mt={10}
               onClick={() => setModalNewProjectOpen(true)}
             >
-              ou cadastrar novo projeto
+              cadastrar novo projeto
             </Button>
           </Group>
         </Center>
-        <Center mt={18}>
-          <Input
-            w={370}
-            size='md'
-            leftSection={<IconSearch size={16} />}
-            placeholder="Digite o nome do projeto ou banda..."
-            onChange={e => handleSearchChange(e.target.value)}
-          />
-        </Center>
-        <Container size={'md'} mt={10} mb={130}>
-          
-        </Container>
-        
+        <form onSubmit={formSearch.onSubmit(handleSearchChange)}>
+          <Center mt={12} mb={6}>
+            <Input
+              w={320}
+              size='md'
+              placeholder="Digite o nome do projeto ou banda..."
+              onChange={(e) => setQuery(e.target.value)}
+              value={query}
+              variant="unstyled"
+            />
+            {/* <Button 
+              size='md' 
+              color='violet' 
+              variant='light' 
+              ml={10}
+              rightSection={<IconSearch size={14} />}
+              onClick={() => handleSearchChange()}
+            >
+              Pesquisar
+            </Button> */}
+            <ActionIcon 
+              variant="transparent" 
+              color="violet" 
+              size="42px" 
+              ml={10}
+              onClick={() => handleSearchChange()}
+            >
+              <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
+            </ActionIcon>
+          </Center>
+        </form>
+        {searchProject.requesting ? ( 
+          <Center mt={20}>
+            <Loader />
+          </Center>
+        ) : (
+          searchProject?.results[0]?.title ? (
+            <Container size={'xs'}>
+              <ScrollArea h={130} type="always" scrollbarSize={8} offsetScrollbars p={4}>
+                {searchProject.results.map((project, key) => 
+                  <Container key={key} p={0}>
+                    <Group 
+                      gap={7} 
+                      py={7} 
+                      onClick={() => handleResultSelect(project)} 
+                      style={{cursor: 'pointer'}}
+                    >
+                      <Avatar src={project.image} />
+                      <Flex direction={'column'}>
+                        <Text size='sm' fw={500}>{project.title}</Text>
+                        <Text size='xs'>{project.description}</Text>
+                        <Text size='10px' c='dimmed'>Fundado em {project.foundation_year} {project.end_year && ' | Encerrado em ' + project.end_year}</Text>
+                      </Flex>
+                    </Group>
+                    <Divider />
+                  </Container>
+                )}
+              </ScrollArea>
+            </Container>
+          ) : (
+            <>
+              {(query && searchProject.error === "Nenhum projeto encontrado") && 
+                <Text ta="center" mt={30} c='dimmed'>
+                  Nenhum projeto localizado
+                </Text>
+              }
+            </>
+          )
+        )}
       </Container>
       <Modal 
         opened={modalNewProjectOpen} 
@@ -132,7 +264,6 @@ function StartFourthStep () {
             key={form.key('name')}
             {...form.getInputProps('name')}
           />
-
           <NativeSelect
             label="Tipo do projeto"
             placeholder="Escolha o Estado"
@@ -146,7 +277,6 @@ function StartFourthStep () {
             <option value='5'>Trio</option>
             <option value='7'>Ideia</option>
           </NativeSelect>
-
           <NativeSelect
             label="Conteúdo"
             mb={5}
@@ -155,7 +285,6 @@ function StartFourthStep () {
             <option value='2'>Cover</option>
             <option value='3'>Autoral + Cover</option>
           </NativeSelect>
-
           <Radio.Group
             name="favoriteFramework"
             label="Visibilidade"
@@ -176,13 +305,125 @@ function StartFourthStep () {
               />
             </Group>
           </Radio.Group>
-
           <Group justify="flex-end" mt="md">
             <Button type="submit" color='violet'>Cadastrar</Button>
           </Group>
         </form>
       </Modal>
+      <Modal 
+        opened={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+        title={`Ingressar em ${modalProjectTitle}?`}
+        centered
+        size={'md'}
+      >
+        <Center mb={4}>
+          <Avatar src={modalProjectImage} size="lg" />
+        </Center>
+        {!project.requesting && 
+          <Group justify="center" mb={5} mt={8}>
+            {members.map((member, key) => 
+              <Avatar 
+                key={key} 
+                size='xs' 
+                src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture}
+                title={member.name} 
+              />
+            )}
+          </Group>
+        }
+        <Text size='xs' ta='center'>{modalProjectInfo}</Text>
+        <Text size='xs' ta='center' c='dimmed' mb={16}>
+          {'Formada em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
+        </Text>
+        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+          <Radio.Group
+            name="favoriteFramework"
+            label="Qual é (ou foi) sua ligação com este projeto?"
+            value={"1"}
+            mb={10}
+          >
+            <Group mt="xs">
+              <Radio 
+                color='violet' 
+                value="1" 
+                label="Integrante oficial"
+                checked 
+              />
+              <Radio 
+                color='violet' 
+                value="0"
+                label={<Group gap={2}><IconIdBadge style={{ width: rem(18), height: rem(18) }} /> Sideman/Contratado</Group>}  
+              />
+            </Group>
+          </Radio.Group>
+          <NativeSelect
+            label="Sua principal função neste projeto"
+            placeholder="Selecione"
+            mt={16}
+            mb={5}
+            data={[
+              { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
+              { group: 'Gestão, produção e outros', items: rolesListManagement },
+              { group: 'Instrumentos', items: rolesListMusicians },
+            ]}
+          />
+          <Grid>
+            <Grid.Col span={6}>
+              <NumberInput
+                label="Entrei em"
+                mb={5}
+                defaultValue={modalProjectFoundationYear}
+                onChange={e => setJoined_in(e.target.value)}
+                min={modalProjectFoundationYear}
+                max={modalProjectEndYear}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NumberInput
+                label="Deixei o projeto em"
+                mb={5}
+                defaultValue={modalProjectFoundationYear}
+                onChange={e => setLeft_in(e.target.value)}
+                min={modalProjectFoundationYear} 
+                max={modalProjectEndYear}
+              />
+            </Grid.Col>
+          </Grid>
+          <Checkbox
+            mt={10}
+            color='violet'
+            label={
+              modalProjectEndYear 
+              ? 'Estive ativo até o final do projeto' 
+              : 'Estou ativo atualmente neste projeto'
+            } 
+            // onChange={() => handleCheckbox(checkbox)}
+            checked={checkbox}
+            onChange={(event) => setChecked(event.currentTarget.checked)}
+          />
+          <Alert variant="light" color="yellow" mt={16} p={'xs'}>
+            <Text size="xs">Sua participação ficará pendente até que o(s) líder(es) deste projeto aprovem sua solicitação</Text>
+          </Alert>
+          <Group justify="flex-end" mt="md">
+            <Button 
+              variant='default' 
+              onClick={() => setModalOpen(false)}
+            >
+              Fechar
+            </Button>
+            <Button 
+              type="submit" 
+              color='violet'
+              onClick={handleSubmitParticipation}
+            >
+              Confirmar
+            </Button>
+          </Group>
+        </form>
+      </Modal>
       <footer className='onFooter step4Page'>
+        {userProjects.list[0].id && 
         <Container className="embla projects" ref={emblaRef1}>
           <div className="embla__container">
             {userProjects.list.map((project, key) =>
@@ -208,7 +449,8 @@ function StartFourthStep () {
             )}
           </div>
         </Container>
-        <Group justify="center" mt="xl">
+        }
+        <Group justify="center" mt="lg">
           <Button variant='default' size='lg' onClick={() => goToStep3()}>Voltar</Button>
           <Button color='violet' size='lg' onClick={() => goToHome()}>Concluir</Button>
         </Group>
