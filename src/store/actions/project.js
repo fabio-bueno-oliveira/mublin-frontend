@@ -5,6 +5,7 @@ export const projectInfos = {
     getProjectInfo: getProjectInfo,
     getProjectAdminAccessInfo: getProjectAdminAccessInfo,
     getProjectMembers: getProjectMembers,
+    resetProjectMembers: resetProjectMembers,
     getProjectMembersByProjectId: getProjectMembersByProjectId,
     getProjectOpportunities: getProjectOpportunities,
     getProjectNotes: getProjectNotes,
@@ -58,6 +59,10 @@ function getProjectMembers(username) {
     function request(username) { return { type: projectTypes.GET_PROJECT_MEMBERS_REQUEST, username } }
     function success(list) { return { type: projectTypes.GET_PROJECT_MEMBERS_SUCCESS, list } }
     function failure(username, error) { return { type: projectTypes.GET_PROJECT_MEMBERS_FAILURE, username, error } }
+}
+
+function resetProjectMembers() {
+    return { type: projectTypes.RESET_PROJECT_MEMBERS }
 }
 
 function getProjectMembersByProjectId(id) {

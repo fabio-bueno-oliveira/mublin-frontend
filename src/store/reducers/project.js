@@ -175,7 +175,34 @@ export function project(state = initialState, action) {
     case projectTypes.GET_PROJECT_MEMBERS_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        error: '',
+        members: [
+          {
+            id: '',
+            joinedIn: '',
+            leftIn: '',
+            name: '',
+            lastname: '',
+            username: '',
+            picture: '',
+            bio: '',
+            role1: '',
+            role2: '',
+            role3: '',
+            projectId: '',
+            projectName: '',
+            projectUsername: '',
+            statusId: '',
+            statusName: '',
+            statusIcon: '',
+            admin: '',
+            active: '',
+            leader: '',
+            touring: '',
+            confirmed: ''
+          }
+        ]
       };
     case projectTypes.GET_PROJECT_MEMBERS_SUCCESS:
       return {
@@ -187,7 +214,65 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        error: "A solicitação falhou"
+        error: "A solicitação falhou",
+        members: [
+          {
+            id: '',
+            joinedIn: '',
+            leftIn: '',
+            name: '',
+            lastname: '',
+            username: '',
+            picture: '',
+            bio: '',
+            role1: '',
+            role2: '',
+            role3: '',
+            projectId: '',
+            projectName: '',
+            projectUsername: '',
+            statusId: '',
+            statusName: '',
+            statusIcon: '',
+            admin: '',
+            active: '',
+            leader: '',
+            touring: '',
+            confirmed: ''
+          }
+        ]
+      };
+    case projectTypes.RESET_PROJECT_MEMBERS:
+      return {
+        ...state,
+        requesting: false,
+        error: "",
+        members: [
+          {
+            id: '',
+            joinedIn: '',
+            leftIn: '',
+            name: '',
+            lastname: '',
+            username: '',
+            picture: '',
+            bio: '',
+            role1: '',
+            role2: '',
+            role3: '',
+            projectId: '',
+            projectName: '',
+            projectUsername: '',
+            statusId: '',
+            statusName: '',
+            statusIcon: '',
+            admin: '',
+            active: '',
+            leader: '',
+            touring: '',
+            confirmed: ''
+          }
+        ]
       };
     case projectTypes.GET_PROJECT_OPPORTUNITIES_REQUEST:
       return {

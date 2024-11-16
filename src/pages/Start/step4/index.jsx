@@ -5,9 +5,9 @@ import { searchInfos } from '../../../store/actions/search';
 import { userProjectsInfos } from '../../../store/actions/userProjects';
 import { miscInfos } from '../../../store/actions/misc';
 import { projectInfos } from '../../../store/actions/project';
-import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, NativeSelect, Radio, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
+import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, NativeSelect, Radio, Avatar,  ActionIcon, Loader, Anchor, Tooltip, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge, IconInfoCircle } from '@tabler/icons-react';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -22,6 +22,7 @@ function StartFourthStep () {
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
   let loggedUser = JSON.parse(localStorage.getItem('user'));
+  const currentYear = new Date().getFullYear()
 
   const user = useSelector(state => state.user);
   const userProjects = useSelector(state => state.userProjects);
@@ -52,6 +53,10 @@ function StartFourthStep () {
 
   const [modalNewProjectOpen, setModalNewProjectOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  // const closeModalParticipation = () => {
+  //   setModalOpen(false);
+  // }
+
   const [modalProjectInfo, setModalProjectInfo] = useState('');
   const [modalProjectTitle, setModalProjectTitle] = useState('');
   const [modalProjectImage, setModalProjectImage] = useState('');
@@ -99,7 +104,6 @@ function StartFourthStep () {
 
   // campos do form para relacionar usuário a um projeto
   const [projectId, setProjectId] = useState('')
-  const [projectUsername, setProjectUsername] = useState('')
   const [active, setActive] = useState('1')
   const [checkbox, setCheckbox] = useState(true)
   const [status, setStatus] = useState('1')
@@ -108,15 +112,24 @@ function StartFourthStep () {
   const [left_in, setLeft_in] = useState(null)
   const [portfolio, setPortfolio] = useState('0')
 
+  const handleCheckbox = (x) => {
+    setCheckbox(value => !value)
+    setLeft_in('')
+    if (x) {
+        setActive('0')
+    } else {
+        setActive('1')
+    }
+  }
+
   const handleResultSelect = (result) => {
-    dispatch(projectInfos.getProjectMembers(projectUsername));
+    dispatch(projectInfos.getProjectMembers(result.username));
     setProjectId(result.id)
-    setProjectUsername(result.username)
     setModalProjectInfo(result.description)
     setModalProjectTitle(result.title)
     setModalFoundationYear(result.foundation_year)
     setJoined_in(result.foundation_year)
-    setModalEndYear(result.end_year)
+    setModalEndYear(result.end_year ? result.end_year : "")
     setModalProjectImage(result.image)
     setModalOpen(true)
   }
@@ -151,6 +164,8 @@ function StartFourthStep () {
     navigate('/home');
   }
 
+  console.log(167, joined_in)
+
   return (
     <>
       <HeaderWelcome />
@@ -166,16 +181,16 @@ function StartFourthStep () {
           De quais projetos ou bandas você participa ou já participou?
         </Text>
         <Center>
-          <Group align="end" gap={10}>
-            <Text>Pesquise abaixo ou</Text>
+          <Group align="baseline" gap={10}>
+            <Text size="sm">Pesquise abaixo ou</Text>
             <Button 
-              variant='outline' 
+              variant='light' 
               color='violet' 
               size="xs"
               mt={10}
               onClick={() => setModalNewProjectOpen(true)}
             >
-              cadastrar novo projeto
+              cadastre um novo projeto
             </Button>
           </Group>
         </Center>
@@ -183,22 +198,13 @@ function StartFourthStep () {
           <Center mt={12} mb={6}>
             <Input
               w={320}
-              size='md'
-              placeholder="Digite o nome do projeto ou banda..."
+              size='lg'
+              autoFocus
+              placeholder="Digite o nome do projeto/banda..."
               onChange={(e) => setQuery(e.target.value)}
               value={query}
               variant="unstyled"
             />
-            {/* <Button 
-              size='md' 
-              color='violet' 
-              variant='light' 
-              ml={10}
-              rightSection={<IconSearch size={14} />}
-              onClick={() => handleSearchChange()}
-            >
-              Pesquisar
-            </Button> */}
             <ActionIcon 
               variant="transparent" 
               color="violet" 
@@ -217,7 +223,7 @@ function StartFourthStep () {
         ) : (
           searchProject?.results[0]?.title ? (
             <Container size={'xs'}>
-              <ScrollArea h={130} type="always" scrollbarSize={8} offsetScrollbars p={4}>
+              <ScrollArea h={largeScreen ? 130 : 180} type="always" scrollbarSize={8} offsetScrollbars p={4}>
                 {searchProject.results.map((project, key) => 
                   <Container key={key} p={0}>
                     <Group 
@@ -233,7 +239,7 @@ function StartFourthStep () {
                         <Text size='10px' c='dimmed'>Fundado em {project.foundation_year} {project.end_year && ' | Encerrado em ' + project.end_year}</Text>
                       </Flex>
                     </Group>
-                    <Divider />
+                    <Divider color='#202020' />
                   </Container>
                 )}
               </ScrollArea>
@@ -250,11 +256,12 @@ function StartFourthStep () {
         )}
       </Container>
       <Modal 
+        fullScreen={largeScreen ? false : true}
         opened={modalNewProjectOpen} 
         onClose={() => setModalNewProjectOpen(false)} 
         title="Cadastrar novo projeto" 
         centered
-        size={'lg'}
+        size={'md'}
       >
         <form onSubmit={form.onSubmit((values) => console.log(values))}>
           <TextInput
@@ -311,6 +318,7 @@ function StartFourthStep () {
         </form>
       </Modal>
       <Modal 
+        fullScreen={largeScreen ? false : true}
         opened={modalOpen} 
         onClose={() => setModalOpen(false)} 
         title={`Ingressar em ${modalProjectTitle}?`}
@@ -321,14 +329,14 @@ function StartFourthStep () {
           <Avatar src={modalProjectImage} size="lg" />
         </Center>
         {!project.requesting && 
-          <Group justify="center" mb={5} mt={8}>
+          <Group justify="center" gap={7} mb={5} mt={8}>
             {members.map((member, key) => 
-              <Avatar 
-                key={key} 
-                size='xs' 
-                src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture}
-                title={member.name} 
-              />
+              <Tooltip label={`${member.name} ${member.lastname}`} key={key}>
+                <Avatar 
+                  size='xs' 
+                  src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture}
+                />
+              </Tooltip>
             )}
           </Group>
         }
@@ -374,20 +382,35 @@ function StartFourthStep () {
                 label="Entrei em"
                 mb={5}
                 defaultValue={modalProjectFoundationYear}
-                onChange={e => setJoined_in(e.target.value)}
-                min={modalProjectFoundationYear}
+                value={joined_in}
+                onChange={setJoined_in}
+                min={modalProjectFoundationYear} 
                 max={modalProjectEndYear}
               />
             </Grid.Col>
             <Grid.Col span={6}>
-              <NumberInput
-                label="Deixei o projeto em"
-                mb={5}
-                defaultValue={modalProjectFoundationYear}
-                onChange={e => setLeft_in(e.target.value)}
-                min={modalProjectFoundationYear} 
-                max={modalProjectEndYear}
-              />
+              {modalProjectEndYear ? (
+                <NumberInput
+                  label="Deixei o projeto em"
+                  mb={5}
+                  defaultValue={modalProjectFoundationYear}
+                  value={left_in}
+                  onChange={setLeft_in}
+                  min={modalProjectFoundationYear} 
+                  max={modalProjectEndYear}
+                />
+              ) : (
+                <NumberInput
+                  label="Deixei o projeto em"
+                  mb={5}
+                  defaultValue={modalProjectFoundationYear}
+                  value={left_in}
+                  onChange={setLeft_in}
+                  min={modalProjectFoundationYear} 
+                  max={currentYear} 
+                  disabled={checkbox ? true : false}
+                />
+              )}
             </Grid.Col>
           </Grid>
           <Checkbox
@@ -400,7 +423,8 @@ function StartFourthStep () {
             } 
             // onChange={() => handleCheckbox(checkbox)}
             checked={checkbox}
-            onChange={(event) => setChecked(event.currentTarget.checked)}
+            // onChange={(event) => setChecked(event.currentTarget.checked)}
+            onChange={() => handleCheckbox(checkbox)}
           />
           <Alert variant="light" color="yellow" mt={16} p={'xs'}>
             <Text size="xs">Sua participação ficará pendente até que o(s) líder(es) deste projeto aprovem sua solicitação</Text>
