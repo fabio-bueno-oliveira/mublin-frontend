@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../../store/actions/user';
 import { useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Title, Text, Select, NativeSelect, Stepper, Button, Group, Pill, Divider, rem } from '@mantine/core';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4 } from '@tabler/icons-react';
+import { Container, Title, Text, NativeSelect, Stepper, Button, Group, Badge, Divider, rem } from '@mantine/core';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconX } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 
@@ -168,7 +168,7 @@ function StartThirdStep () {
     navigate('/start/step4');
   }
 
-  const [value, setValue] = useState('');
+  const xIconStyle = { width: '10px', height: '10px', cursor:'pointer' };
 
   return (
     <>
@@ -182,31 +182,14 @@ function StartThirdStep () {
         </Stepper>
         <Title ta="center" order={3} my={14}>Sua ligação com a música</Title>
         <Container size={'xs'} mt={10} mb={130}>
-          {/* <Select
-            label="Estilos musicais"
-            description="Quais os principais estilos musicais relacionados à sua atuação na música?"
-            placeholder="Selecione o gênero/estilo"
-            data={musicGenresList}
-            // value={value ? value.value : null}
-            onChange={(_value) => addGenre(_value)}
-            searchable
-            withCheckIcon={false}
-            withScrollArea={false}
-            styles={{ 
-              dropdown: { maxHeight: 96, overflowY: 'auto' } 
-            }}
-            disabled={isAddingGenre || isDeletingGenre}
-          /> */}
-
           <NativeSelect
-            size='md'
+            size="md"
             label="Estilos musicais"
             description="Quais os principais estilos relacionados à sua atuação na música?"
             placeholder="Selecione o gênero/estilo"
-            value={value}
             onChange={(event) => addGenre(event.currentTarget.value)}
-            // data={musicGenresList}
             disabled={isAddingGenre || isDeletingGenre || genres.requesting}
+            mb={!userGenres[0].id && 18}
           >
             <option value=''>
               {genres.requesting ? "Carregando..." : "Selecione"}
@@ -223,69 +206,51 @@ function StartThirdStep () {
               </optgroup>
             )}
           </NativeSelect>
-
           {userGenres[0].id && 
             <>
               <Text size={'xs'} mt='xs' mb={6}>
                 {userGenres.length} {userGenres.length === 1 ? "selecionado:" : "selecionados:"}
               </Text>
-              <Group mb={12} gap={5}>
-                {user.requesting ? (
-                  <Pill c={'dimmed'}>
-                    Carregando estilos selecionados...
-                  </Pill>
-                ) : (
+              <Group mb={16} gap={5}>
+                {userGenres.map((genre, key) =>
                   <>
-                    {userGenres.map((genre, key) =>
-                      <Pill 
-                        key={key} 
-                        withRemoveButton 
-                        onRemove={() => deleteGenre(genre.id)} 
-                      >
-                        {genre.name}
-                      </Pill>
-                    )}
-                    {isAddingGenre &&
-                      <Pill c={'blue'}>
-                        Salvando...
-                      </Pill>
-                    }
-                    {isDeletingGenre &&
-                      <Pill c={'red'}>
-                        Removendo...
-                      </Pill>
-                    }
+                    {/* <Pill 
+                      key={key} 
+                      withRemoveButton 
+                      onRemove={() => deleteGenre(genre.id)} 
+                    >
+                      {genre.name}
+                    </Pill> */}
+                    <Badge 
+                      color="violet"
+                      variant='filled'
+                      size='sm'
+                      rightSection={
+                        <IconX 
+                          style={xIconStyle} 
+                          stroke={3} 
+                          onClick={() => deleteGenre(genre.id)} 
+                        />
+                      }
+                    >
+                      {genre.name}
+                    </Badge>
                   </>
                 )}
+                {isAddingGenre &&
+                  <Badge variant="light" color="violet" size="sm">
+                    Salvando...
+                  </Badge>
+                }
               </Group>
             </>
           }
           <Divider my="sm" />
-          {/* <Select
-            label="Atuação na música" 
-            description="Quais suas principais atividades na música?"
-            placeholder="Selecione a atividade"
-            data={[
-              { group: 'Gestão, produção e outros', items: rolesListManagement },
-              { group: 'Instrumentos', items: rolesListMusicians },
-            ]}
-            // value={value ? value.value : null}
-            onChange={(_value) => addRole(_value)}
-            searchable
-            withCheckIcon={false}
-            withScrollArea={false}
-            styles={{ 
-              dropdown: { maxHeight: 96, overflowY: 'auto' } 
-            }}
-            disabled={isAddingRole || isDeletingRole}
-          /> */}
-
           <NativeSelect
-            size='md'
-            label="Atuação na música" 
+            size="md"
+            label="Atuação na música"
             description="Quais suas principais atividades na música?"
             placeholder="Selecione a atividade"
-            value={value}
             onChange={(event) => addRole(event.currentTarget.value)}
             data={[
               { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
@@ -299,34 +264,37 @@ function StartThirdStep () {
               <Text size={'xs'} mt='xs' mb={6}>
                 {userRoles.length} {userRoles.length === 1 ? "selecionado:" : "selecionados:"}
               </Text>
-              <Group mb={14} gap={5}>
-                {user.requesting ? (
-                  <Pill c={'dimmed'}>
-                    Carregando atividades selecionadas...
-                  </Pill>
-                ) : (
+              <Group mb={12} gap={5}>
+                {userRoles.map((role, key) =>
                   <>
-                    {userRoles.map((role, key) =>
-                      <Pill 
-                        key={key} 
-                        withRemoveButton 
-                        onRemove={() => deleteRole(role.id)} 
-                      >
-                        {role.name}
-                      </Pill>
-                    )}
-                    {isAddingRole &&
-                      <Pill c={'blue'}>
-                        Salvando...
-                      </Pill>
-                    }
-                    {isDeletingRole &&
-                      <Pill c={'red'}>
-                        Removendo...
-                      </Pill>
-                    }
+                    {/* <Pill 
+                      key={key} 
+                      withRemoveButton 
+                      onRemove={() => deleteRole(role.id)} 
+                    >
+                      {role.name}
+                    </Pill> */}
+                    <Badge 
+                      color="violet"
+                      variant='filled'
+                      size='sm'
+                      rightSection={
+                        <IconX 
+                          style={xIconStyle} 
+                          stroke={3} 
+                          onClick={() => deleteRole(role.id)} 
+                        />
+                      }
+                    >
+                      {role.name}
+                    </Badge>
                   </>
                 )}
+                {isAddingRole &&
+                  <Badge variant="light" color="violet" size="sm">
+                    Salvando...
+                  </Badge>
+                }
               </Group>
             </>
           }

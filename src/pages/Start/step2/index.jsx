@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Stepper, Grid, Group, Text, Title, Radio, Textarea, Select, Button, Loader, rem } from '@mantine/core';
+import { Container, Stepper, Grid, Group, Text, Title, Textarea, Select, Button, Loader, rem } from '@mantine/core';
 import { NativeSelect } from '@mantine/core';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowLeft, IconArrowRight, IconCheck } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
@@ -22,17 +22,12 @@ function StartSecondStep () {
 
   const [gender, setGender] = useState(user.gender);
   const [bio, setBio] = useState(user.bio);
-  // const [country, setCountry] = useState(user.country);
   const [region, setRegion] = useState(user.region);
   const [city, setCity] = useState(user.city);
 
   useEffect(() => { 
     setGender(user.gender);
     setBio(user.bio ? user.bio : "");
-    // setCountry({
-    //   value: String(user.country),
-    //   label: "Brasil"
-    // });
     setRegion(user.region);
     setCity(user.city);
     searchCity(user.cityName);
@@ -151,26 +146,22 @@ function StartSecondStep () {
         </Stepper>
         <Title ta="center" order={3} my={14}>Conte um pouco sobre você</Title>
         <Container size={'xs'} mt={10} mb={130}>
-          <Radio.Group
+          <NativeSelect
             size='md'
-            label={
-              <Group gap={2}>
-                Gênero: {gender && <IconCheck size={16} color='green' />}
-              </Group>
-            }
-            name="gender"
-            mb={12}
-            value={String(gender)}
-            onChange={setGender}
+            label={<Group gap={2}>Gênero: {gender && <IconCheck size={16} color='green' />}</Group>}
+            placeholder="Gênero"
+            value={gender ? gender : ""}
+            onChange={(e) => {
+              setGender(e.currentTarget.value);
+            }}
           >
-            <Group mt={3} gap={9}>
-              <Radio color='violet' value="m" label="Masculino" />
-              <Radio color='violet' value="f" label="Feminino" />
-              <Radio color='violet' value="n" label="Não informar" />
-            </Group>
-          </Radio.Group>
+            <option value="">Selecione</option>
+            <option value="m">Masculino</option>
+            <option value="f">Feminino</option>
+            <option value="n">Não informar</option>
+          </NativeSelect>
           <Textarea
-            mt={14}
+            mt={18}
             size='md'
             label={<Group gap={2}>Bio (opcional): {bio && <IconCheck size={16} color='green' />}</Group>}
             description={"("+bio?.length+"/220)"}
@@ -182,16 +173,7 @@ function StartSecondStep () {
             maxRows={4}
             onChange={(e) => setBio(e.target.value)}
           />
-          {/* <NativeSelect
-            mt={8}
-            size='md'
-            label={<Group gap={2}>País: {country && <IconCheck size={16} color='green' />}</Group>}
-            placeholder="Escolha um País"
-            data={[{ value: '27', label: 'Brasil' }]}
-            defaultValue='27'
-            onChange={(e) => setCountry(e.currentTarget.value)}
-          /> */}
-          <Grid mt={14}>
+          <Grid mt={18}>
             <Grid.Col span={6}>
               <NativeSelect
                 size='md'
@@ -235,36 +217,6 @@ function StartSecondStep () {
               />
             </Grid.Col>
           </Grid>
-
-          {/* <TextInput
-            label="Pesquise a cidade e selecione no menu"
-            onChange={(e) => searchCity(e.currentTarget.value)}
-            mt={4}
-          />
-          <NativeSelect
-            placeholder="Escolha a Cidade"
-            value={city ? city : null}
-            disabled={!region ? true : false}
-            // onChange={(_value, option) => setCity(option)}
-            // onChange={(_value, option) => console.log(option)}
-            onChange={(e) => setCity(e.currentTarget.value)}
-            leftSection={city ? <IconCheck size={12} color='green' /> : undefined}
-            mt={8}
-          >
-            {citySearchIsLoading ? ( 
-              <option>Carregando...</option>
-            ) : (
-              <option>Selecione na lista abaixo</option>
-            )}
-            {queryCities.map((city, key) =>
-              <option 
-                key={key} 
-                value={city.value} 
-              >
-                {city.text}
-              </option>
-            )}
-          </NativeSelect> */}
         </Container>
         {error && 
           <Text ta="center" mt="md" size='xs'>

@@ -43,7 +43,7 @@ function StartFourthStep () {
       value: String(role.id),
     }));
 
-  // const imageCDNPath = 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/';
+  const avatarCDNPath = 'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/';
   const cdnPath = 'https://ik.imagekit.io/mublin/projects/tr:h-200,w-200,c-maintain_ratio/';
 
   useEffect(() => { 
@@ -53,9 +53,9 @@ function StartFourthStep () {
 
   const [modalNewProjectOpen, setModalNewProjectOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  // const closeModalParticipation = () => {
-  //   setModalOpen(false);
-  // }
+  
+  const [modalDeleteConfirmationOpen, setModalDeleteConfirmationOpen] = useState(false);
+  const [modalDeleteData, setModalDeleteData] = useState({});
 
   const [modalProjectInfo, setModalProjectInfo] = useState('');
   const [modalProjectTitle, setModalProjectTitle] = useState('');
@@ -134,6 +134,15 @@ function StartFourthStep () {
     setModalOpen(true)
   }
 
+  // Modal Delete Participation on Project
+  const handleDeleteParticipation = (project) => {
+    setModalDeleteData(project);
+    setModalDeleteConfirmationOpen(true);
+  }
+  const adminsModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.admin);
+  const myselfModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.userId === loggedUser.id)[0];
+  const myselfAdminModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.admin && m.userId === loggedUser.id);
+
   const handleSubmitParticipation = () => {
     setIsLoading(true)
     fetch('https://mublin.herokuapp.com/user/add/project', {
@@ -153,6 +162,26 @@ function StartFourthStep () {
       console.error(err)
       alert("Ocorreu um erro ao criar o projeto. Tente novamente em alguns minutos.")
       setModalOpen(false)
+    })
+  }
+
+  const deleteProject = (userProjectParticipationId) => {
+    setIsLoading(true)
+    fetch('https://mublin.herokuapp.com/user/delete/project', {
+        method: 'delete',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({userId: loggedUser.id, userProjectParticipationId: userProjectParticipationId})
+    }).then((response) => {
+        //console.log(response);
+        dispatch(userInfos.getUserProjects(loggedUser.id))
+        setIsLoading(false)
+    }).catch(err => {
+        console.error(err)
+        alert("Ocorreu um erro ao remover o seu projeto. Tente novamente em alguns minutos.")
     })
   }
 
@@ -332,7 +361,7 @@ function StartFourthStep () {
               <Tooltip label={`${member.name} ${member.lastname}`} key={key}>
                 <Avatar 
                   size='xs' 
-                  src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture}
+                  src={avatarCDNPath+member.id+'/'+member.picture}
                 />
               </Tooltip>
             )}
@@ -444,40 +473,84 @@ function StartFourthStep () {
           </Group>
         </form>
       </Modal>
+      <Modal 
+        title={`Sair do projeto ${modalDeleteData.name}?`}
+        fullScreen={largeScreen ? false : true}
+        opened={modalDeleteConfirmationOpen} 
+        onClose={() => setModalDeleteConfirmationOpen(false)} 
+        centered
+        size={'sm'}
+      >
+        <Text size='sm' mb={4}>
+          Tem certeza que deseja encerrar seu vínculo com este projeto? Ele não aparecerá mais no seu perfil e você não terá mais acesso ao painel de controle do projeto. Caso deseje voltar a participar no futuro, você terá que solicitar aprovação novamente.
+        </Text>
+        <Flex gap={3} direction={'column'} align={'center'}>
+          <Avatar size='sm' src={myselfModalDelete?.userPicture ? `${avatarCDNPath}${myselfModalDelete?.userId}/${myselfModalDelete?.userPicture}` : undefined} />
+          {/* <Badge variant="filled" color="gray" size="xs">Administrador</Badge> */}
+          <Text size='xs' fw={500}>{myselfModalDelete?.role1}{myselfModalDelete?.role2 && `, ${myselfModalDelete?.role2}`}</Text>
+          <Text size='11px'>Ativo no projeto desde {myselfModalDelete?.joinedIn} {myselfModalDelete?.leftIn ? ` até ${myselfModalDelete?.leftIn}` : ' até o momento'}</Text>
+        </Flex>
+        <Divider my="sm" label="Administradores:" labelPosition="left" />
+        <Group mt={5}>
+        {adminsModalDelete.map((admin, key) => 
+          <Flex key={key} gap={3}>
+            <Avatar size='xs' src={admin.userPicture ? `${avatarCDNPath}${admin.userId}/${admin.userPicture}` : undefined} />
+            <Text size='xs'>{admin.userName}</Text>
+          </Flex>
+        )}
+        </Group>
+        {(myselfAdminModalDelete?.length === 1 && adminsModalDelete?.length === 1) &&
+          <Alert p={8} mt={10} variant="light" color="red">
+            <Text size='xs'>Você é o único administrador deste projeto! Para deletar definitivamente o projeto, utilize o painel de controle da sua conta.</Text>
+          </Alert>
+        }
+        <Group mt="lg" justify="flex-end">
+          <Button variant="default" onClick={() => setModalDeleteConfirmationOpen(false)}>
+            Cancelar
+          </Button>
+          <Button 
+            color="red" 
+            onClick={() => deleteProject(modalDeleteData.id)} 
+            disabled={(myselfAdminModalDelete?.length === 1 && adminsModalDelete?.length === 1)}
+          >
+            Confirmar
+          </Button>
+        </Group>
+      </Modal>
       <footer className='onFooter step4Page'>
         {userProjects.list[0].id && 
-        <Container className="embla projects" ref={emblaRef1}>
-          <div className="embla__container">
-            {userProjects.list.map((project, key) =>
-              <Flex gap={3} align={'center'} key={key} className="embla__slide">
-                <Avatar 
-                  src={project.picture ? cdnPath+project.picture : undefined} 
-                  alt={project.name}
-                />
-                <Flex 
-                  direction={'column'}
-                  justify="flex-start"
-                  align="flex-start"
-                  wrap="wrap"
-                >
-                  <Text size='13px' fw={500}>{project.name}</Text>
-                  <Text size='11px' c="dimmed">{project.ptname}</Text>
-                  <Text size='10px' c="dimmed">{project.workTitle}</Text>
-                  <Anchor
-                    variant="text"
-                    c="red"
-                    fz="10px"
-                    href="#text-props"
+          <Container className="embla projects" ref={emblaRef1}>
+            <div className="embla__container">
+              {userProjects.list.map((project, key) =>
+                <Flex gap={3} align={'center'} key={key} className="embla__slide">
+                  <Avatar 
+                    src={project.picture ? cdnPath+project.picture : undefined} 
+                    alt={project.name}
+                  />
+                  <Flex 
+                    direction={'column'}
+                    justify="flex-start"
+                    align="flex-start"
+                    wrap="wrap"
                   >
-                    <Group gap={1}>
-                      <IconX style={{ width: '9px', height: '9px' }} /> Remover
-                    </Group>
-                  </Anchor>
+                    <Text size='13px' fw={500}>{project.name}</Text>
+                    <Text size='11px' c="dimmed">{project.ptname}</Text>
+                    <Text size='10px' c="dimmed">{project.workTitle}</Text>
+                    <Anchor
+                      variant="text"
+                      c="red"
+                      fz="10px"
+                      onClick={() => handleDeleteParticipation(project)}
+                    >
+                      <Group gap={1}>
+                        <IconX style={{ width: '9px', height: '9px' }} stroke={3} /> Sair
+                      </Group>
+                    </Anchor>
+                  </Flex>
                 </Flex>
-              </Flex>
-            )}
-          </div>
-        </Container>
+              )}
+            </div>
+          </Container>
         }
         <Group justify="center" mt="lg">
           <Button variant='default' size='lg' onClick={() => goToStep3()}>Voltar</Button>

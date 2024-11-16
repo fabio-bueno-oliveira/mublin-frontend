@@ -81,7 +81,29 @@ const initialState = {
       name: '',
       username: ''
     }
-  ] 
+  ],
+  members: [
+    {
+      active: '',
+      joinedIn: '',
+      admin: '',
+      leader: '',
+      leftIn: '',
+      projectId: '',
+      projectUsername: '',
+      role1: '',
+      role1icon: '',
+      role2: '',
+      role2icon: '',
+      role3: '',
+      role3icon: '',
+      userId: '',
+      userLastname: '',
+      userName: '',
+      userPicture: '',
+      userUsername: ''
+    }
+  ]
 }
 
 export function userProjects(state = initialState, action) {
@@ -91,6 +113,9 @@ export function userProjects(state = initialState, action) {
         ...state,
         requesting: true,
         success: true,
+        list: initialState.list,
+        summary: initialState.summary,
+        members: initialState.members,
         error: ''
       };
     case userProjectsTypes.GET_USER_PROJECTS_SUCCESS:
@@ -109,67 +134,9 @@ export function userProjects(state = initialState, action) {
         requesting: false,
         success: false,
         error: 'Erro na solicitação',
-        list: [
-          {
-            id: '',
-            confirmed: '',
-            status: '',
-            joined_in: '',
-            main_role_fk: '',
-            portfolio: '',
-            created: '',
-            projectid: '',
-            name: '',
-            username:'',
-            type: '',
-            picture: '',
-            ptid: '',
-            ptname: '',
-            pticon: '',
-            workTitle: '',
-            workIcon: '',
-            role1: '',
-            role2: '',
-            role3: '',
-            nextEventId: '',
-            nextEventTitle: '',
-            nextEventDateOpening: '',
-            nextEventHourOpening: '',
-            nextEventInvitationId: '',
-            nextEventInvitationResponse: '',
-            nextEventInvitationDate: '',
-            nextEventInvitationNameWhoInvited: '',
-            nextEventInvitationUsernameWhoInvited: '',
-            nextEventInvitationPictureWhoInvited: '',
-            nextEventInvitationUserIdWhoInvited: '',
-            nextGoalDate: '',
-            nextGoalDescription: '',
-            nextGoalCompleted: '',
-            nextUserGoalDate: '',
-            nextUserGoalDescription: '',
-            nextUserGoalCompleted: '',
-            labelShow: '',
-            labelColor: '',
-            labelText: '',
-            cityName: '',
-            regionName: '',
-            regionUf: '',
-            leaderLastNote: '',
-            leaderLastNoteDate: ''
-          }
-        ],
-        summary: [
-          {
-            confirmed: '',
-            joined_in: '',
-            left_in: '',
-            portfolio: '',
-            projectid: '',
-            name: '',
-            username: ''
-          }
-        ],
-        error: "A solicitação falhou"
+        list: initialState.list,
+        summary: initialState.summary,
+        members: initialState.members,
       };
     default:
       return state

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Container, Title, Text, Button, Alert  } from '@mantine/core';
-import { IconArrowRight, IconInfoCircle  } from '@tabler/icons-react';
+import { IconArrowRight, IconMoodSmile  } from '@tabler/icons-react';
 import HeaderWelcome from '../../../components/header/welcome';
 
 function StartFirstStep () {
@@ -37,13 +37,11 @@ function StartFirstStep () {
           <Alert 
             variant="light" 
             color="violet" 
-            title="Alguns dados do seu cadastro já foram preenchidos anteriormente" 
-            icon={<IconInfoCircle />}
-            mt={30}
+            title="Identificamos que lguns dados do seu cadastro já foram preenchidos anteriormente"
+            icon={<IconMoodSmile />}
+            mt={50}
           >
-            <Text size='sm' mb={10}><strong>Isto pode ocorrer por dois motivos:</strong></Text>
-            <Text size='sm'>1) Você iniciou os primeiros passos mas não concluiu</Text>
-            <Text size='sm'>2) Alguns dos seus dados foram previamente cadastrados por outro usuário para facilitar sua jornada</Text>
+            <Text size='sm' mb={10}>Oba! Você já iniciou os primeiros passos anteriormente, ou alguns dos seus dados foram previamente cadastrados por outro usuário para facilitar sua jornada!</Text>
           </Alert>
         }
       </Container>

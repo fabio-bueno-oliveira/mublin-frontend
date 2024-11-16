@@ -4,8 +4,6 @@ import { useSelector } from 'react-redux';
 import Header from '../../components/header/public';
 import Footer from '../../components/footer/public';
 import { useMantineColorScheme, Container, Flex, Text, Title, Button, Grid, Image } from '@mantine/core';
-import AstronautImage1 from '../../assets/img/astronaut-musician-1.png';
-import AstronautImage2 from '../../assets/img/astronaut-musician-2.png';
 import { 
   IconAutomaticGearbox,
   IconCalendarSmile,
@@ -23,6 +21,10 @@ function LandingPage () {
 
   const loggedIn = useSelector(state => state.authentication.loggedIn);
   const { setColorScheme } = useMantineColorScheme();
+
+  const imageCdnUrl = 'https://ik.imagekit.io/mublin';
+  const AstronautImage1 = imageCdnUrl + '/misc/astronaut-musician-1.png?updatedAt=1731768213783';
+  const AstronautImage2 = imageCdnUrl + '/misc/astronaut-musician-2.png?updatedAt=1731768213743';
 
   useEffect(() => { 
     setColorScheme('light');
