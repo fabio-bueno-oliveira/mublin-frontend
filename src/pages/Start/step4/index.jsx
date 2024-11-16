@@ -11,6 +11,7 @@ import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 import useEmblaCarousel from 'embla-carousel-react';
+import ModalDeleteParticipationContent from './modalDeleteParticipation';
 import './styles.scss';
 
 function StartFourthStep () {
@@ -22,7 +23,8 @@ function StartFourthStep () {
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
   let loggedUser = JSON.parse(localStorage.getItem('user'));
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
+  const [isLoading, setIsLoading] = useState(false);
 
   const user = useSelector(state => state.user);
   const userProjects = useSelector(state => state.userProjects);
@@ -155,7 +157,7 @@ function StartFourthStep () {
       body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: main_role_fk, joined_in: joined_in, left_in: left_in, leader: '0', confirmed: '2', admin: '0', portfolio: portfolio })
     }).then((response) => {
       //console.log(153, response)
-      dispatch(userInfos.getUserProjects(user.id))
+      dispatch(userProjectsInfos.getUserProjects(user.id))
       setIsLoading(false)
       setModalOpen(false)
     }).catch(err => {
@@ -168,7 +170,7 @@ function StartFourthStep () {
   const deleteProject = (userProjectParticipationId) => {
     setIsLoading(true)
     fetch('https://mublin.herokuapp.com/user/delete/project', {
-        method: 'delete',
+        method: 'DELETE',
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
@@ -176,12 +178,14 @@ function StartFourthStep () {
         },
         body: JSON.stringify({userId: loggedUser.id, userProjectParticipationId: userProjectParticipationId})
     }).then((response) => {
-        //console.log(response);
-        dispatch(userInfos.getUserProjects(loggedUser.id))
-        setIsLoading(false)
+        // console.log(response);
+        dispatch(userProjectsInfos.getUserProjects(loggedUser.id));
+        setIsLoading(false);
+        setModalDeleteConfirmationOpen(false);
     }).catch(err => {
-        console.error(err)
-        alert("Ocorreu um erro ao remover o seu projeto. Tente novamente em alguns minutos.")
+        console.error(err);
+        setIsLoading(false);
+        alert("Ocorreu um erro ao remover o seu projeto. Tente novamente em alguns minutos.");
     })
   }
 
@@ -226,7 +230,6 @@ function StartFourthStep () {
             <Input
               w={320}
               size='lg'
-              autoFocus
               placeholder="Digite o nome do projeto/banda..."
               onChange={(e) => setQuery(e.target.value)}
               value={query}
@@ -467,6 +470,7 @@ function StartFourthStep () {
               type="submit" 
               color='violet'
               onClick={handleSubmitParticipation}
+              loading={isLoading}
             >
               Confirmar
             </Button>
@@ -475,35 +479,17 @@ function StartFourthStep () {
       </Modal>
       <Modal 
         title={`Sair do projeto ${modalDeleteData.name}?`}
-        fullScreen={largeScreen ? false : true}
         opened={modalDeleteConfirmationOpen} 
         onClose={() => setModalDeleteConfirmationOpen(false)} 
         centered
         size={'sm'}
       >
-        <Text size='sm' mb={4}>
-          Tem certeza que deseja encerrar seu vínculo com este projeto? Ele não aparecerá mais no seu perfil e você não terá mais acesso ao painel de controle do projeto. Caso deseje voltar a participar no futuro, você terá que solicitar aprovação novamente.
-        </Text>
-        <Flex gap={3} direction={'column'} align={'center'}>
-          <Avatar size='sm' src={myselfModalDelete?.userPicture ? `${avatarCDNPath}${myselfModalDelete?.userId}/${myselfModalDelete?.userPicture}` : undefined} />
-          {/* <Badge variant="filled" color="gray" size="xs">Administrador</Badge> */}
-          <Text size='xs' fw={500}>{myselfModalDelete?.role1}{myselfModalDelete?.role2 && `, ${myselfModalDelete?.role2}`}</Text>
-          <Text size='11px'>Ativo no projeto desde {myselfModalDelete?.joinedIn} {myselfModalDelete?.leftIn ? ` até ${myselfModalDelete?.leftIn}` : ' até o momento'}</Text>
-        </Flex>
-        <Divider my="sm" label="Administradores:" labelPosition="left" />
-        <Group mt={5}>
-        {adminsModalDelete.map((admin, key) => 
-          <Flex key={key} gap={3}>
-            <Avatar size='xs' src={admin.userPicture ? `${avatarCDNPath}${admin.userId}/${admin.userPicture}` : undefined} />
-            <Text size='xs'>{admin.userName}</Text>
-          </Flex>
-        )}
-        </Group>
-        {(myselfAdminModalDelete?.length === 1 && adminsModalDelete?.length === 1) &&
-          <Alert p={8} mt={10} variant="light" color="red">
-            <Text size='xs'>Você é o único administrador deste projeto! Para deletar definitivamente o projeto, utilize o painel de controle da sua conta.</Text>
-          </Alert>
-        }
+        <ModalDeleteParticipationContent 
+          user={user} 
+          modalDeleteData={modalDeleteData} 
+          adminsModalDelete={adminsModalDelete} 
+          myselfAdminModalDelete={myselfAdminModalDelete} 
+        />
         <Group mt="lg" justify="flex-end">
           <Button variant="default" onClick={() => setModalDeleteConfirmationOpen(false)}>
             Cancelar
@@ -512,6 +498,7 @@ function StartFourthStep () {
             color="red" 
             onClick={() => deleteProject(modalDeleteData.id)} 
             disabled={(myselfAdminModalDelete?.length === 1 && adminsModalDelete?.length === 1)}
+            loading={isLoading}
           >
             Confirmar
           </Button>
@@ -519,7 +506,7 @@ function StartFourthStep () {
       </Modal>
       <footer className='onFooter step4Page'>
         {userProjects.list[0].id && 
-          <Container className="embla projects" ref={emblaRef1}>
+          <Container size={'sm'} className="embla projects" ref={emblaRef1}>
             <div className="embla__container">
               {userProjects.list.map((project, key) =>
                 <Flex gap={3} align={'center'} key={key} className="embla__slide">
@@ -539,7 +526,7 @@ function StartFourthStep () {
                     <Anchor
                       variant="text"
                       c="red"
-                      fz="10px"
+                      fz="11px"
                       onClick={() => handleDeleteParticipation(project)}
                     >
                       <Group gap={1}>

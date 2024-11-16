@@ -15,6 +15,7 @@ const initialState = {
       activityStatusId: '',
       activityStatus: '',
       activityStatusColor: '',
+      founder: '',
       admin: '',
       joined_in: '',
       yearLeftTheProject: '',

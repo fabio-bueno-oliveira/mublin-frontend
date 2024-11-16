@@ -115,7 +115,33 @@ export function project(state = initialState, action) {
     case projectTypes.GET_PROJECT_INFO_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        confirmed: '',
+        active: '',
+        leader: '',
+        id: '',
+        name: '',
+        oldName: '',
+        username: '',
+        picture: '',
+        created: '',
+        foundationYear: '',
+        endDate: '',
+        bio: '',
+        purpose: '',
+        spotifyUri: '',
+        typeId: '',
+        typeName: '',
+        genre1: '',
+        genre2: '',
+        genre3: '',
+        country: '',
+        region: '',
+        city: '',
+        labelShow: '',
+        labelText: '',
+        labelColor: '',
+        public: '',
       };
     case projectTypes.GET_PROJECT_INFO_SUCCESS:
       return {
@@ -149,7 +175,33 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        error: "A solicitação falhou"
+        error: "A solicitação falhou",
+        confirmed: '',
+        active: '',
+        leader: '',
+        id: '',
+        name: '',
+        oldName: '',
+        username: '',
+        picture: '',
+        created: '',
+        foundationYear: '',
+        endDate: '',
+        bio: '',
+        purpose: '',
+        spotifyUri: '',
+        typeId: '',
+        typeName: '',
+        genre1: '',
+        genre2: '',
+        genre3: '',
+        country: '',
+        region: '',
+        city: '',
+        labelShow: '',
+        labelText: '',
+        labelColor: '',
+        public: ''
       };
     case projectTypes.GET_PROJECT_ADMINACCESS_REQUEST:
       return {
@@ -177,32 +229,7 @@ export function project(state = initialState, action) {
         ...state,
         requesting: true,
         error: '',
-        members: [
-          {
-            id: '',
-            joinedIn: '',
-            leftIn: '',
-            name: '',
-            lastname: '',
-            username: '',
-            picture: '',
-            bio: '',
-            role1: '',
-            role2: '',
-            role3: '',
-            projectId: '',
-            projectName: '',
-            projectUsername: '',
-            statusId: '',
-            statusName: '',
-            statusIcon: '',
-            admin: '',
-            active: '',
-            leader: '',
-            touring: '',
-            confirmed: ''
-          }
-        ]
+        members: initialState.members
       };
     case projectTypes.GET_PROJECT_MEMBERS_SUCCESS:
       return {
@@ -215,64 +242,14 @@ export function project(state = initialState, action) {
         ...state,
         requesting: false,
         error: "A solicitação falhou",
-        members: [
-          {
-            id: '',
-            joinedIn: '',
-            leftIn: '',
-            name: '',
-            lastname: '',
-            username: '',
-            picture: '',
-            bio: '',
-            role1: '',
-            role2: '',
-            role3: '',
-            projectId: '',
-            projectName: '',
-            projectUsername: '',
-            statusId: '',
-            statusName: '',
-            statusIcon: '',
-            admin: '',
-            active: '',
-            leader: '',
-            touring: '',
-            confirmed: ''
-          }
-        ]
+        members: initialState.members
       };
     case projectTypes.RESET_PROJECT_MEMBERS:
       return {
         ...state,
         requesting: false,
         error: "",
-        members: [
-          {
-            id: '',
-            joinedIn: '',
-            leftIn: '',
-            name: '',
-            lastname: '',
-            username: '',
-            picture: '',
-            bio: '',
-            role1: '',
-            role2: '',
-            role3: '',
-            projectId: '',
-            projectName: '',
-            projectUsername: '',
-            statusId: '',
-            statusName: '',
-            statusIcon: '',
-            admin: '',
-            active: '',
-            leader: '',
-            touring: '',
-            confirmed: ''
-          }
-        ]
+        members: initialState.members
       };
     case projectTypes.GET_PROJECT_OPPORTUNITIES_REQUEST:
       return {
@@ -316,17 +293,7 @@ export function project(state = initialState, action) {
         ...state,
         requesting: false,
         error: "A solicitação falhou",
-        notes: [
-          {
-            id: '',
-            note: '',
-            created: '',
-            authorUsername: '',
-            authorName: '',
-            authorLastname: '',
-            authorPicture: ''
-          }
-        ]
+        notes: initialState.notes
       };
     case projectTypes.GET_PROJECT_EVENTS_REQUEST:
       return {
@@ -343,31 +310,7 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        events: [
-          {
-            id: '',
-            title: '',
-            description: '',
-            dateOpening: '',
-            eventHourStart: '',
-            dateEnd: '',
-            eventHourEnd: '',
-            picture: '',
-            authorName: '',
-            authorLastname: '',
-            authorUsername: '',
-            authorPicture: '',
-            city: '',
-            region: '',
-            typeId: '',
-            type: '',
-            placeId: '',
-            placeName: '',
-            purpose: '',
-            method: '',
-            price: ''
-          }
-        ],
+        events: initialState.events,
         error: "A solicitação falhou"
       };
     case projectTypes.GET_PROJECT_RELATED_REQUEST:
