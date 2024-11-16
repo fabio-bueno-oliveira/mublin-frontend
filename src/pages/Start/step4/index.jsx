@@ -5,7 +5,7 @@ import { searchInfos } from '../../../store/actions/search';
 import { userProjectsInfos } from '../../../store/actions/userProjects';
 import { miscInfos } from '../../../store/actions/misc';
 import { projectInfos } from '../../../store/actions/project';
-import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, NativeSelect, Radio, Avatar,  ActionIcon, Loader, rem } from '@mantine/core';
+import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, NativeSelect, Radio, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge, IconInfoCircle } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
@@ -441,9 +441,16 @@ function StartFourthStep () {
                   <Text size='13px' fw={500}>{project.name}</Text>
                   <Text size='11px' c="dimmed">{project.ptname}</Text>
                   <Text size='10px' c="dimmed">{project.workTitle}</Text>
-                  <ActionIcon variant="filled" color="red" size="xs" mt={4}>
-                    <IconX style={{ width: '70%', height: '70%' }} stroke={1.9} />
-                  </ActionIcon>
+                  <Anchor
+                    variant="text"
+                    c="red"
+                    fz="10px"
+                    href="#text-props"
+                  >
+                    <Group gap={1}>
+                      <IconX style={{ width: '9px', height: '9px' }} /> Remover
+                    </Group>
+                  </Anchor>
                 </Flex>
               </Flex>
             )}
