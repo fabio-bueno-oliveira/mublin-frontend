@@ -164,8 +164,6 @@ function StartFourthStep () {
     navigate('/home');
   }
 
-  console.log(167, joined_in)
-
   return (
     <>
       <HeaderWelcome />
@@ -239,7 +237,7 @@ function StartFourthStep () {
                         <Text size='10px' c='dimmed'>Fundado em {project.foundation_year} {project.end_year && ' | Encerrado em ' + project.end_year}</Text>
                       </Flex>
                     </Group>
-                    <Divider color='#202020' />
+                    <Divider />
                   </Container>
                 )}
               </ScrollArea>
