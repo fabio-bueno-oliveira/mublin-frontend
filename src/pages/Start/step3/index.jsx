@@ -187,7 +187,7 @@ function StartThirdStep () {
             label="Estilos musicais"
             description="Quais os principais estilos relacionados à sua atuação na música?"
             placeholder="Selecione o gênero/estilo"
-            onChange={(event) => addGenre(event.currentTarget.value)}
+            onChange={(e) => addGenre(e.currentTarget.value)}
             disabled={isAddingGenre || isDeletingGenre || genres.requesting}
             mb={!userGenres[0].id && 18}
           >
@@ -251,7 +251,7 @@ function StartThirdStep () {
             label="Atuação na música"
             description="Quais suas principais atividades na música?"
             placeholder="Selecione a atividade"
-            onChange={(event) => addRole(event.currentTarget.value)}
+            onChange={(e) => addRole(e.currentTarget.value)}
             data={[
               { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
               { group: 'Gestão, produção e outros', items: rolesListManagement },

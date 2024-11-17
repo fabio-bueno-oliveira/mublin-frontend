@@ -5,9 +5,9 @@ import { searchInfos } from '../../../store/actions/search';
 import { userProjectsInfos } from '../../../store/actions/userProjects';
 import { miscInfos } from '../../../store/actions/misc';
 import { projectInfos } from '../../../store/actions/project';
-import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, NativeSelect, Radio, Avatar,  ActionIcon, Loader, Anchor, Tooltip, rem } from '@mantine/core';
+import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge } from '@tabler/icons-react';
+import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -33,13 +33,13 @@ function StartFourthStep () {
   const project = useSelector(state => state.project);
 
   const rolesListMusicians = roles?.list
-    .filter(e => e.instrumentalist)
+    .filter(e => e.instrumentalist && e.appliesToProject)
     .map(role => ({ 
       label: role.name,
       value: String(role.id),
     }));
   const rolesListManagement = roles?.list
-    .filter(e => !e.instrumentalist)
+    .filter(e => !e.instrumentalist && e.appliesToProject)
     .map(role => ({ 
       label: role.name,
       value: String(role.id),
@@ -76,29 +76,21 @@ function StartFourthStep () {
     }
   )
 
-  const form = useForm({
-    mode: 'uncontrolled',
-    initialValues: {
-      email: '',
-      termsOfService: false,
-    },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-    },
-  });
-
   const [query, setQuery] = useState('')
   const [lastQuery, setLastQuery] = useState('')
 
   const handleSearchChange = () => {
-    if (query.length > 1 && query !== lastQuery) {
+    if (query.length > 1) {
       dispatch(searchInfos.getSearchProjectResults(query))
       setLastQuery(query)
     } else {
       alert("Digite ao menos 2 caracteres!");
     }
   }
+
+  const form = useForm({
+    mode: 'uncontrolled'
+  });
 
   const formSearch = useForm({
     mode: 'uncontrolled'
@@ -107,21 +99,23 @@ function StartFourthStep () {
   // campos do form para relacionar usuário a um projeto
   const [projectId, setProjectId] = useState('')
   const [active, setActive] = useState('1')
-  const [checkbox, setCheckbox] = useState(true)
+  const [checkbox, setCheckbox] = useState(false)
+  const [featured, setFeatured] = useState(true)
   const [status, setStatus] = useState('1')
-  const [main_role_fk, setMain_role_fk] = useState('')
-  const [joined_in, setJoined_in] = useState('')
-  const [left_in, setLeft_in] = useState(null)
-  const [portfolio, setPortfolio] = useState('0')
+  const [mainRole, setMainRole] = useState('')
+  const [joinedIn, setJoinedIn] = useState('')
+  const [leftIn, setLeftIn] = useState('')
 
   const handleCheckbox = (x) => {
-    setCheckbox(value => !value)
-    setLeft_in('')
+    setCheckbox(value => !value);
+    // setLeftIn('');
     if (x) {
-        setActive('0')
+      setLeftIn(joinedIn);
+      setActive('0')
     } else {
-        setActive('1')
-    }
+      setLeftIn('');
+      setActive('1')
+    };
   }
 
   const handleResultSelect = (result) => {
@@ -130,7 +124,7 @@ function StartFourthStep () {
     setModalProjectInfo(result.description)
     setModalProjectTitle(result.title)
     setModalFoundationYear(result.foundation_year)
-    setJoined_in(result.foundation_year)
+    setJoinedIn(result.foundation_year)
     setModalEndYear(result.end_year ? result.end_year : "")
     setModalProjectImage(result.image)
     setModalOpen(true)
@@ -152,9 +146,9 @@ function StartFourthStep () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + loggedUser.token
       },
-      body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: main_role_fk, joined_in: joined_in, left_in: left_in, leader: '0', confirmed: '2', admin: '0', portfolio: portfolio })
+      body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: mainRole, joined_in: joinedIn, left_in: leftIn, leader: '0', featured: featured, confirmed: '2', admin: '0', portfolio: '0' })
     }).then((response) => {
       //console.log(153, response)
       dispatch(userProjectsInfos.getUserProjects(user.id))
@@ -163,7 +157,7 @@ function StartFourthStep () {
     }).catch(err => {
       console.error(err)
       alert("Ocorreu um erro ao criar o projeto. Tente novamente em alguns minutos.")
-      setModalOpen(false)
+      // setModalOpen(false)
     })
   }
 
@@ -221,7 +215,7 @@ function StartFourthStep () {
               mt={10}
               onClick={() => setModalNewProjectOpen(true)}
             >
-              cadastre um novo projeto
+              cadastre um projeto
             </Button>
           </Group>
         </Center>
@@ -259,12 +253,23 @@ function StartFourthStep () {
                     <Group 
                       gap={7} 
                       py={7} 
-                      onClick={() => handleResultSelect(project)} 
-                      style={{cursor: 'pointer'}}
+                      onClick={
+                        !userProjects.list.some(y => y.projectid === project.id) ?
+                        () => handleResultSelect(project) : undefined
+                      } 
+                      style={!userProjects.list.some(y => y.projectid === project.id) ? {cursor: 'pointer'} : undefined}
                     >
                       <Avatar src={project.image} />
                       <Flex direction={'column'}>
-                        <Text size='sm' fw={500}>{project.title}</Text>
+                        <Text size='sm' fw={500}>
+                          {project.title} 
+                          {console.log(266, project)}
+                          {userProjects.list.some(y => y.projectid === project.id) && 
+                            <ThemeIcon size='xs' radius="xl" color="violet" ml={6}>
+                              <IconCheck style={{ width: '70%', height: '70%' }} stroke={3} />
+                            </ThemeIcon>
+                          }
+                        </Text>
                         <Text size='xs'>{project.description}</Text>
                         <Text size='10px' c='dimmed'>Fundado em {project.foundation_year} {project.end_year && ' | Encerrado em ' + project.end_year}</Text>
                       </Flex>
@@ -355,30 +360,39 @@ function StartFourthStep () {
         centered
         size={'md'}
       >
-        <Center mb={4}>
-          <Avatar src={modalProjectImage} size="lg" />
+        <Center mb={7}>
+          {/* <Avatar src={modalProjectImage} size="lg" /> */}
+          <Image 
+            src={modalProjectImage} 
+            radius="md" 
+            h={100}
+            w="auto"
+            fit="contain" 
+          />
         </Center>
+        <Text size='xs' ta='center'>{modalProjectInfo}</Text>
+        <Text size='10px' ta='center' c='dimmed' mb={8} mt={4}>
+          {'Formada em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
+        </Text>
+        <Divider label="Integrantes cadastrados:" labelPosition="center" />
         {!project.requesting && 
-          <Group justify="center" gap={7} mb={5} mt={8}>
+          <Group justify="center" gap={7} mb={7}>
             {members.map((member, key) => 
-              <Tooltip label={`${member.name} ${member.lastname}`} key={key}>
+              <Flex key={key} direction='column' align='center'>
                 <Avatar 
-                  size='xs' 
+                  size='sm' 
                   src={avatarCDNPath+member.id+'/'+member.picture}
                 />
-              </Tooltip>
+                <Text size='10px' mt={5} c='dimmed'>{member.name}</Text>
+              </Flex>
             )}
           </Group>
         }
-        <Text size='xs' ta='center'>{modalProjectInfo}</Text>
-        <Text size='xs' ta='center' c='dimmed' mb={16}>
-          {'Formada em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
-        </Text>
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
+        <Divider mb={7} />
           <Radio.Group
             name="favoriteFramework"
             label="Qual é (ou foi) sua ligação com este projeto?"
-            value={"1"}
+            value={status}
             mb={10}
           >
             <Group mt="xs">
@@ -386,12 +400,13 @@ function StartFourthStep () {
                 color='violet' 
                 value="1" 
                 label="Integrante oficial"
-                checked 
+                onChange={(event) => setStatus(event.currentTarget.value)} 
               />
               <Radio 
                 color='violet' 
-                value="0"
-                label={<Group gap={2}><IconIdBadge style={{ width: rem(18), height: rem(18) }} /> Sideman/Contratado</Group>}  
+                value="2"
+                label={<Group gap={2}><IconIdBadge2 style={{ width: rem(18), height: rem(18) }} /> Contratado</Group>}
+                onChange={(event) => setStatus(event.currentTarget.value)}  
               />
             </Group>
           </Radio.Group>
@@ -405,38 +420,51 @@ function StartFourthStep () {
               { group: 'Gestão, produção e outros', items: rolesListManagement },
               { group: 'Instrumentos', items: rolesListMusicians },
             ]}
+            value={mainRole}
+            onChange={(e) => setMainRole(e.currentTarget.value)}
           />
           <Grid>
             <Grid.Col span={6}>
               <NumberInput
-                label="Entrei em"
+                label="Entrei em:"
+                description={'(entre ' + modalProjectFoundationYear + ' e ' + (modalProjectEndYear ? modalProjectEndYear : currentYear) + ')'}
                 mb={5}
                 defaultValue={modalProjectFoundationYear}
-                value={joined_in}
-                onChange={setJoined_in}
+                value={joinedIn}
+                onChange={(_value) => { 
+                  setJoinedIn(_value); 
+                  setLeftIn(_value);
+                }}
                 min={modalProjectFoundationYear} 
-                max={modalProjectEndYear}
+                max={modalProjectEndYear ? modalProjectEndYear : currentYear}
               />
             </Grid.Col>
             <Grid.Col span={6}>
               {modalProjectEndYear ? (
                 <NumberInput
-                  label="Deixei o projeto em"
+                  label="Deixei o projeto em:"
+                  description={'entre ' + joinedIn + ' e ' + modalProjectEndYear + ')'}
                   mb={5}
                   defaultValue={modalProjectFoundationYear}
-                  value={left_in}
-                  onChange={setLeft_in}
-                  min={modalProjectFoundationYear} 
+                  value={leftIn}
+                  onChange={(_value) => { 
+                    setLeftIn(_value); 
+                  }}
+                  min={joinedIn} 
                   max={modalProjectEndYear}
+                  disabled={checkbox ? true : false}
                 />
               ) : (
                 <NumberInput
                   label="Deixei o projeto em"
+                  description={'(entre ' + joinedIn + ' e ' + currentYear + ')'}
                   mb={5}
                   defaultValue={modalProjectFoundationYear}
-                  value={left_in}
-                  onChange={setLeft_in}
-                  min={modalProjectFoundationYear} 
+                  value={leftIn}
+                  onChange={(_value) => { 
+                    setLeftIn(_value); 
+                  }}
+                  min={joinedIn} 
                   max={currentYear} 
                   disabled={checkbox ? true : false}
                 />
@@ -451,13 +479,18 @@ function StartFourthStep () {
               ? 'Estive ativo até o final do projeto' 
               : 'Estou ativo atualmente neste projeto'
             } 
-            // onChange={() => handleCheckbox(checkbox)}
             checked={checkbox}
-            // onChange={(event) => setChecked(event.currentTarget.checked)}
             onChange={() => handleCheckbox(checkbox)}
           />
+          <Checkbox
+            mt={8}
+            color="yellow"
+            label={'Definir como um dos meus projetos principais'} 
+            checked={featured}
+            onChange={() => setFeatured(value => !value)}
+          />
           <Alert variant="light" color="yellow" mt={16} p={'xs'}>
-            <Text size="xs">Sua participação ficará pendente até que o(s) líder(es) deste projeto aprovem sua solicitação</Text>
+            <Text size="xs">Sua participação ficará pendente até que um dos administradores do projeto aprove sua solicitação</Text>
           </Alert>
           <Group justify="flex-end" mt="md">
             <Button 
@@ -469,13 +502,14 @@ function StartFourthStep () {
             <Button 
               type="submit" 
               color='violet'
-              onClick={handleSubmitParticipation}
+              onClick={() => handleSubmitParticipation()}
               loading={isLoading}
+              disabled={!joinedIn || !mainRole || !status}
             >
-              Confirmar
+              Solicitar aprovação
             </Button>
           </Group>
-        </form>
+
       </Modal>
       <Modal 
         title={`Sair do projeto ${modalDeleteData.name}?`}
@@ -523,6 +557,11 @@ function StartFourthStep () {
                     <Text size='13px' fw={500}>{project.name}</Text>
                     <Text size='11px' c="dimmed">{project.ptname}</Text>
                     <Text size='10px' c="dimmed">{project.workTitle}</Text>
+                    {project.confirmed === 2 && 
+                      <Group gap={1} mt={3} mb={1}>
+                        <IconClock style={{ width: '9px', height: '9px' }} stroke={3} /> <Text size='10px'>Aguardando aprovação</Text>
+                      </Group>
+                    }
                     <Anchor
                       variant="text"
                       c="red"

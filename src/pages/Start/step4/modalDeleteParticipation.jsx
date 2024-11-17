@@ -35,7 +35,7 @@ function ModalDeleteParticipationContent ({
       </Flex>
       <Divider my="sm" label="Administradores:" labelPosition="left" />
       {adminsModalDelete.length ? (
-        <Group>
+        <Group gap={9}>
           {adminsModalDelete.map((admin, key) => 
             <Flex key={key} gap={3}>
               <Avatar size='xs' src={admin.userPicture ? `${avatarCDNPath}${admin.userId}/${admin.userPicture}` : undefined} />
