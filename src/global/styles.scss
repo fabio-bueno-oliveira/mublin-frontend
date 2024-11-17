@@ -22,7 +22,7 @@
 .mublinLogo {
   text-decoration: none;
 
-  h3 {
+  h3,h2 {
     font-optical-sizing: auto;
     font-weight: 800!important;
   }
@@ -33,7 +33,7 @@
     background-color: rgb(14, 14, 14);
 
     .mublinLogo {
-      h3 {
+      h3,h2 {
         color: white;
       }
     }
@@ -46,7 +46,7 @@
     background-color:rgb(247, 247, 248);
 
     .mublinLogo {
-      h3 {
+      h3,h2 {
         color: black;
       }
     }

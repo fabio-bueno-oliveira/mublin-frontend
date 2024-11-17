@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { searchInfos } from '../../../store/actions/search';
+import { userInfos } from '../../../store/actions/user';
 import { userProjectsInfos } from '../../../store/actions/userProjects';
 import { miscInfos } from '../../../store/actions/misc';
 import { projectInfos } from '../../../store/actions/project';
-import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
+import { usernameCheckInfos } from '../../../store/actions/usernameCheck';
+import {IKUpload} from "imagekitio-react";
+import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Textarea, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock } from '@tabler/icons-react';
-import { useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery, useDebouncedCallback  } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 import useEmblaCarousel from 'embla-carousel-react';
 import ModalDeleteParticipationContent from './modalDeleteParticipation';
@@ -31,6 +34,7 @@ function StartFourthStep () {
   const searchProject = useSelector(state => state.searchProject);
   const roles = useSelector(state => state.roles);
   const project = useSelector(state => state.project);
+  const projectUsernameAvailability = useSelector(state => state.projectUsernameCheck);
 
   const rolesListMusicians = roles?.list
     .filter(e => e.instrumentalist && e.appliesToProject)
@@ -76,6 +80,11 @@ function StartFourthStep () {
     }
   )
 
+  // Modal para cadastro de imagem do novo projeto cadastrado
+  const [modalNewProjectPictureOpen, setModalNewProjectPictureOpen] = useState(false);
+  const [pictureIsLoading, SetPictureIsLoading] = useState(false);
+  const [newProjectPicture, setNewProjectPicture] = useState('');
+
   const [query, setQuery] = useState('')
   const [lastQuery, setLastQuery] = useState('')
 
@@ -86,6 +95,41 @@ function StartFourthStep () {
     } else {
       alert("Digite ao menos 2 caracteres!");
     }
+  }
+
+  const handleTypeChange = (value) => {
+    setType(value)
+    if (value === 7) {
+      setUserStatus('3')
+    } else {
+      setUserStatus('1')
+    }
+  }
+
+  const checkUsername = useDebouncedCallback(async (string) => {
+    if (string.length) {
+      dispatch(usernameCheckInfos.checkProjectUsernameByString(string))
+    }
+  }, 800);
+
+  // Campos do form de cadastro de projeto
+  const [projectName, setProjectName] = useState('')
+  const [projectUserName, setProjectUserName] = useState('')
+  const [foundationYear, setFoundationYear] = useState(currentYear)
+  const [checkboxProjectActive, setCheckboxProjectActive] = useState(true)
+  const [endYear, setEndYear] = useState(null)
+  const [bio, setBio] = useState('')
+  const [type, setType] = useState('2')
+  const [kind, setKind] = useState('1')
+  const [npMain_role_fk, setNpMain_role_fk] = useState('')
+  const [publicProject, setPublicProject] = useState('1')
+  const [portfolioNewProject, setPortfolioNewProject] = useState('0')
+  const [checkboxNewProjectFeatured, setCheckboxNewProjectFeatured] = useState(true)
+  const [userStatus, setUserStatus] = useState('1')
+  const [idNewProject, setIdNewProject] = useState('')
+
+  const handleChangeProjectUserName = (value) => {
+    setProjectUserName(value.replace(/[^A-Z0-9]/ig, "").toLowerCase())
   }
 
   const form = useForm({
@@ -118,6 +162,53 @@ function StartFourthStep () {
     };
   }
 
+  const handleCheckboxProjectActive = (x) => {
+    setCheckboxProjectActive(value => !value)
+    if (x) {
+        setEndYear(foundationYear)
+    } else {
+        setEndYear('')
+    }
+  }
+
+  // Update project avatar picture filename in bd
+  const updatePicture = (projectId, userId, value) => {
+    SetPictureIsLoading(true)
+    fetch('https://mublin.herokuapp.com/project/'+projectId+'/picture', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + loggedUser.token
+      },
+      body: JSON.stringify({userId: userId, picture: value})
+    }).then((response) => {
+        response.json().then((response) => {
+          // console.log(response)
+          SetPictureIsLoading(false)
+          setNewProjectPicture(response.picture)
+        })
+      }).catch(err => {
+        SetPictureIsLoading(false)
+        console.error(err)
+    })
+  };
+
+  // Image Upload to ImageKit.io
+  const userAvatarPath = "/projects/"
+  const [pictureFilename, setPictureFilename] = useState('')
+
+  const onUploadError = err => {
+      alert("Ocorreu um erro ao enviar a imagem. Tente novamente em alguns minutos.");
+  };
+
+  const onUploadSuccess = res => {
+      let n = res.filePath.lastIndexOf('/');
+      let fileName = res.filePath.substring(n + 1);
+      updatePicture(idNewProject,user.id,fileName)
+      setPictureFilename(fileName)
+  };
+
   const handleResultSelect = (result) => {
     dispatch(projectInfos.getProjectMembers(result.username));
     setProjectId(result.id)
@@ -125,6 +216,7 @@ function StartFourthStep () {
     setModalProjectTitle(result.title)
     setModalFoundationYear(result.foundation_year)
     setJoinedIn(result.foundation_year)
+    setLeftIn(result.foundation_year)
     setModalEndYear(result.end_year ? result.end_year : "")
     setModalProjectImage(result.image)
     setModalOpen(true)
@@ -150,7 +242,6 @@ function StartFourthStep () {
       },
       body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: mainRole, joined_in: joinedIn, left_in: leftIn, leader: '0', featured: featured, confirmed: '2', admin: '0', portfolio: '0' })
     }).then((response) => {
-      //console.log(153, response)
       dispatch(userProjectsInfos.getUserProjects(user.id))
       setIsLoading(false)
       setModalOpen(false)
@@ -183,12 +274,79 @@ function StartFourthStep () {
     })
   }
 
-  const goToStep3 = () => {
-    navigate('/start/step3');
+  const handleSubmitParticipationToNewProject = (newProjectUserId, newProjectProjectId, newProjectUserStatus, newProjectMain_role_fk) => {
+    setIsLoading(true)
+    fetch('https://mublin.herokuapp.com/user/add/project', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({ userId: newProjectUserId, projectId: newProjectProjectId, active: '1', status: newProjectUserStatus, main_role_fk: newProjectMain_role_fk, joined_in: currentYear, left_in: null, leader: '1', featured: checkboxNewProjectFeatured, confirmed: '1', admin: '1', portfolio: portfolioNewProject })
+    }).then((response) => {
+        dispatch(userProjectsInfos.getUserProjects(loggedUser.id))
+        setIsLoading(false)
+        setModalNewProjectOpen(false)
+        setModalNewProjectPictureOpen(true)
+    }).catch(err => {
+        console.error(err)
+        alert("Ocorreu um erro ao te relacionar ao projeto criado. Use a busca para ingressar no projeto criado.")
+        setModalNewProjectOpen(false)
+    })
   }
 
-  const goToHome = () => {
-    navigate('/home');
+  const handleSubmitNewProject = () => {
+    setIsLoading(true);
+    fetch('https://mublin.herokuapp.com/project/create', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + loggedUser.token
+      },
+      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: projectName, projectUserName: projectUserName, foundation_year: foundationYear, end_year: endYear, bio: bio, type: type, kind: kind, public: publicProject })
+    })
+    .then(response => {
+        return response.json();
+    }).then(jsonResponse => {
+        setIsLoading(false);
+        setIdNewProject(jsonResponse.id)
+        handleSubmitParticipationToNewProject(loggedUser.id, jsonResponse.id, userStatus, npMain_role_fk)
+    }).catch (error => {
+        console.error(error)
+        setIsLoading(false);
+        alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.")
+        setModalNewProjectOpen(false)
+    })
+  }
+
+  const handleFormSubmit = () => {
+    setIsLoading(true)
+    let user = JSON.parse(localStorage.getItem('user'));
+    fetch('https://mublin.herokuapp.com/user/'+user.id+'/firstAccess', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + user.token
+      },
+      body: JSON.stringify({step: 0})
+    }).then((response) => {
+        response.json().then((response) => {
+          dispatch(userInfos.getInfo());
+          setTimeout(() => {
+            navigate('/home');
+          }, 400);
+        })
+      }).catch(err => {
+        setIsLoading(false)
+        console.error(err)
+    })
+  }
+
+  const goToStep3 = () => {
+    navigate('/start/step3');
   }
 
   return (
@@ -227,7 +385,7 @@ function StartFourthStep () {
               placeholder="Digite o nome do projeto/banda..."
               onChange={(e) => setQuery(e.target.value)}
               value={query}
-              variant="unstyled"
+              variant="default"
             />
             <ActionIcon 
               variant="transparent" 
@@ -263,7 +421,6 @@ function StartFourthStep () {
                       <Flex direction={'column'}>
                         <Text size='sm' fw={500}>
                           {project.title} 
-                          {console.log(266, project)}
                           {userProjects.list.some(y => y.projectid === project.id) && 
                             <ThemeIcon size='xs' radius="xl" color="violet" ml={6}>
                               <IconCheck style={{ width: '70%', height: '70%' }} stroke={3} />
@@ -298,59 +455,142 @@ function StartFourthStep () {
         centered
         size={'md'}
       >
-        <form onSubmit={form.onSubmit((values) => console.log(values))}>
-          <TextInput
-            label="Nome do projeto"
-            placeholder="Ex: Viajantes do Espaço"
-            mb={5}
-            key={form.key('name')}
-            {...form.getInputProps('name')}
-          />
-          <NativeSelect
-            label="Tipo do projeto"
-            placeholder="Escolha o Estado"
-            mb={5}
-          >
-            <option value='2'>Banda</option>
-            <option value='3'>Projeto</option>
-            <option value='1'>Artista Solo</option>
-            <option value='8'>DJ</option>
-            <option value='4'>Duo</option>
-            <option value='5'>Trio</option>
-            <option value='7'>Ideia</option>
-          </NativeSelect>
-          <NativeSelect
-            label="Conteúdo"
-            mb={5}
-          >
-            <option value='1'>Autoral</option>
-            <option value='2'>Cover</option>
-            <option value='3'>Autoral + Cover</option>
-          </NativeSelect>
-          <Radio.Group
-            name="favoriteFramework"
-            label="Visibilidade"
-            description="Visibilidade do perfil no Mublin"
-            value={"1"}
-          >
-            <Group mt="xs">
-              <Radio 
-                color='violet' 
-                value="1" 
-                label={<Group gap={2}><IconWorld style={{ width: rem(18), height: rem(18) }} /> Público</Group>} 
-                checked 
-              />
-              <Radio 
-                color='violet' 
-                value="0"
-                label={<Group gap={2}><IconLock style={{ width: rem(18), height: rem(18) }} /> Privado</Group>}  
-              />
-            </Group>
-          </Radio.Group>
-          <Group justify="flex-end" mt="md">
-            <Button type="submit" color='violet'>Cadastrar</Button>
+        <TextInput
+          label="Nome do projeto"
+          placeholder="Ex: Viajantes do Espaço"
+          mb={5}
+          value={projectName}
+          onChange={(e) => setProjectName(e.target.value)}
+        />
+        <TextInput
+          label="Username do projeto"
+          placeholder="Ex: viajantesdoexpaco"
+          description={"mublin.com/project/"+projectUserName}
+          mb={5}
+          value={projectUserName}
+          onChange={(e) => handleChangeProjectUserName(e.target.value)}
+          onKeyUp={e => {
+            checkUsername(e.target.value)
+          }}
+          leftSection={(projectUserName && projectUsernameAvailability.available) && <IconCheck size={20} color='green' />}
+          rightSection={projectUsernameAvailability?.requesting && <Loader size={20} />}
+          disabled={projectUsernameAvailability?.requesting}
+          error={(projectUserName && projectUsernameAvailability.requested &&  !projectUsernameAvailability.available) && "Username indisponível "}
+        />
+        <NumberInput
+          label="Ano de formação"
+          min={1800} 
+          max={currentYear}
+          error={foundationYear > currentYear && "O ano deve ser inferior ao atual"}
+          onChange={(_value) => setFoundationYear(_value)}
+          defaultValue={currentYear}
+          value={foundationYear}
+        />
+        <NumberInput
+          label="Ano de encerramento"
+          min={foundationYear} 
+          max={currentYear}
+          error={endYear > currentYear && "O ano deve ser inferior ao atual"}
+          onChange={(_value) => setEndYear(_value)}
+          defaultValue={currentYear}
+          disabled={checkboxProjectActive}
+          value={endYear}
+        />
+        <Checkbox
+          my={10}
+          color='violet'
+          label="Em atividade"
+          checked={checkboxProjectActive}
+          onChange={() => handleCheckboxProjectActive(checkboxProjectActive)}
+        />
+        <Textarea
+          label="Descrição sobre o projeto (opcional)"
+          error={bio.length === "200" && "A bio atingiu o limite de 200 caracteres"}
+          value={bio}
+          maxLength='220'
+          autosize
+          minRows={2}
+          maxRows={4}
+          onChange={(e) => setBio(e.target.value)}
+        />
+        <NativeSelect
+          label="Sua principal função no projeto"
+          mt={6}
+          data={[
+            { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
+            { group: 'Gestão, produção e outros', items: rolesListManagement },
+            { group: 'Instrumentos', items: rolesListMusicians },
+          ]}
+          value={npMain_role_fk}
+          onChange={(e) => setNpMain_role_fk(e.currentTarget.value)}
+        />
+        <NativeSelect
+          mt={6}
+          label="Tipo de projeto"
+          value={type}
+          onChange={(e) => {
+            handleTypeChange(e.currentTarget.value);
+          }}
+        >
+          <option value="">Selecione</option>
+          <option value='2'>Banda</option>
+          <option value='3'>Projeto</option>
+          <option value='1'>Artista Solo</option>
+          <option value='8'>DJ</option>
+          <option value='4'>Duo</option>
+          <option value='5'>Trio</option>
+          <option value='7'>Ideia no papel</option>
+        </NativeSelect>
+        <NativeSelect
+          mt={6}
+          label="Conteúdo principal"
+          value={kind}
+          onChange={(e) => {
+            setKind(e.currentTarget.value);
+          }}
+        >
+          <option value='1'>Autoral</option>
+          <option value='2'>Cover</option>
+          <option value='3'>Autoral + Cover</option>
+        </NativeSelect>
+        <Radio.Group
+          label="Visibilidade no Mublin"
+          value={publicProject}
+          mb={10}
+          mt={6}
+        >
+          <Group mt="xs">
+            <Radio 
+              color='violet' 
+              value="1" 
+              label={<Group gap={2}><IconWorld style={{ width: rem(18), height: rem(18) }} /> Público</Group>} 
+              onChange={() => setPublicProject('1')} 
+            />
+            <Radio 
+              color='violet' 
+              value="0"
+              label={<Group gap={2}><IconLock style={{ width: rem(18), height: rem(18) }} /> Privado</Group>}  
+              onChange={() => setPublicProject('0')}
+            />
           </Group>
-        </form>
+        </Radio.Group>
+        <Checkbox
+          my={10}
+          color='violet'
+          label='Definir como um dos meus projetos principais'
+          checked={checkboxNewProjectFeatured}
+          onChange={() => setCheckboxNewProjectFeatured(value => !value)}
+        />
+        <Group justify="flex-end" mt="md">
+          <Button variant='default' color='violet' onClick={() => setModalNewProjectOpen(false)} >Fechar</Button>
+          <Button 
+            color='violet'
+            onClick={handleSubmitNewProject}
+            loading={isLoading}
+          >
+            Cadastrar
+          </Button>
+        </Group>
       </Modal>
       <Modal 
         fullScreen={largeScreen ? false : true}
@@ -484,7 +724,7 @@ function StartFourthStep () {
           />
           <Checkbox
             mt={8}
-            color="yellow"
+            color='violet'
             label={'Definir como um dos meus projetos principais'} 
             checked={featured}
             onChange={() => setFeatured(value => !value)}
@@ -538,6 +778,65 @@ function StartFourthStep () {
           </Button>
         </Group>
       </Modal>
+      <Modal 
+        title={`Definir foto para ${projectName}?`}
+        opened={modalNewProjectPictureOpen} 
+        onClose={() => setModalNewProjectPictureOpen(false)} 
+        centered
+        size={'sm'}
+      >
+        {!newProjectPicture ? (
+          <>
+            {/* <Image centered rounded src='https://ik.imagekit.io/mublin/tr:h-200,w-200/sample-folder/avatar-undefined_-dv9U6dcv3.jpg' size='small' className="mb-3" /> */}
+          </>
+        ) : (
+          <Center>
+            <Image 
+              src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/projects/'+newProjectPicture} 
+              radius="md" 
+              h={100}
+              w="auto"
+              fit="contain" 
+            />
+          </Center>
+        )}
+        <Center>
+          <div className="customFileUpload">
+            <IKUpload 
+              fileName={projectUserName+'_avatar.jpg'}
+              folder={userAvatarPath}
+              tags={["avatar"]}
+              useUniqueFileName={true}
+              isPrivateFile= {false}
+              onError={onUploadError}
+              onSuccess={onUploadSuccess}
+            />
+          </div>
+        </Center>
+        {pictureIsLoading &&
+          <Center>
+            <Loader />
+          </Center>
+        }
+        <Group mt="sm" justify="flex-end">
+          {!pictureFilename && 
+            <Button variant="default" onClick={() => setModalNewProjectPictureOpen(false)}>
+              Enviar depois
+            </Button>
+          }
+          {pictureFilename && 
+            <Button 
+              color='violet'
+              onClick={() => { 
+                dispatch(userProjectsInfos.getUserProjects(user.id));
+                setModalNewProjectPictureOpen(false);
+              }}
+            >
+              Concluir
+            </Button>
+          }
+        </Group>
+      </Modal>
       <footer className='onFooter step4Page'>
         {userProjects.list[0].id && 
           <Container size={'sm'} className="embla projects" ref={emblaRef1}>
@@ -580,8 +879,11 @@ function StartFourthStep () {
         }
         <Group justify="center" mt="lg">
           <Button variant='default' size='lg' onClick={() => goToStep3()}>Voltar</Button>
-          <Button color='violet' size='lg' onClick={() => goToHome()}>Concluir</Button>
+          <Button color='violet' size='lg' onClick={handleFormSubmit} loading={isLoading}>
+            Concluir
+          </Button>
         </Group>
+        {/* <Text size="xs" mt={10}>Você poderá ingressar ou criar projetos mais tarde se preferir</Text> */}
       </footer>
     </>
   );

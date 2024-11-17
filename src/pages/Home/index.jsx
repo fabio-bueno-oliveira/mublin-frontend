@@ -17,24 +17,23 @@ function Home () {
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
-  useEffect(() => {
-    dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
-    dispatch(eventsInfos.getUserEvents(loggedUser.id));
-  }, [loggedUser.id, dispatch]);
-
   const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
   // const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
 
-  if (user.first_access !== 0) {
-    navigate("/start/intro/")
-  }
+  useEffect(() => {
+    dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
+    dispatch(eventsInfos.getUserEvents(loggedUser.id));
+    if (user.success && user.first_access !== 0) {
+      navigate("/start/intro/")
+    }
+  }, [loggedUser.id, user.id, user.success]);
 
   return (
     <>
       <Header />
       <Container size={'lg'} mb={'md'} mt={largeScreen ? 20 : 0}>
-        {projects.requesting ? (
+        {projects.requesting || !user.success ? (
           <>
             <Skeleton height={110} radius="md" />
             <Skeleton height={58} mt={6} radius="md" />
@@ -44,12 +43,12 @@ function Home () {
           <>
             <Grid align="center">
               <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
-                <Title order={4} mb={1}>
+                <Title order={3} mb={1}>
                   Olá, {user?.name}
                 </Title>
-                <Title order={6} mb={4}>
+                <Text size="md" mb={4}>
                   Você está cadastrado em {projects?.list.length} projetos
-                </Title>
+                </Text>
                 {/* <Avatar.Group mb={16}>
                   {projects?.list.slice(0, 5).map((p) => (
                     <Tooltip label={p.name} key={p.id} withArrow>
