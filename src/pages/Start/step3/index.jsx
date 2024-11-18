@@ -4,7 +4,7 @@ import { userInfos } from '../../../store/actions/user';
 import { useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../../store/actions/misc';
 import { Container, Title, Text, NativeSelect, Stepper, Button, Group, Badge, Divider, rem } from '@mantine/core';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconX } from '@tabler/icons-react';
+import { IconArrowRight, IconArrowLeft, IconX } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 
@@ -175,10 +175,10 @@ function StartThirdStep () {
       <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
         <Stepper color='violet' active={2} size={largeScreen ? "sm" : "xs"} >
-          <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber2 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
         </Stepper>
         <Title ta="center" order={3} my={14}>Sua ligação com a música</Title>
         <Container size={'xs'} mt={10} mb={130}>
@@ -302,8 +302,22 @@ function StartThirdStep () {
       </Container>
       <footer className='onFooter'>
         <Group justify="center">
-          <Button variant="default" size='lg' onClick={() => goToStep2()}>Voltar</Button>
-          <Button color='violet' size='lg' onClick={() => goToStep4()}>Avançar</Button>
+          <Button 
+            variant="default"
+            size='lg'
+            leftSection={<IconArrowLeft size={14} />}
+            onClick={() => goToStep2()}
+          >
+            Voltar
+          </Button>
+          <Button 
+            color='violet'
+            size='lg'
+            rightSection={<IconArrowRight size={14} />}
+            onClick={() => goToStep4()}
+          >
+            Avançar
+          </Button>
         </Group>
       </footer>
     </>

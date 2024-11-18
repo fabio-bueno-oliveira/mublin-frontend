@@ -10,7 +10,7 @@ import { usernameCheckInfos } from '../../../store/actions/usernameCheck';
 import {IKUpload} from "imagekitio-react";
 import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Textarea, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconWorld, IconLock, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock } from '@tabler/icons-react';
+import { IconArrowLeft, IconWorld, IconLock, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback  } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -59,12 +59,18 @@ function StartFourthStep () {
 
   const [modalNewProjectOpen, setModalNewProjectOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  
+
+  const closeModalParticipation = () => {
+    setModalOpen(false);
+    setMainRole('');
+  }
+
   const [modalDeleteConfirmationOpen, setModalDeleteConfirmationOpen] = useState(false);
   const [modalDeleteData, setModalDeleteData] = useState({});
 
   const [modalProjectInfo, setModalProjectInfo] = useState('');
   const [modalProjectTitle, setModalProjectTitle] = useState('');
+  const [modalProjectType, setModalProjectType] = useState('');
   const [modalProjectImage, setModalProjectImage] = useState('');
   const [modalProjectFoundationYear, setModalFoundationYear] = useState('');
   const [modalProjectEndYear, setModalEndYear] = useState('');
@@ -214,6 +220,7 @@ function StartFourthStep () {
     setProjectId(result.id)
     setModalProjectInfo(result.description)
     setModalProjectTitle(result.title)
+    setModalProjectType(result.type)
     setModalFoundationYear(result.foundation_year)
     setJoinedIn(result.foundation_year)
     setLeftIn(result.foundation_year)
@@ -240,15 +247,16 @@ function StartFourthStep () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + loggedUser.token
       },
-      body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: mainRole, joined_in: joinedIn, left_in: leftIn, leader: '0', featured: featured, confirmed: '2', admin: '0', portfolio: '0' })
+      body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: mainRole, joined_in: joinedIn, left_in: leftIn ? leftIn : null, leader: '0', featured: featured, confirmed: '2', admin: '0', portfolio: '0' })
     }).then((response) => {
       dispatch(userProjectsInfos.getUserProjects(user.id))
+      setMainRole('')
       setIsLoading(false)
-      setModalOpen(false)
+      closeModalParticipation()
     }).catch(err => {
       console.error(err)
       alert("Ocorreu um erro ao criar o projeto. Tente novamente em alguns minutos.")
-      // setModalOpen(false)
+      // closeModalParticipation()
     })
   }
 
@@ -354,10 +362,10 @@ function StartFourthStep () {
       <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
         <Stepper color='violet' active={3} size={largeScreen ? "sm" : "xs"} >
-          <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber2 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
         </Stepper>
         <Title ta="center" order={3} mt={14} mb={1}>Seus projetos musicais</Title>
         <Text ta="center" order={5} mb={11}>
@@ -382,7 +390,7 @@ function StartFourthStep () {
             <Input
               w={320}
               size='lg'
-              placeholder="Digite o nome do projeto/banda..."
+              placeholder="Digite o nome do projeto..."
               onChange={(e) => setQuery(e.target.value)}
               value={query}
               variant="default"
@@ -420,7 +428,7 @@ function StartFourthStep () {
                       <Avatar src={project.image} />
                       <Flex direction={'column'}>
                         <Text size='sm' fw={500}>
-                          {project.title} 
+                          {project.title} {project.type && '(' + project.type + ')'} 
                           {userProjects.list.some(y => y.projectid === project.id) && 
                             <ThemeIcon size='xs' radius="xl" color="violet" ml={6}>
                               <IconCheck style={{ width: '70%', height: '70%' }} stroke={3} />
@@ -595,7 +603,7 @@ function StartFourthStep () {
       <Modal 
         fullScreen={largeScreen ? false : true}
         opened={modalOpen} 
-        onClose={() => setModalOpen(false)} 
+        onClose={() => closeModalParticipation()} 
         title={`Ingressar em ${modalProjectTitle}?`}
         centered
         size={'md'}
@@ -612,11 +620,11 @@ function StartFourthStep () {
         </Center>
         <Text size='xs' ta='center'>{modalProjectInfo}</Text>
         <Text size='10px' ta='center' c='dimmed' mb={8} mt={4}>
-          {'Formada em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
+          {modalProjectType && modalProjectType + ' · '} {'Formada em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
         </Text>
-        <Divider label="Integrantes cadastrados:" labelPosition="center" />
+        <Divider label="Integrantes cadastrados:" labelPosition="left" />
         {!project.requesting && 
-          <Group justify="center" gap={7} mb={7}>
+          <Group justify="flex-start" gap={7} mb={7}>
             {members.map((member, key) => 
               <Flex key={key} direction='column' align='center'>
                 <Avatar 
@@ -629,127 +637,126 @@ function StartFourthStep () {
           </Group>
         }
         <Divider mb={7} />
-          <Radio.Group
-            name="favoriteFramework"
-            label="Qual é (ou foi) sua ligação com este projeto?"
-            value={status}
-            mb={10}
-          >
-            <Group mt="xs">
-              <Radio 
-                color='violet' 
-                value="1" 
-                label="Integrante oficial"
-                onChange={(event) => setStatus(event.currentTarget.value)} 
-              />
-              <Radio 
-                color='violet' 
-                value="2"
-                label={<Group gap={2}><IconIdBadge2 style={{ width: rem(18), height: rem(18) }} /> Contratado</Group>}
-                onChange={(event) => setStatus(event.currentTarget.value)}  
-              />
-            </Group>
-          </Radio.Group>
-          <NativeSelect
-            label="Sua principal função neste projeto"
-            placeholder="Selecione"
-            mt={16}
-            mb={5}
-            data={[
-              { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
-              { group: 'Gestão, produção e outros', items: rolesListManagement },
-              { group: 'Instrumentos', items: rolesListMusicians },
-            ]}
-            value={mainRole}
-            onChange={(e) => setMainRole(e.currentTarget.value)}
-          />
-          <Grid>
-            <Grid.Col span={6}>
+        <Radio.Group
+          name="favoriteFramework"
+          label="Qual é (ou foi) sua ligação com este projeto?"
+          value={status}
+          mb={10}
+        >
+          <Group mt="xs">
+            <Radio 
+              color='violet' 
+              value="1" 
+              label="Integrante oficial"
+              onChange={(event) => setStatus(event.currentTarget.value)} 
+            />
+            <Radio 
+              color='violet' 
+              value="2"
+              label={<Group gap={2}><IconIdBadge2 style={{ width: rem(18), height: rem(18) }} /> Contratado</Group>}
+              onChange={(event) => setStatus(event.currentTarget.value)}  
+            />
+          </Group>
+        </Radio.Group>
+        <NativeSelect
+          label="Sua principal função neste projeto"
+          placeholder="Selecione"
+          mt={16}
+          mb={5}
+          data={[
+            { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
+            { group: 'Gestão, produção e outros', items: rolesListManagement },
+            { group: 'Instrumentos', items: rolesListMusicians },
+          ]}
+          value={mainRole}
+          onChange={(e) => setMainRole(e.currentTarget.value)}
+        />
+        <Grid>
+          <Grid.Col span={6}>
+            <NumberInput
+              label="Entrei em:"
+              description={'(entre ' + modalProjectFoundationYear + ' e ' + (modalProjectEndYear ? modalProjectEndYear : currentYear) + ')'}
+              mb={5}
+              defaultValue={modalProjectFoundationYear}
+              value={joinedIn}
+              onChange={(_value) => { 
+                setJoinedIn(_value); 
+                setLeftIn(_value);
+              }}
+              min={modalProjectFoundationYear} 
+              max={modalProjectEndYear ? modalProjectEndYear : currentYear}
+            />
+          </Grid.Col>
+          <Grid.Col span={6}>
+            {modalProjectEndYear ? (
               <NumberInput
-                label="Entrei em:"
-                description={'(entre ' + modalProjectFoundationYear + ' e ' + (modalProjectEndYear ? modalProjectEndYear : currentYear) + ')'}
+                label="Deixei o projeto em:"
+                description={'entre ' + joinedIn + ' e ' + modalProjectEndYear + ')'}
                 mb={5}
                 defaultValue={modalProjectFoundationYear}
-                value={joinedIn}
+                value={leftIn}
                 onChange={(_value) => { 
-                  setJoinedIn(_value); 
-                  setLeftIn(_value);
+                  setLeftIn(_value); 
                 }}
-                min={modalProjectFoundationYear} 
-                max={modalProjectEndYear ? modalProjectEndYear : currentYear}
+                min={joinedIn} 
+                max={modalProjectEndYear}
+                disabled={checkbox ? true : false}
               />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              {modalProjectEndYear ? (
-                <NumberInput
-                  label="Deixei o projeto em:"
-                  description={'entre ' + joinedIn + ' e ' + modalProjectEndYear + ')'}
-                  mb={5}
-                  defaultValue={modalProjectFoundationYear}
-                  value={leftIn}
-                  onChange={(_value) => { 
-                    setLeftIn(_value); 
-                  }}
-                  min={joinedIn} 
-                  max={modalProjectEndYear}
-                  disabled={checkbox ? true : false}
-                />
-              ) : (
-                <NumberInput
-                  label="Deixei o projeto em"
-                  description={'(entre ' + joinedIn + ' e ' + currentYear + ')'}
-                  mb={5}
-                  defaultValue={modalProjectFoundationYear}
-                  value={leftIn}
-                  onChange={(_value) => { 
-                    setLeftIn(_value); 
-                  }}
-                  min={joinedIn} 
-                  max={currentYear} 
-                  disabled={checkbox ? true : false}
-                />
-              )}
-            </Grid.Col>
-          </Grid>
-          <Checkbox
-            mt={10}
+            ) : (
+              <NumberInput
+                label="Deixei o projeto em"
+                description={'(entre ' + joinedIn + ' e ' + currentYear + ')'}
+                mb={5}
+                defaultValue={modalProjectFoundationYear}
+                value={leftIn}
+                onChange={(_value) => { 
+                  setLeftIn(_value); 
+                }}
+                min={joinedIn} 
+                max={currentYear} 
+                disabled={checkbox ? true : false}
+              />
+            )}
+          </Grid.Col>
+        </Grid>
+        <Checkbox
+          mt={10}
+          color='violet'
+          label={
+            modalProjectEndYear 
+            ? 'Estive ativo até o final do projeto' 
+            : 'Estou ativo atualmente neste projeto'
+          } 
+          checked={checkbox}
+          onChange={() => handleCheckbox(checkbox)}
+        />
+        <Checkbox
+          mt={8}
+          color='violet'
+          label={'Definir como um dos meus projetos principais'} 
+          checked={featured}
+          onChange={() => setFeatured(value => !value)}
+        />
+        <Alert variant="light" color="yellow" mt={16} p={'xs'}>
+          <Text size="xs">Sua participação ficará pendente até que um dos administradores do projeto aprove sua solicitação</Text>
+        </Alert>
+        <Group justify="flex-end" mt="md">
+          <Button 
+            variant='default' 
+            onClick={() => closeModalParticipation()}
+          >
+            Fechar
+          </Button>
+          <Button 
+            type="submit" 
             color='violet'
-            label={
-              modalProjectEndYear 
-              ? 'Estive ativo até o final do projeto' 
-              : 'Estou ativo atualmente neste projeto'
-            } 
-            checked={checkbox}
-            onChange={() => handleCheckbox(checkbox)}
-          />
-          <Checkbox
-            mt={8}
-            color='violet'
-            label={'Definir como um dos meus projetos principais'} 
-            checked={featured}
-            onChange={() => setFeatured(value => !value)}
-          />
-          <Alert variant="light" color="yellow" mt={16} p={'xs'}>
-            <Text size="xs">Sua participação ficará pendente até que um dos administradores do projeto aprove sua solicitação</Text>
-          </Alert>
-          <Group justify="flex-end" mt="md">
-            <Button 
-              variant='default' 
-              onClick={() => setModalOpen(false)}
-            >
-              Fechar
-            </Button>
-            <Button 
-              type="submit" 
-              color='violet'
-              onClick={() => handleSubmitParticipation()}
-              loading={isLoading}
-              disabled={!joinedIn || !mainRole || !status}
-            >
-              Solicitar aprovação
-            </Button>
-          </Group>
-
+            onClick={() => handleSubmitParticipation()}
+            loading={isLoading}
+            disabled={!joinedIn || !mainRole || !status}
+          >
+            Solicitar aprovação
+          </Button>
+        </Group>
       </Modal>
       <Modal 
         title={`Sair do projeto ${modalDeleteData.name}?`}
@@ -838,7 +845,7 @@ function StartFourthStep () {
         </Group>
       </Modal>
       <footer className='onFooter step4Page'>
-        {userProjects.list[0].id && 
+        {userProjects.list[0]?.id && 
           <Container size={'sm'} className="embla projects" ref={emblaRef1}>
             <div className="embla__container">
               {userProjects.list.map((project, key) =>
@@ -878,7 +885,14 @@ function StartFourthStep () {
           </Container>
         }
         <Group justify="center" mt="lg">
-          <Button variant='default' size='lg' onClick={() => goToStep3()}>Voltar</Button>
+          <Button 
+            variant='default'
+            size='lg'
+            leftSection={<IconArrowLeft size={14} />}
+            onClick={() => goToStep3()}
+          >
+            Voltar
+          </Button>
           <Button color='violet' size='lg' onClick={handleFormSubmit} loading={isLoading}>
             Concluir
           </Button>

@@ -5,7 +5,7 @@ import { userInfos } from '../../../store/actions/user';
 import { Container, Stepper, Group, Center, Title, Image, Button, Loader, rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
 import {IKUpload} from "imagekitio-react";
 import HeaderWelcome from '../../../components/header/welcome';
 
@@ -76,10 +76,10 @@ function StartFirstStep () {
       <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
         <Stepper color='violet' active={0} size={largeScreen ? "sm" : "xs"} >
-          <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber2 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
         </Stepper>
         <Title ta="center" order={3} my={14}>Defina sua foto de perfil</Title>
         <Center mt={30}>
@@ -138,7 +138,7 @@ function StartFirstStep () {
               onClick={() => goToStep2()}
               rightSection={<IconArrowRight size={14} />}
             >
-              Pular por enquanto
+              Pular
             </Button>
           )}
         </Group>

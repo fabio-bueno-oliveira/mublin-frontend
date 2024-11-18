@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Stepper, Grid, Group, Text, Title, Textarea, Select, Button, Loader, rem } from '@mantine/core';
+import { Container, Stepper, Grid, Modal, Box, Center, ScrollArea, Group, Text, Title, Textarea, Input, TextInput, Button, Anchor, Loader, Divider, rem } from '@mantine/core';
 import { NativeSelect } from '@mantine/core';
-import { IconNumber1, IconNumber2, IconNumber3, IconNumber4, IconArrowLeft, IconArrowRight, IconCheck } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconCheck, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 
@@ -17,6 +17,9 @@ function StartSecondStep () {
 
   const user = useSelector(state => state.user);
 
+  // Modal city select
+  const [modalCityOpen, setModalCityOpen] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -24,13 +27,17 @@ function StartSecondStep () {
   const [bio, setBio] = useState(user.bio);
   const [region, setRegion] = useState(user.region);
   const [city, setCity] = useState(user.city);
+  const [cityName, setCityName] = useState(user.city);
 
   useEffect(() => { 
     setGender(user.gender);
     setBio(user.bio ? user.bio : "");
     setRegion(user.region);
     setCity(user.city);
-    searchCity(user.cityName);
+    setCityName(user.cityName);
+    if (!user.region) {
+      setModalCityOpen(false);
+    }
   }, [user.id]);
 
   const regionOptions = [
@@ -94,21 +101,35 @@ function StartSecondStep () {
     })
   }
 
+  const handleSearchCity = (e, value) => {
+    e.preventDefault();
+    searchCity(value);
+    setNoCitySearchResults(false);
+  }
+
+  const selectCityOnModalList = (cityId, cityName) => {
+    setCity(cityId);
+    setCityName(cityName);
+    setModalCityOpen(false);
+  }
+
   const [queryCities, setQueryCities] = useState([]);
   const [citySearchIsLoading, setCitySearchIsLoading] = useState(false)
 
   const [searchValue, setSearchValue] = useState('');
-  const [lastSearchedCity, setLastSearchedCity] = useState('');
+  const [noCitySearchResults, setNoCitySearchResults] = useState(false);
+  // const [lastSearchedCity, setLastSearchedCity] = useState('');
 
-  const typeSearchValue = (query) => {
-    setSearchValue(query);
-    searchCity(query);
-  }
+  // const typeSearchValue = (query) => {
+  //   setSearchValue(query);
+  //   searchCity(query);
+  // }
 
   const searchCity = useDebouncedCallback(async (query) => {
-    if (query?.length > 1 && lastSearchedCity !== query) {
-      setLastSearchedCity(query);
+    if (query?.length > 1) {
+      // setLastSearchedCity(query);
       setCitySearchIsLoading(true);
+      setNoCitySearchResults(false);
       fetch('https://mublin.herokuapp.com/search/cities/'+query+'/'+region, {
         method: 'GET'
       })
@@ -120,11 +141,16 @@ function StartSecondStep () {
               setQueryCities(
                 result.map(e => { return { value: String(e.value), label: e.text }})
               );
-            };
+              setNoCitySearchResults(false)
+            } else {
+              setNoCitySearchResults(true);
+            }
             setCitySearchIsLoading(false);
           },
           (error) => {
+            console.log(error)
             setCitySearchIsLoading(false);
+            setNoCitySearchResults(true);
             alert("Ocorreu um erro ao tentar pesquisar a cidade");
         })
       }
@@ -139,13 +165,13 @@ function StartSecondStep () {
       <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
         <Stepper color='violet' active={1} size={largeScreen ? "sm" : "xs"} >
-          <Stepper.Step icon={<IconNumber1 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber2 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber3 style={{ width: rem(18), height: rem(18) }} />} />
-          <Stepper.Step icon={<IconNumber4 style={{ width: rem(18), height: rem(18) }} />} />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
+          <Stepper.Step />
         </Stepper>
         <Title ta="center" order={3} my={14}>Conte um pouco sobre você</Title>
-        <Container size={'xs'} mt={10} mb={130}>
+        <Container px={largeScreen ? undefined : 0} size={largeScreen ? 'xs' : 'lg'} mt={10} mb={130}>
           <NativeSelect
             size='md'
             label={<Group gap={2}>Gênero: {gender && <IconCheck size={16} color='green' />}</Group>}
@@ -166,7 +192,7 @@ function StartSecondStep () {
             label={<Group gap={2}>Bio (opcional): {bio && <IconCheck size={16} color='green' />}</Group>}
             description={"("+bio?.length+"/220)"}
             placeholder="Escreva pouco sobre você..."
-            value={bio}
+            value={bio ? bio : undefined}
             maxLength='220'
             autosize
             minRows={2}
@@ -183,6 +209,7 @@ function StartSecondStep () {
                 onChange={(e) => {
                   setRegion(e.currentTarget.value);
                   setSearchValue('');
+                  setNoCitySearchResults(false);
                   setCity('');
                   setQueryCities([]);
                 }}
@@ -195,7 +222,7 @@ function StartSecondStep () {
               </NativeSelect>
             </Grid.Col>
             <Grid.Col span={6}>
-              <Select
+              {/* <Select
                 size='md'
                 label={
                   <Group gap={2}>
@@ -214,7 +241,44 @@ function StartSecondStep () {
                 allowDeselect={false}
                 value={String(city)}
                 nothingFoundMessage="Nenhuma cidade encontrada..."
-              />
+              /> */}
+              {city ? ( 
+                <Input.Wrapper 
+                  label={
+                    <Group gap={2}>
+                      Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {city && <IconCheck size={16} color='green' />}
+                    </Group>
+                  }
+                >
+                  <Input 
+                    component="button" 
+                    size="md" 
+                    pointer
+                    onClick={() => setModalCityOpen(true)}
+                  >
+                    {cityName}
+                  </Input>
+                </Input.Wrapper>
+              ) : (
+                <Input.Wrapper 
+                  label={
+                    <Group gap={2}>
+                      Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {city && <IconCheck size={16} color='green' />}
+                    </Group>
+                  }
+                >
+                  <Input 
+                    component="button" 
+                    size="md" 
+                    pointer
+                    rightSection={region ? <IconSearch size={16} /> : undefined}
+                    onClick={() => setModalCityOpen(true)}
+                    disabled={!region}
+                  >
+                    {region ? "Selecione..." : undefined}
+                  </Input>
+                </Input.Wrapper>
+              )}
             </Grid.Col>
           </Grid>
         </Container>
@@ -223,8 +287,63 @@ function StartSecondStep () {
             Ocorreu um erro! Tente novamente em alguns instantes
           </Text>
         }
-        
       </Container>
+      <Modal 
+        title='Selecionar cidade'
+        opened={modalCityOpen} 
+        onClose={() => setModalCityOpen(false)} 
+        size={'sm'}
+      >
+        <Grid>
+          <Grid.Col span={7}>
+            <form onSubmit={(e) => handleSearchCity(e, searchValue)}>
+              <TextInput
+                placeholder="Digite e selecione..."
+                onChange={(e) => setSearchValue(e.target.value)}
+                value={searchValue}
+                mb={5}
+                data-autofocus
+              />
+            </form>
+          </Grid.Col>
+          <Grid.Col span={5}>
+            <Button color="violet" onClick={() => searchCity(searchValue)}>
+              Pesquisar
+            </Button>
+          </Grid.Col>
+        </Grid>
+        {citySearchIsLoading && 
+          <Center my={20}>
+            <Loader color="violet" size="sm" type="bars" />
+          </Center>
+        }
+        {!!(queryCities.length && !citySearchIsLoading) && 
+          <>
+            <Text size='xs' c='dimmed' mt={10} mb={10}>
+              {queryCities.length} {queryCities.length === 1 ? "cidade localizada" : "cidades localizadas"} 
+            </Text>
+            <ScrollArea h={170} type="always" offsetScrollbars>
+              {queryCities.map((city, key) =>
+                <Box key={key} py={3}>
+                  <Anchor 
+                    size='lg' 
+                    my={10} 
+                    onClick={() => selectCityOnModalList(city.value, city.label)}
+                  >
+                    {city.label}
+                  </Anchor>
+                  <Divider />
+                </Box>
+              )}
+            </ScrollArea>
+          </>
+        }
+        {noCitySearchResults &&
+          <Text size='xs' c='dimmed' mt={10} mb={10}>
+            Nenhuma cidade localizada a partir desta pesquisa no Estado escolhido
+          </Text>
+        }
+      </Modal>
       <footer className='onFooter'>
         <Group justify="center">
           <Button 

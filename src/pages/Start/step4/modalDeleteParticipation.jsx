@@ -8,8 +8,6 @@ function ModalDeleteParticipationContent ({
     myselfAdminModalDelete
 }) {
 
-  console.log(11, modalDeleteData.yearEnd)
-
   const avatarCDNPath = 'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/';
 
   return (
@@ -21,15 +19,15 @@ function ModalDeleteParticipationContent ({
         <Avatar size='sm' src={user?.picture ? `${avatarCDNPath}${user?.id}/${user?.picture}` : undefined} />
         {/* <Badge variant="filled" color="gray" size="xs">Administrador</Badge> */}
         <Text size='xs' fw={500}>
-          {!!modalDeleteData?.founder && 'Fundador, '}{modalDeleteData.role1}{modalDeleteData?.role2 && `, ${modalDeleteData?.role2}`}
+          {user.name} {user.lastname} - {!!modalDeleteData?.founder && 'Fundador, '}{modalDeleteData.role1}{modalDeleteData?.role2 && `, ${modalDeleteData?.role2}`} em {modalDeleteData.name}
         </Text>
         <Text size='11px'>
-          {modalDeleteData?.yearLeftTheProject && "Ex"} {modalDeleteData.workTitle}
+          {modalDeleteData?.yearLeftTheProject && "Ex"} {modalDeleteData.workTitle} {modalDeleteData.confirmed === 2 && "(aguardando aprovação)"}
         </Text>
         <Text size='11px'>
           Atividade: de {modalDeleteData?.joined_in} 
           {(!modalDeleteData?.yearLeftTheProject && !modalDeleteData.yearEnd) && ' até o momento'}
-          {(modalDeleteData?.yearLeftTheProject && !modalDeleteData.yearEnd) && ` até ${modalDeleteData?.yearLeftTheProject}`}
+          {(modalDeleteData?.yearLeftTheProject) && ` até ${modalDeleteData?.yearLeftTheProject}`}
           {(!modalDeleteData?.yearLeftTheProject && modalDeleteData.yearEnd) && ` até o encerramento em ${modalDeleteData.yearEnd}`}
         </Text>
       </Flex>

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Header from '../../components/header/public';
 import Footer from '../../components/footer/public';
 import { 
-  Alert, Container, Button, Group, Badge,
+  Grid, Alert, Container, Button, Group, Badge, Loader,
   Title, Text, Space, PasswordInput, TextInput
 } from '@mantine/core';
 import { useForm, isEmail, isNotEmpty, hasLength } from '@mantine/form';
@@ -89,36 +89,39 @@ function SignupPage () {
     return (
       <>
         <Header />
-        <Container size={420} my={40}>
+        <Container size={'xs'} my={40}>
           <Title ta="center" order={1}>
             Crie sua conta grátis
           </Title>
           <Text c="dimmed" size="md" ta="center" mt={5} mb={7}>
             Preencha os dados abaixo
           </Text>
-          <Space h="lg" />
+          <Space h="md" />
           <form onSubmit={form.onSubmit(handleSubmit)}>
-            <TextInput
-              size="lg"
-              mb="sm"
-              label="Nome"
-              placeholder="Informe seu nome"
-              key={form.key('name')}
-              {...form.getInputProps('name')}
-            />
-            <TextInput
-              size="lg"
-              mb="sm"
-              label="Sobrenome"
-              placeholder="Informe seu sobrenome"
-              key={form.key('lastname')}
-              {...form.getInputProps('lastname')}
-            />
+            <Grid mb='sm'>
+              <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                <TextInput
+                  size="lg"
+                  label="Nome"
+                  key={form.key('name')}
+                  {...form.getInputProps('name')}
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                <TextInput
+                  size="lg"
+                  label="Sobrenome"
+                  key={form.key('lastname')}
+                  {...form.getInputProps('lastname')}
+                />
+              </Grid.Col>
+            </Grid>
             <TextInput
               size="lg"
               label="Email"
               placeholder="seu@email.com"
               disabled={emailAvailability.requesting}
+              rightSection={emailAvailability.requesting && <Loader size={20} />}
               key={form.key('email')}
               {...form.getInputProps('email')}
               onKeyUp={e => {
@@ -137,12 +140,9 @@ function SignupPage () {
               size="lg"
               mt="md"
               label="Username"
-              description={
-                usernameAvailability.requesting ? 
-                `mublin.com/${usernameChoosen} (verificando disponibilidade...)`
-                : `mublin.com/${usernameChoosen}`
-              }
+              description={`mublin.com/${usernameChoosen}`}
               disabled={usernameAvailability.requesting}
+              rightSection={usernameAvailability.requesting && <Loader size={20} />}
               key={form.key('username')}
               {...form.getInputProps('username')}
               onKeyUp={e => {
@@ -151,7 +151,7 @@ function SignupPage () {
                 form.setFieldValue('username', e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase());
               }}
             />
-            {(usernameChoosen && usernameAvailability.available) && 
+            {(usernameChoosen?.length > 2 && usernameAvailability.available) && 
               <Badge 
                 leftSection={<IconCheck style={{ width: '12px', height: '12px' }} />} 
                 color="green"
@@ -167,21 +167,24 @@ function SignupPage () {
                 mt='xs'
               >Usuário indisponível!</Badge>
             }
-            <PasswordInput
-              size="lg"
-              mt="md"
-              mb="sm"
-              label="Senha"
-              key={form.key('password')}
-              {...form.getInputProps('password')}
-            />
-            <PasswordInput
-              size="lg"
-              mb="sm"
-              label="Confirme a senha"
-              key={form.key('confirmPassword')}
-              {...form.getInputProps('confirmPassword')}
-            />
+            <Grid mt='sm' mb='md'>
+              <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                <PasswordInput
+                  size="lg"
+                  label="Senha"
+                  key={form.key('password')}
+                  {...form.getInputProps('password')}
+                />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                <PasswordInput
+                  size="lg"
+                  label="Confirme a senha"
+                  key={form.key('confirmPassword')}
+                  {...form.getInputProps('confirmPassword')}
+                />
+              </Grid.Col>
+            </Grid>
             {(usernameChoosen && usernameAvailability.available === false) && 
               <Alert 
                 variant="light" 
@@ -202,7 +205,7 @@ function SignupPage () {
                 O email que você informou já está cadastrado.
               </Alert>
             }
-            <Group justify="flex-end" mt="md">
+            <Group justify="flex-end" mt="lg">
               <Button 
                 size="lg"
                 color='violet'

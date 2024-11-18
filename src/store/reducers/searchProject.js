@@ -8,6 +8,7 @@ const initialState = {
     {
       id: '', 
       title: '', 
+      type: '', 
       description: '', 
       username: '', 
       image: '', 
@@ -24,7 +25,8 @@ export function searchProject(state = initialState, action) {
       return {
         ...state,
         success: false,
-        requesting: true
+        requesting: true,
+        results: initialState.results
       };
     case searchTypes.GET_SEARCHPROJECT_RESULTS_SUCCESS:
       return {
@@ -41,17 +43,7 @@ export function searchProject(state = initialState, action) {
         requesting: false,
         success: false,
         error: 'Nenhum projeto encontrado',
-        results: [
-          {
-            id: '', 
-            title: '', 
-            description: '', 
-            username: '', 
-            image: '', 
-            foundation_year: '', 
-            end_year: ''
-          }
-        ]
+        results: initialState.results
       };
     default:
       return state
