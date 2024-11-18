@@ -28,6 +28,7 @@ function StartFourthStep () {
   let loggedUser = JSON.parse(localStorage.getItem('user'));
   const currentYear = new Date().getFullYear();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const user = useSelector(state => state.user);
   const userProjects = useSelector(state => state.userProjects);
@@ -261,7 +262,7 @@ function StartFourthStep () {
   }
 
   const deleteProject = (userProjectParticipationId) => {
-    setIsLoading(true)
+    setIsDeleting(true)
     fetch('https://mublin.herokuapp.com/user/delete/project', {
         method: 'DELETE',
         headers: {
@@ -273,11 +274,11 @@ function StartFourthStep () {
     }).then((response) => {
         // console.log(response);
         dispatch(userProjectsInfos.getUserProjects(loggedUser.id));
-        setIsLoading(false);
+        setIsDeleting(false);
         setModalDeleteConfirmationOpen(false);
     }).catch(err => {
         console.error(err);
-        setIsLoading(false);
+        setIsDeleting(false);
         alert("Ocorreu um erro ao remover o seu projeto. Tente novamente em alguns minutos.");
     })
   }
@@ -779,7 +780,7 @@ function StartFourthStep () {
             color="red" 
             onClick={() => deleteProject(modalDeleteData.id)} 
             disabled={(myselfAdminModalDelete?.length === 1 && adminsModalDelete?.length === 1)}
-            loading={isLoading}
+            loading={isDeleting}
           >
             Confirmar
           </Button>
