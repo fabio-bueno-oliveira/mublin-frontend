@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Title, Text, Button, Alert  } from '@mantine/core';
+import { Container, Center, Title, Text, Button, Alert, Image  } from '@mantine/core';
 import { IconArrowRight, IconMoodSmile  } from '@tabler/icons-react';
 import HeaderWelcome from '../../../components/header/welcome';
 
@@ -13,6 +13,8 @@ function StartFirstStep () {
   const goToStep1 = () => {
     navigate('/start/step1');
   }
+
+  const imageAstronaut = 'https://ik.imagekit.io/mublin/misc/astronaut-musician-3.png?updatedAt=1731982735493';
   
   const [showAlertSavedData, setShowAlertSavedData] = useState(false);
 
@@ -33,15 +35,22 @@ function StartFirstStep () {
             <Text size={'sm'}>Olá! Estamos felizes que tenha dado uma chance de conhecer nossa plataforma. O Mublin foi desenvolvido para ser uma comunidade focada na vida de quem trabalha com música. Estamos em fase inicial de lançamento e buscando evoluir diariamente. Esperamos que goste do Mublin!</Text>
           </Blockquote>
         </Center> */}
+        <Center>
+          <Image 
+            src={imageAstronaut} 
+            h={180}
+            fit={'contain'}
+          />
+        </Center>
         {showAlertSavedData && 
           <Alert 
             variant="light" 
             color="violet" 
-            title="Identificamos que lguns dados do seu cadastro já foram preenchidos anteriormente"
+            title="Aguns dados do seu cadastro já foram preenchidos anteriormente"
             icon={<IconMoodSmile />}
             mt={50}
           >
-            <Text size='sm' mb={10}>Oba! Você já iniciou os primeiros passos anteriormente, ou alguns dos seus dados foram previamente cadastrados por outro usuário para facilitar sua jornada!</Text>
+            <Text size='sm' mb={10}>Oba! Você já iniciou os primeiros passos anteriormente, ou alguns dos seus dados foram previamente cadastrados por outro usuário para facilitar sua jornada</Text>
           </Alert>
         }
       </Container>

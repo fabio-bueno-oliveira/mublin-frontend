@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation  } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,8 +18,7 @@ import {
 } from '@mantine/core';
 import { useForm, isNotEmpty } from '@mantine/form';
 import Header from '../../components/header/public';
-import { IconCheck } from '@tabler/icons-react';
-import { notifications } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 function LoginPage () {
 
@@ -32,10 +31,12 @@ function LoginPage () {
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
+      email: '',
       password: ''
     },
 
     validate: {
+      email: isNotEmpty('Informe o email ou usuário'),
       password: isNotEmpty('Informe a senha')
     },
   });
@@ -44,24 +45,13 @@ function LoginPage () {
   const loggedIn = useSelector(state => state.authentication.loggedIn);
   const error = useSelector(state => state.authentication.error);
 
-  useEffect(() => {
-    if (error) {
-      notifications.show({
-        title: 'Ops!',
-        message: "Login inválido",
-        autoClose: '4000',
-        color: "red"
-      })
-    }
-  }, [error]);
-
   const handleSubmit = (values) => {
     dispatch(userActions.login(values.email, values.password));
   }
 
   return (
       <>
-      <Header />
+      <Header page={'login'} />
       <Container size={420} my={40}>
         {urlInfo === "firstAccess" &&
           <Alert 
@@ -70,9 +60,16 @@ function LoginPage () {
             title="Cadastro efetuado com sucesso!" 
             icon={<IconCheck />}
             mb='md'
-          >
-            Para acessar, digite abaixo os dados de login
-          </Alert>
+          />
+        }
+        {error &&
+          <Alert 
+            variant="light" 
+            color="red" 
+            icon={<IconX />}
+            mb='md'
+            title="Login inválido"
+          />
         }
         <Title ta="center" order={1}>
           Login
@@ -88,8 +85,8 @@ function LoginPage () {
         <Space h="lg" />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput 
-            label="Nome de usuário ou email" 
-            placeholder="seu@email.com" 
+            label="Email ou nome de usuário" 
+            placeholder="seu@email.com ou usuário" 
             size="lg"
             autoFocus
             key={form.key('email')}
@@ -104,7 +101,7 @@ function LoginPage () {
             {...form.getInputProps('password')}
           />
           <Group justify="space-between" mt="lg">
-            <Checkbox defaultChecked label="Lembrar meus dados" />
+            <Checkbox defaultChecked label="Lembrar meus dados" color="violet" />
             <Anchor component="button" size="md">
               Esqueci a senha
             </Anchor>

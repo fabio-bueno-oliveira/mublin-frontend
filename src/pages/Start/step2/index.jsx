@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Stepper, Grid, Modal, Box, Center, ScrollArea, Group, Text, Title, Textarea, Input, TextInput, Button, Anchor, Loader, Divider, rem } from '@mantine/core';
+import { Container, Stepper, Grid, Modal, Box, Center, ScrollArea, Group, Text, Title, Textarea, Input, TextInput, Button, Anchor, Loader, Divider } from '@mantine/core';
 import { NativeSelect } from '@mantine/core';
 import { IconArrowLeft, IconArrowRight, IconCheck, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
@@ -17,24 +17,34 @@ function StartSecondStep () {
 
   const user = useSelector(state => state.user);
 
-  // Modal city select
   const [modalCityOpen, setModalCityOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const [gender, setGender] = useState(user.gender);
-  const [bio, setBio] = useState(user.bio);
-  const [region, setRegion] = useState(user.region);
-  const [city, setCity] = useState(user.city);
-  const [cityName, setCityName] = useState(user.city);
+  const [initialValues, setInitialValues] = useState({
+    gender: user.gender, bio: user.bio, region: user.region, city: user.city, cityName: user.cityName
+  })
+
+  const [formValues, setFormValues] = useState({
+    gender: user.gender, bio: user.bio, region: user.region, city: user.city, cityName: user.cityName
+  })
 
   useEffect(() => { 
-    setGender(user.gender);
-    setBio(user.bio ? user.bio : "");
-    setRegion(user.region);
-    setCity(user.city);
-    setCityName(user.cityName);
+    setInitialValues({
+      gender: user.gender, 
+      bio: user.bio, 
+      region: user.region, 
+      city: user.city, 
+      cityName: user.cityName
+    })
+    setFormValues({
+      gender: user.gender, 
+      bio: user.bio, 
+      region: user.region, 
+      city: user.city, 
+      cityName: user.cityName
+    })
     if (!user.region) {
       setModalCityOpen(false);
     }
@@ -73,32 +83,36 @@ function StartSecondStep () {
 
   const submitForm = () => {
     setIsLoading(true);
-    fetch('https://mublin.herokuapp.com/user/step2', {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
-      },
-      body: JSON.stringify({
-        userId: user.id, 
-        gender: gender, 
-        bio: bio, 
-        id_country_fk: 27, 
-        id_region_fk: region, 
-        id_city_fk: city
-      })
-    }).then((response) => {
-      response.json().then((response) => {
-        navigate('/start/step3')
+    if (valuesUnchanged) {
+      navigate('/start/step3');
+    } else {
+      fetch('https://mublin.herokuapp.com/user/step2', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({
+          userId: user.id, 
+          gender: formValues.gender, 
+          bio: formValues.bio, 
+          id_country_fk: 27, 
+          id_region_fk: formValues.region, 
+          id_city_fk: formValues.city
+        })
+      }).then((response) => {
+        response.json().then((response) => {
+          navigate('/start/step3');
+          setIsLoading(false);
+          setError(false);
+        })
+      }).catch(err => {
         setIsLoading(false);
-        setError(false);
+        setError(true);
+        console.error(err);
       })
-    }).catch(err => {
-      setIsLoading(false);
-      setError(true);
-      console.error(err);
-    })
+    }
   }
 
   const handleSearchCity = (e, value) => {
@@ -108,36 +122,27 @@ function StartSecondStep () {
   }
 
   const selectCityOnModalList = (cityId, cityName) => {
-    setCity(cityId);
-    setCityName(cityName);
+    setFormValues({...formValues, city: cityId, cityName: cityName});
     setModalCityOpen(false);
   }
 
   const [queryCities, setQueryCities] = useState([]);
-  const [citySearchIsLoading, setCitySearchIsLoading] = useState(false)
+  const [citySearchIsLoading, setCitySearchIsLoading] = useState(false);
 
   const [searchValue, setSearchValue] = useState('');
   const [noCitySearchResults, setNoCitySearchResults] = useState(false);
-  // const [lastSearchedCity, setLastSearchedCity] = useState('');
-
-  // const typeSearchValue = (query) => {
-  //   setSearchValue(query);
-  //   searchCity(query);
-  // }
 
   const searchCity = useDebouncedCallback(async (query) => {
     if (query?.length > 1) {
-      // setLastSearchedCity(query);
       setCitySearchIsLoading(true);
       setNoCitySearchResults(false);
-      fetch('https://mublin.herokuapp.com/search/cities/'+query+'/'+region, {
+      fetch('https://mublin.herokuapp.com/search/cities/'+query+'/'+formValues.region, {
         method: 'GET'
       })
         .then(res => res.json())
         .then(
           (result) => {
             if (result?.length) {
-              // setQueryCities(result);
               setQueryCities(
                 result.map(e => { return { value: String(e.value), label: e.text }})
               );
@@ -160,6 +165,8 @@ function StartSecondStep () {
     navigate('/start/step1');
   }
 
+  const valuesUnchanged = (JSON.stringify(initialValues) == JSON.stringify(formValues));
+
   return (
     <>
       <HeaderWelcome />
@@ -172,45 +179,56 @@ function StartSecondStep () {
         </Stepper>
         <Title ta="center" order={3} my={14}>Conte um pouco sobre você</Title>
         <Container px={largeScreen ? undefined : 0} size={largeScreen ? 'xs' : 'lg'} mt={10} mb={130}>
-          <NativeSelect
-            size='md'
-            label={<Group gap={2}>Gênero: {gender && <IconCheck size={16} color='green' />}</Group>}
-            placeholder="Gênero"
-            value={gender ? gender : ""}
-            onChange={(e) => {
-              setGender(e.currentTarget.value);
-            }}
-          >
-            <option value="">Selecione</option>
-            <option value="m">Masculino</option>
-            <option value="f">Feminino</option>
-            <option value="n">Não informar</option>
-          </NativeSelect>
           <Textarea
             mt={18}
             size='md'
-            label={<Group gap={2}>Bio (opcional): {bio && <IconCheck size={16} color='green' />}</Group>}
-            description={"("+bio?.length+"/220)"}
+            label={<Group gap={2}>Bio (opcional): {formValues.bio && <IconCheck size={16} color='green' />}</Group>}
+            description={"("+formValues.bio?.length+"/220)"}
             placeholder="Escreva pouco sobre você..."
-            value={bio ? bio : undefined}
+            value={formValues.bio ? formValues.bio : undefined}
+            onChange={(e) => setFormValues({...formValues, bio: e.target.value})}
+            disabled={user.requesting}
             maxLength='220'
             autosize
             minRows={2}
             maxRows={4}
-            onChange={(e) => setBio(e.target.value)}
           />
           <Grid mt={18}>
             <Grid.Col span={6}>
               <NativeSelect
                 size='md'
-                label={<Group gap={2}>Estado: {region && <IconCheck size={16} color='green' />}</Group>}
-                placeholder="Escolha o Estado"
-                value={region ? region : ""}
+                label={<Group gap={2}>Gênero: {formValues.gender && <IconCheck size={16} color='green' />}</Group>}
+                placeholder="Gênero"
+                value={formValues.gender ? formValues.gender : ""}
                 onChange={(e) => {
-                  setRegion(e.currentTarget.value);
+                  setFormValues({...formValues, gender: e.currentTarget.value})
+                }}
+              >
+                <option value="">Selecione</option>
+                <option value="m">Masculino</option>
+                <option value="f">Feminino</option>
+                <option value="n">Não informar</option>
+              </NativeSelect>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NativeSelect 
+                size='md'
+                label={<Group gap={2}>País: <IconCheck size={16} color='green' /></Group>} 
+                data={['Brasil']} 
+              />
+            </Grid.Col>
+          </Grid>
+          <Grid mt={18}>
+            <Grid.Col span={6}>
+              <NativeSelect
+                size='md'
+                label={<Group gap={2}>Estado: {formValues.region && <IconCheck size={16} color='green' />}</Group>}
+                value={formValues.region ? formValues.region : ""}
+                disabled={user.requesting}
+                onChange={(e) => {
+                  setFormValues({...formValues, region: e.currentTarget.value, city: ''})
                   setSearchValue('');
                   setNoCitySearchResults(false);
-                  setCity('');
                   setQueryCities([]);
                 }}
               >
@@ -242,11 +260,11 @@ function StartSecondStep () {
                 value={String(city)}
                 nothingFoundMessage="Nenhuma cidade encontrada..."
               /> */}
-              {city ? ( 
+              {formValues.city ? ( 
                 <Input.Wrapper 
                   label={
                     <Group gap={2}>
-                      Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {city && <IconCheck size={16} color='green' />}
+                      Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {formValues.city && <IconCheck size={16} color='green' />}
                     </Group>
                   }
                 >
@@ -256,14 +274,14 @@ function StartSecondStep () {
                     pointer
                     onClick={() => setModalCityOpen(true)}
                   >
-                    {cityName}
+                    {formValues.cityName}
                   </Input>
                 </Input.Wrapper>
               ) : (
                 <Input.Wrapper 
                   label={
                     <Group gap={2}>
-                      Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {city && <IconCheck size={16} color='green' />}
+                      Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />} {formValues.city && <IconCheck size={16} color='green' />}
                     </Group>
                   }
                 >
@@ -271,11 +289,11 @@ function StartSecondStep () {
                     component="button" 
                     size="md" 
                     pointer
-                    rightSection={region ? <IconSearch size={16} /> : undefined}
+                    rightSection={formValues.region ? <IconSearch size={16} /> : undefined}
                     onClick={() => setModalCityOpen(true)}
-                    disabled={!region}
+                    disabled={!formValues.region}
                   >
-                    {region ? "Selecione..." : undefined}
+                    {formValues.region ? "Selecione..." : undefined}
                   </Input>
                 </Input.Wrapper>
               )}
@@ -359,7 +377,11 @@ function StartSecondStep () {
             size='lg'
             onClick={submitForm}
             rightSection={<IconArrowRight size={14} />}
-            disabled={!region || !city || !gender || isLoading || citySearchIsLoading}
+            disabled={
+              !formValues.region || !formValues.city || !formValues.gender || 
+              isLoading || 
+              citySearchIsLoading
+            }
             loading={isLoading}
           >
             Avançar

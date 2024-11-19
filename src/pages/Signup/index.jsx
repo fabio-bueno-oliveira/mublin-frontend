@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { emailCheckInfos } from '../../store/actions/emailCheck';
 import { usernameCheckInfos } from '../../store/actions/usernameCheck';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,8 +93,11 @@ function SignupPage () {
           <Title ta="center" order={1}>
             Crie sua conta grátis
           </Title>
-          <Text c="dimmed" size="md" ta="center" mt={5} mb={7}>
+          <Text c="dimmed" size="md" ta="center" mt={5} mb={1}>
             Preencha os dados abaixo
+          </Text>
+          <Text c="dimmed" size="xs" ta="center" mt={1} mb={7}>
+            Se já tem cadastro, <Link to='/login'>clique aqui para fazer login</Link>
           </Text>
           <Space h="md" />
           <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -211,6 +214,7 @@ function SignupPage () {
                 color='violet'
                 type="submit"
                 // disabled={(usernameChoosen && usernameAvailability.available && emailAvailability.available) ? false : true}
+                disabled={usernameAvailability.requesting || emailAvailability.requesting}
               >
                 Continuar
               </Button>
