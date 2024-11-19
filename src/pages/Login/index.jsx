@@ -4,6 +4,7 @@ import { useLocation  } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
 import {
+  Center,
   Alert,
   TextInput,
   PasswordInput,
@@ -118,11 +119,13 @@ function LoginPage () {
             {loggedIn ? "Acessando..." : "Entrar"}
           </Button>
         </form>
-        <Text c="dimmed" size="sm" ta="center" mt={20}>
-          <Anchor size="sm" component="button">
-            Voltar à home
-          </Anchor>
-        </Text>
+        <Center mt={12}>
+          <Link to={{ pathname: '/' }}>
+            <Anchor size="md" component="button">
+              Voltar à home
+            </Anchor>
+          </Link>
+        </Center>
       </Container>
     </>
     );

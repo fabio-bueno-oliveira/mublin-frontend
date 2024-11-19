@@ -88,7 +88,7 @@ function SignupPage () {
 
     return (
       <>
-        <Header />
+        <Header page='signup' />
         <Container size={'xs'} my={40}>
           <Title ta="center" order={1}>
             Crie sua conta grátis
@@ -102,7 +102,7 @@ function SignupPage () {
           <Space h="md" />
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Grid mb='sm'>
-              <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+              <Grid.Col span={6}>
                 <TextInput
                   size="lg"
                   label="Nome"
@@ -110,7 +110,7 @@ function SignupPage () {
                   {...form.getInputProps('name')}
                 />
               </Grid.Col>
-              <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+              <Grid.Col span={6}>
                 <TextInput
                   size="lg"
                   label="Sobrenome"

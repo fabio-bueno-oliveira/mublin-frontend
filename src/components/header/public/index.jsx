@@ -35,14 +35,16 @@ function Header (props) {
                 </Button>
               </Link>
             }
-            <Link to={{ pathname: '/signup' }}>
-              <Button 
-                size="md" 
-                color="violet"
-              >
-                Cadastro
-              </Button>
-            </Link>
+            {page !== 'signup' && 
+              <Link to={{ pathname: '/signup' }}>
+                <Button 
+                  size="md" 
+                  color="violet"
+                >
+                  Cadastro
+                </Button>
+              </Link>
+            }
           </div>
       </Flex>
     </Container>
