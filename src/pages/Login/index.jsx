@@ -110,13 +110,12 @@ function LoginPage () {
           <Button 
             type="submit"
             loading={loggingIn}
-            disabled={loggedIn}
             fullWidth
             size='lg'
             color='violet'
             mt='xl'
           >
-            {loggedIn ? "Acessando..." : "Entrar"}
+            Entrar
           </Button>
         </form>
         <Center mt={12}>

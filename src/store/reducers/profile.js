@@ -79,15 +79,20 @@ const initialState = {
       image: ''
     }
   ],
-  strengths: [
-    { 
-      strengthId: '',
-      strengthTitle: '',
-      idUserTo: '',
-      percent: '',
-      icon: ''
-    }
-  ],
+  strengths: {
+    total: 0,
+    success: false,
+    result: [
+      { 
+        strengthId: '',
+        strengthTitle: '',
+        idUserTo: '',
+        percent: '',
+        totalVotes: '',
+        icon: ''
+      }
+    ]
+  },
   strengthsTotalVotes: [
     {
       idUserTo: '',
@@ -118,7 +123,9 @@ const initialState = {
       currentlyUsing: '',
       featured: '',
       forSale: '',
-      price: ''
+      price: '',
+      tuning: '',
+      tuningDescription: ''
     }
   ],
   gearSetups: [
@@ -330,6 +337,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_GEAR_REQUEST:
       return {
         ...state,
+        gear: initialState.gear,
         requesting: true
       };
     case profileTypes.GET_PROFILE_GEAR_SUCCESS:
@@ -342,21 +350,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_GEAR_FAILURE:
       return {
         ...state,
-        gear: [
-          {
-            brandId: '',
-            brandName: '',
-            brandLogo: '',
-            productId: '',
-            productName: '',
-            category: '',
-            picture: '',
-            currentlyUsing: '',
-            featured: '',
-            forSale: '',
-            price: ''
-          }
-        ],
+        gear: initialState.gear,
         gearCategories: [
           { category: '', macroCategory: '', total: 0 }
         ],
@@ -455,15 +449,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_STRENGTHS_FAILURE:
       return {
         ...state,
-        strengths: [
-          { 
-            idUserTo: '',
-            strengthId: '',
-            strengthTitle: '',
-            percent: '',
-            icon: ''
-          }
-        ],
+        strengths: initialState.strengths,
         requesting: false,
         error: "A solicitação falhou"
       };
@@ -482,13 +468,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_STRENGTHSTOTALVOTES_FAILURE:
       return {
         ...state,
-        strengthsTotalVotes: [
-          {
-            idUserTo: '',
-            strengthId: '',
-            totalVotes: '',
-          }
-        ],
+        strengthsTotalVotes: initialState.strengthsTotalVotes,
         requesting: false,
         error: "A solicitação falhou"
       };
@@ -507,17 +487,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_STRENGTHS_RAW_FAILURE:
       return {
         ...state,
-        strengthsRaw: [
-          { 
-            id: '',
-            idUserTo: '',
-            idUserFrom: '',
-            strengthId: '',
-            icon: '',
-            strengthTitle: '',
-            created: ''
-          }
-        ],
+        strengthsRaw: initialState.strengthsRaw,
         requesting: false,
         error: "A solicitação falhou"
       };
@@ -536,18 +506,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_TESTIMONIALS_FAILURE:
       return {
         ...state,
-        testimonials: [
-          { 
-            id: '',
-            created: '',
-            title: '',
-            testimonial: '',
-            friendId: '',
-            friendName: '',
-            friendUsername: '',
-            friendPicture: ''
-          }
-        ],
+        testimonials: initialState.testimonials,
         requesting: false,
         error: "A solicitação falhou"
       };

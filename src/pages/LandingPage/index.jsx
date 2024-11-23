@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from '../../components/header/public';
 import Footer from '../../components/footer/public';
@@ -50,15 +50,17 @@ function LandingPage () {
               <Text className={s.description} fz="lg" lh="sm">
                 O Mublin é a plataforma onde músicos, produtores e profissionais da música podem gerenciar todos os seus projetos, além de se conectar com outras pessoas do mercado musical
               </Text>
-              <Button
-                size="lg"
-                mt="lg"
-                className={s.control}
-                color="violet"
-                rightSection={<IconArrowRight size={14}/>}
-              >
-                Começar grátis
-              </Button>
+              <Link to={{ pathname: '/signup' }}>
+                <Button
+                  size="lg"
+                  mt="lg"
+                  className={s.control}
+                  color="violet"
+                  rightSection={<IconArrowRight size={14}/>}
+                >
+                  Começar grátis
+                </Button>
+              </Link>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
               <Image

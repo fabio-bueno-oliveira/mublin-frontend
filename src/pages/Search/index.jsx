@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Flex, Group, Skeleton, SimpleGrid, Tabs, Box, Title, Text, Avatar, Input, ActionIcon, Center, Loader, rem } from '@mantine/core';
+import { Container, Flex, Group, Skeleton, SimpleGrid, Tabs, Box, Title, Text, Avatar, Input, ActionIcon, Center, Loader, Badge, rem } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -46,7 +46,7 @@ function Search () {
 
   return (
     <>
-      <Header />
+      <Header pageType="search" />
       <Container size={'lg'} mb={largeScreen ? 30 : 82}>
         {!largeScreen && 
           <Group mb={20} gap={2}>
@@ -123,10 +123,12 @@ function Search () {
           </>
         }
         {searchResults.requesting && 
-          <Center><Loader  mt={76} size={50} color="violet" /></Center>
+          <Center>
+            <Loader  mt={76} size={50} color="violet" />
+          </Center>
         }
         {(searchedKeywords && !searchResults.requesting) && 
-          <Tabs defaultValue="people" orientation="horizontal">
+          <Tabs defaultValue="people" orientation="horizontal" color="violet">
             <Tabs.List>
               <Tabs.Tab value="people" mb={15}>
                 {searchResults.users[0].id
@@ -162,7 +164,7 @@ function Search () {
                           direction="column"
                           wrap="wrap"
                         >
-                          <Link to={{ pathname: `/${user.username}` }}>
+                          <Link to={{ pathname: `/${user.username}` }} className="textLink">
                             <Flex gap={3} align={'center'}>
                               <Text size='sm' fw={500}>
                                 {user.name+' '+user.lastname}
@@ -180,7 +182,7 @@ function Search () {
                           <Text size='xs'>
                             {user.mainRole ? user.mainRole : user.bio}
                           </Text>
-                          <Text size='11px' c='dimmed'>
+                          <Text size='10px' c='dimmed'>
                             {user.city && user.city+' - '+user.region}
                           </Text>
                         </Flex>
@@ -209,13 +211,25 @@ function Search () {
                           direction="column"
                           wrap="wrap"
                         >
-                          <Text size='sm' fw={500}>
-                            {project.name}
-                          </Text>
+                          <Link to={{ pathname: `/project/${project.username}` }} className="textLink">
+                            <Text size='sm' fw={500}>
+                              {project.name} 
+                            </Text>
+                          </Link>
+                          {(project.labelShow && project.labelText) && 
+                            <Badge 
+                              color={project.labelColor} 
+                              size="xs" 
+                              radius="sm" 
+                              variant="filled"
+                            >
+                              {project.labelText}
+                            </Badge>
+                          }
                           <Text size='xs'>
                             {project.type} · {project.mainGenre}
                           </Text>
-                          <Text size='11px' c='dimmed'>
+                          <Text size='10px' c='dimmed'>
                             {project.city && project.city+' - '+project.region}
                           </Text>
                         </Flex>

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
+import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer } from '@mantine/core';
-import { useMediaQuery, useDisclosure } from '@mantine/hooks';
+import { useMediaQuery, useDisclosure, useDebouncedCallback } from '@mantine/hooks';
 import { IconMoon, IconBrightnessUp, IconSearch, IconDotsVertical } from '@tabler/icons-react';
 import s from './header.module.css';
 
@@ -19,12 +20,21 @@ function Header (props) {
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const [searchParams] = useSearchParams();
   const searchedKeywords = searchParams.get('keywords');
+  const [refreshCounter, setRefreshCounter] = useState(0);
   // const [showMobileMenu, setShowMobileMenu] = useState(true)
+
   let currentPath = window.location.pathname;
 
   useEffect(() => { 
     dispatch(userInfos.getInfo());
   }, []);
+
+  useEffect(() => { 
+    if (props.pageType === 'home' && refreshCounter > 0) {
+      dispatch(userInfos.getInfo());
+      dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
+    }
+  }, [refreshCounter]);
 
   const logout = () => {
     setColorScheme('light');
@@ -32,11 +42,8 @@ function Header (props) {
   }
 
   const cdnBaseURL = 'https://ik.imagekit.io/mublin';
-
-  const [searchQuery, setSearchQuery] = useState(searchedKeywords);
-
-  const handleSearch = (e, query, tab) => {
-    e.preventDefault();
+  
+  const navigateToSearchPage = (query, tab) => {
     navigate({
       pathname: '/search',
       search: createSearchParams({
@@ -44,6 +51,25 @@ function Header (props) {
         tab: tab ? tab : ''
       }).toString()
     });
+  }
+
+  const [searchQuery, setSearchQuery] = useState(searchedKeywords);
+
+  const handleChangeSearch = (e, query, tab) => {
+    setSearchQuery(query);
+    autoSearch(e, query, tab);
+  }
+
+  const autoSearch = useDebouncedCallback(async (e, query, tab) => {
+    if (query?.length > 1) {
+      handleSearch(e, query, tab);
+    };
+    navigateToSearchPage(query, tab);
+  },500);
+
+  const handleSearch = (e, query, tab) => {
+    e.preventDefault();
+    navigateToSearchPage(query, tab);
   }
 
   const [openedDrawer, { open, close }] = useDisclosure(false);
@@ -65,7 +91,11 @@ function Header (props) {
       >
         <Group>
           <>
-            <Link to={{ pathname: '/home' }} className='mublinLogo'>
+            <Link 
+              to={{ pathname: '/home' }} 
+              className='mublinLogo'
+              onClick={() => setRefreshCounter(refreshCounter + 1)}
+            >
               <Title order={3}>Mublin</Title>
             </Link>
             {props.pageType === 'profile' &&
@@ -84,10 +114,14 @@ function Header (props) {
               >
                 <Input 
                   variant="filled" 
-                  size="sm"
+                  size="md"
+                  w={320}
                   placeholder='Pessoa, instrumento, cidade...'
                   value={searchQuery ? searchQuery : undefined}
-                  onChange={(event) => setSearchQuery(event.currentTarget.value)}
+                  onChange={(event) => handleChangeSearch(
+                    event, event.currentTarget.value, null
+                  )}
+                  // onFocus={(event) => navigateToSearchPage(event.currentTarget.value, null)}
                   rightSectionPointerEvents="all"
                 />
               </form>
@@ -142,7 +176,7 @@ function Header (props) {
               <Link to={{ pathname: `/${user.username}`}}>
                 <Avatar
                   size="md"
-                  src={cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
+                  src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null}
                   alt={user.username}
                   ml={8}
                 />

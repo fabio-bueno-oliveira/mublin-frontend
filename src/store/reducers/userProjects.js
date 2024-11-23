@@ -68,6 +68,7 @@ const initialState = {
       cityName: '',
       regionName: '',
       regionUf: '',
+      countryName: '',
       leaderLastNote: '',
       leaderLastNoteDate: ''
     }

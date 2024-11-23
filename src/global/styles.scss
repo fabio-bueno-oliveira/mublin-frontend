@@ -19,6 +19,10 @@
   }
 }
 
+a.textLink {
+  color: #000000;
+}
+
 .mublinLogo {
   text-decoration: none;
 
@@ -117,4 +121,10 @@ button.mantine-Button-root {
 
 button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-root {
   cursor: default;
+}
+
+.masonry {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: masonry;
 }

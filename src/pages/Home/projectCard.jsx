@@ -8,6 +8,7 @@ import { IconDots, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, Ic
 function ProjectCard (props) {
 
   const project = props?.project;
+  const loading = props.loading;
   const activeMembers = props?.activeMembers;
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
@@ -28,7 +29,14 @@ function ProjectCard (props) {
         <Group justify="space-between" align="flex-start" wrap='nowrap' style={{ justify: 'space-between' }}>
           <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
             <Link to={{ pathname: `/project/${project?.username}` }}>
-              <Avatar variant="filled" radius="md" size="lg" src={cdnProjectPath+project?.picture} />
+              <Avatar 
+                variant="filled" 
+                radius="md" 
+                size="lg" 
+                color="violet"
+                name={"🎵"}
+                src={(!loading && project.picture) ? cdnProjectPath+project?.picture : undefined} 
+              />
             </Link>
             <div>
               <Anchor
@@ -45,7 +53,7 @@ function ProjectCard (props) {
               </Anchor>
               {project?.regionName && 
                 <Text size="10px" truncate="end" mb={5} c='dimmed'>
-                  {`de ${project.cityName}, ${project.regionUf}`} 
+                  {project.cityName && `de ${project.cityName}, `} {`${project.regionName},`} {`${project.countryName}`}  
                 </Text>
               }
               <Group gap={2} truncate="start" >
@@ -120,7 +128,7 @@ function ProjectCard (props) {
         >
           <Avatar 
             variant="filled" 
-            radius="sm" 
+            radius="xl" 
             size="md" 
             src={
               (user.id && user.picture) ? 
@@ -185,8 +193,10 @@ function ProjectCard (props) {
               <Link to={{ pathname: `/${member.userUsername}` }}>
                 <Avatar 
                   variant="filled" 
-                  radius="sm" 
-                  size="sm" 
+                  radius="xl" 
+                  size="sm"
+                  name={`${member.userName} ${member.userLastname}`}
+                  color={"violet"}
                   src={
                     (member.userId && member.userPicture) ? 
                       cdnBaseURL+'tr:h-26,w-26,r-max,c-maintain_ratio/users/avatars/'+member.userId+'/'+member.userPicture

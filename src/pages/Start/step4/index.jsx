@@ -119,10 +119,12 @@ function StartFourthStep () {
     }
   }, 800);
 
-  // Campos do form de cadastro de projeto
+  // Campos do form de cadastro de novo projeto
   const [projectName, setProjectName] = useState('')
   const [projectUserName, setProjectUserName] = useState('')
-  const [foundationYear, setFoundationYear] = useState(currentYear)
+  const [npFoundationYear, setNpFoundationYear] = useState(currentYear)
+  const [npRegion, setNpRegion] = useState('')
+  const [npCountry, setNpCountry] = useState('')
   const [checkboxProjectActive, setCheckboxProjectActive] = useState(true)
   const [endYear, setEndYear] = useState(null)
   const [bio, setBio] = useState('')
@@ -179,6 +181,10 @@ function StartFourthStep () {
   }
 
   // Update project avatar picture filename in bd
+  const closeModalPicture = () => {
+    setProjectName('');
+    setModalNewProjectPictureOpen(false);
+  }
   const updatePicture = (projectId, userId, value) => {
     SetPictureIsLoading(true)
     fetch('https://mublin.herokuapp.com/project/'+projectId+'/picture', {
@@ -191,13 +197,14 @@ function StartFourthStep () {
       body: JSON.stringify({userId: userId, picture: value})
     }).then((response) => {
         response.json().then((response) => {
-          // console.log(response)
-          SetPictureIsLoading(false)
-          setNewProjectPicture(response.picture)
+          // console.log(response);
+          SetPictureIsLoading(false);
+          setNewProjectPicture(response.picture);
+          setProjectName('');
         })
       }).catch(err => {
-        SetPictureIsLoading(false)
-        console.error(err)
+        SetPictureIsLoading(false);
+        console.error(err);
     })
   };
 
@@ -314,19 +321,31 @@ function StartFourthStep () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + loggedUser.token
       },
-      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: projectName, projectUserName: projectUserName, foundation_year: foundationYear, end_year: endYear, bio: bio, type: type, kind: kind, public: publicProject })
+      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: projectName, projectUserName: projectUserName, foundation_year: npFoundationYear, end_year: endYear, id_country_fk: npCountry, id_region_fk: npRegion, id_city_fk: '', bio: bio, type: type, kind: kind, public: publicProject })
     })
     .then(response => {
         return response.json();
     }).then(jsonResponse => {
         setIsLoading(false);
-        setIdNewProject(jsonResponse.id)
-        handleSubmitParticipationToNewProject(loggedUser.id, jsonResponse.id, userStatus, npMain_role_fk)
+        setIdNewProject(jsonResponse.id);
+        handleSubmitParticipationToNewProject(
+          loggedUser.id, jsonResponse.id, userStatus, npMain_role_fk
+        );
+        setProjectUserName('');
+        setNpFoundationYear(currentYear);
+        setNpRegion('');
+        setNpCountry('');
+        setCheckboxProjectActive(true);
+        setBio('');
+        setType('2');
+        setKind('1');
+        setNpMain_role_fk('');
+        setPublicProject('1');
     }).catch (error => {
-        console.error(error)
+        console.error(error);
         setIsLoading(false);
-        alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.")
-        setModalNewProjectOpen(false)
+        alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.");
+        setModalNewProjectOpen(false);
     })
   }
 
@@ -490,14 +509,15 @@ function StartFourthStep () {
           label="Ano de formação"
           min={1800} 
           max={currentYear}
-          error={foundationYear > currentYear && "O ano deve ser inferior ao atual"}
-          onChange={(_value) => setFoundationYear(_value)}
+          mb={5}
+          error={npFoundationYear > currentYear && "O ano deve ser inferior ao atual"}
+          onChange={(_value) => setNpFoundationYear(_value)}
           defaultValue={currentYear}
-          value={foundationYear}
+          value={npFoundationYear}
         />
         <NumberInput
           label="Ano de encerramento"
-          min={foundationYear} 
+          min={npFoundationYear} 
           max={currentYear}
           error={endYear > currentYear && "O ano deve ser inferior ao atual"}
           onChange={(_value) => setEndYear(_value)}
@@ -512,6 +532,58 @@ function StartFourthStep () {
           checked={checkboxProjectActive}
           onChange={() => handleCheckboxProjectActive(checkboxProjectActive)}
         />
+        <Grid mb={10}>
+          <Grid.Col span={6}>
+            <NativeSelect
+              label="País"
+              value={npCountry}
+              onChange={(e) => {
+                setNpCountry(e.currentTarget.value);
+              }}
+            >
+              <option value="">Selecione</option>
+              <option value='27'>Brasil</option>
+            </NativeSelect>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <NativeSelect
+              label="Estado"
+              value={npRegion}
+              onChange={(e) => {
+                setNpRegion(e.currentTarget.value);
+              }}
+            >
+              <option value="">Selecione</option>
+              <option value="415">Acre</option>
+              <option value="422">Alagoas</option>
+              <option value="406">Amapa</option>
+              <option value="407">Amazonas</option>
+              <option value="402">Bahia</option>
+              <option value="409">Ceara</option>
+              <option value="424">Distrito Federal</option>
+              <option value="401">Espirito Santo</option>
+              <option value="411">Goias</option>
+              <option value="419">Maranhao</option>
+              <option value="418">Mato Grosso</option>
+              <option value="399">Mato Grosso do Sul</option>
+              <option value="404">Minas Gerais</option>
+              <option value="408">Para</option>
+              <option value="405">Paraiba</option>
+              <option value="413">Parana</option>
+              <option value="417">Pernambuco</option>
+              <option value="416">Piaui</option>
+              <option value="410">Rio de Janeiro</option>
+              <option value="414">Rio Grande do Norte</option>
+              <option value="400">Rio Grande do Sul</option>
+              <option value="403">Rondonia</option>
+              <option value="421">Roraima</option>
+              <option value="398">Santa Catarina</option>
+              <option value="412">São Paulo</option>
+              <option value="423">Sergipe</option>
+              <option value="420">Tocantins</option>
+            </NativeSelect>
+          </Grid.Col>
+        </Grid>
         <Textarea
           label="Descrição sobre o projeto (opcional)"
           error={bio.length === "200" && "A bio atingiu o limite de 200 caracteres"}
@@ -596,6 +668,7 @@ function StartFourthStep () {
             color='violet'
             onClick={handleSubmitNewProject}
             loading={isLoading}
+            disabled={(projectName && projectUserName && npFoundationYear && npCountry && npRegion && type && kind && publicProject && npMain_role_fk && projectUsernameAvailability.available) ? false : true }
           >
             Cadastrar
           </Button>
@@ -789,7 +862,7 @@ function StartFourthStep () {
       <Modal 
         title={`Definir foto para ${projectName}?`}
         opened={modalNewProjectPictureOpen} 
-        onClose={() => setModalNewProjectPictureOpen(false)} 
+        onClose={() => closeModalPicture()} 
         centered
         size={'sm'}
       >
@@ -828,7 +901,7 @@ function StartFourthStep () {
         }
         <Group mt="sm" justify="flex-end">
           {!pictureFilename && 
-            <Button variant="default" onClick={() => setModalNewProjectPictureOpen(false)}>
+            <Button variant="default" onClick={() => closeModalPicture()}>
               Enviar depois
             </Button>
           }
@@ -837,7 +910,7 @@ function StartFourthStep () {
               color='violet'
               onClick={() => { 
                 dispatch(userProjectsInfos.getUserProjects(user.id));
-                setModalNewProjectPictureOpen(false);
+                closeModalPicture();
               }}
             >
               Concluir

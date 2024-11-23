@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { eventsInfos } from '../../store/actions/events';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Avatar, Tooltip, Title, Text, Grid, Paper, Skeleton } from '@mantine/core';
+import { Container, Title, Text, Grid, Skeleton } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -27,17 +27,16 @@ function Home () {
     if (user.success && user.first_access !== 0) {
       navigate("/start/intro/")
     }
-  }, [loggedUser.id, user.id, user.success]);
+  }, []);
 
   return (
     <>
-      <Header />
+      <Header pageType="home" />
       <Container size={'lg'} mb={'md'} mt={largeScreen ? 20 : 0}>
         {projects.requesting || !user.success ? (
           <>
-            <Skeleton height={110} radius="md" />
-            <Skeleton height={58} mt={6} radius="md" />
-            <Skeleton height={58} mt={6} width="70%" radius="md" />
+            <Skeleton height={34} width={300} radius="md" />
+            <Skeleton height={24} width={540} mt={10} radius="md" />
           </>
         ) : (
           <>
