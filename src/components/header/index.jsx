@@ -185,7 +185,7 @@ function Header (props) {
                 {user.name}
               </Text> */}
               {user.plan === 'Pro' && 
-                <Badge size='xs' variant='light' color="violet" ml={9}>PRO</Badge>
+                <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
               }
               {colorScheme === 'dark' && 
                 <ActionIcon 

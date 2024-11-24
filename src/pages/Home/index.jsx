@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { eventsInfos } from '../../store/actions/events';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Title, Text, Grid, Skeleton } from '@mantine/core';
+import { Container, Title, Text, Grid, Skeleton, Switch } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -17,9 +17,16 @@ function Home () {
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
+  const [showEndedProjects, setShowEndedProjects] = useState(true);
+
   const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
-  // const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
+  const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
+  const totalProjects = projects.totalProjects;
+
+  const projectsToShow = showEndedProjects
+    ? projects?.list 
+    : projects?.list.filter((project) => { return !project.yearEnd })
 
   useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
@@ -32,83 +39,46 @@ function Home () {
   return (
     <>
       <Header pageType="home" />
-      <Container size={'lg'} mb={'md'} mt={largeScreen ? 20 : 0}>
+      <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         {projects.requesting || !user.success ? (
           <>
-            <Skeleton height={34} width={300} radius="md" />
-            <Skeleton height={24} width={540} mt={10} radius="md" />
+            <Skeleton height={34} width={190} radius="md" />
+            <Skeleton height={24} width={400} mt={10} radius="md" />
+            <Skeleton height={18} width={150} mt={6} radius="md" />
           </>
         ) : (
           <>
-            <Grid align="center">
-              <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
-                <Title order={3} mb={1}>
-                  Olá, {user?.name}
-                </Title>
-                <Text size="md" mb={4}>
-                  Você está cadastrado em {projects?.list.length} projetos
-                </Text>
-                {/* <Avatar.Group mb={16}>
-                  {projects?.list.slice(0, 5).map((p) => (
-                    <Tooltip label={p.name} key={p.id} withArrow>
-                      <Avatar 
-                        size='lg'
-                        src={'https://ik.imagekit.io/mublin/projects/tr:h-80,w-80,c-maintain_ratio/'+p.picture} 
-                      />
-                    </Tooltip>
-                  ))}
-                  {projects?.list.length > 5 && 
-                    <Avatar size='lg'>+{projects?.list.length - 5}</Avatar>
-                  }
-                </Avatar.Group> */}
-              </Grid.Col>
-              {/* <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-                <Grid grow gutter="xs">
-                  <Grid.Col span={6}>
-                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
-                      <Text size="xs" fw={500}>Principais</Text>
-                      <Text size="xs" c="dimmed">4 projetos</Text>
-                    </Paper>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
-                      <Text size="xs" fw={500}>Temporários</Text>
-                      <Text size="xs" c="dimmed">4 projetos</Text>
-                    </Paper>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
-                      <Text size="xs" fw={500}>Ativo em</Text>
-                      <Text size="xs" c="dimmed">4 projetos</Text>
-                    </Paper>
-                  </Grid.Col>
-                  <Grid.Col span={6}>
-                    <Paper radius="md" withBorder p='sm' style={{ backgroundColor: 'transparent' }}>
-                      <Text size="xs" fw={500}>Encerrados</Text>
-                      <Text size="xs" c="dimmed">{projectsTerminated?.length} projetos</Text>
-                    </Paper>
-                  </Grid.Col>
-                </Grid>
-              </Grid.Col> */}
-            </Grid>
+            <Title order={3} mb={1}>
+              Olá, {user?.name}
+            </Title>
+            <Text size="md" mb={4}>
+              Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
+            </Text>
+            <Switch
+              label="Exibir projetos encerrados"
+              color='violet'
+              checked={showEndedProjects}
+              size="xs"
+              onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
+            />
           </>
         )}
       </Container>
       <Container size={'lg'}>
         <Grid mb={largeScreen ? 30 : 86}>
           {projects.requesting ? ( 
-            Array.apply(null, { length: 4 }).map((e, i) => (
-              <Grid.Col span={{ base: 12, md: 2, lg: 3 }} key={i}>
+            Array.apply(null, { length: 3 }).map((e, i) => (
+              <Grid.Col span={{ base: 12, md: 2, lg: 4 }} key={i}>
                 <>
-                  <Skeleton height={50} circle mb="xl" mt="lg" />
                   <Skeleton height={8} radius="xl" />
+                  <Skeleton height={50} circle mb="xl" mt="lg" />
                   <Skeleton height={8} mt={6} radius="xl" />
                   <Skeleton height={8} mt={6} width="70%" radius="xl" />
                 </>
               </Grid.Col>
             ))
           ) : (
-            projects?.list.map((p) => (
+            projectsToShow.map((p) => (
               <Grid.Col span={{ base: 12, md: 2, lg: 4 }} key={p.id}>
                 <ProjectCard 
                   loading={projects.requesting}

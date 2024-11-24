@@ -4,6 +4,7 @@ const initialState = {
   requesting: false,
   success: false,
   error: '',
+  totalProjects: 0,
   list: [
     {
       id: '',
@@ -114,7 +115,8 @@ export function userProjects(state = initialState, action) {
       return {
         ...state,
         requesting: true,
-        success: true,
+        success: false,
+        totalProjects: 0,
         list: initialState.list,
         summary: initialState.summary,
         members: initialState.members,
@@ -125,16 +127,18 @@ export function userProjects(state = initialState, action) {
         ...state,
         requesting: false,
         success: true,
+        totalProjects: action.list.totalProjects,
         error: '',
-        list: action.list[0],
-        summary: action.list[1],
-        members: action.list[2],
+        list: action.list.result[0],
+        summary: action.list.result[1],
+        members: action.list.result[2],
       };
     case userProjectsTypes.GET_USER_PROJECTS_FAILURE:
       return {
         ...state,
         requesting: false,
         success: false,
+        totalProjects: 0,
         error: 'Erro na solicitação',
         list: initialState.list,
         summary: initialState.summary,
