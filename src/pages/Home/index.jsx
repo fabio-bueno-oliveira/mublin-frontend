@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { eventsInfos } from '../../store/actions/events';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Title, Text, Grid, Skeleton, Switch } from '@mantine/core';
+import { Container, Box, Title, Text, Grid, Skeleton, Switch } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import ProjectCard from './projectCard';
+import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
 
 function Home () {
 
@@ -43,8 +44,8 @@ function Home () {
         {projects.requesting || !user.success ? (
           <>
             <Skeleton height={34} width={190} radius="md" />
-            <Skeleton height={24} width={400} mt={10} radius="md" />
-            <Skeleton height={18} width={150} mt={6} radius="md" />
+            <Skeleton height={21} width={400} mt={6} radius="md" />
+            <Skeleton height={14} width={150} mt={6} radius="md" />
           </>
         ) : (
           <>
@@ -60,26 +61,31 @@ function Home () {
               checked={showEndedProjects}
               size="xs"
               onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
+              w={"fit-content"}
             />
           </>
         )}
       </Container>
       <Container size={'lg'}>
-        <Grid mb={largeScreen ? 30 : 86}>
-          {projects.requesting ? ( 
-            Array.apply(null, { length: 3 }).map((e, i) => (
-              <Grid.Col span={{ base: 12, md: 2, lg: 4 }} key={i}>
+        {projects.requesting ? ( 
+          Array.apply(null, { length: 3 }).map((e, i) => (
+            <Grid mb={largeScreen ? 30 : 86}>
+              <Grid.Col span={{ base: 12, md: 2, lg: 4 }} key={i} mt={20}>
                 <>
-                  <Skeleton height={8} radius="xl" />
-                  <Skeleton height={50} circle mb="xl" mt="lg" />
-                  <Skeleton height={8} mt={6} radius="xl" />
-                  <Skeleton height={8} mt={6} width="70%" radius="xl" />
+                  <Skeleton height={50} width={50} radius="md" mb="xs" />
+                  <Skeleton height={14} width={"76%"} mt={6} radius="xl" />
+                  <Skeleton height={14} width={"50%"} mt={6} radius="xl" />
                 </>
               </Grid.Col>
-            ))
-          ) : (
-            projectsToShow.map((p) => (
-              <Grid.Col span={{ base: 12, md: 2, lg: 4 }} key={p.id}>
+            </Grid>
+          ))
+        ) : (
+          <Box mb={largeScreen ? 30 : 86}>
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
+          >
+            <Masonry gutter="10px">
+              {projectsToShow.map((p) => (
                 <ProjectCard 
                   loading={projects.requesting}
                   project={p}
@@ -92,10 +98,11 @@ function Home () {
                     ).sort((a, b) => b.leader - a.leader)
                   }
                 />
-              </Grid.Col>
-            ))
-          )}
-        </Grid>
+              ))}
+            </Masonry>
+          </ResponsiveMasonry>
+          </Box>
+        )}
       </Container>
       <FooterMenuMobile />
     </>

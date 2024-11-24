@@ -5,7 +5,7 @@ import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Flex, Grid, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, Divider, em } from '@mantine/core';
-import { IconCircleFilled, IconCheck, IconInfoCircle, IconInfoCircleFilled, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled } from '@tabler/icons-react';
+import { IconCircleFilled, IconCheck, IconInfoCircle, IconInfoCircleFilled, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -226,25 +226,25 @@ function ProfilePage () {
   return (
     <>
       <Header pageType='profile' username={username} />
-      <Container size={'lg'} mb={largeScreen ? 30 : 82} className='profilePage'>
+      <Container size={'lg'} mb={largeScreen ? 30 : 82} pt={largeScreen ? 10 : 0} className='profilePage'>
         <Grid>
-          <Grid.Col span={{ base: 12, md: 12, lg: 9 }} pt={largeScreen ? 20 : 0}>
-            <Box mb={15}>
-              {profile.requesting && 
-                <>
-                <Group justify='flex-start'>
-                  <Skeleton height={56} circle />
-                  <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                    <Skeleton height={10} width={240} radius="xl" />
-                    <Skeleton height={13} width={240} radius="xl" />
-                    <Skeleton height={11} width={240} radius="xl" />
-                  </SimpleGrid>
-                </Group>
-                <Skeleton height={15} width={312} mt={16} radius="xl" />
-                </>
-              }
-              {!profile.requesting && 
-                <>
+          <Grid.Col span={{ base: 12, md: 12, lg: 9 }}>
+            {profile.requesting && 
+              <>
+              <Group justify='flex-start'>
+                <Skeleton height={56} circle />
+                <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
+                  <Skeleton height={10} width={240} radius="xl" />
+                  <Skeleton height={13} width={240} radius="xl" />
+                  <Skeleton height={11} width={240} radius="xl" />
+                </SimpleGrid>
+              </Group>
+              <Skeleton height={15} width={312} mt={16} radius="xl" />
+              </>
+            }
+            {!profile.requesting && 
+              <Grid mb={20}>
+                <Grid.Col span={{ base: 12, md: 6, lg: 7 }}>
                   <Flex
                     justify="flex-start"
                     align="center"
@@ -308,78 +308,95 @@ function ProfilePage () {
                       {profile.bio}
                     </Text>
                   }
-                </>
-              }
-              <Group gap={5} mt={12}>
-                {followedByMe?.requesting ? (
-                  <Button size="xs" disabled>Carregando...</Button>
-                ) : (
-                  loggedUser.id !== profile.id ? (
-                    <Button 
-                      size="xs" 
-                      color={colorScheme === "light" ? "dark" : "violet"}
-                      loading={loadingFollow} 
-                      variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
-                      onClick={() => followUnfollow()}
-                    >
-                      {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
-                    </Button>
-                  ) : (
-                    <Button 
-                      size="xs" 
-                      variant='outline'
-                      color={colorScheme === "light" ? "dark" : "white"}
-                      onClick={() => navigate('/settings/profile')}
-                    >
-                      Editar meu perfil
-                    </Button>
-                  )
-                )}
-                <Button 
-                  size="xs" 
-                  variant='outline'
-                  color={colorScheme === "light" ? "dark" : "white"}
-                  onClick={() => setModalContactOpen(true)}
-                >
-                  Contato
-                </Button>
-              </Group>
-            </Box>
-            <Paper radius="md" withBorder p="sm" mb={18}
-              style={{ backgroundColor: 'transparent' }}
-            >
-              {profile.requesting ? ( 
-                <>
-                  <Title order={5}>Disponibilidade</Title>
-                  <Text size='sm'>Carregando...</Text>
-                </>
-              ) : (
-                <>
-                  <Flex align='center' gap={3}>
-                    <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
-                    <Title order={6}>{profile.availabilityTitle}</Title>
-                  </Flex>
-                  {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
-                    <>
-                      <Divider my={7} />
-                      <Text size="xs">Interessado em:</Text>
-                      <Flex align='normal' mt={6}>
-                        {profile.availabilityFocus === 1 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text></>} 
-                        {profile.availabilityFocus === 2 && <><IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
-                        {profile.availabilityFocus === 3 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text>  <IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
-                      </Flex>
-                      <Group gap={4} mt={5}>
-                        {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                          <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant='light' color='dark' key={key} mx={0}>
-                            {item.itemName}
-                          </Badge>
-                        )}  
-                      </Group>
-                    </>
-                  }
-                </>
-              )}
-            </Paper>
+                  <Group gap={5} mt={12}>
+                    {followedByMe?.requesting ? (
+                      <Button size="xs" disabled>Carregando...</Button>
+                    ) : (
+                      <>
+                        {loggedUser.id !== profile.id ? (
+                          <Button 
+                            size="xs" 
+                            color={colorScheme === "light" ? "dark" : "violet"}
+                            loading={loadingFollow} 
+                            variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
+                            onClick={() => followUnfollow()}
+                          >
+                            {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
+                          </Button>
+                        ) : (
+                          <Button 
+                            size="xs" 
+                            variant='outline'
+                            color={colorScheme === "light" ? "dark" : "white"}
+                            onClick={() => navigate('/settings/profile')}
+                          >
+                            Editar perfil
+                          </Button>
+                        )}
+                        <Button 
+                          size="xs" 
+                          variant='outline'
+                          leftSection={<IconMail size={14} />} 
+                          color={colorScheme === "light" ? "dark" : "white"}
+                          onClick={() => setModalContactOpen(true)}
+                        >
+                          Contato
+                        </Button>
+                        {profile.instagram && 
+                          <Link to={`https://instagram.com/${profile.instagram}`} target="_blank">
+                            <Button
+                              leftSection={<IconBrandInstagram size={14} />} 
+                              size="xs" 
+                              variant='outline'
+                              color={colorScheme === "light" ? "dark" : "white"}
+                            >
+                              Instagram
+                            </Button>
+                          </Link>
+                        }
+                      </>
+                    )}
+                  </Group>
+                </Grid.Col>
+                <Grid.Col span={{ base: 12, md: 6, lg: 5 }}>
+                  <Paper radius="md" withBorder p="sm"
+                    style={{ backgroundColor: 'transparent' }}
+                  >
+                    {profile.requesting ? ( 
+                      <>
+                        <Title order={5}>Disponibilidade</Title>
+                        <Text size='sm'>Carregando...</Text>
+                      </>
+                    ) : (
+                      <>
+                        <Flex align='center' gap={3}>
+                          <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
+                          <Title order={6}>{profile.availabilityTitle}</Title>
+                        </Flex>
+                        {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
+                          <>
+                            <Divider my={7} />
+                            <Text size="xs">Interessado em:</Text>
+                            <Flex align='normal' mt={6}>
+                              {profile.availabilityFocus === 1 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text></>} 
+                              {profile.availabilityFocus === 2 && <><IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
+                              {profile.availabilityFocus === 3 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text>  <IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
+                            </Flex>
+                            <Group gap={4} mt={5}>
+                              {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                                <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant='light' color='dark' key={key} mx={0}>
+                                  {item.itemName}
+                                </Badge>
+                              )}  
+                            </Group>
+                          </>
+                        }
+                      </>
+                    )}
+                  </Paper>
+                </Grid.Col>
+              </Grid>
+            }
             <Paper radius="md" withBorder px="sm" py="xs" mb={18}
               style={{ backgroundColor: 'transparent' }}
             >

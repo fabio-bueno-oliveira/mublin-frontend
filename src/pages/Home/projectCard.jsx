@@ -56,10 +56,25 @@ function ProjectCard (props) {
             wrap="wrap"
             rowGap={3}
           >
-            <Text size="13px" fw={500} lineClamp={1}> 
+            <Text size="sm" fw={500} lineClamp={1}> 
               {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
             </Text>
-            <Flex align="end" justify="flex-start" direction="row" mb={1}>
+            {isActiveOnProject && 
+              <Flex align='center'>
+                <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='11px'>{`${project.joined_in} - atualmente (${currentYear - project.joined_in} anos)`}</Text>
+              </Flex>
+            }
+            {project.yearLeftTheProject && 
+              <Flex align='center'>
+                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>deixei o projeto em {project.yearLeftTheProject}</Text>
+              </Flex>
+            }
+            {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
+              <Flex align='center'>
+                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>{project.joined_in} até o encerramento em {project.yearEnd}</Text>
+              </Flex>
+            }
+            <Flex align="end" justify="flex-start" direction="row" mt={6}>
               {project.workTitle === "Membro oficial" && 
                 <IconCircleDashedCheck style={{ width: '14px', height: '14px', marginRight: '3px' }} stroke={1.2} />
               }
@@ -78,21 +93,6 @@ function ProjectCard (props) {
                 </>
               }
             </Flex>
-            {isActiveOnProject && 
-              <Flex align='center' mt={3}>
-                <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='10px'>{`${project.joined_in} - atualmente (${currentYear - project.joined_in} anos)`}</Text>
-              </Flex>
-            }
-            {project.yearLeftTheProject && 
-              <Flex align='center' mt={3}>
-                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>deixei o projeto em {project.yearLeftTheProject}</Text>
-              </Flex>
-            }
-            {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-              <Flex align='center' mt={3}>
-                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>{project.joined_in} até o encerramento em {project.yearEnd}</Text>
-              </Flex>
-            }
           </Flex>
           <Menu withArrow withinPortal position="bottom-end" shadow="sm">
             <Menu.Target>
@@ -151,7 +151,7 @@ function ProjectCard (props) {
               <Title 
                 fw={largeScreen ? 600 : 600}
                 lineClamp={1} 
-                size={largeScreen ? '0.9rem' : '1rem'}
+                size={largeScreen ? '0.95rem' : '1rem'}
                 mb={!project?.regionName ? 0 : 0}
               >
                 {project?.name}
@@ -205,12 +205,12 @@ function ProjectCard (props) {
                 <Avatar 
                   variant="filled" 
                   radius="xl" 
-                  size="sm"
+                  size="md"
                   name={`${member.userName} ${member.userLastname}`}
                   color={"violet"}
                   src={
                     (member.userId && member.userPicture) ? 
-                      cdnBaseURL+'tr:h-26,w-26,r-max,c-maintain_ratio/users/avatars/'+member.userId+'/'+member.userPicture
+                      cdnBaseURL+'tr:h-114,w-114/users/avatars/'+member.userId+'/'+member.userPicture
                     : null
                   } 
                 />
@@ -221,7 +221,7 @@ function ProjectCard (props) {
             <Avatar 
               variant="filled" 
               radius="xl" 
-              size="sm"
+              size="md"
             >
               <IconUserOff size="1rem" />
             </Avatar>
