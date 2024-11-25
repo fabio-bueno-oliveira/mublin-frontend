@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, Divider, em } from '@mantine/core';
+import { Container, Flex, Grid, Paper, ActionIcon, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, em } from '@mantine/core';
 import { IconCircleFilled, IconCheck, IconInfoCircle, IconInfoCircleFilled, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -34,8 +34,9 @@ function ProfilePage () {
     dispatch(profileInfos.getProfileFollowing(username));
     dispatch(profileInfos.getProfileProjects(username));
     dispatch(profileInfos.getProfileRoles(username));
+    dispatch(profileInfos.getProfileGenres(username));
     dispatch(profileInfos.getProfileGear(username));
-    dispatch(profileInfos.getProfileGearSetups(username));
+    // dispatch(profileInfos.getProfileGearSetups(username));
     dispatch(profileInfos.getProfileStrengths(username));
     dispatch(profileInfos.getProfileStrengthsTotalVotes(username));
     dispatch(profileInfos.getProfileStrengthsRaw(username));
@@ -231,15 +232,15 @@ function ProfilePage () {
           <Grid.Col span={{ base: 12, md: 12, lg: 9 }}>
             {profile.requesting && 
               <>
-              <Group justify='flex-start'>
-                <Skeleton height={56} circle />
-                <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                  <Skeleton height={10} width={240} radius="xl" />
-                  <Skeleton height={13} width={240} radius="xl" />
-                  <Skeleton height={11} width={240} radius="xl" />
-                </SimpleGrid>
-              </Group>
-              <Skeleton height={15} width={312} mt={16} radius="xl" />
+                <Group justify='flex-start'>
+                  <Skeleton height={56} circle />
+                  <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
+                    <Skeleton height={10} width={240} radius="xl" />
+                    <Skeleton height={13} width={240} radius="xl" />
+                    <Skeleton height={11} width={240} radius="xl" />
+                  </SimpleGrid>
+                </Group>
+                <Skeleton height={15} width={312} mt={16} mb={20} radius="xl" />
               </>
             }
             {!profile.requesting && 
@@ -343,6 +344,7 @@ function ProfilePage () {
                           Contato
                         </Button>
                         {profile.instagram && 
+                          <>
                           <Link to={`https://instagram.com/${profile.instagram}`} target="_blank">
                             <Button
                               leftSection={<IconBrandInstagram size={14} />} 
@@ -353,15 +355,25 @@ function ProfilePage () {
                               Instagram
                             </Button>
                           </Link>
+                          {/* <ActionIcon 
+                            size="30px" 
+                            w={28} 
+                            variant="outline" 
+                            color={colorScheme === "light" ? "dark" : "white"}
+                            component="a"
+                            href={`https://instagram.com/${profile.instagram}`}
+                            target='_blank'
+                          >
+                            <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                          </ActionIcon> */}
+                          </>
                         }
                       </>
                     )}
                   </Group>
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, md: 6, lg: 5 }}>
-                  <Paper radius="md" withBorder p="sm"
-                    style={{ backgroundColor: 'transparent' }}
-                  >
+                  <Box>
                     {profile.requesting ? ( 
                       <>
                         <Title order={5}>Disponibilidade</Title>
@@ -369,31 +381,52 @@ function ProfilePage () {
                       </>
                     ) : (
                       <>
-                        <Flex align='center' gap={3}>
+                        <Flex align='center' gap={3} mb={10} mt={largeScreen ? 10 : 5}>
                           <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
                           <Title order={6}>{profile.availabilityTitle}</Title>
                         </Flex>
-                        {(profile.availabilityId === 1 || profile.availabilityId === 2) &&
-                          <>
-                            <Divider my={7} />
-                            <Text size="xs">Interessado em:</Text>
-                            <Flex align='normal' mt={6}>
-                              {profile.availabilityFocus === 1 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text></>} 
-                              {profile.availabilityFocus === 2 && <><IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
-                              {profile.availabilityFocus === 3 && <><IconBulb style={iconAvailabilityStyles} /><Text size='xs'>Projetos autorais</Text>  <IconIdBadge2 style={iconAvailabilityStyles} /><Text size='xs'>Sideman</Text></>}
-                            </Flex>
-                            <Group gap={4} mt={5}>
-                              {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                                <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant='light' color='dark' key={key} mx={0}>
-                                  {item.itemName}
-                                </Badge>
-                              )}  
-                            </Group>
-                          </>
-                        }
+                        <Text size="xs" fw={500}>
+                          Estilos musicais:
+                        </Text>
+                        <Group gap={4}>
+                          {profile.genres[0].id && profile.genres.map((item, key) =>
+                            <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" key={key} mx={0}>
+                              {item.name}
+                            </Badge>
+                          )}  
+                        </Group>
+                        <Text size="xs" fw={500} mt={7} >
+                          Tipos de projetos:
+                        </Text>
+                        <Group gap={4}>
+                          {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
+                            <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" mx={0}>
+                              Autorais
+                            </Badge>
+                          }
+                          <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" mx={0}>
+                            Outros (contratado)
+                          </Badge>
+                        </Group>
+                        <Text size="xs" fw={500} mt={7} mb={3}>
+                          Tipos de trabalho:
+                        </Text>
+                        {profile.availabilityItems[0].id ? (
+                          <Group gap={4}>
+                            {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                              <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" key={key} mx={0}>
+                                {item.itemName}
+                              </Badge>
+                            )}  
+                          </Group>
+                        ) : (
+                          <Text size="11px" c="dimmed">
+                            Não informado
+                          </Text>
+                        )}
                       </>
                     )}
-                  </Paper>
+                  </Box>
                 </Grid.Col>
               </Grid>
             }
@@ -472,15 +505,22 @@ function ProfilePage () {
                               className="embla__slide"
                               key={key}
                             >
+                              <Text size='11px' mb={3}>
+                              {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3} em
+                              </Text>
                               <Image 
-                                  src={project.picture} 
-                                  w={80}
-                                  mb={10}
-                                  radius={3}
+                                src={project.picture} 
+                                w={80}
+                                mb={10}
+                                radius={3}
                               />
-                              <Text size='13px' fw={500} mb={3}>{project.name}</Text>
-                              <Text size='12px'>{project.type}</Text>
-                              <Text size='12px'>{project.workTitle}</Text>
+                              <Box w={90}>
+                                <Text ta="center" size='12px' fw={500} mb={3} truncate="end">
+                                  {project.name}
+                                </Text>
+                              </Box>
+                              <Text ta="center" size='11px'>{project.type}</Text>
+                              <Text ta="center" size='11px'>{project.workTitle}</Text>
                             </Flex>
                           )}
                         </div>
@@ -600,8 +640,12 @@ function ProfilePage () {
                                 wrap="wrap"
                                 key={key}
                               >
-                                <Text size='11px' mb={3}>{project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3} em</Text>
-                                <Text size='13px' fw={500} mb={3}>{project.name} {!!project.featured && <IconStarFilled style={{ width: '12px', height: '12px' }} color='gold' />}</Text>
+                                <Text size='11px' mb={3}>
+                                  {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3} em
+                                </Text>
+                                <Text size='13px' fw={500} mb={3}>
+                                  {project.name} {!!project.featured && <IconStarFilled style={{ width: '12px', height: '12px' }} color='gold' />}
+                                </Text>
                                 <Text size='12px'>{project.type}</Text>
                                 {/* <Text size='12px'>{project.workTitle}</Text> */}
                               </Flex>
@@ -651,7 +695,7 @@ function ProfilePage () {
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(follower.username)}>
             <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
             <Flex direction={'column'} className='point'>
-              <Text size={'sm'}>{follower.name}</Text>
+              <Text size={'sm'}>{follower.name} {follower.lastname}</Text>
               <Text size={'10px'} key={key}>
                 {'@'+follower.username}
               </Text>
@@ -670,7 +714,7 @@ function ProfilePage () {
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)}>
             <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
             <Flex direction={'column'} className='point'>
-              <Text size={'sm'}>{following.name}</Text>
+              <Text size={'sm'}>{following.name} {following.lastname}</Text>
               <Text size={'10px'} key={key}>
                 {'@'+following.username}
               </Text>
@@ -685,8 +729,8 @@ function ProfilePage () {
         centered
         // fullScreen
       >
-        <Alert variant="light" mb={10} p={'xs'} color="yellow" icon={<IconInfoCircle />}>
-          <Text size="xs">Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter o Mublin uma comunidade com credibilidade!</Text>
+        <Alert variant="light" mb={10} p={'xs'} color="yellow">
+          <Text size="xs">Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter o Mublin uma comunidade com credibilidade</Text>
         </Alert>
         {strengths.map((strength,key) =>
           <div key={key}>
@@ -716,9 +760,9 @@ function ProfilePage () {
             </div>
           </div>
         )}
-        <Group mt="xs" gap={8}>
-          <Button variant='outline' size='xs' color='violet' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
-          <Button loading={!strengthsLoaded} size='xs' color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
+        <Group mt="xs" justify="flex-end" gap={8}>
+          <Button variant='outline' color='violet' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
+          <Button loading={!strengthsLoaded} color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
         </Group>
       </Modal>
       <FooterMenuMobile />

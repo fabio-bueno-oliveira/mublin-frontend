@@ -19,6 +19,7 @@ export const profileService = {
     getProfileInfo,
     getProfileProjects,
     getProfileRoles,
+    getProfileGenres,
     getProfileFollowers,
     getProfileFollowing,
     checkProfileFollowing,
@@ -56,6 +57,14 @@ function getProfileRoles(username) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/profile/${username}/roles`, requestOptions).then(handleResponse);
+}
+
+function getProfileGenres(username) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/profile/${username}/genres`, requestOptions).then(handleResponse);
 }
 
 function getProfileFollowers(username) {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Divider, Anchor, Indicator } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconDots, IconDotsVertical, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconIdBadge2, IconCircleDashedCheck, IconMusic, IconSettings, IconUserOff, IconRoad, IconCircleFilled } from '@tabler/icons-react';
+import { IconDotsVertical, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconMusic, IconSettings, IconUserOff, IconCircleFilled } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
@@ -12,7 +12,7 @@ function ProjectCard (props) {
   const activeMembers = props?.activeMembers;
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
-  // const user = useSelector(state => state.user);
+  const user = useSelector(state => state.user);
 
   const cdnBaseURL = 'https://ik.imagekit.io/mublin/';
   const cdnProjectPath = cdnBaseURL+'projects/tr:h-250,w-410,fo-top,c-maintain_ratio/';
@@ -22,6 +22,15 @@ function ProjectCard (props) {
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
 
   const iconCircleStyles = { width: '8px', height: '8px', marginLeft: '3px', marginRight: '3px' };
+
+  const yearText = (yearSum) => {
+    return yearSum === 1 ? " ano" : " anos";
+  }
+
+  const years = (yearSmallest, yearBiggest) => {
+    let subtraction = (yearBiggest - yearSmallest);
+    return subtraction === 0 ? "(menos de 1 ano)" : "("+subtraction + yearText(subtraction)+")";
+  }
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
@@ -35,63 +44,54 @@ function ProjectCard (props) {
       <Card.Section withBorder inheritPadding pt="6px" pb="10px" px="xs">
         <Flex
           justify="space-between"
-          align="flex-start"
-          direction="row"
-          wrap="nowrap"
           columnGap="xs"
           mt={6}
         >
-          {/* <Avatar 
-            variant="filled" 
-            radius="xl" 
-            size="md" 
-            src={
-              (user.id && user.picture) ? 
-                cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
-              : null
-              } 
-          /> */}
-          <Flex
-            direction="column"
-            wrap="wrap"
-            rowGap={3}
-          >
-            <Text size="sm" fw={500} lineClamp={1}> 
-              {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
-            </Text>
-            {isActiveOnProject && 
-              <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='11px'>{`${project.joined_in} - atualmente (${currentYear - project.joined_in} anos)`}</Text>
-              </Flex>
-            }
-            {project.yearLeftTheProject && 
-              <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>deixei o projeto em {project.yearLeftTheProject}</Text>
-              </Flex>
-            }
-            {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-              <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>{project.joined_in} até o encerramento em {project.yearEnd}</Text>
-              </Flex>
-            }
-            <Flex align="end" justify="flex-start" direction="row" mt={6}>
-              {project.workTitle === "Membro oficial" && 
-                <IconCircleDashedCheck style={{ width: '14px', height: '14px', marginRight: '3px' }} stroke={1.2} />
-              }
-              {project.workTitle === "Contratado" && 
-                <IconIdBadge2 style={{ width: '14px', height: '14px', marginRight: '3px' }} stroke={1.2} />
-              }
-              <Text size={'11.5px'} truncate="end">
-                {project.workTitle}
+          <Flex align={"center"}>
+            <Avatar 
+              variant="filled" 
+              radius="xl" 
+              size="sm" 
+              mr={7}
+              src={
+                (user.id && user.picture) ? 
+                  cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
+                : null
+                } 
+            />
+            <Flex
+              direction="column"
+              wrap="wrap"
+              rowGap={3}
+            >
+              <Text size="sm" fw={500} lineClamp={1}> 
+                {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
               </Text>
-              {!!project.admin && 
-                <>
-                  <IconSettings style={{ width: '14px', height: '14px', marginLeft: '5px' }} stroke={1.2} />
-                  <Text size={'11.5px'} truncate="end">
-                    Admin
-                  </Text>
-                </>
+              {isActiveOnProject && 
+                <Flex align='center'>
+                  <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='11px'>{`${project.joined_in} - atualmente`} {years(project.joined_in, currentYear)}</Text>
+                </Flex>
               }
+              {project.yearLeftTheProject && 
+                <Flex align='center'>
+                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}</Text>
+                </Flex>
+              }
+              {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
+                <Flex align='center'>
+                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>{project.joined_in} até o encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}</Text>
+                </Flex>
+              }
+              <Flex align="end" justify="flex-start" direction="row" mt={3}>
+                <Badge variant="light" color="gray" radius="sm" size="xs">
+                  {project.workTitle}
+                </Badge>
+                {!!project.admin && 
+                  <Badge variant="light" color="gray" radius="sm" size="xs" ml={3}>
+                    Administrador
+                  </Badge>
+                }
+              </Flex>
             </Flex>
           </Flex>
           <Menu withArrow withinPortal position="bottom-end" shadow="sm">
@@ -158,7 +158,7 @@ function ProjectCard (props) {
               </Title>
             </Anchor>
             {project?.regionName && 
-              <Text size="10px" truncate="end" mb={4} c="dimmed">
+              <Text size="10px" truncate="end" mt={1} mb={4} c="dimmed">
                 {project.cityName && `de ${project.cityName}, `} {`${project.regionUf},`} {`${project.countryName}`}  
               </Text>
             }

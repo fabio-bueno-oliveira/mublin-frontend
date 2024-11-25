@@ -23,14 +23,24 @@ const initialState = {
       icon: ''
     }
   ],
+  genres: [
+    { 
+      id: '', 
+      name: '',
+      main: ''
+    }
+  ],
   availabilityId: '',
   availabilityTitle: '',
   availabilityColor: '',
+  availabilityFocusId: '',
   availabilityFocus: '',
   projects: [
     {
       confirme: '',
       joined_in: '',
+      left_in: '',
+      show_on_profile: '',
       portfolio: '',
       created: '',
       id: '',
@@ -215,6 +225,7 @@ export function profile(state = initialState, action) {
         availabilityId: action.info.availabilityId,
         availabilityTitle: action.info.availabilityTitle,
         availabilityColor: action.info.availabilityColor,
+        availabilityFocusId: action.info.availabilityFocusId,
         availabilityFocus: action.info.availabilityFocus,
         firstAccess: action.info.firstAccess,
         plan: action.info.plan,
@@ -263,6 +274,24 @@ export function profile(state = initialState, action) {
         requesting: false,
       };
     case profileTypes.GET_PROFILE_ROLES_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        error: "A solicitação falhou"
+      };
+    // GENRES
+    case profileTypes.GET_PROFILE_GENRES_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+    case profileTypes.GET_PROFILE_GENRES_SUCCESS:
+      return {
+        ...state,
+        genres: action.list,
+        requesting: false,
+      };
+    case profileTypes.GET_PROFILE_GENRES_FAILURE:
       return {
         ...state,
         requesting: false,

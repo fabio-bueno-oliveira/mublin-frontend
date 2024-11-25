@@ -5,6 +5,7 @@ export const profileInfos = {
     getProfileInfo: getProfileInfo,
     getProfileProjects: getProfileProjects,
     getProfileRoles: getProfileRoles,
+    getProfileGenres: getProfileGenres,
     getProfileFollowers: getProfileFollowers,
     getProfileFollowing: getProfileFollowing,
     checkProfileFollowing: checkProfileFollowing,
@@ -65,6 +66,22 @@ function getProfileRoles(username) {
     function request(username) { return { type: profileTypes.GET_PROFILE_ROLES_REQUEST, username } }
     function success(list) { return { type: profileTypes.GET_PROFILE_ROLES_SUCCESS, list } }
     function failure(username, error) { return { type: profileTypes.GET_PROFILE_ROLES_FAILURE, username, error } }
+}
+
+function getProfileGenres(username) {
+    return dispatch => {
+        dispatch(request(username));
+
+        profileService.getProfileGenres(username)
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(username, error.toString()))
+            );
+    };
+  
+    function request(username) { return { type: profileTypes.GET_PROFILE_GENRES_REQUEST, username } }
+    function success(list) { return { type: profileTypes.GET_PROFILE_GENRES_SUCCESS, list } }
+    function failure(username, error) { return { type: profileTypes.GET_PROFILE_GENRES_FAILURE, username, error } }
 }
 
 function getProfileFollowers(username) {

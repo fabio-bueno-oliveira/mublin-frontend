@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { eventsInfos } from '../../store/actions/events';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Box, Title, Text, Grid, Skeleton, Switch } from '@mantine/core';
+import { Container, Box, Card, Title, Text, Grid, Skeleton, Switch } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -55,52 +55,56 @@ function Home () {
             <Text size="md" mb={4}>
               Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
             </Text>
-            <Switch
-              label="Exibir projetos encerrados"
-              color='violet'
-              checked={showEndedProjects}
-              size="xs"
-              onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
-              w={"fit-content"}
-            />
+            {projectsTerminated.length && 
+              <Switch
+                label="Exibir projetos encerrados"
+                color='violet'
+                checked={showEndedProjects}
+                size="xs"
+                onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
+                w={"fit-content"}
+              />
+            }
           </>
         )}
       </Container>
       <Container size={'lg'}>
         {projects.requesting ? ( 
-          Array.apply(null, { length: 3 }).map((e, i) => (
-            <Grid mb={largeScreen ? 30 : 86}>
+          <Grid mb={largeScreen ? 30 : 86}>
+            {Array.apply(null, { length: 3 }).map((e, i) => (
               <Grid.Col span={{ base: 12, md: 2, lg: 4 }} key={i} mt={20}>
-                <>
-                  <Skeleton height={50} width={50} radius="md" mb="xs" />
-                  <Skeleton height={14} width={"76%"} mt={6} radius="xl" />
+                <Card shadow="sm" padding="lg" radius="md" withBorder>
+                  <Skeleton height={14} width={"40%"} radius="xl" />
+                  <Skeleton height={50} width={50} mt={13} radius="md" />
+                  <Skeleton height={14} width={"76%"} mt={13} radius="xl" />
                   <Skeleton height={14} width={"50%"} mt={6} radius="xl" />
-                </>
+                  <Skeleton height={14} width={"50%"} mt={6} radius="xl" />
+                </Card>
               </Grid.Col>
-            </Grid>
-          ))
+            ))}
+          </Grid>
         ) : (
           <Box mb={largeScreen ? 30 : 86}>
-          <ResponsiveMasonry
-            columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
-          >
-            <Masonry gutter="10px">
-              {projectsToShow.map((p) => (
-                <ProjectCard 
-                  loading={projects.requesting}
-                  project={p}
-                  activeMembers={
-                    projects?.members?.filter(
-                      (member) => { 
-                        return member.projectId === p.projectid 
-                        && !member.leftIn 
-                      }
-                    ).sort((a, b) => b.leader - a.leader)
-                  }
-                />
-              ))}
-            </Masonry>
-          </ResponsiveMasonry>
+            <ResponsiveMasonry
+              columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
+            >
+              <Masonry gutter="10px">
+                {projectsToShow.map((p) => (
+                  <ProjectCard 
+                    loading={projects.requesting}
+                    project={p}
+                    activeMembers={
+                      projects?.members?.filter(
+                        (member) => { 
+                          return member.projectId === p.projectid 
+                          && !member.leftIn 
+                        }
+                      ).sort((a, b) => b.leader - a.leader)
+                    }
+                  />
+                ))}
+              </Masonry>
+            </ResponsiveMasonry>
           </Box>
         )}
       </Container>
