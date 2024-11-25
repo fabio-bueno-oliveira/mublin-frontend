@@ -14,6 +14,17 @@ const initialState = {
   country: '',
   region: '',
   city: '',
+  availabilityId: '',
+  availabilityTitle: '',
+  availabilityColor: '',
+  availabilityFocusId: '',
+  availabilityFocus: '',
+  plan: '',
+  legend: '',
+  verified: '',
+  instagram: '',
+  website: '',
+  public: '',
   roles: [
     { 
       id: '', 
@@ -30,11 +41,6 @@ const initialState = {
       main: ''
     }
   ],
-  availabilityId: '',
-  availabilityTitle: '',
-  availabilityColor: '',
-  availabilityFocusId: '',
-  availabilityFocus: '',
   projects: [
     {
       confirme: '',
@@ -176,13 +182,7 @@ const initialState = {
       friendPicture: '',
       friendPlan: ''
     }
-  ],
-  plan: '',
-  legend: '',
-  verified: '',
-  instagram: '',
-  website: '',
-  public: ''
+  ]
 }
 
 export function profile(state = initialState, action) {
@@ -200,8 +200,17 @@ export function profile(state = initialState, action) {
         country: '',
         region: '',
         city: '',
+        availabilityId: '',
+        availabilityTitle: '',
+        availabilityColor: '',
+        availabilityFocusId: '',
+        availabilityFocus: '',
+        plan: '',
+        legend: '',
+        verified: '',
         instagram: '',
         website: '',
+        public: '',
         requesting: true,
         requested: false,
         success: false
@@ -390,6 +399,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_GEARSETUPS_REQUEST:
       return {
         ...state,
+        gearSetups: initialState.gearSetups,
         requesting: true
       };
     case profileTypes.GET_PROFILE_GEARSETUPS_SUCCESS:
@@ -401,14 +411,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_GEARSETUPS_FAILURE:
       return {
         ...state,
-        gearSetups: [
-          {
-            id: '',
-            name: '',
-            created: '',
-            image: ''
-          }
-        ],
+        gearSetups: initialState.gearSetups,
         requesting: false,
         error: "A solicitação falhou"
     };
@@ -416,6 +419,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_PARTNERS_REQUEST:
       return {
         ...state,
+        partners: initialState.partners,
         requesting: true
       };
     case profileTypes.GET_PROFILE_PARTNERS_SUCCESS:
@@ -427,14 +431,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_PARTNERS_FAILURE:
       return {
         ...state,
-        partners: [
-          {
-            featured: '',
-            type: '',
-            brandName: '',
-            brandLogo: ''
-          }
-        ],
+        partners: initialState.partners,
         requesting: false,
         error: "A solicitação falhou"
       };
@@ -442,6 +439,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_AVAILABILITYITEMS_REQUEST:
       return {
         ...state,
+        availabilityItems: initialState.availabilityItems,
         requesting: true
       };
     case profileTypes.GET_PROFILE_AVAILABILITYITEMS_SUCCESS:
@@ -453,13 +451,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_AVAILABILITYITEMS_FAILURE:
       return {
         ...state,
-        availabilityItems: [
-          {
-            id: '',
-            itemId: '',
-            itemName: ''
-          }
-        ],
+        availabilityItems: initialState.availabilityItems,
         requesting: false,
         error: "A solicitação falhou"
       };

@@ -4,8 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Paper, ActionIcon, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, em } from '@mantine/core';
-import { IconCircleFilled, IconCheck, IconInfoCircle, IconInfoCircleFilled, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail } from '@tabler/icons-react';
+import { Container, Flex, Grid, Paper, ActionIcon, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, Pill, rem, em } from '@mantine/core';
+import { IconCircleFilled, IconCheck, IconInfoCircle, IconInfoCircleFilled, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -71,7 +71,7 @@ function ProfilePage () {
   const iconAvailabilityStyles = { width: '14px', height: '14px', marginLeft: '3px', marginRight: '3px' };
 
   // Projects
-  const allProjects = profile.projects;
+  const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
   // const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
   // const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
@@ -244,7 +244,7 @@ function ProfilePage () {
               </>
             }
             {!profile.requesting && 
-              <Grid mb={20}>
+              <Grid mb={largeScreen ? 45: 20}>
                 <Grid.Col span={{ base: 12, md: 6, lg: 7 }}>
                   <Flex
                     justify="flex-start"
@@ -279,25 +279,13 @@ function ProfilePage () {
                           </Flex>
                         )}
                       </Flex>
-                      <Group gap={8} mt={4}>
-                        {profile.followers.length ? (
-                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
-                            {profile.followers.length} seguidores
-                          </Text>
-                        ) : (
-                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowersOpen(true)}>
-                            {profile.followers.length} seguidores
-                          </Text>
-                        )}
-                        {profile.following.length ? (
-                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
-                            {profile.following.length} seguindo
-                          </Text>
-                        ) : (
-                          <Text className='point' size={'xs'} fw={500} onClick={() => setModalFollowingOpen(true)}>
-                            {profile.following.length} seguindo
-                          </Text>
-                        )}
+                      <Group gap={12} mt={4}>
+                        <Text className='point' size='sm' fw={500} onClick={() => setModalFollowersOpen(true)}>
+                          {profile.followers.length} seguidores
+                        </Text>
+                        <Text className='point' size='sm' fw={500} onClick={() => setModalFollowingOpen(true)}>
+                          {profile.following.length} seguindo
+                        </Text>
                       </Group>
                     </Box>
                   </Flex>
@@ -317,9 +305,10 @@ function ProfilePage () {
                         {loggedUser.id !== profile.id ? (
                           <Button 
                             size="xs" 
-                            color={colorScheme === "light" ? "dark" : "violet"}
-                            loading={loadingFollow} 
-                            variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
+                            color={colorScheme === "light" ? "dark" : "gray"}
+                            variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
+                            loading={loadingFollow}
+                            rightSection={<IconChevronDown size={14} />}
                             onClick={() => followUnfollow()}
                           >
                             {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
@@ -327,8 +316,8 @@ function ProfilePage () {
                         ) : (
                           <Button 
                             size="xs" 
-                            variant='outline'
-                            color={colorScheme === "light" ? "dark" : "white"}
+                            variant='light'
+                            color={colorScheme === "light" ? "dark" : "gray"}
                             onClick={() => navigate('/settings/profile')}
                           >
                             Editar perfil
@@ -336,9 +325,9 @@ function ProfilePage () {
                         )}
                         <Button 
                           size="xs" 
-                          variant='outline'
+                          variant='light'
+                          color={colorScheme === "light" ? "dark" : "gray"}
                           leftSection={<IconMail size={14} />} 
-                          color={colorScheme === "light" ? "dark" : "white"}
                           onClick={() => setModalContactOpen(true)}
                         >
                           Contato
@@ -349,8 +338,8 @@ function ProfilePage () {
                             <Button
                               leftSection={<IconBrandInstagram size={14} />} 
                               size="xs" 
-                              variant='outline'
-                              color={colorScheme === "light" ? "dark" : "white"}
+                              variant='light'
+                              color={colorScheme === "light" ? "dark" : "gray"}
                             >
                               Instagram
                             </Button>
@@ -374,57 +363,56 @@ function ProfilePage () {
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, md: 6, lg: 5 }}>
                   <Box>
-                    {profile.requesting ? ( 
-                      <>
-                        <Title order={5}>Disponibilidade</Title>
-                        <Text size='sm'>Carregando...</Text>
-                      </>
-                    ) : (
-                      <>
-                        <Flex align='center' gap={3} mb={10} mt={largeScreen ? 10 : 5}>
-                          <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
-                          <Title order={6}>{profile.availabilityTitle}</Title>
-                        </Flex>
-                        <Text size="xs" fw={500}>
-                          Estilos musicais:
+                    <Flex align='center' gap={3} mb={10} mt={largeScreen ? 20 : 5}>
+                      <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
+                      <Title order={6}>{profile.availabilityTitle}</Title>
+                    </Flex>
+                    <Text size="xs" fw={500}>
+                      Estilos musicais:
+                    </Text>
+                    <Group gap={4}>
+                      {profile.requesting ? (
+                        <Text size='xs' mx={0}>Carregando...</Text>
+                      ) : (
+                        <Text size='xs' mx={0}>
+                          {profile.genres[0].id && profile.genres.map((genre, key) =>
+                            <span key={key} className="comma">{genre.name}</span>
+                          )}
                         </Text>
-                        <Group gap={4}>
-                          {profile.genres[0].id && profile.genres.map((item, key) =>
-                            <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" key={key} mx={0}>
-                              {item.name}
-                            </Badge>
-                          )}  
-                        </Group>
-                        <Text size="xs" fw={500} mt={7} >
-                          Tipos de projetos:
-                        </Text>
-                        <Group gap={4}>
+                      )}
+                    </Group>
+                    <Text size="xs" fw={500} mt={7} >
+                      Tipos de projetos:
+                    </Text>
+                    <Group gap={4}>
+                      {profile.requesting ? (
+                        <Text size='xs' mx={0}>Carregando...</Text>
+                      ) : (
+                        <Text size='xs' mx={0}>
                           {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-                            <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" mx={0}>
-                              Autorais
-                            </Badge>
+                            <span className="comma">Autorais</span>
                           }
-                          <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" mx={0}>
-                            Outros (contratado)
-                          </Badge>
-                        </Group>
-                        <Text size="xs" fw={500} mt={7} mb={3}>
-                          Tipos de trabalho:
+                          {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
+                            <span className="comma">Contratado</span>
+                          }
                         </Text>
-                        {profile.availabilityItems[0].id ? (
-                          <Group gap={4}>
-                            {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                              <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="light" color="violet" key={key} mx={0}>
-                                {item.itemName}
-                              </Badge>
-                            )}  
-                          </Group>
-                        ) : (
-                          <Text size="11px" c="dimmed">
-                            Não informado
-                          </Text>
-                        )}
-                      </>
+                      )}
+                    </Group>
+                    <Text size="xs" fw={500} mt={7} mb={3}>
+                      Tipos de trabalho:
+                    </Text>
+                    {profile.availabilityItems[0].id ? (
+                      <Group gap={4}>
+                        {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                          <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' color="rgba(18, 18, 18, 1)" key={key} mx={0}>
+                            {item.itemName}
+                          </Badge>
+                        )}  
+                      </Group>
+                    ) : (
+                      <Text size="11px" c="dimmed">
+                        Não informado
+                      </Text>
                     )}
                   </Box>
                 </Grid.Col>
@@ -695,8 +683,8 @@ function ProfilePage () {
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(follower.username)}>
             <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
             <Flex direction={'column'} className='point'>
-              <Text size={'sm'}>{follower.name} {follower.lastname}</Text>
-              <Text size={'10px'} key={key}>
+              <Text size='xs' fw={500}>{follower.name} {follower.lastname}</Text>
+              <Text size='xs' key={key}>
                 {'@'+follower.username}
               </Text>
             </Flex>
@@ -714,8 +702,8 @@ function ProfilePage () {
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)}>
             <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
             <Flex direction={'column'} className='point'>
-              <Text size={'sm'}>{following.name} {following.lastname}</Text>
-              <Text size={'10px'} key={key}>
+              <Text size='xs' fw={500}>{following.name} {following.lastname}</Text>
+              <Text size='xs' key={key}>
                 {'@'+following.username}
               </Text>
             </Flex>
