@@ -155,14 +155,18 @@ const initialState = {
   gearCategories: [
     { category: '', macroCategory: '', total: 0 }
   ],
-  partners: [
-    {
-      featured: '',
-      type: '',
-      brandName: '',
-      brandLogo: ''
-    }
-  ],
+  partners: {
+    total: 0,
+    success: false,
+    result: [
+      { 
+        featured: '',
+        type: '',
+        brandName: '',
+        brandLogo: ''
+      }
+    ]
+  },
   availabilityItems: [
     {
       id: '',
@@ -459,6 +463,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_STRENGTHS_REQUEST:
       return {
         ...state,
+        strengths: initialState.strengths,
         requesting: true
       };
     case profileTypes.GET_PROFILE_STRENGTHS_SUCCESS:

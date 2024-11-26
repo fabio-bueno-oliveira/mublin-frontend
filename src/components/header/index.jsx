@@ -14,6 +14,8 @@ function Header (props) {
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
+  const openMenuDrawerFromProfile = props.openMenuDrawerFromProfile;
+
   const user = useSelector(state => state.user);
 
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -72,6 +74,7 @@ function Header (props) {
     navigateToSearchPage(query, tab);
   }
 
+  const [openMenuDrawer, setOpenMenuDrawer] = useState(false);
   const [openedDrawer, { open, close }] = useDisclosure(false);
 
   return (
@@ -210,7 +213,7 @@ function Header (props) {
           }
           {(!largeScreen && props.pageType === 'profile') && 
             <ActionIcon 
-              onClick={open} 
+              onClick={() => setOpenMenuDrawer(true)} 
               variant="transparent" 
               size="lg" 
               color='gray'
@@ -223,8 +226,8 @@ function Header (props) {
       </Flex>
     </Container>
     <Drawer 
-      opened={openedDrawer} 
-      onClose={close} 
+      opened={openMenuDrawer || openMenuDrawerFromProfile} 
+      onClose={() => setOpenMenuDrawer(false)} 
       title={props.username}
       position="bottom"
     >

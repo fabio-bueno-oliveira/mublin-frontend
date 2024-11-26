@@ -4,12 +4,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Paper, ActionIcon, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, Pill, rem, em } from '@mantine/core';
-import { IconCircleFilled, IconCheck, IconInfoCircle, IconInfoCircleFilled, IconBulb, IconIdBadge2, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
+import { Container, Flex, Grid, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, em } from '@mantine/core';
+import { IconCircleFilled, IconCheck, IconInfoCircleFilled, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useMediaQuery } from '@mantine/hooks';
+import PartnersModule from './partners';
 import './styles.scss';
 
 function ProfilePage () {
@@ -37,6 +38,7 @@ function ProfilePage () {
     dispatch(profileInfos.getProfileGenres(username));
     dispatch(profileInfos.getProfileGear(username));
     // dispatch(profileInfos.getProfileGearSetups(username));
+    dispatch(profileInfos.getProfilePartners(username));
     dispatch(profileInfos.getProfileStrengths(username));
     dispatch(profileInfos.getProfileStrengthsTotalVotes(username));
     dispatch(profileInfos.getProfileStrengthsRaw(username));
@@ -308,8 +310,8 @@ function ProfilePage () {
                             color={colorScheme === "light" ? "dark" : "gray"}
                             variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
                             loading={loadingFollow}
-                            rightSection={<IconChevronDown size={14} />}
-                            onClick={() => followUnfollow()}
+                            rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
+                            onClick={followedByMe?.following === 'true' ? () => followUnfollow() : () => followUnfollow()}
                           >
                             {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
                           </Button>
@@ -418,9 +420,10 @@ function ProfilePage () {
                 </Grid.Col>
               </Grid>
             }
-            <Paper radius="md" withBorder px="sm" py="xs" mb={18}
-              style={{ backgroundColor: 'transparent' }}
-            >
+            {profile.plan === "Pro" && 
+              <PartnersModule loading={profile.requesting} partners={profile.partners} />
+            }
+            <Box mb={18}>
               <Group justify="flex-start" align="center" gap={8} mb={18}>
                 <Title order={5}>Pontos Fortes ({profile?.strengths?.total})</Title>
                 {profile.id !== loggedUser.id && 
@@ -469,7 +472,7 @@ function ProfilePage () {
                   )}
                 </>
               )}
-            </Paper>
+            </Box>
             {isMobile && 
               <Paper radius="md" withBorder px="sm" py="xs" mb={18}
                 style={{ backgroundColor: 'transparent' }}
@@ -523,9 +526,7 @@ function ProfilePage () {
               </Paper>
             }
             {profile.plan === "Pro" && 
-              <Paper radius="md" withBorder px="sm" py="xs" mb={25}
-                style={{ backgroundColor: 'transparent' }}
-              >
+              <Box mb={25}>
                 <Title order={5} mb={8}>Equipamento</Title>
                 {profile.requesting ? ( 
                   <Text size='sm'>Carregando...</Text>
@@ -593,7 +594,7 @@ function ProfilePage () {
                     )}
                   </>
                 )}
-              </Paper>
+              </Box>
             }
           </Grid.Col>
           {largeScreen && 
@@ -683,7 +684,14 @@ function ProfilePage () {
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(follower.username)}>
             <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
             <Flex direction={'column'} className='point'>
-              <Text size='xs' fw={500}>{follower.name} {follower.lastname}</Text>
+              <Group gap={0}>
+                <Text size='sm' fw={500}>
+                  {follower.name} {follower.lastname}
+                </Text>
+                {follower.verified && 
+                  <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                } 
+              </Group>
               <Text size='xs' key={key}>
                 {'@'+follower.username}
               </Text>
@@ -702,7 +710,7 @@ function ProfilePage () {
           <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)}>
             <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
             <Flex direction={'column'} className='point'>
-              <Text size='xs' fw={500}>{following.name} {following.lastname}</Text>
+              <Text size='sm' fw={500}>{following.name} {following.lastname}</Text>
               <Text size='xs' key={key}>
                 {'@'+following.username}
               </Text>
