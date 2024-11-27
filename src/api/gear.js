@@ -14,10 +14,28 @@ export function authHeader() {
 }
 
 export const gearService = {
+    getBrandInfo,
+    gerBrandProducts,
     getProductInfo,
     getProductOwners,
     logout
 };
+
+function getBrandInfo(brandUrlName) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/gear/brand/${brandUrlName}`, requestOptions).then(handleResponse);
+}
+
+function gerBrandProducts(brandUrlName) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/gear/${brandUrlName}/products`, requestOptions).then(handleResponse);
+}
 
 function getProductInfo(productId) {
     const requestOptions = {

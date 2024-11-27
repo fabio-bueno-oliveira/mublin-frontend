@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Group, Center, Box, Title, Text, Image, Avatar, Divider, Badge, Modal, ScrollArea } from '@mantine/core';
+import { Container, Flex, Group, Anchor, Center, Box, Title, Text, Image, Avatar, Divider, Badge, Modal, ScrollArea } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -29,8 +29,11 @@ function GearProductPage () {
       <Header />
       <Container size={'lg'} mt={largeScreen ? 20 : 0}>
         <Box mb={20}>
+          <Link to={{ pathname: `/gear/brand/${product.brandSlug}` }}>
+            {product.brandName}
+          </Link>
           <Text>
-            {product.requesting ? 'Carregando marca...' : product.categoryName + ' • ' + product.brandName}
+            {product.requesting ? 'Carregando marca...' : product.categoryName}
           </Text>
           <Title order={3} mb={20}>
             {product.requesting ? 'Carregando produto...' : product.name}
@@ -57,52 +60,56 @@ function GearProductPage () {
             </Center>
           )}
         </Box>
-        <Title order={4} mb={14}>Quem possui {product?.owners?.length && '('+product?.owners?.length+')'}</Title>
+        <Title order={4} mb={14}>
+          Quem possui {product?.owners?.length && '('+product?.owners?.length+')'}
+        </Title>
         {product.requesting ? (
           <Text>
             Carregando...
           </Text>
         ) : (
           <>
-            {product?.owners?.map((owner,key) => 
-              <Box key={key}>
-                <Flex mb={14} gap={7}>
-                  <Link to={{ pathname: `/${owner.username}` }}>
-                    <Avatar.Group>
-                      <Avatar size='lg' src={owner.picture} />
-                      <Avatar src={product.picture} />
-                    </Avatar.Group>
-                  </Link>
-                  <Flex
-                    justify="flex-start"
-                    align="flex-start"
-                    direction="column"
-                    wrap="wrap"
-                  >
-                    <Text size='sm' fw={500}>
-                      {owner.name+' '+owner.lastname}
-                    </Text>
-                    <Text size='xs'>
-                      {owner.city && <span>{owner.city}/{owner.region}</span>}
-                    </Text>
-                    <Group gap={3}>
-                      {!!owner.currentlyUsing && 
-                        <Badge size='xs' color='dark'>Em uso</Badge>
-                      } 
-                      {!!owner.forSale && 
-                        <Badge size='xs' color='violet'>À venda</Badge>
-                      } 
-                      {!!owner.price && 
-                        <Badge size='xs' color='violet'>
-                          {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
-                        </Badge>
-                      }
-                    </Group>
+            {product.owners[0].id && 
+              product?.owners?.map((owner,key) => 
+                <Box key={key}>
+                  <Flex mb={14} gap={7}>
+                    <Link to={{ pathname: `/${owner.username}` }}>
+                      <Avatar.Group>
+                        <Avatar size='lg' src={owner.picture} />
+                        <Avatar src={product.picture} />
+                      </Avatar.Group>
+                    </Link>
+                    <Flex
+                      justify="flex-start"
+                      align="flex-start"
+                      direction="column"
+                      wrap="wrap"
+                    >
+                      <Text size='sm' fw={500}>
+                        {owner.name+' '+owner.lastname}
+                      </Text>
+                      <Text size='xs'>
+                        {owner.city && <span>{owner.city}/{owner.region}</span>}
+                      </Text>
+                      <Group gap={3}>
+                        {!!owner.currentlyUsing && 
+                          <Badge size='xs' color='dark'>Em uso</Badge>
+                        } 
+                        {!!owner.forSale && 
+                          <Badge size='xs' color='violet'>À venda</Badge>
+                        } 
+                        {!!owner.price && 
+                          <Badge size='xs' color='violet'>
+                            {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                          </Badge>
+                        }
+                      </Group>
+                    </Flex>
                   </Flex>
-                </Flex>
-                <Divider my="xs" />
-              </Box>
-            )}
+                  <Divider my="xs" />
+                </Box>
+              )
+            }
           </>
         )}
       </Container>

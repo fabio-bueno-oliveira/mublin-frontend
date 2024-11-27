@@ -10,6 +10,7 @@ const initialState = {
   brandId: '',
   brandName: '',
   brandLogo: '',
+  brandSlug: '',
   categoryId: '',
   categoryName: '',
   owners: [
@@ -53,6 +54,7 @@ export function gear(state = initialState, action) {
         brandId: action.info.brandId,
         brandName: action.info.brandName,
         brandLogo: action.info.brandLogo,
+        brandSlug: action.info.brandSlug,
         categoryId: action.info.categoryId,
         categoryName: action.info.categoryName
       };
