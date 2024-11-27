@@ -226,6 +226,7 @@ function Header (props) {
                   <Menu.Divider />
                   <Menu.Item 
                     leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
+                    onClick={() => navigate('/settings')}
                   >
                     Configurações
                   </Menu.Item>
