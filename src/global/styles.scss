@@ -128,3 +128,9 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: masonry;
 }
+
+.menuHeader {
+  .mantine-Button-section {
+    margin-right: 5px;
+  }
+}

@@ -4,9 +4,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Menu, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer } from '@mantine/core';
 import { useMediaQuery, useDisclosure, useDebouncedCallback } from '@mantine/hooks';
-import { IconMoon, IconBrightnessUp, IconSearch, IconDotsVertical } from '@tabler/icons-react';
+import { 
+  IconMoon, 
+  IconBrightnessUp, 
+  IconSearch, 
+  IconDotsVertical, 
+  IconSettings, 
+  IconMessageCircle, 
+  IconUserCircle, 
+  IconHome,
+  IconTopologyStar3,
+  IconMusic,
+  IconLogout
+} from '@tabler/icons-react';
 import s from './header.module.css';
 
 function Header (props) {
@@ -137,78 +149,111 @@ function Header (props) {
             </>
           }
         </Group>
-        <Flex align={"center"}>
+        <Flex align={"center"} className="menuHeader">
           {user.first_access === 0 && 
-            <Link to={{ pathname: '/home' }}>
-              <Button 
-                size="sm" 
-                variant='transparent'
-                color={currentPath === '/home' ? 'violet' : 'dark'}
-                p={'xs'}
-                visibleFrom="md"
-              >
-                Início
-              </Button>
-            </Link>
+            <>
+              <Link to={{ pathname: '/home' }}>
+                <Button 
+                  size="sm" 
+                  variant='transparent'
+                  color={currentPath === '/home' ? 'violet' : 'dark'}
+                  leftSection={<><IconHome size={14} /></>}
+                  p={'xs'}
+                  visibleFrom="md"
+                >
+                  Início
+                </Button>
+              </Link>
+              <Link to={{ pathname: '/my-projects' }}>
+                <Button 
+                  size="sm" 
+                  variant='transparent'
+                  color={currentPath === '/my-projects' ? 'violet' : 'dark'}
+                  leftSection={<><IconTopologyStar3 size={14} /></>}
+                  p={'xs'}
+                  visibleFrom="md"
+                >
+                  Oportunidades
+                </Button>
+              </Link>
+              <Link to={{ pathname: '/my-projects' }}>
+                <Button 
+                  size="sm" 
+                  variant='transparent'
+                  color={currentPath === '/my-projects' ? 'violet' : 'dark'}
+                  leftSection={<><IconMusic size={14} /></>}
+                  p={'xs'}
+                  visibleFrom="md"
+                >
+                  Meus Projetos
+                </Button>
+              </Link>
+            </>
           }
-          {user.first_access === 0 && 
-            <Link to={{ pathname: '/my-projects' }}>
-              <Button 
-                size="sm" 
-                variant='transparent'
-                color={currentPath === '/my-projects' ? 'violet' : 'dark'}
-                p={'xs'}
-                visibleFrom="md"
-              >
-                Meus Projetos
-              </Button>
-            </Link>
-          }
-          <Button 
-            size="sm" 
-            variant='transparent'
-            color="dark"
-            onClick={() => logout()}
-            p={'xs'}
-            visibleFrom="md"
-          >
-            Sair
-          </Button>
           {largeScreen && 
             <>
-              <Link to={{ pathname: `/${user.username}`}}>
-                <Avatar
-                  size="md"
-                  src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null}
-                  alt={user.username}
-                  ml={8}
-                />
-              </Link>
-              {/* <Text fw={400} size='sm' ml={4} c='dimmed'>
-                {user.name}
-              </Text> */}
-              {user.plan === 'Pro' && 
+              {/* {user.plan === 'Pro' && 
                 <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
-              }
-              {colorScheme === 'dark' && 
-                <ActionIcon 
-                  variant="transparent" size="lg" color="default" 
-                  onClick={() => {setColorScheme('light')}}
-                  visibleFrom="md"
-                  ml={14}
-                >
-                  <IconBrightnessUp style={{ width: rem(20) }} stroke={1.5} />
-                </ActionIcon>
-              }
-              {colorScheme === 'light' && 
-                <ActionIcon variant="transparent" size="lg" color="default" 
-                  onClick={() => {setColorScheme('dark')}}
-                  visibleFrom="md"
-                  ml={14}
-                >
-                  <IconMoon style={{ width: rem(20) }} stroke={1.5} />
-                </ActionIcon>
-              }
+              } */}
+              <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
+                <Menu.Target>
+                  <Avatar
+                    size="md"
+                    className="point"
+                    src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null}
+                    alt={user.username}
+                    ml={8}
+                  />
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Label>
+                    {user.name} {user.lastname} 
+                    {user.plan === 'Pro' && 
+                      <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
+                    }
+                  </Menu.Label>
+                  <Menu.Item 
+                    leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
+                    // onClick={() => navigate(`/${user.username}`)}
+                    // onClick={() => console.log("foi")}
+                    onClick={() => navigate(''+user.username)}
+                  >
+                    Ver perfil
+                  </Menu.Item>
+                  <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
+                    Mensagens
+                  </Menu.Item>
+                  <Menu.Divider />
+                  <Menu.Item 
+                    leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
+                  >
+                    Configurações
+                  </Menu.Item>
+                  {colorScheme === 'dark' && 
+                    <Menu.Item 
+                      leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => {setColorScheme('light')}}
+                    >
+                      Modo claro
+                    </Menu.Item>
+                  }
+                  {colorScheme === 'light' && 
+                    <Menu.Item 
+                      leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => {setColorScheme('dark')}}
+                    >
+                      Modo escuro
+                    </Menu.Item>
+                  }
+                  <Menu.Divider />
+                  <Menu.Item 
+                    leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                    onClick={() => logout()}
+                  >
+                    Sair
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
             </>
           }
           {(!largeScreen && props.pageType === 'profile') && 
