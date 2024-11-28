@@ -21,7 +21,7 @@ function ProjectCard (props) {
   const currentYear = new Date().getFullYear();
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
 
-  const iconCircleStyles = { width: '8px', height: '8px', marginLeft: '3px', marginRight: '3px' };
+  const iconCircleStyles = { width: '7px', height: '7px', marginRight: '3px' };
 
   const yearText = (yearSum) => {
     return yearSum === 1 ? " ano" : " anos";
@@ -33,7 +33,7 @@ function ProjectCard (props) {
   }
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder>
+    <Card shadow="sm" padding="lg" radius="md" withBorder style={{borderTop: "2px solid #d9d9d9"}}>
       {/* <Card.Section>
         <Image
           src={cdnProjectPathBlur+project?.picture}
@@ -64,34 +64,27 @@ function ProjectCard (props) {
               wrap="wrap"
               rowGap={3}
             >
-              <Text size="sm" fw={500} lineClamp={1}> 
+              <Text size="sm" mb={0} fw={500} lineClamp={1}> 
                 {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
+              </Text>
+              <Text size="10px" c="dimmed" mb={3}>
+                {project.workTitle} {!!project.admin && " · Administrador"}
               </Text>
               {isActiveOnProject && 
                 <Flex align='center'>
-                  <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='11px'>{`${project.joined_in} - atualmente`} {years(project.joined_in, currentYear)}</Text>
+                  <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='10px'>{`${project.joined_in} - atualmente`} {years(project.joined_in, currentYear)}</Text>
                 </Flex>
               }
               {project.yearLeftTheProject && 
                 <Flex align='center'>
-                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}</Text>
+                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}</Text>
                 </Flex>
               }
               {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
                 <Flex align='center'>
-                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='11px'>{project.joined_in} até o encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}</Text>
+                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>{project.joined_in} até o encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}</Text>
                 </Flex>
               }
-              <Flex align="end" justify="flex-start" direction="row" mt={3}>
-                <Badge variant="light" color="gray" radius="sm" size="xs">
-                  {project.workTitle}
-                </Badge>
-                {!!project.admin && 
-                  <Badge variant="light" color="gray" radius="sm" size="xs" ml={3}>
-                    Administrador
-                  </Badge>
-                }
-              </Flex>
             </Flex>
           </Flex>
           <Menu withArrow withinPortal position="bottom-end" shadow="sm">
@@ -120,8 +113,15 @@ function ProjectCard (props) {
             </Menu.Dropdown>
           </Menu>
         </Flex>
-      </Card.Section>
-      <Card.Section withBorder inheritPadding py="xs" px="xs">
+        <Divider
+          mt={11}
+          mb={11} 
+          label={
+            <Badge size="xs" variant="light" color={project?.activityStatusColor}>
+              {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
+            </Badge>
+          } 
+        />
         <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
           <Link to={{ pathname: `/project/${project?.username}` }}>
             <Indicator 
@@ -184,9 +184,6 @@ function ProjectCard (props) {
                 </>
               }
             </Group>
-            <Badge size="xs" variant="light" color={project?.activityStatusColor}>
-              {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
-            </Badge>
           </div>
         </Group>
         <Divider 
