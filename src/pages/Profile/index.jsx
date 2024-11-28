@@ -235,19 +235,20 @@ function ProfilePage () {
             {profile.requesting && 
               <>
                 <Group justify='flex-start'>
-                  <Skeleton height={56} circle />
+                  <Skeleton height={84} circle />
                   <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                    <Skeleton height={10} width={240} radius="xl" />
-                    <Skeleton height={13} width={240} radius="xl" />
+                    <Skeleton height={18} width={240} radius="xl" />
                     <Skeleton height={11} width={240} radius="xl" />
+                    <Skeleton height={14} width={240} radius="xl" />
                   </SimpleGrid>
                 </Group>
-                <Skeleton height={15} width={312} mt={16} mb={20} radius="xl" />
+                <Skeleton height={15} width={420} mt={16} radius="xl" />
+                <Skeleton height={15} width={450} mt={5} mb={20} radius="xl" />
               </>
             }
             {!profile.requesting && 
               <Grid mb={largeScreen ? 45: 20}>
-                <Grid.Col span={{ base: 12, md: 6, lg: 7 }}>
+                <Grid.Col span={{ base: 12, md: 6, lg: 8 }}>
                   <Flex
                     justify="flex-start"
                     align="center"
@@ -262,6 +263,7 @@ function ProfilePage () {
                     />
                     <Box style={{ overflow: 'hidden' }}>
                       <Flex align={'center'}>
+
                         <Title order={largeScreen ? 3 : 4}>{profile.name} {profile.lastname}</Title>
                         {!!profile.verified && 
                           <Tooltip label="Usuário Verificado">
@@ -277,15 +279,18 @@ function ProfilePage () {
                       <Flex className='rolesList'>
                         {profile.roles.map((role, key) =>
                           <Flex gap={2} align={'center'} key={key}>
-                            {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />} <Text size='11px' mr={13}>{role.name}</Text>
+                            {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />} <Text size='13px' mr={13}>{role.name}</Text>
                           </Flex>
                         )}
                       </Flex>
-                      <Group gap={12} mt={4}>
-                        <Text className='point' size='sm' fw={500} onClick={() => setModalFollowersOpen(true)}>
+                      <Text size="11px" c="dimmed" mt={4}>
+                        {profile.city} {profile.region && `, ${profile.region}`}
+                      </Text>
+                      <Group gap={12} mt={7}>
+                        <Text className='point' size='xs' fw={500} onClick={() => setModalFollowersOpen(true)}>
                           {profile.followers.length} seguidores
                         </Text>
-                        <Text className='point' size='sm' fw={500} onClick={() => setModalFollowingOpen(true)}>
+                        <Text className='point' size='xs' fw={500} onClick={() => setModalFollowingOpen(true)}>
                           {profile.following.length} seguindo
                         </Text>
                       </Group>
@@ -295,6 +300,7 @@ function ProfilePage () {
                     <Text 
                       size={largeScreen ? 'sm' : 'xs'} mt={14} lineClamp={3}
                       onClick={!largeScreen ? () => setModalBioOpen(true) : undefined}
+                      pr={largeScreen ? 26 : 0}
                     >
                       {profile.bio}
                     </Text>
@@ -363,60 +369,62 @@ function ProfilePage () {
                     )}
                   </Group>
                 </Grid.Col>
-                <Grid.Col span={{ base: 12, md: 6, lg: 5 }}>
-                  <Box>
-                    <Flex align='center' gap={3} mb={10} mt={largeScreen ? 20 : 5}>
-                      <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
-                      <Title order={6}>{profile.availabilityTitle}</Title>
-                    </Flex>
-                    <Text size="xs" fw={500}>
-                      Estilos musicais:
-                    </Text>
-                    <Group gap={4}>
-                      {profile.requesting ? (
-                        <Text size='xs' mx={0}>Carregando...</Text>
-                      ) : (
-                        <Text size='xs' mx={0}>
-                          {profile.genres[0].id && profile.genres.map((genre, key) =>
-                            <span key={key} className="comma">{genre.name}</span>
-                          )}
-                        </Text>
-                      )}
-                    </Group>
-                    <Text size="xs" fw={500} mt={7} >
-                      Tipos de projetos:
-                    </Text>
-                    <Group gap={4}>
-                      {profile.requesting ? (
-                        <Text size='xs' mx={0}>Carregando...</Text>
-                      ) : (
-                        <Text size='xs' mx={0}>
-                          {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-                            <span className="comma">Autorais</span>
-                          }
-                          {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-                            <span className="comma">Contratado</span>
-                          }
-                        </Text>
-                      )}
-                    </Group>
-                    <Text size="xs" fw={500} mt={7} mb={3}>
-                      Tipos de trabalho:
-                    </Text>
-                    {profile.availabilityItems[0].id ? (
-                      <Group gap={4}>
-                        {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                          <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' color="rgba(18, 18, 18, 1)" key={key} mx={0}>
-                            {item.itemName}
-                          </Badge>
-                        )}  
-                      </Group>
-                    ) : (
-                      <Text size="11px" c="dimmed">
-                        Não informado
+                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
+                  {profile.availabilityId && 
+                    <Box>
+                      <Flex align='center' gap={3} mb={10} mt={largeScreen ? 14 : 5}>
+                        <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
+                        <Title order={6}>{profile.availabilityTitle}</Title>
+                      </Flex>
+                      <Text size="xs" fw={500}>
+                        Estilos musicais:
                       </Text>
-                    )}
-                  </Box>
+                      <Group gap={4}>
+                        {profile.requesting ? (
+                          <Text size='xs' mx={0}>Carregando...</Text>
+                        ) : (
+                          <Text size='xs' mx={0}>
+                            {profile.genres[0].id && profile.genres.map((genre, key) =>
+                              <span key={key} className="comma">{genre.name}</span>
+                            )}
+                          </Text>
+                        )}
+                      </Group>
+                      <Text size="xs" fw={500} mt={7} >
+                        Tipos de projetos:
+                      </Text>
+                      <Group gap={4}>
+                        {profile.requesting ? (
+                          <Text size='xs' mx={0}>Carregando...</Text>
+                        ) : (
+                          <Text size='xs' mx={0}>
+                            {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
+                              <span className="comma">Autorais</span>
+                            }
+                            {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
+                              <span className="comma">Contratado</span>
+                            }
+                          </Text>
+                        )}
+                      </Group>
+                      <Text size="xs" fw={500} mt={7} mb={3}>
+                        Tipos de trabalho:
+                      </Text>
+                      {profile.availabilityItems[0].id ? (
+                        <Group gap={4}>
+                          {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                            <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' color="rgba(18, 18, 18, 1)" key={key} mx={0}>
+                              {item.itemName}
+                            </Badge>
+                          )}  
+                        </Group>
+                      ) : (
+                        <Text size="11px" c="dimmed">
+                          Não informado
+                        </Text>
+                      )}
+                    </Box>
+                  }
                 </Grid.Col>
               </Grid>
             }
@@ -675,8 +683,8 @@ function ProfilePage () {
       </Modal>
       <Modal 
         centered
-        opened={modalFollowersOpen} 
-        onClose={() => setModalFollowersOpen(false)} 
+        opened={modalFollowersOpen}
+        onClose={() => setModalFollowersOpen(false)}
         title={profile.followers.length+' seguidores'}
         scrollAreaComponent={ScrollArea.Autosize}
       >
@@ -701,8 +709,8 @@ function ProfilePage () {
       </Modal>
       <Modal 
         centered
-        opened={modalFollowingOpen} 
-        onClose={() => setModalFollowingOpen(false)} 
+        opened={modalFollowingOpen}
+        onClose={() => setModalFollowingOpen(false)}
         title={'Seguindo '+profile.following.length}
         scrollAreaComponent={ScrollArea.Autosize}
       >
@@ -719,8 +727,8 @@ function ProfilePage () {
         )}
       </Modal>
       <Modal 
-        opened={modalStrengthsOpen} 
-        onClose={() => setModalStrengthsOpen(false)} 
+        opened={modalStrengthsOpen}
+        onClose={() => setModalStrengthsOpen(false)}
         title={`Votar pontos fortes de ${profile.name} ${profile.lastname}`}
         centered
         // fullScreen

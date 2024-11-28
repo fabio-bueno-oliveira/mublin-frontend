@@ -33,7 +33,13 @@ function ProjectCard (props) {
   }
 
   return (
-    <Card shadow="sm" padding="lg" radius="md" withBorder style={{borderTop: "2px solid #d9d9d9"}}>
+    <Card 
+      shadow="sm" 
+      padding="lg" 
+      radius="md" 
+      withBorder 
+      style={{borderTop: "2px solid #d9d9d9"}}
+    >
       {/* <Card.Section>
         <Image
           src={cdnProjectPathBlur+project?.picture}
@@ -192,28 +198,32 @@ function ProjectCard (props) {
           labelPosition="left" 
         />
         <Group gap={5}>
-          {activeMembers?.map((member) => (
-            <Tooltip 
-              label={`${member.userName} ${member.userLastname} - ${member.role1}`} 
-              key={member.userId} 
-              withArrow
-            >
-              <Link to={{ pathname: `/${member.userUsername}` }}>
-                <Avatar 
-                  variant="filled" 
-                  radius="xl" 
-                  size="md"
-                  name={`${member.userName} ${member.userLastname}`}
-                  color={"violet"}
-                  src={
-                    (member.userId && member.userPicture) ? 
-                      cdnBaseURL+'tr:h-114,w-114/users/avatars/'+member.userId+'/'+member.userPicture
-                    : null
-                  } 
-                />
-              </Link>
-            </Tooltip>
-          ))}
+          {activeMembers?.length && 
+            <Avatar.Group>
+              {activeMembers?.map((member) => (
+                <Tooltip 
+                  label={`${member.userName} ${member.userLastname} - ${member.role1}`} 
+                  key={member.userId} 
+                  withArrow
+                >
+                  <Link to={{ pathname: `/${member.userUsername}` }}>
+                    <Avatar 
+                      variant="filled" 
+                      radius="xl" 
+                      size="md"
+                      name={`${member.userName} ${member.userLastname}`}
+                      color={"violet"}
+                      src={
+                        (member.userId && member.userPicture) ? 
+                          cdnBaseURL+'tr:h-114,w-114/users/avatars/'+member.userId+'/'+member.userPicture
+                        : null
+                      } 
+                    />
+                  </Link>
+                </Tooltip>
+              ))}
+            </Avatar.Group>
+          }
           {!activeMembers?.length && 
             <Avatar 
               variant="filled" 

@@ -77,6 +77,36 @@ const initialState = {
       totalProjects: '',
       verified: ''
     }
+  ],
+  suggestedFeaturedUsers: [
+    {
+      id: '',
+      name: '',
+      lastname: '',
+      username: '',
+      role: '',
+      picture: '',
+      verified: '',
+      legend: '',
+      city: '',
+      region: '',
+      uf: '',
+    }
+  ],
+  suggestedNewUsers: [
+    {
+      id: '',
+      name: '',
+      lastname: '',
+      username: '',
+      role: '',
+      picture: '',
+      verified: '',
+      legend: '',
+      city: '',
+      region: '',
+      uf: '',
+    }
   ]
 }
 
@@ -98,66 +128,27 @@ export function search(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        users: [
-          {
-            id: '',
-            name: '',
-            lastname: '',
-            username: '',
-            picture: '',
-            publicProfile: '',
-            plan: '',
-            status: '',
-            city: '',
-            region: '',
-            verified: '',
-            country: '',
-            roleName: '',
-            mainRole: '',
-            projectRelated: '',
-            projectType: '',
-            availabilityStatus: '',
-            availability_color: '',
-            legend: '',
-            totalProjects: '',
-            instrumentalist: '',
-            projects: [
-              { id: '', name: '', username: '', picture: '' }
-            ]
-          }
-        ],
+        users: initialState.users,
         error: 'Nenhum resultado encontrado'
       };
     // PROJECTS
     case searchTypes.SEARCH_PROJECTS_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        error: ''
       };
     case searchTypes.SEARCH_PROJECTS_SUCCESS:
       return {
         ...state,
         projects: action.results,
-        requesting: false
+        requesting: false,
+        error: ''
       };
     case searchTypes.SEARCH_PROJECTS_FAILURE:
       return {
         ...state,
-        projects: [
-          {
-            id: '',
-            name: '',
-            username: '',
-            picture: '',
-            public: '',
-            city: '',
-            region: '',
-            country: '',
-            members: [
-              { id: '', name: '', lastname: '', username: '', picture: '' }
-            ]
-          }
-        ],
+        projects: initialState.projects,
         requesting: false,
         error: 'Nenhum projeto encontrado'
       };
@@ -178,6 +169,48 @@ export function search(state = initialState, action) {
         ...state,
         requesting: false,
         error: 'Nenhum usuário sugerido encontrado'
+      };
+    // SUGGESTED FEATURED USERS
+    case searchTypes.GET_SUGGESTED_FEATURED_USERS_REQUEST:
+      return {
+        ...state,
+        suggestedFeaturedUsers: initialState.suggestedFeaturedUsers,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.GET_SUGGESTED_FEATURED_USERS_SUCCESS:
+      return {
+        ...state,
+        suggestedFeaturedUsers: action.results,
+        requesting: false
+      };
+    case searchTypes.GET_SUGGESTED_FEATURED_USERS_FAILURE:
+      return {
+        ...state,
+        suggestedFeaturedUsers: initialState.suggestedFeaturedUsers,
+        requesting: false,
+        error: 'Nenhum usuário em destaque encontrado'
+      };
+    // SUGGESTED NEW USERS
+    case searchTypes.GET_SUGGESTED_NEW_USERS_REQUEST:
+      return {
+        ...state,
+        suggestedNewUsers: initialState.suggestedNewUsers,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.GET_SUGGESTED_NEW_USERS_SUCCESS:
+      return {
+        ...state,
+        suggestedNewUsers: action.results,
+        requesting: false
+      };
+    case searchTypes.GET_SUGGESTED_NEW_USERS_FAILURE:
+      return {
+        ...state,
+        suggestedNewUsers: initialState.suggestedNewUsers,
+        requesting: false,
+        error: 'Nenhum novo usuário sugerido encontrado'
       };
     default:
       return state

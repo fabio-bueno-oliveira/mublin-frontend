@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { eventsInfos } from '../../store/actions/events';
+// import { eventsInfos } from '../../store/actions/events';
+import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Box, Card, Title, Text, Grid, Skeleton, Switch } from '@mantine/core';
+import { Container, Flex, Box, Card, Title, Badge, Text, Grid, Skeleton, Switch, Button, Avatar } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import UserCard from '../../components/userCard';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import ProjectCard from './projectCard';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
+import { IconPlus } from '@tabler/icons-react';
 
 function Home () {
+
+  document.title = `Home | Mublin`;
 
   let dispatch = useDispatch();
   let navigate = useNavigate();
@@ -24,6 +29,7 @@ function Home () {
   const projects = useSelector(state => state.userProjects);
   const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
   const totalProjects = projects.totalProjects;
+  const search = useSelector(state => state.search);
 
   const projectsToShow = showEndedProjects
     ? projects?.list 
@@ -31,7 +37,9 @@ function Home () {
 
   useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
-    dispatch(eventsInfos.getUserEvents(loggedUser.id));
+    // dispatch(eventsInfos.getUserEvents(loggedUser.id));
+    dispatch(searchInfos.getSuggestedFeaturedUsers());
+    dispatch(searchInfos.getSuggestedNewUsers());
     if (user.success && user.first_access !== 0) {
       navigate("/start/intro/")
     }
@@ -41,72 +49,147 @@ function Home () {
     <>
       <Header pageType="home" />
       <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
-        {projects.requesting || !user.success ? (
-          <>
-            <Skeleton height={34} width={190} radius="md" />
-            <Skeleton height={21} width={400} mt={6} radius="md" />
-            <Skeleton height={14} width={150} mt={6} radius="md" />
-          </>
-        ) : (
-          <>
-            <Title order={3} mb={1}>
-              Olá, {user?.name}
-            </Title>
-            <Text size="md" mb={4}>
-              Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
-            </Text>
-            {projectsTerminated.length && 
-              <Switch
-                label="Exibir projetos encerrados"
-                color='violet'
-                checked={showEndedProjects}
-                size="xs"
-                onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
-                w={"fit-content"}
-              />
-            }
-          </>
-        )}
-      </Container>
-      <Container size={'lg'}>
-        {projects.requesting ? ( 
-          <Grid mb={largeScreen ? 30 : 86}>
-            {Array.apply(null, { length: 3 }).map((e, i) => (
-              <Grid.Col span={{ base: 12, md: 2, lg: 4 }} key={i} mt={20}>
-                <Card shadow="sm" padding="lg" radius="md" withBorder>
-                  <Skeleton height={14} width={"40%"} radius="xl" />
-                  <Skeleton height={50} width={50} mt={13} radius="md" />
-                  <Skeleton height={14} width={"76%"} mt={13} radius="xl" />
-                  <Skeleton height={14} width={"50%"} mt={6} radius="xl" />
-                  <Skeleton height={14} width={"50%"} mt={6} radius="xl" />
-                </Card>
-              </Grid.Col>
-            ))}
-          </Grid>
-        ) : (
-          <Box mb={largeScreen ? 30 : 86}>
-            <ResponsiveMasonry
-              columnsCountBreakPoints={{350: 1, 750: 2, 900: 3}}
-            >
-              <Masonry gutter="10px">
-                {projectsToShow.map((p) => (
-                  <ProjectCard 
-                    loading={projects.requesting}
-                    project={p}
-                    activeMembers={
-                      projects?.members?.filter(
-                        (member) => { 
-                          return member.projectId === p.projectid 
-                          && !member.leftIn 
-                        }
-                      ).sort((a, b) => b.leader - a.leader)
-                    }
-                  />
+        <Grid>
+          <Grid.Col span={2} pt={12}>
+            {projects.requesting || !user.success ? (
+              <>
+                <Skeleton height={56} circle />
+                <Skeleton height={16} width={125} mt={10} radius="md" />
+              </>
+            ) : (
+              <>
+                <Avatar 
+                  size="lg"
+                  src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null} 
+                />
+                <Title order={4} mb={1} mt={10}>
+                  Olá, {user?.name}
+                </Title>
+                {user.plan === 'Pro' && 
+                  <Badge size='sm' variant='light' color="violet">PRO</Badge>
+                }
+                <Text size="xs" mt={14}>
+                  {user?.bio}
+                </Text>
+              </>
+            )}
+          </Grid.Col>
+          <Grid.Col span={7}>
+            {projects.requesting ? ( 
+              <Grid mb={largeScreen ? 30 : 86}>
+                {Array.apply(null, { length: 2 }).map((e, i) => (
+                  <Grid.Col span={{ base: 12, md: 2, lg: 6 }} key={i}>
+                    <Card shadow="sm" h="270px" padding="lg" radius="md" withBorder>
+                      <Skeleton height={14} width={"40%"} radius="xl" />
+                      <Skeleton height={50} width={50} mt={13} radius="md" />
+                      <Skeleton height={14} width={"76%"} mt={13} radius="xl" />
+                      <Skeleton height={14} width={"50%"} mt={6} radius="xl" />
+                      <Skeleton height={14} width={"50%"} mt={6} radius="xl" />
+                    </Card>
+                  </Grid.Col>
                 ))}
-              </Masonry>
-            </ResponsiveMasonry>
-          </Box>
-        )}
+              </Grid>
+            ) : (
+              <Box mb={largeScreen ? 30 : 86}>
+                <Card mb={16} padding="md" radius="md" withBorder>
+                  <Flex justify="space-between" align="center">
+                    <div>
+                    <Text size="md" mb={3}>
+                      Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
+                    </Text>
+                    {!!projectsTerminated.length && 
+                      <Switch
+                        label="Exibir projetos encerrados"
+                        color='violet'
+                        checked={showEndedProjects}
+                        size="xs"
+                        onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
+                        w={"fit-content"}
+                      />
+                    }
+                    </div>
+                    <div>
+                      <Button size="sm" color="violet" leftSection={<IconPlus size={14} />}>
+                        Criar novo projeto
+                      </Button>
+                    </div>
+                  </Flex>
+                </Card>
+                {totalProjects > 0 ? (
+                  <ResponsiveMasonry
+                    columnsCountBreakPoints={{350: 1, 750: 2, 900: 2}}
+                  >
+                    <Masonry gutter="10px">
+                      {projectsToShow.map((p, key) => (
+                        <ProjectCard 
+                          key={key}
+                          loading={projects.requesting}
+                          project={p}
+                          activeMembers={
+                            projects?.members?.filter(
+                              (member) => { 
+                                return member.projectId === p.projectid 
+                                && !member.leftIn 
+                              }
+                            ).sort((a, b) => b.leader - a.leader)
+                          }
+                        />
+                      ))}
+                    </Masonry>
+                  </ResponsiveMasonry>
+                ) : (
+                  <Button>Cadastrar novo projeto</Button>
+                )}
+              </Box>
+            )}
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Card shadow="sm" padding="md" radius="md" withBorder>
+              <Text fw={500} size="md">Músicos em destaque</Text>
+              {search.requesting ? (
+                <Text size="13px" mt={7}>Carregando...</Text>
+              ) : (
+                search.suggestedFeaturedUsers.map((user, key) => (
+                  <UserCard 
+                    mt={14}
+                    key={key}
+                    name={user.name}
+                    lastname={user.lastname}
+                    username={user.username}
+                    mainRole={user.role}
+                    picture={user.picture}
+                    verified={user.verified}
+                    legend={user.legend}
+                    city={user.city}
+                    region={user.region}
+                  />
+                ))
+              )}
+            </Card>
+            <Card shadow="sm" padding="md" radius="md" withBorder mt={10}>
+            <Text fw={500} size="md">Novos usuários</Text>
+              {search.requesting ? (
+                <Text size="13px" mt={7}>Carregando...</Text>
+              ) : (
+                search.suggestedNewUsers.map((user, key) => (
+                  <UserCard 
+                    mt={14}
+                    key={key}
+                    name={user.name}
+                    lastname={user.lastname}
+                    username={user.username}
+                    mainRole={user.role}
+                    picture={user.picture}
+                    verified={user.verified}
+                    legend={user.legend}
+                    city={user.city}
+                    region={user.region}
+                  />
+                ))
+              )}
+            </Card>
+          </Grid.Col>
+        </Grid>
       </Container>
       <FooterMenuMobile />
     </>

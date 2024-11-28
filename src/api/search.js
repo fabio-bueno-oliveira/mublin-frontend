@@ -21,6 +21,8 @@ export const searchService = {
     getSearchResults,
     getSearchProjectResults,
     getSuggestedUsersResults,
+    getSuggestedFeaturedUsers,
+    getSuggestedNewUsers,
     logout
 };
 
@@ -62,6 +64,22 @@ function getSuggestedUsersResults(query) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/search/explore/suggestedUsers`, requestOptions).then(handleResponse);
+}
+
+function getSuggestedFeaturedUsers(query) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/explore/featuredUsers`, requestOptions).then(handleResponse);
+}
+
+function getSuggestedNewUsers(query) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/explore/newUsers`, requestOptions).then(handleResponse);
 }
 
 function logout() {

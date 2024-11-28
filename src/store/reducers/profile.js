@@ -215,6 +215,8 @@ export function profile(state = initialState, action) {
         instagram: '',
         website: '',
         public: '',
+        roles: initialState.roles,
+        genres: initialState.genres,
         requesting: true,
         requested: false,
         success: false
