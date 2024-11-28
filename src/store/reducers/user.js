@@ -22,6 +22,7 @@ const initialState = {
   public: '',
   instagram: '',
   phone: '',
+  phoneIsPublic: '',
   status: '',
   legend: '',
   website: '',
@@ -99,6 +100,7 @@ export function user(state = initialState, action) {
         public: action.info.public,
         instagram: action.info.instagram,
         phone: action.info.phone,
+        phoneIsPublic: action.info.phoneIsPublic,
         status: action.info.status,
         legend: action.info.legend_badge,
         website: action.info.website,
@@ -131,6 +133,7 @@ export function user(state = initialState, action) {
         public: '',
         instagram: '',
         phone: '',
+        phoneIsPublic: '',
         status: '',
         legend: '',
         website: ''

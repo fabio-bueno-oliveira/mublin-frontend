@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Container, Modal, Center, Loader, Box, ScrollArea, NavLink, Menu, Group, Button, LoadingOverlay, TextInput, Input, Text, Textarea, NativeSelect, Anchor, Divider, Tabs, rem, em } from '@mantine/core';
+import { userInfos } from '../../store/actions/user';
+import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, NavLink, Menu, Group, Button, LoadingOverlay, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider, Tabs, rem, em } from '@mantine/core';
 import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconChevronDown } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
@@ -14,22 +15,31 @@ function SettingsPage () {
 
   document.title = "Configurações | Mublin";
 
+  const loggedUser = JSON.parse(localStorage.getItem('user'));
   const isLargeScreen = useMediaQuery('(min-width: 60em)');
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
   const [modalCityOpen, setModalCityOpen] = useState(false);
 
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: { 
-      name: '', 
-      lastname: '', 
-      email: '', 
+      name: '',
+      lastname: '',
+      email: '',
+      phone: '',
+      phoneIsPublic: '',
+      website: '',
+      instagram: '',
       gender: '',
+      bio: '',
       country: '',
       region: '',
       city: '',
       cityName: '',
-      bio: ''
+      public: ''
     },
     validate: {
       name: hasLength({ min: 3 }, 'O nome deve ter no mínimo 2 caracteres'),
@@ -38,12 +48,37 @@ function SettingsPage () {
   });
 
   useEffect(() => {
-    form.setInitialValues({ name: user.name, lastname: user.lastname, email: user.email, gender: user.gender, country: user.country, region: user.region, city: user.city, cityName: user.cityName, bio: user.bio });
-    form.setValues({ name: user.name, lastname: user.lastname, email: user.email, gender: user.gender, country: user.country, region: user.region, city: user.city, cityName: user.cityName, bio: user.bio });
+    form.setInitialValues({ name: user.name, lastname: user.lastname, email: user.email, phone: user.phone, phoneIsPublic: user.phoneIsPublic ? true : false, website: user.website, instagram: user.instagram, gender: user.gender, bio: user.bio, country: user.country, region: user.region, city: user.city, cityName: user.cityName, public: user.public ? true : false });
+    form.setValues({ name: user.name, lastname: user.lastname, email: user.email, phone: user.phone, phoneIsPublic: user.phoneIsPublic ? true : false, website: user.website, instagram: user.instagram, gender: user.gender, bio: user.bio, country: user.country, region: user.region, city: user.city, cityName: user.cityName, public: user.public ? true : false });
   }, [user.success]);
 
   const handleSubmit = (values) => {
-    console.log(47, values)
+    setSuccess(false);
+    setError(false);
+    setIsLoading(true)
+    fetch('https://mublin.herokuapp.com/user/updateProfile', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + loggedUser.token
+      },
+      body: JSON.stringify({userId: loggedUser.id, name: values.name, lastname: values.lastname, email: values.email, phone_mobile: values.phone, phone_mobile_public: values.phoneIsPublic ? 1 : 0, website: values.website, instagram: values.instagram, gender: values.gender, bio: values.bio, id_country_fk: Number(values.country), id_region_fk: Number(values.region), id_city_fk: Number(values.city), public: values.public ? 1 : 0})
+    }).then((response) => {
+      response.json().then((response) => {
+        window.scrollTo(0, 0);
+        setSuccess(response.success ? true : false);
+        setError(false);
+        setIsLoading(false);
+        dispatch(userInfos.getInfo());
+      })
+    }).catch(err => {
+      window.scrollTo(0, 0);
+      setSuccess(false);
+      setError(true);
+      setIsLoading(false);
+      console.error(err);
+    })
   }
 
   const handleSearchCity = (e, value) => {
@@ -93,78 +128,74 @@ function SettingsPage () {
       }
   },500);
 
-  const iconStyle = { width: rem(12), height: rem(12) };
-
   return (
     <>
       <Header />
       <Container size={'sm'} mb={80}>
         {isMobile && 
           <Group>
-            <Tabs defaultValue="gallery">
+            <Tabs variant="outline" defaultValue="myAccount">
               <Tabs.List>
-                <Tabs.Tab value="gallery" leftSection={<IconUser style={iconStyle} />}>
+                <Tabs.Tab value="myAccount">
                   Minha conta
                 </Tabs.Tab>
-                <Tabs.Tab value="messages" leftSection={<IconCamera style={iconStyle} />}>
+                <Tabs.Tab value="myPicture">
                   Foto de perfil
+                </Tabs.Tab>
+                <Tabs.Tab value="more">
+                  <Menu shadow="md" position="bottom-end">
+                    <Menu.Target>
+                      <Anchor size='sm'>
+                        <Group gap={6}>Mais <IconChevronDown size={16} /></Group>
+                      </Anchor>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      <Menu.Item leftSection={<IconAdjustmentsHorizontal style={{ width: rem(14), height: rem(14) }} />}>
+                        Preferências
+                      </Menu.Item>
+                      <Menu.Item leftSection={<IconLock style={{ width: rem(14), height: rem(14) }} />}>
+                        Senha
+                      </Menu.Item>
+                      <Menu.Item leftSection={<IconEye style={{ width: rem(14), height: rem(14) }} />}>
+                        Privacidade
+                      </Menu.Item>
+                    </Menu.Dropdown>
+                  </Menu>
                 </Tabs.Tab>
               </Tabs.List>
             </Tabs>
-            <Menu shadow="md" width={200} position="bottom-end">
-              <Menu.Target>
-                <Anchor size='sm'>
-                  <Group gap={6}>Mais <IconChevronDown size={16} /></Group>
-                </Anchor>
-                {/* <Button 
-                  color="dark"
-                  variant="transparent"
-                  rightSection={<IconChevronDown size={14} />}
-                  style={{ fontWeight: '400'}}
-                  size="compact-sm"
-                >
-                  Mais
-                </Button> */}
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item leftSection={<IconAdjustmentsHorizontal style={{ width: rem(14), height: rem(14) }} />}>
-                  Preferências
-                </Menu.Item>
-                <Menu.Item leftSection={<IconLock style={{ width: rem(14), height: rem(14) }} />}>
-                  Senha
-                </Menu.Item>
-                <Menu.Item leftSection={<IconEye style={{ width: rem(14), height: rem(14) }} />}>
-                  Privacidade
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
           </Group>
         }
         <Grid mt={30}>
           {isLargeScreen && 
             <Grid.Col span={5} p={24}>
               <NavLink
+                color="violet"
                 href="#required-for-focus"
                 label="Minha conta"
                 leftSection={<IconUser size="1rem" stroke={1.5} />}
                 active
               />
               <NavLink
+                color="violet"
                 href="#required-for-focus"
                 label="Foto de perfil"
                 leftSection={<IconCamera size="1rem" stroke={1.5} />}
               />
               <NavLink
+                color="violet"
                 href="#required-for-focus"
                 label="Preferências"
                 leftSection={<IconAdjustmentsHorizontal size="1rem" stroke={1.5} />}
               />
               <NavLink
+                color="violet"
                 href="#required-for-focus"
                 label="Senha"
                 leftSection={<IconLock size="1rem" stroke={1.5} />}
               />
               <NavLink
+                color="violet"
                 href="#required-for-focus"
                 label="Privacidade"
                 leftSection={<IconEye size="1rem" stroke={1.5} />}
@@ -179,6 +210,21 @@ function SettingsPage () {
                   zIndex={1000} 
                   overlayProps={{ radius: "sm", blur: 2 }} 
                 />
+                {success && 
+                  <Alert color="green">Dados atualizados com sucesso</Alert>
+                }
+                {error && 
+                  <Alert color="red">Erro ao atualizar os dados. Tente novamente em instantes</Alert>
+                }
+                <Checkbox
+                  mt="md"
+                  color="violet"
+                  label="Tornar meu perfil público"
+                  description="Exibir meu perfil nas buscas internas e nos mecanismos"
+                  key={form.key('public')}
+                  {...form.getInputProps('public', { type: 'checkbox' })}
+                />
+                <Divider my={10} />
                 <Grid>
                   <Grid.Col span={6}>
                     <TextInput
@@ -204,9 +250,38 @@ function SettingsPage () {
                 />
                 <TextInput
                   mt="xs"
+                  type="email"
                   label="Email"
                   key={form.key('email')}
                   {...form.getInputProps('email')}
+                />
+                <TextInput
+                  mt="xs"
+                  type="tel"
+                  label="Telefone Celular"
+                  maxLength={14}
+                  key={form.key('phone')}
+                  {...form.getInputProps('phone')}
+                />
+                <Checkbox
+                  mt="md"
+                  color="violet"
+                  label="Exibir telefone no meu perfil"
+                  key={form.key('phoneIsPublic')}
+                  {...form.getInputProps('phoneIsPublic', { type: 'checkbox' })}
+                />
+                <TextInput
+                  mt="xs"
+                  type="url"
+                  label="Website"
+                  key={form.key('website')}
+                  {...form.getInputProps('website')}
+                />
+                <TextInput
+                  mt="xs"
+                  label="Usuário no Instagram"
+                  key={form.key('instagram')}
+                  {...form.getInputProps('instagram')}
                 />
                 <NativeSelect
                   mt="xs"
@@ -301,9 +376,12 @@ function SettingsPage () {
                   key={form.key('bio')}
                   {...form.getInputProps('bio')}
                 />
-                <Group justify="center" mt="xl">
+                <Group justify="end" mt="xl">
                   <Button
                     type="submit"
+                    color="violet"
+                    size="md"
+                    loading={isLoading}
                   >
                     Enviar
                   </Button>
