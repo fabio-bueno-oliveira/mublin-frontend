@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, em } from '@mantine/core';
+import { Container, Flex, Grid, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, Accordion, em } from '@mantine/core';
 import { IconCircleFilled, IconCheck, IconInfoCircleFilled, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -69,8 +69,8 @@ function ProfilePage () {
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '5px' };
-  const iconCircleStyles = { width: '11px', height: '11px', marginLeft: '3px', marginRight: '3px' };
-  const iconAvailabilityStyles = { width: '14px', height: '14px', marginLeft: '3px', marginRight: '3px' };
+  const iconCircleStyles = { width: '11px', height: '11px', marginRight: '3px' };
+  // const iconAvailabilityStyles = { width: '14px', height: '14px', marginLeft: '3px', marginRight: '3px' };
 
   // Projects
   const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
@@ -84,6 +84,14 @@ function ProfilePage () {
   const gear = gearTotal.filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
 
   // Carousels
+  const [rolesCarousel] = useEmblaCarousel(
+    {
+      active: true,
+      loop: false, 
+      dragFree: true, 
+      align: 'start' 
+    }
+  )
   const [emblaRef1] = useEmblaCarousel(
     {
       active: true,
@@ -247,186 +255,275 @@ function ProfilePage () {
               </>
             }
             {!profile.requesting && 
-              <Grid mb={largeScreen ? 45: 20}>
-                <Grid.Col span={{ base: 12, md: 6, lg: 8 }}>
-                  <Flex
-                    justify="flex-start"
-                    align="center"
-                    direction="row"
-                    wrap="nowrap"
-                    columnGap="xs"
-                    mt={6}
-                  >
-                    <Avatar
-                      size={largeScreen ? 'xl' : 'lg'}
-                      src={profile.picture}
-                    />
-                    <Box style={{ overflow: 'hidden' }}>
-                      <Flex align={'center'}>
-
-                        <Title order={largeScreen ? 3 : 4}>{profile.name} {profile.lastname}</Title>
-                        {!!profile.verified && 
-                          <Tooltip label="Usuário Verificado">
-                            <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
-                          </Tooltip>
-                        }
-                        {!!profile.legend && 
-                          <Tooltip label={`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante no cenário musical`} multiline withArrow w={180}>
-                            <IconShieldCheckFilled style={iconLegendStyle} />
-                          </Tooltip>
-                        }
-                      </Flex>
-                      <Flex className='rolesList'>
-                        {profile.roles.map((role, key) =>
-                          <Flex gap={2} align={'center'} key={key}>
-                            {role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />} <Text size='13px' mr={13}>{role.name}</Text>
-                          </Flex>
-                        )}
-                      </Flex>
-                      <Text size="11px" c="dimmed" mt={4}>
-                        {profile.city} {profile.region && `, ${profile.region}`}
-                      </Text>
-                      <Group gap={12} mt={7}>
-                        <Text className='point' size='xs' fw={500} onClick={() => setModalFollowersOpen(true)}>
-                          {profile.followers.length} seguidores
-                        </Text>
-                        <Text className='point' size='xs' fw={500} onClick={() => setModalFollowingOpen(true)}>
-                          {profile.following.length} seguindo
-                        </Text>
-                      </Group>
-                    </Box>
-                  </Flex>
-                  {(profile.bio && profile.bio !== 'null') && 
-                    <Text 
-                      size={largeScreen ? 'sm' : 'xs'} mt={14} lineClamp={3}
-                      onClick={!largeScreen ? () => setModalBioOpen(true) : undefined}
-                      pr={largeScreen ? 26 : 0}
+              <Paper 
+                radius="md" 
+                withBorder={largeScreen ? true : false}
+                px={largeScreen ? "md" : 0} 
+                py={largeScreen ? "md" : 0} 
+                mb={18}
+                style={{ backgroundColor: 'transparent' }}
+              >
+                <Grid>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                    <Flex
+                      justify="flex-start"
+                      align="center"
+                      direction="row"
+                      wrap="nowrap"
+                      columnGap="xs"
                     >
-                      {profile.bio}
-                    </Text>
-                  }
-                  <Group gap={5} mt={12}>
-                    {followedByMe?.requesting ? (
-                      <Button size="xs" disabled>Carregando...</Button>
-                    ) : (
-                      <>
-                        {loggedUser.id !== profile.id ? (
-                          <Button 
-                            size="xs" 
-                            color={colorScheme === "light" ? "dark" : "gray"}
-                            variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
-                            loading={loadingFollow}
-                            rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
-                            onClick={followedByMe?.following === 'true' ? () => followUnfollow() : () => followUnfollow()}
-                          >
-                            {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
-                          </Button>
-                        ) : (
+                      <Avatar
+                        size={largeScreen ? 'xl' : 'lg'}
+                        src={profile.picture}
+                      />
+                      <Box style={{ overflow: 'hidden' }}>
+                        <Flex align={'center'}>
+
+                          <Title order={largeScreen ? 3 : 4}>{profile.name} {profile.lastname}</Title>
+                          {!!profile.verified && 
+                            <Tooltip label="Usuário Verificado">
+                              <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                            </Tooltip>
+                          }
+                          {!!profile.legend && 
+                            <Tooltip label={`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante no cenário musical`} multiline withArrow w={180}>
+                              <IconShieldCheckFilled style={iconLegendStyle} />
+                            </Tooltip>
+                          }
+                        </Flex>
+                        <div className="embla roles" ref={rolesCarousel}>
+                          <div className="embla__container">
+                            {profile.roles.map((role, key) =>
+                              <div className="embla__slide" key={key}>
+                                {role.icon && 
+                                  <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />
+                                }
+                                <Text size='13px' mr={13}>{role.name}</Text>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <Text size="11px" c="dimmed" mt={4}>
+                          {profile.city} {profile.region && `, ${profile.region}`}
+                        </Text>
+                        <Group gap={12} mt={7}>
+                          <Text className='point' size='xs' fw={500} onClick={() => setModalFollowersOpen(true)}>
+                            {profile.followers.length} seguidores
+                          </Text>
+                          <Text className='point' size='xs' fw={500} onClick={() => setModalFollowingOpen(true)}>
+                            {profile.following.length} seguindo
+                          </Text>
+                        </Group>
+                      </Box>
+                    </Flex>
+                    {(profile.bio && profile.bio !== 'null') && 
+                      <Text 
+                        size={largeScreen ? 'sm' : 'xs'} mt={14} lineClamp={3}
+                        onClick={!largeScreen ? () => setModalBioOpen(true) : undefined}
+                        pr={largeScreen ? 26 : 0}
+                      >
+                        {profile.bio}
+                      </Text>
+                    }
+                    <Group gap={5} mt={12}>
+                      {followedByMe?.requesting ? (
+                        <Button size="xs" disabled>Carregando...</Button>
+                      ) : (
+                        <>
+                          {loggedUser.id !== profile.id ? (
+                            <Button 
+                              size="xs" 
+                              color={colorScheme === "light" ? "dark" : "gray"}
+                              variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
+                              loading={loadingFollow}
+                              rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
+                              onClick={followedByMe?.following === 'true' ? () => followUnfollow() : () => followUnfollow()}
+                            >
+                              {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
+                            </Button>
+                          ) : (
+                            <Button 
+                              size="xs" 
+                              variant='light'
+                              color={colorScheme === "light" ? "dark" : "gray"}
+                              onClick={() => navigate('/settings/profile')}
+                            >
+                              Editar perfil
+                            </Button>
+                          )}
                           <Button 
                             size="xs" 
                             variant='light'
                             color={colorScheme === "light" ? "dark" : "gray"}
-                            onClick={() => navigate('/settings/profile')}
+                            leftSection={<IconMail size={14} />} 
+                            onClick={() => setModalContactOpen(true)}
                           >
-                            Editar perfil
+                            Contato
                           </Button>
-                        )}
-                        <Button 
-                          size="xs" 
-                          variant='light'
-                          color={colorScheme === "light" ? "dark" : "gray"}
-                          leftSection={<IconMail size={14} />} 
-                          onClick={() => setModalContactOpen(true)}
-                        >
-                          Contato
-                        </Button>
-                        {profile.instagram && 
-                          <>
-                          <Link to={`https://instagram.com/${profile.instagram}`} target="_blank">
-                            <Button
-                              leftSection={<IconBrandInstagram size={14} />} 
-                              size="xs" 
-                              variant='light'
-                              color={colorScheme === "light" ? "dark" : "gray"}
+                          {profile.instagram && 
+                            <>
+                            <Link to={`https://instagram.com/${profile.instagram}`} target="_blank">
+                              <Button
+                                leftSection={<IconBrandInstagram size={14} />} 
+                                size="xs" 
+                                variant='light'
+                                color={colorScheme === "light" ? "dark" : "gray"}
+                              >
+                                Instagram
+                              </Button>
+                            </Link>
+                            {/* <ActionIcon 
+                              size="30px" 
+                              w={28} 
+                              variant="outline" 
+                              color={colorScheme === "light" ? "dark" : "white"}
+                              component="a"
+                              href={`https://instagram.com/${profile.instagram}`}
+                              target='_blank'
                             >
-                              Instagram
-                            </Button>
-                          </Link>
-                          {/* <ActionIcon 
-                            size="30px" 
-                            w={28} 
-                            variant="outline" 
-                            color={colorScheme === "light" ? "dark" : "white"}
-                            component="a"
-                            href={`https://instagram.com/${profile.instagram}`}
-                            target='_blank'
-                          >
-                            <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                          </ActionIcon> */}
-                          </>
-                        }
-                      </>
-                    )}
-                  </Group>
-                </Grid.Col>
-                <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-                  {profile.availabilityId && 
-                    <Box>
-                      <Flex align='center' gap={3} mb={10} mt={largeScreen ? 14 : 5}>
-                        <IconCircleFilled style={iconCircleStyles} color={profile.availabilityColor} />
-                        <Title order={6}>{profile.availabilityTitle}</Title>
-                      </Flex>
-                      <Text size="xs" fw={500}>
-                        Estilos musicais:
-                      </Text>
-                      <Group gap={4}>
-                        {profile.requesting ? (
-                          <Text size='xs' mx={0}>Carregando...</Text>
-                        ) : (
-                          <Text size='xs' mx={0}>
-                            {profile.genres[0].id && profile.genres.map((genre, key) =>
-                              <span key={key} className="comma">{genre.name}</span>
-                            )}
-                          </Text>
-                        )}
-                      </Group>
-                      <Text size="xs" fw={500} mt={7} >
-                        Tipos de projetos:
-                      </Text>
-                      <Group gap={4}>
-                        {profile.requesting ? (
-                          <Text size='xs' mx={0}>Carregando...</Text>
-                        ) : (
-                          <Text size='xs' mx={0}>
-                            {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-                              <span className="comma">Autorais</span>
-                            }
-                            {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-                              <span className="comma">Contratado</span>
-                            }
-                          </Text>
-                        )}
-                      </Group>
-                      <Text size="xs" fw={500} mt={7} mb={3}>
-                        Tipos de trabalho:
-                      </Text>
-                      {profile.availabilityItems[0].id ? (
-                        <Group gap={4}>
-                          {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                            <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' color="rgba(18, 18, 18, 1)" key={key} mx={0}>
-                              {item.itemName}
-                            </Badge>
-                          )}  
-                        </Group>
-                      ) : (
-                        <Text size="11px" c="dimmed">
-                          Não informado
-                        </Text>
+                              <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                            </ActionIcon> */}
+                            </>
+                          }
+                        </>
                       )}
-                    </Box>
-                  }
-                </Grid.Col>
-              </Grid>
+                    </Group>
+                  </Grid.Col>
+                  <Grid.Col 
+                    span={{ base: 12, md: 6, lg: 6 }} 
+                    py={isMobile ? 0 : undefined}
+                  >
+                    {profile.availabilityId && 
+                      <>
+                        <Flex 
+                          align='center' 
+                          gap={3} 
+                          mb={largeScreen ? 6 : 0} 
+                          mt={largeScreen ? 0 : 6}
+                        >
+                          <IconCircleFilled 
+                            style={iconCircleStyles} 
+                            color={profile.availabilityColor} 
+                          />
+                          <Text 
+                            fz={largeScreen ? "14px" : "13px"} 
+                            fw={largeScreen ? 700 : 600}
+                          >
+                            {profile.availabilityTitle}
+                          </Text>
+                        </Flex>
+                        {largeScreen && 
+                          <Box>
+                            <Text size="xs" fw={500}>
+                              Estilos musicais:
+                            </Text>
+                            <Group gap={4}>
+                              {profile.requesting ? (
+                                <Text size='xs' mx={0}>Carregando...</Text>
+                              ) : (
+                                <Text size='xs' mx={0}>
+                                  {profile.genres[0].id && profile.genres.map((genre, key) =>
+                                    <span key={key} className="comma">{genre.name}</span>
+                                  )}
+                                </Text>
+                              )}
+                            </Group>
+                            <Text size="xs" fw={500} mt={7} >
+                              Tipos de projetos:
+                            </Text>
+                            <Group gap={4}>
+                              {profile.requesting ? (
+                                <Text size='xs' mx={0}>Carregando...</Text>
+                              ) : (
+                                <Text size='xs' mx={0}>
+                                  {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
+                                    <span className="comma">Autorais</span>
+                                  }
+                                  {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
+                                    <span className="comma">Contratado</span>
+                                  }
+                                </Text>
+                              )}
+                            </Group>
+                            <Text size="xs" fw={500} mt={7} mb={3}>
+                              Tipos de trabalho:
+                            </Text>
+                            {profile.availabilityItems[0].id ? (
+                              <Group gap={4}>
+                                {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                                  <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="filled" color="black" key={key} mx={0}>
+                                    {item.itemName}
+                                  </Badge>
+                                )}  
+                              </Group>
+                            ) : (
+                              <Text size="11px" c="dimmed">
+                                Não informado
+                              </Text>
+                            )}
+                          </Box>
+                        }
+                        <Accordion chevronPosition="right">
+                          <Accordion.Item value="Exibir mais" style={{border:'0px'}}>
+                            <Accordion.Control p={0} fz="sm"  withBorder={false}>
+                              Exibir mais
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                              <Text size="xs" fw={500}>
+                                Estilos musicais:
+                              </Text>
+                              <Group gap={4}>
+                                {profile.requesting ? (
+                                  <Text size='xs' mx={0}>Carregando...</Text>
+                                ) : (
+                                  <Text size='xs' mx={0}>
+                                    {profile.genres[0].id && profile.genres.map((genre, key) =>
+                                      <span key={key} className="comma">{genre.name}</span>
+                                    )}
+                                  </Text>
+                                )}
+                              </Group>
+                              <Text size="xs" fw={500} mt={7} >
+                                Tipos de projetos:
+                              </Text>
+                              <Group gap={4}>
+                                {profile.requesting ? (
+                                  <Text size='xs' mx={0}>Carregando...</Text>
+                                ) : (
+                                  <Text size='xs' mx={0}>
+                                    {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
+                                      <span className="comma">Autorais</span>
+                                    }
+                                    {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
+                                      <span className="comma">Contratado</span>
+                                    }
+                                  </Text>
+                                )}
+                              </Group>
+                              <Text size="xs" fw={500} mt={7} mb={3}>
+                                Tipos de trabalho:
+                              </Text>
+                              {profile.availabilityItems[0].id ? (
+                                <Group gap={4}>
+                                  {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                                    <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="filled" color="black" key={key} mx={0}>
+                                      {item.itemName}
+                                    </Badge>
+                                  )}  
+                                </Group>
+                              ) : (
+                                <Text size="11px" c="dimmed">
+                                  Não informado
+                                </Text>
+                              )}
+                            </Accordion.Panel>
+                          </Accordion.Item>
+                        </Accordion>
+                      </> 
+                    }
+                  </Grid.Col>
+                </Grid>
+              </Paper>
             }
             {profile.plan === "Pro" && 
               <PartnersModule loading={profile.requesting} partners={profile.partners} />

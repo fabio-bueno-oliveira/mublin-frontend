@@ -1,4 +1,28 @@
 .profilePage {
+  .embla.roles {
+    overflow: hidden;
+    width: 89%;
+
+    .embla__container {
+      display: flex;
+
+      .embla__slide {
+        cursor: default;
+        user-select: none;
+        display: flex;
+        gap: 3px;
+        flex: 0 0 auto;
+        min-width: 0;
+        margin-right: 3px;
+      }
+      @media (min-width: 768px) {
+        .embla__slide {
+          margin-right: 3px;
+        }
+      }
+    }
+  }
+
   .embla.strengths {
     overflow: hidden;
 

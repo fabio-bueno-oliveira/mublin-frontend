@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 // import { eventsInfos } from '../../store/actions/events';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Flex, Box, Card, Title, Badge, Text, Grid, Skeleton, Switch, Button, Avatar } from '@mantine/core';
+import { Container, Flex, Center, Box, Card, Title, Badge, Text, Grid, Skeleton, Switch, Button, Avatar, em } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import UserCard from '../../components/userCard';
 import Header from '../../components/header';
@@ -21,6 +21,7 @@ function Home () {
   let navigate = useNavigate();
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
   const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const [showEndedProjects, setShowEndedProjects] = useState(true);
@@ -50,31 +51,39 @@ function Home () {
       <Header pageType="home" />
       <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         <Grid>
-          <Grid.Col span={2} pt={12}>
-            {projects.requesting || !user.success ? (
-              <>
-                <Skeleton height={56} circle />
-                <Skeleton height={16} width={125} mt={10} radius="md" />
-              </>
-            ) : (
-              <>
-                <Avatar 
-                  size="lg"
-                  src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null} 
-                />
-                <Title order={4} mb={1} mt={10}>
-                  Olá, {user?.name}
-                </Title>
-                {user.plan === 'Pro' && 
-                  <Badge size='sm' variant='light' color="violet">PRO</Badge>
-                }
-                <Text size="xs" mt={14}>
-                  {user?.bio}
-                </Text>
-              </>
-            )}
-          </Grid.Col>
-          <Grid.Col span={7}>
+          {largeScreen && 
+            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={12}>
+              {projects.requesting || !user.success ? (
+                <>
+                  <Skeleton height={56} circle />
+                  <Skeleton height={16} width={125} mt={10} radius="md" />
+                </>
+              ) : (
+                <>
+                  <Center>
+                    <Link to={{ pathname: `/${user.username}` }}>
+                      <Avatar 
+                        size="lg"
+                        src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null} 
+                      />
+                    </Link>
+                  </Center>
+                  <Title order={4} mb={1} mt={10} ta="center">
+                    Olá, {user?.name}
+                  </Title>
+                  {user.plan === 'Pro' && 
+                    <Center>
+                      <Badge size='sm' variant='light' color="violet">PRO</Badge>
+                    </Center>
+                  }
+                  <Text size="xs" mt={14} c="dimmed" ta="center">
+                    {user.bio}
+                  </Text>
+                </>
+              )}
+            </Grid.Col>
+          }
+          <Grid.Col span={{ base: 12, md: 12, lg: 7 }}>
             {projects.requesting ? ( 
               <Grid mb={largeScreen ? 30 : 86}>
                 {Array.apply(null, { length: 2 }).map((e, i) => (
@@ -91,28 +100,34 @@ function Home () {
               </Grid>
             ) : (
               <Box mb={largeScreen ? 30 : 86}>
-                <Card mb={16} padding="md" radius="md" withBorder>
+                <Card 
+                  mb={16} 
+                  padding={largeScreen ? "md" : 0} 
+                  radius={largeScreen ? "md" : 0} 
+                  withBorder={largeScreen ? true : false}
+                  style={isMobile ? {backgroundColor: "transparent"} : undefined}
+                >
                   <Flex justify="space-between" align="center">
                     <div>
-                    <Text size="md" mb={3}>
-                      Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
-                    </Text>
-                    {!!projectsTerminated.length && 
-                      <Switch
-                        label="Exibir projetos encerrados"
-                        color='violet'
-                        checked={showEndedProjects}
-                        size="xs"
-                        onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
-                        w={"fit-content"}
-                      />
-                    }
+                      <Text size="md" mb={3}>
+                        Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
+                      </Text>
+                      {!!projectsTerminated.length && 
+                        <Switch
+                          label="Exibir projetos encerrados"
+                          color='violet'
+                          checked={showEndedProjects}
+                          size="xs"
+                          onChange={(event) => setShowEndedProjects(event.currentTarget.checked)}
+                          w={"fit-content"}
+                        />
+                      }
                     </div>
-                    <div>
+                    {largeScreen && 
                       <Button size="sm" color="violet" leftSection={<IconPlus size={14} />}>
                         Criar novo projeto
                       </Button>
-                    </div>
+                    }
                   </Flex>
                 </Card>
                 {totalProjects > 0 ? (
@@ -143,52 +158,54 @@ function Home () {
               </Box>
             )}
           </Grid.Col>
-          <Grid.Col span={3}>
-            <Card shadow="sm" padding="md" radius="md" withBorder>
-              <Text fw={500} size="md">Músicos em destaque</Text>
-              {search.requesting ? (
-                <Text size="13px" mt={7}>Carregando...</Text>
-              ) : (
-                search.suggestedFeaturedUsers.map((user, key) => (
-                  <UserCard 
-                    mt={14}
-                    key={key}
-                    name={user.name}
-                    lastname={user.lastname}
-                    username={user.username}
-                    mainRole={user.role}
-                    picture={user.picture}
-                    verified={user.verified}
-                    legend={user.legend}
-                    city={user.city}
-                    region={user.region}
-                  />
-                ))
-              )}
-            </Card>
-            <Card shadow="sm" padding="md" radius="md" withBorder mt={10}>
-            <Text fw={500} size="md">Novos usuários</Text>
-              {search.requesting ? (
-                <Text size="13px" mt={7}>Carregando...</Text>
-              ) : (
-                search.suggestedNewUsers.map((user, key) => (
-                  <UserCard 
-                    mt={14}
-                    key={key}
-                    name={user.name}
-                    lastname={user.lastname}
-                    username={user.username}
-                    mainRole={user.role}
-                    picture={user.picture}
-                    verified={user.verified}
-                    legend={user.legend}
-                    city={user.city}
-                    region={user.region}
-                  />
-                ))
-              )}
-            </Card>
-          </Grid.Col>
+          {largeScreen && 
+            <Grid.Col span={3}>
+              <Card shadow="sm" padding="md" radius="md" withBorder>
+                <Text fw={500} size="md">Músicos em destaque</Text>
+                {search.requesting ? (
+                  <Text size="13px" mt={7}>Carregando...</Text>
+                ) : (
+                  search.suggestedFeaturedUsers.map((user, key) => (
+                    <UserCard 
+                      mt={14}
+                      key={key}
+                      name={user.name}
+                      lastname={user.lastname}
+                      username={user.username}
+                      mainRole={user.role}
+                      picture={user.picture}
+                      verified={user.verified}
+                      legend={user.legend}
+                      city={user.city}
+                      region={user.region}
+                    />
+                  ))
+                )}
+              </Card>
+              <Card shadow="sm" padding="md" radius="md" withBorder mt={10}>
+              <Text fw={500} size="md">Novos usuários</Text>
+                {search.requesting ? (
+                  <Text size="13px" mt={7}>Carregando...</Text>
+                ) : (
+                  search.suggestedNewUsers.map((user, key) => (
+                    <UserCard 
+                      mt={14}
+                      key={key}
+                      name={user.name}
+                      lastname={user.lastname}
+                      username={user.username}
+                      mainRole={user.role}
+                      picture={user.picture}
+                      verified={user.verified}
+                      legend={user.legend}
+                      city={user.city}
+                      region={user.region}
+                    />
+                  ))
+                )}
+              </Card>
+            </Grid.Col>
+          }
         </Grid>
       </Container>
       <FooterMenuMobile />

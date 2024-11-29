@@ -216,7 +216,7 @@ function Header (props) {
                     leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
                     // onClick={() => navigate(`/${user.username}`)}
                     // onClick={() => console.log("foi")}
-                    onClick={() => navigate(''+user.username)}
+                    onClick={() => navigate('/'+user.username)}
                   >
                     Ver perfil
                   </Menu.Item>

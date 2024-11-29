@@ -195,7 +195,7 @@ export function profile(state = initialState, action) {
       return {
         ...state,
         id: '',
-        name: '',
+        name: 'Carregando...',
         lastname: '',
         email: '',
         picture: '',

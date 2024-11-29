@@ -73,22 +73,31 @@ function ProjectCard (props) {
               <Text size="sm" mb={0} fw={500} lineClamp={1}> 
                 {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
               </Text>
-              <Text size="10px" c="dimmed" mb={3}>
+              <Text size="11px" mb={3}>
                 {project.workTitle} {!!project.admin && " · Administrador"}
               </Text>
               {isActiveOnProject && 
-                <Flex align='center'>
-                  <IconCircleFilled style={iconCircleStyles} color='green' /><Text size='10px'>{`${project.joined_in} - atualmente`} {years(project.joined_in, currentYear)}</Text>
+                <Flex align='center' c="dimmed">
+                  <IconCircleFilled style={iconCircleStyles} color='green' />
+                  <Text size='11px'>
+                    {`${project.joined_in} › atualmente`} {years(project.joined_in, currentYear)}
+                  </Text>
                 </Flex>
               }
               {project.yearLeftTheProject && 
-                <Flex align='center'>
-                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}</Text>
+                <Flex align='center' c="dimmed">
+                  <IconCircleFilled style={iconCircleStyles} color='red' />
+                  <Text size='11px'>
+                    deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}
+                  </Text>
                 </Flex>
               }
               {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-                <Flex align='center'>
-                  <IconCircleFilled style={iconCircleStyles} color='red' /><Text size='10px'>{project.joined_in} até o encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}</Text>
+                <Flex align='center' c="dimmed">
+                  <IconCircleFilled style={iconCircleStyles} color='red' />
+                  <Text size='11px'>
+                    {project.joined_in} › encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}
+                  </Text>
                 </Flex>
               }
             </Flex>

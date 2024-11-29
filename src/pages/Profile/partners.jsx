@@ -25,7 +25,7 @@ function PartnersModule ({
       mb={25}
       style={{ backgroundColor: 'transparent' }}
     >
-      <Title order={5} mb={8}>Parceiros e Patrocínios</Title>
+      <Title order={5} mb={8}>Parceiros</Title>
       {loading ? ( 
         <Text size='sm'>Carregando...</Text>
       ) : (
