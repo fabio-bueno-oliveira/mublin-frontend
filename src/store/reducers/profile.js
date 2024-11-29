@@ -144,14 +144,24 @@ const initialState = {
       tuningDescription: ''
     }
   ],
-  gearSetups: [
-    { 
-      id: '',
-      name: '',
-      created: '',
-      image: ''
-    }
-  ],
+  gearSetups: {
+    total: 0,
+    success: true,
+    setups: [
+      { 
+        id: '',
+        name: '',
+        created: '',
+        image: ''
+      }
+    ],
+    products: [
+      { 
+        productId: '',
+        setupId: ''
+      }
+    ],
+  },
   gearCategories: [
     { category: '', macroCategory: '', total: 0 }
   ],

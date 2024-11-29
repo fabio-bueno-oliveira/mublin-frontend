@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
-import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, NavLink, Menu, Group, Button, LoadingOverlay, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider, Tabs, rem, em } from '@mantine/core';
-import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconChevronDown } from '@tabler/icons-react';
+import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, NavLink, Menu, Group, Button, LoadingOverlay, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider, Tabs, em } from '@mantine/core';
+import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconChevronDown, IconHeartHandshake, IconPackages, IconTargetArrow } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
@@ -150,13 +150,22 @@ function SettingsPage () {
                       </Anchor>
                     </Menu.Target>
                     <Menu.Dropdown>
-                      <Menu.Item leftSection={<IconAdjustmentsHorizontal style={{ width: rem(14), height: rem(14) }} />}>
+                      <Menu.Item>
                         Preferências
                       </Menu.Item>
-                      <Menu.Item leftSection={<IconLock style={{ width: rem(14), height: rem(14) }} />}>
+                      <Menu.Item>
+                        Disponibilidade
+                      </Menu.Item>
+                      <Menu.Item>
+                        Parceiros e Endorsements
+                      </Menu.Item>
+                      <Menu.Item>
+                        Meus equipamentos
+                      </Menu.Item>
+                      <Menu.Item>
                         Senha
                       </Menu.Item>
-                      <Menu.Item leftSection={<IconEye style={{ width: rem(14), height: rem(14) }} />}>
+                      <Menu.Item>
                         Privacidade
                       </Menu.Item>
                     </Menu.Dropdown>
@@ -185,8 +194,26 @@ function SettingsPage () {
               <NavLink
                 color="violet"
                 href="#required-for-focus"
-                label="Preferências"
+                label="Preferências musicais"
                 leftSection={<IconAdjustmentsHorizontal size="1rem" stroke={1.5} />}
+              />
+              <NavLink
+                color="violet"
+                href="#required-for-focus"
+                label="Disponibilidade"
+                leftSection={<IconTargetArrow size="1rem" stroke={1.5} />}
+              />
+              <NavLink
+                color="violet"
+                href="#required-for-focus"
+                label="Parceiros e Endorsements"
+                leftSection={<IconHeartHandshake size="1rem" stroke={1.5} />}
+              />
+              <NavLink
+                color="violet"
+                href="#required-for-focus"
+                label="Meus equipamentos"
+                leftSection={<IconPackages size="1rem" stroke={1.5} />}
               />
               <NavLink
                 color="violet"

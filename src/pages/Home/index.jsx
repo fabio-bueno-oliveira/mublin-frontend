@@ -109,7 +109,7 @@ function Home () {
                 >
                   <Flex justify="space-between" align="center">
                     <div>
-                      <Text size="md" mb={3}>
+                      <Text size="md" mb={3} fw={500}>
                         Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
                       </Text>
                       {!!projectsTerminated.length && 
@@ -124,9 +124,11 @@ function Home () {
                       }
                     </div>
                     {largeScreen && 
-                      <Button size="sm" color="violet" leftSection={<IconPlus size={14} />}>
-                        Criar novo projeto
-                      </Button>
+                      <Link to={{ pathname: `/new` }}>
+                        <Button size="sm" color="violet" leftSection={<IconPlus size={14} />}>
+                          Criar novo projeto
+                        </Button>
+                      </Link>
                     }
                   </Flex>
                 </Card>

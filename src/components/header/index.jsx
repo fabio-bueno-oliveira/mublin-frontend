@@ -15,7 +15,7 @@ import {
   IconMessageCircle, 
   IconUserCircle, 
   IconHome,
-  IconTopologyStar3,
+  IconRocket,
   IconMusic,
   IconLogout
 } from '@tabler/icons-react';
@@ -169,7 +169,7 @@ function Header (props) {
                   size="sm" 
                   variant='transparent'
                   color={currentPath === '/my-projects' ? 'violet' : 'dark'}
-                  leftSection={<><IconTopologyStar3 size={14} /></>}
+                  leftSection={<><IconRocket size={14} /></>}
                   p={'xs'}
                   visibleFrom="md"
                 >

@@ -1,4 +1,16 @@
 .profilePage {
+  .mantine-Accordion-content {
+    padding: 0px
+  }
+  .mantine-Accordion-chevron {
+    margin-inline-end: 6px;
+    margin-inline-start: 0;
+  }
+  .mantine-focus-auto:focus-visible {
+    outline: none;
+    outline-offset: none;
+  }
+
   .embla.roles {
     overflow: hidden;
     width: 89%;

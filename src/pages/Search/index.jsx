@@ -185,6 +185,11 @@ function Search () {
                           <Text size='10px' c='dimmed'>
                             {user.city && user.city+' - '+user.region}
                           </Text>
+                          {user.projectRelated && 
+                            <Text size='10px' mt="3px">
+                              Projeto relacionado: {user.projectRelated} ({user.projectType})
+                            </Text>
+                          }
                         </Flex>
                       </Flex>
                       {/* <Divider my="xs" /> */}

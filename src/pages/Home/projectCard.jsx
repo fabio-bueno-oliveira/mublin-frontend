@@ -177,7 +177,7 @@ function ProjectCard (props) {
                 {project.cityName && `de ${project.cityName}, `} {`${project.regionUf},`} {`${project.countryName}`}  
               </Text>
             }
-            <Group gap={2} mb={0} truncate="start" fz={"10px"}>
+            <Group gap={2} truncate="start" fz={"10px"}>
               {project?.ptname === "Projeto solo" &&
                 <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
               }
@@ -202,7 +202,7 @@ function ProjectCard (props) {
           </div>
         </Group>
         <Divider 
-          my="xs" 
+          mb="xs"
           label={`Integrantes ativos (${activeMembers?.length})`} 
           labelPosition="left" 
         />

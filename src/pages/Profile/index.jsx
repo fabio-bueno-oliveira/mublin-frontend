@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Paper, Title, Text, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, Accordion, em } from '@mantine/core';
+import { Container, Flex, Grid, Paper, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, Accordion, em } from '@mantine/core';
 import { IconCircleFilled, IconCheck, IconInfoCircleFilled, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -37,7 +37,7 @@ function ProfilePage () {
     dispatch(profileInfos.getProfileRoles(username));
     dispatch(profileInfos.getProfileGenres(username));
     dispatch(profileInfos.getProfileGear(username));
-    // dispatch(profileInfos.getProfileGearSetups(username));
+    dispatch(profileInfos.getProfileGearSetups(username));
     dispatch(profileInfos.getProfilePartners(username));
     dispatch(profileInfos.getProfileStrengths(username));
     dispatch(profileInfos.getProfileStrengthsTotalVotes(username));
@@ -318,12 +318,19 @@ function ProfilePage () {
                     </Flex>
                     {(profile.bio && profile.bio !== 'null') && 
                       <Text 
-                        size={largeScreen ? 'sm' : 'xs'} mt={14} lineClamp={3}
-                        onClick={!largeScreen ? () => setModalBioOpen(true) : undefined}
+                        size="sm" mt={14} lineClamp={3}
+                        onClick={() => setModalBioOpen(true)}
                         pr={largeScreen ? 26 : 0}
                       >
                         {profile.bio}
                       </Text>
+                    }
+                    {profile.website && 
+                      <Anchor href={profile.website} target="_blank" underline="hover">
+                        <Text size="sm" mt={3}>
+                          {profile.website}
+                        </Text>
+                      </Anchor>
                     }
                     <Group gap={5} mt={12}>
                       {followedByMe?.requesting ? (
@@ -399,7 +406,7 @@ function ProfilePage () {
                           align='center' 
                           gap={3} 
                           mb={largeScreen ? 6 : 0} 
-                          mt={largeScreen ? 0 : 6}
+                          mt={6}
                         >
                           <IconCircleFilled 
                             style={iconCircleStyles} 
@@ -463,69 +470,71 @@ function ProfilePage () {
                             )}
                           </Box>
                         }
-                        <Accordion chevronPosition="right">
-                          <Accordion.Item value="Exibir mais" style={{border:'0px'}}>
-                            <Accordion.Control p={0} fz="sm"  withBorder={false}>
-                              Exibir mais
-                            </Accordion.Control>
-                            <Accordion.Panel>
-                              <Text size="xs" fw={500}>
-                                Estilos musicais:
-                              </Text>
-                              <Group gap={4}>
-                                {profile.requesting ? (
-                                  <Text size='xs' mx={0}>Carregando...</Text>
-                                ) : (
-                                  <Text size='xs' mx={0}>
-                                    {profile.genres[0].id && profile.genres.map((genre, key) =>
-                                      <span key={key} className="comma">{genre.name}</span>
-                                    )}
-                                  </Text>
-                                )}
-                              </Group>
-                              <Text size="xs" fw={500} mt={7} >
-                                Tipos de projetos:
-                              </Text>
-                              <Group gap={4}>
-                                {profile.requesting ? (
-                                  <Text size='xs' mx={0}>Carregando...</Text>
-                                ) : (
-                                  <Text size='xs' mx={0}>
-                                    {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-                                      <span className="comma">Autorais</span>
-                                    }
-                                    {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-                                      <span className="comma">Contratado</span>
-                                    }
-                                  </Text>
-                                )}
-                              </Group>
-                              <Text size="xs" fw={500} mt={7} mb={3}>
-                                Tipos de trabalho:
-                              </Text>
-                              {profile.availabilityItems[0].id ? (
-                                <Group gap={4}>
-                                  {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                                    <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="filled" color="black" key={key} mx={0}>
-                                      {item.itemName}
-                                    </Badge>
-                                  )}  
-                                </Group>
-                              ) : (
-                                <Text size="11px" c="dimmed">
-                                  Não informado
+                        {isMobile && 
+                          <Accordion chevronPosition="left">
+                            <Accordion.Item value="Exibir mais" style={{border:'0px'}}>
+                              <Accordion.Control p={0} fz="sm"  withBorder={false}>
+                                Exibir mais
+                              </Accordion.Control>
+                              <Accordion.Panel>
+                                <Text size="sm" fw={500}>
+                                  Estilos musicais:
                                 </Text>
-                              )}
-                            </Accordion.Panel>
-                          </Accordion.Item>
-                        </Accordion>
+                                <Group gap={4}>
+                                  {profile.requesting ? (
+                                    <Text size="xs" mx={0}>Carregando...</Text>
+                                  ) : (
+                                    <Text size="xs" mx={0}>
+                                      {profile.genres[0].id && profile.genres.map((genre, key) =>
+                                        <span key={key} className="comma">{genre.name}</span>
+                                      )}
+                                    </Text>
+                                  )}
+                                </Group>
+                                <Text size="sm" fw={500} mt={7} >
+                                  Tipos de projetos:
+                                </Text>
+                                <Group gap={4}>
+                                  {profile.requesting ? (
+                                    <Text size="xs" mx={0}>Carregando...</Text>
+                                  ) : (
+                                    <Text size="xs" mx={0}>
+                                      {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
+                                        <span className="comma">Autorais</span>
+                                      }
+                                      {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
+                                        <span className="comma">Contratado</span>
+                                      }
+                                    </Text>
+                                  )}
+                                </Group>
+                                <Text size="sm" fw={500} mt={7} mb={3}>
+                                  Tipos de trabalho:
+                                </Text>
+                                {profile.availabilityItems[0].id ? (
+                                  <Group gap={4}>
+                                    {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
+                                      <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="filled" color="black" key={key} mx={0}>
+                                        {item.itemName}
+                                      </Badge>
+                                    )}  
+                                  </Group>
+                                ) : (
+                                  <Text size="xs" c="dimmed">
+                                    Não informado
+                                  </Text>
+                                )}
+                              </Accordion.Panel>
+                            </Accordion.Item>
+                          </Accordion>
+                        }
                       </> 
                     }
                   </Grid.Col>
                 </Grid>
               </Paper>
             }
-            {profile.plan === "Pro" && 
+            {(profile.plan === "Pro" && profile.total) && 
               <PartnersModule loading={profile.requesting} partners={profile.partners} />
             }
             <Box mb={18}>
@@ -639,18 +648,18 @@ function ProfilePage () {
                   <>
                     {profile.gear[0]?.brandId && 
                       <Group mb={20}>
-                        {/* <NativeSelect 
+                        <NativeSelect 
                           size="xs"
                           w={138}
                           onChange={(e) => getSetupProducts(e.target.options[e.target.selectedIndex].value)}
                         >
                           <option>Setup completo</option>
-                          {profile.gearSetups[0].id && profile.gearSetups.map((setup, key) =>
+                          {profile.gearSetups.total && profile.gearSetups.result[0].map((setup, key) =>
                             <option key={key} value={setup.id}>
                               {setup.name}
                             </option>
                           )}
-                        </NativeSelect> */}
+                        </NativeSelect>
                         <NativeSelect 
                           size="xs"
                           w={132}
@@ -765,7 +774,7 @@ function ProfilePage () {
         onClose={() => setModalBioOpen(false)} 
         title={'Sobre '+profile.name}
         scrollAreaComponent={ScrollArea.Autosize}
-        fullScreen
+        fullScreen={isMobile ? true : false}
       >
         <Text size={'sm'}>{profile.bio}</Text>
       </Modal>
@@ -777,6 +786,7 @@ function ProfilePage () {
       >
         <Text size={'sm'}><strong>Localidade:</strong> {profile.city}, {profile.region}</Text>
         <Text size={'sm'}><strong>E-mail:</strong> {profile.email}</Text>
+        {/* <Text size={'sm'}><strong>Celular:</strong> {profile.phone}</Text> */}
       </Modal>
       <Modal 
         centered
