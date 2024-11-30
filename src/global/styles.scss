@@ -139,3 +139,7 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
     margin-right: 5px;
   }
 }
+
+.comma:not(:empty) ~ .comma:not(:empty):before {
+  content: ", ";
+}

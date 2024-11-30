@@ -21,6 +21,7 @@ import StartStep3Page from './pages/Start/step3';
 import StartStep4Page from './pages/Start/step4';
 import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search';
+import NewProject from './pages/New/project';
 import New from './pages/New';
 import ProjectPage from './pages/ProjectPage';
 import ProjectDashboardPage from './pages/ProjectDashboard';
@@ -66,6 +67,7 @@ function AppRoutes () {
           <Route path="/gear/brand/:brandUrlName" element={<GearBrandPage />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/new/project" element={<NewProject />} />
           <Route path="/new" element={<New />} />
           <Route exact path="/:username" element={<ProfilePage />} />
         </Route>

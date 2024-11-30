@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 // import { eventsInfos } from '../../store/actions/events';
+import { userInfos } from '../../store/actions/user';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { Container, Flex, Center, Box, Card, Title, Badge, Text, Grid, Skeleton, Switch, Button, Avatar, em } from '@mantine/core';
@@ -37,6 +38,7 @@ function Home () {
     : projects?.list.filter((project) => { return !project.yearEnd })
 
   useEffect(() => {
+    dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
     dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
     // dispatch(eventsInfos.getUserEvents(loggedUser.id));
     dispatch(searchInfos.getSuggestedFeaturedUsers());
@@ -73,10 +75,15 @@ function Home () {
                   </Title>
                   {user.plan === 'Pro' && 
                     <Center>
-                      <Badge size='sm' variant='light' color="violet">PRO</Badge>
+                      <Text size="11px" c="dimmed" mr={3}>Mublin</Text> <Badge size='sm' variant='light' color="violet">PRO</Badge>
                     </Center>
                   }
-                  <Text size="xs" mt={14} c="dimmed" ta="center">
+                  <Text ta="center" c="dimmed" fw="500" size="11px" mt={10}>
+                    {user.roles.map((role, key) => 
+                      <span className="comma" key={key}>{role.description}</span>
+                    )}
+                  </Text>
+                  <Text ta="center"  size="xs" mt={14} c="dimmed">
                     {user.bio}
                   </Text>
                 </>

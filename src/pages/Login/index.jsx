@@ -118,13 +118,6 @@ function LoginPage () {
             Entrar
           </Button>
         </form>
-        <Center mt={12}>
-          <Link to={{ pathname: '/' }}>
-            <Anchor size="md" component="button">
-              Voltar à home
-            </Anchor>
-          </Link>
-        </Center>
       </Container>
     </>
     );

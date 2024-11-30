@@ -187,8 +187,4 @@
   .mantine-Badge-section {
     margin-right: 2px;
   }
-
-  .comma:not(:empty) ~ .comma:not(:empty):before {
-    content: ", ";
-  }
 }
