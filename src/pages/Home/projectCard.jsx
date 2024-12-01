@@ -15,7 +15,7 @@ function ProjectCard (props) {
   const user = useSelector(state => state.user);
 
   const cdnBaseURL = 'https://ik.imagekit.io/mublin/';
-  const cdnProjectPath = cdnBaseURL+'projects/tr:h-250,w-410,fo-top,c-maintain_ratio/';
+  const cdnProjectPath = cdnBaseURL+'projects/tr:h-200,w-200,c-maintain_ratio/';
   // const cdnProjectPathBlur = cdnBaseURL+'projects/tr:bl-6,h-80,w-410,fo-middle,c-maintain_ratio/';
   
   const currentYear = new Date().getFullYear();

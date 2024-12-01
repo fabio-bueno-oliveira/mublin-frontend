@@ -137,10 +137,7 @@ function Search () {
                 }
               </Tabs.Tab>
               <Tabs.Tab value="projects" mb={15}>
-                {searchResults.projects[0].id 
-                  ? 'Projetos ('+searchResults.projects.length+')' 
-                  : 'Projetos (0)'
-                }
+                {`Projetos (${searchResults.projects.total})`}
               </Tabs.Tab>
               {/* <Tabs.Tab value="gear">
                 Equipamentos
@@ -199,9 +196,9 @@ function Search () {
               }
             </Tabs.Panel>
             <Tabs.Panel value="projects" pl={10}>
-              {searchResults.users[0].id && 
+              {searchResults.projects.total && 
                 <Box>
-                  {searchResults.projects.map((project, key) => 
+                  {searchResults.projects.result.map((project, key) => 
                     <>
                       <Flex align={'center'} key={key} mb={8} gap={6}>
                         <Link to={{ pathname: `/project/${project.username}` }}>

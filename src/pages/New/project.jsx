@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../store/actions/misc';
 import { usernameCheckInfos } from '../../store/actions/usernameCheck';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Flex, Grid, Modal, Center, Box, ScrollArea, Text, Anchor, Checkbox, Group, Image, NumberInput, TextInput, Input, Textarea, NativeSelect, Radio, Title, Button, Loader, Badge, Divider } from '@mantine/core';
+import { searchInfos } from '../../store/actions/search';
+import { Container, Flex, Grid, Modal, Paper, Center, Box, ScrollArea, Avatar, Text, Anchor, Checkbox, Group, Image, NumberInput, TextInput, Input, Textarea, NativeSelect, Radio, Title, Button, Loader, Badge, Divider } from '@mantine/core';
 import { useForm, isNotEmpty, isInRange } from '@mantine/form';
 import { useDebouncedCallback  } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import {IKUpload} from "imagekitio-react";
@@ -22,6 +24,7 @@ function New () {
 
   const projectUsernameAvailability = useSelector(state => state.projectUsernameCheck);
   const roles = useSelector(state => state.roles);
+  const searchProjects = useSelector(state => state.search);
 
   let navigate = useNavigate();
 
@@ -66,6 +69,7 @@ function New () {
   const [projectUsernameFinal, setProjectUsernameFinal] = useState('');
 
   const [formValues, setFormValues] = useState({
+    projectName: '',
     foundation_year: '',
     end_year: '',
     bio: '',
@@ -76,6 +80,35 @@ function New () {
     id_city_fk: '',
     cityName: ''
   })
+
+  const checkProjectName = useDebouncedCallback(async (string) => {
+    if (string.length) {
+      dispatch(searchInfos.getSearchProjectsResults(string));
+    }
+  }, 800);
+
+  useEffect(() => {
+    if (formValues.projectName.length > 3) {
+      checkProjectName(formValues.projectName);
+    }
+  }, [formValues.projectName]);
+
+  useEffect(() => {
+    if (searchProjects.projects.total > 0) {
+      // setSimilarProjectAlert(true);
+      notifications.show({
+        id: 'similar',
+        autoClose: 5000,
+        position: "top-right",
+        withBorder: true,
+        color: "yellow",
+        title: 'Encontramos projetos com nomes parecidos',
+        message: <>
+          <Text size="xs" c="dimmed">Será que seu projeto já está cadastrado?</Text>
+        </>,
+      })
+    }
+  }, [searchProjects.projects.total]);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -101,6 +134,7 @@ function New () {
       form.setFieldValue("projectUserName", usernameFormatted);
       setFormValues({
         ...formValues,
+        projectName: values.projectName,
         foundation_year: values.foundation_year,
         end_year: values.end_year,
         bio: values.bio,
@@ -259,6 +293,33 @@ function New () {
             key={form.key('featured')}
             {...form.getInputProps('featured', { type: 'checkbox' })}
           />
+          {!!searchProjects.projects.total && 
+            <Paper shadow="xs" withBorder p="sm" mt={8} mb={14}>
+              <Text size="xs" fw={500}>Encontramos projetos com nomes parecidos</Text>
+              <Text size="xs" c="dimmed">Será que seu projeto já está cadastrado?</Text>
+              <ScrollArea 
+                w="100%" 
+                h={60} 
+                type="always" 
+                scrollbarSize={10} 
+                scrollHideDelay={500}
+              >
+                <Flex direction="row" gap={14} w="max-content">
+                  {searchProjects.projects.result.map((project, key) => 
+                    <Group key={key} gap={3} mt={6}>
+                      <Anchor href={`/project/${project?.username}`}>
+                        <Avatar size="md" src={project.picture ? project.picture : undefined} />
+                      </Anchor>
+                      <Flex direction="column">
+                        <Text size="xs" fw={500}>{project.name} ({project.type}{project.mainGenre ? " • " + project.mainGenre : null})</Text>
+                        <Text size="11px" c="dimmed">{project.city ? project.city : null}{project.region ? ", " + project.region : null}{project.country ? ", " + project.country : null}</Text>
+                      </Flex>
+                    </Group>
+                  )}
+                </Flex>
+              </ScrollArea>
+            </Paper>
+          }
           <TextInput
             mt={8}
             withAsterisk

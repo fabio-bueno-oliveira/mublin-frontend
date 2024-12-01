@@ -30,32 +30,36 @@ const initialState = {
       ]
     }
   ],
-  projects: [
-    {
-      id: '',
-      name: '',
-      username: '',
-      picture: '',
-      public: '',
-      city: '',
-      region: '',
-      country: '',
-      mainGenre: '',
-      secondGenre: '',
-      thirdGenre: '',
-      type: '',
-      labelShow: '',
-      labelText: '',
-      labelColor: '',
-      foundationYear: '',
-      endYear: '',
-      participationStatus: '',
-      participationId: '',
-      members: [
-        { id: '', name: '', lastname: '', username: '', picture: '' }
-      ]
-    }
-  ],
+  projects: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        name: '',
+        username: '',
+        picture: '',
+        public: '',
+        city: '',
+        region: '',
+        country: '',
+        mainGenre: '',
+        secondGenre: '',
+        thirdGenre: '',
+        type: '',
+        labelShow: '',
+        labelText: '',
+        labelColor: '',
+        foundationYear: '',
+        endYear: '',
+        participationStatus: '',
+        participationId: '',
+        members: [
+          { id: '', name: '', lastname: '', username: '', picture: '' }
+        ]
+      }
+    ]
+  },
   suggestedUsers: [
     {
       id: '',
@@ -135,6 +139,7 @@ export function search(state = initialState, action) {
     case searchTypes.SEARCH_PROJECTS_REQUEST:
       return {
         ...state,
+        projects: initialState.projects,
         requesting: true,
         error: ''
       };
