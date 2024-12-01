@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../store/actions/misc';
 import { usernameCheckInfos } from '../../store/actions/usernameCheck';
+import { userProjectsInfos } from '../../store/actions/userProjects';
 import { Container, Flex, Grid, Checkbox, Group, Image, NumberInput, TextInput, Input, Textarea, NativeSelect, Radio, Title, Text, Button, Loader, Badge } from '@mantine/core';
 import { useForm, isNotEmpty, isInRange } from '@mantine/form';
 import { useDebouncedCallback  } from '@mantine/hooks';
@@ -20,6 +22,8 @@ function New () {
 
   const projectUsernameAvailability = useSelector(state => state.projectUsernameCheck);
   const roles = useSelector(state => state.roles);
+
+  let navigate = useNavigate();
 
   useEffect(() => { 
     dispatch(miscInfos.getRoles());
@@ -53,7 +57,8 @@ function New () {
     foundation_year: '',
     projectIsActive: true,
     bio: '',
-    npMain_role_fk: ''
+    npMain_role_fk: '',
+    type: ''
   })
 
   const form = useForm({
@@ -69,7 +74,8 @@ function New () {
       npMain_role_fk: '',
       type: '2',
       kind: '1',
-      publicProject: "1"
+      publicProject: "1",
+      featured: false
     },
 
     onValuesChange: (values) => {
@@ -80,7 +86,8 @@ function New () {
         foundation_year: values.foundation_year,
         projectIsActive: values.projectIsActive,
         bio: values.bio,
-        npMain_role_fk: values.npMain_role_fk
+        npMain_role_fk: values.npMain_role_fk,
+        type: values.type
       })
       if (usernameFormatted !== projectUsernameFinal && usernameFormatted.length > 1) {
         setProjectUsernameFinal(usernameFormatted);
@@ -115,25 +122,55 @@ function New () {
     document.querySelector('#projectImage').value = null;
   }
 
-  const handleSubmitNewProject = () => {
-    // setIsLoading(true)
+  const handleSubmitNewProject = (values) => {
+    setIsSubmitting(true);
     fetch('https://mublin.herokuapp.com/project/create', {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + loggedUser.token
       },
-      body: JSON.stringify({ id_user_creator_fk: user.id, projectName: projectName, projectUserName: projectUserName, projectImage: projectImage, foundation_year: foundation_year, end_year: end_year, bio: bio, type: type, kind: kind, public: publicProject })
+      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: values.projectName, projectUserName: values.projectUserName, projectImage: projectImage, foundation_year: values.foundation_year, end_year: values.end_year, bio: values.bio, type: values.type, kind: values.kind, public: values.publicProject })
     })
     .then(response => {
       return response.json();
     }).then(jsonResponse => {
-      setIdNewProject(jsonResponse.id)
-      handleSubmitParticipationToNewProject(user.id, jsonResponse.id, userStatus, npMain_role_fk)
+      setIsSubmitting(true);
+      handleSubmitParticipationToNewProject(
+        loggedUser.id, jsonResponse.id, formValues.type, formValues.npMain_role_fk, values.featured
+      );
     }).catch (error => {
-      console.error(error)
-      alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.")
+      setIsSubmitting(false);
+      console.error(error);
+      alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.");
+    })
+  }
+
+  const handleSubmitParticipationToNewProject = (newProjectUserId, newProjectProjectId, newProjectType, newProjectMain_role_fk, featured) => {
+    setIsSubmitting(true)
+    fetch('https://mublin.herokuapp.com/user/add/project', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + loggedUser.token
+      },
+      body: JSON.stringify({ userId: newProjectUserId, projectId: newProjectProjectId, active: '1', status: newProjectType === 7 ? 3 : 1, main_role_fk: newProjectMain_role_fk, joined_in: currentYear, left_in: null, leader: '1', featured: featured, confirmed: '1', admin: '1', portfolio: '0' })
+    }).then((response) => {
+        dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
+        setIsSubmitting(false)
+        navigate({
+          // pathname: '/projects/'+projectUsernameFinal,
+          pathname: '/home',
+          search: createSearchParams({
+            new: 'true'
+          }).toString()
+        });
+    }).catch(err => {
+      setIsSubmitting(false)
+      console.error(err)
+      alert("Ocorreu um erro ao criar o projeto. Tente novamente em instantes.")
     })
   }
 
@@ -145,14 +182,7 @@ function New () {
           Cadastrar novo projeto
         </Title>
         <form 
-          onSubmit={form.onSubmit(
-            (values) => console.log(values),
-            (errors) => {
-              const firstErrorPath = Object.keys(errors)[0];
-              form.getInputNode(firstErrorPath)?.focus();
-            },
-            handleSubmitNewProject
-          )}
+          onSubmit={form.onSubmit(handleSubmitNewProject)}
         >
           <TextInput
             withAsterisk
@@ -160,6 +190,13 @@ function New () {
             placeholder="Ex: Viajantes do Espaço"
             key={form.key('projectName')}
             {...form.getInputProps('projectName')}
+          />
+          <Checkbox
+            mt={8}
+            color="violet"
+            label="Definir como um dos meus projetos principais"
+            key={form.key('featured')}
+            {...form.getInputProps('featured', { type: 'checkbox' })}
           />
           <TextInput
             mt={8}
