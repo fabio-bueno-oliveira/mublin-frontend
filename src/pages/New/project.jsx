@@ -4,13 +4,13 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../store/actions/misc';
 import { usernameCheckInfos } from '../../store/actions/usernameCheck';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Flex, Grid, Checkbox, Group, Image, NumberInput, TextInput, Input, Textarea, NativeSelect, Radio, Title, Text, Button, Loader, Badge } from '@mantine/core';
+import { Container, Flex, Grid, Modal, Center, Box, ScrollArea, Text, Anchor, Checkbox, Group, Image, NumberInput, TextInput, Input, Textarea, NativeSelect, Radio, Title, Button, Loader, Badge, Divider } from '@mantine/core';
 import { useForm, isNotEmpty, isInRange } from '@mantine/form';
 import { useDebouncedCallback  } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import {IKUpload} from "imagekitio-react";
-import { IconTrash, IconCheck } from '@tabler/icons-react';
+import { IconTrash, IconCheck, IconSearch } from '@tabler/icons-react';
 
 function New () {
 
@@ -48,6 +48,18 @@ function New () {
       value: String(role.id),
     }));
 
+  // City search
+  const [modalCityOpen, setModalCityOpen] = useState(false);
+  const [queryCities, setQueryCities] = useState([]);
+  const [citySearchIsLoading, setCitySearchIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [noCitySearchResults, setNoCitySearchResults] = useState(false);
+  const handleSearchCity = (e, value) => {
+    e.preventDefault();
+    searchCity(value);
+    setNoCitySearchResults(false);
+  }
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const currentYear = new Date().getFullYear();
   const [projectImage, setProjectImage] = useState('');
@@ -55,10 +67,14 @@ function New () {
 
   const [formValues, setFormValues] = useState({
     foundation_year: '',
-    projectIsActive: true,
+    end_year: '',
     bio: '',
     npMain_role_fk: '',
-    type: ''
+    type: '',
+    activity_status: '',
+    id_region_fk: '',
+    id_city_fk: '',
+    cityName: ''
   })
 
   const form = useForm({
@@ -68,30 +84,37 @@ function New () {
       projectName: '',
       projectUserName: '',
       foundation_year: currentYear,
-      end_year: '',
-      projectIsActive: true,
+      end_year: null,
       bio: '',
       npMain_role_fk: '',
       type: '2',
       kind: '1',
-      publicProject: "1",
-      featured: false
+      activity_status: '1',
+      publicProject: '1',
+      featured: false,
+      id_country_fk: '27',
+      id_region_fk: ''
     },
 
     onValuesChange: (values) => {
       let usernameFormatted = values.projectUserName.replace(/[^A-Z0-9]/ig, "").toLowerCase();
       form.setFieldValue("projectUserName", usernameFormatted);
       setFormValues({
-        ...formValues, 
+        ...formValues,
         foundation_year: values.foundation_year,
-        projectIsActive: values.projectIsActive,
+        end_year: values.end_year,
         bio: values.bio,
         npMain_role_fk: values.npMain_role_fk,
-        type: values.type
+        type: values.type,
+        activity_status: values.activity_status,
+        id_region_fk: values.id_region_fk
       })
       if (usernameFormatted !== projectUsernameFinal && usernameFormatted.length > 1) {
         setProjectUsernameFinal(usernameFormatted);
         checkUsername(values.projectUserName);
+      }
+      if (values.activity_status !== "2") {
+        form.setFieldValue("end_year", "");
       }
     },
 
@@ -99,10 +122,13 @@ function New () {
       projectName: (value) => (value.length < 2 ? 'O nome do projeto deve ter no mínimo 2 letras' : null),
       projectUserName: (value) => (value.length < 2 ? 'O username do projeto deve ter no mínimo 2 letras' : null),
       foundation_year: isInRange({ min: 1800, max: currentYear }, 'O ano de fundação deve ser entre 1800 e o ano atual'),
-      end_year: (value) => ((!value && !formValues.projectIsActive) ? 'Informe o ano de encerramento do projeto' : null),
+      end_year: (value, values) => ((!value && values.activity_status === "2") ? 'Informe o ano de encerramento do projeto' : null),
       npMain_role_fk: isNotEmpty('Informe sua principal atividade neste projeto'),
       type: isNotEmpty('Informe o tipo do projeto'),
       kind: isNotEmpty('Informe o conteúdo do projeto'),
+      activity_status: isNotEmpty('Informe o status do projeto'),
+      id_country_fk: isNotEmpty('Informe o País de origem do projeto'),
+      id_region_fk: isNotEmpty('Informe o Estado de origem do projeto'),
     },
   });
 
@@ -114,13 +140,47 @@ function New () {
   const onUploadSuccess = res => {
       let n = res.filePath.lastIndexOf('/');
       let fileName = res.filePath.substring(n + 1);
-      setProjectImage(fileName)
+      setProjectImage(fileName);
   };
 
   const removeImage = () => {
     setProjectImage('');
     document.querySelector('#projectImage').value = null;
   }
+
+  const selectCityOnModalList = (cityId, cityName) => {
+    setFormValues({...formValues, id_city_fk: cityId, cityName: cityName});
+    setModalCityOpen(false);
+  }
+
+  const searchCity = useDebouncedCallback(async (query) => {
+    if (query?.length > 1) {
+      setCitySearchIsLoading(true);
+      setNoCitySearchResults(false);
+      fetch('https://mublin.herokuapp.com/search/cities/'+query+'/'+formValues.id_region_fk, {
+        method: 'GET'
+      })
+        .then(res => res.json())
+        .then(
+          (result) => {
+            if (result?.length) {
+              setQueryCities(
+                result.map(e => { return { value: String(e.value), label: e.text }})
+              );
+              setNoCitySearchResults(false)
+            } else {
+              setNoCitySearchResults(true);
+            }
+            setCitySearchIsLoading(false);
+          },
+          (error) => {
+            console.log(error)
+            setCitySearchIsLoading(false);
+            setNoCitySearchResults(true);
+            alert("Ocorreu um erro ao tentar pesquisar a cidade");
+        })
+      }
+  },500);
 
   const handleSubmitNewProject = (values) => {
     setIsSubmitting(true);
@@ -131,7 +191,7 @@ function New () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + loggedUser.token
       },
-      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: values.projectName, projectUserName: values.projectUserName, projectImage: projectImage, foundation_year: values.foundation_year, end_year: values.end_year, bio: values.bio, type: values.type, kind: values.kind, public: values.publicProject })
+      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: values.projectName, projectUserName: values.projectUserName, projectImage: projectImage, foundation_year: values.foundation_year, end_year: values.end_year ? values.end_year : null, bio: values.bio, type: values.type, kind: values.kind, activity_status: values.activity_status, public: values.publicProject, id_country_fk: values.id_country_fk, id_region_fk: values.id_region_fk, id_city_fk: formValues.id_city_fk })
     })
     .then(response => {
       return response.json();
@@ -178,12 +238,13 @@ function New () {
     <>
       <Header />
       <Container size="xs" mt={32} mb={40}>
-        <Title order={2} mb={14}>
+        <Title order={2} mb={14} ta="center">
           Cadastrar novo projeto
         </Title>
         <form 
           onSubmit={form.onSubmit(handleSubmitNewProject)}
         >
+          <Divider label="Informações básicas do projeto de música" labelPosition="center" />
           <TextInput
             withAsterisk
             label="Nome do projeto"
@@ -223,12 +284,13 @@ function New () {
           {(projectUsernameFinal && projectUsernameAvailability.requested && projectUsernameAvailability.available === false) && 
             <Badge size="xs" color="red">Nome de usuário do projeto não disponível</Badge>
           }
-          <Flex direction="column" mt={8}>
-            <Input.Label>Foto</Input.Label>
+          <Divider mt="xs" mb="sm" label="Imagem" labelPosition="center" />
+          <Flex direction="column">
+            {/* <Input.Label>Foto</Input.Label> */}
             <div style={projectImage ? {display: "none"} : undefined}>
               <IKUpload 
                 id='projectImage'
-                fileName={"projectPicture_"+projectUsernameFinal+"_.jpg"}
+                fileName={projectUsernameFinal+"_.jpg"}
                 folder={projectImagePath}
                 tags={["project", "avatar"]}
                 useUniqueFileName={true}
@@ -258,60 +320,7 @@ function New () {
               </Button>
             </Flex>
           }
-          <Grid mt={8}>
-            <Grid.Col span={6}>
-              <NumberInput
-                withAsterisk
-                label="Ano de formação"
-                min={1800} 
-                max={currentYear}
-                key={form.key('foundation_year')}
-                {...form.getInputProps('foundation_year')}
-              />
-            </Grid.Col>
-            <Grid.Col span={6}>
-              <NumberInput
-                withAsterisk={!formValues.projectIsActive}
-                label="Ano de encerramento"
-                min={formValues.foundation_year} 
-                max={currentYear}
-                disabled={formValues.projectIsActive}
-                key={form.key('end_year')}
-                {...form.getInputProps('end_year')}
-              />
-            </Grid.Col>
-          </Grid>
-          <Checkbox
-            mt={8}
-            color="violet"
-            label="Projeto em atividade atualmente"
-            key={form.key('projectIsActive')}
-            {...form.getInputProps('projectIsActive', { type: 'checkbox' })}
-          />
-          <Textarea
-            mt={8}
-            label="Bio"
-            description={formValues.bio.length+'/200'}
-            placeholder="Conte um pouco sobre o projeto (opcional)"
-            maxLength="220"
-            key={form.key('bio')}
-            {...form.getInputProps('bio', { type: 'checkbox' })}
-          />
-          <NativeSelect
-            withAsterisk
-            label="Sua principal função no projeto"
-            mt={6}
-            data={[
-              { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
-              { group: 'Gestão, produção e outros', items: rolesListManagement },
-              { group: 'Instrumentos', items: rolesListMusicians },
-            ]}
-            key={form.key('npMain_role_fk')}
-            {...form.getInputProps('npMain_role_fk')}
-          />
-          <Text size="11px" mt={4} c="dimmed">
-            Você também será atribuído automaticamente como Administrador deste novo projeto
-          </Text>
+          <Divider mb="xs" mt="sm" label="Informações adicionais" labelPosition="center" />
           <Grid mt={8}>
             <Grid.Col span={6}>
               <NativeSelect
@@ -342,11 +351,152 @@ function New () {
               </NativeSelect>
             </Grid.Col>
           </Grid>
+          <NativeSelect
+            withAsterisk
+            label="Status do projeto"
+            mt={6}
+            key={form.key('activity_status')}
+            {...form.getInputProps('activity_status')}
+          >
+            <option value=''>Selecione</option>
+            <option value='1'>Projeto em atividade</option>
+            <option value='2'>Projeto encerrado</option>
+            <option value='3'>Projeto ativo vez em quando</option>
+            <option value='4'>Projeto sazonal / de temporada</option>
+            <option value='5'>Projeto ainda em construção</option>
+            <option value='6'>Projeto em Hiato/Parado</option>
+          </NativeSelect>
+          <Grid mt={8}>
+            <Grid.Col span={6}>
+              <NumberInput
+                withAsterisk
+                label="Ano de formação"
+                min={1800} 
+                max={formValues.end_year ? formValues.end_year : currentYear}
+                key={form.key('foundation_year')}
+                {...form.getInputProps('foundation_year')}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NumberInput
+                withAsterisk={formValues.activity_status === "2"}
+                label="Ano de encerramento"
+                min={formValues.foundation_year} 
+                max={currentYear}
+                disabled={formValues.activity_status !== "2"}
+                key={form.key('end_year')}
+                {...form.getInputProps('end_year')}
+              />
+            </Grid.Col>
+          </Grid>
+          <Grid mt={2}>
+            <Grid.Col span={6}>
+              <NativeSelect
+                label="País de origem"
+                key={form.key('id_country_fk')}
+                {...form.getInputProps('id_country_fk')}
+              >
+                <option value="">Selecione</option>
+                <option value='27'>Brasil</option>
+              </NativeSelect>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NativeSelect
+                label="Estado"
+                key={form.key('id_region_fk')}
+                {...form.getInputProps('id_region_fk')}
+              >
+                <option value="">Selecione</option>
+                <option value="415">Acre</option>
+                <option value="422">Alagoas</option>
+                <option value="406">Amapa</option>
+                <option value="407">Amazonas</option>
+                <option value="402">Bahia</option>
+                <option value="409">Ceara</option>
+                <option value="424">Distrito Federal</option>
+                <option value="401">Espirito Santo</option>
+                <option value="411">Goias</option>
+                <option value="419">Maranhao</option>
+                <option value="418">Mato Grosso</option>
+                <option value="399">Mato Grosso do Sul</option>
+                <option value="404">Minas Gerais</option>
+                <option value="408">Para</option>
+                <option value="405">Paraiba</option>
+                <option value="413">Parana</option>
+                <option value="417">Pernambuco</option>
+                <option value="416">Piaui</option>
+                <option value="410">Rio de Janeiro</option>
+                <option value="414">Rio Grande do Norte</option>
+                <option value="400">Rio Grande do Sul</option>
+                <option value="403">Rondonia</option>
+                <option value="421">Roraima</option>
+                <option value="398">Santa Catarina</option>
+                <option value="412">São Paulo</option>
+                <option value="423">Sergipe</option>
+                <option value="420">Tocantins</option>
+              </NativeSelect>
+            </Grid.Col>
+          </Grid>
+          {formValues.id_city_fk ? ( 
+            <Input.Wrapper 
+              label={
+                <Group gap={2} mt={8}>
+                  Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />}
+                </Group>
+              }
+            >
+              <Input 
+                size="sm" 
+                pointer
+                onClick={() => setModalCityOpen(true)}
+                value={formValues.cityName}
+              />
+            </Input.Wrapper>
+          ) : (
+            <Input.Wrapper 
+              label={
+                <Group gap={2} mt={8}>
+                  Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />}
+                </Group>
+              }
+            >
+              <Input 
+                value={formValues.id_region_fk ? "Selecione..." : "Selecione o Estado antes"}
+                size="sm"
+                pointer
+                rightSection={formValues.id_region_fk ? <IconSearch size={16} /> : undefined}
+                onClick={() => setModalCityOpen(true)}
+                disabled={!formValues.id_region_fk}
+              />
+            </Input.Wrapper>
+          )}
+          <Textarea
+            mt={8}
+            label="Bio"
+            description={formValues.bio.length+'/220'}
+            placeholder="Conte um pouco sobre o projeto (opcional)"
+            maxLength="220"
+            key={form.key('bio')}
+            {...form.getInputProps('bio', { type: 'checkbox' })}
+          />
+          <NativeSelect
+            withAsterisk
+            label="Sua principal função no projeto"
+            description="Você também será atribuído automaticamente como Administrador deste novo projeto"
+            mt={6}
+            data={[
+              { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
+              { group: 'Gestão, produção e outros', items: rolesListManagement },
+              { group: 'Instrumentos', items: rolesListMusicians },
+            ]}
+            key={form.key('npMain_role_fk')}
+            {...form.getInputProps('npMain_role_fk')}
+          />
           <Radio.Group
             mt={8}
             name="favoriteFramework"
             label="Visibilidade"
-            description="Exibir o projeto nas buscas?"
+            description="Exibir o projeto nas buscas do Mublin e mecanismos externos?"
             key={form.key('publicProject')}
             {...form.getInputProps('publicProject')}
           >
@@ -368,6 +518,62 @@ function New () {
           </Group>
         </form>
       </Container>
+      <Modal
+        title='Selecionar cidade'
+        opened={modalCityOpen}
+        onClose={() => setModalCityOpen(false)}
+        size={'sm'}
+      >
+        <Grid>
+          <Grid.Col span={7}>
+            <form onSubmit={(e) => handleSearchCity(e, searchValue)}>
+              <TextInput
+                placeholder="Digite e selecione..."
+                onChange={(e) => setSearchValue(e.target.value)}
+                value={searchValue}
+                mb={5}
+                data-autofocus
+              />
+            </form>
+          </Grid.Col>
+          <Grid.Col span={5}>
+            <Button color="violet" onClick={() => searchCity(searchValue)}>
+              Pesquisar
+            </Button>
+          </Grid.Col>
+        </Grid>
+        {citySearchIsLoading && 
+          <Center my={20}>
+            <Loader color="violet" size="sm" type="bars" />
+          </Center>
+        }
+        {!!(queryCities.length && !citySearchIsLoading) && 
+          <>
+            <Text size='xs' c='dimmed' mt={10} mb={10}>
+              {queryCities.length} {queryCities.length === 1 ? "cidade localizada" : "cidades localizadas"} 
+            </Text>
+            <ScrollArea h={170} type="always" offsetScrollbars>
+              {queryCities.map((city, key) =>
+                <Box key={key} py={3}>
+                  <Anchor 
+                    size='lg' 
+                    my={10} 
+                    onClick={() => selectCityOnModalList(city.value, city.label)}
+                  >
+                    {city.label}
+                  </Anchor>
+                  <Divider />
+                </Box>
+              )}
+            </ScrollArea>
+          </>
+        }
+        {noCitySearchResults &&
+          <Text size='xs' c='dimmed' mt={10} mb={10}>
+            Nenhuma cidade localizada a partir desta pesquisa no Estado escolhido
+          </Text>
+        }
+      </Modal>
       <FooterMenuMobile />
     </>
   );
