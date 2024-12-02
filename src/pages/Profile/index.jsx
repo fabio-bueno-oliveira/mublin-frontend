@@ -4,8 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Paper, Center, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, rem, Accordion, em } from '@mantine/core';
-import { IconCircleFilled, IconCheck, IconInfoCircleFilled, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
+import { Container, Flex, Grid, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, ActionIcon, Accordion, rem, em } from '@mantine/core';
+import { IconCircleFilled, IconCheck, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -78,7 +78,6 @@ function ProfilePage () {
   // const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
   // Badges
-  const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false);
   const [modalLegendOpen, setModalLegendOpen] = useState(false);
 
   // Gear
@@ -132,6 +131,8 @@ function ProfilePage () {
     }
   )
 
+  // Modal Follow Info
+  const [modalFollowInfoOpen, setModalFollowInfoOpen] = useState(false);
   // Modal Bio
   const [modalBioOpen, setModalBioOpen] = useState(false);
   // Modal Contact
@@ -142,42 +143,43 @@ function ProfilePage () {
   const [modalFollowingOpen, setModalFollowingOpen] = useState(false);
 
   const followUnfollow = () => {
+    setModalFollowInfoOpen(false);
     if (!followedByMe.following || followedByMe.following === 'false') {
-        setLoadingFollow(true)
-        fetch('https://mublin.herokuapp.com/profile/'+profile.id+'/follow', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + loggedUser.token
-            }
-        })
-        .then((response) => {
-            dispatch(followInfos.checkProfileFollowing(username));
-            dispatch(profileInfos.getProfileFollowers(username));
-            setLoadingFollow(false)
-        }).catch(err => {
-            console.error(err)
-            alert("Ocorreu um erro ao tentar seguir o usuário")
-        })
+      setLoadingFollow(true);
+      fetch('https://mublin.herokuapp.com/profile/'+profile.id+'/follow', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        }
+      })
+      .then((response) => {
+        dispatch(followInfos.checkProfileFollowing(username));
+        dispatch(profileInfos.getProfileFollowers(username));
+        setLoadingFollow(false);
+      }).catch(err => {
+        console.error(err);
+        alert("Ocorreu um erro ao tentar seguir o usuário");
+      })
     } else if (followedByMe.following === 'true') {
-        setLoadingFollow(true)
-        fetch('https://mublin.herokuapp.com/profile/'+profile.id+'/follow', {
-            method: 'delete',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + user.token
-            }
-        })
-        .then((response) => {
-            dispatch(followInfos.checkProfileFollowing(username));
-            dispatch(profileInfos.getProfileFollowers(username));
-            setLoadingFollow(false)
-        }).catch(err => {
-            console.error(err)
-            alert("Ocorreu um erro ao deixar de seguir o usuário")
-        })
+      setLoadingFollow(true);
+      fetch('https://mublin.herokuapp.com/profile/'+profile.id+'/follow', {
+        method: 'delete',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        }
+      })
+      .then((response) => {
+        dispatch(followInfos.checkProfileFollowing(username));
+        dispatch(profileInfos.getProfileFollowers(username));
+        setLoadingFollow(false);
+      }).catch(err => {
+        console.error(err);
+        alert("Ocorreu um erro ao deixar de seguir o usuário");
+      })
     }
   }
 
@@ -350,67 +352,55 @@ function ProfilePage () {
                       </Anchor>
                     }
                     <Group gap={5} mt={14}>
-                      {followedByMe?.requesting ? (
-                        <Button size="xs" disabled>Carregando...</Button>
+                      {loggedUser.id !== profile.id ? (
+                        <Button 
+                          size="xs" 
+                          color={colorScheme === "light" ? "dark" : "gray"}
+                          variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
+                          loading={loadingFollow}
+                          rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
+                          onClick={
+                            followedByMe?.following === 'true' 
+                              ? () => setModalFollowInfoOpen(true)
+                              : () => followUnfollow() 
+                          }
+                        >
+                          {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
+                        </Button>
                       ) : (
+                        <Button 
+                          size="xs" 
+                          variant='light'
+                          color={colorScheme === "light" ? "dark" : "gray"}
+                          onClick={() => navigate('/settings')}
+                        >
+                          Editar perfil
+                        </Button>
+                      )}
+                      <Button 
+                        size="xs" 
+                        variant='light'
+                        color={colorScheme === "light" ? "dark" : "gray"}
+                        leftSection={<IconMail size={14} />} 
+                        onClick={() => setModalContactOpen(true)}
+                      >
+                        Contato
+                      </Button>
+                      {profile.instagram && 
                         <>
-                          {loggedUser.id !== profile.id ? (
-                            <Button 
-                              size="xs" 
-                              color={colorScheme === "light" ? "dark" : "gray"}
-                              variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
-                              loading={loadingFollow}
-                              rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
-                              onClick={followedByMe?.following === 'true' ? () => followUnfollow() : () => followUnfollow()}
-                            >
-                              {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
-                            </Button>
-                          ) : (
-                            <Button 
-                              size="xs" 
-                              variant='light'
-                              color={colorScheme === "light" ? "dark" : "gray"}
-                              onClick={() => navigate('/settings')}
-                            >
-                              Editar perfil
-                            </Button>
-                          )}
-                          <Button 
-                            size="xs" 
+                          <ActionIcon 
+                            size="30px" 
+                            w={28} 
                             variant='light'
                             color={colorScheme === "light" ? "dark" : "gray"}
-                            leftSection={<IconMail size={14} />} 
-                            onClick={() => setModalContactOpen(true)}
+                            component="a"
+                            href={`https://instagram.com/${profile.instagram}`}
+                            target='_blank'
                           >
-                            Contato
-                          </Button>
-                          {profile.instagram && 
-                            <>
-                            <Link to={`https://instagram.com/${profile.instagram}`} target="_blank">
-                              <Button
-                                leftSection={<IconBrandInstagram size={14} />} 
-                                size="xs" 
-                                variant='light'
-                                color={colorScheme === "light" ? "dark" : "gray"}
-                              >
-                                Instagram
-                              </Button>
-                            </Link>
-                            {/* <ActionIcon 
-                              size="30px" 
-                              w={28} 
-                              variant="outline" 
-                              color={colorScheme === "light" ? "dark" : "white"}
-                              component="a"
-                              href={`https://instagram.com/${profile.instagram}`}
-                              target='_blank'
-                            >
-                              <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                            </ActionIcon> */}
-                            </>
-                          }
+                            <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                          </ActionIcon>
                         </>
-                      )}
+                      }
                     </Group>
                   </Grid.Col>
                   <Grid.Col 
@@ -560,7 +550,7 @@ function ProfilePage () {
             {(profile.plan === "Pro" && profile.total) && 
               <PartnersModule loading={profile.requesting} partners={profile.partners} />
             }
-            <Box mb={18}>
+            <Box mb={18} mt={largeScreen ? 30 : 0}>
               <Group justify="flex-start" align="center" gap={8} mb={18}>
                 <Title order={5} fw={500}>Pontos Fortes</Title>
                 {(profile.id !== loggedUser.id && !profile.requesting) && 
@@ -810,6 +800,35 @@ function ProfilePage () {
           }
         </Grid>
       </Container>
+      <Modal 
+        centered
+        opened={modalFollowInfoOpen} 
+        onClose={() => setModalFollowInfoOpen(false)} 
+        title={
+          <Group mt={12} gap={3}>
+            <Avatar
+              size="md"
+              src={profile.picture}
+            />
+            <Text size="sm" fw="500">
+              {`${profile.name} ${profile.lastname}`}
+            </Text>
+          </Group>
+        }
+      >
+        <Stack
+          align="stretch"
+          justify="center"
+          gap="xs"
+        >
+          <Button variant="default" size="xs" rightSection={<IconStar size={14} />}>
+            Adicionar como inspiração
+          </Button>
+          <Button variant="default" size="xs" onClick={() => followUnfollow()}>
+            {followedByMe?.following === 'true' ? 'Deixar de seguir' : 'Seguir'}
+          </Button>
+        </Stack>
+      </Modal>
       <Modal 
         centered
         opened={modalBioOpen} 

@@ -3,6 +3,7 @@ import { profileTypes } from '../types/profile';
 const initialState = {
   requesting: false,
   requested: false,
+  requestingFollowingActions: false,
   success: false,
   id: '',
   name: '',
@@ -330,19 +331,19 @@ export function profile(state = initialState, action) {
       return {
         ...state,
         followers: initialState.followers,
-        requesting: true
+        requestingFollowingActions: true
       };
     case profileTypes.GET_PROFILE_FOLLOWERS_SUCCESS:
       return {
         ...state,
         followers: action.list,
-        requesting: false,
+        requestingFollowingActions: false,
       };
     case profileTypes.GET_PROFILE_FOLLOWERS_FAILURE:
       return {
         ...state,
         followers: initialState.followers,
-        requesting: false,
+        requestingFollowingActions: false,
         error: "A solicitação falhou"
       };
     // FOLLOWING
@@ -350,19 +351,19 @@ export function profile(state = initialState, action) {
       return {
         ...state,
         following: initialState.following,
-        requesting: true
+        requestingFollowingActions: true
       };
     case profileTypes.GET_PROFILE_FOLLOWING_SUCCESS:
       return {
         ...state,
         following: action.list,
-        requesting: false,
+        requestingFollowingActions: false,
       };
     case profileTypes.GET_PROFILE_FOLLOWING_FAILURE:
       return {
         ...state,
         following: initialState.following,
-        requesting: false,
+        requestingFollowingActions: false,
         error: "A solicitação falhou"
       };
     // POSTS (RECENT ACTIVITY)
