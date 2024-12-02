@@ -2,8 +2,9 @@ import { followTypes } from '../types/follow';
 
 const initialState = {
   requesting: false,
+  id: '',
   following: '',
-  id: ''
+  inspiration: ''
 }
 
 export function followedByMe(state = initialState, action) {
@@ -11,21 +12,24 @@ export function followedByMe(state = initialState, action) {
     case followTypes.GET_FOLLOWEDBYME_REQUEST:
       return {
         ...state,
+        error: '',
         requesting: true
       };
     case followTypes.GET_FOLLOWEDBYME_SUCCESS:
       return {
         ...state,
         requesting: false,
-        following: action.info.following,
         id: action.info.id,
+        following: action.info.following,
+        inspiration: action.info.inspiration,
       };
     case followTypes.GET_FOLLOWEDBYME_FAILURE:
       return {
         ...state,
         requesting: false,
-        following: '',
         id: '',
+        following: '',
+        inspiration: '',
         error: "A solicitação falhou"
       };
     default:

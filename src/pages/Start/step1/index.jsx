@@ -30,7 +30,7 @@ function StartFirstStep () {
             'Authorization': 'Bearer ' + user.token
         },
         body: JSON.stringify({picture: value})
-    }).then((response) => {
+      }).then((response) => {
         response.json().then((response) => {
           dispatch(userInfos.getInfo());
         })

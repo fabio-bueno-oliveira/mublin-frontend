@@ -183,6 +183,24 @@ function ProfilePage () {
     }
   }
 
+  const changeInspirationStatus = (id, followedId, option) => {
+    fetch('https://mublin.herokuapp.com/profile/'+profile.username+'/updateInspiration', {
+      method: 'PUT',
+      headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+      },
+      body: JSON.stringify({id: id, followedId: followedId, option: option})
+        }).then((response) => {
+          response.json().then((response) => {
+            dispatch(followInfos.checkProfileFollowing(username));
+          })
+        }).catch(err => {
+          console.error(err)
+        })
+  }
+
   const goToProfile = (username) => {
     setModalFollowersOpen(false);
     setModalFollowingOpen(false);
@@ -821,9 +839,19 @@ function ProfilePage () {
           justify="center"
           gap="xs"
         >
-          <Button variant="default" size="xs" rightSection={<IconStar size={14} />}>
-            Adicionar como inspiração
-          </Button>
+          {followedByMe.inspiration ? (
+            <Button variant="default" size="xs" rightSection={<IconStarFilled size={14} />}
+              onClick={() => changeInspirationStatus(followedByMe.id, profile.id, "0")}
+            >
+              Remover como inspiração
+            </Button>
+          ) : (
+            <Button variant="default" size="xs" rightSection={<IconStar size={14} />}
+              onClick={() => changeInspirationStatus(followedByMe.id, profile.id, "1")}
+            >
+              Adicionar como inspiração
+            </Button>
+          )}
           <Button variant="default" size="xs" onClick={() => followUnfollow()}>
             {followedByMe?.following === 'true' ? 'Deixar de seguir' : 'Seguir'}
           </Button>
