@@ -63,6 +63,8 @@
       display: flex;
 
       .embla__slide {
+        cursor: default;
+        user-select: none;
         background-color: #FFF;
         border: 1px solid #dee2e6;
         border-radius: 8px;

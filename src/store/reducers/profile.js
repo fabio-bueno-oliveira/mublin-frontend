@@ -8,6 +8,7 @@ const initialState = {
   name: '',
   lastname: '',
   email: '',
+  phone: '',
   picture: '',
   pictureLarge: '',
   bio: '',
@@ -150,14 +151,12 @@ const initialState = {
     setups: [
       { 
         id: '',
-        name: '',
-        created: '',
-        image: ''
+        name: ''
       }
     ],
     products: [
       { 
-        productId: '',
+        id: '',
         setupId: ''
       }
     ],
@@ -208,6 +207,7 @@ export function profile(state = initialState, action) {
         name: 'Carregando...',
         lastname: '',
         email: '',
+        phone: "",
         picture: '',
         pictureLarge: '',
         bio: '',
@@ -241,6 +241,7 @@ export function profile(state = initialState, action) {
         name: action.info.name,
         lastname: action.info.lastname,
         email: action.info.email,
+        phone: action.info.phone,
         picture: action.info.picture,
         pictureLarge: action.info.pictureLarge,
         bio: action.info.bio,
@@ -308,6 +309,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_GENRES_REQUEST:
       return {
         ...state,
+        genres: initialState.genres,
         requesting: true
       };
     case profileTypes.GET_PROFILE_GENRES_SUCCESS:
@@ -319,6 +321,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_GENRES_FAILURE:
       return {
         ...state,
+        genres: initialState.genres,
         requesting: false,
         error: "A solicitação falhou"
       };
@@ -326,6 +329,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_FOLLOWERS_REQUEST:
       return {
         ...state,
+        followers: initialState.followers,
         requesting: true
       };
     case profileTypes.GET_PROFILE_FOLLOWERS_SUCCESS:
@@ -337,6 +341,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_FOLLOWERS_FAILURE:
       return {
         ...state,
+        followers: initialState.followers,
         requesting: false,
         error: "A solicitação falhou"
       };
@@ -344,6 +349,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_FOLLOWING_REQUEST:
       return {
         ...state,
+        following: initialState.following,
         requesting: true
       };
     case profileTypes.GET_PROFILE_FOLLOWING_SUCCESS:
@@ -355,6 +361,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_FOLLOWING_FAILURE:
       return {
         ...state,
+        following: initialState.following,
         requesting: false,
         error: "A solicitação falhou"
       };
