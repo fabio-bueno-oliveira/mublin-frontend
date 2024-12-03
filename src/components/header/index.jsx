@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Menu, Title, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer, Image } from '@mantine/core';
 import { useMediaQuery, useDisclosure, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon, 
@@ -19,6 +19,10 @@ import {
   IconMusic,
   IconLogout
 } from '@tabler/icons-react';
+import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
+import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
+import PianoLogoBlack from '../../assets/svg/piano-logo.svg';
+import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg';
 import s from './header.module.css';
 
 function Header (props) {
@@ -79,7 +83,7 @@ function Header (props) {
       handleSearch(e, query, tab);
     };
     navigateToSearchPage(query, tab);
-  },500);
+  },430);
 
   const handleSearch = (e, query, tab) => {
     e.preventDefault();
@@ -111,12 +115,17 @@ function Header (props) {
               className='mublinLogo'
               onClick={() => setRefreshCounter(refreshCounter + 1)}
             >
-              <Title order={3}>Mublin</Title>
+              <Flex gap={2} align='center'>
+                <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 27} />
+                <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 24} />
+              </Flex>
             </Link>
             {props.pageType === 'profile' &&
               <>
                 <Divider size="xs" orientation="vertical" />
-                <Text mr={34}>{props.username}</Text>
+                <Text mr={34} style={{lineHeight:'normal'}} pt={largeScreen ? 0 : 5}>
+                  {props.username}
+                </Text>
               </>
             }
           </>
@@ -133,6 +142,7 @@ function Header (props) {
                   w={320}
                   placeholder='Pessoa, instrumento, cidade...'
                   value={searchQuery ? searchQuery : undefined}
+                  leftSection={<IconSearch size={16} />}
                   onChange={(event) => handleChangeSearch(
                     event, event.currentTarget.value, null
                   )}
@@ -140,12 +150,12 @@ function Header (props) {
                   rightSectionPointerEvents="all"
                 />
               </form>
-              <ActionIcon 
+              {/* <ActionIcon 
                 c='dimmed' variant="transparent" aria-label="Buscar"
                 onClick={(e) => handleSearch(e, searchQuery, null)}
               >
                 <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
-              </ActionIcon>
+              </ActionIcon> */}
             </>
           }
         </Group>

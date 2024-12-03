@@ -39,7 +39,7 @@ function LandingPage () {
       <div className={s.wrapper}>
         <Container size={'lg'} className={s.inner}>
           <Grid justify="space-between" align="flex-start">
-            <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
+            <Grid.Col span={{ base: 12, md: 7, lg: 7 }}>
               <h1 className={s.title}>
                 Gerencie{' '}
                 <Text component="span" c="violet" inherit>
@@ -62,7 +62,7 @@ function LandingPage () {
                 </Button>
               </Link>
             </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
+            <Grid.Col span={{ base: 12, md: 5, lg: 5 }}>
               <Image
                 h={280}
                 src={AstronautImage1}

@@ -22,9 +22,9 @@ const theme = createTheme({
       },
     }),
   },
-  fontFamily: '-apple-system, system-ui, BlinkMacSystemFont, Roboto, sans-serif',
-  fontFamilyMonospace: '-apple-system, system-ui, BlinkMacSystemFont, Roboto, Courier, monospace',
-  headings: { fontFamily: '-apple-system, system-ui, BlinkMacSystemFont, Roboto, sans-serif' }
+  fontFamily: '"Archivo", Roboto, Helvetica, Arial, sans-serif',
+  fontFamilyMonospace: '"Archivo", Roboto, Helvetica, Arial, monospace',
+  headings: { fontFamily: '"Archivo", Roboto, Helvetica, Arial, sans-serif' }
 });
 
 function App() {

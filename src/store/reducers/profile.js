@@ -214,7 +214,7 @@ export function profile(state = initialState, action) {
         bio: '',
         country: '',
         region: '',
-        city: '',
+        city: 'Carregando...',
         availabilityId: '',
         availabilityTitle: '',
         availabilityColor: '',

@@ -18,7 +18,7 @@ export function UserCard({
       <Flex direction="column">
         <Link to={{ pathname: `/${username}` }} className='displayBlockLink'>
           <Group gap={0}>
-            <Text size="13.5px" fw="500" c={colorScheme === "light" ? 'dark' : 'gray'}>
+            <Text size="13.5px" fw="600" c={colorScheme === "light" ? 'dark' : 'gray'}>
               {name} {lastname}
             </Text>
             {verified && 

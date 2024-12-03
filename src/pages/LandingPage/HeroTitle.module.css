@@ -7,7 +7,7 @@
 .wrapperFeatured {
   position: relative;
   box-sizing: border-box;
-  background-color: #371a45!important;
+  background-color: #170941!important;
   color: white;
 }
 
@@ -52,7 +52,7 @@
   font-family:
     Greycliff CF,
     var(--mantine-font-family);
-  font-size: rem(58px);
+  font-size: rem(55px);
   font-weight: 900;
   line-height: 1.1;
   margin: 0;

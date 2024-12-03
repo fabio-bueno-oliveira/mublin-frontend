@@ -54,14 +54,19 @@ function Home () {
       <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 
-            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={12}>
+            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={isMobile ? 12 : 8}>
               {projects.requesting || !user.success ? (
                 <>
                   <Skeleton height={56} circle />
                   <Skeleton height={16} width={125} mt={10} radius="md" />
                 </>
               ) : (
-                <>
+                <Card 
+                  padding={largeScreen ? 10 : 0} 
+                  radius={largeScreen ? "md" : 0} 
+                  withBorder={largeScreen ? true : false}
+                  style={isMobile ? {backgroundColor: "transparent"} : undefined}
+                >
                   <Center>
                     <Link to={{ pathname: `/${user.username}` }}>
                       <Avatar 
@@ -70,23 +75,23 @@ function Home () {
                       />
                     </Link>
                   </Center>
-                  <Title order={4} mb={1} mt={10} ta="center">
+                  <Title order={5} mb={1} mt={10} ta="center">
                     Olá, {user?.name}
                   </Title>
                   {user.plan === 'Pro' && 
                     <Center>
-                      <Text size="11px" c="dimmed" mr={3}>Mublin</Text> <Badge size='sm' variant='light' color="violet">PRO</Badge>
+                      <Badge size='sm' variant='light' color="violet">PRO</Badge>
                     </Center>
                   }
-                  <Text ta="center" c="dimmed" fw="500" size="11px" mt={10}>
+                  <Text ta="center" c="dimmed" fw="700" size="12px" mt={13}>
                     {user.roles.map((role, key) => 
                       <span className="comma" key={key}>{role.description}</span>
                     )}
                   </Text>
-                  <Text ta="center"  size="xs" mt={14} c="dimmed">
+                  <Text ta="center"  size="xs" mt={9} c="dimmed">
                     {user.bio}
                   </Text>
-                </>
+                </Card>
               )}
             </Grid.Col>
           }
@@ -116,7 +121,7 @@ function Home () {
                 >
                   <Flex justify="space-between" align="center">
                     <div>
-                      <Text size="md" mb={3} fw={500}>
+                      <Text size="md" mb={3} fw={600}>
                         Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
                       </Text>
                       {!!projectsTerminated.length && 
@@ -170,7 +175,7 @@ function Home () {
           {largeScreen && 
             <Grid.Col span={3}>
               <Card shadow="sm" padding="md" radius="md" withBorder>
-                <Text fw={500} size="md">Músicos em destaque</Text>
+                <Text fw={700} size="md">Músicos em destaque</Text>
                 {search.requesting ? (
                   <Text size="13px" mt={7}>Carregando...</Text>
                 ) : (
@@ -192,7 +197,7 @@ function Home () {
                 )}
               </Card>
               <Card shadow="sm" padding="md" radius="md" withBorder mt={10}>
-              <Text fw={500} size="md">Novos usuários</Text>
+              <Text fw={700} size="md">Novos usuários</Text>
                 {search.requesting ? (
                   <Text size="13px" mt={7}>Carregando...</Text>
                 ) : (

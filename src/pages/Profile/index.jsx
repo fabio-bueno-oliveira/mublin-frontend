@@ -4,13 +4,16 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, ActionIcon, Accordion, rem, em } from '@mantine/core';
-import { IconCircleFilled, IconCheck, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown } from '@tabler/icons-react';
+import { Container, Flex, Grid, Affix, Transition, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, rem, em } from '@mantine/core';
+import { useWindowScroll } from '@mantine/hooks';
+import { IconCircleFilled, IconCheck, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink } from '@tabler/icons-react';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import useEmblaCarousel from 'embla-carousel-react';
 import { useMediaQuery } from '@mantine/hooks';
 import PartnersModule from './partners';
+import PianoLogoBlack from '../../assets/svg/piano-logo.svg';
+import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg';
 import './styles.scss';
 
 function ProfilePage () {
@@ -69,7 +72,7 @@ function ProfilePage () {
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '5px', cursor: "pointer" };
-  const iconCircleStyles = { width: '11px', height: '11px', marginRight: '3px' };
+  const iconCircleStyles = { width: '10px', height: '10px', marginRight: '2px' };
   // const iconAvailabilityStyles = { width: '14px', height: '14px', marginLeft: '3px', marginRight: '3px' };
 
   // Projects
@@ -269,8 +272,61 @@ function ProfilePage () {
     })
   }
 
+  const [scroll] = useWindowScroll();
+
+  const truncate = (input) => input.length > 17 ? `${input.substring(0, 17)}...` : input;
+
   return (
     <>
+      <Affix 
+        w='100%'
+        position={{ top: 0, left: 0 }} 
+      >
+        <Transition 
+          transition="slide-down" 
+          duration={400} 
+          timingFunction="ease" 
+          mounted={largeScreen ? scroll.y > 100 : scroll.y > 50}
+        >
+          {(transitionStyles) => (
+            <Container className='floatingMenu' style={transitionStyles} fluid h={50} py={9}>
+              <Container size={largeScreen ? 'lg' : undefined} p={isMobile ? 0 : undefined}>
+                <Group gap={3}>
+                  <Link to={{ pathname: `/home` }}>
+                    <Image 
+                      src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} 
+                      h={largeScreen ? 29 : 27} 
+                    />
+                  </Link>
+                  <Avatar
+                    size={largeScreen ? 'sm' : 'sm'}
+                    src={profile.picture ? profile.picture : undefined}
+                    ml={10}
+                    mr={4}
+                  />
+                  <Flex direction="column">
+                    <Box w={largeScreen ? 400 : 200}>
+                      <Text fw="500" size={largeScreen ? "14px" : "12px"} >
+                        {profile.name} {profile.lastname}
+                      </Text>
+                      <Text size='11px' truncate="end">
+                        {profile.roles.map((role, key) =>
+                        <span key={key} className="comma">
+                          {role.description}
+                        </span>
+                        )}
+                      </Text>
+                      <Text c="dimmed" size='9px' mt={2}>
+                        {!!profile.city && profile.city}{profile.region && `, ${profile.region}`}
+                      </Text>
+                    </Box>
+                  </Flex>
+                </Group>
+              </Container>
+            </Container>
+          )}
+        </Transition>
+      </Affix>
       <Header pageType='profile' username={username} />
       <Container size={'lg'} mb={largeScreen ? 30 : 82} pt={largeScreen ? 10 : 0} className='profilePage'>
         <Grid>
@@ -292,11 +348,10 @@ function ProfilePage () {
             {!profile.requesting && 
               <Paper 
                 radius="md" 
-                withBorder={largeScreen ? true : false}
-                px={largeScreen ? 20 : 0} 
-                py={largeScreen ? 20 : 0} 
-                mb={18}
-                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                withBorder={largeScreen ? false : false}
+                px={largeScreen ? 0 : 0} 
+                py={largeScreen ? 0 : 0} 
+                style={isMobile ? { backgroundColor: 'transparent' } : { backgroundColor: 'transparent' }}
               >
                 <Grid>
                   <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
@@ -314,7 +369,9 @@ function ProfilePage () {
                       <Box style={{ overflow: 'hidden' }}>
                         <Flex align={'center'}>
 
-                          <Title order={largeScreen ? 3 : 4}>{profile.name} {profile.lastname}</Title>
+                          <Title order={largeScreen ? 3 : 4}>
+                            {profile.name} {profile.lastname}
+                          </Title>
                           {!!profile.verified && 
                             <Tooltip label="Usuário Verificado">
                               <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
@@ -334,21 +391,21 @@ function ProfilePage () {
                                 {role.icon && 
                                   <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />
                                 }
-                                <Text size='13px' mr={13}>{role.name}</Text>
+                                <Text size='13px' fw='500' mr={8}>{role.name}</Text>
                               </div>
                             )}
                           </div>
                         </div>
-                        <Text size={largeScreen ? '12px' : '12px'} c="dimmed" mt={4}>
-                          {profile.city} {profile.region && `, ${profile.region}`}
+                        <Text size={largeScreen ? '13px' : '12px'} fw='400' c="dimmed" mt={5}>
+                          {profile.city}{profile.region && `, ${profile.region}`}
                         </Text>
                       </Box>
                     </Flex>
-                    <Group gap={12} mt={largeScreen ? 5 : 8}>
+                    <Group gap={12} mt={largeScreen ? 12 : 11} mb={largeScreen ? 10 : 9}>
                       <Text 
                         className='point' 
-                        size={largeScreen ? '13px' : '14px'} 
-                        fw={500} 
+                        size={largeScreen ? '16px' : '14px'} 
+                        fw='600'
                         onClick={() => setModalFollowersOpen(true)}
                         style={{lineHeight: 'normal'}}
                       >
@@ -356,8 +413,8 @@ function ProfilePage () {
                       </Text>
                       <Text 
                         className='point' 
-                        size={largeScreen ? '13px' : '14px'} 
-                        fw={500} 
+                        size={largeScreen ? '16px' : '14px'} 
+                        fw='600'
                         onClick={() => setModalFollowingOpen(true)}
                         style={{lineHeight: 'normal'}}
                       >
@@ -366,7 +423,7 @@ function ProfilePage () {
                     </Group>
                     {(profile.bio && profile.bio !== 'null') && 
                       <Text 
-                        size={largeScreen ? "13px" : "12px"} mt={6} lineClamp={3}
+                        size={largeScreen ? "0.85em" : "0.86em"} mt={6} lineClamp={3}
                         onClick={() => setModalBioOpen(true)}
                         pr={largeScreen ? 26 : 0}
                         style={{lineHeight:'15px'}}
@@ -376,19 +433,25 @@ function ProfilePage () {
                     }
                     {profile.website && 
                       <Anchor href={profile.website} target="_blank" underline="hover">
-                        <Text size={largeScreen ? '12px' : '12px'} fw={500} mt={8} c="gray">
-                          {profile.website}
-                        </Text>
+                        <Flex gap={2} align="center" mt={8}>
+                          <IconLink size={13} />
+                          <Text size={largeScreen ? "0.83em" : "0.82em"} fw={600}>
+                            {profile.website}
+                          </Text>
+                        </Flex>
                       </Anchor>
                     }
-                    <Group gap={5} mt={14}>
+                    <Flex gap={5} mt={14}>
                       {loggedUser.id !== profile.id ? (
                         <Button 
-                          size="xs" 
+                          size={largeScreen ? "sm" : "xs"} 
+                          fz={largeScreen ? "14px" : "14px"}
+                          fw={largeScreen ? "800" : "800"}
                           color={colorScheme === "light" ? "dark" : "gray"}
                           variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
                           loading={loadingFollow}
                           rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
+                          fullWidth={isMobile}
                           onClick={
                             followedByMe?.following === 'true' 
                               ? () => setModalFollowInfoOpen(true)
@@ -399,19 +462,25 @@ function ProfilePage () {
                         </Button>
                       ) : (
                         <Button 
-                          size="xs" 
+                          size={largeScreen ? "sm" : "xs"} 
+                          fz={largeScreen ? "14px" : "14px"}
+                          fw={largeScreen ? "800" : "800"}
                           variant='light'
                           color={colorScheme === "light" ? "dark" : "gray"}
+                          fullWidth={isMobile}
                           onClick={() => navigate('/settings')}
                         >
                           Editar perfil
                         </Button>
                       )}
                       <Button 
-                        size="xs" 
+                        size={largeScreen ? "sm" : "xs"} 
+                        fz={largeScreen ? "14px" : "14px"}
+                        fw={largeScreen ? "800" : "800"}
                         variant='light'
                         color={colorScheme === "light" ? "dark" : "gray"}
                         leftSection={<IconMail size={14} />} 
+                        fullWidth={isMobile}
                         onClick={() => setModalContactOpen(true)}
                       >
                         Contato
@@ -419,8 +488,8 @@ function ProfilePage () {
                       {profile.instagram && 
                         <>
                           <ActionIcon 
-                            size="30px" 
-                            w={28} 
+                            size={largeScreen ? "36px" : "30"}
+                            w={largeScreen ? "36px" : "30"}
                             variant='light'
                             color={colorScheme === "light" ? "dark" : "gray"}
                             component="a"
@@ -431,7 +500,7 @@ function ProfilePage () {
                           </ActionIcon>
                         </>
                       }
-                    </Group>
+                    </Flex>
                   </Grid.Col>
                   <Grid.Col 
                     span={{ base: 12, md: 6, lg: 6 }} 
@@ -440,8 +509,8 @@ function ProfilePage () {
                     {profile.availabilityId && 
                       <>
                         <Flex 
-                          align='center' 
-                          gap={3} 
+                          align='baseline' 
+                          gap={2} 
                           mb={largeScreen ? 6 : 0} 
                           mt={6}
                         >
@@ -450,21 +519,21 @@ function ProfilePage () {
                             color={profile.availabilityColor} 
                           />
                           <Text 
-                            fz={largeScreen ? "14px" : "13px"} 
-                            fw={600}
+                            fz={largeScreen ? "15px" : "14px"} 
+                            fw={700}
                           >
                             {profile.availabilityTitle}
                           </Text>
                         </Flex>
                         {largeScreen && 
                           <Box>
-                            <Text size="xs" fw={500}>
-                              Estilos musicais:
+                            <Text size="0.85em" fw={600} mb={2}>
+                              Principais estilos musicais:
                             </Text>
                             {profile.genres[0].id ? (
                               <Group gap={4}>
                                 {profile.requesting ? (
-                                  <Text size='xs' mx={0}>Carregando...</Text>
+                                  <Text size='xs' mx={0} c="dimmed">Carregando...</Text>
                                 ) : (
                                   <Text size='xs' mx={0}>
                                     {profile.genres[0].id && profile.genres.map((genre, key) =>
@@ -478,7 +547,7 @@ function ProfilePage () {
                                 Nenhum estilo cadastrado
                               </Text>
                             )}
-                            <Text size="xs" fw={500} mt={7} >
+                            <Text size="0.85em" fw={600} mb={2} mt={7}>
                               Tipos de projetos:
                             </Text>
                             <Group gap={4}>
@@ -495,7 +564,7 @@ function ProfilePage () {
                                 </Text>
                               )}
                             </Group>
-                            <Text size="xs" fw={500} mt={7} mb={3}>
+                            <Text size="0.85em" fw={600} mb={2} mt={7}>
                               Tipos de trabalho:
                             </Text>
                             {profile.availabilityItems[0].id ? (
@@ -507,7 +576,7 @@ function ProfilePage () {
                                 )}
                               </Text>
                             ) : (
-                              <Text size="11px" c="dimmed">
+                              <Text size="xs" c="dimmed">
                                 Não informado
                               </Text>
                             )}
@@ -515,9 +584,9 @@ function ProfilePage () {
                         }
                         {isMobile && 
                           <Accordion chevronPosition="left">
-                            <Accordion.Item value="Exibir mais" style={{border:'0px'}}>
+                            <Accordion.Item value="Exibir mais detalhes" style={{border:'0px'}}>
                               <Accordion.Control p={0} fz="sm"  withBorder={false}>
-                                Exibir mais
+                                Exibir mais detalhes
                               </Accordion.Control>
                               <Accordion.Panel pb={12}>
                                 <Text size="sm" fw={500}>
@@ -557,7 +626,7 @@ function ProfilePage () {
                                 {profile.availabilityItems[0].id ? (
                                   <Group gap={4}>
                                     {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                                      <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="filled" color="black" key={key} mx={0}>
+                                      <Badge leftSection={<IconCheck style={{ width: '10px', height: '10px' }} />} size='xs' variant="filled" color="dark" key={key} mx={0}>
                                         {item.itemName}
                                       </Badge>
                                     )}  
@@ -577,23 +646,27 @@ function ProfilePage () {
                 </Grid>
               </Paper>
             }
+            {isMobile && 
+              <Divider mb={12} mt={10} />
+            }
             {(profile.plan === "Pro" && profile.total) && 
               <PartnersModule loading={profile.requesting} partners={profile.partners} />
             }
             <Paper 
               radius="md" 
               withBorder={largeScreen ? true : false}
-              px={largeScreen ? 20 : 0} 
-              py={largeScreen ? 20 : 0} 
+              px={largeScreen ? 15 : 0} 
+              pt={largeScreen ? 11 : 0}
+              pb={largeScreen ? 16 : 0}
               mb={18}
               style={isMobile ? { backgroundColor: 'transparent' } : undefined}
             >
               <Group justify="flex-start" align="center" gap={8} mb={18}>
-                <Title order={5} fw={600}>Pontos Fortes</Title>
+                <Title order={4} fw={700}>Pontos Fortes</Title>
                 {(profile.id !== loggedUser.id && !profile.requesting) && 
                   <Button 
                     size="compact-xs" 
-                    color="violet"
+                    color={colorScheme === "light" ? "dark" : "gray"}
                     onClick={() => setModalStrengthsOpen(true)}
                   >
                     Votar
@@ -618,10 +691,10 @@ function ProfilePage () {
                             key={key}
                           >
                             <i className={strength.icon}></i>
-                            <Text order={6} fw={500} mb={2} mt={3} size={'xs'} align='center' truncate="end">
+                            <Text fw={500} mb={2} mt={3} size='sm' align='center' truncate="end">
                               {strength.strengthTitle}
                             </Text>
-                            <Text size='10px'>
+                            <Text size='11px'>
                               {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
                             </Text>
                           </Flex>
@@ -640,7 +713,7 @@ function ProfilePage () {
             {isMobile && 
               <Box mb={18}>
                 <Group justify="flex-start" align="center" mb={18}>
-                  <Title order={5} fw={600}>Projetos ({profile?.projects?.length})</Title>
+                  <Title order={5} fw={700}>Projetos ({profile?.projects?.length})</Title>
                 </Group>
                 {profile.requesting ? ( 
                     <Text size='sm'>Carregando...</Text>
@@ -697,21 +770,22 @@ function ProfilePage () {
               <Paper 
                 radius="md" 
                 withBorder={largeScreen ? true : false}
-                px={largeScreen ? 20 : 0} 
-                py={largeScreen ? 20 : 0} 
+                px={largeScreen ? 15 : 0} 
+                pt={largeScreen ? 11 : 0}
+                pb={largeScreen ? 16 : 0}
                 mb={25}
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
               >
-                <Title order={5} fw={600} mb={8}>Equipamento</Title>
+                <Title order={4} fw={700} mb={8}>Equipamento</Title>
                 {profile.requesting ? ( 
                   <Text size='sm'>Carregando...</Text>
                 ) : (
                   <>
                     {profile.gear[0]?.brandId && 
-                      <Group mb={20}>
+                      <Group gap={10} mb={20}>
                         <NativeSelect 
-                          size="xs"
-                          w={138}
+                          size={largeScreen ? "sm" : "sm"}
+                          w={136}
                           // onChange={(e) => setGearSetup(e.target.options[e.target.selectedIndex].value)}
                           onChange={(e) => selectSetup(e.target.options[e.target.selectedIndex].value)}
                         >
@@ -724,8 +798,8 @@ function ProfilePage () {
                         </NativeSelect>
                         {!gearSetup && 
                           <NativeSelect
-                            size="xs"
-                            w={138}
+                            size={largeScreen ? "sm" : "sm"}
+                            w={136}
                             onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
                           >
                             <option value="">
@@ -733,7 +807,7 @@ function ProfilePage () {
                             </option>
                             {profile.gearCategories.map((gearCategory, key) =>
                               <option key={key} value={gearCategory.category}>
-                                {gearCategory.category + '(' + gearCategory.total + ')'}
+                                {truncate(gearCategory.category) + '(' + gearCategory.total + ')'}
                               </option>
                             )}
                           </NativeSelect>
@@ -753,10 +827,14 @@ function ProfilePage () {
                                   onClick={() => history.push('/gear/product/'+product.productId)}
                                 />
                               </Link>
-                              <Text size='12px' fw={600} mb={3}>
-                                {product.brandName}
-                              </Text>
-                              <Text size='12px'>{product.productName}</Text>
+                              <Box w={110}>
+                                <Text size='11px' fw={700} mb={3} truncate="end" title={product.brandName}>
+                                  {product.brandName}
+                                </Text>
+                                <Text size="sm" truncate="end" title={product.productName}>
+                                  {product.productName}
+                                </Text>
+                              </Box>
                               {product.tuning && 
                                 <>
                                   <Group gap={2} mt={4}>
@@ -789,12 +867,16 @@ function ProfilePage () {
           </Grid.Col>
           {largeScreen && 
             <Grid.Col span={{ base: 12, md: 12, lg: 3 }}>
-              <Paper radius="md" withBorder px="md" py="md" mb={18}
-                // style={{ backgroundColor: 'transparent' }}
+              <Paper 
+                radius="md" 
+                withBorder 
+                px={16}
+                py={11}
+                mb={18}
               >
                 <ScrollArea h={422} offsetScrollbars>
                   <Group justify="flex-start" align="center" mb={18}>
-                    <Title order={5} fw={500}>Projetos ({profile?.projects?.length})</Title>
+                    <Title order={4} fw={700}>Projetos ({profile?.projects?.length})</Title>
                   </Group>
                   {profile.requesting ? ( 
                       <Text size='sm'>Carregando...</Text>
@@ -807,7 +889,7 @@ function ProfilePage () {
                               <Avatar 
                                 variant="filled" 
                                 radius="md" 
-                                size="70px" 
+                                size="62px" 
                                 color="violet"
                                 name={"🎵"}
                                 src={project.picture ? project.picture : undefined} 
@@ -819,14 +901,16 @@ function ProfilePage () {
                                 wrap="wrap"
                                 key={key}
                               >
-                                <Text size='11px' mb={3}>
-                                  {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3} em
-                                </Text>
-                                <Text size='13px' fw={500} mb={3}>
-                                  {project.name} {!!project.featured && <IconStarFilled style={{ width: '12px', height: '12px' }} color='gold' />}
-                                </Text>
-                                <Text size='12px'>{project.type}</Text>
-                                {/* <Text size='12px'>{project.workTitle}</Text> */}
+                                <Box w={120}>
+                                  <Text size='11px' mb={3} truncate="end">
+                                    {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2} em
+                                  </Text>
+                                  <Text size='14px' fw={700} mb={3} truncate="end" title={project.name}>
+                                    {project.name} {!!project.featured && <IconStarFilled style={{ width: '11px', height: '11px' }} color='gold' />}
+                                  </Text>
+                                  <Text size='12px'>{project.type}</Text>
+                                  {/* <Text size='12px'>{project.workTitle}</Text> */}
+                                </Box>
                               </Flex>
                             </Flex>
                           )}
@@ -849,14 +933,19 @@ function ProfilePage () {
         opened={modalFollowInfoOpen} 
         onClose={() => setModalFollowInfoOpen(false)} 
         title={
-          <Group mt={12} gap={3}>
+          <Group mt={12} gap={8}>
             <Avatar
               size="md"
               src={profile.picture}
             />
-            <Text size="sm" fw="500">
-              {`${profile.name} ${profile.lastname}`}
-            </Text>
+            <Flex direction="column">
+              <Text size="sm" fw="500">
+                {`${profile.name} ${profile.lastname}`}
+              </Text>
+              <Text size="xs" c="dimmed">
+                {username}
+              </Text>
+            </Flex>
           </Group>
         }
       >
@@ -894,7 +983,7 @@ function ProfilePage () {
         <Text size={'sm'}>{profile.bio}</Text>
         {profile.website && 
           <Anchor href={profile.website} target="_blank" underline="hover">
-            <Text size="13px" fw={500} mt={8}>
+            <Text size="13px" fw={500} mt={10}>
               {profile.website}
             </Text>
           </Anchor>

@@ -1,11 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Flex, Title, Button } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Button, Image } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import MublinLogoBlack from '../../../assets/svg/mublin-logo.svg';
+import MublinLogoWhite from '../../../assets/svg/mublin-logo-w.svg';
+import PianoLogoBlack from '../../../assets/svg/piano-logo.svg';
+import PianoLogoWhite from '../../../assets/svg/piano-logo-w.svg';
 import s from './header.module.css';
 
 function Header (props) {
 
   const page = props.page;
+  const { colorScheme } = useMantineColorScheme();
+  const largeScreen = useMediaQuery('(min-width: 60em)');
 
   return (
     <Container 
@@ -21,7 +28,10 @@ function Header (props) {
         direction="row"
       >
         <Link to={{ pathname: '/' }} className={s.mublinLogo}>
-          <Title size="2rem" c="black">Mublin</Title>
+          <Flex gap={3}>
+            <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 43} />
+            <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 40 : 40} />
+          </Flex>
         </Link>
           <div>
             {page !== 'login' && 

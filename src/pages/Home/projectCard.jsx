@@ -79,9 +79,9 @@ function ProjectCard (props) {
               >
                 <Flex gap={5} align='center'>
                   <Title 
-                    fw={largeScreen ? 600 : 600}
+                    fw={largeScreen ? 700 : 700}
                     lineClamp={1} 
-                    size={largeScreen ? '0.95rem' : '1rem'}
+                    size={largeScreen ? '0.95rem' : '0.95rem'}
                     mb={!project?.regionName ? 0 : 0}
                   >
                     {project?.name}
@@ -90,11 +90,11 @@ function ProjectCard (props) {
                 </Flex>
               </Anchor>
               {project?.regionName && 
-                <Text size="11px" truncate="end" mt={1} mb={4} c="#505254">
+                <Text size="11px" truncate="end" mt={1} mb={4} c="dimmed">
                   {project.cityName && `de ${project.cityName}, `} {`${project.regionUf},`} {`${project.countryName}`}  
                 </Text>
               }
-              <Group gap={2} truncate="start" fz="10px" c="#505254">
+              <Group gap={2} truncate="start" fz="10px" c="dimmed">
                 {project?.ptname === "Projeto solo" &&
                   <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                 }
@@ -187,7 +187,7 @@ function ProjectCard (props) {
               <Flex align='center'>
                 <IconCircleFilled style={iconCircleStyles} color='red' />
                 <Text size='11px'>
-                  {project.joined_in} › encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}
+                  {project.joined_in} até o encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}
                 </Text>
               </Flex>
             }
