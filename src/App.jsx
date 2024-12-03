@@ -22,9 +22,9 @@ const theme = createTheme({
       },
     }),
   },
-  fontFamily: 'Poppins, sans-serif',
-  fontFamilyMonospace: 'Poppins, Courier, monospace',
-  headings: { fontFamily: 'Poppins, sans-serif' }
+  fontFamily: '-apple-system, system-ui, BlinkMacSystemFont, Roboto, sans-serif',
+  fontFamilyMonospace: '-apple-system, system-ui, BlinkMacSystemFont, Roboto, Courier, monospace',
+  headings: { fontFamily: '-apple-system, system-ui, BlinkMacSystemFont, Roboto, sans-serif' }
 });
 
 function App() {
