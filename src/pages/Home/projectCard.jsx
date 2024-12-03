@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Divider, Anchor, Indicator } from '@mantine/core';
+import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Divider, Anchor } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconDotsVertical, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconMusic, IconSettings, IconUserOff, IconCircleFilled } from '@tabler/icons-react';
 
@@ -34,11 +34,10 @@ function ProjectCard (props) {
 
   return (
     <Card 
-      shadow="sm" 
+      // shadow="sm" 
       padding="lg" 
       radius="md" 
       withBorder 
-      style={{borderTop: "2px solid #d9d9d9"}}
     >
       {/* <Card.Section>
         <Image
@@ -48,60 +47,77 @@ function ProjectCard (props) {
         />
       </Card.Section> */}
       <Card.Section withBorder inheritPadding pt="6px" pb="10px" px="xs">
+        
+        {/* <Divider
+          mt={11}
+          mb={11} 
+          label={
+            <Badge size="xs" variant="light" color={project?.activityStatusColor}>
+              {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
+            </Badge>
+          } 
+        /> */}
         <Flex
           justify="space-between"
           columnGap="xs"
-          mt={6}
+          mb={8}
         >
-          <Flex align={"center"}>
-            <Avatar 
-              variant="filled" 
-              radius="xl" 
-              size="sm" 
-              mr={7}
-              src={
-                (user.id && user.picture) ? 
-                  cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
-                : null
+          <Group justify="flex-start" align="flex-start" wrap='nowrap' mt={8} gap={8}>
+            <Link to={{ pathname: `/project/${project?.username}` }}>
+              <Avatar 
+                variant="filled" 
+                radius="md" 
+                size="54px" 
+                color="violet"
+                name={"🎵"}
+                src={(!loading && project.picture) ? cdnProjectPath+project?.picture : undefined} 
+              />
+            </Link>
+            <div>
+              <Anchor
+                href={`/project/${project?.username}`}
+              >
+                <Flex gap={5} align='center'>
+                  <Title 
+                    fw={largeScreen ? 600 : 600}
+                    lineClamp={1} 
+                    size={largeScreen ? '0.95rem' : '1rem'}
+                    mb={!project?.regionName ? 0 : 0}
+                  >
+                    {project?.name}
+                  </Title>
+                  {!!project.projectCurrentlyOnTour && <Badge size='xs' variant='light' color='violet'>Em turnê</Badge>}
+                </Flex>
+              </Anchor>
+              {project?.regionName && 
+                <Text size="11px" truncate="end" mt={1} mb={4} c="#505254">
+                  {project.cityName && `de ${project.cityName}, `} {`${project.regionUf},`} {`${project.countryName}`}  
+                </Text>
+              }
+              <Group gap={2} truncate="start" fz="10px" c="#505254">
+                {project?.ptname === "Projeto solo" &&
+                  <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
+                }
+                {project?.ptname === "Banda" &&
+                  <IconUsersGroup style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
                 } 
-            />
-            <Flex
-              direction="column"
-              wrap="wrap"
-              rowGap={3}
-            >
-              <Text size="sm" mb={0} fw={500} lineClamp={1}> 
-                {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
-              </Text>
-              <Text size="11px" mb={3}>
-                {project.workTitle} {!!project.admin && " · Administrador"}
-              </Text>
-              {isActiveOnProject && 
-                <Flex align='center' c="dimmed">
-                  <IconCircleFilled style={iconCircleStyles} color='green' />
-                  <Text size='11px'>
-                    {`${project.joined_in} › atualmente`} {years(project.joined_in, currentYear)}
-                  </Text>
-                </Flex>
-              }
-              {project.yearLeftTheProject && 
-                <Flex align='center' c="dimmed">
-                  <IconCircleFilled style={iconCircleStyles} color='red' />
-                  <Text size='11px'>
-                    deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}
-                  </Text>
-                </Flex>
-              }
-              {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
-                <Flex align='center' c="dimmed">
-                  <IconCircleFilled style={iconCircleStyles} color='red' />
-                  <Text size='11px'>
-                    {project.joined_in} › encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}
-                  </Text>
-                </Flex>
-              }
-            </Flex>
-          </Flex>
+                {project?.ptname === "Ideia" &&
+                  <IconBulb style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
+                }
+                <Text size="11px" pt={1} lineClamp={1}>
+                  {project?.ptname} {project.genre1 && ' · '}
+                </Text>
+                {project.genre1 && 
+                  <>
+                    <IconMusic style={{ width: '12px', height: '12px' }} />
+                    <Text size="11px" pt={1} lineClamp={1} truncate="end">
+                      {project.genre1 ? project.genre1 : null }
+                    </Text>
+                  </>
+                }
+              </Group>
+            </div>
+          </Group>
           <Menu withArrow withinPortal position="bottom-end" shadow="sm">
             <Menu.Target>
               <ActionIcon variant="subtle" color="gray">
@@ -128,81 +144,58 @@ function ProjectCard (props) {
             </Menu.Dropdown>
           </Menu>
         </Flex>
-        <Divider
-          mt={11}
-          mb={11} 
-          label={
-            <Badge size="xs" variant="light" color={project?.activityStatusColor}>
-              {project?.activityStatus} {(project.activityStatusId === 2 && project.yearEnd) && `em ${project.yearEnd}`}
-            </Badge>
-          } 
-        />
-        <Group justify="flex-start" align="flex-start" wrap='nowrap' gap={8}>
-          <Link to={{ pathname: `/project/${project?.username}` }}>
-            <Indicator 
-              size="xs" 
-              position="bottom-center" 
-              inline 
-              color="violet"
-              label={
-                <div style={{fontSize: '9px'}}>Em turnê</div>
-              }
-              disabled={!project.projectCurrentlyOnTour}
-            >
-            <Avatar 
-              variant="filled" 
-              radius="md" 
-              size="70px" 
-              color="violet"
-              name={"🎵"}
-              src={(!loading && project.picture) ? cdnProjectPath+project?.picture : undefined} 
-            />
-            </Indicator>
-          </Link>
-          <div>
-            <Anchor
-              href={`/project/${project?.username}`}
-            >
-              <Title 
-                fw={largeScreen ? 600 : 600}
-                lineClamp={1} 
-                size={largeScreen ? '0.95rem' : '1rem'}
-                mb={!project?.regionName ? 0 : 0}
-              >
-                {project?.name}
-              </Title>
-            </Anchor>
-            {project?.regionName && 
-              <Text size="10px" truncate="end" mt={1} mb={4} c="dimmed">
-                {project.cityName && `de ${project.cityName}, `} {`${project.regionUf},`} {`${project.countryName}`}  
-              </Text>
-            }
-            <Group gap={2} truncate="start" fz={"10px"}>
-              {project?.ptname === "Projeto solo" &&
-                <IconUser style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
-              }
-              {project?.ptname === "Banda" &&
-                <IconUsersGroup style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
+        <Flex align={"center"}>
+          {/* <Avatar 
+            variant="filled" 
+            radius="xl" 
+            size="sm" 
+            mr={7}
+            src={
+              (user.id && user.picture) ? 
+                cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
+              : null
               } 
-              {project?.ptname === "Ideia" &&
-                <IconBulb style={{ width: '12px', height: '12px' }} stroke={1.5} /> 
-              }
-              <Text size="11px" pt={1} lineClamp={1}>
-                {project?.ptname} {project.genre1 && ' · '}
-              </Text>
-              {project.genre1 && 
-                <>
-                  <IconMusic style={{ width: '12px', height: '12px' }} />
-                  <Text size="11px" pt={1} lineClamp={1} truncate="end">
-                    {project.genre1 ? project.genre1 : null }
-                  </Text>
-                </>
-              }
-            </Group>
-          </div>
-        </Group>
+          /> */}
+          <Flex
+            direction="column"
+            wrap="wrap"
+            rowGap={3}
+          >
+            <Text size={largeScreen ? "sm" : "13px"} mb={0} fw={500} lineClamp={1}> 
+              {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
+            </Text>
+            <Text size="11px" mb={3}>
+              {project.workTitle} {!!project.admin && " · Administrador"}
+            </Text>
+            {isActiveOnProject && 
+              <Flex align='center'>
+                <IconCircleFilled style={iconCircleStyles} color='green' />
+                <Text size='11px'>
+                  {`${project.joined_in} › atualmente`} {years(project.joined_in, currentYear)}
+                </Text>
+              </Flex>
+            }
+            {project.yearLeftTheProject && 
+              <Flex align='center'>
+                <IconCircleFilled style={iconCircleStyles} color='red' />
+                <Text size='11px'>
+                  deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}
+                </Text>
+              </Flex>
+            }
+            {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
+              <Flex align='center'>
+                <IconCircleFilled style={iconCircleStyles} color='red' />
+                <Text size='11px'>
+                  {project.joined_in} › encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}
+                </Text>
+              </Flex>
+            }
+          </Flex>
+        </Flex>
         <Divider 
-          mb="xs"
+          mt={9}
+          mb={5}
           label={`Integrantes ativos (${activeMembers?.length})`} 
           labelPosition="left" 
         />

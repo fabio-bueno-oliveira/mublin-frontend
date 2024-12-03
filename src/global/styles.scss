@@ -63,6 +63,14 @@ a.displayBlockLink {
   --mantine-color-anchor: #222222;
 }
 
+:root[data-mantine-color-scheme='dark'] {
+  body {
+    .mantine-Card-root {
+      background-color: transparent;
+    }
+  }
+}
+
 a {
   text-decoration: none;
 }

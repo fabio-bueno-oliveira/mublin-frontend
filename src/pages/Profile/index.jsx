@@ -292,11 +292,11 @@ function ProfilePage () {
             {!profile.requesting && 
               <Paper 
                 radius="md" 
-                withBorder={largeScreen ? false : false}
-                px={largeScreen ? 0 : 0} 
-                py={largeScreen ? 0 : 0} 
+                withBorder={largeScreen ? true : false}
+                px={largeScreen ? 20 : 0} 
+                py={largeScreen ? 20 : 0} 
                 mb={18}
-                style={{ backgroundColor: 'transparent' }}
+                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
               >
                 <Grid>
                   <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
@@ -339,22 +339,34 @@ function ProfilePage () {
                             )}
                           </div>
                         </div>
-                        <Text size="11px" c="dimmed" mt={4}>
+                        <Text size={largeScreen ? '12px' : '12px'} c="dimmed" mt={4}>
                           {profile.city} {profile.region && `, ${profile.region}`}
                         </Text>
-                        <Group gap={12} mt={7}>
-                          <Text className='point' size='xs' fw={500} onClick={() => setModalFollowersOpen(true)}>
-                            {profile.followers.length} seguidores
-                          </Text>
-                          <Text className='point' size='xs' fw={500} onClick={() => setModalFollowingOpen(true)}>
-                            {profile.following.length} seguindo
-                          </Text>
-                        </Group>
                       </Box>
                     </Flex>
+                    <Group gap={12} mt={largeScreen ? 5 : 8}>
+                      <Text 
+                        className='point' 
+                        size={largeScreen ? '13px' : '14px'} 
+                        fw={500} 
+                        onClick={() => setModalFollowersOpen(true)}
+                        style={{lineHeight: 'normal'}}
+                      >
+                        {profile.followers.length} seguidores
+                      </Text>
+                      <Text 
+                        className='point' 
+                        size={largeScreen ? '13px' : '14px'} 
+                        fw={500} 
+                        onClick={() => setModalFollowingOpen(true)}
+                        style={{lineHeight: 'normal'}}
+                      >
+                        {profile.following.length} seguindo
+                      </Text>
+                    </Group>
                     {(profile.bio && profile.bio !== 'null') && 
                       <Text 
-                        size="13px" mt={14} lineClamp={3}
+                        size={largeScreen ? "13px" : "12px"} mt={6} lineClamp={3}
                         onClick={() => setModalBioOpen(true)}
                         pr={largeScreen ? 26 : 0}
                         style={{lineHeight:'15px'}}
@@ -364,7 +376,7 @@ function ProfilePage () {
                     }
                     {profile.website && 
                       <Anchor href={profile.website} target="_blank" underline="hover">
-                        <Text size="13px" fw={500} mt={8}>
+                        <Text size={largeScreen ? '12px' : '12px'} fw={500} mt={8} c="gray">
                           {profile.website}
                         </Text>
                       </Anchor>
@@ -439,7 +451,7 @@ function ProfilePage () {
                           />
                           <Text 
                             fz={largeScreen ? "14px" : "13px"} 
-                            fw={largeScreen ? 700 : 600}
+                            fw={600}
                           >
                             {profile.availabilityTitle}
                           </Text>
@@ -568,9 +580,16 @@ function ProfilePage () {
             {(profile.plan === "Pro" && profile.total) && 
               <PartnersModule loading={profile.requesting} partners={profile.partners} />
             }
-            <Box mb={18} mt={largeScreen ? 30 : 0}>
+            <Paper 
+              radius="md" 
+              withBorder={largeScreen ? true : false}
+              px={largeScreen ? 20 : 0} 
+              py={largeScreen ? 20 : 0} 
+              mb={18}
+              style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+            >
               <Group justify="flex-start" align="center" gap={8} mb={18}>
-                <Title order={5} fw={500}>Pontos Fortes</Title>
+                <Title order={5} fw={600}>Pontos Fortes</Title>
                 {(profile.id !== loggedUser.id && !profile.requesting) && 
                   <Button 
                     size="compact-xs" 
@@ -617,11 +636,11 @@ function ProfilePage () {
                   )}
                 </>
               )}
-            </Box>
+            </Paper>
             {isMobile && 
               <Box mb={18}>
                 <Group justify="flex-start" align="center" mb={18}>
-                  <Title order={5} fw={500}>Projetos ({profile?.projects?.length})</Title>
+                  <Title order={5} fw={600}>Projetos ({profile?.projects?.length})</Title>
                 </Group>
                 {profile.requesting ? ( 
                     <Text size='sm'>Carregando...</Text>
@@ -639,24 +658,24 @@ function ProfilePage () {
                               className="embla__slide"
                               key={key}
                             >
-                              <Box w={88} h={25}>
-                                <Text size="11px" mb={3} ta="center" lineClamp={2}>
-                                  {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
-                                </Text>
-                              </Box>
                               <Image 
                                 src={project.picture} 
                                 w={80}
                                 mb={10}
                                 radius={3}
                               />
-                              <Box w={90}>
-                                <Text ta="center" size='12px' fw={500} mb={3} truncate="end">
+                              <Box w={95}>
+                                <Text ta="center" size='13px' fw={500} mb={3} truncate="end">
                                   {project.name}
                                 </Text>
                               </Box>
-                              <Text ta="center" size='11px'>{project.type}</Text>
-                              <Text ta="center" size='10px' fw="500" mt={10}>
+                              {/* <Text ta="center" size='11px'>{project.type}</Text> */}
+                              <Box w={88} mt={6}>
+                                <Text size="11px" fw="500" mb={3} ta="center" lineClamp={2}>
+                                  {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
+                                </Text>
+                              </Box>
+                              <Text ta="center" size='10px' fw="500" mt={1}>
                                 <Badge size="xs" variant="light" color="gray">
                                   {project.workTitle}
                                 </Badge>
@@ -675,8 +694,15 @@ function ProfilePage () {
               </Box>
             }
             {profile.plan === "Pro" && 
-              <Box mb={25}>
-                <Title order={5} fw={500} mb={8}>Equipamento</Title>
+              <Paper 
+                radius="md" 
+                withBorder={largeScreen ? true : false}
+                px={largeScreen ? 20 : 0} 
+                py={largeScreen ? 20 : 0} 
+                mb={25}
+                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+              >
+                <Title order={5} fw={600} mb={8}>Equipamento</Title>
                 {profile.requesting ? ( 
                   <Text size='sm'>Carregando...</Text>
                 ) : (
@@ -758,7 +784,7 @@ function ProfilePage () {
                     )}
                   </>
                 )}
-              </Box>
+              </Paper>
             }
           </Grid.Col>
           {largeScreen && 
@@ -994,7 +1020,7 @@ function ProfilePage () {
         <Text size="sm" mt="lg">
           {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante e que contribuiu no cenário musical`}
         </Text>
-        <Text size="xs" mt="lg">
+        <Text size="xs" mt="lg" c="dimmed">
           Este selo é atribuído pela equipe do Mublin baseado em critérios internos
         </Text>
       </Modal>
