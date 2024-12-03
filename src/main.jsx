@@ -1,16 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { Store } from './store';
-import {IKContext} from 'imagekitio-react';
-import App from './App.jsx';
-import './global/styles.scss';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import { Store } from './store'
+import {IKContext} from 'imagekitio-react'
+import App from './App.jsx'
+import './global/styles.scss'
 
-const loggedUser = JSON.parse(localStorage.getItem('user'));
+const loggedUser = JSON.parse(localStorage.getItem('user'))
 
 // Imagekit Image Upload Authenticator
-const publicKey = "public_vFOVSJ4ZRbnv5fT4XZFbo82R2DE=";
-const urlEndpoint = "https://ik.imagekit.io/mublin";
+const publicKey = "public_vFOVSJ4ZRbnv5fT4XZFbo82R2DE="
+const urlEndpoint = "https://ik.imagekit.io/mublin"
 const authenticator = async () => {
   try {
     const headers = {
@@ -30,7 +30,7 @@ const authenticator = async () => {
   } catch (error) {
       throw new Error(`Authentication request failed: ${error.message}`);
   }
-};
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
