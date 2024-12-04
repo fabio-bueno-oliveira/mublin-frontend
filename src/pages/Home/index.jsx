@@ -83,7 +83,7 @@ function Home () {
                       <Badge size='sm' variant='light' color="violet">PRO</Badge>
                     </Center>
                   }
-                  <Text ta="center" c="dimmed" fw="700" size="12px" mt={13}>
+                  <Text ta="center" c="dimmed" fw="600" size="12px" mt={13}>
                     {user.roles.map((role, key) => 
                       <span className="comma" key={key}>{role.description}</span>
                     )}

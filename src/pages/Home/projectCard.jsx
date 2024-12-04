@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Divider, Anchor } from '@mantine/core';
+import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Divider, Anchor, Button } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconDotsVertical, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconMusic, IconSettings, IconUserOff, IconCircleFilled } from '@tabler/icons-react';
 
@@ -81,7 +81,7 @@ function ProjectCard (props) {
                   <Title 
                     fw={largeScreen ? 700 : 700}
                     lineClamp={1} 
-                    size={largeScreen ? '0.95rem' : '1.05rem'}
+                    size={largeScreen ? '1.05rem' : '1.05rem'}
                     mb={!project?.regionName ? 0 : 0}
                   >
                     {project.name}
@@ -90,7 +90,7 @@ function ProjectCard (props) {
                 </Flex>
               </Anchor>
               {project?.regionName && 
-                <Text size="11px" truncate="end" mt={1} mb={4} c="dimmed">
+                <Text size="11px" truncate="end" mt={1} mb={4}>
                   {project.cityName && `de ${project.cityName}, `} {`${project.regionUf},`} {`${project.countryName}`}  
                 </Text>
               }
@@ -161,10 +161,10 @@ function ProjectCard (props) {
             wrap="wrap"
             rowGap={3}
           >
-            <Text size={largeScreen ? "sm" : "13px"} mb={0} fw={500} lineClamp={1}> 
+            <Text size={largeScreen ? "sm" : "13px"} fw={500} lineClamp={1}> 
               {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
             </Text>
-            <Text size="11px" mb={3}>
+            <Text size="xs" mb={1}>
               {project.workTitle} {!!project.admin && " · Administrador"}
             </Text>
             {isActiveOnProject && 
@@ -177,7 +177,7 @@ function ProjectCard (props) {
             }
             {project.yearLeftTheProject && 
               <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='red' />
+                <IconCircleFilled style={iconCircleStyles} color='#733635' />
                 <Text size='11px'>
                   deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}
                 </Text>
@@ -185,7 +185,7 @@ function ProjectCard (props) {
             }
             {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
               <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='red' />
+                <IconCircleFilled style={iconCircleStyles} color='#733635' />
                 <Text size='11px'>
                   {project.joined_in} até o encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}
                 </Text>
@@ -237,27 +237,23 @@ function ProjectCard (props) {
           }
         </Group>
       </Card.Section>
-      {/* <Card.Section withBorder inheritPadding py="xs">
-        <Flex align="center" justify="flex-start" direction="row">
-          <Text style={{ fontSize: '11px' }}>
-            Categoria: 
-          </Text>
-          <IconFolder 
-            style={{ width: '14px', height: '14px', marginLeft: '3px', marginRight: '3px' }}
-          />
-          <Text style={{ fontSize: '11px' }}>
-            {project.portfolio ? 'Portfolio' : 'Principais'}
-          </Text>
+      <Card.Section>
+        <Flex gap={7} p={10}>
+          <Button 
+            size='compact-xs' 
+            fullWidth 
+            variant='outline' 
+            color='default'
+            component="a"
+            href={`/my-projects?p=${project.username}`}
+          >
+            Painel do projeto
+          </Button>
+          <Button size='compact-xs' fullWidth variant='outline' color='default'>
+            Ver perfil
+          </Button>
         </Flex>
-      </Card.Section> */}
-      {/* <Card.Section withBorder inheritPadding py="xs">
-        {!!project.id && 
-          <div>
-            <Badge size="xs" variant="light">{project.workTitle}</Badge>
-            {!!(project.touring && !project.yearLeftTheProject && !project.yearEnd) && <Badge size="xs" variant="light">Em turnê com este projeto</Badge>} {!!project.admin && <Badge size="xs" variant="light">Administrador</Badge>} {!!(!project.yearLeftTheProject && !project.yearEnd && (currentYear - project.joined_in) >= 10) && <Badge size="xs" variant="light">há + de 10 anos ativo no projeto!</Badge>} 
-          </div>
-        }
-      </Card.Section> */}
+      </Card.Section>
     </Card>
   );
 };

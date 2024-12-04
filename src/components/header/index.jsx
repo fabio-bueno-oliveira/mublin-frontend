@@ -129,77 +129,65 @@ function Header (props) {
               </>
             }
           </>
-          {(largeScreen && user.first_access === 0) &&
-            <>
-              <form
-                onSubmit={(e) => handleSearch(e, searchQuery, null)}
-                // onFocus={() => setShowMobileMenu(false)}
-                // onBlur={() => setShowMobileMenu(true)}
-              >
-                <Input 
-                  variant={colorScheme === 'light' ? 'filled' : 'unstyled'} 
-                  size="md"
-                  w={320}
-                  placeholder='Pessoa, instrumento, cidade...'
-                  value={searchQuery ? searchQuery : undefined}
-                  leftSection={<IconSearch size={16} />}
-                  onChange={(event) => handleChangeSearch(
-                    event, event.currentTarget.value, null
-                  )}
-                  // onFocus={(event) => navigateToSearchPage(event.currentTarget.value, null)}
-                  rightSectionPointerEvents="all"
-                />
-              </form>
-              {/* <ActionIcon 
-                c='dimmed' variant="transparent" aria-label="Buscar"
-                onClick={(e) => handleSearch(e, searchQuery, null)}
-              >
-                <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
-              </ActionIcon> */}
-            </>
+          {largeScreen && 
+            <form
+              onSubmit={(e) => handleSearch(e, searchQuery, null)}
+              // onFocus={() => setShowMobileMenu(false)}
+              // onBlur={() => setShowMobileMenu(true)}
+            >
+              <Input 
+                variant={colorScheme === 'light' ? 'filled' : 'unstyled'} 
+                size="md"
+                w={320}
+                placeholder='Pessoa, instrumento ou cidade...'
+                value={searchQuery ? searchQuery : undefined}
+                leftSection={<IconSearch size={16} />}
+                onChange={(event) => handleChangeSearch(
+                  event, event.currentTarget.value, null
+                )}
+                // onFocus={(event) => navigateToSearchPage(event.currentTarget.value, null)}
+                rightSectionPointerEvents="all"
+              />
+            </form>
           }
         </Group>
         <Flex align={"center"} className="menuHeader">
-          {user.first_access === 0 && 
-            <>
-              <Link to={{ pathname: '/home' }}>
-                <Button 
-                  size="sm" 
-                  variant='transparent'
-                  color={currentPath === '/home' ? 'violet' : 'dark'}
-                  leftSection={<><IconHome size={14} /></>}
-                  p={'xs'}
-                  visibleFrom="md"
-                >
-                  Início
-                </Button>
-              </Link>
-              <Link to={{ pathname: '/my-projects' }}>
-                <Button 
-                  size="sm" 
-                  variant='transparent'
-                  color={currentPath === '/opportunities' ? 'violet' : 'dark'}
-                  leftSection={<><IconRocket size={14} /></>}
-                  p={'xs'}
-                  visibleFrom="md"
-                >
-                  Oportunidades
-                </Button>
-              </Link>
-              <Link to={{ pathname: '/my-projects' }}>
-                <Button 
-                  size="sm" 
-                  variant='transparent'
-                  color={currentPath === '/my-projects' ? 'violet' : 'dark'}
-                  leftSection={<><IconMusic size={14} /></>}
-                  p={'xs'}
-                  visibleFrom="md"
-                >
-                  Meus Projetos
-                </Button>
-              </Link>
-            </>
-          }
+          <Link to={{ pathname: '/home' }}>
+            <Button 
+              size="sm" 
+              variant='transparent'
+              color={currentPath === '/home' ? 'violet' : 'dark'}
+              leftSection={<><IconHome size={14} /></>}
+              p={'xs'}
+              visibleFrom="md"
+            >
+              Início
+            </Button>
+          </Link>
+          <Link to={{ pathname: '/my-projects' }}>
+            <Button
+              size="sm"
+              variant='transparent'
+              color={currentPath === '/my-projects' ? 'violet' : 'dark'}
+              leftSection={<><IconMusic size={14} /></>}
+              p={'xs'}
+              visibleFrom="md"
+            >
+              Meus Projetos
+            </Button>
+          </Link>
+          <Link to={{ pathname: '/my-projects' }}>
+            <Button 
+              size="sm" 
+              variant='transparent'
+              color={currentPath === '/opportunities' ? 'violet' : 'dark'}
+              leftSection={<><IconRocket size={14} /></>}
+              p={'xs'}
+              visibleFrom="md"
+            >
+              Oportunidades
+            </Button>
+          </Link>
           {largeScreen && 
             <>
               {/* {user.plan === 'Pro' && 
@@ -210,7 +198,7 @@ function Header (props) {
                   <Avatar
                     size="md"
                     className="point"
-                    src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null}
+                    src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined}
                     alt={user.username}
                     ml={8}
                   />

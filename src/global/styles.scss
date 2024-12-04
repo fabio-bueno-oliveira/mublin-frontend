@@ -40,7 +40,7 @@ a.displayBlockLink {
 
 :root[data-mantine-color-scheme='dark'] {
   body {
-    background-color: rgb(14, 14, 14);
+    background-color: #0d141a;
 
     .mublinLogo {
       h1,h2,h3 {
@@ -67,12 +67,14 @@ a.displayBlockLink {
 :root[data-mantine-color-scheme='dark'] {
   body {
     .mantine-Card-root.mublinModule {
-      background-color: transparent;
-      border-color: #222222;
+      background-color: #161b21;
+      border: none;
+      box-shadow: 0 1px 2px 0 rgba(27, 29, 52, 0.05);
     }
     .mantine-Paper-root.mublinModule {
-      background-color: transparent;
-      border-color: #222222;
+      background-color: #161b21;
+      border: none;
+      box-shadow: 0 1px 2px 0 rgba(27, 29, 52, 0.05);
     }
     .mantine-Divider-label {
       &::after {

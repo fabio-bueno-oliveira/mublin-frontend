@@ -659,7 +659,7 @@ function ProfilePage () {
             }
             <Paper 
               radius="md"
-              mt={12}
+              mt={16}
               withBorder={largeScreen ? true : false}
               px={largeScreen ? 15 : 0} 
               pt={largeScreen ? 11 : 0}

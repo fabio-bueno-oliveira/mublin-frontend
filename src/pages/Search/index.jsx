@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Flex, Group, Skeleton, SimpleGrid, Tabs, Box, Title, Text, Avatar, Input, ActionIcon, Center, Loader, Badge, rem } from '@mantine/core';
+import { Container, Flex, Tabs, Box, Text, Avatar, Input, Center, Loader, Badge, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
-import { useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
+import UserCard from '../../components/userCard';
 
 function Search () {
 
@@ -18,16 +19,32 @@ function Search () {
   const [searchParams] = useSearchParams();
   const searchedKeywords = searchParams.get('keywords');
   const searchResults = useSelector(state => state.search);
-  const suggestedUsers = useSelector(state => state.search.suggestedUsers);
+  // const suggestedUsers = useSelector(state => state.search.suggestedUsers);
+
   const largeScreen = useMediaQuery('(min-width: 60em)');
-  const [searchQuery, setSearchQuery] = useState(searchedKeywords);
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+
   const [showMobileMenu, setShowMobileMenu] = useState(true);
+
+  const [searchQuery, setSearchQuery] = useState(searchedKeywords);
+
+  const handleChangeSearch = (e, query, tab) => {
+    setSearchQuery(query);
+    autoSearch(e, query, tab);
+  }
+
+  const autoSearch = useDebouncedCallback(async (e, query, tab) => {
+      handleSearch(e, query, tab);
+  },430);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(searchInfos.getSearchUsersResults(searchedKeywords));
-    dispatch(searchInfos.getSearchProjectsResults(searchedKeywords));
-    dispatch(searchInfos.getSuggestedUsersResults());
+    if (searchedKeywords) {
+      dispatch(searchInfos.getSearchUsersResults(searchedKeywords));
+      dispatch(searchInfos.getSearchProjectsResults(searchedKeywords));
+    }
+    dispatch(searchInfos.getSuggestedFeaturedUsers());
+    // dispatch(searchInfos.getSuggestedUsersResults());
     // dispatch(miscInfos.getFeed());
   }, [dispatch, searchedKeywords]);
 
@@ -46,80 +63,78 @@ function Search () {
 
   return (
     <>
-      <Header pageType="search" />
+      <Header pageType='search' />
       <Container size={'lg'} mb={largeScreen ? 30 : 82}>
-        {!largeScreen && 
-          <Group mb={20} gap={2}>
-            <form
-              onSubmit={(e) => handleSearch(e, searchQuery, null)}
-              onFocus={() => setShowMobileMenu(false)}
-              onBlur={() => setShowMobileMenu(true)}
-            >
-              <Input 
-                variant="filled" 
-                size="sm"
-                w={'280px'}
-                placeholder='Pessoa, instrumento ou cidade'
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.currentTarget.value)}
-                rightSectionPointerEvents="all"
-              />
-            </form>
-            <ActionIcon 
-              c='dimmed' variant="transparent" aria-label="Buscar"
-              onClick={(e) => handleSearch(e, searchQuery, null)}
-            >
-              <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
-            </ActionIcon>
-          </Group>
+        {isMobile && 
+          <form
+            onSubmit={(e) => handleSearch(e, searchQuery, null)}
+            onFocus={() => setShowMobileMenu(false)}
+            onBlur={() => setShowMobileMenu(true)}
+          >
+            <Input 
+              variant='filled'
+              size='md'
+              w={"100%"}
+              mb={14}
+              placeholder='Pessoa, instrumento ou cidade...'
+              value={searchQuery ? searchQuery : undefined}
+              // onChange={(event) => setSearchQuery(event.currentTarget.value)}
+              onChange={(event) => handleChangeSearch(
+                event, event.currentTarget.value, null
+              )}
+              leftSection={<IconSearch size={16} />}
+            />
+          </form>
         }
-        <Box mb={14}>
-          <Title order={5}>{!searchedKeywords ? 'Sugestões para se conectar' : 'Resultados da pesquisa por "'+searchedKeywords+'"'}</Title>
-        </Box>
         {!searchedKeywords && 
           <>
+            <Text fw={700} size="md">Músicos em destaque</Text>
             {searchResults.requesting ? (
-              <>
-                <Group justify='flex-start'>
-                  <Skeleton height={50} width={50} />
-                  <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                    <Skeleton height={9} width={300} radius="xl" />
-                    <Skeleton height={9} width={300} radius="xl" />
-                    <Skeleton height={9} width={300} radius="xl" />
-                  </SimpleGrid>
-                </Group>
-              </>
+              <Text size="13px" mt={7}>Carregando...</Text>
+            ) : (
+              searchResults.suggestedFeaturedUsers.map((user, key) => (
+                <UserCard 
+                  mt={6}
+                  key={key}
+                  name={user.name}
+                  lastname={user.lastname}
+                  username={user.username}
+                  mainRole={user.role}
+                  picture={user.picture}
+                  verified={user.verified}
+                  legend={user.legend}
+                  city={user.city}
+                  region={user.region}
+                />
+              ))
+            )}
+            {/* <Text fw={700} size="md" mt={16}>Sugestões para conectar</Text>
+            {searchResults.requesting ? (
+              <Group justify='flex-start'>
+                <Skeleton height={50} width={50} />
+                <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
+                  <Skeleton height={9} width={300} radius="xl" />
+                  <Skeleton height={9} width={300} radius="xl" />
+                  <Skeleton height={9} width={300} radius="xl" />
+                </SimpleGrid>
+              </Group>
             ) : (
               suggestedUsers.map((user, key) =>
-                <>
-                  <Flex key={key} mb={14} gap={7}>
-                    <Link to={{ pathname: `/${user.username}` }}>
-                      <Avatar 
-                        src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
-                        size='lg'
-                      />
-                    </Link>
-                    <Flex
-                      justify="flex-start"
-                      align="flex-start"
-                      direction="column"
-                      wrap="wrap"
-                    >
-                      <Text size='sm' fw={500}>
-                        {user.name+' '+user.lastname} {!!user.verified && <IconRosetteDiscountCheckFilled color='violet' style={iconVerifiedStyle} />}
-                      </Text>
-                      <Text size='xs'>
-                        {user.mainRole ? user.mainRole : user.bio}
-                      </Text>
-                      <Text size='11px' c='dimmed'>
-                        {user.city && user.city+' - '+user.region}
-                      </Text>
-                    </Flex>
-                  </Flex>
-                  {/* <Divider my="xs" /> */}
-                </>
+                <UserCard 
+                  mt={6}
+                  key={key}
+                  name={user.name}
+                  lastname={user.lastname}
+                  username={user.username}
+                  mainRole={user.role}
+                  picture={user.picture}
+                  verified={user.verified}
+                  legend={user.legend}
+                  city={user.city}
+                  region={user.region}
+                />
               )
-            )}
+            )} */}
           </>
         }
         {searchResults.requesting && 
