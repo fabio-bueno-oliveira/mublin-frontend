@@ -648,7 +648,7 @@ function ProfilePage () {
                 </Grid>
               </Paper>
             }
-            {isMobile && 
+            {(isMobile && profile.availabilityId) && 
               <Divider mb={12} mt={10} />
             }
             {(profile.plan === "Pro" && profile.total) && 

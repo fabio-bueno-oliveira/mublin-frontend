@@ -137,7 +137,7 @@ function Header (props) {
                 // onBlur={() => setShowMobileMenu(true)}
               >
                 <Input 
-                  variant="filled" 
+                  variant={colorScheme === 'light' ? 'filled' : 'unstyled'} 
                   size="md"
                   w={320}
                   placeholder='Pessoa, instrumento, cidade...'

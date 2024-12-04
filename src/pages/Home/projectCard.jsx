@@ -81,10 +81,10 @@ function ProjectCard (props) {
                   <Title 
                     fw={largeScreen ? 700 : 700}
                     lineClamp={1} 
-                    size={largeScreen ? '0.95rem' : '0.95rem'}
+                    size={largeScreen ? '0.95rem' : '1.05rem'}
                     mb={!project?.regionName ? 0 : 0}
                   >
-                    {project?.name}
+                    {project.name}
                   </Title>
                   {!!project.projectCurrentlyOnTour && <Badge size='xs' variant='light' color='violet'>Em turnê</Badge>}
                 </Flex>

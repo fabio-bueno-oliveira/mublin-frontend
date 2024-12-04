@@ -65,6 +65,7 @@ function Home () {
                   padding={10} 
                   radius={"md"} 
                   withBorder
+                  className="mublinModule"
                 >
                   <Center>
                     <Link to={{ pathname: `/${user.username}` }}>
@@ -112,11 +113,12 @@ function Home () {
             ) : (
               <Box mb={largeScreen ? 30 : 86}>
                 <Card 
-                  mb={16} 
+                  mb={19} 
                   padding={largeScreen ? "md" : 0} 
                   radius={largeScreen ? "md" : 0} 
                   withBorder={largeScreen ? true : false}
                   style={isMobile ? {backgroundColor: "transparent"} : undefined}
+                  className="mublinModule"
                 >
                   <Flex justify="space-between" align="center">
                     <div>
@@ -173,7 +175,7 @@ function Home () {
           </Grid.Col>
           {largeScreen && 
             <Grid.Col span={3}>
-              <Card shadow="sm" padding="md" radius="md" withBorder>
+              <Card shadow="sm" padding="md" radius="md" withBorder className="mublinModule">
                 <Text fw={700} size="md">Músicos em destaque</Text>
                 {search.requesting ? (
                   <Text size="13px" mt={7}>Carregando...</Text>
@@ -195,7 +197,7 @@ function Home () {
                   ))
                 )}
               </Card>
-              <Card shadow="sm" padding="md" radius="md" withBorder mt={10}>
+              <Card shadow="sm" padding="md" radius="md" withBorder mt={10} className="mublinModule">
               <Text fw={700} size="md">Novos usuários</Text>
                 {search.requesting ? (
                   <Text size="13px" mt={7}>Carregando...</Text>
