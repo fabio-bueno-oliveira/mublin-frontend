@@ -178,7 +178,7 @@ function Header (props) {
                 <Button 
                   size="sm" 
                   variant='transparent'
-                  color={currentPath === '/my-projects' ? 'violet' : 'dark'}
+                  color={currentPath === '/opportunities' ? 'violet' : 'dark'}
                   leftSection={<><IconRocket size={14} /></>}
                   p={'xs'}
                   visibleFrom="md"

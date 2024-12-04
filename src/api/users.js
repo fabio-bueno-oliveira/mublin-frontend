@@ -23,6 +23,7 @@ export const userService = {
     getUserGearInfoById,
     getUserAvailabilityItemsById,
     getUserProjects,
+    getUserProjectsBasicInfo,
     getUserMessages,
     getUserLastConnectedFriends,
     update,
@@ -90,6 +91,15 @@ function getUserProjects(id,type) {
     };
 
     return fetch(`${BASE_URL}/user/${id}/projects?type=${type}`, requestOptions).then(handleResponse);
+}
+
+function getUserProjectsBasicInfo(id,type) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${BASE_URL}/user/${id}/projectsBasicInfos`, requestOptions).then(handleResponse);
 }
 
 function getUserLastConnectedFriends() {

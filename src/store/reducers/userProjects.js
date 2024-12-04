@@ -106,6 +106,28 @@ const initialState = {
       userPicture: '',
       userUsername: ''
     }
+  ],
+  listBasicInfo: [
+    {
+      id: '',
+      confirmed: '',
+      projectid: '',
+      name: '',
+      username: '',
+      type: '',
+      workTitle: '',
+      role1: '',
+      role2: '',
+      role3: '',
+      genre1: '',
+      genre2: '',
+      genre3: '',
+      cityName: '',
+      regionName: '',
+      regionUf: '',
+      countryName: '',
+      activityStatus: '',
+    }
   ]
 }
 
@@ -143,6 +165,38 @@ export function userProjects(state = initialState, action) {
         list: initialState.list,
         summary: initialState.summary,
         members: initialState.members,
+      };
+    case userProjectsTypes.GET_USER_PROJECTS_BASIC_INFO_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        success: false,
+        totalProjects: 0,
+        list: initialState.list,
+        summary: initialState.summary,
+        members: initialState.members,
+        listBasicInfo: initialState.listBasicInfo,
+        error: ''
+      };
+    case userProjectsTypes.GET_USER_PROJECTS_BASIC_INFO_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        success: true,
+        error: '',
+        listBasicInfo: action.list
+      };
+    case userProjectsTypes.GET_USER_PROJECTS_BASIC_INFO_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        success: false,
+        totalProjects: 0,
+        error: 'Erro na solicitação',
+        list: initialState.list,
+        summary: initialState.summary,
+        members: initialState.members,
+        listBasicInfo: initialState.listBasicInfo
       };
     default:
       return state
