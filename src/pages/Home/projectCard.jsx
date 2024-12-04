@@ -34,10 +34,10 @@ function ProjectCard (props) {
 
   return (
     <Card 
-      // shadow="sm" 
-      padding="lg" 
-      radius="md" 
-      withBorder 
+      padding="lg"
+      radius="md"
+      withBorder
+      className="mublinModule"
     >
       {/* <Card.Section>
         <Image

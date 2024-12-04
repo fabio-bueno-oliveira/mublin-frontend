@@ -66,11 +66,11 @@ a.displayBlockLink {
 
 :root[data-mantine-color-scheme='dark'] {
   body {
-    .mantine-Card-root {
+    .mantine-Card-root.mublinModule {
       background-color: transparent;
       border-color: #222222;
     }
-    .mantine-Paper-root {
+    .mantine-Paper-root.mublinModule {
       background-color: transparent;
       border-color: #222222;
     }
@@ -161,4 +161,9 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 
 .comma:not(:empty) ~ .comma:not(:empty):before {
   content: ", ";
+}
+
+.invertPngColor {
+  -webkit-filter: invert(100%); /* Safari/Chrome */
+  filter: invert(100%);
 }

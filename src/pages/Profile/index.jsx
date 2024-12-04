@@ -389,9 +389,11 @@ function ProfilePage () {
                             {profile.roles.map((role, key) =>
                               <div className="embla__slide" key={key}>
                                 {role.icon && 
-                                  <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "imgToWhite" : undefined} />
+                                  <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
                                 }
-                                <Text size='13px' fw='500' mr={8}>{role.name}</Text>
+                                <Text size='13px' fw='500' mr={8}>
+                                  {role.name}
+                                </Text>
                               </div>
                             )}
                           </div>
@@ -446,7 +448,7 @@ function ProfilePage () {
                         <Button 
                           size={largeScreen ? "sm" : "xs"} 
                           fz={largeScreen ? "14px" : "14px"}
-                          fw={largeScreen ? "800" : "800"}
+                          fw={largeScreen ? "700" : "700"}
                           color={colorScheme === "light" ? "dark" : "gray"}
                           variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
                           loading={loadingFollow}
@@ -464,7 +466,7 @@ function ProfilePage () {
                         <Button 
                           size={largeScreen ? "sm" : "xs"} 
                           fz={largeScreen ? "14px" : "14px"}
-                          fw={largeScreen ? "800" : "800"}
+                          fw={largeScreen ? "700" : "700"}
                           variant='light'
                           color={colorScheme === "light" ? "dark" : "gray"}
                           fullWidth={isMobile}
@@ -476,7 +478,7 @@ function ProfilePage () {
                       <Button 
                         size={largeScreen ? "sm" : "xs"} 
                         fz={largeScreen ? "14px" : "14px"}
-                        fw={largeScreen ? "800" : "800"}
+                        fw={largeScreen ? "700" : "700"}
                         variant='light'
                         color={colorScheme === "light" ? "dark" : "gray"}
                         leftSection={<IconMail size={14} />} 
@@ -659,7 +661,9 @@ function ProfilePage () {
               pt={largeScreen ? 11 : 0}
               pb={largeScreen ? 16 : 0}
               mb={18}
+              mt={largeScreen ? 18 : 0}
               style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+              className="mublinModule"
             >
               <Group justify="flex-start" align="center" gap={8} mb={18}>
                 <Title order={4} fw={700}>Pontos Fortes</Title>
@@ -713,7 +717,7 @@ function ProfilePage () {
             {isMobile && 
               <Box mb={18}>
                 <Group justify="flex-start" align="center" mb={18}>
-                  <Title order={5} fw={700}>Projetos ({profile?.projects?.length})</Title>
+                  <Title order={4} fw={700}>Projetos ({profile?.projects?.length})</Title>
                 </Group>
                 {profile.requesting ? ( 
                     <Text size='sm'>Carregando...</Text>
@@ -733,17 +737,17 @@ function ProfilePage () {
                             >
                               <Image 
                                 src={project.picture} 
-                                w={80}
+                                w={84}
                                 mb={10}
                                 radius={3}
                               />
                               <Box w={95}>
-                                <Text ta="center" size='13px' fw={500} mb={3} truncate="end">
+                                <Text ta="center" size='13px' fw={600} mb={3} truncate="end">
                                   {project.name}
                                 </Text>
                               </Box>
                               {/* <Text ta="center" size='11px'>{project.type}</Text> */}
-                              <Box w={88} mt={6}>
+                              <Box w={88} mt={2}>
                                 <Text size="11px" fw="500" mb={3} ta="center" lineClamp={2}>
                                   {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
                                 </Text>
@@ -774,6 +778,7 @@ function ProfilePage () {
                 pt={largeScreen ? 11 : 0}
                 pb={largeScreen ? 16 : 0}
                 mb={25}
+                className="mublinModule"
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
               >
                 <Title order={4} fw={700} mb={8}>Equipamento</Title>
@@ -873,6 +878,7 @@ function ProfilePage () {
                 px={16}
                 py={11}
                 mb={18}
+                className="mublinModule"
               >
                 <ScrollArea h={422} offsetScrollbars>
                   <Group justify="flex-start" align="center" mb={18}>

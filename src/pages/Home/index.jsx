@@ -54,7 +54,7 @@ function Home () {
       <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 
-            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={isMobile ? 12 : 8}>
+            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={12}>
               {projects.requesting || !user.success ? (
                 <>
                   <Skeleton height={56} circle />
@@ -62,10 +62,9 @@ function Home () {
                 </>
               ) : (
                 <Card 
-                  padding={largeScreen ? 10 : 0} 
-                  radius={largeScreen ? "md" : 0} 
-                  withBorder={largeScreen ? true : false}
-                  style={isMobile ? {backgroundColor: "transparent"} : undefined}
+                  padding={10} 
+                  radius={"md"} 
+                  withBorder
                 >
                   <Center>
                     <Link to={{ pathname: `/${user.username}` }}>
@@ -100,7 +99,7 @@ function Home () {
               <Grid mb={largeScreen ? 30 : 86}>
                 {Array.apply(null, { length: 2 }).map((e, i) => (
                   <Grid.Col span={{ base: 12, md: 2, lg: 6 }} key={i}>
-                    <Card shadow="sm" h="270px" padding="lg" radius="md" withBorder>
+                    <Card className="mublinModule" h="210px" padding="lg" radius="md" withBorder>
                       <Skeleton height={14} width={"40%"} radius="xl" />
                       <Skeleton height={50} width={50} mt={13} radius="md" />
                       <Skeleton height={14} width={"76%"} mt={13} radius="xl" />
