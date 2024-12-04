@@ -12,7 +12,7 @@ footer.menuMobile {
     align-items: flex-start;
     height: 100%;
   
-    div {
+    div.item {
       color: #3a3a3a;
       cursor: pointer;
       padding: 0 10px;
@@ -25,7 +25,7 @@ footer.menuMobile {
       padding-top: 14px;
   
       svg {
-        stroke-width: 1;
+        stroke-width: 1.7;
       }
       
       p {
@@ -48,6 +48,16 @@ footer.menuMobile {
   
       span {
         font-size:10px;
+      }
+    }
+
+    div.avatar {
+      margin-top: 14px;
+      flex-basis: 100%;
+      padding-left: 16px;
+
+      .mantine-Avatar-root {
+        cursor: pointer;
       }
     }
   }

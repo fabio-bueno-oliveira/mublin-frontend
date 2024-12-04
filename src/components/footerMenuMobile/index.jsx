@@ -39,25 +39,25 @@ const FooterMenuMobile = () => {
     <>
       <footer className="menuMobile mantine-hidden-from-sm">
         <div>
-          <div className={currentPath === '/home' ? 'active' : undefined} onClick={() => navigate("/home")}>
+          <div className={currentPath === '/home' ? 'item active' : 'item'} onClick={() => navigate("/home")}>
             <IconHome />
-            <Text size="xs">Home</Text>
+            <Text size="12px" fw="600">Home</Text>
           </div>
           {/* <div className={currentPath.includes("/career") && 'active'} onClick={() => navigate("/career")}>
             <IconBell />
             <span>Carreira</span>
           </div> */}
-          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/my-projects")}>
+          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) ? 'item active' : 'item'} onClick={() => navigate("/my-projects")}>
             <IconMusic />
-            <Text size="xs">Projetos</Text>
+            <Text size="12px" fw="600">Projetos</Text>
           </div>
-          <div className={currentPath === '/search' ? 'active' : undefined} onClick={() => navigate("/search")}>
+          <div className={currentPath === '/search' ? 'item active' : 'item'} onClick={() => navigate("/search")}>
             <IconSearch />
-            <Text size="xs">Buscar</Text>
+            <Text size="12px" fw="600">Buscar</Text>
           </div>
-          <div className={currentPath === '/new' ? 'active' : undefined} onClick={() => navigate("/new")}>
+          <div className={currentPath === '/new' ? 'item active' : 'item'} onClick={() => navigate("/new")}>
             <IconPlus />
-            <Text size="xs">Novo</Text>
+            <Text size="12px" fw="600">Novo</Text>
           </div>
           {/* <div className={currentPath === '/notifications' && 'active'} onClick={() => navigate("/notifications")}>
             <IconBell />
@@ -65,8 +65,14 @@ const FooterMenuMobile = () => {
           </div> */}
           <div  
             onClick={() => setMobileMenuOpen(true)}
+            className="avatar"
           >
-            <IconMenu2 style={{ marginTop: 6 }} />
+            {/* <IconMenu2 style={{ marginTop: 6 }} /> */}
+            <Avatar 
+              size="40px"
+              src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture}
+              alt="Foto de perfil"
+            />
           </div>
           {/* <div 
             className='userPicture'
@@ -101,34 +107,34 @@ const FooterMenuMobile = () => {
         // withCloseButton={false}
       >
         <NavLink
-          label="Ver meu perfil"
-          leftSection={<IconUserCircle size="1rem" stroke={1.5} />}
+          label={<Text fz={16}>Ver meu perfil</Text>}
+          leftSection={<IconUserCircle size="1.5rem" stroke={1.5} />}
           onClick={goToProfile}
         />
         <Divider my="xs" />
         <NavLink
-          label="Configurações"
-          leftSection={<IconSettings size="1rem" stroke={1.5} />}
+          label={<Text fz={16}>Configurações</Text>}
+          leftSection={<IconSettings size="1.5rem" stroke={1.5} />}
           onClick={goToSettings}
         />
         {colorScheme === 'dark' && 
           <NavLink
-            label="Mudar para o tema claro"
-            leftSection={<IconBrightnessUp size="1rem" stroke={1.5} />}
+            label={<Text fz={16}>Mudar para o tema claro</Text>}
+            leftSection={<IconBrightnessUp size="1.5rem" stroke={1.5} />}
             onClick={() => setNewColorTheme('light')}
           />
         }
         {colorScheme === 'light' && 
           <NavLink
-            label="Mudar para o tema escuro"
-            leftSection={<IconMoon size="1rem" stroke={1.5} />}
+            label={<Text fz={16}>Mudar para o tema escuro</Text>}
+            leftSection={<IconMoon size="1.5rem" stroke={1.5} />}
             onClick={() => setNewColorTheme('dark')}
           />
         }
         <Divider my="xs" />
         <NavLink
-          label="Sair"
-          leftSection={<IconLogout size="1rem" stroke={1.5} />}
+          label={<Text fz={16}>Sair</Text>}
+          leftSection={<IconLogout size="1.5rem" stroke={1.5} />}
           onClick={() => logout()}
         />
       </Modal>

@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { profileInfos } from '../../store/actions/profile';
 import { followInfos } from '../../store/actions/follow';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Affix, Transition, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, rem, em } from '@mantine/core';
+import { Container, Flex, Grid, Affix, Space, Transition, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, rem, em } from '@mantine/core';
 import { useWindowScroll } from '@mantine/hooks';
 import { IconCircleFilled, IconCheck, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink } from '@tabler/icons-react';
 import Header from '../../components/header';
@@ -654,14 +654,17 @@ function ProfilePage () {
             {(profile.plan === "Pro" && profile.total) && 
               <PartnersModule loading={profile.requesting} partners={profile.partners} />
             }
+            {(isMobile && !profile.availabilityId) && 
+               <Space h="sm" />
+            }
             <Paper 
-              radius="md" 
+              radius="md"
+              mt={12}
               withBorder={largeScreen ? true : false}
               px={largeScreen ? 15 : 0} 
               pt={largeScreen ? 11 : 0}
               pb={largeScreen ? 16 : 0}
               mb={18}
-              mt={largeScreen ? 18 : 0}
               style={isMobile ? { backgroundColor: 'transparent' } : undefined}
               className="mublinModule"
             >

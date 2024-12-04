@@ -47,7 +47,7 @@ function MyProjects () {
         className='myProjectsPage'
       >
         <NativeSelect
-          size="md"
+          size="lg"
           mb={20}
           placeholder="Escolha um projeto"
           value={selectedProject ? selectedProject : null}

@@ -9,9 +9,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js" integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc" crossorigin="anonymous"></script>
     <title>Mublin - Gerencie seus projetos de música</title>
+    <style>
+      .loader {
+         padding-top: 200px;
+         margin: 0px auto;
+         position: relative;
+         animation: rotation 3s linear infinite;
+      }
+      .loader-inner {
+         position: absolute;
+         width: 40px;
+         height: 40px;
+         animation: rotation-inner 3s linear infinite;
+      }
+      .loader-text {
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+      }
+      @keyframes rotation {
+         from { transform: rotate(0deg);}
+         to { transform: rotate(360deg);}
+      }
+      @keyframes rotation-inner {
+         from { transform: rotate(0deg);}
+         to {transform: rotate(360deg);}
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class = "loader">
+        <div class = "loader-inner"> </div>
+        <div class = "loader-text"> <img src="/apple-touch-icon.png" width="46" /> </div>
+     </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

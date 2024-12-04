@@ -28,9 +28,9 @@ function Header (props) {
         direction="row"
       >
         <Link to={{ pathname: '/' }} className={s.mublinLogo}>
-          <Flex gap={3}>
+          <Flex gap={3} align='center'>
             <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 43} />
-            <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 40 : 40} />
+            <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 40 : 24} />
           </Flex>
         </Link>
           <div>
