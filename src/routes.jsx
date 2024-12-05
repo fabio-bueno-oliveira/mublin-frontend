@@ -31,6 +31,7 @@ import GearProductPage from './pages/Gear/product';
 import GearBrandPage from './pages/Gear/brand';
 import Settings from './pages/Settings';
 import MenuMobilePage from './pages/MenuMobile';
+import CheckoutSuccess from './pages/Checkout/success';
 
 function AppRoutes () {
 
@@ -52,6 +53,7 @@ function AppRoutes () {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route exact path="/:username/public" element={<PublicProfilePage />} />
         <Route element={<RequireAuth />}>
           <Route path="/my-account" element={<MyAccountPage />} />

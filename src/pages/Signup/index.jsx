@@ -32,7 +32,7 @@ function SignupPage () {
         name: '',
         lastname: '',
         email: '',
-        username: '',
+        newUsername: '',
         password: '',
         confirmPassword: ''
       },
@@ -47,7 +47,7 @@ function SignupPage () {
         //   return null;
         // }
         email: isEmail('Email inválido'),
-        username: hasLength({ min: 2, max: 14 }, 'Informe o username desejado com no mínimo 2 caracteres e no máximo 14'),
+        newUsername: hasLength({ min: 2, max: 14 }, 'Informe o username desejado com no mínimo 2 caracteres e no máximo 14'),
         password: (value) => (value.length < 4 ? 'Senha muito curta' : null),
         confirmPassword: (value, values) =>
           value !== values.password ? 'As senhas informadas estão diferentes' : null
@@ -77,7 +77,7 @@ function SignupPage () {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({name: values.name, lastname: values.lastname, email: values.email, username: values.username, password: values.password})
+        body: JSON.stringify({name: values.name, lastname: values.lastname, email: values.email, username: values.newUsername, password: values.password})
       })
       .then(res => res.json())
       // .then(res => localStorage.setItem('user', JSON.stringify(res)))
@@ -146,12 +146,12 @@ function SignupPage () {
               description={`mublin.com/${usernameChoosen}`}
               disabled={usernameAvailability.requesting}
               rightSection={usernameAvailability.requesting && <Loader size={20} />}
-              key={form.key('username')}
-              {...form.getInputProps('username')}
+              key={form.key('newUsername')}
+              {...form.getInputProps('newUsername')}
               onKeyUp={e => {
                 checkUsername(e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase())
                 setUsernameChoosen(e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase())
-                form.setFieldValue('username', e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase());
+                form.setFieldValue('newUsername', e.target.value.replace(/[^A-Z0-9]/ig, "").toLowerCase());
               }}
             />
             {(usernameChoosen?.length > 2 && usernameAvailability.available) && 
@@ -214,11 +214,16 @@ function SignupPage () {
                 color='violet'
                 type="submit"
                 // disabled={(usernameChoosen && usernameAvailability.available && emailAvailability.available) ? false : true}
-                disabled={usernameAvailability.requesting || emailAvailability.requesting}
+                disabled={usernameAvailability.requesting || emailAvailability.requesting || process.env.NODE_ENV === "production"}
               >
                 Continuar
               </Button>
             </Group>
+            {process.env.NODE_ENV === "production" && 
+              <Alert variant="light" color="red" mt={14}>
+                Novos cadastros serão liberados em breve!
+              </Alert>
+            }
           </form>
         </Container>
         <Footer />

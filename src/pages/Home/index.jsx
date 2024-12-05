@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { userInfos } from '../../store/actions/user';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { Container, Flex, Center, Box, Card, Title, Badge, Text, Grid, Skeleton, Switch, Button, Avatar, em } from '@mantine/core';
+import { Container, Flex, Center, Box, Card, Title, Badge, Text, Grid, Skeleton, Switch, Button, Avatar, Image, em } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import UserCard from '../../components/userCard';
 import Header from '../../components/header';
@@ -127,7 +127,7 @@ function Home () {
                 >
                   <Flex justify="space-between" align="center">
                     <div>
-                      <Text size="md" mb={3} fw={600}>
+                      <Text size="md" mb={projectsTerminated.length ? 3 : 0} fw={600}>
                         Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
                       </Text>
                       {!!projectsTerminated.length && 
@@ -173,7 +173,9 @@ function Home () {
                     </Masonry>
                   </ResponsiveMasonry>
                 ) : (
-                  <Button>Cadastrar novo projeto</Button>
+                  <Center mt={44}>
+                    <Image src={'https://ik.imagekit.io/mublin/misc/astronaut-musician-3.png?updatedAt=1731982735493'} w='240' style={{opacity:'0.3'}} />
+                  </Center>
                 )}
               </Box>
             )}
