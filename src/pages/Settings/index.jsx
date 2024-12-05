@@ -131,7 +131,7 @@ function SettingsPage () {
   return (
     <>
       <Header />
-      <Container size={'sm'} mb={80}>
+      <Container size={'sm'} mb={100}>
         {isMobile && 
           <Group>
             <Tabs variant="outline" defaultValue="myAccount">
@@ -175,7 +175,7 @@ function SettingsPage () {
             </Tabs>
           </Group>
         }
-        <Grid mt={30}>
+        <Grid mt={isLargeScreen ? 30 : 0}>
           {isLargeScreen && 
             <Grid.Col span={5} p={24}>
               <NavLink
@@ -232,11 +232,11 @@ function SettingsPage () {
           <Grid.Col span={{ base: 12, md: 12, lg: 7 }} pl={isLargeScreen ? 30 : 0}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos="relative" p={10}>
-                <LoadingOverlay 
+                {/* <LoadingOverlay 
                   visible={user.requesting} 
                   zIndex={1000} 
                   overlayProps={{ radius: "sm", blur: 2 }} 
-                />
+                /> */}
                 {success && 
                   <Alert color="green">Dados atualizados com sucesso</Alert>
                 }

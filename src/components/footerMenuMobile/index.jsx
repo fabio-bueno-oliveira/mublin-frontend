@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Modal, NavLink, Text, Divider, Group, Avatar } from '@mantine/core';
-import { IconHome, IconSearch, IconPlus, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconMenu2, IconMusic } from '@tabler/icons-react';
+import { IconHome, IconSearch, IconUserFilled, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconHexagonPlusFilled, IconMusic } from '@tabler/icons-react';
 import './styles.scss';
 
 const FooterMenuMobile = () => {
@@ -39,55 +39,21 @@ const FooterMenuMobile = () => {
     <>
       <footer className="menuMobile mantine-hidden-from-sm">
         <div>
-          <div className={currentPath === '/home' ? 'item active' : 'item'} onClick={() => navigate("/home")}>
+          <div className={currentPath === '/home' ? 'active' : undefined} onClick={() => navigate("/home")}>
             <IconHome />
-            <Text size="12px" fw="600">Home</Text>
           </div>
-          {/* <div className={currentPath.includes("/career") && 'active'} onClick={() => navigate("/career")}>
-            <IconBell />
-            <span>Carreira</span>
-          </div> */}
-          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) ? 'item active' : 'item'} onClick={() => navigate("/my-projects")}>
+          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/my-projects")}>
             <IconMusic />
-            <Text size="12px" fw="600">Projetos</Text>
           </div>
-          <div className={currentPath === '/search' ? 'item active' : 'item'} onClick={() => navigate("/search")}>
+          <div className={currentPath === '/new' ? 'active plus' : 'plus'} onClick={() => navigate("/new")}>
+            <IconHexagonPlusFilled />
+          </div>
+          <div className={currentPath === '/search' ? 'active' : undefined} onClick={() => navigate("/search")}>
             <IconSearch />
-            <Text size="12px" fw="600">Buscar</Text>
           </div>
-          <div className={currentPath === '/new' ? 'item active' : 'item'} onClick={() => navigate("/new")}>
-            <IconPlus />
-            <Text size="12px" fw="600">Novo</Text>
+          <div className={currentPath === '/menu' ? 'active' : undefined} onClick={() => navigate("/menu")}>
+            <IconUserFilled />
           </div>
-          {/* <div className={currentPath === '/notifications' && 'active'} onClick={() => navigate("/notifications")}>
-            <IconBell />
-            <span>Notificações</span>
-          </div> */}
-          <div  
-            onClick={() => setMobileMenuOpen(true)}
-            className="avatar"
-          >
-            {/* <IconMenu2 style={{ marginTop: 6 }} /> */}
-            <Avatar 
-              size="40px"
-              src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture}
-              alt="Foto de perfil"
-            />
-          </div>
-          {/* <div 
-            className='userPicture'
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            {userInfo.picture && 
-            <Avatar 
-              // variant="filled" 
-              // radius="xl" 
-              // size="md" 
-              src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture}
-              alt="Foto de perfil"
-            />
-            }
-          </div> */}
         </div>
       </footer>
       <Modal 

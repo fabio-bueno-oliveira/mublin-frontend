@@ -21,8 +21,8 @@ import {
 } from '@tabler/icons-react';
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
-import PianoLogoBlack from '../../assets/svg/piano-logo.svg';
-import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg';
+// import PianoLogoBlack from '../../assets/svg/piano-logo.svg';
+// import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg';
 import s from './header.module.css';
 
 function Header (props) {
@@ -115,9 +115,9 @@ function Header (props) {
               className='mublinLogo'
               onClick={() => setRefreshCounter(refreshCounter + 1)}
             >
-              <Flex gap={2} align='center'>
-                <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 27} />
-                <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 24} />
+              <Flex align='center'>
+                {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 27} /> */}
+                <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 28} />
               </Flex>
             </Link>
             {props.pageType === 'profile' &&

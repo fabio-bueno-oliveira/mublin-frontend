@@ -9,6 +9,7 @@ import { Container, Flex, Center, Box, Card, Title, Badge, Text, Grid, Skeleton,
 import { useMediaQuery } from '@mantine/hooks';
 import UserCard from '../../components/userCard';
 import Header from '../../components/header';
+import HeaderMobile from '../../components/header/mobile';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import ProjectCard from './projectCard';
 import Masonry, {ResponsiveMasonry} from "react-responsive-masonry";
@@ -50,7 +51,11 @@ function Home () {
 
   return (
     <>
-      <Header pageType="home" />
+      {isMobile ? (
+        <HeaderMobile pageType="home" />
+      ) : (
+        <Header pageType="home" />
+      )}
       <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 

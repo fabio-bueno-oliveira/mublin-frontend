@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Flex, Tabs, Box, Text, Avatar, Input, Center, Loader, Badge, rem, em } from '@mantine/core';
+import { Container, Flex, Tabs, Box, Text, Avatar, Input, CloseButton, Center, Loader, Badge, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -10,8 +10,6 @@ import FooterMenuMobile from '../../components/footerMenuMobile';
 import UserCard from '../../components/userCard';
 
 function Search () {
-
-  // const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const dispatch = useDispatch();
   let navigate = useNavigate();
@@ -77,12 +75,21 @@ function Search () {
               w={"100%"}
               mb={14}
               placeholder='Pessoa, instrumento ou cidade...'
-              value={searchQuery ? searchQuery : undefined}
-              // onChange={(event) => setSearchQuery(event.currentTarget.value)}
+              value={searchQuery}
               onChange={(event) => handleChangeSearch(
                 event, event.currentTarget.value, null
               )}
               leftSection={<IconSearch size={16} />}
+              rightSectionPointerEvents="all"
+              rightSection={
+                <CloseButton
+                  aria-label="Apagar"
+                  onClick={(event) => handleChangeSearch(
+                    event, "", null
+                  )}
+                  style={{ display: searchQuery ? undefined : 'none' }}
+                />
+              }
             />
           </form>
         }

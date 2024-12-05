@@ -2,62 +2,70 @@ footer.menuMobile {
   position: fixed;
   bottom: 0;
   background-color: #FFF;
-  height: 64px;
+  height: 70px;
   width: 100%;
-  z-index: 99;
+  z-index: 999;
 
   > div {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     height: 100%;
   
-    div.item {
+    div {
       color: #3a3a3a;
       cursor: pointer;
-      padding: 0 10px;
       font-size: 1.6rem;
       font-weight: 300;
       display: flex;
       flex-direction: column;
       flex-basis: 100%;
       align-items: center;
-      padding-top: 14px;
+      position: relative;
   
       svg {
+        width: 26px;
+        height: 26px;
         stroke-width: 1.7;
       }
-      
-      p {
-        font-weight: 300;
-      }
-  
-      &.active {
+
+      &.plus {
         opacity: 1;
-        border-top: 2px solid #3a3a3a;
-        padding-top: 12px;
+
+        &.active:before {
+          content: "";
+          display: block;
+          border-top: 2px solid #272727;
+          position: absolute;
+          top: -11px;
+          left: 0;
+          width: 76px;
+        }
 
         svg {
-          stroke-width: 2.0;
-        }
-        
-        p {
-          font-weight: 500;
+          stroke-width: 2.3;
+          width: 48px;
+          height: 48px;
         }
       }
-  
-      span {
-        font-size:10px;
-      }
-    }
 
-    div.avatar {
-      margin-top: 14px;
-      flex-basis: 100%;
-      padding-left: 16px;
+      &.active {
+        opacity: 1;
 
-      .mantine-Avatar-root {
-        cursor: pointer;
+        &:before {
+          content: "";
+          display: block;
+          border-top: 2px solid #272727;
+          position: absolute;
+          top: -21px;
+          left: 0;
+          width: 76px;
+          z-index: 9999;
+        }
+
+        svg {
+          stroke-width: 2.3;
+        }
       }
     }
   }
@@ -73,7 +81,10 @@ footer.menuMobile {
 
         &.active {
           opacity: 1;
-          border-top-color: #bfbfbf;
+
+          &:before {
+            border-top-color: #bfbfbf;
+          }
         }
       }
     }
