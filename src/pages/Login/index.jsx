@@ -88,7 +88,7 @@ function LoginPage () {
           <TextInput 
             label="Email ou nome de usuário" 
             placeholder="seu@email.com ou usuário" 
-            size="lg"
+            size="md"
             autoFocus
             key={form.key('email')}
             {...form.getInputProps('email')}
@@ -96,22 +96,23 @@ function LoginPage () {
           <PasswordInput 
             label="Senha" 
             placeholder="Digite sua senha" 
-            size="lg" 
+            size="md" 
             mt="md"
             key={form.key('password')}
             {...form.getInputProps('password')}
           />
           <Group justify="space-between" mt="lg">
             <Checkbox defaultChecked label="Lembrar meus dados" color="violet" />
-            <Anchor component="button" size="md">
+            <Anchor component="button" size="sm">
               Esqueci a senha
             </Anchor>
           </Group>
           <Button 
             type="submit"
             loading={loggingIn}
+            loaderProps={{ type: 'dots' }}
             fullWidth
-            size='lg'
+            size='md'
             color='violet'
             mt='xl'
           >

@@ -22,9 +22,9 @@ const theme = createTheme({
       },
     }),
   },
-  fontFamily: '"Archivo", Roboto, Helvetica, Arial, sans-serif',
-  fontFamilyMonospace: '"Archivo", Roboto, Helvetica, Arial, monospace',
-  headings: { fontFamily: '"Archivo", Roboto, Helvetica, Arial, sans-serif' }
+  fontFamily: '"Rubik", Helvetica, Arial, sans-serif',
+  fontFamilyMonospace: '"Rubik", Helvetica, Arial, monospace',
+  headings: { fontFamily: '"Rubik", Helvetica, Arial, sans-serif' }
 });
 
 function App() {

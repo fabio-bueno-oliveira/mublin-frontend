@@ -117,6 +117,7 @@ function Home () {
               </Grid>
             ) : (
               <Box mb={largeScreen ? 30 : 86}>
+                {!!totalProjects && 
                 <Card 
                   mb={19} 
                   padding={largeScreen ? "md" : 0} 
@@ -144,12 +145,13 @@ function Home () {
                     {largeScreen && 
                       <Link to={{ pathname: `/new` }}>
                         <Button size="sm" color="violet" leftSection={<IconPlus size={14} />}>
-                          Criar novo projeto
+                          Criar ou entrar em um projeto
                         </Button>
                       </Link>
                     }
                   </Flex>
                 </Card>
+                }
                 {totalProjects > 0 ? (
                   <ResponsiveMasonry
                     columnsCountBreakPoints={{350: 1, 750: 2, 900: 2}}
@@ -173,9 +175,25 @@ function Home () {
                     </Masonry>
                   </ResponsiveMasonry>
                 ) : (
-                  <Center mt={44}>
-                    <Image src={'https://ik.imagekit.io/mublin/misc/astronaut-musician-3.png?updatedAt=1731982735493'} w='240' style={{opacity:'0.3'}} />
-                  </Center>
+                  <>
+                    <Center>
+                      <Image src={'https://ik.imagekit.io/mublin/misc/astronaut-musician-3.png?updatedAt=1731982735493'} w='240' style={{opacity:'0.3'}} />
+                    </Center>
+                    {projects.totalProjects === 0 && 
+                      <>
+                        <Text size="sm" ta="center">
+                          Você não está cadastrado em nenhum projeto atualmente.
+                        </Text>
+                        <Center>
+                          <Link to={{ pathname: `/new` }}>
+                            <Text size="sm" ta="center" color="violet">
+                              Crie ou entre em algum projeto de música!
+                            </Text>
+                          </Link>
+                        </Center>
+                      </>
+                    }
+                  </>
                 )}
               </Box>
             )}

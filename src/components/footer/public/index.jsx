@@ -3,9 +3,10 @@ import { IconBrandInstagram } from '@tabler/icons-react';
 import classes from './FooterCentered.module.css';
 
 const links = [
-  { link: '#', label: 'Sobre' },
-  { link: '#', label: 'Contato' },
-  { link: '#', label: 'Trabalhe no Mublin' },
+  // { link: '#', label: 'Sobre' },
+  // { link: '#', label: 'Contato' },
+  // { link: '#', label: 'Trabalhe no Mublin' },
+  { link: 'mailto:contato@mublin.com', label: 'contato@mublin.com' },
 ];
 
 function Footer () {

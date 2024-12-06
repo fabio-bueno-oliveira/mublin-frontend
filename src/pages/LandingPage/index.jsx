@@ -1,19 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Header from '../../components/header/public'
 import Footer from '../../components/footer/public'
-import { useMantineColorScheme, Container, Flex, Text, Title, Button, Grid, Image } from '@mantine/core'
+import { useMantineColorScheme, Container, Center, Avatar, Flex, Box, Text, Title, Button, Grid, Image, rem } from '@mantine/core'
 import { 
   IconAutomaticGearbox,
   IconCalendarSmile,
   IconPlaylist,
   IconUserSearch,
   IconLayoutDashboard,
-  IconUsersGroup
+  IconUsersGroup,
+  IconRosetteDiscountCheckFilled,
+  IconShieldCheckFilled
 } from '@tabler/icons-react';
 import { IconArrowRight } from '@tabler/icons-react'
-import s from './HeroTitle.module.css'
+import Marquee from "react-fast-marquee";
 
 function LandingPage () {
 
@@ -24,118 +26,137 @@ function LandingPage () {
 
   const imageCdnUrl = 'https://ik.imagekit.io/mublin'
   const AstronautImage1 = imageCdnUrl + '/misc/astronaut-musician-1.png?updatedAt=1731768213783'
-  const AstronautImage2 = imageCdnUrl + '/misc/astronaut-musician-2.png?updatedAt=1731768213743'
 
-  useEffect(() => { 
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '1px' };
+
+  const [featuredUsers, setFeaturedUsers] = useState([]);
+
+  useEffect(() => {
     setColorScheme('light');
-  }, [])
+    fetch('https://mublin.herokuapp.com/home/featuredUsers', {
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(
+        (result) => {
+            setFeaturedUsers(result)
+        },
+        (error) => {
+            console.error(error)
+        }
+      )
+  }, []);
 
   return (
     <>
       {loggedIn &&
         <Navigate to="/home" />
       }
+      <Box bg="black" c="white" py="14">
+        <Text ta="center" size="15px" fw="200" c="dimmed">
+          🚀 40% off no lançamento: Mublin PRO por 3 meses
+        </Text>
+      </Box>
       <Header />
-      <div className={s.wrapper}>
-        <Container size={'lg'} className={s.inner}>
-          <Grid justify="space-between" align="flex-start">
-            <Grid.Col span={{ base: 12, md: 7, lg: 7 }}>
-              <h1 className={s.title}>
-                Gerencie{' '}
-                <Text component="span" c="violet" inherit>
-                  projetos de música
-                </Text>{' '}
-                com facilidade
-              </h1>
-              <Text className={s.description} fz="lg" lh="sm">
-                O Mublin é a plataforma onde músicos, produtores e profissionais da música podem gerenciar todos os seus projetos, além de se conectar com outras pessoas do mercado musical
-              </Text>
-              <Link to={{ pathname: '/signup' }}>
-                <Button
-                  size="lg"
-                  mt="lg"
-                  className={s.control}
-                  color="violet"
-                  rightSection={<IconArrowRight size={14}/>}
-                >
-                  Começar grátis
-                </Button>
-              </Link>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 5, lg: 5 }}>
-              <Image
-                h={280}
-                src={AstronautImage1}
-                fit={'contain'}
-              />
-            </Grid.Col>
-          </Grid>
-        </Container>
-      </div>
-      <div className={s.wrapperFeatured}>
-        <Container size={'lg'} className={s.innerSmall}>
-          <Title size="h1" mb={'lg'}>Organize suas gigs!</Title>
-          <Text className={s.description} fz="lg" lh="sm" mb={'sm'}>
-            O Mublin foi desenvolvido para a organização de projetos musicais, facilitando as necessidades de músicos e produtores.
-          </Text>
-          <Text className={s.description} fz="lg" lh="sm" mb={'xl'}>
-            Organize seus projetos em um único lugar e acompanha atualizações como anotações, cronogramas e oportunidades de gigs. Além disso, você pode acompanhar as datas de gravações, ensaios e apresentações.
-          </Text>
-          <Grid 
-            justify="space-between" 
-            align="center" 
-            columns={12}
-            fz="sm"
+        <Container size="sm" pt={45}>
+          <Title 
+            size="33px"
+            ta="center"
           >
-            <Grid.Col 
-              className={s.gridFeaturedItem} span="6"
-            >
-              <IconAutomaticGearbox /> Gerencie projetos
+            <span style={{fontWeight:'800'}}>Gerencie</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
+          </Title>
+          <Title 
+            size="22px"
+            ta="center" 
+            fw="300"
+          >
+            Aumente suas chances de tocar em gigs interessantes
+          </Title>
+          <Center>
+            <Link to={{ pathname: '/signup' }}>
+              <Button
+                size="md"
+                mt="lg"
+                color="violet"
+                rightSection={<IconArrowRight size={14}/>}
+              >
+                Comece grátis
+              </Button>
+            </Link>
+          </Center>
+          <Text size="lg" lh="sm" ta="center" mt={50} mb={56}>
+            O Mublin é a plataforma onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
+          </Text>
+        </Container>
+        <Marquee>
+          {featuredUsers?.map((user, key) =>
+            <Flex w="170px" h="110px" direction="column" key={key}>
+              <Center mb={5}>
+                <Avatar src={user.picture ? user.picture : undefined} size="lg" />
+              </Center>
+              <Flex gap={0} align="center" justify="center" mb={0}>
+                <Text size="13px" fw="500" ta="center">{user.name} {user.lastname}</Text>
+                {!!user.verified && 
+                  <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                }
+                {!!user.legend && 
+                  <IconShieldCheckFilled style={iconLegendStyle} />
+                }
+              </Flex>
+              <Text size="xs" ta="center">{user.role}</Text>
+              {user.city && 
+                <Text size="11px" ta="center" c="dimmed">{user.city}, {user.uf}</Text>
+              }
+            </Flex>
+          )}
+        </Marquee>
+        <Container size="sm"mt={50}>
+          <Grid mt={56}>
+            <Grid.Col span={4}>
+              <Flex align="center">
+                <IconCalendarSmile size="80" color="#252525" />
+                <Text c="#252525" size="16px">Compartilhe informações e datas</Text>
+              </Flex>
             </Grid.Col>
-            <Grid.Col 
-              className={s.gridFeaturedItem} span="6"
-            >
-              <IconCalendarSmile /> Compartilhe informações e datas
+            <Grid.Col span={4}>
+              <Flex align="center">
+                <IconAutomaticGearbox size="66" color="#252525" />
+                <Text c="#252525" size="16px">Gerencie projetos</Text>
+              </Flex>
             </Grid.Col>
-            <Grid.Col 
-              className={s.gridFeaturedItem} span="6"
-            >
-              <IconPlaylist /> Confira a playlist dos eventos
+            <Grid.Col span={4}>
+              <Flex align="center">
+                <IconPlaylist size="66" color="#252525" />
+                <Text c="#252525" size="16px">Confira a playlist dos eventos</Text>
+              </Flex>
             </Grid.Col>
-            <Grid.Col 
-              className={s.gridFeaturedItem} span="6"
-            >
-              <IconUserSearch /> Encontre músicos disponíveis
+            <Grid.Col span={4}>
+              <Flex align="center">
+                <IconUserSearch size="66" color="#252525" />
+                <Text c="#252525" size="16px">Encontre músicos disponíveis</Text>
+              </Flex>
             </Grid.Col>
-            <Grid.Col 
-              className={s.gridFeaturedItem} span="6"
-            >
-              <IconLayoutDashboard /> Cadastre seus equipamentos
+            <Grid.Col span={4}>
+              <Flex align="center">
+                <IconLayoutDashboard size="66" color="#252525" />
+                <Text c="#252525" size="16px">Cadastre seus equipamentos</Text>
+              </Flex>
             </Grid.Col>
-            <Grid.Col 
-              className={s.gridFeaturedItem} span="6"
-            >
-              <IconUsersGroup /> Encontre projetos em busca de músicos
+            <Grid.Col span={4}>
+              <Flex align="center">
+                <IconUsersGroup size="66" color="#252525" />
+                <Text c="#252525" size="16px">Encontre projetos em busca de músicos</Text>
+              </Flex>
             </Grid.Col>
           </Grid>
-        </Container>
-      </div>
-        <Container size={'lg'} className={s.innerSmall}>
-        <Flex
-          direction={{ base: 'column', sm: 'row' }}
-          gap={{ base: 'sm', sm: 'lg' }}
-          justify={{ sm: 'center' }}
-          align={'center'}
-        >
-          <Text className={s.description} fz="md" lh="sm" pt={'lg'}>
-            Com uma interface simples e visual, o Mublin também integra ferramentas de armazenamento em nuvem e sincronização automática, facilitando o acesso aos arquivos em qualquer dispositivo e promovendo uma colaboração eficiente entre os membros do projeto.
-          </Text>
-          <Image
-            h={'160'}
-            src={AstronautImage2}
-            fit={'contain'}
-          />
-        </Flex>
+          <Center>
+            <Image
+              h={280}
+              src={AstronautImage1}
+              fit={'contain'}
+            />
+          </Center>
         </Container>
       <Footer />
     </>
