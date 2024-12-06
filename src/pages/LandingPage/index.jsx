@@ -3,7 +3,8 @@ import { Link, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Header from '../../components/header/public'
 import Footer from '../../components/footer/public'
-import { useMantineColorScheme, Container, Center, Avatar, Flex, Box, Text, Title, Button, Grid, Image, rem } from '@mantine/core'
+import { useMantineColorScheme, Container, Center, Avatar, Flex, Box, Text, Title, Button, Grid, Image, rem, em } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { 
   IconAutomaticGearbox,
   IconCalendarSmile,
@@ -23,6 +24,7 @@ function LandingPage () {
 
   const loggedIn = useSelector(state => state.authentication.loggedIn)
   const { setColorScheme } = useMantineColorScheme()
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   const imageCdnUrl = 'https://ik.imagekit.io/mublin'
   const AstronautImage1 = imageCdnUrl + '/misc/astronaut-musician-1.png?updatedAt=1731768213783'
@@ -54,20 +56,20 @@ function LandingPage () {
         <Navigate to="/home" />
       }
       <Box bg="black" c="white" py="14">
-        <Text ta="center" size="15px" fw="200" c="dimmed">
+        <Text ta="center" size="14px" fw="200" c="dimmed">
           🚀 40% off no lançamento: Mublin PRO por 3 meses
         </Text>
       </Box>
       <Header />
         <Container size="sm" pt={45}>
           <Title 
-            size="33px"
+            size="32px"
             ta="center"
           >
             <span style={{fontWeight:'800'}}>Gerencie</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
           </Title>
           <Title 
-            size="22px"
+            size="21px"
             ta="center" 
             fw="300"
           >
@@ -85,7 +87,7 @@ function LandingPage () {
               </Button>
             </Link>
           </Center>
-          <Text size="lg" lh="sm" ta="center" mt={50} mb={56}>
+          <Text size="lg" lh="sm" ta="center" mt={47} mb={56}>
             O Mublin é a plataforma onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
           </Text>
         </Container>
@@ -116,37 +118,37 @@ function LandingPage () {
             <Grid.Col span={4}>
               <Flex align="center">
                 <IconCalendarSmile size="80" color="#252525" />
-                <Text c="#252525" size="16px">Compartilhe informações e datas</Text>
+                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Compartilhe informações e datas</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
                 <IconAutomaticGearbox size="66" color="#252525" />
-                <Text c="#252525" size="16px">Gerencie projetos</Text>
+                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Gerencie projetos</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
                 <IconPlaylist size="66" color="#252525" />
-                <Text c="#252525" size="16px">Confira a playlist dos eventos</Text>
+                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Confira a playlist dos eventos</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
                 <IconUserSearch size="66" color="#252525" />
-                <Text c="#252525" size="16px">Encontre músicos disponíveis</Text>
+                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre músicos disponíveis</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
                 <IconLayoutDashboard size="66" color="#252525" />
-                <Text c="#252525" size="16px">Cadastre seus equipamentos</Text>
+                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Cadastre seus equipamentos</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
                 <IconUsersGroup size="66" color="#252525" />
-                <Text c="#252525" size="16px">Encontre projetos em busca de músicos</Text>
+                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre projetos em busca de músicos</Text>
               </Flex>
             </Grid.Col>
           </Grid>
