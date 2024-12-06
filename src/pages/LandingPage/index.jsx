@@ -56,7 +56,7 @@ function LandingPage () {
         <Navigate to="/home" />
       }
       <Box bg="black" c="white" py="14">
-        <Text ta="center" size="14px" fw="200" c="dimmed">
+        <Text ta="center" size={isMobile ? "12px" : "15px"} fw="200" c="dimmed">
           🚀 40% off no lançamento: Mublin PRO por 3 meses
         </Text>
       </Box>
@@ -117,37 +117,37 @@ function LandingPage () {
           <Grid mt={56}>
             <Grid.Col span={4}>
               <Flex align="center">
-                <IconCalendarSmile size="80" color="#252525" />
+                <IconCalendarSmile size={isMobile ? 50 : 80} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Compartilhe informações e datas</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
-                <IconAutomaticGearbox size="66" color="#252525" />
+                <IconAutomaticGearbox size={isMobile ? 42 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Gerencie projetos</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
-                <IconPlaylist size="66" color="#252525" />
+                <IconPlaylist size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Confira a playlist dos eventos</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
-                <IconUserSearch size="66" color="#252525" />
+                <IconUserSearch size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre músicos disponíveis</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
-                <IconLayoutDashboard size="66" color="#252525" />
+                <IconLayoutDashboard size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Cadastre seus equipamentos</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={4}>
               <Flex align="center">
-                <IconUsersGroup size="66" color="#252525" />
+                <IconUsersGroup size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre projetos em busca de músicos</Text>
               </Flex>
             </Grid.Col>

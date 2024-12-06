@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { userActions } from '../../store/actions/authentication';
 import { userInfos } from '../../store/actions/user';
 import { useMantineColorScheme, Container, Center, Stack, Button, Text, Avatar, Badge, ActionIcon } from '@mantine/core';
-import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconChevronDown, IconHeartHandshake, IconPackages, IconTargetArrow, IconCalendarMonth,
-  IconChevronRight } from '@tabler/icons-react';
+import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera,  IconHeartHandshake, IconPackages, IconCalendarMonth,
+  IconChevronRight, IconLogout } from '@tabler/icons-react';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 
 function MenuMobile () {
@@ -12,18 +13,24 @@ function MenuMobile () {
 
   const dispatch = useDispatch();
 
+  const { colorScheme, setColorScheme,  } = useMantineColorScheme();
+
   useEffect(() => { 
     dispatch(userInfos.getInfo());
   }, []);
 
+  const logout = () => {
+    setColorScheme('light');
+    dispatch(userActions.logout());
+  }
+
   const userInfo = useSelector(state => state.user);
-  const { colorScheme, setColorScheme,  } = useMantineColorScheme();
 
   return (
     <>
       <Container
         size={'lg'}
-        mb={60}
+        mb={100}
         mt={30}
       >
         <Center>
@@ -75,6 +82,9 @@ function MenuMobile () {
           </Button>
           <Button variant='transparent' color='dark' size='compact-md' justify="space-between" leftSection={<IconEye />} rightSection={<IconChevronRight />}>
             Privacidade da conta
+          </Button>
+          <Button variant='transparent' color='dark' size='compact-md' justify="space-between" leftSection={<IconLogout />} rightSection={<IconChevronRight />} onClick={() => logout()}>
+            Sair
           </Button>
         </Stack>
       </Container>
