@@ -16,7 +16,9 @@ import {
   IconUserCircle, 
   IconHome,
   IconRocket,
+  IconMicrophone2,
   IconMusic,
+  IconPlus,
   IconLogout
 } from '@tabler/icons-react';
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
@@ -156,7 +158,7 @@ function Header (props) {
             <Button 
               size="sm" 
               variant='transparent'
-              color={currentPath === '/home' ? 'violet' : 'dark'}
+              color={currentPath === '/home' ? 'violet' : 'gray'}
               leftSection={<><IconHome size={14} /></>}
               p={'xs'}
               visibleFrom="md"
@@ -164,11 +166,23 @@ function Header (props) {
               Início
             </Button>
           </Link>
+          <Link to={{ pathname: '/new' }}>
+            <Button 
+              size="sm" 
+              variant='transparent'
+              color={currentPath === '/new' ? 'violet' : 'gray'}
+              leftSection={<><IconPlus size={14} /></>}
+              p={'xs'}
+              visibleFrom="md"
+            >
+              Novo
+            </Button>
+          </Link>
           <Link to={{ pathname: '/my-projects' }}>
             <Button
               size="sm"
               variant='transparent'
-              color={currentPath === '/my-projects' ? 'violet' : 'dark'}
+              color={currentPath === '/my-projects' ? 'violet' : 'gray'}
               leftSection={<><IconMusic size={14} /></>}
               p={'xs'}
               visibleFrom="md"
@@ -179,13 +193,14 @@ function Header (props) {
           <Link to={{ pathname: '/my-projects' }}>
             <Button 
               size="sm" 
-              variant='transparent'
-              color={currentPath === '/opportunities' ? 'violet' : 'dark'}
-              leftSection={<><IconRocket size={14} /></>}
+              variant='outline'
+              radius="xl"
+              color={currentPath === '/opportunities' ? 'violet' : 'gray'}
+              leftSection={<IconMicrophone2 size={14} />}
               p={'xs'}
               visibleFrom="md"
             >
-              Oportunidades
+              Quero tocar
             </Button>
           </Link>
           {largeScreen && 

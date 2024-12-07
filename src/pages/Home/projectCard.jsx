@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Group, Title, Text, Card, Badge, Menu, Avatar, ActionIcon, Flex, Tooltip, Divider, Anchor, Button } from '@mantine/core';
+import { Group, Box, Title, Text, Card, Badge, Image, Menu, Avatar, ActionIcon, Flex, Tooltip, Divider, Anchor, Button, Indicator } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconDotsVertical, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconMusic, IconSettings, IconUserOff, IconCircleFilled } from '@tabler/icons-react';
+import { IconDotsVertical, IconEye, IconUserCog , IconUsersGroup, IconUser, IconBulb, IconMusic, IconSettings, IconUserOff, IconCircleFilled, IconCalendarEvent, IconThumbDown, IconThumbUp, IconNotes, IconMicrophone2 } from '@tabler/icons-react';
 
 function ProjectCard (props) {
 
   const project = props?.project;
   const loading = props.loading;
   const activeMembers = props?.activeMembers;
+  const key = props.key;
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const user = useSelector(state => state.user);
@@ -21,8 +22,6 @@ function ProjectCard (props) {
   const currentYear = new Date().getFullYear();
   const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
 
-  const iconCircleStyles = { width: '7px', height: '7px', marginRight: '3px' };
-
   const yearText = (yearSum) => {
     return yearSum === 1 ? " ano" : " anos";
   }
@@ -31,6 +30,8 @@ function ProjectCard (props) {
     let subtraction = (yearBiggest - yearSmallest);
     return subtraction === 0 ? "(menos de 1 ano)" : "("+subtraction + yearText(subtraction)+")";
   }
+
+  const [isEventLoading, setEventIsLoading] = useState({key: null, response: null});
 
   return (
     <Card 
@@ -79,7 +80,7 @@ function ProjectCard (props) {
               >
                 <Flex gap={5} align='center'>
                   <Title 
-                    fw={largeScreen ? 700 : 700}
+                    fw={largeScreen ? 500 : 600}
                     lineClamp={1} 
                     size={largeScreen ? '1.05rem' : '1.05rem'}
                     mb={!project?.regionName ? 0 : 0}
@@ -118,7 +119,10 @@ function ProjectCard (props) {
               </Group>
             </div>
           </Group>
-          <Menu withArrow withinPortal position="bottom-end" shadow="sm">
+          <IconMusic 
+            style={{opacity:'0.1',marginRight:'7px',marginTop:'7px'}} 
+          />
+          {/* <Menu withArrow withinPortal position="bottom-end" shadow="sm">
             <Menu.Target>
               <ActionIcon variant="subtle" color="gray">
                 <IconDotsVertical style={{ width: '16px', height: '16px' }} />
@@ -142,7 +146,7 @@ function ProjectCard (props) {
                 Gerenciar participação
               </Menu.Item>
             </Menu.Dropdown>
-          </Menu>
+          </Menu> */}
         </Flex>
         <Flex align={"center"}>
           {/* <Avatar 
@@ -161,32 +165,36 @@ function ProjectCard (props) {
             wrap="wrap"
             rowGap={3}
           >
-            <Text size={largeScreen ? "sm" : "13px"} fw={500} lineClamp={1}> 
-              {project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
-            </Text>
-            <Text size="xs" mb={1}>
-              {project.workTitle} {!!project.admin && " · Administrador"}
-            </Text>
+            <Group gap={3}>
+              <Image 
+                h={18}
+                w={18} 
+                src={'https://ik.imagekit.io/mublin/tr:h-18,w-18,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}  
+              />
+              <Text size={largeScreen ? "13px" : "13px"} fw={400} lineClamp={1}> 
+                {project.yearLeftTheProject && "ex "}{project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
+              </Text>
+            </Group>
             {isActiveOnProject && 
               <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='green' />
-                <Text size='11px'>
-                  {`${project.joined_in} › atualmente`} {years(project.joined_in, currentYear)}
+                <Indicator inline processing color="green" size={6} ml={5} mr={7} />
+                <Text size='10px'>
+                  {`${project.joined_in} › Atualmente`} {years(project.joined_in, currentYear)}
                 </Text>
               </Flex>
             }
             {project.yearLeftTheProject && 
               <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='#733635' />
-                <Text size='11px'>
+                <Indicator inline color="#ad413f" size={6} ml={5} mr={7} />
+                <Text size='10px'>
                   deixei o projeto em {project.yearLeftTheProject} {years(project.yearFoundation, project.yearLeftTheProject)}
                 </Text>
               </Flex>
             }
             {(project.activityStatusId === 2 && project.yearEnd && !project.yearLeftTheProject) && 
               <Flex align='center'>
-                <IconCircleFilled style={iconCircleStyles} color='#733635' />
-                <Text size='11px'>
+                <Indicator inline color="gray" size={6} ml={5} mr={7} />
+                <Text size='10px'>
                   {project.joined_in} até o encerramento em {project.yearEnd} {years(project.joined_in, project.yearEnd)}
                 </Text>
               </Flex>
@@ -194,9 +202,90 @@ function ProjectCard (props) {
           </Flex>
         </Flex>
         <Divider 
+          mt={6}
+          label={<Group gap={1}><IconNotes size={14} /> Vínculo</Group>} 
+          labelPosition="left" 
+        />
+        <Text size="12px">
+          {project.workTitle} {!!project.admin && " · Administrador"}
+        </Text>
+        {!project.yearEnd && 
+          <>
+            <Divider 
+              mt={4}
+              label={<Group gap={1}><IconMicrophone2 size={14} /> Próximo evento</Group>} 
+              labelPosition="left" 
+            />
+            <Flex gap={2} align='center'>
+              {project.nextEventDateOpening && 
+                <IconCalendarEvent size={16} />
+              }
+              <div>
+                <Text size='10px'>
+                  {project.nextEventDateOpening ? project.nextEventDateOpening + ' às ' + project.nextEventHourOpening.substr(0,5) : null}
+                </Text>
+                <Text size='12px' fw={400}>
+                  {project.nextEventDateOpening ? 
+                    <>{project.nextEventTitle}</> 
+                  : 
+                    'Nenhum evento programado'
+                  }
+                </Text>
+              </div>
+            </Flex>
+            {(project.nextEventDateOpening && project.nextEventInvitationId) && 
+              <>
+                <Group gap={4} my={6}>
+                  <Image h={18} w={18} src={'https://ik.imagekit.io/mublin/tr:h-18,w-18,r-max,c-maintain_ratio/users/avatars/'+project.nextEventInvitationUserIdWhoInvited+'/'+project.nextEventInvitationPictureWhoInvited} title={project.nextEventInvitationUsernameWhoInvited} />
+                  {(user.id !== project.nextEventInvitationUserIdWhoInvited) ? 
+                    <Text size='10px'>
+                      {project.nextEventInvitationNameWhoInvited} te convidou em {project.nextEventInvitationDate.substr(0,11)}
+                    </Text>
+                  :
+                    <Text size='10px'>
+                      Você criou este evento em {project.nextEventInvitationDate.substr(0,11)}
+                    </Text>
+                  }
+                </Group>
+                <Button.Group>
+                  <Button 
+                    variant="default" 
+                    fullWidth 
+                    size="xs" 
+                    leftSection={<IconThumbUp size={14} />}
+                    color={project.nextEventInvitationResponse === 1 ? 'green' : null}
+                    onClick={project.nextEventInvitationResponse === 1 ? () => submitInvitationResponse(key,project.nextEventInvitationId,2,currentDate,'') : () => setModalAcceptEvent(key)}
+                    loading={isEventLoading.key === key && isEventLoading.response === 2 ? true : false}
+                  >
+                    Aceitar
+                  </Button>
+                  <Button 
+                    variant="default" 
+                    fullWidth 
+                    size="xs" 
+                    color={project.nextEventInvitationResponse === 0 ? 'red' : null} 
+                    onClick={project.nextEventInvitationResponse === 0 ? () => submitInvitationResponse(key,project.nextEventInvitationId,2,currentDate,'') : () => setModalDeclineEvent(key)} 
+                    loading={isEventLoading.key === key && isEventLoading.response === 2 ? true : false} 
+                    leftSection={<IconThumbDown size={14} />}
+                  >
+                    Recusar
+                  </Button>
+                  <Button 
+                    variant="default" 
+                    fullWidth 
+                    size="xs"
+                  >
+                    + detalhes
+                  </Button>
+                </Button.Group>
+              </>
+            }
+          </>
+        }
+        <Divider 
           mt={9}
           mb={5}
-          label={`Integrantes ativos (${activeMembers?.length})`} 
+          label={<Group gap={1}><IconUsersGroup size={14} /> Integrantes ativos ({activeMembers?.length})</Group>} 
           labelPosition="left" 
         />
         <Group gap={5}>
@@ -236,11 +325,21 @@ function ProjectCard (props) {
             </Avatar>
           }
         </Group>
+        <Button.Group mt={9}>
+          <Button size='xs' fw={500} fullWidth variant="light">
+            Painel do projeto
+          </Button>
+          <Button size='xs' fw={500} fullWidth variant="light">
+            Ver perfil
+          </Button>
+        </Button.Group>
       </Card.Section>
       <Card.Section>
-        <Flex gap={7} p={10}>
+        
+        {/* <Flex gap={7} p={10}>
           <Button 
             size='compact-xs' 
+            fw={500}
             fullWidth 
             variant='outline' 
             color='default'
@@ -249,10 +348,10 @@ function ProjectCard (props) {
           >
             Painel do projeto
           </Button>
-          <Button size='compact-xs' fullWidth variant='outline' color='default'>
+          <Button size='compact-xs' fw={500} fullWidth variant='outline' color='default'>
             Ver perfil
           </Button>
-        </Flex>
+        </Flex> */}
       </Card.Section>
     </Card>
   );

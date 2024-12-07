@@ -1,15 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Flex, Box, Title, Text, Button } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Box, Title, Text, Button } from '@mantine/core';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
-import { IconMusicPlus, IconBulb, IconSend, IconUserPlus } from '@tabler/icons-react';
+import { IconMusicPlus, IconBulb, IconSend, IconUserPlus, IconChevronRight, IconBox } from '@tabler/icons-react';
 
 function New () {
 
   document.title = 'Criar novo projeto | Mublin'
 
   let navigate = useNavigate();
+
+  const { colorScheme } = useMantineColorScheme();
 
   return (
     <>
@@ -21,8 +23,12 @@ function New () {
         <Flex mb={24} mt={18} direction="column" gap={18}>
           <Box>
             <Button
-              color="violet"
-              leftSection={<IconMusicPlus size={14} />}
+              variant='outline'
+              color={colorScheme === "light" ? 'violet' : 'violet'}
+              size='lg'
+              radius='xl'
+              leftSection={<IconMusicPlus size={19} />}
+              rightSection={<IconChevronRight size={12} />}
               fullWidth
               onClick={() => navigate('/new/project')}
             >
@@ -34,8 +40,12 @@ function New () {
           </Box>
           <Box>
             <Button
-              color="violet"
-              leftSection={<IconBulb size={14} />}
+              variant='outline'
+              color={colorScheme === "light" ? 'violet' : 'violet'}
+              size='lg'
+              radius='xl'
+              leftSection={<IconBulb size={19} />}
+              rightSection={<IconChevronRight size={12} />}
               fullWidth
             >
               Nova ideia de projeto
@@ -46,26 +56,50 @@ function New () {
           </Box>
           <Box>
             <Button
-              color="violet"
-              leftSection={<IconUserPlus size={14} />}
+              variant='outline'
+              color={colorScheme === "light" ? 'violet' : 'violet'}
+              size='lg'
+              radius='xl'
+              leftSection={<IconBox size={22} />}
+              rightSection={<IconChevronRight size={12} />}
               fullWidth
             >
-              Ingressar em projeto já cadastrado
+              Novo equipamento
             </Button>
             <Text ta="center" size="xs" c="dimmed" mt={5} px={20}>
-              Ingresse em projetos já cadastrados no Mublin 
+              Cadastre um projeto ainda em idealização para atrair interessados em participar
             </Text>
           </Box>
           <Box>
             <Button
-              color="violet"
-              leftSection={<IconSend size={14} />}
+              variant='outline'
+              color={colorScheme === "light" ? 'violet' : 'violet'}
+              size='lg'
+              radius='xl'
+              leftSection={<IconUserPlus size={19} />}
+              rightSection={<IconChevronRight size={12} />}
               fullWidth
             >
-              Convidar alguém para um projeto
+              Ingressar em um projeto
             </Button>
             <Text ta="center" size="xs" c="dimmed" mt={5} px={20}>
-              Envie um convite por e-mail para músicos que ainda não estão cadastrados no projeto
+              Ingresse em projetos cadastrados no Mublin 
+            </Text>
+          </Box>
+          <Box>
+            <Button
+              variant='outline'
+              color={colorScheme === "light" ? 'violet' : 'violet'}
+              size='lg'
+              radius='xl'
+              leftSection={<IconSend size={19} />}
+              rightSection={<IconChevronRight size={12} />}
+              fullWidth
+            >
+              Convidar para projeto
+            </Button>
+            <Text ta="center" size="xs" c="dimmed" mt={5} px={20}>
+              Convide por e-mail músicos que ainda não estão cadastrados no Mublin
             </Text>
           </Box>
         </Flex>

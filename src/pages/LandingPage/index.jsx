@@ -17,6 +17,7 @@ import {
 } from '@tabler/icons-react';
 import { IconArrowRight } from '@tabler/icons-react'
 import Marquee from "react-fast-marquee";
+import './styles.scss';
 
 function LandingPage () {
 
@@ -115,37 +116,37 @@ function LandingPage () {
         </Marquee>
         <Container size="sm"mt={50}>
           <Grid mt={56}>
-            <Grid.Col span={4}>
+            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">
                 <IconCalendarSmile size={isMobile ? 50 : 80} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Compartilhe informações e datas</Text>
               </Flex>
             </Grid.Col>
-            <Grid.Col span={4}>
+            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">
                 <IconAutomaticGearbox size={isMobile ? 42 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Gerencie projetos</Text>
               </Flex>
             </Grid.Col>
-            <Grid.Col span={4}>
+            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">
                 <IconPlaylist size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Confira a playlist dos eventos</Text>
               </Flex>
             </Grid.Col>
-            <Grid.Col span={4}>
+            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">
                 <IconUserSearch size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre músicos disponíveis</Text>
               </Flex>
             </Grid.Col>
-            <Grid.Col span={4}>
+            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">
                 <IconLayoutDashboard size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Cadastre seus equipamentos</Text>
               </Flex>
             </Grid.Col>
-            <Grid.Col span={4}>
+            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">
                 <IconUsersGroup size={isMobile ? 50 : 66} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre projetos em busca de músicos</Text>
@@ -156,7 +157,8 @@ function LandingPage () {
             <Image
               h={280}
               src={AstronautImage1}
-              fit={'contain'}
+              fit='contain'
+              className='featuredImage'
             />
           </Center>
         </Container>

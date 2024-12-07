@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-// import { eventsInfos } from '../../store/actions/events';
+import { eventsInfos } from '../../store/actions/events';
 import { userInfos } from '../../store/actions/user';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
@@ -31,6 +31,7 @@ function Home () {
   const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
   const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
+  const events = useSelector(state => state.events.list);
   const totalProjects = projects.totalProjects;
   const search = useSelector(state => state.search);
 
@@ -59,7 +60,7 @@ function Home () {
       <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 
-            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={12}>
+            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={8}>
               {projects.requesting || !user.success ? (
                 <>
                   <Skeleton height={56} circle />
@@ -67,7 +68,7 @@ function Home () {
                 </>
               ) : (
                 <Card 
-                  padding={10} 
+                  padding={12} 
                   radius={"md"} 
                   withBorder
                   className="mublinModule"
@@ -88,7 +89,7 @@ function Home () {
                       <Badge size='sm' variant='light' color="violet">PRO</Badge>
                     </Center>
                   }
-                  <Text ta="center" c="dimmed" fw="600" size="12px" mt={13}>
+                  <Text ta="center" c="dimmed" fw="500" size="12px" mt={13}>
                     {user.roles.map((role, key) => 
                       <span className="comma" key={key}>{role.description}</span>
                     )}
@@ -128,7 +129,7 @@ function Home () {
                 >
                   <Flex justify="space-between" align="center">
                     <div>
-                      <Text size="md" mb={projectsTerminated.length ? 3 : 0} fw={600}>
+                      <Text size="md" mb={projectsTerminated.length ? 3 : 0} fw={500}>
                         Você está cadastrado em {totalProjects} {totalProjects === 1 ? " projeto" : " projetos"}
                       </Text>
                       {!!projectsTerminated.length && 
@@ -201,7 +202,7 @@ function Home () {
           {largeScreen && 
             <Grid.Col span={3}>
               <Card shadow="sm" padding="md" radius="md" withBorder className="mublinModule">
-                <Text fw={700} size="md">Músicos em destaque</Text>
+                <Text fw={400} size="lg">Músicos em destaque</Text>
                 {search.requesting ? (
                   <Text size="13px" mt={7}>Carregando...</Text>
                 ) : (

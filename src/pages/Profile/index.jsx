@@ -406,8 +406,8 @@ function ProfilePage () {
                     <Group gap={12} mt={largeScreen ? 12 : 11} mb={largeScreen ? 10 : 9}>
                       <Text 
                         className='point' 
-                        size={largeScreen ? '16px' : '14px'} 
-                        fw='600'
+                        size={largeScreen ? '15px' : '14px'} 
+                        fw='500'
                         onClick={() => setModalFollowersOpen(true)}
                         style={{lineHeight: 'normal'}}
                       >
@@ -415,8 +415,8 @@ function ProfilePage () {
                       </Text>
                       <Text 
                         className='point' 
-                        size={largeScreen ? '16px' : '14px'} 
-                        fw='600'
+                        size={largeScreen ? '15px' : '14px'} 
+                        fw='500'
                         onClick={() => setModalFollowingOpen(true)}
                         style={{lineHeight: 'normal'}}
                       >
@@ -437,7 +437,7 @@ function ProfilePage () {
                       <Anchor href={profile.website} target="_blank" underline="hover">
                         <Flex gap={2} align="center" mt={8}>
                           <IconLink size={13} />
-                          <Text size={largeScreen ? "0.83em" : "0.82em"} fw={600}>
+                          <Text size={largeScreen ? "0.83em" : "0.82em"} fw={500}>
                             {profile.website}
                           </Text>
                         </Flex>
@@ -522,14 +522,14 @@ function ProfilePage () {
                           />
                           <Text 
                             fz={largeScreen ? "15px" : "14px"} 
-                            fw={700}
+                            fw={600}
                           >
                             {profile.availabilityTitle}
                           </Text>
                         </Flex>
                         {largeScreen && 
                           <Box>
-                            <Text size="0.85em" fw={600} mb={2}>
+                            <Text size="0.85em" fw={500} mb={2}>
                               Principais estilos musicais:
                             </Text>
                             {profile.genres[0].id ? (
@@ -549,7 +549,7 @@ function ProfilePage () {
                                 Nenhum estilo cadastrado
                               </Text>
                             )}
-                            <Text size="0.85em" fw={600} mb={2} mt={7}>
+                            <Text size="0.85em" fw={500} mb={2} mt={7}>
                               Tipos de projetos:
                             </Text>
                             <Group gap={4}>
@@ -566,7 +566,7 @@ function ProfilePage () {
                                 </Text>
                               )}
                             </Group>
-                            <Text size="0.85em" fw={600} mb={2} mt={7}>
+                            <Text size="0.85em" fw={500} mb={2} mt={7}>
                               Tipos de trabalho:
                             </Text>
                             {profile.availabilityItems[0].id ? (
@@ -659,7 +659,7 @@ function ProfilePage () {
             }
             <Paper 
               radius="md"
-              mt={16}
+              mt={largeScreen ? 21 : 0} 
               withBorder={largeScreen ? true : false}
               px={largeScreen ? 15 : 0} 
               pt={largeScreen ? 11 : 0}
@@ -669,7 +669,7 @@ function ProfilePage () {
               className="mublinModule"
             >
               <Group justify="flex-start" align="center" gap={8} mb={18}>
-                <Title order={4} fw={700}>Pontos Fortes</Title>
+                <Title order={4} fw={500}>Pontos Fortes</Title>
                 {(profile.id !== loggedUser.id && !profile.requesting) && 
                   <Button 
                     size="compact-xs" 
@@ -784,7 +784,7 @@ function ProfilePage () {
                 className="mublinModule"
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
               >
-                <Title order={4} fw={700} mb={8}>Equipamento</Title>
+                <Title order={4} fw={500} mb={8}>Equipamento</Title>
                 {profile.requesting ? ( 
                   <Text size='sm'>Carregando...</Text>
                 ) : (
@@ -885,7 +885,7 @@ function ProfilePage () {
               >
                 <ScrollArea h={422} offsetScrollbars>
                   <Group justify="flex-start" align="center" mb={18}>
-                    <Title order={4} fw={700}>Projetos ({profile?.projects?.length})</Title>
+                    <Title order={4} fw={500}>Projetos ({profile?.projects?.length})</Title>
                   </Group>
                   {profile.requesting ? ( 
                       <Text size='sm'>Carregando...</Text>
