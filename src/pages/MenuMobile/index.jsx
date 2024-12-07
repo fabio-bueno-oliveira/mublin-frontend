@@ -109,7 +109,7 @@ function MenuMobile () {
           gap='md'
           mt={30}
         >
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconUser style={{width:17,height:17}} />} rightSection={<IconChevronRight/>}  onClick={() => navigate("/start/intro/")} fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconUser style={{width:17,height:17}} />} rightSection={<IconChevronRight/>}  onClick={() => navigate("/"+user.username)} fw="500">
             Ir para meu perfil
           </Button>
           <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconEdit style={{width:17,height:17}} />} rightSection={<IconChevronRight/>} component="a" href="/settings" fw="500">
