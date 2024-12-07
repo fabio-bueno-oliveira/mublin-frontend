@@ -122,7 +122,7 @@ function Header (props) {
                 <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 28} />
               </Flex>
             </Link>
-            {props.pageType === 'profile' &&
+            {(props.pageType === 'profile' && props.profileId) &&
               <>
                 <Divider size="xs" orientation="vertical" />
                 <Text mr={34} style={{lineHeight:'normal'}} pt={largeScreen ? 0 : 5}>

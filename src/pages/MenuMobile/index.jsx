@@ -4,7 +4,7 @@ import { userActions } from '../../store/actions/authentication';
 import { userInfos } from '../../store/actions/user';
 import { useMantineColorScheme, Container, Center, Stack, Button, Text, Avatar, Badge, ActionIcon } from '@mantine/core';
 import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera,  IconHeartHandshake, IconPackages, IconCalendarMonth,
-  IconChevronRight, IconLogout } from '@tabler/icons-react';
+  IconChevronRight, IconLogout, IconBrightnessUp, IconMoon } from '@tabler/icons-react';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 
 function MenuMobile () {
@@ -18,6 +18,11 @@ function MenuMobile () {
   useEffect(() => { 
     dispatch(userInfos.getInfo());
   }, []);
+
+  const setNewColorTheme = (option) => {
+    setColorScheme(option);
+    setMobileMenuOpen(false);
+  }
 
   const logout = () => {
     setColorScheme('light');
@@ -51,10 +56,36 @@ function MenuMobile () {
         </Text>
         <Center>
           {userInfo.plan === "Pro" ? (
-            <Badge color='teal' size='sm'>conta pro</Badge>
+            <Badge color='violet' size='sm'>conta pro</Badge>
           ) : (
             <Badge color='gray' size='sm'>conta grátis</Badge>
           )}
+        </Center>
+        <Center mt={10}>
+          {colorScheme === 'dark' && 
+            <Button
+              size="xs"
+              variant="outline"
+              radius="xl"
+              color='violet'
+              leftSection={<IconBrightnessUp size="1.5rem" stroke={1.5} />}
+              onClick={() => setNewColorTheme('light')}
+            >
+              Mudar para o tema claro
+            </Button>
+          }
+          {colorScheme === 'light' && 
+            <Button
+              size="xs"
+              variant="outline"
+              radius="xl"
+              color='violet'
+              leftSection={<IconMoon size="1.5rem" stroke={1.5} />}
+              onClick={() => setNewColorTheme('dark')}
+            >
+              Mudar para o tema escuro
+            </Button>
+          }
         </Center>
         <Stack
           h={300}

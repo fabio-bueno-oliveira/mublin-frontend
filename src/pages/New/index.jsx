@@ -17,9 +17,6 @@ function New () {
     <>
       <Header />
       <Container size={'xs'} mt={32}>
-        <Title order={2} ta="center">
-          Criar novo
-        </Title>
         <Flex mb={24} mt={18} direction="column" gap={18}>
           <Box>
             <Button
