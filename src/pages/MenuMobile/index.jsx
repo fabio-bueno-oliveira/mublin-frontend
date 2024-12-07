@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
 import { userInfos } from '../../store/actions/user';
@@ -30,6 +31,8 @@ function MenuMobile () {
   }
 
   const user = useSelector(state => state.user);
+
+  let navigate = useNavigate();
 
   return (
     <>
@@ -106,31 +109,31 @@ function MenuMobile () {
           gap='md'
           mt={30}
         >
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconUser style={{width:17,height:17}} />} rightSection={<IconChevronRight/>} component="a" href="/settings" fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconUser style={{width:17,height:17}} />} rightSection={<IconChevronRight/>}  onClick={() => navigate("/start/intro/")} fw="500">
             Ir para meu perfil
           </Button>
           <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconEdit style={{width:17,height:17}} />} rightSection={<IconChevronRight/>} component="a" href="/settings" fw="500">
             Editar meus dados
           </Button>
-          <Button variant='transparent' color='dark' size='compact-sm' justify="space-between" leftSection={<IconAdjustmentsHorizontal style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconAdjustmentsHorizontal style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
             Preferências musicais
           </Button>
-          <Button variant='transparent' color='dark' size='compact-sm' justify="space-between" leftSection={<IconCalendarMonth style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconCalendarMonth style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
             Disponibilidade para gigs
           </Button>
-          <Button variant='transparent' color='dark' size='compact-sm' justify="space-between" leftSection={<IconHeartHandshake style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconHeartHandshake style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
             Parceiros e Endorsements
           </Button>
-          <Button variant='transparent' color='dark' size='compact-sm' justify="space-between" leftSection={<IconPackages style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconPackages style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
             Meus equipamentos
           </Button>
-          <Button variant='transparent' color='dark' size='compact-sm' justify="space-between" leftSection={<IconLock style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconLock style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
             Senha
           </Button>
-          <Button variant='transparent' color='dark' size='compact-sm' justify="space-between" leftSection={<IconEye style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconEye style={{width:17,height:17}} />} rightSection={<IconChevronRight />} fw="500">
             Privacidade da conta
           </Button>
-          <Button variant='transparent' color='dark' size='compact-sm' justify="space-between" leftSection={<IconLogout style={{width:17,height:17}} />} rightSection={<IconChevronRight />} onClick={() => logout()}>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify="space-between" leftSection={<IconLogout style={{width:17,height:17}} />} rightSection={<IconChevronRight />} onClick={() => logout()}>
             Sair
           </Button>
         </Stack>

@@ -278,7 +278,6 @@ function New () {
         <form 
           onSubmit={form.onSubmit(handleSubmitNewProject)}
         >
-          <Divider label="Informações básicas do projeto de música" labelPosition="center" />
           <TextInput
             withAsterisk
             label="Nome do projeto"

@@ -1,0 +1,53 @@
+// Mantine Custom Styles
+
+:root[data-mantine-color-scheme='dark'] {
+  body {
+    background-color: #0d141a;
+
+    .mublinLogo {
+      h1,h2,h3 {
+        color: white;
+      }
+    }
+  }
+  --mantine-color-anchor: #c9c9c9;
+}
+
+:root[data-mantine-color-scheme='light'] {
+  body {
+    background-color:rgb(247, 247, 248);
+
+    .mublinLogo {
+      h1,h2,h3 {
+        color: black;
+      }
+    }
+  }
+  --mantine-color-anchor: #222222;
+}
+
+:root[data-mantine-color-scheme='dark'] {
+  .mantine-TextInput-input,.mantine-Input-input,.mantine-NativeSelect-input {
+    background-color: transparent;
+  }
+}
+
+:root[data-mantine-color-scheme='dark'] {
+  body {
+    .mantine-Card-root.mublinModule {
+      background-color: #161b21;
+      border: none;
+      box-shadow: 0 1px 2px 0 rgba(27, 29, 52, 0.05);
+    }
+    .mantine-Paper-root.mublinModule {
+      background-color: #161b21;
+      border: none;
+      box-shadow: 0 1px 2px 0 rgba(27, 29, 52, 0.05);
+    }
+    .mantine-Divider-label {
+      &::after {
+        border-top-color: #222222;
+      }
+    }
+  }
+}

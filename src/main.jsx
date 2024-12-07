@@ -5,6 +5,7 @@ import { Store } from './store'
 import {IKContext} from 'imagekitio-react'
 import App from './App.jsx'
 import './global/styles.scss'
+import './global/custom.scss'
 
 const loggedUser = JSON.parse(localStorage.getItem('user'))
 
