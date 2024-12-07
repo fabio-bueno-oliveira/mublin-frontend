@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
-import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, NavLink, Menu, Group, Button, LoadingOverlay, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider, Tabs, em } from '@mantine/core';
-import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconChevronDown, IconHeartHandshake, IconPackages, IconTargetArrow } from '@tabler/icons-react';
+import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, NavLink, Group, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider, em } from '@mantine/core';
+import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconHeartHandshake, IconPackages, IconTargetArrow } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
@@ -17,7 +17,6 @@ function SettingsPage () {
 
   const loggedUser = JSON.parse(localStorage.getItem('user'));
   const isLargeScreen = useMediaQuery('(min-width: 60em)');
-  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
@@ -132,49 +131,6 @@ function SettingsPage () {
     <>
       <Header />
       <Container size={'sm'} mb={100}>
-        {isMobile && 
-          <Group>
-            <Tabs variant="outline" defaultValue="myAccount">
-              <Tabs.List>
-                <Tabs.Tab value="myAccount">
-                  Minha conta
-                </Tabs.Tab>
-                <Tabs.Tab value="myPicture">
-                  Foto de perfil
-                </Tabs.Tab>
-                <Tabs.Tab value="more">
-                  <Menu shadow="md" position="bottom-end">
-                    <Menu.Target>
-                      <Anchor size='sm'>
-                        <Group gap={6}>Mais <IconChevronDown size={16} /></Group>
-                      </Anchor>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                      <Menu.Item>
-                        Preferências
-                      </Menu.Item>
-                      <Menu.Item>
-                        Disponibilidade
-                      </Menu.Item>
-                      <Menu.Item>
-                        Parceiros e Endorsements
-                      </Menu.Item>
-                      <Menu.Item>
-                        Meus equipamentos
-                      </Menu.Item>
-                      <Menu.Item>
-                        Senha
-                      </Menu.Item>
-                      <Menu.Item>
-                        Privacidade
-                      </Menu.Item>
-                    </Menu.Dropdown>
-                  </Menu>
-                </Tabs.Tab>
-              </Tabs.List>
-            </Tabs>
-          </Group>
-        }
         <Grid mt={isLargeScreen ? 30 : 0}>
           {isLargeScreen && 
             <Grid.Col span={5} p={24}>
@@ -229,14 +185,9 @@ function SettingsPage () {
               />
             </Grid.Col>
           }
-          <Grid.Col span={{ base: 12, md: 12, lg: 7 }} pl={isLargeScreen ? 30 : 0}>
+          <Grid.Col span={{ base: 12, md: 12, lg: 7 }} pl={isLargeScreen ? 26 : 0}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos="relative" p={10}>
-                {/* <LoadingOverlay 
-                  visible={user.requesting} 
-                  zIndex={1000} 
-                  overlayProps={{ radius: "sm", blur: 2 }} 
-                /> */}
                 {success && 
                   <Alert color="green">Dados atualizados com sucesso</Alert>
                 }
@@ -244,7 +195,6 @@ function SettingsPage () {
                   <Alert color="red">Erro ao atualizar os dados. Tente novamente em instantes</Alert>
                 }
                 <Checkbox
-                  mt="md"
                   color="violet"
                   label="Tornar meu perfil público"
                   description="Exibir meu perfil nas buscas internas e nos mecanismos"
@@ -255,6 +205,7 @@ function SettingsPage () {
                 <Grid>
                   <Grid.Col span={6}>
                     <TextInput
+                      size={isLargeScreen ? "sm" : "md"}
                       label="Nome"
                       key={form.key('name')}
                       {...form.getInputProps('name')}
@@ -262,6 +213,7 @@ function SettingsPage () {
                   </Grid.Col>
                   <Grid.Col span={6}>
                     <TextInput
+                      size={isLargeScreen ? "sm" : "md"}
                       label="Sobrenome"
                       key={form.key('lastname')}
                       {...form.getInputProps('lastname')}
@@ -269,6 +221,7 @@ function SettingsPage () {
                   </Grid.Col>
                 </Grid>
                 <TextInput
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   label="Username"
                   description="O username não pode ser alterado no momento"
@@ -276,6 +229,7 @@ function SettingsPage () {
                   disabled
                 />
                 <TextInput
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   type="email"
                   label="Email"
@@ -283,6 +237,7 @@ function SettingsPage () {
                   {...form.getInputProps('email')}
                 />
                 <TextInput
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   type="tel"
                   label="Telefone Celular"
@@ -290,14 +245,15 @@ function SettingsPage () {
                   key={form.key('phone')}
                   {...form.getInputProps('phone')}
                 />
-                <Checkbox
-                  mt="md"
+                {/* <Checkbox
+                  size={isLargeScreen ? "sm" : "md"}
                   color="violet"
                   label="Exibir telefone no meu perfil"
                   key={form.key('phoneIsPublic')}
                   {...form.getInputProps('phoneIsPublic', { type: 'checkbox' })}
-                />
+                /> */}
                 <TextInput
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   type="url"
                   label="Website"
@@ -305,12 +261,14 @@ function SettingsPage () {
                   {...form.getInputProps('website')}
                 />
                 <TextInput
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   label="Usuário no Instagram"
                   key={form.key('instagram')}
                   {...form.getInputProps('instagram')}
                 />
                 <NativeSelect
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   label="Gênero"
                   key={form.key('gender')}
@@ -322,6 +280,7 @@ function SettingsPage () {
                   <option value="n">Não informar</option>
                 </NativeSelect>
                 <NativeSelect
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   label="País"
                   key={form.key('country')}
@@ -331,6 +290,7 @@ function SettingsPage () {
                   <option value="27">Brasil</option>
                 </NativeSelect>
                 <NativeSelect
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   label="Estado"
                   key={form.key('region')}
@@ -373,7 +333,7 @@ function SettingsPage () {
                   <option value="420">Tocantins</option>
                 </NativeSelect>
                 {form?.getValues()?.cityName ? ( 
-                  <Input.Wrapper label="Cidade" mt="xs">
+                  <Input.Wrapper label="Cidade" mt="xs" size={isLargeScreen ? "sm" : "md"}>
                     <Input 
                       component="button"
                       pointer
@@ -383,7 +343,7 @@ function SettingsPage () {
                     </Input>
                   </Input.Wrapper>
                 ) : (
-                  <Input.Wrapper label="Cidade" mt="xs">
+                  <Input.Wrapper label="Cidade" mt="xs" size={isLargeScreen ? "sm" : "md"}>
                     <Input 
                       component="button"
                       pointer
@@ -396,6 +356,7 @@ function SettingsPage () {
                   </Input.Wrapper>
                 )}
                 <Textarea
+                  size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
                   label="Bio"
                   rows="4"

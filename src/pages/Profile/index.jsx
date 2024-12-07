@@ -308,7 +308,7 @@ function ProfilePage () {
                       mr={4}
                     />
                     <Flex direction="column">
-                      <Box w={largeScreen ? 400 : 200}>
+                      <Box w={largeScreen ? 400 : 295}>
                         <Text fw="500" size={largeScreen ? "14px" : "12px"} >
                           {profile.name} {profile.lastname}
                         </Text>
