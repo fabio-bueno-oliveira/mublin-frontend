@@ -45,7 +45,7 @@ const initialState = {
   ],
   projects: [
     {
-      confirme: '',
+      confirmed: '',
       joined_in: '',
       left_in: '',
       show_on_profile: '',
@@ -55,6 +55,7 @@ const initialState = {
       name: '',
       username: '',
       picture: '',
+      endYear: '',
       featured: '',
       type: '',
       workTitle: '',
@@ -64,28 +65,36 @@ const initialState = {
       role3: ''
     }
   ],
-  followers: [
-    {
-      id: '',
-      followerId: '',
-      followedId: '',
-      name: '',
-      lastname: '',
-      username: '',
-      picture: ''
-    }
-  ],
-  following: [
-    {
-      id: '',
-      followerId: '',
-      followedId: '',
-      name: '',
-      lastname: '',
-      username: '',
-      picture: ''
-    }
-  ],
+  followers: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        followerId: '',
+        followedId: '',
+        name: '',
+        lastname: '',
+        username: '',
+        picture: ''
+      }
+    ]
+  },
+  following: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        followerId: '',
+        followedId: '',
+        name: '',
+        lastname: '',
+        username: '',
+        picture: ''
+      }
+    ]
+  },
   recentActivity: [
     {
       id: '',

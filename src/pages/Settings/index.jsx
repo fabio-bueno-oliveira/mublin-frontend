@@ -189,7 +189,9 @@ function SettingsPage () {
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos="relative" p={10}>
                 {success && 
-                  <Alert color="green">Dados atualizados com sucesso</Alert>
+                  <Alert color="green" mb={8}>
+                    Dados atualizados com sucesso
+                  </Alert>
                 }
                 {error && 
                   <Alert color="red">Erro ao atualizar os dados. Tente novamente em instantes</Alert>
@@ -207,6 +209,7 @@ function SettingsPage () {
                     <TextInput
                       size={isLargeScreen ? "sm" : "md"}
                       label="Nome"
+                      disabled={user.requesting}
                       key={form.key('name')}
                       {...form.getInputProps('name')}
                     />
@@ -215,6 +218,7 @@ function SettingsPage () {
                     <TextInput
                       size={isLargeScreen ? "sm" : "md"}
                       label="Sobrenome"
+                      disabled={user.requesting}
                       key={form.key('lastname')}
                       {...form.getInputProps('lastname')}
                     />
@@ -333,9 +337,10 @@ function SettingsPage () {
                   <option value="420">Tocantins</option>
                 </NativeSelect>
                 {form?.getValues()?.cityName ? ( 
-                  <Input.Wrapper label="Cidade" mt="xs" size={isLargeScreen ? "sm" : "md"}>
+                  <Input.Wrapper label="Cidade" mt="xs">
                     <Input 
                       component="button"
+                      size={isLargeScreen ? "sm" : "md"}
                       pointer
                       onClick={() => setModalCityOpen(true)}
                     >
@@ -343,9 +348,10 @@ function SettingsPage () {
                     </Input>
                   </Input.Wrapper>
                 ) : (
-                  <Input.Wrapper label="Cidade" mt="xs" size={isLargeScreen ? "sm" : "md"}>
+                  <Input.Wrapper label="Cidade" mt="xs">
                     <Input 
                       component="button"
+                      size={isLargeScreen ? "sm" : "md"}
                       pointer
                       rightSection={form?.getValues()?.region ? <IconSearch size={16} /> : undefined}
                       onClick={() => setModalCityOpen(true)}
@@ -364,12 +370,13 @@ function SettingsPage () {
                   key={form.key('bio')}
                   {...form.getInputProps('bio')}
                 />
-                <Group justify="end" mt="xl">
+                <Group justify="end" mt="lg">
                   <Button
                     type="submit"
                     color="violet"
                     size="md"
                     loading={isLoading}
+                    loaderProps={{ type: 'dots' }}
                   >
                     Enviar
                   </Button>

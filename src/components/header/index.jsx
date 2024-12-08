@@ -125,7 +125,7 @@ function Header (props) {
             {(props.pageType === 'profile' && props.profileId) &&
               <>
                 <Divider size="xs" orientation="vertical" />
-                <Text mr={34} style={{lineHeight:'normal'}} pt={largeScreen ? 0 : 5}>
+                <Text mr={28} style={{lineHeight:'normal'}} pt={largeScreen ? 0 : 5}>
                   {props.username}
                 </Text>
               </>

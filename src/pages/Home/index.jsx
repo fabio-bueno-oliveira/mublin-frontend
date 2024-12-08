@@ -160,7 +160,7 @@ function Home () {
                     <Masonry gutter="10px">
                       {projectsToShow.map((p, key) => (
                         <ProjectCard 
-                          key={key}
+                          keyIndex={key}
                           loading={projects.requesting}
                           project={p}
                           activeMembers={

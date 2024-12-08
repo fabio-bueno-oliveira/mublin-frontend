@@ -10,7 +10,7 @@ function ProjectCard (props) {
   const project = props?.project;
   const loading = props.loading;
   const activeMembers = props?.activeMembers;
-  const key = props.key;
+  const keyIndex = props.key;
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const user = useSelector(state => state.user);

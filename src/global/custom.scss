@@ -29,6 +29,10 @@
 :root[data-mantine-color-scheme='dark'] {
   .mantine-TextInput-input,.mantine-Input-input,.mantine-NativeSelect-input {
     background-color: transparent;
+
+    option {
+      background-color: #0d141a;
+    }
   }
 }
 
@@ -48,6 +52,9 @@
       &::after {
         border-top-color: #222222;
       }
+    }
+    .mantine-Accordion-control:where(:not(:disabled, [data-disabled])):hover {
+      background-color: transparent;
     }
   }
 }
