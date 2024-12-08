@@ -4,8 +4,11 @@ import { useLocation  } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
 import {
+  useMantineColorScheme,
   Center,
+  Flex,
   Alert,
+  Image,
   TextInput,
   PasswordInput,
   Checkbox,
@@ -17,13 +20,17 @@ import {
   Group,
   Button
 } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
 import Header from '../../components/header/public';
 import { IconCheck, IconX } from '@tabler/icons-react';
+import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
+import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
+import s from '../../components/header/public/header.module.css';
 
 function LoginPage () {
 
-  document.title = 'Mublin';
+  document.title = 'Login | Mublin';
 
   const search = useLocation().search;
   const urlInfo = new URLSearchParams(search).get("info");
@@ -42,8 +49,10 @@ function LoginPage () {
     },
   });
 
+  const { colorScheme } = useMantineColorScheme();
+  const largeScreen = useMediaQuery('(min-width: 60em)');
+
   const loggingIn = useSelector(state => state.authentication.loggingIn);
-  const loggedIn = useSelector(state => state.authentication.loggedIn);
   const error = useSelector(state => state.authentication.error);
 
   const handleSubmit = (values) => {
@@ -52,8 +61,17 @@ function LoginPage () {
 
   return (
       <>
-      <Header page={'login'} />
-      <Container size={420} my={40}>
+      <Center mt={80} mb={34}>
+        <Link to={{ pathname: '/' }} className={s.mublinLogo}>
+          <Flex gap={3} align='center'>
+            <Image 
+              src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} 
+              h={largeScreen ? 42 : 40} 
+            />
+          </Flex>
+        </Link>
+      </Center>
+      <Container size={420} mb={40}>
         {urlInfo === "firstAccess" &&
           <Alert 
             variant="light" 
@@ -72,17 +90,6 @@ function LoginPage () {
             title="Login inválido"
           />
         }
-        <Title ta="center" order={1}>
-          Login
-        </Title>
-        <Text c="dimmed" size="md" ta="center" mt={5} mb={7}>
-          Ainda não tem cadastro?{' '}
-          <Link to={{ pathname: '/signup' }}>
-            <Anchor size="md" component="button">
-              Criar conta
-            </Anchor>
-          </Link>
-        </Text>
         <Space h="lg" />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput 
@@ -116,9 +123,17 @@ function LoginPage () {
             color='violet'
             mt='xl'
           >
-            Entrar
+            Login
           </Button>
         </form>
+        <Text c="dimmed" size="sm" ta="center" mt={15} mb={7}>
+          Ainda não possui cadastro?{' '}
+          <Link to={{ pathname: '/signup' }}>
+            <Anchor size="md" component="button">
+              Crie sua conta grátis
+            </Anchor>
+          </Link>
+        </Text>
       </Container>
     </>
     );

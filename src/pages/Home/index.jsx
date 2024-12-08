@@ -81,7 +81,7 @@ function Home () {
                       />
                     </Link>
                   </Center>
-                  <Title order={5} mb={1} mt={10} ta="center">
+                  <Title fw={500} order={5} mb={1} mt={10} ta="center">
                     Olá, {user?.name}
                   </Title>
                   {user.plan === 'Pro' && 
@@ -89,7 +89,7 @@ function Home () {
                       <Badge size='sm' variant='light' color="violet">PRO</Badge>
                     </Center>
                   }
-                  <Text ta="center" c="dimmed" fw="500" size="12px" mt={13}>
+                  <Text ta="center" c="dimmed" fw="400" size="13px" mt={13}>
                     {user.roles.map((role, key) => 
                       <span className="comma" key={key}>{role.description}</span>
                     )}
@@ -201,7 +201,7 @@ function Home () {
           </Grid.Col>
           {largeScreen && 
             <Grid.Col span={3}>
-              <Card shadow="sm" padding="md" radius="md" withBorder className="mublinModule">
+              <Card shadow="sm" px="md" pt="sm" pb="lg" radius="md" withBorder className="mublinModule">
                 <Text fw={400} size="lg">Músicos em destaque</Text>
                 {search.requesting ? (
                   <Text size="13px" mt={7}>Carregando...</Text>
@@ -223,8 +223,8 @@ function Home () {
                   ))
                 )}
               </Card>
-              <Card shadow="sm" padding="md" radius="md" withBorder mt={10} className="mublinModule">
-              <Text fw={700} size="md">Novos usuários</Text>
+              <Card shadow="sm" px="md" pt="sm" pb="lg" radius="md" withBorder mt={10} className="mublinModule">
+                <Text fw={400} size="lg">Novos usuários</Text>
                 {search.requesting ? (
                   <Text size="13px" mt={7}>Carregando...</Text>
                 ) : (

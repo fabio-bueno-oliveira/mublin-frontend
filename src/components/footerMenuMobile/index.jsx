@@ -42,7 +42,7 @@ const FooterMenuMobile = () => {
           <div className={currentPath === '/home' ? 'active' : undefined} onClick={() => navigate("/home")}>
             <IconHome />
           </div>
-          <div className={(currentPath === '/my-projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/my-projects")}>
+          <div className={(currentPath === '/projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/projects")}>
             <IconMusic />
           </div>
           <div className={currentPath === '/new' ? 'active plus' : 'plus'} onClick={() => navigate("/new")}>

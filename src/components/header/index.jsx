@@ -178,11 +178,11 @@ function Header (props) {
               Novo
             </Button>
           </Link>
-          <Link to={{ pathname: '/my-projects' }}>
+          <Link to={{ pathname: '/projects' }}>
             <Button
               size="sm"
               variant='transparent'
-              color={currentPath === '/my-projects' ? 'violet' : 'gray'}
+              color={currentPath === '/projects' ? 'violet' : 'gray'}
               leftSection={<><IconMusic size={14} /></>}
               p={'xs'}
               visibleFrom="md"
@@ -190,7 +190,7 @@ function Header (props) {
               Meus Projetos
             </Button>
           </Link>
-          <Link to={{ pathname: '/my-projects' }}>
+          <Link to={{ pathname: '/projects' }}>
             <Button 
               size="sm" 
               variant='outline'

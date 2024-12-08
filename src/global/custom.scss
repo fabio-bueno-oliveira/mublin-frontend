@@ -56,5 +56,11 @@
     .mantine-Accordion-control:where(:not(:disabled, [data-disabled])):hover {
       background-color: transparent;
     }
+    .mantine-Table-thead:where([data-sticky]) {
+      background-color: #161b21;
+    }
+    .mantine-NavLink-root:hover {
+      background-color: #10141a;
+    }
   }
 }

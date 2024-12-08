@@ -2,6 +2,7 @@ import { searchTypes } from '../types/search';
 import { searchService } from '../../api/search';
 
 export const searchInfos = {
+  getUserLastSearches: getUserLastSearches,
   getSearchUsersResults: getSearchUsersResults,
   getSearchProjectsResults: getSearchProjectsResults,
   getSearchResults: getSearchResults,
@@ -10,6 +11,22 @@ export const searchInfos = {
   getSuggestedFeaturedUsers: getSuggestedFeaturedUsers,
   getSuggestedNewUsers: getSuggestedNewUsers,
 };
+
+function getUserLastSearches(query) {
+  return dispatch => {
+    dispatch(request(query));
+
+    searchService.getUserLastSearches(query)
+      .then(
+        results => dispatch(success(results)),
+        error => dispatch(failure(query, error.toString()))
+      );
+    };
+
+  function request(query) { return { type: searchTypes.GET_USERLASTSEARCHES_REQUEST, query } }
+  function success(results) { return { type: searchTypes.GET_USERLASTSEARCHES_SUCCESS, results } }
+  function failure(error) { return { type: searchTypes.GET_USERLASTSEARCHES_FAILURE, error } }
+}
 
 function getSearchUsersResults(query) {
   return dispatch => {

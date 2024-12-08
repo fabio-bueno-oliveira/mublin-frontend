@@ -344,7 +344,7 @@ function ProjectCard (props) {
             variant='outline' 
             color='default'
             component="a"
-            href={`/my-projects?p=${project.username}`}
+            href={`/projects?p=${project.username}`}
           >
             Painel do projeto
           </Button>

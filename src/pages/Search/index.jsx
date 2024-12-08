@@ -161,9 +161,9 @@ function Search () {
               <Tabs.Tab value="projects" mb={15}>
                 {`Projetos (${searchResults.projects.total})`}
               </Tabs.Tab>
-              {/* <Tabs.Tab value="gear">
+              <Tabs.Tab value="gear" mb={15}>
                 Equipamentos
-              </Tabs.Tab> */}
+              </Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value="people" pl={10}>
               {searchResults.users[0].id && 
@@ -183,7 +183,7 @@ function Search () {
                           direction="column"
                           wrap="wrap"
                         >
-                          <Link to={{ pathname: `/${user.username}` }} className="textLink">
+                          <Link to={{ pathname: `/${user.username}` }}>
                             <Flex gap={3} align={'center'}>
                               <Text size='sm' fw={500}>
                                 {user.name+' '+user.lastname}
@@ -264,9 +264,11 @@ function Search () {
                 </Box>
               }
             </Tabs.Panel>
-            {/* <Tabs.Panel value="gear">
-              Equipamentos tab content
-            </Tabs.Panel> */}
+            <Tabs.Panel value="gear" pl={10}>
+              <Box>
+                Equipamentos
+              </Box>
+            </Tabs.Panel>
           </Tabs>
         }
       </Container>

@@ -4,6 +4,7 @@ import { MantineProvider, ColorSchemeScript, Anchor, createTheme } from '@mantin
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
 import '@mantine/core/styles.css'
+import '@mantine/dates/styles.css'
 // import '@mantine/carousel/styles.css'
 
 const theme = createTheme({

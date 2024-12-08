@@ -63,7 +63,7 @@ function AppRoutes () {
           <Route path="/start/step2" element={<StartStep2Page />} />
           <Route path="/start/step3" element={<StartStep3Page />} />
           <Route path="/start/step4" element={<StartStep4Page />} />
-          <Route path="/my-projects" element={<MyProjectsPage />} />
+          <Route path="/projects" element={<MyProjectsPage />} />
           <Route path="/project/:username" element={<ProjectPage />} />
           <Route path="/project/:username/dashboard" element={<ProjectDashboardPage />} />
           <Route path="/gear/product/:productId" element={<GearProductPage />} />

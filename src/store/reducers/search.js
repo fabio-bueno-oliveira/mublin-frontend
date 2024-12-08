@@ -2,6 +2,10 @@ import { searchTypes } from '../types/search';
 
 const initialState = {
   requesting: false,
+  lastSearches: [
+    { query: '' }
+  ],
+  errorLastSearches: '',
   users: [
     {
       id: '',
@@ -216,6 +220,29 @@ export function search(state = initialState, action) {
         suggestedNewUsers: initialState.suggestedNewUsers,
         requesting: false,
         error: 'Nenhum novo usuário sugerido encontrado'
+      };
+    // LAST SEARCHES
+    case searchTypes.GET_USERLASTSEARCHES_REQUEST:
+      return {
+        ...state,
+        lastSearches: initialState.lastSearches,
+        requesting: true,
+        errorLastSearches: '',
+        error: ''
+      };
+    case searchTypes.GET_USERLASTSEARCHES_SUCCESS:
+      return {
+        ...state,
+        lastSearches: action.results,
+        requesting: false
+      };
+    case searchTypes.GET_USERLASTSEARCHES_FAILURE:
+      return {
+        ...state,
+        lastSearches: initialState.lastSearches,
+        requesting: false,
+        errorLastSearches: 'Nenhuma busca recente encontrada',
+        error: ''
       };
     default:
       return state

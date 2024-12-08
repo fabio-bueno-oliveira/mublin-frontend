@@ -16,6 +16,7 @@ export function authHeader() {
 }
 
 export const searchService = {
+    getUserLastSearches,
     getSearchUsersResults,
     getSearchProjectsResults,
     getSearchResults,
@@ -25,6 +26,14 @@ export const searchService = {
     getSuggestedNewUsers,
     logout
 };
+
+function getUserLastSearches() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/queries/userLastSearches`, requestOptions).then(handleResponse);
+}
 
 function getSearchUsersResults(query) {
     const requestOptions = {
