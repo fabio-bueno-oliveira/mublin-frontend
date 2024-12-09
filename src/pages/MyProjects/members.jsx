@@ -3,11 +3,11 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { projectInfos } from '../../store/actions/project';
-import { Container, Indicator, Grid, Center, Divider, Group, Flex, ScrollArea, NavLink, Box, Table, Avatar, Title, Text, Button, Badge, Select, NativeSelect, Card, Image, Loader, em } from '@mantine/core';
+import { Container, Indicator, Grid, Center, Divider, Group, Flex, NavLink, Box, Table, Avatar, Title, Text, Button, Badge, Select, NativeSelect, Card, Image, Loader, em } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import { DatesProvider, Calendar } from '@mantine/dates';
-import { IconHome, IconFileDescription, IconUsersGroup, IconCalendar } from '@tabler/icons-react';
+import { IconHome, IconFileDescription, IconUsersGroup, IconEye } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -78,9 +78,8 @@ function MyProjects () {
   const subPages = [
     { value: '1', label: 'Visão geral' },
     { value: '2', label: 'Integrantes' },
-    { value: '3', label: 'Eventos' },
-    { value: '4', label: 'Alterar dados do projeto' },
-    { value: '5', label: 'Ir para o perfil do projeto' }
+    { value: '3', label: 'Alterar dados do projeto' },
+    { value: '4', label: 'Ir para o perfil do projeto' }
   ];
 
   return (
@@ -99,12 +98,8 @@ function MyProjects () {
           value={selectedProject ? selectedProject : undefined}
           onChange={(e) => selectProject(e.currentTarget.value)}
         >
-          {projects.requesting ? (
-            <option value="">Carregando projetos...</option>
-          ) : (
-            <option value="">Selecione o projeto</option>
-          )}
-          {!projects.requesting && projectsList.map((project, key) =>
+          <option value="">Selecione o projeto</option>
+          {projectsList.map((project, key) =>
             <option key={key} value={project.value}>
               {project.label}
             </option>
@@ -113,7 +108,7 @@ function MyProjects () {
         {selectedProject ? ( 
           <Grid mb={80}>
             <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-              <Card p={0} h={isMobile ? 260 : 600} className="mublinModule" withBorder radius="md">
+              <Card p={0} h={isMobile ? 160 : 600} className="mublinModule" withBorder radius="md">
                 {project.requesting ? (
                   <Center pt={38}>
                     <Loader />
@@ -138,10 +133,9 @@ function MyProjects () {
                         }
                       />
                     </Group>
-                    <Text>adad</Text>
                     {isMobile && 
                       <Select
-                        size="md"
+                        size="sm"
                         mx={20}
                         mt={20}
                         mb={4}
@@ -149,25 +143,6 @@ function MyProjects () {
                         value={subPage ? subPage.value : null}
                         onChange={(_value, option) => setSubPage(option)}
                       />
-                    }
-                    {isMobile && 
-                      <ScrollArea 
-                        mx={20}
-                        mb={11} 
-                        type="always" 
-                        w="auto" 
-                        h={44}
-                      >
-                        <Box w={520}>
-                        <Flex gap={14}>
-                          <Text c="white">Visão geral</Text>
-                          <Text c="white">Integrantes</Text>
-                          <Text c="white">Eventos</Text>
-                          <Text c="white">Notas</Text>
-                          <Text c="white">Alterar dados do projeto</Text>
-                        </Flex>
-                        </Box>
-                      </ScrollArea>
                     }
                     {isLargeScreen && 
                       <Box px={20} pt={10}>
@@ -183,11 +158,6 @@ function MyProjects () {
                           href="#required-for-focus"
                           label="Integrantes"
                           leftSection={<IconUsersGroup size="1rem" stroke={1.5} />}
-                        />
-                        <NavLink
-                          href="#required-for-focus"
-                          label="Eventos"
-                          leftSection={<IconCalendar size="1rem" stroke={1.5} />}
                         />
                         <NavLink
                           href="#required-for-focus"
@@ -216,91 +186,90 @@ function MyProjects () {
                         Visão Geral
                       </Title>
                       <Text>
-                        Informações gerais do projeto
+                        Informações gerais sobre o projeto
                       </Text>
                     </Box>
                   }
                   {/* <Divider mt="md" mb="lg" /> */}
-                  <ScrollArea 
-                    h={104} 
-                    mt={isLargeScreen ? 16 : 10} 
-                    mb={11} 
-                    type="always" 
-                    scrollbars="x" 
-                    offsetScrollbars
-                  >
-                    <Flex gap={14} px={6}>
-                      {members.map((member, key) => 
-                        <Flex key={key}  gap={5} justify="center" align="center" direction="column">
-                          <Avatar
-                            size="50px" 
-                            name={member.name} 
-                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-50,w-50,c-maintain_ratio/'+member.id+'/'+member.picture} 
-                          />
-                          <Text size="12px">
-                            {member.name}
-                          </Text>
-                          <Text size="10px" c="dimmed">
-                            {member.role1}
-                          </Text>
-                        </Flex>
-                      )}
+                  <Card p={16} mb={16} className="mublinModule" withBorder>
+                    <Flex justify="space-between">
+                      <Text fw={400} size="lg" mb={14}>
+                        Integrantes
+                      </Text>
+                      <Button size="xs" color="violet" variant="outline">
+                        Gerenciar
+                      </Button>
                     </Flex>
-                  </ScrollArea>
-                  <Grid>
-                    <Grid.Col mb={isLargeScreen ? 16 : 0} span={{ base: 6, md: 3, lg: 3 }}>
-                      <Card p={16} className="mublinModule" withBorder>
-                        <Text size="sm" fw="400" c="dimmed" mb={6}> 
-                          Tipo do projeto
-                        </Text>
-                        <Text size="md">
-                          {project.typeName}
-                        </Text>
-                      </Card>
-                    </Grid.Col>
-                    <Grid.Col mb={isLargeScreen ? 16 : 0} span={{ base: 6, md: 3, lg: 3 }}>
-                      <Card p={16} className="mublinModule" withBorder>
-                        <Flex direction="column">
-                          <Text size="sm" fw="400" c="dimmed" mb={6}> 
-                            {(project.endDate) && "Período: " + (project.endDate - project.foundationYear) + " anos"}
-                            {(!project.endDate) && "Período: " + (currentYear - project.foundationYear) + " anos"}
-                          </Text>
-                          <Text size="md">
-                            Fundado em {project.foundationYear}
-                          </Text>
-                          {project.endDate && 
-                            <Text size="11px" c="dimmed">
-                              {project.endDate && "Encerrado em " + project.endDate}
-                            </Text>
-                          }
-                        </Flex>
-                      </Card>
-                    </Grid.Col>
-                    <Grid.Col mb={isLargeScreen ? 16 : 9} span={{ base: 6, md: 3, lg: 3 }}>
-                      <Card p={16} className="mublinModule" withBorder>
-                        <Text size="sm" fw="400" c="dimmed" mb={6}> 
-                          Conteúdo principal
-                        </Text>
-                        <Text size="md">
-                          {project.kind === 1 && "Autoral"}
-                          {project.kind === 2 && "Cover"}
-                          {project.kind === 3 && "Autoral e Cover"}
-                          {!project.kind && "Não informado"}
-                        </Text>
-                      </Card>
-                    </Grid.Col>
-                    <Grid.Col mb={isLargeScreen ? 16 : 9} span={{ base: 6, md: 3, lg: 3 }}>
-                      <Card p={16} className="mublinModule" withBorder>
-                        <Text size="sm" fw="400" c="dimmed" mb={6}> 
-                          Em turnê
-                        </Text>
-                        {project.currentlyOnTour 
-                          ? <Text c="lime" size="md">Sim</Text>
-                          : <Text size="md">Não</Text>
-                        }
-                      </Card>
-                    </Grid.Col>
-                  </Grid>
+
+
+                    
+                    <Table.ScrollContainer minWidth={500} h={150}>
+                      <Table 
+                        horizontalSpacing={1} 
+                        verticalSpacing={4} 
+                      >
+                        <Table.Thead>
+                          <Table.Tr>
+                            <Table.Th>Nome</Table.Th>
+                            <Table.Th>Função</Table.Th>
+                            <Table.Th>Status <br/>participação</Table.Th>
+                            <Table.Th>Vínculo</Table.Th>
+                            <Table.Th>Período</Table.Th>
+                          </Table.Tr>
+                        </Table.Thead>
+                        <Table.Tbody>
+                          {members.map((member, key) =>
+                            <Table.Tr key={key} c={member.leftIn ? "dimmed" : undefined}>
+                              <Table.Td fz="12px">
+                                <Group gap={5}>
+                                  <Avatar 
+                                    size="26px" 
+                                    name={member.name} 
+                                    src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-26,w-26,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                                  />
+                                  {member.name+' '+member.lastname}
+                                </Group>
+                              </Table.Td>
+                              <Table.Td fz="12px">
+                                {member.role1}{member.role2 && <><br/>{member.role2}</>}{member.role3 && <><br/>{member.role3}</>}
+                              </Table.Td>
+                              <Table.Td fz="12px">
+                                {member.confirmed === 1 && 
+                                  <Badge size="xs" variant="light" color="green">Confirmado</Badge>
+                                }
+                                {member.confirmed === 2 && 
+                                  <Badge size="xs" variant="light" color="yellow">Aguardando</Badge>
+                                }
+                                {member.confirmed === 0 && 
+                                  <Badge size="xs" variant="light" color="red">Recusado</Badge>
+                                }
+                              </Table.Td>
+                              <Table.Td fz="12px">
+                                {member.statusName}
+                              </Table.Td>
+                              <Table.Td fz="12px">
+                                {!member.leftIn && !project.endDate && 
+                                  <>
+                                    {`${member.joinedIn} › Atualmente`} {years(member.joinedIn, currentYear)}
+                                  </>
+                                }
+                                {member.leftIn && 
+                                  <>
+                                    {project.foundationYear} › {member.leftIn} {years(project.foundationYear, member.leftIn)}
+                                  </>
+                                }
+                                {(project.endDate && !member.leftIn) && 
+                                  <>
+                                    {member.joinedIn} › {project.endDate} {years(member.joinedIn, project.endDate)}
+                                  </>
+                                }
+                              </Table.Td>
+                            </Table.Tr>
+                          )}
+                        </Table.Tbody>
+                      </Table>
+                    </Table.ScrollContainer>
+                  </Card>
                   <Grid>
                     <Grid.Col span={{ base: 12, md: 7, lg: 7 }}>
                       <Card p={16} className="mublinModule" withBorder>
@@ -318,7 +287,7 @@ function MyProjects () {
                     <Grid.Col span={{ base: 12, md: 5, lg: 5 }}>
                       <Card p={16} className="mublinModule" withBorder>
                         <Text fw={400} size="lg" mb={14}>
-                          Próximos eventos
+                          Calendário
                         </Text>
                         <Center>
                           <DatesProvider 
@@ -330,11 +299,19 @@ function MyProjects () {
                           >
                             <Calendar
                               highlightToday
-                              static={true}
-                              // getDayProps={(date) => ({
-                              //   selected: selected.some((s) => dayjs(date).isSame(s, 'date')),
-                              //   onClick: () => handleSelect(date),
-                              // })}
+                              static={false}
+                              getDayProps={(date) => ({
+                                selected: selected.some((s) => dayjs(date).isSame(s, 'date')),
+                                onClick: () => handleSelect(date),
+                              })}
+                              renderDay={(date) => {
+                                const day = date.getDate();
+                                return (
+                                  <Indicator size={6} color="red" offset={-2} disabled={day !== 16}>
+                                    <div>{day}</div>
+                                  </Indicator>
+                                );
+                              }}
                             />
                           </DatesProvider>
                         </Center>
