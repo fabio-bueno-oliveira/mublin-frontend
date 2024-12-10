@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { authentication } from './authentication';
 import { user } from './user';
 import { userProjects } from './userProjects';
+import { feed } from './feed';
 import { search } from './search';
 import { searchProject } from './searchProject';
 import { projectUsernameCheck } from './projectUsernameCheck';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   authentication,
   user,
   userProjects,
+  feed,
   search,
   searchProject,
   profile,

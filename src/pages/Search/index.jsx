@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Flex, Tabs, Box, Text, Avatar, Input, CloseButton, Center, Loader, Badge, rem, em } from '@mantine/core';
+import { Container, Grid, Flex, Tabs, Box, Text, Anchor, Avatar, Input, CloseButton, Button, Center, Loader, Badge, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -62,7 +62,7 @@ function Search () {
   return (
     <>
       <Header pageType='search' />
-      <Container size={'lg'} mb={largeScreen ? 30 : 82}>
+      <Container size={'xs'} mb={largeScreen ? 30 : 82} mt={30}>
         {isMobile && 
           <form
             onSubmit={(e) => handleSearch(e, searchQuery, null)}
@@ -150,7 +150,7 @@ function Search () {
           </Center>
         }
         {(searchedKeywords && !searchResults.requesting) && 
-          <Tabs defaultValue="people" orientation="horizontal" color="violet">
+          <Tabs defaultValue="people" orientation="horizontal" variant="pills" color="violet">
             <Tabs.List>
               <Tabs.Tab value="people" mb={15}>
                 {searchResults.users[0].id
@@ -165,101 +165,107 @@ function Search () {
                 Equipamentos
               </Tabs.Tab>
             </Tabs.List>
-            <Tabs.Panel value="people" pl={10}>
+            <Tabs.Panel value="people" pl={8} pt={12}>
               {searchResults.users[0].id && 
                 <Box>
                   {searchResults.users.map((user, key) =>
-                    <>
-                      <Flex align={'center'} key={key} mb={8} gap={6}>
-                        <Link to={{ pathname: `/${user.username}` }}>
-                          <Avatar 
-                            src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
-                            size='md'
-                          />
-                        </Link>
-                        <Flex
-                          justify="flex-start"
-                          align="flex-start"
-                          direction="column"
-                          wrap="wrap"
-                        >
-                          <Link to={{ pathname: `/${user.username}` }}>
-                            <Flex gap={3} align={'center'}>
-                              <Text size='sm' fw={500}>
-                                {user.name+' '+user.lastname}
-                              </Text>
-                              {!!user.verified && 
-                                <IconRosetteDiscountCheckFilled color='blue' 
-                                style={iconVerifiedStyle} />
-                              }
-                              {!!user.legend && 
-                                <IconShieldCheckFilled color='#DAA520' 
-                                style={iconVerifiedStyle} />
-                              }
-                            </Flex>
-                          </Link>
-                          <Text size='xs'>
-                            {user.mainRole ? user.mainRole : user.bio}
-                          </Text>
-                          <Text size='10px' c='dimmed'>
-                            {user.city && user.city+' - '+user.region}
-                          </Text>
-                          {user.projectRelated && 
-                            <Text size='10px' mt="3px">
-                              Projeto relacionado: {user.projectRelated} ({user.projectType})
+                    <Flex key={key} align={'center'} mb={15} gap={6} justify="space-between">
+                      <Link to={{ pathname: `/${user.username}` }}>
+                        <Avatar 
+                          src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
+                          size='lg'
+                        />
+                      </Link>
+                      <Flex
+                        justify="flex-start"
+                        align="flex-start"
+                        direction="column"
+                        wrap="wrap"
+                        style={{flexGrow:'2'}}
+                      >
+                        <Anchor href={`/${user.username}`}>
+                          <Flex gap={3} align={'center'}>
+                            <Text size='md' fw={500} style={{lineHeight:'normal'}}>
+                              {user.name+' '+user.lastname}
                             </Text>
-                          }
-                        </Flex>
+                            {!!user.verified && 
+                              <IconRosetteDiscountCheckFilled color='blue' 
+                              style={iconVerifiedStyle} />
+                            }
+                            {!!user.legend && 
+                              <IconShieldCheckFilled color='#DAA520' 
+                              style={iconVerifiedStyle} />
+                            }
+                          </Flex>
+                        </Anchor>
+                        <Text size='sm'>
+                          {user.mainRole ? user.mainRole : user.bio}
+                        </Text>
+                        <Text size='11px' c='dimmed'>
+                          {user.city && user.city+' - '+user.region}
+                        </Text>
+                        {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
+                          <Text size='10px' mt='3px' c='dimmed'>
+                            Projeto relacionado: {user.projectRelated} ({user.projectType})
+                          </Text>
+                        } */}
                       </Flex>
-                      {/* <Divider my="xs" /> */}
-                    </>
+                      <Box>
+                        <Button 
+                          size='sm' 
+                          color='violet' 
+                          variant='light'
+                          component="a"
+                          href={`/${user.username}`}
+                        >
+                          Ver perfil
+                        </Button>
+                      </Box>
+                    </Flex>
                   )}
                 </Box>
               }
             </Tabs.Panel>
-            <Tabs.Panel value="projects" pl={10}>
+            <Tabs.Panel value="projects" pl={8} pt={12}>
               {searchResults.projects.total && 
                 <Box>
                   {searchResults.projects.result.map((project, key) => 
-                    <>
-                      <Flex align={'center'} key={key} mb={8} gap={6}>
-                        <Link to={{ pathname: `/project/${project.username}` }}>
-                          <Avatar 
-                            src={project.picture ? project.picture : undefined} 
-                            size='md'
-                          />
+                    <Flex align='center' key={key} mb={15} gap={6}>
+                      <Link to={{ pathname: `/project/${project.username}` }}>
+                        <Avatar 
+                          src={project.picture ? project.picture : undefined} 
+                          size='lg'
+                        />
+                      </Link>
+                      <Flex
+                        justify="flex-start"
+                        align="flex-start"
+                        direction="column"
+                        wrap="wrap"
+                      >
+                        <Link to={{ pathname: `/project/${project.username}` }} className="textLink">
+                          <Text size='md' fw={500}>
+                            {project.name} 
+                          </Text>
                         </Link>
-                        <Flex
-                          justify="flex-start"
-                          align="flex-start"
-                          direction="column"
-                          wrap="wrap"
-                        >
-                          <Link to={{ pathname: `/project/${project.username}` }} className="textLink">
-                            <Text size='sm' fw={500}>
-                              {project.name} 
-                            </Text>
-                          </Link>
-                          {(project.labelShow && project.labelText) && 
-                            <Badge 
-                              color={project.labelColor} 
-                              size="xs" 
-                              radius="sm" 
-                              variant="filled"
-                            >
-                              {project.labelText}
-                            </Badge>
-                          }
-                          <Text size='xs'>
-                            {project.type} · {project.mainGenre}
-                          </Text>
-                          <Text size='10px' c='dimmed'>
-                            {project.city && project.city+' - '+project.region}
-                          </Text>
-                        </Flex>
+                        {(project.labelShow && project.labelText) && 
+                          <Badge 
+                            color={project.labelColor} 
+                            size="xs" 
+                            radius="lg" 
+                            variant="filled"
+                          >
+                            {project.labelText}
+                          </Badge>
+                        }
+                        <Text size='sm'>
+                          {project.type} · {project.mainGenre}
+                        </Text>
+                        <Text size='11px' c='dimmed'>
+                          {project.city && project.city+' - '+project.region}
+                        </Text>
                       </Flex>
-                      {/* <Divider my="xs" /> */}
-                    </>
+                    </Flex>
                   )}
                 </Box>
               }

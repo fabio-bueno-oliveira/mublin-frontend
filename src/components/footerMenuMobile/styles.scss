@@ -35,11 +35,11 @@ footer.menuMobile {
         &.active:before {
           content: "";
           display: block;
-          border-top: 2px solid #272727;
+          border-top: 2px solid #7950f2;
           position: absolute;
           top: -11px;
           left: 0;
-          width: 76px;
+          width: 100%;
         }
 
         svg {
@@ -59,7 +59,7 @@ footer.menuMobile {
           position: absolute;
           top: -21px;
           left: 0;
-          width: 76px;
+          width: 100%;
           z-index: 9999;
         }
 

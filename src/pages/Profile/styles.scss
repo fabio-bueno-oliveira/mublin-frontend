@@ -26,35 +26,6 @@
     outline-offset: none;
   }
 
-  .embla.roles {
-    overflow: hidden;
-    width: 96%;
-
-    .embla__container {
-      display: flex;
-
-      .embla__slide {
-        cursor: default;
-        user-select: none;
-        display: flex;
-        gap: 2px;
-        flex: 0 0 auto;
-        min-width: 0;
-        margin-right: 1px;
-      }
-      @media (min-width: 768px) {
-        .embla__slide {
-          margin-right: 3px;
-        }
-      }
-    }
-  }
-  @media (min-width: 768px) {
-    .embla.roles {
-      width: 96%;
-    }
-  }
-
   .embla.strengths {
     overflow: hidden;
 
@@ -114,40 +85,40 @@
     }
   }
 
-  .embla.projects {
-    overflow: hidden;
+  .carousel-roles {
+    width: 96%;
 
-    .embla__container {
-      display: flex;
-
-      .embla__slide {
-        // background-color: #FFF;
-        // border: 1px solid #dee2e6;
-        // border-radius: 8px;
-        flex: 0 0 100px;
-        // min-width: 0;
-        // margin-right: 5px;
-        // padding: 6px 10px 6px 10px;
-        // text-align: center;
-        // display: flex;
-        // flex-direction: column;
-        // justify-content: center;
-        // align-items: center;
-
-        // &:not(:first-child) {
-        //   margin-left: 6px;
-        // }
-
-        // p {
-        //   color: #000;
-        // }
-      }
-      @media (min-width: 768px) {
-        .embla__slide {
-          margin-right: 3px;
-        }
-      }
+    &:not(:last-child) {
+      margin-right: 16px;
     }
+  
+    .carousel-item {
+      cursor: default;
+      user-select: none;
+      overflow: hidden;
+    }
+  }
+
+  .carousel-project, .carousel-gear {
+    cursor: default;
+    user-select: none;
+
+    &:not(:last-child) {
+      margin-right: 23px;
+    }
+  }
+
+  .carousel-strengths {
+    cursor: default;
+    user-select: none;
+
+    &:not(:last-child) {
+      margin-right: 35px;
+    }
+  }
+
+  .carousel-gear {
+    text-align: center;
   }
 
   .embla.partners {

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Modal, NavLink, Text, Divider, Group, Avatar } from '@mantine/core';
-import { IconHome, IconSearch, IconUserFilled, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconHexagonPlusFilled, IconMusic } from '@tabler/icons-react';
+import { IconHome, IconSearch, IconUser, IconUserCircle, IconLogout, IconSettings, IconMoon, IconBrightnessUp, IconHexagonPlusFilled, IconMusic } from '@tabler/icons-react';
 import './styles.scss';
 
 const FooterMenuMobile = () => {
@@ -46,13 +46,13 @@ const FooterMenuMobile = () => {
             <IconMusic />
           </div>
           <div className={currentPath === '/new' ? 'active plus' : 'plus'} onClick={() => navigate("/new")}>
-            <IconHexagonPlusFilled />
+            <IconHexagonPlusFilled color='#7950f2' />
           </div>
           <div className={currentPath === '/search' ? 'active' : undefined} onClick={() => navigate("/search")}>
             <IconSearch />
           </div>
           <div className={currentPath === '/menu' ? 'active' : undefined} onClick={() => navigate("/menu")}>
-            <IconUserFilled />
+            <IconUser />
           </div>
         </div>
       </footer>

@@ -1,52 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { useNavigate, Link } from 'react-router-dom';
-import { profileInfos } from '../../store/actions/profile';
-import { followInfos } from '../../store/actions/follow';
-import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Grid, Affix, Space, Transition, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core';
-import { useWindowScroll } from '@mantine/hooks';
-import { IconCircleFilled, IconCheck, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX } from '@tabler/icons-react';
-import Header from '../../components/header';
-import FooterMenuMobile from '../../components/footerMenuMobile';
-import useEmblaCarousel from 'embla-carousel-react';
-import { useMediaQuery } from '@mantine/hooks';
-import PartnersModule from './partners';
-import PianoLogoBlack from '../../assets/svg/piano-logo.svg';
-import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg';
-import './styles.scss';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+import { useNavigate, Link } from 'react-router-dom'
+import { profileInfos } from '../../store/actions/profile'
+import { followInfos } from '../../store/actions/follow'
+import { useDispatch, useSelector } from 'react-redux'
+import { Container, Flex, Grid, Affix, Space, Transition, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
+import { Carousel } from '@mantine/carousel'
+import { useWindowScroll } from '@mantine/hooks'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX } from '@tabler/icons-react'
+import Header from '../../components/header'
+import FooterMenuMobile from '../../components/footerMenuMobile'
+import { useMediaQuery } from '@mantine/hooks'
+import PartnersModule from './partners'
+import PianoLogoBlack from '../../assets/svg/piano-logo.svg'
+import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg'
+import CarouselProjects from './carouselProjects'
+import classes from './carousel.module.scss'
+import './styles.scss'
 
 function ProfilePage () {
 
-  let navigate = useNavigate();
-  const params = useParams();
-  const username = params?.username;
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
-  const user = useSelector(state => state.user);
-  const profile = useSelector(state => state.profile);
+  let navigate = useNavigate()
+  const params = useParams()
+  const username = params?.username
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
+  const user = useSelector(state => state.user)
+  const profile = useSelector(state => state.profile)
 
-  const largeScreen = useMediaQuery('(min-width: 60em)');
-  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
-  const { colorScheme } = useMantineColorScheme();
+  const largeScreen = useMediaQuery('(min-width: 60em)')
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
+  const { colorScheme } = useMantineColorScheme()
 
-  let dispatch = useDispatch();
+  let dispatch = useDispatch()
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
 
   useEffect(() => {
-    dispatch(profileInfos.getProfileInfo(username));
-    dispatch(followInfos.checkProfileFollowing(username));
-    dispatch(profileInfos.getProfileAvailabilityItems(username));
-    dispatch(profileInfos.getProfileFollowers(username));
-    dispatch(profileInfos.getProfileFollowing(username));
-    dispatch(profileInfos.getProfileProjects(username));
-    dispatch(profileInfos.getProfileRoles(username));
-    dispatch(profileInfos.getProfileGenres(username));
-    dispatch(profileInfos.getProfileGear(username));
-    dispatch(profileInfos.getProfileGearSetups(username));
-    dispatch(profileInfos.getProfilePartners(username));
-    dispatch(profileInfos.getProfileStrengths(username));
-    dispatch(profileInfos.getProfileStrengthsTotalVotes(username));
-    dispatch(profileInfos.getProfileStrengthsRaw(username));
+    dispatch(profileInfos.getProfileInfo(username))
+    dispatch(followInfos.checkProfileFollowing(username))
+    dispatch(profileInfos.getProfileAvailabilityItems(username))
+    dispatch(profileInfos.getProfileFollowers(username))
+    dispatch(profileInfos.getProfileFollowing(username))
+    dispatch(profileInfos.getProfileProjects(username))
+    dispatch(profileInfos.getProfileRoles(username))
+    dispatch(profileInfos.getProfileGenres(username))
+    dispatch(profileInfos.getProfileGear(username))
+    dispatch(profileInfos.getProfileGearSetups(username))
+    dispatch(profileInfos.getProfilePartners(username))
+    dispatch(profileInfos.getProfileStrengths(username))
+    dispatch(profileInfos.getProfileStrengthsTotalVotes(username))
+    dispatch(profileInfos.getProfileStrengthsRaw(username))
 
     fetch('https://mublin.herokuapp.com/strengths/getAllStrengths', {
       method: 'GET',
@@ -99,40 +101,6 @@ function ProfilePage () {
   }) : gear;
 
   const gearTotal = gearFiltered.filter((product) => { return product.productId > 0 });
-
-  // Carousels
-  const [rolesCarousel] = useEmblaCarousel(
-    {
-      active: true,
-      loop: false, 
-      dragFree: true, 
-      align: 'start' 
-    }
-  )
-  const [emblaRef1] = useEmblaCarousel(
-    {
-      active: true,
-      loop: false, 
-      dragFree: true, 
-      align: 'start' 
-    }
-  )
-  const [emblaRef2] = useEmblaCarousel(
-    {
-      active: true,
-      loop: false, 
-      dragFree: true, 
-      align: 'start' 
-    }
-  )
-  const [emblaRefprojects] = useEmblaCarousel(
-    {
-      active: true,
-      loop: false, 
-      dragFree: true, 
-      align: 'start' 
-    }
-  )
 
   // Modal Follow Info
   const [modalFollowInfoOpen, setModalFollowInfoOpen] = useState(false);
@@ -364,8 +332,8 @@ function ProfilePage () {
                     columnGap="xs"
                   >
                     <Indicator 
-                      color="dark" 
-                      position="top-center" 
+                      color='gray'
+                      position="bottom-center" 
                       withBorder 
                       inline 
                       label={<Text size="9px">PRO</Text>} 
@@ -379,7 +347,7 @@ function ProfilePage () {
                     </Indicator>
                     <Box style={{overflow:'hidden'}}>
                       <Flex align={'center'} mt={0}>
-                        <Title order={largeScreen ? 3 : 4} fw={500}>
+                        <Title order={isMobile ? 4 : 3} fw={460} mb={3}>
                           {profile.name} {profile.lastname}
                         </Title>
                         {!!profile.verified && 
@@ -394,60 +362,80 @@ function ProfilePage () {
                           />
                         }
                       </Flex>
-                      <div className="embla roles" ref={rolesCarousel}>
-                        <div className="embla__container">
-                          {profile.roles.map((role, key) =>
-                            <div className="embla__slide" key={key}>
-                              {role.icon && 
-                                <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
-                              }
-                              <Text size='13px' fw='400' mr={8}>
-                                {role.name}
-                              </Text>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      <Carousel 
+                        slideSize={{ base: '100%', sm: '100%' }}
+                        slideGap={{ base: 'xl', sm: 'xl' }}
+                        align='start'
+                        slidesToScroll={isMobile ? 2 : 3}
+                        height={14}
+                        withControls={false}
+                        dragFree
+                        className='carousel-roles'
+                      >
+                        {profile.roles.map((role, key) =>
+                          <Flex gap={1} key={key} className='carousel-item'>
+                            {role.icon && 
+                              <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
+                            }
+                            <Text size='13px' fw='400' mr={8}>
+                              {role.name}
+                            </Text>
+                          </Flex>
+                        )}
+                      </Carousel>
                       <Text size={largeScreen ? '13px' : '12px'} fw='400' c="dimmed" mt={5}>
                         {profile.city}{profile.region && `, ${profile.region}`}
                       </Text>
                     </Box>
                   </Flex>
-                  <Group gap={12} mt={largeScreen ? 12 : 11} mb={largeScreen ? 10 : 9}>
+                  <Group 
+                    gap={12} 
+                    mt={largeScreen ? 13 : 11} 
+                    mb={largeScreen ? 10 : 9}
+                  >
                     <Text 
                       className='point' 
-                      size={largeScreen ? '0.9rem' : '14px'} 
-                      fw='400'
+                      size={largeScreen ? '0.9rem' : '0.9rem'} 
+                      fw='430'
                       onClick={() => setModalFollowersOpen(true)}
                       style={{lineHeight: 'normal'}}
                     >
-                      <span style={{fontWeight:'500'}}>{profile.followers.total}</span> seguidores
+                      {profile.followers.total} seguidores
                     </Text>
                     <Text 
                       className='point' 
-                      size={largeScreen ? '0.9rem' : '14px'} 
-                      fw='400'
+                      size={largeScreen ? '0.9rem' : '0.9rem'} 
+                      fw='430'
                       onClick={() => setModalFollowingOpen(true)}
                       style={{lineHeight: 'normal'}}
                     >
-                      <span style={{fontWeight:'500'}}>{profile.following.total}</span> seguindo
+                      {profile.following.total} seguindo
                     </Text>
                   </Group>
                   {(profile.bio && profile.bio !== 'null') && 
                     <Text 
-                      size={largeScreen ? "0.83em" : "0.86em"} mt={5} lineClamp={3}
+                      size={isMobile ? '0.86em' : '0.83em'} 
+                      mt={5} lineClamp={3}
                       onClick={isMobile ? () => setModalBioOpen(true) : undefined}
-                      pr={largeScreen ? 26 : 0}
-                      style={{lineHeight:'17px'}}
+                      pr={isMobile ? 0 : 26}
+                      style={{lineHeight:'1.11em'}}
                     >
                       {profile.bio}
                     </Text>
                   }
                   {profile.website && 
-                    <Anchor href={profile.website} target="_blank" underline="hover" style={{display:'block',width:'fit-content'}}>
-                      <Flex gap={2} align="center" mt={9}>
+                    <Anchor 
+                      href={profile.website} 
+                      target="_blank" 
+                      underline="hover" 
+                      style={{display:'block',width:'fit-content'}} 
+                      c='#6565ff'
+                      mt={isMobile ? 12 : 8}
+                      mb={6}
+                    >
+                      <Flex gap={2} align="center">
                         <IconLink size={13} />
-                        <Text size={largeScreen ? "0.83em" : "0.82em"} fw={500}>
+                        <Text size={largeScreen ? "0.83em" : "0.84em"}>
                           {profile.website}
                         </Text>
                       </Flex>
@@ -706,30 +694,41 @@ function ProfilePage () {
                 ) : (
                   <>
                     {(profile.strengths.total && profile.strengths.result[0].idUserTo === profile.id) ? ( 
-                      <div className="embla strengths" ref={emblaRef1}>
-                        <div className="embla__container">
+                      <>
+                        <Carousel 
+                          slideSize="22%"
+                          slidesToScroll={isMobile ? 4 : 4}
+                          align='start'
+                          // slidesToScroll={isMobile ? 2 : 7}
+                          height={62}
+                          dragFree
+                          controlsOffset='6px'
+                          controlSize={24}
+                          withControls={true}
+                          classNames={classes}
+                        >
                           {profile.strengths.result.map((strength, key) =>
-                          <>
-                            <Flex 
-                              justify="flex-start"
-                              align="center"
-                              direction="column"
-                              wrap="wrap"
-                              className="embla__slide"
-                              key={key}
-                            >
-                              <i className={strength.icon}></i>
-                              <Text fw={500} mb={2} mt={3} size='sm' align='center' truncate="end">
-                                {strength.strengthTitle}
-                              </Text>
-                              <Text size='11px'>
-                                {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
-                              </Text>
-                            </Flex>
-                          </>
+                            <>
+                              <Flex 
+                                justify="flex-start"
+                                align="center"
+                                direction="column"
+                                wrap="wrap"
+                                className="carousel-strengths"
+                                key={key}
+                              >
+                                <i className={strength.icon}></i>
+                                <Text fw={500} mb={2} mt={3} size='sm' align='center' truncate="end">
+                                  {strength.strengthTitle}
+                                </Text>
+                                <Text size='11px'>
+                                  {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
+                                </Text>
+                              </Flex>
+                            </>
                           )}
-                        </div>
-                      </div>
+                        </Carousel>
+                      </>
                     ) : (
                       <Text size='xs'>
                         Nenhum ponto forte votado para {profile.name} até o momento
@@ -771,59 +770,17 @@ function ProfilePage () {
                 mb={12}
                 className="mublinModule"
               >
-                <ScrollArea mx="auto" h={102} type="always" scrollbars="x" offsetScrollbars>
+                <>
                   {profile.requesting ? ( 
-                      <Text size='sm'>Carregando...</Text>
+                    <Text size='sm'>Carregando...</Text>
                   ) : (
-                    <Flex gap={10}>
-                      {profile.projects[0].id ? ( 
-                        <>
-                          {allProjects.splice(0 , profile.plan === "Free" ? 3 : 300).map((project, key) =>
-                            <Flex align="flex-start" gap={14} mb={10} key={key}>
-                              <Avatar 
-                                variant="filled" 
-                                radius="md" 
-                                size="82px" 
-                                color="violet"
-                                name={"🎵"}
-                                src={project.picture ? project.picture : undefined} 
-                              />
-                              <Flex 
-                                direction={'column'}
-                                justify="flex-start"
-                                align="flex-start"
-                                wrap="wrap"
-                              >
-                                <Box w={114}>
-                                  <Text c='dimmed' size='11px' fw={400} mb={3} truncate="end">
-                                    {project.workTitle}
-                                  </Text>
-                                  <Text size='11px' fw={400} mb={3} truncate="end">
-                                    {project.left_in && "ex "} {project.role1}{project.role2 && ', '+project.role2} em
-                                  </Text>
-                                  <Text size='0.91rem' fw={500} mb={3} truncate="end" title={project.name}>
-                                    {project.name} {!!project.featured && <IconStarFilled style={{ width: '11px', height: '11px' }} color='gold' />}
-                                  </Text>
-                                  <Text size='12px' fw={400}>{project.type}</Text>
-                                  {/* <Text size='12px'>{project.workTitle}</Text> */}
-                                  {project.endYear && 
-                                    <Text size='10px' c='dimmed' mt={3}>
-                                      (encerrado em {project.endYear})
-                                    </Text>
-                                  }
-                                </Box>
-                              </Flex>
-                            </Flex>
-                          )}
-                        </>
-                      ) : (
-                        <Text size='xs'>
-                          Nenhum projeto cadastrado
-                        </Text>
-                      )}
-                    </Flex>
+                    <CarouselProjects 
+                      profile={profile}
+                      projects={allProjects}
+                      profilePlan={profile.plan}
+                    />
                   )}
-                </ScrollArea>
+                </>
               </Paper>
               {profile.plan === "Pro" ? ( 
                 <>
@@ -843,7 +800,7 @@ function ProfilePage () {
                     ) : (
                       <>
                         {profile.gear[0]?.brandId && 
-                          <Group gap={10} mb={20}>
+                          <Group gap={10} mb={14}>
                             <NativeSelect 
                               size={largeScreen ? "xs" : "sm"}
                               w={136}
@@ -876,20 +833,39 @@ function ProfilePage () {
                           </Group>
                         }
                         {profile.gear[0]?.brandId ? ( 
-                          <div className="embla gear" ref={emblaRef2}>
-                            <div className="embla__container">
+                          <>
+                            <Carousel 
+                              slideSize={{ base: '100%', sm: '100%' }}
+                              slideGap={{ base: 'xl', sm: 'xl' }}
+                              align='start'
+                              slidesToScroll={isMobile ? 3 : 4}
+                              pt={8}
+                              height={210}
+                              controlsOffset='6px'
+                              controlSize={24}
+                              withControls={true}
+                              dragFree
+                              classNames={classes}
+                            >
                               {gearFiltered.map((product, key) =>
-                                <div className="embla__slide" key={key}>
+                                <Flex 
+                                  direction='column' 
+                                  justify='flex-start' 
+                                  align='center' 
+                                  className='carousel-gear' 
+                                  key={key}
+                                >
                                   <Link to={{ pathname: `/gear/product/${product.productId}` }}>
                                     <Image 
-                                      src={product.picture} 
-                                      w={80}
+                                      src={'https://ik.imagekit.io/mublin/products/tr:h-120,w-120,cm-pad_resize,bg-FFFFFF/'+product.pictureFilename} 
+                                      // w={150}
                                       mb={10}
+                                      radius='md'
                                       onClick={() => history.push('/gear/product/'+product.productId)}
                                     />
                                   </Link>
                                   <Box w={110}>
-                                    <Text size='11px' fw={700} mb={3} truncate="end" title={product.brandName}>
+                                    <Text size='11px' fw={550} mb={3} truncate="end" title={product.brandName}>
                                       {product.brandName}
                                     </Text>
                                     <Text size="sm" truncate="end" title={product.productName}>
@@ -914,10 +890,10 @@ function ProfilePage () {
                                       }
                                     </Flex>
                                   }
-                                </div>
+                                </Flex>
                               )}
-                            </div>
-                          </div>
+                            </Carousel>
+                          </>
                         ) : (
                           <Text size='xs'>Nenhum equipamento cadastrado</Text>
                         )}

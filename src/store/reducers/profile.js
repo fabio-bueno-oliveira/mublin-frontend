@@ -147,6 +147,7 @@ const initialState = {
       productName: '',
       category: '',
       picture: '',
+      pictureFilename: '',
       currentlyUsing: '',
       featured: '',
       forSale: '',

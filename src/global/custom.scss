@@ -22,6 +22,9 @@
         color: black;
       }
     }
+    .mantine-Carousel-control {
+      background-color: #d4d4d4;
+    }
   }
   --mantine-color-anchor: #222222;
 }
@@ -61,6 +64,9 @@
     }
     .mantine-NavLink-root:hover {
       background-color: #10141a;
+    }
+    .mantine-Carousel-control {
+      background-color: #161616;
     }
   }
 }

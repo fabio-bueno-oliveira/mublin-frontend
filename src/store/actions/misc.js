@@ -1,10 +1,11 @@
 import { musicGenresTypes } from '../types/musicGenres';
 import { rolesTypes } from '../types/roles';
+import { feedTypes } from '../types/feed';
 import { miscService } from '../../api/misc';
 
 export const miscInfos = {
 //   getNotifications: getNotifications,
-//   getFeed: getFeed,
+  getFeed: getFeed,
   getMusicGenres: getMusicGenres,
   getMusicGenresCategories: getMusicGenresCategories,
   getRoles: getRoles,
@@ -13,6 +14,22 @@ export const miscInfos = {
 //   getAvailabilityItems: getAvailabilityItems,
 //   getAvailabilityFocuses: getAvailabilityFocuses
 };
+
+function getFeed() {
+  return dispatch => {
+    dispatch(request());
+
+    miscService.getFeed()
+      .then(
+        list => dispatch(success(list)),
+        error => dispatch(failure(error.toString()))
+      );
+    };
+
+  function request() { return { type: feedTypes.GET_USER_FEED_REQUEST} }
+  function success(list) { return { type: feedTypes.GET_USER_FEED_SUCCESS, list } }
+  function failure(error) { return { type: feedTypes.GET_USER_FEED_FAILURE, error } }
+}
 
 function getMusicGenres() {
   return dispatch => {

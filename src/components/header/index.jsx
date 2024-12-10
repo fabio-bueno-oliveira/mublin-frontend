@@ -95,6 +95,8 @@ function Header (props) {
   const [openMenuDrawer, setOpenMenuDrawer] = useState(false);
   const [openedDrawer, { open, close }] = useDisclosure(false);
 
+  const menuTextColor = (colorScheme === 'light') ? '#383b3e' : '#f1f1f1';
+
   return (
     <>
     <Container 
@@ -156,9 +158,10 @@ function Header (props) {
         <Flex align={"center"} className="menuHeader">
           <Link to={{ pathname: '/home' }}>
             <Button 
-              size="sm" 
+              size='sm'
+              fw={400}
               variant='transparent'
-              color={currentPath === '/home' ? 'violet' : 'gray'}
+              color={currentPath === '/home' ? 'violet' : menuTextColor}
               leftSection={<><IconHome size={14} /></>}
               p={'xs'}
               visibleFrom="md"
@@ -168,9 +171,10 @@ function Header (props) {
           </Link>
           <Link to={{ pathname: '/new' }}>
             <Button 
-              size="sm" 
+              size='sm'
+              fw={400}
               variant='transparent'
-              color={currentPath === '/new' ? 'violet' : 'gray'}
+              color={currentPath === '/new' ? 'violet' : menuTextColor}
               leftSection={<><IconPlus size={14} /></>}
               p={'xs'}
               visibleFrom="md"
@@ -180,9 +184,10 @@ function Header (props) {
           </Link>
           <Link to={{ pathname: '/projects' }}>
             <Button
-              size="sm"
+              size='sm'
+              fw={400}
               variant='transparent'
-              color={currentPath === '/projects' ? 'violet' : 'gray'}
+              color={currentPath === '/projects' ? 'violet' : menuTextColor}
               leftSection={<><IconMusic size={14} /></>}
               p={'xs'}
               visibleFrom="md"
@@ -192,13 +197,15 @@ function Header (props) {
           </Link>
           <Link to={{ pathname: '/projects' }}>
             <Button 
-              size="sm" 
+              size='sm'
+              fw={400}
               variant='outline'
               radius="xl"
-              color={currentPath === '/opportunities' ? 'violet' : 'gray'}
+              color={currentPath === '/opportunities' ? 'violet' : menuTextColor}
               leftSection={<IconMicrophone2 size={14} />}
               p={'xs'}
-              visibleFrom="md"
+              visibleFrom='md'
+              mx='sm'
             >
               Quero tocar
             </Button>

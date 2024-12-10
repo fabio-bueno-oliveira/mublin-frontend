@@ -32,6 +32,7 @@ import GearBrandPage from './pages/Gear/brand';
 import Settings from './pages/Settings';
 import MenuMobilePage from './pages/MenuMobile';
 import CheckoutSuccess from './pages/Checkout/success';
+import AdminPage from './pages/Admin';
 
 function AppRoutes () {
 
@@ -72,6 +73,7 @@ function AppRoutes () {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/new/project" element={<NewProject />} />
           <Route path="/new" element={<New />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route exact path="/:username" element={<ProfilePage />} />
           <Route exact path="/menu" element={<MenuMobilePage />} />
         </Route>
