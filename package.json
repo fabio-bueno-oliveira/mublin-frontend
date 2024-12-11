@@ -24,6 +24,7 @@
     "@mantine/nprogress": "^7.13.4",
     "@mantine/spotlight": "^7.13.4",
     "@mantine/tiptap": "^7.13.3",
+    "@splidejs/react-splide": "^0.7.12",
     "@tabler/icons-react": "^3.20.0",
     "@tiptap/extension-link": "^2.9.1",
     "@tiptap/react": "^2.9.1",

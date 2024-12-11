@@ -117,7 +117,6 @@ function LoginPage () {
           <Button 
             type="submit"
             loading={loggingIn}
-            loaderProps={{ type: 'dots' }}
             fullWidth
             size='md'
             color='violet'

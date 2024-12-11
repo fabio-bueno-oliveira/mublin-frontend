@@ -5,7 +5,7 @@ import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Container, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer, Image } from '@mantine/core';
-import { useMediaQuery, useDisclosure, useDebouncedCallback } from '@mantine/hooks';
+import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon, 
   IconBrightnessUp, 
@@ -15,7 +15,7 @@ import {
   IconMessageCircle, 
   IconUserCircle, 
   IconHome,
-  IconRocket,
+  IconChevronLeft,
   IconMicrophone2,
   IconMusic,
   IconPlus,
@@ -93,212 +93,219 @@ function Header (props) {
   }
 
   const [openMenuDrawer, setOpenMenuDrawer] = useState(false);
-  const [openedDrawer, { open, close }] = useDisclosure(false);
 
   const menuTextColor = (colorScheme === 'light') ? '#383b3e' : '#f1f1f1';
 
   return (
     <>
-    <Container 
-      size={'lg'} 
-      mt={8} 
-      mb={8} 
-      className={s.headerContainer}
-    >
-      <Flex
-        mih={50}
-        gap="md"
-        justify="space-between"
-        align="center"
-        direction="row"
+      <Container 
+        size={'lg'} 
+        mt={8} 
+        mb={8} 
+        className={s.headerContainer}
       >
-        <Group>
-          <>
-            <Link 
-              to={{ pathname: '/home' }} 
-              className='mublinLogo'
-              onClick={() => setRefreshCounter(refreshCounter + 1)}
-            >
-              <Flex align='center'>
-                {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 27} /> */}
-                <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 28} />
+        <Flex
+          mih={50}
+          gap="md"
+          justify="space-between"
+          align="center"
+          direction="row"
+        >
+          <Group>
+            <>
+              <Flex align='flex-end' gap={9}>
+                {props.showBackIcon && 
+                  <IconChevronLeft 
+                    style={{width:'21px',height:'21px'}} 
+                    onClick={() => navigate(-1)}
+                  />
+                }
+                <Link 
+                  to={{ pathname: '/home' }} 
+                  className='mublinLogo'
+                  onClick={() => setRefreshCounter(refreshCounter + 1)}
+                >
+                  <Flex align='center'>
+                    {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 27} /> */}
+                    <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 28} />
+                  </Flex>
+                </Link>
               </Flex>
+              {(props.pageType === 'profile' && props.profileId) &&
+                <>
+                  <Divider size="xs" orientation="vertical" />
+                  <Text mr={28} style={{lineHeight:'normal'}} pt={largeScreen ? 0 : 5}>
+                    {props.username}
+                  </Text>
+                </>
+              }
+            </>
+            {largeScreen && 
+              <form
+                onSubmit={(e) => handleSearch(e, searchQuery, null)}
+                // onFocus={() => setShowMobileMenu(false)}
+                // onBlur={() => setShowMobileMenu(true)}
+              >
+                <Input 
+                  variant={colorScheme === 'light' ? 'filled' : 'unstyled'} 
+                  size="md"
+                  w={320}
+                  placeholder='Pessoa, instrumento ou cidade...'
+                  value={searchQuery ? searchQuery : undefined}
+                  leftSection={<IconSearch size={16} />}
+                  onChange={(event) => handleChangeSearch(
+                    event, event.currentTarget.value, null
+                  )}
+                  // onFocus={(event) => navigateToSearchPage(event.currentTarget.value, null)}
+                  rightSectionPointerEvents="all"
+                />
+              </form>
+            }
+          </Group>
+          <Flex align={"center"} className="menuHeader">
+            <Link to={{ pathname: '/home' }}>
+              <Button 
+                size='sm'
+                fw={400}
+                variant='transparent'
+                color={currentPath === '/home' ? 'violet' : menuTextColor}
+                leftSection={<><IconHome size={14} /></>}
+                p={'xs'}
+                visibleFrom="md"
+              >
+                Início
+              </Button>
             </Link>
-            {(props.pageType === 'profile' && props.profileId) &&
+            <Link to={{ pathname: '/new' }}>
+              <Button 
+                size='sm'
+                fw={400}
+                variant='transparent'
+                color={currentPath === '/new' ? 'violet' : menuTextColor}
+                leftSection={<><IconPlus size={14} /></>}
+                p={'xs'}
+                visibleFrom="md"
+              >
+                Novo
+              </Button>
+            </Link>
+            <Link to={{ pathname: '/projects' }}>
+              <Button
+                size='sm'
+                fw={400}
+                variant='transparent'
+                color={currentPath === '/projects' ? 'violet' : menuTextColor}
+                leftSection={<><IconMusic size={14} /></>}
+                p={'xs'}
+                visibleFrom="md"
+              >
+                Meus Projetos
+              </Button>
+            </Link>
+            <Link to={{ pathname: '/projects' }}>
+              <Button 
+                size='sm'
+                fw={400}
+                variant='outline'
+                radius="xl"
+                color={currentPath === '/opportunities' ? 'violet' : menuTextColor}
+                leftSection={<IconMicrophone2 size={14} />}
+                p={'xs'}
+                visibleFrom='md'
+                mx='sm'
+              >
+                Quero tocar
+              </Button>
+            </Link>
+            {largeScreen && 
               <>
-                <Divider size="xs" orientation="vertical" />
-                <Text mr={28} style={{lineHeight:'normal'}} pt={largeScreen ? 0 : 5}>
-                  {props.username}
-                </Text>
+                {/* {user.plan === 'Pro' && 
+                  <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
+                } */}
+                <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
+                  <Menu.Target>
+                    <Avatar
+                      size="md"
+                      className="point"
+                      src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined}
+                      alt={user.username}
+                      ml={8}
+                    />
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Label>
+                      {user.name} {user.lastname} 
+                      {user.plan === 'Pro' && 
+                        <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
+                      }
+                    </Menu.Label>
+                    <Menu.Item 
+                      leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
+                      // onClick={() => navigate(`/${user.username}`)}
+                      // onClick={() => console.log("foi")}
+                      onClick={() => navigate('/'+user.username)}
+                    >
+                      Ver perfil
+                    </Menu.Item>
+                    <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
+                      Mensagens
+                    </Menu.Item>
+                    <Menu.Divider />
+                    <Menu.Item 
+                      leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => navigate('/settings')}
+                    >
+                      Configurações
+                    </Menu.Item>
+                    {colorScheme === 'dark' && 
+                      <Menu.Item 
+                        leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
+                        onClick={() => {setColorScheme('light')}}
+                      >
+                        Modo claro
+                      </Menu.Item>
+                    }
+                    {colorScheme === 'light' && 
+                      <Menu.Item 
+                        leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
+                        onClick={() => {setColorScheme('dark')}}
+                      >
+                        Modo escuro
+                      </Menu.Item>
+                    }
+                    <Menu.Divider />
+                    <Menu.Item 
+                      leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => logout()}
+                    >
+                      Sair
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
               </>
             }
-          </>
-          {largeScreen && 
-            <form
-              onSubmit={(e) => handleSearch(e, searchQuery, null)}
-              // onFocus={() => setShowMobileMenu(false)}
-              // onBlur={() => setShowMobileMenu(true)}
-            >
-              <Input 
-                variant={colorScheme === 'light' ? 'filled' : 'unstyled'} 
-                size="md"
-                w={320}
-                placeholder='Pessoa, instrumento ou cidade...'
-                value={searchQuery ? searchQuery : undefined}
-                leftSection={<IconSearch size={16} />}
-                onChange={(event) => handleChangeSearch(
-                  event, event.currentTarget.value, null
-                )}
-                // onFocus={(event) => navigateToSearchPage(event.currentTarget.value, null)}
-                rightSectionPointerEvents="all"
-              />
-            </form>
-          }
-        </Group>
-        <Flex align={"center"} className="menuHeader">
-          <Link to={{ pathname: '/home' }}>
-            <Button 
-              size='sm'
-              fw={400}
-              variant='transparent'
-              color={currentPath === '/home' ? 'violet' : menuTextColor}
-              leftSection={<><IconHome size={14} /></>}
-              p={'xs'}
-              visibleFrom="md"
-            >
-              Início
-            </Button>
-          </Link>
-          <Link to={{ pathname: '/new' }}>
-            <Button 
-              size='sm'
-              fw={400}
-              variant='transparent'
-              color={currentPath === '/new' ? 'violet' : menuTextColor}
-              leftSection={<><IconPlus size={14} /></>}
-              p={'xs'}
-              visibleFrom="md"
-            >
-              Novo
-            </Button>
-          </Link>
-          <Link to={{ pathname: '/projects' }}>
-            <Button
-              size='sm'
-              fw={400}
-              variant='transparent'
-              color={currentPath === '/projects' ? 'violet' : menuTextColor}
-              leftSection={<><IconMusic size={14} /></>}
-              p={'xs'}
-              visibleFrom="md"
-            >
-              Meus Projetos
-            </Button>
-          </Link>
-          <Link to={{ pathname: '/projects' }}>
-            <Button 
-              size='sm'
-              fw={400}
-              variant='outline'
-              radius="xl"
-              color={currentPath === '/opportunities' ? 'violet' : menuTextColor}
-              leftSection={<IconMicrophone2 size={14} />}
-              p={'xs'}
-              visibleFrom='md'
-              mx='sm'
-            >
-              Quero tocar
-            </Button>
-          </Link>
-          {largeScreen && 
-            <>
-              {/* {user.plan === 'Pro' && 
-                <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
-              } */}
-              <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
-                <Menu.Target>
-                  <Avatar
-                    size="md"
-                    className="point"
-                    src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined}
-                    alt={user.username}
-                    ml={8}
-                  />
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Label>
-                    {user.name} {user.lastname} 
-                    {user.plan === 'Pro' && 
-                      <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
-                    }
-                  </Menu.Label>
-                  <Menu.Item 
-                    leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
-                    // onClick={() => navigate(`/${user.username}`)}
-                    // onClick={() => console.log("foi")}
-                    onClick={() => navigate('/'+user.username)}
-                  >
-                    Ver perfil
-                  </Menu.Item>
-                  <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
-                    Mensagens
-                  </Menu.Item>
-                  <Menu.Divider />
-                  <Menu.Item 
-                    leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
-                    onClick={() => navigate('/settings')}
-                  >
-                    Configurações
-                  </Menu.Item>
-                  {colorScheme === 'dark' && 
-                    <Menu.Item 
-                      leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
-                      onClick={() => {setColorScheme('light')}}
-                    >
-                      Modo claro
-                    </Menu.Item>
-                  }
-                  {colorScheme === 'light' && 
-                    <Menu.Item 
-                      leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
-                      onClick={() => {setColorScheme('dark')}}
-                    >
-                      Modo escuro
-                    </Menu.Item>
-                  }
-                  <Menu.Divider />
-                  <Menu.Item 
-                    leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-                    onClick={() => logout()}
-                  >
-                    Sair
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </>
-          }
-          {(!largeScreen && props.pageType === 'profile') && 
-            <ActionIcon 
-              onClick={() => setOpenMenuDrawer(true)} 
-              variant="transparent" 
-              size="lg" 
-              color='gray'
-              aria-label="Menu"
-            >
-              <IconDotsVertical style={{ width: '70%', height: '70%' }} stroke={1.5} />
-            </ActionIcon>
-          }
+            {(!largeScreen && props.pageType === 'profile') && 
+              <ActionIcon 
+                onClick={() => setOpenMenuDrawer(true)} 
+                variant="transparent" 
+                size="lg" 
+                color='gray'
+                aria-label="Menu"
+              >
+                <IconDotsVertical style={{ width: '70%', height: '70%' }} stroke={1.5} />
+              </ActionIcon>
+            }
+          </Flex>
         </Flex>
-      </Flex>
-    </Container>
-    <Drawer 
-      opened={openMenuDrawer || openMenuDrawerFromProfile} 
-      onClose={() => setOpenMenuDrawer(false)} 
-      title={props.username}
-      position="bottom"
-    >
-      {/* <h1>Teste</h1> */}
-    </Drawer>
+      </Container>
+      <Drawer 
+        opened={openMenuDrawer || openMenuDrawerFromProfile} 
+        onClose={() => setOpenMenuDrawer(false)} 
+        title={props.username}
+        position="bottom"
+      >
+        {/* <h1>Teste</h1> */}
+      </Drawer>
     </>
   );
 };

@@ -5,7 +5,6 @@ import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Flex, Grid, Affix, Space, Transition, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
-import { Carousel } from '@mantine/carousel'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -15,7 +14,8 @@ import PartnersModule from './partners'
 import PianoLogoBlack from '../../assets/svg/piano-logo.svg'
 import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg'
 import CarouselProjects from './carouselProjects'
-import classes from './carousel.module.scss'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css/skyblue'
 import './styles.scss'
 
 function ProfilePage () {
@@ -297,7 +297,12 @@ function ProfilePage () {
           </Transition>
         </Affix>
       }
-      <Header pageType='profile' username={username} profileId={profile.id} />
+      <Header
+        pageType='profile'
+        username={username}
+        profileId={profile.id}
+        showBackIcon={true}
+      />
       {profile.id && 
         <Container size={'lg'} mb={largeScreen ? 30 : 82} pt={largeScreen ? 10 : 0} className='profilePage'>
           <Grid>
@@ -362,27 +367,32 @@ function ProfilePage () {
                           />
                         }
                       </Flex>
-                      <Carousel 
-                        slideSize={{ base: '100%', sm: '100%' }}
-                        slideGap={{ base: 'xl', sm: 'xl' }}
-                        align='start'
-                        slidesToScroll={isMobile ? 2 : 3}
-                        height={14}
-                        withControls={false}
-                        dragFree
+                      <Splide 
+                        options={{
+                          drag   : 'free',
+                          snap: false,
+                          perPage: isMobile ? 3 : 3,
+                          autoWidth: true,
+                          arrows: false,
+                          gap: '3px',
+                          dots: false,
+                          pagination: false,
+                        }}
                         className='carousel-roles'
                       >
                         {profile.roles.map((role, key) =>
-                          <Flex gap={1} key={key} className='carousel-item'>
-                            {role.icon && 
-                              <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
-                            }
-                            <Text size='13px' fw='400' mr={8}>
-                              {role.name}
-                            </Text>
-                          </Flex>
+                          <SplideSlide className='carousel-item'>
+                            <Flex gap={1} key={key}>
+                              {role.icon && 
+                                <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
+                              }
+                              <Text size='13px' fw='400' mr={8}>
+                                {role.name}
+                              </Text>
+                            </Flex>
+                          </SplideSlide>
                         )}
-                      </Carousel>
+                      </Splide>
                       <Text size={largeScreen ? '13px' : '12px'} fw='400' c="dimmed" mt={5}>
                         {profile.city}{profile.region && `, ${profile.region}`}
                       </Text>
@@ -390,7 +400,7 @@ function ProfilePage () {
                   </Flex>
                   <Group 
                     gap={12} 
-                    mt={largeScreen ? 13 : 11} 
+                    mt={largeScreen ? 15 : 12} 
                     mb={largeScreen ? 10 : 9}
                   >
                     <Text 
@@ -414,7 +424,7 @@ function ProfilePage () {
                   </Group>
                   {(profile.bio && profile.bio !== 'null') && 
                     <Text 
-                      size={isMobile ? '0.86em' : '0.83em'} 
+                      size={isMobile ? "0.83em" : "0.83em"}
                       mt={5} lineClamp={3}
                       onClick={isMobile ? () => setModalBioOpen(true) : undefined}
                       pr={isMobile ? 0 : 26}
@@ -428,14 +438,13 @@ function ProfilePage () {
                       href={profile.website} 
                       target="_blank" 
                       underline="hover" 
-                      style={{display:'block',width:'fit-content'}} 
-                      c='#6565ff'
-                      mt={isMobile ? 12 : 8}
+                      className='websiteLink'
+                      mt={isMobile ? 10 : 9}
                       mb={6}
                     >
                       <Flex gap={2} align="center">
                         <IconLink size={13} />
-                        <Text size={largeScreen ? "0.83em" : "0.84em"}>
+                        <Text size={isMobile ? "0.83em" : "0.83em"}>
                           {profile.website}
                         </Text>
                       </Flex>
@@ -657,7 +666,7 @@ function ProfilePage () {
                 </Paper>
               }
               {(isMobile && profile.availabilityId) && 
-                <Divider mb={8} mt={10} />
+                <Divider mb={2} mt={6} />
               }
               {(profile.plan === "Pro" && profile.total) && 
                 <PartnersModule loading={profile.requesting} partners={profile.partners} />
@@ -694,41 +703,39 @@ function ProfilePage () {
                 ) : (
                   <>
                     {(profile.strengths.total && profile.strengths.result[0].idUserTo === profile.id) ? ( 
-                      <>
-                        <Carousel 
-                          slideSize="22%"
-                          slidesToScroll={isMobile ? 4 : 4}
-                          align='start'
-                          // slidesToScroll={isMobile ? 2 : 7}
-                          height={62}
-                          dragFree
-                          controlsOffset='6px'
-                          controlSize={24}
-                          withControls={true}
-                          classNames={classes}
-                        >
-                          {profile.strengths.result.map((strength, key) =>
-                            <>
-                              <Flex 
-                                justify="flex-start"
-                                align="center"
-                                direction="column"
-                                wrap="wrap"
-                                className="carousel-strengths"
-                                key={key}
-                              >
-                                <i className={strength.icon}></i>
-                                <Text fw={500} mb={2} mt={3} size='sm' align='center' truncate="end">
-                                  {strength.strengthTitle}
-                                </Text>
-                                <Text size='11px'>
-                                  {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
-                                </Text>
-                              </Flex>
-                            </>
-                          )}
-                        </Carousel>
-                      </>
+                      <Splide 
+                        options={{
+                          drag   : 'free',
+                          snap: false,
+                          perPage: isMobile ? 3 : 6,
+                          autoWidth: true,
+                          arrows: false,
+                          gap: '22px',
+                          dots: false,
+                          pagination: false,
+                        }}
+                      >
+                        {profile.strengths.result.map((strength, key) =>
+                          <SplideSlide>
+                            <Flex 
+                              justify="flex-start"
+                              align="center"
+                              direction="column"
+                              wrap="wrap"
+                              className="carousel-strengths"
+                              key={key}
+                            >
+                              <i className={strength.icon}></i>
+                              <Text fw={500} mb={2} mt={3} size='sm' align='center'>
+                                {strength.strengthTitle}
+                              </Text>
+                              <Text size='11px'>
+                                {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
+                              </Text>
+                            </Flex>
+                          </SplideSlide>
+                        )}
+                      </Splide>
                     ) : (
                       <Text size='xs'>
                         Nenhum ponto forte votado para {profile.name} até o momento
@@ -803,7 +810,7 @@ function ProfilePage () {
                           <Group gap={10} mb={14}>
                             <NativeSelect 
                               size={largeScreen ? "xs" : "sm"}
-                              w={136}
+                              w={140}
                               // onChange={(e) => setGearSetup(e.target.options[e.target.selectedIndex].value)}
                               onChange={(e) => selectSetup(e.target.options[e.target.selectedIndex].value)}
                             >
@@ -817,7 +824,7 @@ function ProfilePage () {
                             {!gearSetup && 
                               <NativeSelect
                                 size={largeScreen ? "xs" : "sm"}
-                                w={136}
+                                w={148}
                                 onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
                               >
                                 <option value="">
@@ -834,20 +841,20 @@ function ProfilePage () {
                         }
                         {profile.gear[0]?.brandId ? ( 
                           <>
-                            <Carousel 
-                              slideSize={{ base: '100%', sm: '100%' }}
-                              slideGap={{ base: 'xl', sm: 'xl' }}
-                              align='start'
-                              slidesToScroll={isMobile ? 3 : 4}
-                              pt={8}
-                              height={210}
-                              controlsOffset='6px'
-                              controlSize={24}
-                              withControls={true}
-                              dragFree
-                              classNames={classes}
+                            <Splide 
+                              options={{
+                                drag   : 'free',
+                                snap: false,
+                                perPage: isMobile ? 2 : 5,
+                                autoWidth: true,
+                                arrows: true,
+                                gap: '22px',
+                                dots: false,
+                                pagination: false,
+                              }}
                             >
                               {gearFiltered.map((product, key) =>
+                              <SplideSlide>
                                 <Flex 
                                   direction='column' 
                                   justify='flex-start' 
@@ -891,8 +898,10 @@ function ProfilePage () {
                                     </Flex>
                                   }
                                 </Flex>
+                                </SplideSlide>
                               )}
-                            </Carousel>
+                            </Splide>
+                            
                           </>
                         ) : (
                           <Text size='xs'>Nenhum equipamento cadastrado</Text>

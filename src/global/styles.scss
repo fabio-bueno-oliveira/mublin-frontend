@@ -123,3 +123,29 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
   -webkit-filter: invert(100%); /* Safari/Chrome */
   filter: invert(100%);
 }
+
+.splide__arrow svg {
+  fill: #484848;
+  height: 1.5em;
+  transition: fill .2s linear;
+  width: 1.5em;
+}
+
+.splide__arrow:hover:not(:disabled) svg {
+  fill: #949494;
+}
+
+:root[data-mantine-color-scheme='dark'] {
+  .websiteLink {
+    color: #67adf5;
+    display: block;
+    width: fit-content;
+  }
+}
+:root[data-mantine-color-scheme='light'] {
+  .websiteLink {
+    color: #133a61;
+    display: block;
+    width: fit-content;
+  }
+}

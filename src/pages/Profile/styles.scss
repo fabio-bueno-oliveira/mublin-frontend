@@ -26,65 +26,6 @@
     outline-offset: none;
   }
 
-  .embla.strengths {
-    overflow: hidden;
-
-    .embla__container {
-      display: flex;
-
-      .embla__slide {
-        cursor: default;
-        user-select: none;
-        flex: 0 0 auto;
-        min-width: 0;
-        margin-right: 18px;
-      }
-      @media (min-width: 768px) {
-        .embla__slide {
-          margin-right: 18px;
-        }
-      }
-    }
-  }
-
-  .embla.gear {
-    overflow: hidden;
-
-    .embla__container {
-      display: flex;
-
-      .embla__slide {
-        cursor: default;
-        user-select: none;
-        background-color: #FFF;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        flex: 0 0 130px;
-        min-width: 0;
-        // margin-right: 5px;
-        padding: 6px 10px 6px 10px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        &:not(:first-child) {
-          margin-left: 6px;
-        }
-
-        p {
-          color: #000;
-        }
-      }
-      @media (min-width: 768px) {
-        .embla__slide {
-          margin-right: 4px;
-        }
-      }
-    }
-  }
-
   .carousel-roles {
     width: 96%;
 
@@ -119,41 +60,6 @@
 
   .carousel-gear {
     text-align: center;
-  }
-
-  .embla.partners {
-    overflow: hidden;
-
-    .embla__container {
-      display: flex;
-
-      .embla__slide {
-        background-color: #FFF;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        flex: 0 0 130px;
-        min-width: 0;
-        padding: 1px 1px 7px 1px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        &:not(:first-child) {
-          margin-left: 6px;
-        }
-
-        p {
-          color: #000;
-        }
-      }
-      @media (min-width: 768px) {
-        .embla__slide {
-          margin-right: 4px;
-        }
-      }
-    }
   }
 
   .rolesList {

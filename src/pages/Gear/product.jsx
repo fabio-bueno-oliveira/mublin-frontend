@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Flex, Group, Anchor, Center, Box, Title, Text, Image, Avatar, Divider, Badge, Modal, ScrollArea } from '@mantine/core';
+import { Container, Flex, Group, Center, Box, Title, Text, Image, Avatar, Divider, Badge, Modal, ScrollArea } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -26,7 +26,7 @@ function GearProductPage () {
 
   return (
     <>
-      <Header />
+      <Header showBackIcon={true} />
       <Container size={'lg'} mt={largeScreen ? 20 : 0}>
         <Box mb={20}>
           <Link to={{ pathname: `/gear/brand/${product.brandSlug}` }}>
