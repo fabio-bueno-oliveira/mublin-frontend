@@ -34,8 +34,8 @@ function CarouselProjects (props) {
         }}
       >
         {projects.splice(0 , profilePlan === 'Free' ? 3 : 300).map((project, key) =>
-          <SplideSlide>
-            <Flex align='flex-start' gap={7} mb={10} key={key} className='carousel-project'>
+          <SplideSlide key={key}>
+            <Flex align='flex-start' gap={7} mb={10} className='carousel-project'>
               <Avatar 
                 variant='filled' 
                 radius='md' 

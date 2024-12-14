@@ -11,6 +11,8 @@ import { useSelector } from 'react-redux';
 import NotFound from './pages/NotFound';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/Login';
+import ForgotPasswordPage from './pages/Login/forgotPassword';
+import RedefinePasswordPage from './pages/Login/redefinePassword';
 import SignupPage from './pages/Signup';
 import MyAccountPage from './pages/MyAccount';
 import Home from './pages/Home';
@@ -52,6 +54,8 @@ function AppRoutes () {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login/forgot" element={<ForgotPasswordPage />} />
+        <Route path="/login/redefine-password" element={<RedefinePasswordPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useLocation  } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/authentication';
@@ -14,7 +14,6 @@ import {
   Checkbox,
   Anchor,
   Space,
-  Title,
   Text,
   Container,
   Group,
@@ -22,7 +21,6 @@ import {
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useForm, isNotEmpty } from '@mantine/form';
-import Header from '../../components/header/public';
 import { IconCheck, IconX } from '@tabler/icons-react';
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
@@ -34,6 +32,9 @@ function LoginPage () {
 
   const search = useLocation().search;
   const urlInfo = new URLSearchParams(search).get("info");
+
+  const loggedIn = useSelector(state => state.authentication.loggedIn);
+
   let dispatch = useDispatch();
 
   const form = useForm({
@@ -61,6 +62,9 @@ function LoginPage () {
 
   return (
       <>
+      {loggedIn &&
+        <Navigate to="/home" />
+      }
       <Center mt={80} mb={34}>
         <Link to={{ pathname: '/' }} className={s.mublinLogo}>
           <Flex gap={3} align='center'>
@@ -110,7 +114,7 @@ function LoginPage () {
           />
           <Group justify="space-between" mt="lg">
             <Checkbox defaultChecked label="Lembrar meus dados" color="violet" />
-            <Anchor component="button" size="sm">
+            <Anchor size="sm" href='/login/forgot'>
               Esqueci a senha
             </Anchor>
           </Group>

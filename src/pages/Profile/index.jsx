@@ -4,15 +4,14 @@ import { useNavigate, Link } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Flex, Grid, Affix, Space, Transition, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, useMantineColorScheme, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX } from '@tabler/icons-react'
 import Header from '../../components/header'
+import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { useMediaQuery } from '@mantine/hooks'
 import PartnersModule from './partners'
-import PianoLogoBlack from '../../assets/svg/piano-logo.svg'
-import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg'
 import CarouselProjects from './carouselProjects'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
@@ -247,55 +246,7 @@ function ProfilePage () {
   return (
     <>
       {profile.id && 
-        <Affix 
-          w='100%'
-          position={{ top: 0, left: 0 }} 
-        >
-          <Transition 
-            transition="slide-down" 
-            duration={400} 
-            timingFunction="ease" 
-            mounted={largeScreen ? scroll.y > 100 : scroll.y > 50}
-          >
-            {(transitionStyles) => (
-              <Container className='floatingMenu' style={transitionStyles} fluid h={50} py={9}>
-                <Container size={largeScreen ? 'lg' : undefined} p={isMobile ? 0 : undefined}>
-                  <Group gap={3}>
-                    <Link to={{ pathname: `/home` }}>
-                      <Image 
-                        src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} 
-                        h={largeScreen ? 29 : 27} 
-                      />
-                    </Link>
-                    <Avatar
-                      size={largeScreen ? 'sm' : 'sm'}
-                      src={profile.picture ? profile.picture : undefined}
-                      ml={10}
-                      mr={4}
-                    />
-                    <Flex direction="column">
-                      <Box w={largeScreen ? 400 : 200}>
-                        <Text fw="500" size={largeScreen ? "14px" : "12px"} >
-                          {profile.name} {profile.lastname}
-                        </Text>
-                        <Text size='11px' truncate="end">
-                          {profile.roles.map((role, key) =>
-                          <span key={key} className="comma">
-                            {role.description}
-                          </span>
-                          )}
-                        </Text>
-                        <Text c="dimmed" size='9px' mt={2}>
-                          {!!profile.city && profile.city}{profile.region && `, ${profile.region}`}
-                        </Text>
-                      </Box>
-                    </Flex>
-                  </Group>
-                </Container>
-              </Container>
-            )}
-          </Transition>
-        </Affix>
+        <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
         pageType='profile'
@@ -351,7 +302,7 @@ function ProfilePage () {
                       />
                     </Indicator>
                     <Box style={{overflow:'hidden'}}>
-                      <Flex align={'center'} mt={0}>
+                      <Flex align={'baseline'} mt={0}>
                         <Title order={isMobile ? 4 : 3} fw={460} mb={3}>
                           {profile.name} {profile.lastname}
                         </Title>
@@ -381,8 +332,8 @@ function ProfilePage () {
                         className='carousel-roles'
                       >
                         {profile.roles.map((role, key) =>
-                          <SplideSlide className='carousel-item'>
-                            <Flex gap={1} key={key}>
+                          <SplideSlide className='carousel-item' key={key}>
+                            <Flex gap={1}>
                               {role.icon && 
                                 <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
                               }
@@ -716,14 +667,13 @@ function ProfilePage () {
                         }}
                       >
                         {profile.strengths.result.map((strength, key) =>
-                          <SplideSlide>
+                          <SplideSlide key={key}>
                             <Flex 
                               justify="flex-start"
                               align="center"
                               direction="column"
                               wrap="wrap"
                               className="carousel-strengths"
-                              key={key}
                             >
                               <i className={strength.icon}></i>
                               <Text fw={500} mb={2} mt={3} size='sm' align='center'>
@@ -854,18 +804,17 @@ function ProfilePage () {
                               }}
                             >
                               {gearFiltered.map((product, key) =>
-                              <SplideSlide>
+                              <SplideSlide key={key}>
                                 <Flex 
                                   direction='column' 
                                   justify='flex-start' 
                                   align='center' 
                                   className='carousel-gear' 
-                                  key={key}
                                 >
                                   <Link to={{ pathname: `/gear/product/${product.productId}` }}>
                                     <Image 
-                                      src={'https://ik.imagekit.io/mublin/products/tr:h-120,w-120,cm-pad_resize,bg-FFFFFF/'+product.pictureFilename} 
-                                      // w={150}
+                                      src={'https://ik.imagekit.io/mublin/products/tr:h-240,w-240,cm-pad_resize,bg-FFFFFF/'+product.pictureFilename} 
+                                      w={120}
                                       mb={10}
                                       radius='md'
                                       onClick={() => history.push('/gear/product/'+product.productId)}
