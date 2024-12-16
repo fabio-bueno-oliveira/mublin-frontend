@@ -1,6 +1,7 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { miscInfos } from '../../store/actions/misc'
 import { Card, Flex, Box, Anchor, Text, Badge, Image, Avatar, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
@@ -9,12 +10,14 @@ import pt from 'date-fns/locale/pt-BR'
 
 function FeedCard (props) {
 
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
+
+  let dispatch = useDispatch()
+
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
-  const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   const feed = useSelector(state => state.feed)
   const item = props.item
-  const key = props.key
 
   const likeFeedPost = (feedId) => {
     fetch('https://mublin.herokuapp.com/feed/'+feedId+'/like', {
@@ -22,7 +25,7 @@ function FeedCard (props) {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + loggedUser.token
       }
     })
     .then(() => {
@@ -39,7 +42,7 @@ function FeedCard (props) {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + loggedUser.token
       }
     })
     .then((response) => {
@@ -52,12 +55,13 @@ function FeedCard (props) {
 
   return (
     <Card 
-      key={key}
-      radius={isLargeScreen ? 'md' : 0}
-      withBorder={isLargeScreen ? true : false}
-      px={isLargeScreen ? 15 : 15} 
-      py={isLargeScreen ? 11 : 14}
-      mb={isLargeScreen ? 12 : 18}
+      key={item.id}
+      radius={isMobile ? 0 : 'md'}
+      withBorder={isMobile ? false : true}
+      px={isMobile ? 15 : 15} 
+      pt={isMobile ? 13 : 11}
+      pb={isMobile ? 10 : 11}
+      mb={isMobile ? 8 : 12}
       style={isMobile ? {borderTop:'1px solid #dee2e6',borderBottom:'1px solid #dee2e6'} : undefined}
       className='mublinModule'
       id='feed'

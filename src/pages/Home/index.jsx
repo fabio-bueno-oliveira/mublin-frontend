@@ -102,7 +102,7 @@ function Home () {
               </Flex>
               Meus projetos
             </Card>
-            <Divider my="xs" label="Atualizações" labelPosition="left" />
+            <Divider my="xs" label="Atualizações" labelPosition="center" />
             {feed.requesting ? (
               <Card 
                 px='md'
