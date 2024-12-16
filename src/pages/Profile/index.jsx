@@ -288,9 +288,9 @@ function ProfilePage () {
                     columnGap="xs"
                   >
                     <Indicator 
-                      color='gray'
+                      color='black'
                       position="bottom-center" 
-                      withBorder 
+                      withBorder={colorScheme === "light"}
                       inline 
                       label={<Text size="9px">PRO</Text>} 
                       size={15}

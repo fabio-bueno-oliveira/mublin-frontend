@@ -4,14 +4,13 @@ import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { searchInfos } from '../../store/actions/search'
-import { Container, Flex, Center, Box, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Image, em } from '@mantine/core'
+import { Container, Flex, Center, Box, Card, Divider, Title, Badge, Text, Grid, Skeleton, Avatar, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import UserCard from '../../components/userCard'
+import FeedCard from './feedCard'
 import Header from '../../components/header'
 import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
-import { formatDistance } from 'date-fns'
-import pt from 'date-fns/locale/pt-BR'
 
 function Home () {
 
@@ -46,7 +45,7 @@ function Home () {
       ) : (
         <Header pageType="home" />
       )}
-      <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
+      <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0} px={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 
             <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={8}>
@@ -75,7 +74,7 @@ function Home () {
                   </Title>
                   {user.plan === 'Pro' && 
                     <Center>
-                      <Badge size='sm' variant='light' color="violet">PRO</Badge>
+                      <Badge size='xs' variant='outline' color="gray">PRO</Badge>
                     </Center>
                   }
                   <Text ta="center" c="dimmed" fw="400" size="13px" mt={13}>
@@ -90,29 +89,44 @@ function Home () {
               )}
             </Grid.Col>
           }
-          <Grid.Col span={{ base: 12, md: 12, lg: 7 }}>
-            <Card shadow="sm" px="md" pt="sm" pb="lg" radius="md" withBorder className="mublinModule">
-              {feed.list.map((item, key) => 
-                <>
-                  <Flex>
-                    <Avatar radius="xl" src={item.relatedUserPicture ? item.relatedUserPicture : undefined} alt={'Foto de '+item.relatedUserName} />
-                    <Box>
-                      <Text title={Date(item.created)}>
-                       {item.action} {item.category === 'project' ? item.relatedProjectName+' ('+item.relatedProjectType+')' : (<a href='/'>{item.relatedEventTitle}</a>)}
-                        há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-                      </Text>
-                      <Text fw='500'>
-                        {item.action} {item.category === 'project' ? item.relatedProjectName+' ('+item.relatedProjectType+')' : (<a href='/'>{item.relatedEventTitle}</a>)}
-                      </Text>
-                    </Box>
-                  </Flex>
-                  {(item.categoryId === 8) && 
-                    <Text>{item.extraText}</Text>
-                  }
-                  
-                </>
-              )}
+          <Grid.Col span={{ base: 12, md: 12, lg: 7 }} mb={isMobile ? 60 : 20}>
+            <Card 
+              px='md' pt='sm' pb='lg'
+              radius='md' 
+              withBorder 
+              className='mublinModule' 
+              id='feed'
+            >
+              <Flex>
+                
+              </Flex>
+              Meus projetos
             </Card>
+            <Divider my="xs" label="Atualizações" labelPosition="left" />
+            {feed.requesting ? (
+              <Card 
+                px='md'
+                pt='sm'
+                mb='xs'
+                radius='md'
+                withBorder
+                className='mublinModule'
+                id='feed'
+              >
+                <Flex gap={5} align='center'>
+                  <Skeleton height={45} circle />
+                  <Box>
+                    <Skeleton height={13} radius="xl" />
+                    <Skeleton height={10} width={200} radius="xl" mt={10} />
+                  </Box>
+                </Flex>
+                <Skeleton height={10} width={300} radius="xl" mt={10} />
+              </Card>
+            ) : (
+              feed.list.map((item, key) => 
+                <FeedCard item={item} key={key} />
+              )
+            )}
           </Grid.Col>
           {largeScreen && 
             <Grid.Col span={3}>

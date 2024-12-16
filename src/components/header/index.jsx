@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, rem, Group, Badge, Divider, Drawer, Image } from '@mantine/core';
+import { useMantineColorScheme, Container, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, rem, em, Group, Badge, Divider, Drawer, Image } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon, 
@@ -36,32 +36,34 @@ function Header (props) {
 
   const user = useSelector(state => state.user);
 
-  const { colorScheme, setColorScheme } = useMantineColorScheme();
-  const largeScreen = useMediaQuery('(min-width: 60em)');
-  const [searchParams] = useSearchParams();
-  const searchedKeywords = searchParams.get('keywords');
-  const [refreshCounter, setRefreshCounter] = useState(0);
+  const { colorScheme, setColorScheme } = useMantineColorScheme()
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
+
+  const [searchParams] = useSearchParams()
+  const searchedKeywords = searchParams.get('keywords')
+  const [refreshCounter, setRefreshCounter] = useState(0)
   // const [showMobileMenu, setShowMobileMenu] = useState(true)
 
-  let currentPath = window.location.pathname;
+  let currentPath = window.location.pathname
 
   useEffect(() => { 
     dispatch(userInfos.getInfo());
-  }, []);
+  }, [])
 
   useEffect(() => { 
     if (props.pageType === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
       dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
     }
-  }, [refreshCounter]);
+  }, [refreshCounter])
 
   const logout = () => {
     setColorScheme('light');
     dispatch(userActions.logout());
   }
 
-  const cdnBaseURL = 'https://ik.imagekit.io/mublin';
+  const cdnBaseURL = 'https://ik.imagekit.io/mublin'
   
   const navigateToSearchPage = (query, tab) => {
     navigate({
@@ -73,7 +75,7 @@ function Header (props) {
     });
   }
 
-  const [searchQuery, setSearchQuery] = useState(searchedKeywords);
+  const [searchQuery, setSearchQuery] = useState(searchedKeywords)
 
   const handleChangeSearch = (e, query, tab) => {
     setSearchQuery(query);
@@ -85,16 +87,16 @@ function Header (props) {
       handleSearch(e, query, tab);
     };
     navigateToSearchPage(query, tab);
-  },430);
+  },430)
 
   const handleSearch = (e, query, tab) => {
     e.preventDefault();
     navigateToSearchPage(query, tab);
   }
 
-  const [openMenuDrawer, setOpenMenuDrawer] = useState(false);
+  const [openMenuDrawer, setOpenMenuDrawer] = useState(false)
 
-  const menuTextColor = (colorScheme === 'light') ? '#383b3e' : '#f1f1f1';
+  const menuTextColor = (colorScheme === 'light') ? '#383b3e' : '#f1f1f1'
 
   return (
     <>
@@ -114,7 +116,7 @@ function Header (props) {
           <Group>
             <>
               <Flex align='flex-end' gap={9}>
-                {props.showBackIcon && 
+                {(props.showBackIcon && isMobile) && 
                   <IconChevronLeft 
                     style={{width:'21px',height:'21px'}} 
                     onClick={() => navigate(-1)}
@@ -126,21 +128,21 @@ function Header (props) {
                   onClick={() => setRefreshCounter(refreshCounter + 1)}
                 >
                   <Flex align='center'>
-                    {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 27} /> */}
-                    <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 28} />
+                    {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={isLargeScreen ? 43 : 27} /> */}
+                    <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={isLargeScreen ? 22 : 28} />
                   </Flex>
                 </Link>
               </Flex>
               {(props.pageType === 'profile' && props.profileId) &&
                 <>
                   <Divider size="xs" orientation="vertical" />
-                  <Text mr={28} style={{lineHeight:'normal'}} pt={largeScreen ? 0 : 5}>
+                  <Text mr={28} style={{lineHeight:'normal'}} pt={isLargeScreen ? 0 : 5}>
                     {props.username}
                   </Text>
                 </>
               }
             </>
-            {largeScreen && 
+            {isLargeScreen && 
               <form
                 onSubmit={(e) => handleSearch(e, searchQuery, null)}
                 // onFocus={() => setShowMobileMenu(false)}
@@ -217,7 +219,7 @@ function Header (props) {
                 Quero tocar
               </Button>
             </Link>
-            {largeScreen && 
+            {isLargeScreen && 
               <>
                 {/* {user.plan === 'Pro' && 
                   <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
@@ -284,7 +286,7 @@ function Header (props) {
                 </Menu>
               </>
             }
-            {(!largeScreen && props.pageType === 'profile') && 
+            {(!isLargeScreen && props.pageType === 'profile') && 
               <ActionIcon 
                 onClick={() => setOpenMenuDrawer(true)} 
                 variant="transparent" 
