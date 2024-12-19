@@ -18,6 +18,8 @@ export function authHeader() {
 export const miscService = {
   getNotifications,
   getFeed,
+  getFeedLikes,
+  getItemLikes,
   getAllMusicGenres,
   getAllMusicGenresCategories,
   getAllRoles,
@@ -34,6 +36,22 @@ function getFeed() {
     headers: authHeader()
   };
   return fetch(`${BASE_URL}/feed`, requestOptions).then(handleResponse);
+}
+
+function getFeedLikes() {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  };
+  return fetch(`${BASE_URL}/feedTotalLikes`, requestOptions).then(handleResponse);
+}
+
+function getItemLikes(feedId) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  };
+  return fetch(`${BASE_URL}/${feedId}/feedLikes`, requestOptions).then(handleResponse);
 }
 
 function getNotifications() {

@@ -141,6 +141,13 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
     display: block;
     width: fit-content;
   }
+  .mublinModule.feedCard {
+    @media only screen and (max-width: 600px) {
+      background-color: transparent!important;
+      // border-top: 1px solid #081017 !important;
+      border-bottom: 1px solid #222830 !important;
+    }
+  }
 }
 :root[data-mantine-color-scheme='light'] {
   .websiteLink {
@@ -148,4 +155,12 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
     display: block;
     width: fit-content;
   }
+  .mublinModule.feedCard {
+    @media only screen and (max-width: 600px) {
+      background-color: transparent!important;
+      // border-top: 1px solid #dee2e6 !important;
+      border-bottom: 1px solid #dee2e6 !important;
+    }
+  }
 }
+

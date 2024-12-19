@@ -30,6 +30,7 @@ function Home () {
 
   useEffect(() => {
     dispatch(miscInfos.getFeed());
+    dispatch(miscInfos.getFeedLikes());
     dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
     dispatch(searchInfos.getSuggestedFeaturedUsers());
     dispatch(searchInfos.getSuggestedNewUsers());
@@ -41,11 +42,11 @@ function Home () {
   return (
     <>
       {isMobile ? (
-        <HeaderMobile pageType="home" />
+        <HeaderMobile page="home" />
       ) : (
-        <Header pageType="home" />
+        <Header page="home" />
       )}
-      <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0} px={largeScreen ? 20 : 0}>
+      <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 
             <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={8}>
@@ -124,7 +125,13 @@ function Home () {
               </Card>
             ) : (
               feed.list.map((item, key) => 
-                <FeedCard item={item} key={key} />
+                <FeedCard 
+                  key={key} 
+                  item={item} 
+                  likes={
+                    feed.likes.filter((feed) => { return feed.feedId === item.id })[0]
+                  } 
+                />
               )
             )}
           </Grid.Col>

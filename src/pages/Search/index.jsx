@@ -19,8 +19,8 @@ function Search () {
   const searchResults = useSelector(state => state.search);
   // const suggestedUsers = useSelector(state => state.search.suggestedUsers);
 
-  const largeScreen = useMediaQuery('(min-width: 60em)');
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+  const isLargeScreen = useMediaQuery('(min-width: 60em)');
 
   const [showMobileMenu, setShowMobileMenu] = useState(true);
 
@@ -61,8 +61,8 @@ function Search () {
 
   return (
     <>
-      <Header pageType='search' />
-      <Container size={'xs'} mb={largeScreen ? 30 : 82} mt={30}>
+      <Header page='search' />
+      <Container size={'lg'} mb={isLargeScreen ? 30 : 82} mt={isMobile ? 6 : 30}>
         {isMobile && 
           <form
             onSubmit={(e) => handleSearch(e, searchQuery, null)}
@@ -95,24 +95,64 @@ function Search () {
         }
         {!searchedKeywords && 
           <>
-            <Text fw={700} size="md">Músicos em destaque</Text>
+            <Text fw={600} size="md" mb={10}>Músicos em destaque</Text>
             {searchResults.requesting ? (
               <Text size="13px" mt={7}>Carregando...</Text>
             ) : (
               searchResults.suggestedFeaturedUsers.map((user, key) => (
-                <UserCard 
-                  mt={6}
-                  key={key}
-                  name={user.name}
-                  lastname={user.lastname}
-                  username={user.username}
-                  mainRole={user.role}
-                  picture={user.picture}
-                  verified={user.verified}
-                  legend={user.legend}
-                  city={user.city}
-                  region={user.region}
-                />
+                <Flex key={key} align={'center'} mb={13} gap={6} justify="space-between">
+                  <Link to={{ pathname: `/${user.username}` }}>
+                    <Avatar 
+                      src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
+                      size='lg'
+                    />
+                  </Link>
+                  <Flex
+                    justify="flex-start"
+                    align="flex-start"
+                    direction="column"
+                    wrap="wrap"
+                    style={{flexGrow:'2'}}
+                  >
+                    <Anchor href={`/${user.username}`}>
+                      <Flex gap={3} align={'center'}>
+                        <Text size='md' fw={500} style={{lineHeight:'normal'}}>
+                          {user.name+' '+user.lastname}
+                        </Text>
+                        {!!user.verified && 
+                          <IconRosetteDiscountCheckFilled color='blue' 
+                          style={iconVerifiedStyle} />
+                        }
+                        {!!user.legend && 
+                          <IconShieldCheckFilled color='#DAA520' 
+                          style={iconVerifiedStyle} />
+                        }
+                      </Flex>
+                    </Anchor>
+                    <Text size='sm'>
+                      {user.mainRole ? user.mainRole : user.bio}
+                    </Text>
+                    <Text size='11px' c='dimmed'>
+                      {user.city && user.city+' - '+user.region}
+                    </Text>
+                    {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
+                      <Text size='10px' mt='3px' c='dimmed'>
+                        Projeto relacionado: {user.projectRelated} ({user.projectType})
+                      </Text>
+                    } */}
+                  </Flex>
+                  <Box>
+                    <Button 
+                      size='sm' 
+                      color='violet' 
+                      variant='light'
+                      component="a"
+                      href={`/${user.username}`}
+                    >
+                      Ver perfil
+                    </Button>
+                  </Box>
+                </Flex>
               ))
             )}
             {/* <Text fw={700} size="md" mt={16}>Sugestões para conectar</Text>
@@ -169,7 +209,7 @@ function Search () {
               {searchResults.users[0].id && 
                 <Box>
                   {searchResults.users.map((user, key) =>
-                    <Flex key={key} align={'center'} mb={15} gap={6} justify="space-between">
+                    <Flex key={key} align={'center'} mb={13} gap={6} justify="space-between">
                       <Link to={{ pathname: `/${user.username}` }}>
                         <Avatar 
                           src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
@@ -248,7 +288,7 @@ function Search () {
                             {project.name} 
                           </Text>
                         </Link>
-                        {(project.labelShow && project.labelText) && 
+                        {!!(project.labelShow && project.labelText) && 
                           <Badge 
                             color={project.labelColor} 
                             size="xs" 

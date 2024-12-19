@@ -24,7 +24,7 @@ function Header (props) {
   }, []);
 
   useEffect(() => { 
-    if (props.pageType === 'home' && refreshCounter > 0) {
+    if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
       dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
     }

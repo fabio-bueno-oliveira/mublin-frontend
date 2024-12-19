@@ -4,15 +4,17 @@ import { feedTypes } from '../types/feed';
 import { miscService } from '../../api/misc';
 
 export const miscInfos = {
-//   getNotifications: getNotifications,
   getFeed: getFeed,
+  getFeedLikes: getFeedLikes,
+  getItemLikes: getItemLikes,
   getMusicGenres: getMusicGenres,
   getMusicGenresCategories: getMusicGenresCategories,
   getRoles: getRoles,
-//   getGearBrands: getGearBrands,
-//   getAvailabilityStatuses: getAvailabilityStatuses,
-//   getAvailabilityItems: getAvailabilityItems,
-//   getAvailabilityFocuses: getAvailabilityFocuses
+  // getNotifications: getNotifications,
+  // getGearBrands: getGearBrands,
+  // getAvailabilityStatuses: getAvailabilityStatuses,
+  // getAvailabilityItems: getAvailabilityItems,
+  // getAvailabilityFocuses: getAvailabilityFocuses
 };
 
 function getFeed() {
@@ -29,6 +31,38 @@ function getFeed() {
   function request() { return { type: feedTypes.GET_USER_FEED_REQUEST} }
   function success(list) { return { type: feedTypes.GET_USER_FEED_SUCCESS, list } }
   function failure(error) { return { type: feedTypes.GET_USER_FEED_FAILURE, error } }
+}
+
+function getFeedLikes() {
+  return dispatch => {
+    dispatch(request());
+
+    miscService.getFeedLikes()
+      .then(
+        likes => dispatch(success(likes)),
+        error => dispatch(failure(error.toString()))
+      );
+    };
+
+  function request() { return { type: feedTypes.GET_USER_FEED_LIKES_REQUEST} }
+  function success(likes) { return { type: feedTypes.GET_USER_FEED_LIKES_SUCCESS, likes } }
+  function failure(error) { return { type: feedTypes.GET_USER_FEED_LIKES_FAILURE, error } }
+}
+
+function getItemLikes(feedId) {
+  return dispatch => {
+    dispatch(request());
+
+    miscService.getItemLikes(feedId)
+      .then(
+        result => dispatch(success(result)),
+        error => dispatch(failure(error.toString()))
+      );
+    };
+
+  function request() { return { type: feedTypes.GET_ITEM_LIKES_REQUEST} }
+  function success(result) { return { type: feedTypes.GET_ITEM_LIKES_SUCCESS, result } }
+  function failure(error) { return { type: feedTypes.GET_ITEM_LIKES_FAILURE, error } }
 }
 
 function getMusicGenres() {

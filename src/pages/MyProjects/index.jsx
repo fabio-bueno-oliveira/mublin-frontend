@@ -85,7 +85,7 @@ function MyProjects () {
 
   return (
     <>
-      <Header pageType="myProjects" />
+      <Header page="myProjects" />
       <Container
         size={'lg'}
         mb={isLargeScreen ? 30 : 82}

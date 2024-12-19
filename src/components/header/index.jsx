@@ -52,7 +52,7 @@ function Header (props) {
   }, [])
 
   useEffect(() => { 
-    if (props.pageType === 'home' && refreshCounter > 0) {
+    if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
       dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
     }
@@ -133,7 +133,7 @@ function Header (props) {
                   </Flex>
                 </Link>
               </Flex>
-              {(props.pageType === 'profile' && props.profileId) &&
+              {(props.page === 'profile' && props.profileId) &&
                 <>
                   <Divider size="xs" orientation="vertical" />
                   <Text mr={28} style={{lineHeight:'normal'}} pt={isLargeScreen ? 0 : 5}>
@@ -158,7 +158,7 @@ function Header (props) {
                   onChange={(event) => handleChangeSearch(
                     event, event.currentTarget.value, null
                   )}
-                  // onFocus={(event) => navigateToSearchPage(event.currentTarget.value, null)}
+                  onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
                   rightSectionPointerEvents="all"
                 />
               </form>
@@ -286,7 +286,7 @@ function Header (props) {
                 </Menu>
               </>
             }
-            {(!isLargeScreen && props.pageType === 'profile') && 
+            {(!isLargeScreen && props.page === 'profile') && 
               <ActionIcon 
                 onClick={() => setOpenMenuDrawer(true)} 
                 variant="transparent" 

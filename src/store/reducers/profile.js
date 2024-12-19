@@ -43,6 +43,17 @@ const initialState = {
       main: ''
     }
   ],
+  recentActivity: [
+    {
+      id: '',
+      typeId: '',
+      created: '',
+      created_date: '',
+      action: '',
+      extraText: '',
+      image: ''
+    }
+  ],
   projects: [
     {
       confirmed: '',

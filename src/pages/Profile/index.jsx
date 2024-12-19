@@ -6,7 +6,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -15,6 +15,8 @@ import PartnersModule from './partners'
 import CarouselProjects from './carouselProjects'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
+import { formatDistance } from 'date-fns';
+import pt from 'date-fns/locale/pt-BR';
 import './styles.scss'
 
 function ProfilePage () {
@@ -39,6 +41,7 @@ function ProfilePage () {
     dispatch(profileInfos.getProfileAvailabilityItems(username))
     dispatch(profileInfos.getProfileFollowers(username))
     dispatch(profileInfos.getProfileFollowing(username))
+    dispatch(profileInfos.getProfilePosts(username))
     dispatch(profileInfos.getProfileProjects(username))
     dispatch(profileInfos.getProfileRoles(username))
     dispatch(profileInfos.getProfileGenres(username))
@@ -249,7 +252,7 @@ function ProfilePage () {
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
-        pageType='profile'
+        page='profile'
         username={username}
         profileId={profile.id}
         showBackIcon={true}
@@ -351,11 +354,11 @@ function ProfilePage () {
                   </Flex>
                   <Group 
                     gap={12} 
-                    mt={largeScreen ? 15 : 12} 
-                    mb={largeScreen ? 10 : 9}
+                    mt={isMobile ? 12 : 18} 
+                    mb={isMobile ? 9 : 10}
                   >
                     <Text 
-                      className='point' 
+                      className='point'
                       size={largeScreen ? '0.9rem' : '0.9rem'} 
                       fw='430'
                       onClick={() => setModalFollowersOpen(true)}
@@ -364,7 +367,7 @@ function ProfilePage () {
                       {profile.followers.total} seguidores
                     </Text>
                     <Text 
-                      className='point' 
+                      className='point'
                       size={largeScreen ? '0.9rem' : '0.9rem'} 
                       fw='430'
                       onClick={() => setModalFollowingOpen(true)}
@@ -422,21 +425,22 @@ function ProfilePage () {
                       </Button>
                     ) : (
                       <Button 
-                        size={largeScreen ? "xs" : "xs"} 
-                        fz={largeScreen ? "14px" : "14px"}
-                        fw={largeScreen ? "500" : "500"}
+                        size='xs'
+                        fz='0.84rem'
+                        fw='470'
                         variant='light'
                         color={colorScheme === "light" ? "dark" : "gray"}
                         fullWidth={isMobile}
+                        leftSection={<IconPencil size={14} />} 
                         onClick={() => navigate('/settings')}
                       >
                         Editar perfil
                       </Button>
                     )}
                     <Button 
-                      size={largeScreen ? "xs" : "xs"}
-                      fz={largeScreen ? "14px" : "14px"}
-                      fw={largeScreen ? "500" : "500"}
+                      size='xs'
+                      fz='0.84rem'
+                      fw='470'
                       variant='light'
                       color={colorScheme === "light" ? "dark" : "gray"}
                       leftSection={<IconMail size={14} />} 
@@ -627,6 +631,50 @@ function ProfilePage () {
               }
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
+              <Group justify='space-between' align='center' gap={8} mb={8}>
+                <Title order={5} fw={500}>Postagens</Title>
+                {(profile.id === loggedUser.id && !profile.requesting) && 
+                  <Button 
+                    size='compact-xs'
+                    radius='lg'
+                    variant='light'
+                    color={'violet'}
+                    onClick={() => setModalStrengthsOpen(true)}
+                  >
+                    Nova postagem
+                  </Button>
+                }
+              </Group>
+              <Paper
+                radius="md"
+                withBorder={largeScreen ? true : false}
+                px={largeScreen ? 18 : 0}
+                py={largeScreen ? 18 : 0}
+                mb={14}
+                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                className="mublinModule"
+              >
+                {profile.requesting ? ( 
+                  <Text size='sm'>Carregando...</Text>
+                ) : (
+                  <>
+                    {profile.recentActivity.slice(0,2).map((activity, key) =>
+                      <>
+                        <Group gap={3} mb={6}>
+                          <Avatar src={profile.picture} />
+                          <Flex direction='column'>
+                            <Text size='xs' fw={400}>{profile.name} {profile.lastname}</Text>
+                            <Text size='xs' c='dimmed' title={activity.created_date}>
+                              há {formatDistance(new Date(activity.created * 1000), new Date(), {locale:pt})}
+                            </Text>
+                          </Flex>
+                        </Group>
+                        <Text size='sm' key={key}>{activity.extraText}</Text>
+                      </>
+                    )}
+                  </>
+                )}
+              </Paper>
               <Group justify="flex-start" align="center" gap={8} mb={8}>
                 <Title order={5} fw={500}>Pontos Fortes</Title>
                 {(profile.id !== loggedUser.id && !profile.requesting) && 

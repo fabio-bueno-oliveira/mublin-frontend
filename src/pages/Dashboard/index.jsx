@@ -53,9 +53,9 @@ function Home () {
   return (
     <>
       {isMobile ? (
-        <HeaderMobile pageType="home" />
+        <HeaderMobile page="home" />
       ) : (
-        <Header pageType="home" />
+        <Header page="home" />
       )}
       <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
         <Grid>
