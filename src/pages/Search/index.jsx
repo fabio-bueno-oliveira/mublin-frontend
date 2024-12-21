@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Flex, Tabs, Box, Title, Text, Anchor, Avatar, Input, CloseButton, Button, Center, Loader, Badge, rem, em } from '@mantine/core';
+import { Container, Grid, Flex, Tabs, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Button, Center, Loader, Badge, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
-import UserCard from '../../components/userCard';
 
 function Search () {
 
@@ -42,6 +41,7 @@ function Search () {
       dispatch(searchInfos.getSearchProjectsResults(searchedKeywords));
     }
     dispatch(searchInfos.getSuggestedFeaturedUsers());
+    dispatch(searchInfos.getFeaturedProjects());
     // dispatch(searchInfos.getSuggestedUsersResults());
     // dispatch(miscInfos.getFeed());
   }, [dispatch, searchedKeywords]);
@@ -61,7 +61,9 @@ function Search () {
 
   return (
     <>
-      <Header page='search' />
+      {isLargeScreen && 
+        <Header page='search' />
+      }
       <Container size={'lg'} mb={isLargeScreen ? 30 : 82} mt={isMobile ? 6 : 30}>
         {isMobile && 
           <form
@@ -94,97 +96,128 @@ function Search () {
           </form>
         }
         {!searchedKeywords && 
-          <>
-            <Title fz='1.14rem' fw={460} className='op80' mb={10}>
-              Músicos em destaque
-            </Title>
-            {searchResults.requesting ? (
-              <Text size="13px" mt={7}>Carregando...</Text>
-            ) : (
-              searchResults.suggestedFeaturedUsers.map((user, key) => (
-                <Flex key={key} align={'center'} mb={13} gap={6} justify="space-between">
-                  <Link to={{ pathname: `/${user.username}` }}>
-                    <Avatar 
-                      src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
-                      size='lg'
-                    />
-                  </Link>
-                  <Flex
-                    justify="flex-start"
-                    align="flex-start"
-                    direction="column"
-                    wrap="wrap"
-                    style={{flexGrow:'2'}}
-                  >
-                    <Anchor href={`/${user.username}`}>
-                      <Flex gap={3} align={'center'}>
-                        <Text size='md' fw={500} style={{lineHeight:'normal'}}>
-                          {user.name+' '+user.lastname}
-                        </Text>
-                        {!!user.verified && 
-                          <IconRosetteDiscountCheckFilled color='blue' 
-                          style={iconVerifiedStyle} />
-                        }
-                        {!!user.legend && 
-                          <IconShieldCheckFilled color='#DAA520' 
-                          style={iconVerifiedStyle} />
-                        }
-                      </Flex>
-                    </Anchor>
-                    <Text size='0.82rem' mt={1}>
-                      {user.role}
-                    </Text>
-                    <Text size='0.82rem' c='dimmed'>
-                      {user.city && user.city+' - '+user.region}
-                    </Text>
-                    {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
-                      <Text size='10px' mt='3px' c='dimmed'>
-                        Projeto relacionado: {user.projectRelated} ({user.projectType})
-                      </Text>
-                    } */}
-                  </Flex>
-                  <Box>
-                    <Button 
-                      size='sm' 
-                      color='violet' 
-                      variant='light'
-                      component="a"
-                      href={`/${user.username}`}
+          <Grid>
+            <Grid.Col span={{ base: 12, md: 9, lg: 9 }}>
+              <Title fz='1.14rem' fw={460} className='op80' mb={14}>
+                Músicos em destaque
+              </Title>
+              {searchResults.requesting ? (
+                <Text size="13px" mt={7}>Carregando...</Text>
+              ) : (
+                searchResults.suggestedFeaturedUsers.map((user, key) => (
+                  <Flex key={key} align={'center'} mb={13} gap={6} justify="space-between">
+                    <Link to={{ pathname: `/${user.username}` }}>
+                      <Avatar 
+                        src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
+                        size='lg'
+                      />
+                    </Link>
+                    <Flex
+                      justify="flex-start"
+                      align="flex-start"
+                      direction="column"
+                      wrap="wrap"
+                      style={{flexGrow:'2'}}
                     >
-                      Ver perfil
-                    </Button>
-                  </Box>
-                </Flex>
-              ))
-            )}
-            {/* <Text fw={700} size="md" mt={16}>Sugestões para conectar</Text>
-            {searchResults.requesting ? (
-              <Group justify='flex-start'>
-                <Skeleton height={50} width={50} />
-                <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                  <Skeleton height={9} width={300} radius="xl" />
-                  <Skeleton height={9} width={300} radius="xl" />
-                  <Skeleton height={9} width={300} radius="xl" />
-                </SimpleGrid>
-              </Group>
-            ) : (
-              suggestedUsers.map((user, key) =>
-                <UserCard 
-                  mt={6}
-                  key={key}
-                  name={user.name}
-                  lastname={user.lastname}
-                  username={user.username}
-                  mainRole={user.role}
-                  picture={user.picture}
-                  verified={user.verified}
-                  legend={user.legend}
-                  city={user.city}
-                  region={user.region}
-                />
-              )
-            )} */}
-          </>
+                      <Anchor href={`/${user.username}`}>
+                        <Flex gap={3} align={'center'}>
+                          <Text size='md' fw={500} style={{lineHeight:'normal'}}>
+                            {user.name+' '+user.lastname}
+                          </Text>
+                          {!!user.verified && 
+                            <IconRosetteDiscountCheckFilled color='blue' 
+                            style={iconVerifiedStyle} />
+                          }
+                          {!!user.legend && 
+                            <IconShieldCheckFilled color='#DAA520' 
+                            style={iconVerifiedStyle} />
+                          }
+                        </Flex>
+                      </Anchor>
+                      <Text size='0.82rem' mt={1}>
+                        {user.role}
+                      </Text>
+                      <Text size='0.82rem' c='dimmed'>
+                        {user.city && user.city+' - '+user.region}
+                      </Text>
+                      {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
+                        <Text size='10px' mt='3px' c='dimmed'>
+                          Projeto relacionado: {user.projectRelated} ({user.projectType})
+                        </Text>
+                      } */}
+                    </Flex>
+                    {/* <Box>
+                      <Button 
+                        size='sm' 
+                        color='violet' 
+                        variant='light'
+                        component="a"
+                        href={`/${user.username}`}
+                      >
+                        Ver perfil
+                      </Button>
+                    </Box> */}
+                  </Flex>
+                ))
+              )}
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+              <Title fz='1.14rem' fw={460} className='op80' mb={14}>
+                Projetos em destaque
+              </Title>
+              {searchResults.requesting ? (
+                <Text size="13px" mt={7}>Carregando...</Text>
+              ) : (
+                searchResults.featuredProjects.result.map((project, key) => (
+                  <Flex key={key} align='flex-start' mb={13} gap={6} justify="space-between">
+                    <Link to={{ pathname: `/projects/${project.username}` }}>
+                      <Image 
+                        radius='md'
+                        h={50}
+                        w={50}
+                        fit='contain'
+                        name='🎵'
+                        src={project.picture ? project.picture : undefined} 
+                      />
+                    </Link>
+                    <Flex
+                      justify="flex-start"
+                      align="flex-start"
+                      direction="column"
+                      wrap="wrap"
+                      style={{flexGrow:'2'}}
+                      gap={2}
+                    >
+                      <Anchor href={`/projects/${project.username}`}>
+                        <Flex gap={3} align={'center'}>
+                          <Box w={isMobile ? 300 : 128}>
+                            <Text 
+                              size='0.91rem'
+                              pt={1}
+                              fw={450}
+                              style={{lineHeight:'normal'}}
+                              truncate='end'
+                              title={project.name}
+                            >
+                              {project.name}
+                            </Text>
+                          </Box>
+                        </Flex>
+                      </Anchor>
+                      <Text size='0.74rem' fw={350} mt={1}>
+                        {project.type}{project.genre1 && ` · ${project.genre1}`}
+                      </Text>
+                      {project.city && 
+                        <Text size='0.7rem' c='dimmed'>
+                          {project.city && `${project.city} - ${project.region}`}
+                        </Text>
+                      }
+                    </Flex>
+                  </Flex>
+                ))
+              )}
+            </Grid.Col>
+          </Grid>
         }
         {searchResults.requesting && 
           <Center>

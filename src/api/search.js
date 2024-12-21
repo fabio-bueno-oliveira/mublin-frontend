@@ -24,6 +24,7 @@ export const searchService = {
     getSuggestedUsersResults,
     getSuggestedFeaturedUsers,
     getSuggestedNewUsers,
+    getFeaturedProjects,
     logout
 };
 
@@ -67,7 +68,7 @@ function getSearchProjectResults(query) {
     return fetch(`${BASE_URL}/quickSearch/project/${query}`, requestOptions).then(handleResponse);
 }
 
-function getSuggestedUsersResults(query) {
+function getSuggestedUsersResults() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -75,7 +76,7 @@ function getSuggestedUsersResults(query) {
     return fetch(`${BASE_URL}/search/explore/suggestedUsers`, requestOptions).then(handleResponse);
 }
 
-function getSuggestedFeaturedUsers(query) {
+function getSuggestedFeaturedUsers() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -83,12 +84,20 @@ function getSuggestedFeaturedUsers(query) {
     return fetch(`${BASE_URL}/search/explore/featuredUsers`, requestOptions).then(handleResponse);
 }
 
-function getSuggestedNewUsers(query) {
+function getSuggestedNewUsers() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/search/explore/newUsers`, requestOptions).then(handleResponse);
+}
+
+async function getFeaturedProjects() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/explore/featuredProjects`, requestOptions).then(handleResponse);
 }
 
 function logout() {

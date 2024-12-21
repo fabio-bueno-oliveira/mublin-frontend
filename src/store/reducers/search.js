@@ -115,7 +115,26 @@ const initialState = {
       region: '',
       uf: '',
     }
-  ]
+  ],
+  featuredProjects: {
+    total: 0,
+    success: '',
+    result: [
+      {
+        id: '',
+        name: '',
+        username: '',
+        picture: '',
+        currentlyOnTour: '',
+        genre1: '',
+        genre2: '',
+        city: '',
+        region: '',
+        uf: '',
+        type: ''
+      }
+    ]
+  }
 }
 
 export function search(state = initialState, action) {
@@ -220,6 +239,27 @@ export function search(state = initialState, action) {
         suggestedNewUsers: initialState.suggestedNewUsers,
         requesting: false,
         error: 'Nenhum novo usuário sugerido encontrado'
+      };
+    // FEATURED PROJECTS
+    case searchTypes.GET_FEATURED_PROJECTS_REQUEST:
+      return {
+        ...state,
+        featuredProjects: initialState.featuredProjects,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.GET_FEATURED_PROJECTS_SUCCESS:
+      return {
+        ...state,
+        featuredProjects: action.results,
+        requesting: false
+      };
+    case searchTypes.GET_FEATURED_PROJECTS_FAILURE:
+      return {
+        ...state,
+        featuredProjects: initialState.featuredProjects,
+        requesting: false,
+        error: 'Nenhum projeto em destaque encontrado'
       };
     // LAST SEARCHES
     case searchTypes.GET_USERLASTSEARCHES_REQUEST:

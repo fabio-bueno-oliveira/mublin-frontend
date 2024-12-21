@@ -10,6 +10,7 @@ export const searchInfos = {
   getSuggestedUsersResults: getSuggestedUsersResults,
   getSuggestedFeaturedUsers: getSuggestedFeaturedUsers,
   getSuggestedNewUsers: getSuggestedNewUsers,
+  getFeaturedProjects: getFeaturedProjects
 };
 
 function getUserLastSearches(query) {
@@ -138,4 +139,20 @@ function getSuggestedNewUsers() {
   function request(query) { return { type: searchTypes.GET_SUGGESTED_NEW_USERS_REQUEST, query } }
   function success(results) { return { type: searchTypes.GET_SUGGESTED_NEW_USERS_SUCCESS, results } }
   function failure(error) { return { type: searchTypes.GET_SUGGESTED_NEW_USERS_FAILURE, error } }
+}
+
+function getFeaturedProjects() {
+  return dispatch => {
+    dispatch(request());
+
+    searchService.getFeaturedProjects()
+      .then(
+        results => dispatch(success(results)),
+        error => dispatch(failure(error.toString()))
+      );
+    };
+
+  function request(query) { return { type: searchTypes.GET_FEATURED_PROJECTS_REQUEST, query } }
+  function success(results) { return { type: searchTypes.GET_FEATURED_PROJECTS_SUCCESS, results } }
+  function failure(error) { return { type: searchTypes.GET_FEATURED_PROJECTS_FAILURE, error } }
 }

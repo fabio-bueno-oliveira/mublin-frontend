@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, rem, em, Group, Badge, Divider, Drawer, Image } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Divider, Drawer, Image, CloseButton, rem, em } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon, 
@@ -125,7 +125,10 @@ function Header (props) {
                   className='mublinLogo showOnlyInLargeScreen'
                   onClick={() => setRefreshCounter(refreshCounter + 1)}
                 >
-                  <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={isMobile ? 28 : 22} />
+                  <Image 
+                    src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} 
+                    h={27}
+                  />
                 </Link>
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
@@ -156,13 +159,22 @@ function Header (props) {
                   size="md"
                   w={320}
                   placeholder='Pessoa, instrumento ou cidade...'
-                  value={searchQuery ? searchQuery : undefined}
+                  value={searchQuery}
                   leftSection={<IconSearch size={16} />}
                   onChange={(event) => handleChangeSearch(
                     event, event.currentTarget.value, null
                   )}
                   // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
                   rightSectionPointerEvents="all"
+                  rightSection={
+                    <CloseButton
+                      aria-label="Apagar"
+                      onClick={(event) => handleChangeSearch(
+                        event, "", null
+                      )}
+                      style={{ display: searchQuery ? undefined : 'none' }}
+                    />
+                  }
                 />
               </form>
             }
