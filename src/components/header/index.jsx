@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, rem, em, Group, Badge, Divider, Drawer, Image } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, rem, em, Group, Badge, Divider, Drawer, Image } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon, 
@@ -122,21 +122,26 @@ function Header (props) {
                 }
                 <Link 
                   to={{ pathname: '/home' }} 
-                  className='mublinLogo'
+                  className='mublinLogo showOnlyInLargeScreen'
                   onClick={() => setRefreshCounter(refreshCounter + 1)}
                 >
-                  <Flex align='center'>
-                    {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={isMobile ? 27 : 43} /> */}
-                    <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={isMobile ? 28 : 22} />
-                  </Flex>
+                  <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={isMobile ? 28 : 22} />
                 </Link>
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
                 <>
-                  <Divider size="xs" orientation="vertical" />
-                  <Text mr={28} style={{lineHeight:'normal'}} pt={isMobile ? 5 : 0}>
-                    {props.username}
-                  </Text>
+                  <Divider size="xs" mx={0} orientation="vertical" className='showOnlyInLargeScreen' />
+                  <Box w={isMobile ? 160 : 130}>
+                    <Text 
+                      mr={10} 
+                      style={{lineHeight:'normal'}} 
+                      pt={isMobile ? 2 : 0}
+                      truncate="end"
+                      size={isMobile ? 'lg' : 'md'}
+                    >
+                      {props.username}
+                    </Text>
+                  </Box>
                 </>
               }
             </>
@@ -236,7 +241,7 @@ function Header (props) {
                     <Menu.Label>
                       {user.name} {user.lastname} 
                       {user.plan === 'Pro' && 
-                        <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
+                        <Badge size='sm' variant='light' color='violet' ml={6}>PRO</Badge>
                       }
                     </Menu.Label>
                     <Menu.Item 

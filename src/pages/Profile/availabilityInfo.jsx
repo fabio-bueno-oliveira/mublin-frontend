@@ -7,8 +7,8 @@ function AvailabilityInfo () {
   const profile = useSelector(state => state.profile)
 
   return (
-    <Box>
-      <Text size='0.83em' fw={400} mb={5}>
+    <Box mt={25}>
+      <Text size='0.83em' fw={300} mb={6}>
         Principais estilos musicais:
       </Text>
       {profile.genres[0].id ? (
@@ -18,8 +18,8 @@ function AvailabilityInfo () {
           ) : (
             <Flex gap={3} mx={0} pt={2}>
               {profile.genres[0].id && profile.genres.map((genre, key) =>
-                <Badge variant='default' size='sm' key={key}>
-                  {genre.name}
+                <Badge variant='default' size='md' key={key}>
+                  <Text fz='0.64rem' fw='400'>{genre.name}</Text>
                 </Badge>
               )}
             </Flex>
@@ -30,7 +30,7 @@ function AvailabilityInfo () {
           Nenhum estilo cadastrado
         </Text>
       )}
-      <Text size='0.83em' fw={400} mb={5} mt={14}>
+      <Text size='0.83em' fw={300} mb={6} mt={14}>
         Tipos de projetos:
       </Text>
       <Group gap={4}>
@@ -39,22 +39,26 @@ function AvailabilityInfo () {
         ) : (
           <Flex gap={3} mx={0} pt={2}>
             {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-              <Badge variant='default' size='sm'>Autorais</Badge>
+              <Badge variant='default' size='md'>
+                <Text fz='0.64rem' fw='400'>Autorais</Text>
+              </Badge>
             }
             {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-              <Badge variant='default' size='sm'>Contratado</Badge>
+              <Badge variant='default' size='md'>
+                <Text fz='0.64rem' fw='400'>Contrato</Text>
+              </Badge>
             }
           </Flex>
         )}
       </Group>
-      <Text size="0.83em" fw={400} mb={5} mt={14}>
+      <Text size="0.83em" fw={300} mb={6} mt={14}>
         Tipos de trabalho:
       </Text>
       {profile.availabilityItems[0].id ? (
         <Flex gap={3} mx={0} pt={2}>
           {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-            <Badge variant='default' size='sm' key={key}>
-              {item.itemName}
+            <Badge variant='default' size='md' key={key}>
+              <Text fz='0.64rem' fw='400'>{item.itemName}</Text>
             </Badge>
           )}
         </Flex>

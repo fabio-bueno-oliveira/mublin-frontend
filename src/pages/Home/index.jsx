@@ -75,7 +75,7 @@ function Home () {
                   </Title>
                   {user.plan === 'Pro' && 
                     <Center>
-                      <Badge size='xs' variant='outline' color="gray">PRO</Badge>
+                      <Badge size='xs' variant='light' color='violet'>PRO</Badge>
                     </Center>
                   }
                   <Text ta="center" c="dimmed" fw="400" size="13px" mt={13}>

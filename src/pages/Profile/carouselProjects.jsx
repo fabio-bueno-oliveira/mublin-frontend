@@ -33,7 +33,7 @@ function CarouselProjects (props) {
           pagination: false,
         }}
       >
-        {projects.splice(0 , profilePlan === 'Free' ? 3 : 300).map((project, key) =>
+        {projects.splice(0 , profilePlan === 'Free' ? 2 : 300).map((project, key) =>
           <SplideSlide key={key}>
             <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>
               <Avatar 
@@ -52,20 +52,20 @@ function CarouselProjects (props) {
                 wrap='wrap'
               >
                 <Box w={114}>
-                  <Text c='dimmed' size='11px' fw={400} mb={3} truncate='end'>
+                  <Text c='dimmed' size='11px' fw={320} mb={3} truncate='end'>
                     {project.workTitle}
                   </Text>
-                  <Text size='11px' fw={400} mb={3} truncate='end'>
+                  <Text size='11px' fw={320} mb={6} truncate='end'>
                     {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
                   </Text>
-                  <Text size='0.91rem' fw={490} mb={3} truncate='end' title={project.name}>
+                  <Text size='0.91rem' fw={420} mb={3} truncate='end' title={project.name}>
                     {project.name} {!!project.featured && <IconStarFilled style={{ width: '11px', height: '11px' }} color='gold' />}
                   </Text>
-                  <Text size='12px' fw={400}>{project.type}</Text>
+                  <Text size='12px' fw={210}>{project.type}</Text>
                   {/* <Text size='12px'>{project.workTitle}</Text> */}
                   {project.endYear && 
                     <Text size='10px' c='dimmed' mt={3}>
-                      (encerrado em {project.endYear})
+                      encerrado em {project.endYear}
                     </Text>
                   }
                 </Box>

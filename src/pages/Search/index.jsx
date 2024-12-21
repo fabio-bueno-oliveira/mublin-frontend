@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Flex, Tabs, Box, Text, Anchor, Avatar, Input, CloseButton, Button, Center, Loader, Badge, rem, em } from '@mantine/core';
+import { Container, Grid, Flex, Tabs, Box, Title, Text, Anchor, Avatar, Input, CloseButton, Button, Center, Loader, Badge, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -95,7 +95,9 @@ function Search () {
         }
         {!searchedKeywords && 
           <>
-            <Text fw={600} size="md" mb={10}>Músicos em destaque</Text>
+            <Title fz='1.14rem' fw={460} className='op80' mb={10}>
+              Músicos em destaque
+            </Title>
             {searchResults.requesting ? (
               <Text size="13px" mt={7}>Carregando...</Text>
             ) : (
@@ -129,10 +131,10 @@ function Search () {
                         }
                       </Flex>
                     </Anchor>
-                    <Text size='sm'>
-                      {user.mainRole ? user.mainRole : user.bio}
+                    <Text size='0.82rem' mt={1}>
+                      {user.role}
                     </Text>
-                    <Text size='11px' c='dimmed'>
+                    <Text size='0.82rem' c='dimmed'>
                       {user.city && user.city+' - '+user.region}
                     </Text>
                     {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 

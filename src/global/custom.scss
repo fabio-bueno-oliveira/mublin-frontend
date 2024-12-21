@@ -69,5 +69,27 @@
     .mantine-Carousel-control {
       background-color: #161616;
     }
+    .mantine-Divider-root {
+      border-top-color: #1f262c;
+    }
+    .mantine-Modal-content, .mantine-Modal-header {
+      background-color: #090e12!important;
+    }
+
+    .mantine-Modal-overlay, .mantine-Overlay-root {
+      background: var(--overlay-bg, rgba(0, 0, 0, 0.83));
+    }
   }
+}
+
+.splide__pagination {
+  top: 172px;
+}
+
+.splide__pagination__page.is-active {
+  background: #7950f2;
+}
+
+.splide__pagination__page:hover {
+  background: #b49df7;
 }

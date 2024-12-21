@@ -48,6 +48,12 @@ a.displayBlockLink {
   }
 }
 
+.showOnlyInLargeScreen {
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
+}
+
 /* Custom App Styles */
 .mantine-Badge-label {
   font-weight: 500;
@@ -172,4 +178,8 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 
 .op80 {
   opacity: 0.80;
+}
+
+.lhNormal {
+  line-height: normal;
 }

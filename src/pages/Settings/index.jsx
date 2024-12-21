@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, NavLink, Group, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider, em } from '@mantine/core';
-import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconHeartHandshake, IconPackages, IconTargetArrow } from '@tabler/icons-react';
+import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconHeartHandshake, IconPackages, IconTargetArrow, IconWorld } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
@@ -197,8 +197,12 @@ function SettingsPage () {
                   <Alert color="red">Erro ao atualizar os dados. Tente novamente em instantes</Alert>
                 }
                 <Checkbox
-                  color="violet"
-                  label="Tornar meu perfil público"
+                  color='violet'
+                  label={
+                    <Group gap={3}>
+                      <IconWorld size='17' /><Text>Tornar meu perfil público</Text>
+                    </Group>
+                  }
                   description="Exibir meu perfil nas buscas internas e nos mecanismos"
                   key={form.key('public')}
                   {...form.getInputProps('public', { type: 'checkbox' })}
