@@ -43,17 +43,21 @@ const initialState = {
       main: ''
     }
   ],
-  recentActivity: [
-    {
-      id: '',
-      typeId: '',
-      created: '',
-      created_date: '',
-      action: '',
-      extraText: '',
-      image: ''
-    }
-  ],
+  recentActivity: {
+    total: 0,
+    success: '',
+    result: [
+      {
+        id: '',
+        typeId: '',
+        created: '',
+        created_date: '',
+        action: '',
+        extraText: '',
+        image: '',
+      }
+    ]
+  },
   projects: [
     {
       confirmed: '',
@@ -391,6 +395,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_POSTS_REQUEST:
       return {
         ...state,
+        recentActivity: initialState.recentActivity,
         requesting: true
       };
     case profileTypes.GET_PROFILE_POSTS_SUCCESS:
@@ -402,17 +407,7 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_POSTS_FAILURE:
       return {
         ...state,
-        recentActivity: [
-          {
-            id: '',
-            typeId: '',
-            created: '',
-            created_date: '',
-            action: '',
-            extraText: '',
-            image: ''
-          }
-        ],
+        recentActivity: initialState.recentActivity,
         requesting: false,
         error: "A solicitação falhou"
       };

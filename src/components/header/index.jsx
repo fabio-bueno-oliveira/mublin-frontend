@@ -23,8 +23,6 @@ import {
 } from '@tabler/icons-react';
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
-// import PianoLogoBlack from '../../assets/svg/piano-logo.svg';
-// import PianoLogoWhite from '../../assets/svg/piano-logo-w.svg';
 import s from './header.module.css';
 
 function Header (props) {
@@ -37,8 +35,8 @@ function Header (props) {
   const user = useSelector(state => state.user);
 
   const { colorScheme, setColorScheme } = useMantineColorScheme()
-  const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   const [searchParams] = useSearchParams()
   const searchedKeywords = searchParams.get('keywords')
@@ -128,15 +126,15 @@ function Header (props) {
                   onClick={() => setRefreshCounter(refreshCounter + 1)}
                 >
                   <Flex align='center'>
-                    {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={isLargeScreen ? 43 : 27} /> */}
-                    <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={isLargeScreen ? 22 : 28} />
+                    {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={isMobile ? 27 : 43} /> */}
+                    <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={isMobile ? 28 : 22} />
                   </Flex>
                 </Link>
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
                 <>
                   <Divider size="xs" orientation="vertical" />
-                  <Text mr={28} style={{lineHeight:'normal'}} pt={isLargeScreen ? 0 : 5}>
+                  <Text mr={28} style={{lineHeight:'normal'}} pt={isMobile ? 5 : 0}>
                     {props.username}
                   </Text>
                 </>
@@ -158,7 +156,7 @@ function Header (props) {
                   onChange={(event) => handleChangeSearch(
                     event, event.currentTarget.value, null
                   )}
-                  onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
+                  // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
                   rightSectionPointerEvents="all"
                 />
               </form>
@@ -168,12 +166,12 @@ function Header (props) {
             <Link to={{ pathname: '/home' }}>
               <Button 
                 size='sm'
-                fw={400}
+                fw='400'
                 variant='transparent'
                 color={currentPath === '/home' ? 'violet' : menuTextColor}
                 leftSection={<><IconHome size={14} /></>}
-                p={'xs'}
-                visibleFrom="md"
+                p='xs'
+                visibleFrom='md'
               >
                 Início
               </Button>
@@ -181,12 +179,12 @@ function Header (props) {
             <Link to={{ pathname: '/new' }}>
               <Button 
                 size='sm'
-                fw={400}
+                fw='400'
                 variant='transparent'
                 color={currentPath === '/new' ? 'violet' : menuTextColor}
                 leftSection={<><IconPlus size={14} /></>}
-                p={'xs'}
-                visibleFrom="md"
+                p='xs'
+                visibleFrom='md'
               >
                 Novo
               </Button>
@@ -198,8 +196,8 @@ function Header (props) {
                 variant='transparent'
                 color={currentPath === '/projects' ? 'violet' : menuTextColor}
                 leftSection={<><IconMusic size={14} /></>}
-                p={'xs'}
-                visibleFrom="md"
+                p='xs'
+                visibleFrom='md'
               >
                 Meus Projetos
               </Button>

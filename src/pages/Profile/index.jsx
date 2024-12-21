@@ -17,7 +17,8 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 import { formatDistance } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
-import './styles.scss'
+import AvailabilityInfo from './availabilityInfo';
+import './styles.scss';
 
 function ProfilePage () {
 
@@ -28,7 +29,7 @@ function ProfilePage () {
   const user = useSelector(state => state.user)
   const profile = useSelector(state => state.profile)
 
-  const largeScreen = useMediaQuery('(min-width: 60em)')
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const { colorScheme } = useMantineColorScheme()
 
@@ -77,7 +78,7 @@ function ProfilePage () {
   const [loadingFollow, setLoadingFollow] = useState(false);
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
-  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '5px', cursor: "pointer" };
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '2px', cursor: "pointer" };
 
   // Projects
   const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
@@ -258,55 +259,45 @@ function ProfilePage () {
         showBackIcon={true}
       />
       {profile.id && 
-        <Container size={'lg'} mb={largeScreen ? 30 : 82} pt={largeScreen ? 10 : 0} className='profilePage'>
+        <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10} className='profilePage'>
           <Grid>
             <Grid.Col pr={22} span={{ base: 12, md: 12, lg: 4 }}>
               {profile.requesting && 
                 <>
                   <Group justify='flex-start'>
                     <Skeleton height={84} circle />
-                    <SimpleGrid cols={1} spacing="xs" verticalSpacing="xs">
-                      <Skeleton height={18} width={240} radius="xl" />
-                      <Skeleton height={11} width={240} radius="xl" />
-                      <Skeleton height={14} width={240} radius="xl" />
+                    <SimpleGrid cols={1} spacing='xs' verticalSpacing='xs'>
+                      <Skeleton height={18} width={240} radius='xl' />
+                      <Skeleton height={11} width={240} radius='xl' />
+                      <Skeleton height={14} width={240} radius='xl' />
                     </SimpleGrid>
                   </Group>
-                  <Skeleton height={15} width={420} mt={16} radius="xl" />
-                  <Skeleton height={15} width={450} mt={5} mb={20} radius="xl" />
+                  <Skeleton height={15} width={420} mt={16} radius='xl' />
+                  <Skeleton height={15} width={450} mt={5} mb={20} radius='xl' />
                 </>
               }
               {!profile.requesting && 
                 <Paper 
-                  radius="md" 
-                  withBorder={largeScreen ? false : false}
-                  px={largeScreen ? 0 : 0} 
-                  py={largeScreen ? 0 : 0} 
+                  radius='md'
+                  withBorder={false}
+                  px='0'
+                  py='0'
                   style={isMobile ? { backgroundColor: 'transparent' } : { backgroundColor: 'transparent' }}
                 >
                   <Flex
-                    justify="flex-start"
-                    align="center"
-                    direction="row"
-                    wrap="nowrap"
-                    columnGap="xs"
+                    justify='flex-start'
+                    align='center'
+                    direction='row'
+                    wrap='nowrap'
+                    columnGap='xs'
                   >
-                    <Indicator 
-                      color='black'
-                      position="bottom-center" 
-                      withBorder={colorScheme === "light"}
-                      inline 
-                      label={<Text size="9px">PRO</Text>} 
-                      size={15}
-                      disabled={profile.plan === "Free"}
-                    >
-                      <Avatar
-                        size={largeScreen ? 'xl' : 'lg'}
-                        src={profile.picture}
-                      />
-                    </Indicator>
+                    <Avatar
+                      size='xl'
+                      src={profile.picture}
+                    />
                     <Box style={{overflow:'hidden'}}>
                       <Flex align={'baseline'} mt={0}>
-                        <Title order={isMobile ? 4 : 3} fw={460} mb={3}>
+                        <Title order={isMobile ? 4 : 3} fw={460}>
                           {profile.name} {profile.lastname}
                         </Title>
                         {!!profile.verified && 
@@ -336,30 +327,35 @@ function ProfilePage () {
                       >
                         {profile.roles.map((role, key) =>
                           <SplideSlide className='carousel-item' key={key}>
-                            <Flex gap={1}>
+                            <Flex gap={2}>
                               {role.icon && 
                                 <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
                               }
-                              <Text size='13px' fw='400' mr={8}>
+                              <Text size='13px' fw='400' mr={7}>
                                 {role.name}
                               </Text>
                             </Flex>
                           </SplideSlide>
                         )}
                       </Splide>
-                      <Text size={largeScreen ? '13px' : '12px'} fw='400' c="dimmed" mt={5}>
+                      <Text size='13px' fw='400' c='dimmed' mt={5}>
                         {profile.city}{profile.region && `, ${profile.region}`}
                       </Text>
+                      {profile.plan === 'Pro' && 
+                        <Badge size='xs' variant='light' color='#DAA520' title='Usuário PRO'>
+                          PRO
+                        </Badge>
+                      }
                     </Box>
                   </Flex>
                   <Group 
                     gap={12} 
-                    mt={isMobile ? 12 : 18} 
+                    mt={isMobile ? 12 : 16} 
                     mb={isMobile ? 9 : 10}
                   >
                     <Text 
                       className='point'
-                      size={largeScreen ? '0.9rem' : '0.9rem'} 
+                      size='0.9rem'
                       fw='430'
                       onClick={() => setModalFollowersOpen(true)}
                       style={{lineHeight: 'normal'}}
@@ -368,7 +364,7 @@ function ProfilePage () {
                     </Text>
                     <Text 
                       className='point'
-                      size={largeScreen ? '0.9rem' : '0.9rem'} 
+                      size={isLargeScreen ? '0.9rem' : '0.9rem'} 
                       fw='430'
                       onClick={() => setModalFollowingOpen(true)}
                       style={{lineHeight: 'normal'}}
@@ -378,11 +374,12 @@ function ProfilePage () {
                   </Group>
                   {(profile.bio && profile.bio !== 'null') && 
                     <Text 
-                      size={isMobile ? "0.83em" : "0.83em"}
+                      size={isMobile ? 'sm' : '0.83em'}
                       mt={5} lineClamp={3}
                       onClick={isMobile ? () => setModalBioOpen(true) : undefined}
                       pr={isMobile ? 0 : 26}
-                      style={{lineHeight:'1.11em'}}
+                      style={{lineHeight:'1.24em'}}
+                      className='op80'
                     >
                       {profile.bio}
                     </Text>
@@ -407,9 +404,9 @@ function ProfilePage () {
                   <Flex gap={5} mt={14}>
                     {loggedUser.id !== profile.id ? (
                       <Button 
-                        size={largeScreen ? "xs" : "xs"} 
-                        fz={largeScreen ? "14px" : "14px"}
-                        fw={largeScreen ? "500" : "500"}
+                        size='xs'
+                        fz='14px'
+                        fw='500'
                         color={colorScheme === "light" ? "dark" : "gray"}
                         variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
                         loading={loadingFollow}
@@ -452,8 +449,8 @@ function ProfilePage () {
                     {profile.instagram && 
                       <>
                         <ActionIcon 
-                          size={largeScreen ? "30px" : "30"}
-                          w={largeScreen ? "30px" : "30"}
+                          size={isLargeScreen ? "30px" : "30"}
+                          w={isLargeScreen ? "30px" : "30"}
                           variant='light'
                           color={colorScheme === "light" ? "dark" : "gray"}
                           component="a"
@@ -472,7 +469,7 @@ function ProfilePage () {
                         align="center"
                         justify="flex-start"
                         gap={2} 
-                        mb={largeScreen ? 12 : 0} 
+                        mb={isLargeScreen ? 12 : 0} 
                       >
                         <Indicator 
                           inline
@@ -483,70 +480,14 @@ function ProfilePage () {
                           mr={7}
                         />
                         <Text 
-                          fz={largeScreen ? "15px" : "14px"} 
+                          fz={isLargeScreen ? "15px" : "14px"} 
                           fw={500}
                         >
                           {profile.availabilityTitle}
                         </Text>
                       </Flex>
-                      {largeScreen && 
-                        <Box>
-                          <Text size="0.83em" fw={400} mb={5}>
-                            Principais estilos musicais:
-                          </Text>
-                          {profile.genres[0].id ? (
-                            <>
-                              {profile.requesting ? (
-                                <Text size='xs' mx={0} c="dimmed">Carregando...</Text>
-                              ) : (
-                                <Flex gap={3} mx={0} pt={2}>
-                                  {profile.genres[0].id && profile.genres.map((genre, key) =>
-                                    <Badge variant="default" size="xs" key={key}>
-                                      {genre.name}
-                                    </Badge>
-                                  )}
-                                </Flex>
-                              )}
-                            </>
-                          ) : (
-                            <Text size='xs' mx={0} c="dimmed">
-                              Nenhum estilo cadastrado
-                            </Text>
-                          )}
-                          <Text size="0.83em" fw={400} mb={5} mt={14}>
-                            Tipos de projetos:
-                          </Text>
-                          <Group gap={4}>
-                            {profile.requesting ? (
-                              <Text size='xs' mx={0}>Carregando...</Text>
-                            ) : (
-                              <Flex gap={3} mx={0} pt={2}>
-                                {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-                                  <Badge variant="default" size="xs">Autorais</Badge>
-                                }
-                                {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-                                  <Badge variant="default" size="xs">Contratado</Badge>
-                                }
-                              </Flex>
-                            )}
-                          </Group>
-                          <Text size="0.83em" fw={400} mb={5} mt={14}>
-                            Tipos de trabalho:
-                          </Text>
-                          {profile.availabilityItems[0].id ? (
-                            <Flex gap={3} mx={0} pt={2}>
-                              {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                                <Badge variant="default" size="xs" key={key}>
-                                  {item.itemName}
-                                </Badge>
-                              )}
-                            </Flex>
-                          ) : (
-                            <Text size="xs" c="dimmed">
-                              Não informado
-                            </Text>
-                          )}
-                        </Box>
+                      {isLargeScreen && 
+                        <AvailabilityInfo />
                       }
                       {isMobile && 
                         <Accordion chevronPosition="left">
@@ -555,63 +496,7 @@ function ProfilePage () {
                               Exibir mais detalhes
                             </Accordion.Control>
                             <Accordion.Panel pb={12}>
-                              <Box>
-                                <Text size="0.83em" fw={400} mb={5}>
-                                  Principais estilos musicais:
-                                </Text>
-                                {profile.genres[0].id ? (
-                                  <>
-                                    {profile.requesting ? (
-                                      <Text size='xs' mx={0} c="dimmed">Carregando...</Text>
-                                    ) : (
-                                      <Flex gap={3} mx={0} pt={2}>
-                                        {profile.genres[0].id && profile.genres.map((genre, key) =>
-                                          <Badge variant="default" size="xs" key={key}>
-                                            {genre.name}
-                                          </Badge>
-                                        )}
-                                      </Flex>
-                                    )}
-                                  </>
-                                ) : (
-                                  <Text size='xs' mx={0} c="dimmed">
-                                    Nenhum estilo cadastrado
-                                  </Text>
-                                )}
-                                <Text size="0.83em" fw={400} mb={5} mt={14}>
-                                  Tipos de projetos:
-                                </Text>
-                                <Group gap={4}>
-                                  {profile.requesting ? (
-                                    <Text size='xs' mx={0}>Carregando...</Text>
-                                  ) : (
-                                    <Flex gap={3} mx={0} pt={2}>
-                                      {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-                                        <Badge variant="default" size="xs">Autorais</Badge>
-                                      }
-                                      {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-                                        <Badge variant="default" size="xs">Contratado</Badge>
-                                      }
-                                    </Flex>
-                                  )}
-                                </Group>
-                                <Text size="0.83em" fw={400} mb={5} mt={14}>
-                                  Tipos de trabalho:
-                                </Text>
-                                {profile.availabilityItems[0].id ? (
-                                  <Flex gap={3} mx={0} pt={2}>
-                                    {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-                                      <Badge variant="default" size="xs" key={key}>
-                                        {item.itemName}
-                                      </Badge>
-                                    )}
-                                  </Flex>
-                                ) : (
-                                  <Text size="xs" c="dimmed">
-                                    Não informado
-                                  </Text>
-                                )}
-                              </Box>
+                              <AvailabilityInfo />
                             </Accordion.Panel>
                           </Accordion.Item>
                         </Accordion>
@@ -623,43 +508,43 @@ function ProfilePage () {
               {(isMobile && profile.availabilityId) && 
                 <Divider mb={2} mt={6} />
               }
-              {(profile.plan === "Pro" && profile.total) && 
+              {(profile.plan === 'Pro' && profile.total) && 
                 <PartnersModule loading={profile.requesting} partners={profile.partners} />
               }
               {(isMobile && !profile.availabilityId) && 
-                <Space h="xs" />
+                <Space h='xs' />
               }
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-              <Group justify='space-between' align='center' gap={8} mb={8}>
-                <Title order={5} fw={500}>Postagens</Title>
-                {(profile.id === loggedUser.id && !profile.requesting) && 
-                  <Button 
-                    size='compact-xs'
-                    radius='lg'
-                    variant='light'
-                    color={'violet'}
-                    onClick={() => setModalStrengthsOpen(true)}
-                  >
-                    Nova postagem
-                  </Button>
-                }
-              </Group>
               <Paper
-                radius="md"
-                withBorder={largeScreen ? true : false}
-                px={largeScreen ? 18 : 0}
-                py={largeScreen ? 18 : 0}
-                mb={14}
+                radius='md'
+                withBorder={isLargeScreen ? true : false}
+                px={isMobile ? 0 : 18}
+                py={isMobile ? 0 : 12}
+                mb={20}
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                className="mublinModule"
+                className='mublinModule'
               >
+                <Group justify='space-between' align='center' gap={8} mb={13}>
+                  <Title fz='1.2rem' fw={490} className='op80'>Postagens</Title>
+                  {(profile.id === loggedUser.id && !profile.requesting) && 
+                    <Button 
+                      size='xs'
+                      radius='lg'
+                      variant='light'
+                      color={colorScheme === 'light' ? 'dark' : 'gray'}
+                      onClick={() => setModalStrengthsOpen(true)}
+                    >
+                      Nova postagem
+                    </Button>
+                  }
+                </Group>
                 {profile.requesting ? ( 
                   <Text size='sm'>Carregando...</Text>
                 ) : (
-                  <>
-                    {profile.recentActivity.slice(0,2).map((activity, key) =>
-                      <>
+                  profile.recentActivity.total ? (
+                    profile.recentActivity.result.slice(0,2).map((activity, key) =>
+                      <Box key={key}>
                         <Group gap={3} mb={6}>
                           <Avatar src={profile.picture} />
                           <Flex direction='column'>
@@ -669,38 +554,44 @@ function ProfilePage () {
                             </Text>
                           </Flex>
                         </Group>
-                        <Text size='sm' key={key}>{activity.extraText}</Text>
-                      </>
-                    )}
-                  </>
+                        <Text size='sm' className='op80'>
+                          {activity.extraText}
+                        </Text>
+                      </Box>
+                    )
+                  ) : (
+                    <Text size='sm' color='dimmed'>Nenhuma postagem até o momento</Text>
+                  )
                 )}
               </Paper>
-              <Group justify="flex-start" align="center" gap={8} mb={8}>
-                <Title order={5} fw={500}>Pontos Fortes</Title>
-                {(profile.id !== loggedUser.id && !profile.requesting) && 
-                  <Button 
-                    size="compact-xs"
-                    variant="outline"
-                    color={colorScheme === "light" ? "dark" : "gray"}
-                    onClick={() => setModalStrengthsOpen(true)}
-                  >
-                    Votar
-                  </Button>
-                }
-              </Group>
+              <Divider mb={18} className='showOnlyInMobile' />
               <Paper
-                radius="md"
-                withBorder={largeScreen ? true : false}
-                px={largeScreen ? 13 : 0}
-                py={largeScreen ? 11 : 0}
-                mb={14}
+                radius='md'
+                withBorder={isLargeScreen ? true : false}
+                px={isMobile ? 0 : 18}
+                py={isMobile ? 0 : 12}
+                mb={20}
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                 className="mublinModule"
               >
+                <Group justify='space-between' align='center' gap={8} mb={15}>
+                  <Title fz='1.2rem' fw={490} className='op80'>Pontos Fortes</Title>
+                  {(profile.id !== loggedUser.id && !profile.requesting) && 
+                    <Button 
+                      size='xs'
+                      radius='lg'
+                      variant='light'
+                      color={colorScheme === 'light' ? 'dark' : 'gray'}
+                      onClick={() => setModalStrengthsOpen(true)}
+                    >
+                      Votar
+                    </Button>
+                  }
+                </Group>
                 {profile.requesting ? ( 
                   <Text size='sm'>Carregando...</Text>
                 ) : (
-                  <>
+                  <Box mb={20}>
                     {(profile.strengths.total && profile.strengths.result[0].idUserTo === profile.id) ? ( 
                       <Splide 
                         options={{
@@ -739,42 +630,32 @@ function ProfilePage () {
                         Nenhum ponto forte votado para {profile.name} até o momento
                       </Text>
                     )}
-                  </>
+                  </Box>
                 )}
               </Paper>
-              <Group justify="flex-start" align="center" gap={8} mb={8}>
-                <Title order={5} fw={500}>Projetos ({profile?.projects?.length})</Title>
-                {(profile.id === loggedUser.id && !profile.requesting && profile.plan === "Free") && 
-                  <Text 
-                    size="sm"
-                    c="dimmed"
-                  >
-                    Assine Mublin PRO e gerencie quantos projetos quiser!
-                  </Text>
-                }
-              </Group>
-              {/* <Group justify="flex-start" align="center" gap={8} mb={8}>
-                <Title order={5} fw={500}>
-                  Projetos ({profile?.projects?.length})
-                </Title>
-                {(profile.id !== loggedUser.id && !profile.requesting) && 
-                  <Button 
-                    size="compact-xs"
-                    variant="outline"
-                    color={colorScheme === "light" ? "dark" : "gray"}
-                  >
-                    Convidar {profile.name} para um projeto
-                  </Button>
-                }
-              </Group> */}
+              <Divider mb={18} className='showOnlyInMobile' />
               <Paper 
-                radius="md" 
-                withBorder 
-                px={13}
-                py={11}
-                mb={12}
-                className="mublinModule"
+                radius='md'
+                withBorder={isLargeScreen ? true : false}
+                px={isMobile ? 0 : 18}
+                py={isMobile ? 0 : 12}
+                mb={20}
+                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                className='mublinModule'
               >
+                <Group justify='space-between' align='center' gap={8} mb={15}>
+                  <Title fz='1.2rem' fw={490} className='op80'>
+                    Projetos ({profile?.projects?.length})
+                  </Title>
+                  {(profile.id === loggedUser.id && !profile.requesting && profile.plan === "Free") && 
+                    <Text 
+                      size="sm"
+                      c="dimmed"
+                    >
+                      Assine Mublin PRO e gerencie quantos projetos quiser!
+                    </Text>
+                  }
+                </Group>
                 <>
                   {profile.requesting ? ( 
                     <Text size='sm'>Carregando...</Text>
@@ -787,18 +668,18 @@ function ProfilePage () {
                   )}
                 </>
               </Paper>
-              {profile.plan === "Pro" ? ( 
+              <Divider mb={18} className='showOnlyInMobile' />
+              {profile.plan === 'Pro' ? ( 
                 <>
-                  <Title order={5} fw={500} mb={8}>Equipamento</Title>
+                  <Title fz='1.2rem' fw={490} className='op80' mb={10}>Equipamento</Title>
                   <Paper 
-                    radius="md" 
-                    withBorder={largeScreen ? true : false}
-                    px={largeScreen ? 15 : 0} 
-                    pt={largeScreen ? 11 : 0}
-                    pb={largeScreen ? 16 : 0}
-                    mb={25}
-                    className="mublinModule"
+                    radius='md'
+                    withBorder={isLargeScreen ? true : false}
+                    px={isMobile ? 0 : 18}
+                    py={isMobile ? 0 : 12}
+                    mb={20}
                     style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                    className='mublinModule'
                   >
                     {profile.requesting ? ( 
                       <Text size='sm'>Carregando...</Text>
@@ -807,8 +688,8 @@ function ProfilePage () {
                         {profile.gear[0]?.brandId && 
                           <Group gap={10} mb={14}>
                             <NativeSelect 
-                              size={largeScreen ? "xs" : "sm"}
-                              w={140}
+                              size={isLargeScreen ? "xs" : "sm"}
+                              w={148}
                               // onChange={(e) => setGearSetup(e.target.options[e.target.selectedIndex].value)}
                               onChange={(e) => selectSetup(e.target.options[e.target.selectedIndex].value)}
                             >
@@ -821,7 +702,7 @@ function ProfilePage () {
                             </NativeSelect>
                             {!gearSetup && 
                               <NativeSelect
-                                size={largeScreen ? "xs" : "sm"}
+                                size={isLargeScreen ? "xs" : "sm"}
                                 w={148}
                                 onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
                               >
@@ -885,8 +766,8 @@ function ProfilePage () {
                                     </>
                                   }
                                   {!!product.forSale && 
-                                    <Flex direction="column" align="center" gap={4} mt={4}>
-                                      <Badge size="xs" color="dark">À venda</Badge>
+                                    <Flex direction='column' align='center' gap={4} mt={4}>
+                                      <Badge size='xs' color='dark'>À venda</Badge>
                                       {!!product.price && 
                                         <Text size='10px' fw={500}>
                                           {product.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
@@ -916,24 +797,23 @@ function ProfilePage () {
                         <IconLockSquareRoundedFilled size={22} color="gray" /> 
                       </Group>
                       <Paper 
-                        radius="md" 
-                        withBorder={largeScreen ? true : false}
-                        px={15} 
-                        pt={11}
-                        pb={16}
-                        mb={25}
-                        className="mublinModule"
-                        // style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                        radius='md'
+                        withBorder={isLargeScreen ? true : false}
+                        px={isMobile ? 0 : 18}
+                        py={isMobile ? 0 : 12}
+                        mb={20}
+                        style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                        className='mublinModule'
                       >
-                        <Text size="sm">
+                        <Text size='sm'>
                           Torne-se PRO para liberar esta funcionalidade em seu perfil!
                         </Text>
                         <Anchor 
                           href={`https://buy.stripe.com/8wM03sfPadmmc4EaEE?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=gear`} 
-                          target="_blank"
-                          underline="never"
+                          target='_blank'
+                          underline='never'
                         >
-                          <Text size="xs" c="violet">
+                          <Text size='xs' c='violet'>
                             Assinar Mublin PRO - R$ 30,00 por 3 meses (pagamento único)
                           </Text>
                         </Anchor>
@@ -1021,7 +901,7 @@ function ProfilePage () {
           >
             <Flex gap={2} align="center" mt={9}>
               <IconLink size={13} />
-              <Text size={largeScreen ? "0.83em" : "0.82em"} fw={500}>
+              <Text size={isLargeScreen ? "0.83em" : "0.82em"} fw={500}>
                 {profile.website}
               </Text>
             </Flex>
@@ -1039,9 +919,10 @@ function ProfilePage () {
         onClose={() => setModalContactOpen(false)} 
         title={'Entrar em contato com '+profile.name}
       >
-        <Text size={'sm'}><strong>Localidade:</strong> {profile.city}, {profile.region}, {profile.country}</Text>
-        <Text size={'sm'}><strong>E-mail:</strong> {profile.email}</Text>
-        <Text size={'sm'}><strong>Celular:</strong> {profile.phone ? profile.phone : "Não informado"}</Text>
+        <Text size='sm'><strong>Localidade:</strong> {profile.city}, {profile.region}, {profile.country}</Text>
+        <Text size='sm'><strong>E-mail:</strong> {profile.email}</Text>
+        <Text size='sm' mb='md'><strong>Celular:</strong> {profile.phone ? profile.phone : 'Não informado'}</Text>
+        <AvailabilityInfo />
       </Modal>
       <Modal 
         centered
@@ -1060,7 +941,10 @@ function ProfilePage () {
                 </Text>
                 {follower.verified && 
                   <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
-                } 
+                }
+                {follower.legend_badge && 
+                  <IconShieldCheckFilled style={iconLegendStyle} />
+                }
               </Group>
               <Text size='xs'>
                 {'@'+follower.username}
@@ -1077,10 +961,20 @@ function ProfilePage () {
         scrollAreaComponent={ScrollArea.Autosize}
       >
         {profile.following.result.map((following, key) => 
-          <Flex key={key} align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)}>
+          <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)} key={key}>
             <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
             <Flex direction={'column'} className='point'>
-              <Text size='sm' fw={500}>{following.name} {following.lastname}</Text>
+              <Group gap={0}>
+                <Text size='sm' fw={500}>
+                  {following.name} {following.lastname}
+                </Text>
+                {following.verified && 
+                  <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                }
+                {following.legend_badge && 
+                  <IconShieldCheckFilled style={iconLegendStyle} />
+                }
+              </Group>
               <Text size='xs'>
                 {'@'+following.username}
               </Text>
@@ -1095,15 +989,15 @@ function ProfilePage () {
         centered
         // fullScreen
       >
-        <Alert variant="light" mb={10} p={'xs'} color="gray">
-          <Text size="xs">Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter o Mublin uma comunidade com credibilidade :)</Text>
+        <Alert variant='light' mb={10} p='xs' color='gray'>
+          <Text size='xs'>Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter o Mublin uma comunidade com credibilidade :)</Text>
         </Alert>
         {strengths.map((strength,key) =>
           <div key={key}>
             <Radio
               my={5}
               id={'strengthsGroup_'+strength.id}
-              color="violet"
+              color='violet'
               value={strength.id}
               checked={(strength.id === strengthVoted || myVotes.filter((x) => { return x.strengthId === strength.id}).length) ? true : false}
               onChange={() => {
@@ -1116,11 +1010,11 @@ function ProfilePage () {
                   <Group gap={3}>
                     <i className={strength.icon+' fa-fw ml-1'}></i> {strength.title}
                     {!!myVotes.filter((x) => { return x.strengthId === strength.id}).length && 
-                      <Button 
-                        size="compact-xs" 
-                        variant="filled" 
-                        color="red"
-                        fw="400"
+                      <Button
+                        size='compact-xs'
+                        variant='filled'
+                        color='red'
+                        fw='400'
                         onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}
                         leftSection={<IconX size={14} />}
                       >
@@ -1133,7 +1027,7 @@ function ProfilePage () {
             />
           </div>
         )}
-        <Group mt="xs" justify="flex-end" gap={8}>
+        <Group mt='xs' justify='flex-end' gap={8}>
           <Button variant='outline' color='violet' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
           <Button loading={!strengthsLoaded} color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
         </Group>
@@ -1143,7 +1037,7 @@ function ProfilePage () {
         onClose={() => setModalLegendOpen(false)}
         title={`Lenda da música`}
         centered
-        size="xs"
+        size='xs'
       >
         <Center>
           <IconShieldCheckFilled 
@@ -1152,19 +1046,19 @@ function ProfilePage () {
             } 
           />
         </Center>
-        <Text size="sm" mt="lg">
+        <Text size='sm' mt='lg'>
           {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante e que contribuiu no cenário musical`}
         </Text>
-        <Text size="xs" mt="lg" c="dimmed">
+        <Text size='xs' mt='lg' c='dimmed'>
           Este selo é atribuído pela equipe do Mublin baseado em critérios internos
         </Text>
       </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>
-          <Title order={3} ta="center" mt={40}>
+          <Title order={3} ta='center' mt={40}>
             Esta página não está disponível.
           </Title>
-          <Text size="md" ta="center">
+          <Text size='md' ta='center'>
             O link em que você clicou pode não estar funcionando, ou a página pode ter sido removida.
           </Text>
         </>

@@ -19,6 +19,10 @@
   }
 }
 
+a {
+  text-decoration: none;
+}
+
 a.textLink {
   color: #000000;
 }
@@ -38,8 +42,10 @@ a.displayBlockLink {
   }
 }
 
-a {
-  text-decoration: none;
+.showOnlyInMobile {
+  @media only screen and (min-width: 601px) {
+    display: none;
+  }
 }
 
 /* Custom App Styles */
@@ -151,7 +157,7 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 }
 :root[data-mantine-color-scheme='light'] {
   .websiteLink {
-    color: #133a61;
+    color: #0a66c2;
     display: block;
     width: fit-content;
   }
@@ -164,3 +170,6 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
   }
 }
 
+.op80 {
+  opacity: 0.80;
+}
