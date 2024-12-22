@@ -258,255 +258,255 @@ function ProfilePage () {
         profileId={profile.id}
         showBackIcon={true}
       />
+      {profile.requesting && 
+        <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10}>
+          <Group justify='flex-start'>
+            <Skeleton height={84} circle />
+            <SimpleGrid cols={1} spacing='xs' verticalSpacing='xs'>
+              <Skeleton height={18} width={180} radius='xl' />
+              <Skeleton height={11} width={180} radius='xl' />
+              <Skeleton height={14} width={180} radius='xl' />
+            </SimpleGrid>
+          </Group>
+          <Skeleton height={15} width={280} mt={16} radius='xl' />
+          <Skeleton height={15} width={280} mt={5} mb={20} radius='xl' />
+        </Container>
+      }
       {profile.id && 
         <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10} className='profilePage'>
           <Grid>
             <Grid.Col pr={22} span={{ base: 12, md: 12, lg: 4 }}>
-              {profile.requesting && 
-                <>
-                  <Group justify='flex-start'>
-                    <Skeleton height={84} circle />
-                    <SimpleGrid cols={1} spacing='xs' verticalSpacing='xs'>
-                      <Skeleton height={18} width={240} radius='xl' />
-                      <Skeleton height={11} width={240} radius='xl' />
-                      <Skeleton height={14} width={240} radius='xl' />
-                    </SimpleGrid>
-                  </Group>
-                  <Skeleton height={15} width={420} mt={16} radius='xl' />
-                  <Skeleton height={15} width={450} mt={5} mb={20} radius='xl' />
-                </>
-              }
-              {!profile.requesting && 
-                <Paper 
-                  radius='md'
-                  withBorder={false}
-                  px='0'
-                  py='0'
-                  style={isMobile ? { backgroundColor: 'transparent' } : { backgroundColor: 'transparent' }}
+              <Paper 
+                radius='md'
+                withBorder={false}
+                px='0'
+                py='0'
+                style={{ backgroundColor: 'transparent' }}
+              >
+                <Flex
+                  justify='flex-start'
+                  align='center'
+                  direction='row'
+                  wrap='nowrap'
+                  columnGap='xs'
+                  mt={isMobile ? 0 : 14}
                 >
-                  <Flex
-                    justify='flex-start'
-                    align='center'
-                    direction='row'
-                    wrap='nowrap'
-                    columnGap='xs'
-                  >
-                    <Avatar
-                      size='xl'
-                      src={profile.picture}
-                    />
-                    <Box style={{overflow:'hidden'}}>
-                      <Flex align={'baseline'} mt={0} mb={1}>
-                        <Title order={3} fw={460}>
-                          {profile.name} {profile.lastname}
-                        </Title>
-                        {!!profile.verified && 
-                          <Tooltip label="Usuário Verificado">
-                            <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
-                          </Tooltip>
-                        }
-                        {!!profile.legend && 
-                          <IconShieldCheckFilled
-                            style={iconLegendStyle}
-                            onClick={() => setModalLegendOpen(true)}
-                          />
-                        }
-                      </Flex>
-                      <Splide 
-                        options={{
-                          drag   : 'free',
-                          snap: false,
-                          perPage: isMobile ? 3 : 3,
-                          autoWidth: true,
-                          arrows: false,
-                          gap: '3px',
-                          dots: false,
-                          pagination: false,
-                        }}
-                        className='carousel-roles'
-                      >
-                        {profile.roles.map((role, key) =>
-                          <SplideSlide className='carousel-item' key={key}>
-                            <Flex gap={2}>
-                              {role.icon && 
-                                <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
-                              }
-                              <Text size='13px' fw='400' mr={7}>
-                                {role.name}
-                              </Text>
-                            </Flex>
-                          </SplideSlide>
-                        )}
-                      </Splide>
-                      <Text size='13px' fw='400' c='dimmed' mt={5}>
-                        {profile.city}{profile.region && `, ${profile.region}`}
-                      </Text>
-                      {profile.plan === 'Pro' && 
-                        <Badge size='xs' variant='light' color='gray' title='Usuário PRO'>
-                          PRO
-                        </Badge>
+                  <Avatar
+                    size='xl'
+                    src={profile.picture}
+                  />
+                  <Box style={{overflow:'hidden'}}>
+                    <Flex align={'baseline'} mt={0} mb={1}>
+                      <Title order={3} fw={460}>
+                        {profile.name} {profile.lastname}
+                      </Title>
+                      {!!profile.verified && 
+                        <Tooltip label="Usuário Verificado">
+                          <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                        </Tooltip>
                       }
-                    </Box>
-                  </Flex>
-                  <Group 
-                    gap={12} 
-                    mt={isMobile ? 12 : 16} 
-                    mb={isMobile ? 9 : 10}
+                      {!!profile.legend && 
+                        <IconShieldCheckFilled
+                          style={iconLegendStyle}
+                          onClick={() => setModalLegendOpen(true)}
+                        />
+                      }
+                    </Flex>
+                    <Splide 
+                      options={{
+                        drag   : 'free',
+                        snap: false,
+                        perPage: isMobile ? 3 : 3,
+                        autoWidth: true,
+                        arrows: false,
+                        gap: '3px',
+                        dots: false,
+                        pagination: false,
+                      }}
+                      className='carousel-roles'
+                    >
+                      {profile.roles.map((role, key) =>
+                        <SplideSlide className='carousel-item' key={key}>
+                          <Flex gap={2}>
+                            {role.icon && 
+                              <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
+                            }
+                            <Text size='13px' fw='400' mr={7}>
+                              {role.name}
+                            </Text>
+                          </Flex>
+                        </SplideSlide>
+                      )}
+                    </Splide>
+                    <Text size='13px' fw='400' c='dimmed' mt={5}>
+                      {profile.city}{profile.region && `, ${profile.region}`}
+                    </Text>
+                    {profile.plan === 'Pro' && 
+                      <Badge size='xs' variant='light' color='gray' title='Usuário PRO'>
+                        PRO
+                      </Badge>
+                    }
+                  </Box>
+                </Flex>
+                <Group 
+                  gap={12} 
+                  mt={isMobile ? 12 : 16} 
+                  mb={isMobile ? 9 : 10}
+                >
+                  <Text 
+                    className='point'
+                    size={isLargeScreen ? '0.9rem' : '1rem'}
+                    fw='430'
+                    onClick={() => setModalFollowersOpen(true)}
+                    style={{lineHeight: 'normal'}}
                   >
-                    <Text 
-                      className='point'
-                      size={isLargeScreen ? '0.9rem' : '1rem'}
-                      fw='430'
-                      onClick={() => setModalFollowersOpen(true)}
-                      style={{lineHeight: 'normal'}}
+                    {profile.followers.total} seguidores
+                  </Text>
+                  <Text 
+                    className='point'
+                    size={isLargeScreen ? '0.9rem' : '1rem'}
+                    fw='430'
+                    onClick={() => setModalFollowingOpen(true)}
+                    style={{lineHeight: 'normal'}}
+                  >
+                    {profile.following.total} seguindo
+                  </Text>
+                </Group>
+                {(profile.bio && profile.bio !== 'null') && 
+                  <Text 
+                    size={isMobile ? 'sm' : '0.83em'}
+                    mt={5}
+                    lineClamp={3}
+                    onClick={isMobile ? () => setModalBioOpen(true) : undefined}
+                    pr={isMobile ? 0 : 26}
+                    style={{lineHeight:'1.24em'}}
+                    className='op80'
+                  >
+                    {profile.bio}
+                  </Text>
+                }
+                {profile.website && 
+                  <Anchor 
+                    href={profile.website} 
+                    target="_blank" 
+                    underline="hover" 
+                    className='websiteLink'
+                    mt={isMobile ? 12 : 9}
+                    mb={isMobile ? 12 : 6}
+                  >
+                    <Flex gap={2} align='center' w={isMobile ? 290 : 390}>
+                      <IconLink size={13} />
+                      <Text size={isMobile ? '0.92em' : '0.83em'} truncate='end'>
+                        {profile.website}
+                      </Text>
+                    </Flex>
+                  </Anchor>
+                }
+                <Flex gap={5} mt={isMobile ? 14 : 20} mb={isMobile ? 0 : 20}>
+                  {loggedUser.id !== profile.id ? (
+                    <Button 
+                      size='xs'
+                      fz='14px'
+                      fw='500'
+                      color={colorScheme === "light" ? "dark" : "gray"}
+                      variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
+                      loading={loadingFollow}
+                      rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
+                      fullWidth={isMobile}
+                      onClick={
+                        followedByMe?.following === 'true' 
+                          ? () => setModalFollowInfoOpen(true)
+                          : () => followUnfollow() 
+                      }
                     >
-                      {profile.followers.total} seguidores
-                    </Text>
-                    <Text 
-                      className='point'
-                      size={isLargeScreen ? '0.9rem' : '1rem'}
-                      fw='430'
-                      onClick={() => setModalFollowingOpen(true)}
-                      style={{lineHeight: 'normal'}}
-                    >
-                      {profile.following.total} seguindo
-                    </Text>
-                  </Group>
-                  {(profile.bio && profile.bio !== 'null') && 
-                    <Text 
-                      size={isMobile ? 'sm' : '0.83em'}
-                      mt={5} lineClamp={3}
-                      onClick={isMobile ? () => setModalBioOpen(true) : undefined}
-                      pr={isMobile ? 0 : 26}
-                      style={{lineHeight:'1.24em'}}
-                      className='op80'
-                    >
-                      {profile.bio}
-                    </Text>
-                  }
-                  {profile.website && 
-                    <Anchor 
-                      href={profile.website} 
-                      target="_blank" 
-                      underline="hover" 
-                      className='websiteLink'
-                      mt={isMobile ? 10 : 9}
-                      mb={6}
-                    >
-                      <Flex gap={2} align='center'>
-                        <IconLink size={13} />
-                        <Text size={isMobile ? '0.9em' : '0.83em'}>
-                          {profile.website}
-                        </Text>
-                      </Flex>
-                    </Anchor>
-                  }
-                  <Flex gap={5} mt={isMobile ? 14 : 20} mb={isMobile ? 0 : 20}>
-                    {loggedUser.id !== profile.id ? (
-                      <Button 
-                        size='xs'
-                        fz='14px'
-                        fw='500'
-                        color={colorScheme === "light" ? "dark" : "gray"}
-                        variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
-                        loading={loadingFollow}
-                        rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
-                        fullWidth={isMobile}
-                        onClick={
-                          followedByMe?.following === 'true' 
-                            ? () => setModalFollowInfoOpen(true)
-                            : () => followUnfollow() 
-                        }
-                      >
-                        {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
-                      </Button>
-                    ) : (
-                      <Button 
-                        size='xs'
-                        fz='0.84rem'
-                        fw='470'
-                        variant='light'
-                        color={colorScheme === "light" ? "dark" : "gray"}
-                        fullWidth={isMobile}
-                        leftSection={<IconPencil size={14} />} 
-                        onClick={() => navigate('/settings')}
-                      >
-                        Editar perfil
-                      </Button>
-                    )}
+                      {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
+                    </Button>
+                  ) : (
                     <Button 
                       size='xs'
                       fz='0.84rem'
                       fw='470'
                       variant='light'
                       color={colorScheme === "light" ? "dark" : "gray"}
-                      leftSection={<IconMail size={14} />} 
                       fullWidth={isMobile}
-                      onClick={() => setModalContactOpen(true)}
+                      leftSection={<IconPencil size={14} />} 
+                      onClick={() => navigate('/settings')}
                     >
-                      Contato
+                      Editar perfil
                     </Button>
-                    {profile.instagram && 
-                      <>
-                        <ActionIcon 
-                          size={isLargeScreen ? "30px" : "30"}
-                          w={isLargeScreen ? "30px" : "30"}
-                          variant='light'
-                          color={colorScheme === "light" ? "dark" : "gray"}
-                          component="a"
-                          href={`https://instagram.com/${profile.instagram}`}
-                          target='_blank'
-                        >
-                          <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                        </ActionIcon>
-                      </>
-                    }
-                  </Flex>
-                  {profile.availabilityId && 
+                  )}
+                  <Button 
+                    size='xs'
+                    fz='0.84rem'
+                    fw='470'
+                    variant='light'
+                    color={colorScheme === "light" ? "dark" : "gray"}
+                    leftSection={<IconMail size={14} />} 
+                    fullWidth={isMobile}
+                    onClick={() => setModalContactOpen(true)}
+                  >
+                    Contato
+                  </Button>
+                  {profile.instagram && 
                     <>
-                      {/* <Divider mt='md' mb='xs' label='Disponibilidade:' labelPosition='left' /> */}
-                      <Flex 
-                        align='center'
-                        justify='flex-start'
-                        gap={4} 
-                        mt='md'
-                        mb={isMobile ? 0 : 12} 
+                      <ActionIcon 
+                        size={isLargeScreen ? "30px" : "30"}
+                        w={isLargeScreen ? "30px" : "30"}
+                        variant='light'
+                        color={colorScheme === "light" ? "dark" : "gray"}
+                        component="a"
+                        href={`https://instagram.com/${profile.instagram}`}
+                        target='_blank'
                       >
-                        <Indicator 
-                          inline
-                          processing={profile.availabilityId}
-                          color={profile.availabilityColor}
-                          size={8}
-                          ml={5}
-                          mr={7}
-                        />
-                        <Text 
-                          fz='15px'
-                          fw={480}
-                          className='lhNormal'
-                        >
-                          {profile.availabilityTitle}
-                        </Text>
-                      </Flex>
-                      {isLargeScreen && 
-                        <AvailabilityInfo />
-                      }
-                      {isMobile && 
-                        <Accordion chevronPosition="left">
-                          <Accordion.Item value="Exibir preferências musicais e de trabalho" style={{border:'0px'}}>
-                            <Accordion.Control p={0} fz="sm"  withBorder={false}>
-                              Exibir preferências musicais e de trabalho
-                            </Accordion.Control>
-                            <Accordion.Panel pb={12}>
-                              <AvailabilityInfo />
-                            </Accordion.Panel>
-                          </Accordion.Item>
-                        </Accordion>
-                      }
-                    </> 
+                        <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                      </ActionIcon>
+                    </>
                   }
-                </Paper>
-              }
+                </Flex>
+                {profile.availabilityId && 
+                  <>
+                    {/* <Divider mt='md' mb='xs' label='Disponibilidade:' labelPosition='left' /> */}
+                    <Flex 
+                      align='center'
+                      justify='flex-start'
+                      gap={4} 
+                      mt='md'
+                      mb={isMobile ? 0 : 12} 
+                    >
+                      <Indicator 
+                        inline
+                        processing={profile.availabilityId}
+                        color={profile.availabilityColor}
+                        size={8}
+                        ml={5}
+                        mr={7}
+                      />
+                      <Text 
+                        fz='15px'
+                        fw={480}
+                        className='lhNormal'
+                      >
+                        {profile.availabilityTitle}
+                      </Text>
+                    </Flex>
+                    {isLargeScreen && 
+                      <AvailabilityInfo mt={18} />
+                    }
+                    {isMobile && 
+                      <Accordion chevronPosition="left">
+                        <Accordion.Item value="Exibir preferências musicais e de trabalho" style={{border:'0px'}}>
+                          <Accordion.Control p={0} fz="sm"  withBorder={false}>
+                            Exibir preferências musicais e de trabalho
+                          </Accordion.Control>
+                          <Accordion.Panel pb={12}>
+                            <AvailabilityInfo mt={4} />
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                      </Accordion>
+                    }
+                  </>
+                }
+              </Paper>
               {(isMobile && profile.availabilityId) && 
                 <Divider mb={2} mt={6} />
               }
@@ -557,7 +557,11 @@ function ProfilePage () {
                             </Text>
                           </Flex>
                         </Group>
-                        <Text size='0.85rem' className='op80 lhNormal'>
+                        <Text 
+                          size={isMobile ? 'sm' : '0.83em'}
+                          style={{lineHeight:'1.24em'}}
+                          className='op80'
+                        >
                           {activity.extraText}
                         </Text>
                       </Box>
@@ -616,13 +620,14 @@ function ProfilePage () {
                               align="center"
                               direction="column"
                               wrap="wrap"
+                              gap={4}
                               className="carousel-strengths"
                             >
                               <i className={strength.icon}></i>
-                              <Text fw={420} mb={2} mt={3} size='sm' align='center'>
+                              <Text fw={400} size='sm' align='center'>
                                 {strength.strengthTitle}
                               </Text>
-                              <Text size='11px' fw={250} c='dimmed'>
+                              <Text size='11px' fw={300} c='dimmed'>
                                 {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
                               </Text>
                             </Flex>
@@ -934,7 +939,7 @@ function ProfilePage () {
           </Text>
         }
         <Space h="md" />
-        <AvailabilityInfo />
+        <AvailabilityInfo mt={16} />
       </Modal>
       <Modal 
         centered

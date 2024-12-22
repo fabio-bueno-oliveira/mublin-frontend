@@ -102,7 +102,7 @@ function FeedCard ({ item, likes }) {
           <Box>
             <Flex gap={4} align='center' mb={2}>
               <Text size={isMobile ? '1.04rem' : 'sm'}>
-                <Anchor fw='500' href={`/${item.relatedUserUsername}`}>
+                <Anchor size='md' fw={460} style={{lineHeight:'normal'}} href={`/${item.relatedUserUsername}`}>
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Anchor>
               </Text>
@@ -231,7 +231,7 @@ function FeedCard ({ item, likes }) {
               />
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
-                  <Text size='sm' fw={500}>
+                  <Text size='sm' fw={450}>
                     {user.name} {user.lastname}
                   </Text>
                   {user.verified &&

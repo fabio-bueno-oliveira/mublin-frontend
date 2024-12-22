@@ -2,13 +2,13 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Flex, Group, Box, Badge, Text } from '@mantine/core'
 
-function AvailabilityInfo () {
+function AvailabilityInfo (props) {
 
   const profile = useSelector(state => state.profile)
 
   return (
-    <Box mt={25}>
-      <Text size='0.83em' fw={300} mb={6}>
+    <Box mt={props.mt}>
+      <Text size='0.83em' fw={300} mb={8}>
         Principais estilos musicais:
       </Text>
       {profile.genres[0].id ? (
@@ -26,11 +26,11 @@ function AvailabilityInfo () {
           )}
         </>
       ) : (
-        <Text size='xs' mx={0} c="dimmed">
+        <Text size='0.83em' fw={300} mx={0} c='dimmed'>
           Nenhum estilo cadastrado
         </Text>
       )}
-      <Text size='0.83em' fw={300} mb={6} mt={14}>
+      <Text size='0.83em' fw={300} mb={8} mt={14}>
         Tipos de projetos:
       </Text>
       <Group gap={4}>
@@ -51,7 +51,7 @@ function AvailabilityInfo () {
           </Flex>
         )}
       </Group>
-      <Text size="0.83em" fw={300} mb={6} mt={14}>
+      <Text fz='0.64rem' fw={300} mb={8} mt={14}>
         Tipos de trabalho:
       </Text>
       {profile.availabilityItems[0].id ? (
@@ -63,7 +63,7 @@ function AvailabilityInfo () {
           )}
         </Flex>
       ) : (
-        <Text size='xs' c='dimmed'>
+        <Text fz='0.64rem' fw={300} c='dimmed'>
           Não informado
         </Text>
       )}

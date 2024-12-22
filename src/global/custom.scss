@@ -32,7 +32,7 @@
 
 :root[data-mantine-color-scheme='dark'] {
   .mantine-TextInput-input,.mantine-Input-input,.mantine-NativeSelect-input {
-    background-color: transparent;
+    background-color: #090e12;
 
     option {
       background-color: #0d141a;
@@ -75,9 +75,11 @@
     .mantine-Modal-content, .mantine-Modal-header {
       background-color: #090e12!important;
     }
-
     .mantine-Modal-overlay, .mantine-Overlay-root {
       background: var(--overlay-bg, rgba(0, 0, 0, 0.83));
+    }
+    .mantine-Anchor-root {
+      color: #FFFFFF;
     }
   }
 }
