@@ -953,6 +953,7 @@ function ProfilePage () {
       </Modal>
       <Modal 
         centered
+        fullScreen={isMobile ? true : false}
         opened={modalFollowersOpen}
         onClose={() => setModalFollowersOpen(false)}
         title={profile.followers.total+' seguidores'}
@@ -960,11 +961,11 @@ function ProfilePage () {
       >
         {profile.followers.total ?  (
           profile.followers.result.map((follower, key) => 
-            <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(follower.username)} key={key}>
+            <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(follower.username)} key={key}>
               <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
-                  <Text size='sm' fw={500}>
+                  <Text size='md' fw={420} style={{lineHeight:'normal'}}>
                     {follower.name} {follower.lastname}
                   </Text>
                   {follower.verified && 
@@ -986,6 +987,7 @@ function ProfilePage () {
       </Modal>
       <Modal 
         centered
+        fullScreen={isMobile ? true : false}
         opened={modalFollowingOpen}
         onClose={() => setModalFollowingOpen(false)}
         title={'Seguindo '+profile.following.total}
@@ -993,11 +995,11 @@ function ProfilePage () {
       >
         {profile.following.total ?  (
           profile.following.result.map((following, key) => 
-            <Flex align={'center'} gap={7} mb={6} onClick={() => goToProfile(following.username)} key={key}>
+            <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(following.username)} key={key}>
               <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
-                  <Text size='sm' fw={500}>
+                  <Text size='md' fw={420} style={{lineHeight:'normal'}}>
                     {following.name} {following.lastname}
                   </Text>
                   {following.verified && 
@@ -1007,7 +1009,7 @@ function ProfilePage () {
                     <IconShieldCheckFilled style={iconLegendStyle} />
                   }
                 </Group>
-                <Text size='xs'>
+                <Text size='xs' color='dimmed'>
                   {'@'+following.username}
                 </Text>
               </Flex>
