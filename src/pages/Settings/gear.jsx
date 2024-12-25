@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Paper, Center, Group, Flex, Alert, Loader, Box, Image, Button, Radio, Text, Input, TextInput, em } from '@mantine/core'
+import { Grid, Container, Modal, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, TextInput, em } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -35,7 +35,10 @@ function SettingsMyGearPage () {
   const [modalAddNewProductOpen, setModalAddNewProductOpen] = useState(false)
   const [brandSelected, setBrandSelected] = useState('')
   const [categorySelected, setCategorySelected] = useState('')
+  const [products, setProducts] = useState([])
   const [productSelected, setProductSelected] = useState('')
+  const productInfo = products.filter((product) => { return product.id === Number(productSelected)}) 
+
   const selectBrand = (brandId) => {
       setBrandSelected(brandId)
       setCategories([])
@@ -48,6 +51,32 @@ function SettingsMyGearPage () {
       setProductSelected('')
       setCategorySelected(categoryId)
       getProducts(brandSelected,categoryId)
+  }
+
+  const addProductToGear = (productId, featured, for_sale, price, currently_using) => {
+    setIsLoaded(false)
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/user/addGearItem', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
+      }).then((response) => {
+        dispatch(userInfos.getUserGearInfoById(loggedUser.id))
+        setIsLoaded(true)
+        setModalAddNewProductOpen(false)
+        setBrandSelected('')
+        setCategorySelected('')
+        setProductSelected('')
+      }).catch(err => {
+        console.error(err)
+        alert("Ocorreu um erro ao adicionar o produto")
+        setIsLoaded(true)
+      })
+    }, 300);
   }
 
   useEffect(() => {
@@ -104,7 +133,6 @@ function SettingsMyGearPage () {
   const [featured, setFeatured] = useState('')
   const [for_sale, setForSale] = useState('')
   const [price, setPrice] = useState('')
-
   const [currently_using, setCurrentlyUsing] = useState('')
 
   const [itemIdToEdit, setItemIdToEdit] = useState('')
@@ -158,15 +186,17 @@ function SettingsMyGearPage () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + loggedUser.token
       }
     }).then((response) => {
       dispatch(userInfos.getUserGearInfoById(user.id))
       setLoadingRemove(false)
+      setModalConfirmDelete(false)
     }).catch(err => {
       console.error(err)
       alert("Ocorreu um erro ao remover o item")
       setLoadingRemove(false)
+      setModalConfirmDelete(false)
     })
   }
 
@@ -181,6 +211,12 @@ function SettingsMyGearPage () {
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 9 }} pl={isLargeScreen ? 26 : 0}>
+            <Breadcrumbs mb={16} separator="›" separatorMargin="xs">
+              <Anchor href='/teste'>
+                <Text fw='400'>Configurações</Text>
+              </Anchor>
+              <Text fw='500'>Meus equipamentos</Text>
+            </Breadcrumbs>
             {user.requesting ? (
               <Center mt='60'>
                 <Loader active inline='centered' />
@@ -189,11 +225,11 @@ function SettingsMyGearPage () {
               <>
                 {user.plan === 'Pro' ? (
                   <Button
+                    leftSection={<IconPlus size={14} />}
                     color='violet'
-                    fullWidth={isMobile}
                     onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
                   >
-                    <IconPlus /> Adicionar novo item à lista
+                    Adicionar novo item
                   </Button>
                 ) : (
                   <>
@@ -309,9 +345,78 @@ function SettingsMyGearPage () {
         onClose={() => setModalAddNewProductOpen(false)} 
         size='sm'
       >
-        <>
-          <Text>Adicionar novo item</Text>
-        </>
+        <NativeSelect
+          withAsterisk
+          label='Marca'
+          onChange={(e) => selectBrand(e.target.options[e.target.selectedIndex].value)}
+          value={brandSelected}
+          defaultValue={brandSelected}
+        >
+          {!brandSelected &&
+            <option>Selecione</option>
+          } 
+          {brands.map((brand,key) =>
+            <option key={key} value={brand.id}>{brand.name}</option>
+          )}
+        </NativeSelect>
+        <NativeSelect
+          withAsterisk
+          label='Marca'
+          onChange={(e) => selectCategory(e.target.options[e.target.selectedIndex].value)}
+          value={categorySelected}
+          defaultValue={categorySelected}
+        >
+          {!isLoaded && 
+            <option>Carregando...</option>
+          }
+          {!categorySelected && 
+            <option>{!brandSelected ? 'Selecione primeiro a marca' : 'Selecione a categoria'}</option>
+          } 
+          {categories.map((category,key) =>
+            <option key={key} value={category.id}>{category.name}</option>
+          )}
+        </NativeSelect>
+        <NativeSelect
+          withAsterisk
+          label='Marca'
+          onChange={(e) => setProductSelected(e.target.options[e.target.selectedIndex].value)}
+          value={productSelected}
+        >
+          {!isLoaded && 
+            <option>Carregando...</option>
+          }
+          {!productSelected && 
+            <option value=''>{!categorySelected ? 'Selecione primeiro a categoria' : 'Selecione o produto'}</option>
+          }
+          {products.map((product,key) =>
+            <option key={key} value={product.id} disabled={!!user.gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {product.colorName && product.colorName} {!!user.gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
+          )}
+        </NativeSelect>
+        {(productSelected && productInfo) ? (
+          <Center p={12}>
+            <Image 
+              radius='md'
+              h={150}
+              w={150}
+              src={productInfo[0].picture} 
+            />
+          </Center>
+        ) : (
+          <Paper>
+            Selecione o produto para carregar a imagem
+          </Paper>
+        )}
+        <Anchor href='/gear/submit/product' className='websiteLink'>
+          Não encontrei meu produto na lista
+        </Anchor>
+        <Group justify='flex-end' gap={7} mt={20}>
+          <Button variant='outline' color='violet' size='sm' onClick={() => setModalAddNewProductOpen(false)}>
+            Cancelar
+          </Button>
+          <Button color='violet' size='sm' onClick={() => addProductToGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={!isLoaded}>
+            Salvar
+          </Button>
+        </Group>
       </Modal>
       <Modal 
         title='Editar detalhes do item'
