@@ -56,9 +56,9 @@ function MenuMobile () {
     fetch('https://mublin.herokuapp.com/user/'+userId+'/picture', {
         method: 'PUT',
         headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + user.token
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + user.token
         },
         body: JSON.stringify({picture: value})
       }).then((response) => {
@@ -163,7 +163,7 @@ function MenuMobile () {
           direction='column'
           gap='md'
         >
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconUser style={iconMenuStyle} />} rightSection={<IconChevronRight/>}  onClick={() => navigate('/'+user.username)} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconUser style={iconMenuStyle} />} rightSection={<IconChevronRight/>} onClick={() => navigate('/'+user.username)} fw='500'>
             Ir para meu perfil
           </Button>
           <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconEdit style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href='/settings' fw='500'>
@@ -178,7 +178,7 @@ function MenuMobile () {
           <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconHeartHandshake style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
             Parceiros e Endorsements
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconPackages style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconPackages style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500' onClick={() => navigate('/settings/my-gear')}>
             Meus equipamentos
           </Button>
           <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconLock style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>

@@ -7,6 +7,7 @@ import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
+import SettingsMenu from './menu';
 
 function SettingsPage () {
 
@@ -134,55 +135,7 @@ function SettingsPage () {
         <Grid mt={isLargeScreen ? 30 : 0}>
           {isLargeScreen && 
             <Grid.Col span={5} p={24}>
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Minha conta"
-                leftSection={<IconUser size="1rem" stroke={1.5} />}
-                active
-              />
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Foto de perfil"
-                leftSection={<IconCamera size="1rem" stroke={1.5} />}
-              />
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Preferências musicais"
-                leftSection={<IconAdjustmentsHorizontal size="1rem" stroke={1.5} />}
-              />
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Disponibilidade"
-                leftSection={<IconTargetArrow size="1rem" stroke={1.5} />}
-              />
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Parceiros e Endorsements"
-                leftSection={<IconHeartHandshake size="1rem" stroke={1.5} />}
-              />
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Meus equipamentos"
-                leftSection={<IconPackages size="1rem" stroke={1.5} />}
-              />
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Senha"
-                leftSection={<IconLock size="1rem" stroke={1.5} />}
-              />
-              <NavLink
-                color="violet"
-                href="#required-for-focus"
-                label="Privacidade"
-                leftSection={<IconEye size="1rem" stroke={1.5} />}
-              />
+              <SettingsMenu page='profileEdit' />
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 7 }} pl={isLargeScreen ? 26 : 0}>
@@ -409,7 +362,7 @@ function SettingsPage () {
             </form>
           </Grid.Col>
           <Grid.Col span={5}>
-            <Button color="violet" onClick={() => searchCity(searchValue)}>
+            <Button color='violet' onClick={() => searchCity(searchValue)}>
               Pesquisar
             </Button>
           </Grid.Col>

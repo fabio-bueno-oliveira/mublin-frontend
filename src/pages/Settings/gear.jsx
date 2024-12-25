@@ -1,0 +1,381 @@
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { userInfos } from '../../store/actions/user'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, Button, Radio, Text, TextInput, Input, NativeSelect, Checkbox, Anchor, Divider, em } from '@mantine/core'
+import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
+import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks'
+import { hasLength, isEmail, useForm } from '@mantine/form'
+import Header from '../../components/header'
+import FooterMenuMobile from '../../components/footerMenuMobile'
+import SettingsMenu from './menu'
+import IntlCurrencyInput from 'react-intl-currency-input'
+
+function SettingsMyGearPage () {
+
+  const user = useSelector(state => state.user)
+  let dispatch = useDispatch()
+
+  document.title = "Meu equipamento | Mublin"
+
+  let loggedUser = JSON.parse(localStorage.getItem('user'))
+
+  useEffect(() => { 
+    dispatch(userInfos.getUserGearInfoById(loggedUser.id))
+  }, [dispatch, loggedUser.id])
+
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [brands, setBrands] = useState([])
+  const [categories, setCategories] = useState([])
+
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
+
+  const [modalEditOpen, setModalEditOpen] = useState(false)
+
+  // Modal Add New Gear
+  const [modalAddNewProductOpen, setModalAddNewProductOpen] = useState(false)
+  const [brandSelected, setBrandSelected] = useState('')
+  const [categorySelected, setCategorySelected] = useState('')
+  const [productSelected, setProductSelected] = useState('')
+  const selectBrand = (brandId) => {
+      setBrandSelected(brandId)
+      setCategories([])
+      setCategorySelected('')
+      setProducts([])
+      setProductSelected('')
+      getCategories(brandId)
+  }
+  const selectCategory = (categoryId) => {
+      setProductSelected('')
+      setCategorySelected(categoryId)
+      getProducts(brandSelected,categoryId)
+  }
+
+  useEffect(() => {
+    fetch("https://mublin.herokuapp.com/gear/brands")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true)
+          setBrands(result)
+        },
+        (error) => {
+          setIsLoaded(true)
+          alert(error)
+        }
+      )
+  }, [])
+
+  const getCategories = (brandId) => {
+    setIsLoaded(false);
+    fetch("https://mublin.herokuapp.com/gear/brand/"+brandId+"/categories")
+      .then(res => res.json())
+      .then(
+      (result) => {
+        setIsLoaded(true);
+        setCategories(result);
+      },
+      (error) => {
+        setIsLoaded(true);
+        alert(error);
+      }
+    )
+  }
+
+  const getProducts = (brandId, categoryId) => {
+    setIsLoaded(false);
+    fetch("https://mublin.herokuapp.com/gear/brand/"+brandId+"/"+categoryId+"/products")
+        .then(res => res.json())
+        .then(
+        (result) => {
+            setIsLoaded(true);
+            setProducts(result);
+        },
+        (error) => {
+            setIsLoaded(true);
+            alert(error);
+        }
+    )
+  }
+
+  // Edit item
+  const [modalEditItemOpen, setModalEditItemOpen] = useState(false)
+  const [modalItemManagementProductId, setModalItemManagementProductId] = useState(null)
+  
+  const [featured, setFeatured] = useState('')
+  const [for_sale, setForSale] = useState('')
+  const [price, setPrice] = useState('')
+  const handleChangePrice = (event, value, maskedValue) => {
+    setPrice(value)
+  }
+  const currencyConfig = {
+      locale: "pt-BR",
+      formats: {
+        number: {
+          BRL: {
+            style: "currency",
+            currency: "BRL",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          },
+        },
+      },
+  };
+  const [currently_using, setCurrentlyUsing] = useState('')
+
+  const [itemIdToEdit, setItemIdToEdit] = useState('')
+  const openModalItemManagement = (itemId, productId, featured, for_sale, price, currently_using) => {
+      setModalItemManagementProductId(productId)
+      setItemIdToEdit(itemId)
+      setModalEditItemOpen(true)
+      setFeatured(featured)
+      setForSale(for_sale)
+      setPrice(price)
+      setCurrentlyUsing(currently_using)
+  }
+
+  const itemInfo = user.gear.filter((item) => { return item.productId === modalItemManagementProductId })
+
+  const editGearItem = (itemId, productId, featured, for_sale, price, currently_using) => {
+    setIsLoaded(false)
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/user/updateGearItem', {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({id: itemId, productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
+      }).then((response) => {
+        dispatch(userInfos.getUserGearInfoById(user.id));
+        setIsLoaded(true)
+        setModalEditItemOpen(false)
+      }).catch(err => {
+        console.error(err)
+        alert("Ocorreu um erro ao adicionar a atividade")
+        setIsLoaded(true)
+      })
+    }, 300);
+  }
+
+  return (
+    <>
+      <Header />
+      <Container size='lg' mb={100}>
+        <Grid mt={isLargeScreen ? 30 : 0}>
+          {isLargeScreen && 
+            <Grid.Col span={3}>
+              <SettingsMenu page='myGear' />
+            </Grid.Col>
+          }
+          <Grid.Col span={{ base: 12, md: 12, lg: 9 }} pl={isLargeScreen ? 26 : 0}>
+            {user.requesting ? (
+              <Center mt='60'>
+                <Loader active inline='centered' />
+              </Center>
+            ) : (
+              <>
+                {user.plan === 'Pro' ? (
+                  <Button
+                    color='violet'
+                    fullWidth={isMobile}
+                    onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
+                  >
+                    <IconPlus /> Adicionar novo item à lista
+                  </Button>
+                ) : (
+                  <>
+                    <Button disabled>
+                      <IconPlus name='plus' /> Adicionar novo item à lista
+                    </Button>
+                    <Alert variant="light" color="yellow" title="Funcionalidade exclusiva">
+                      Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento
+                    </Alert>
+                  </>
+                )}
+                <Grid mt='lg'>
+                  {user.gear.map((item, key) => (
+                    <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>
+                      <Paper
+                        radius='md'
+                        withBorder
+                        px='16'
+                        py='12'
+                        mb='14'
+                        className='mublinModule'
+                      >
+                        <Center mb='md'>
+                          <Image
+                            radius='md'
+                            h={100}
+                            w={100}
+                            src={item.picture ? item.picture : undefined}
+                          />
+                        </Center>
+                        <Box>
+                          <Text size='xs' c='dimmed'>{item.brandName}</Text>
+                          <Text size='sm' mb='3'>{item.productName}</Text>
+                          <Group gap='3'>
+                            {item.featured ? (
+                              <IconToggleRightFilled color='#7950f2' />
+                            ) : (
+                              <IconToggleLeft color='gray' />
+                            )}
+                            <Text size='xs'>Em destaque</Text>
+                          </Group>
+                          <Group gap='3'>
+                            {item.currentlyUsing ? (
+                              <IconToggleRightFilled color='#7950f2' />
+                            ) : (
+                              <IconToggleLeft color='gray' />
+                            )}
+                            <Text size='xs'>Em uso</Text>
+                          </Group>
+                          <Group gap='3'>
+                            {item.forSale ? (
+                              <IconToggleRightFilled color='#7950f2' />
+                            ) : (
+                              <IconToggleLeft color='gray' />
+                            )}
+                            <Text size='xs'>À venda</Text>
+                            <Text size='xs' c='dimmed'>{!!item.forSale && '('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')'}</Text>
+                          </Group>
+                        </Box> 
+                        <Flex mt='10' gap='4' justify='space-between'>
+                          <Button 
+                            size='compact-sm'
+                            color='violet'
+                            variant='subtle'
+                            fullWidth
+                            fw='440'
+                            onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing)}
+                          >
+                            Editar
+                          </Button>
+                          <Button 
+                            size='compact-sm'
+                            color='gray'
+                            variant='subtle'
+                            fullWidth
+                            fw='440'
+                            onClick={() => deleteGear(item.id)}
+                          >
+                            Remover
+                          </Button>
+                        </Flex>
+                      </Paper>
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </>
+            )}
+          </Grid.Col>
+        </Grid>
+      </Container>
+      <Modal 
+        title='Adicionar novo item'
+        opened={modalAddNewProductOpen} 
+        onClose={() => setModalAddNewProductOpen(false)} 
+        size='sm'
+      >
+        <>
+          <Text>Adicionar novo item</Text>
+        </>
+      </Modal>
+      <Modal 
+        title='Editar detalhes do item'
+        centered
+        opened={modalEditItemOpen} 
+        onClose={() => setModalEditItemOpen(false)} 
+        size='sm'
+      >
+        <>
+          {modalItemManagementProductId && itemInfo.map((item, key) =>
+            <Box key={key}>
+              <Center>
+                <Image
+                  radius='md'
+                  h={100}
+                  w={100}
+                  src={item.picture ? item.picture : undefined} 
+                />
+              </Center>
+              <Text size='xs' c='dimmed' mt={8}>{item.brandName}</Text>
+              <Text size='sm'>{item.productName}</Text>
+              <Radio.Group
+                mt={8}
+                value={String(featured)}
+                onChange={setFeatured}
+                name='editItemFeatured'
+                label='Em destaque'
+              >
+                <Group>
+                <Radio color='violet' value='1' label='Sim' />
+                <Radio color='violet' value='0' label='Não' />
+                </Group>
+              </Radio.Group>
+              <Radio.Group
+                mt={8}
+                value={String(currently_using)}
+                onChange={setCurrentlyUsing}
+                name='editItemUsing'
+                label='Em uso atualmente'
+              >
+                <Group>
+                <Radio color='violet' value='1' label='Sim' />
+                <Radio color='violet' value='0' label='Não' />
+                </Group>
+              </Radio.Group>
+              <Radio.Group
+                mt={8}
+                mb={8}
+                value={String(for_sale)}
+                onChange={setForSale}
+                name='editItemForSale'
+                label='À venda'
+              >
+                <Group>
+                <Radio color='violet' value='1' label='Sim' />
+                <Radio color='violet' value='0' label='Não' />
+                </Group>
+              </Radio.Group>
+              <Flex>
+                <Input.Label>Preço de venda:</Input.Label>
+                <IntlCurrencyInput 
+                  disabled={(for_sale === '1' || for_sale === 1) ? false : true}
+                  currency='BRL' 
+                  config={currencyConfig}
+                  id='price'
+                  name='price'
+                  value={price}
+                  onChange={handleChangePrice} 
+                  style={{backgroundColor:'transparent'}}
+                />
+              </Flex>
+              {(productSelected && productInfo) &&
+                <Image
+                  radius='md'
+                  h={100}
+                  w={100}
+                  src={productInfo[0].picture ? productInfo[0].picture : undefined}
+                />
+              }
+              <Group justify='flex-end' gap={7} mt={20}>
+                <Button variant='outline' color='violet' size='xs' onClick={() => setModalEditItemOpen(false)}>
+                  Cancelar
+                </Button>
+                <Button color='violet' size='xs' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using)} loading={!isLoaded}>
+                  Salvar
+                </Button>
+              </Group>
+            </Box>
+          )}
+        </>
+      </Modal>
+      <FooterMenuMobile />
+    </>
+  );
+};
+
+export default SettingsMyGearPage;

@@ -99,7 +99,7 @@ function Header (props) {
   return (
     <>
       <Container 
-        size={'lg'} 
+        size='lg'
         mt={8} 
         mb={8} 
         className={s.headerContainer}
