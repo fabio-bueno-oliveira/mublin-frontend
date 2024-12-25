@@ -122,7 +122,7 @@ function Header (props) {
                 }
                 <Link 
                   to={{ pathname: '/home' }} 
-                  className='mublinLogo showOnlyInLargeScreen'
+                  className='mublinLogo'
                   onClick={() => setRefreshCounter(refreshCounter + 1)}
                 >
                   <Image 

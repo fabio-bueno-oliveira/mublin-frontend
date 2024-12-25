@@ -95,3 +95,8 @@
 .splide__pagination__page:hover {
   background: #b49df7;
 }
+
+.mantine-focus-auto:focus-visible {
+  outline: none;
+  outline-offset: 0;
+}

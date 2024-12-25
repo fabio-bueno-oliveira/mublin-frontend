@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, Button, Radio, Text, TextInput, Input, NativeSelect, Checkbox, Anchor, Divider, em } from '@mantine/core'
+import { Grid, Container, Modal, Paper, Center, Group, Flex, Alert, Loader, Box, Image, Button, Radio, Text, Input, TextInput, em } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
-import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks'
-import { hasLength, isEmail, useForm } from '@mantine/form'
+import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
-import IntlCurrencyInput from 'react-intl-currency-input'
+import { CurrencyInput } from 'react-currency-mask'
 
 function SettingsMyGearPage () {
 
   const user = useSelector(state => state.user)
   let dispatch = useDispatch()
 
-  document.title = "Meu equipamento | Mublin"
+  document.title = 'Meu equipamento | Mublin'
 
   let loggedUser = JSON.parse(localStorage.getItem('user'))
 
@@ -105,22 +104,7 @@ function SettingsMyGearPage () {
   const [featured, setFeatured] = useState('')
   const [for_sale, setForSale] = useState('')
   const [price, setPrice] = useState('')
-  const handleChangePrice = (event, value, maskedValue) => {
-    setPrice(value)
-  }
-  const currencyConfig = {
-      locale: "pt-BR",
-      formats: {
-        number: {
-          BRL: {
-            style: "currency",
-            currency: "BRL",
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          },
-        },
-      },
-  };
+
   const [currently_using, setCurrentlyUsing] = useState('')
 
   const [itemIdToEdit, setItemIdToEdit] = useState('')
@@ -157,6 +141,33 @@ function SettingsMyGearPage () {
         setIsLoaded(true)
       })
     }, 300);
+  }
+
+  // Remove product from list
+  const [modalConfirmDelete, setModalConfirmDelete] = useState(false)
+  const [loadingRemove, setLoadingRemove] = useState(false)
+  const [itemToRemove, setItemToRemove] = useState({id: '', name: ''})
+  const openModalConfirmation = (productId, productName) => {
+    setModalConfirmDelete(true)
+    setItemToRemove({id: productId, name: productName})
+  }
+  const deleteGear = (userGearId) => {
+    setLoadingRemove(true)
+    fetch('https://mublin.herokuapp.com/user/'+userGearId+'/deleteGearItem', {
+      method: 'delete',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + user.token
+      }
+    }).then((response) => {
+      dispatch(userInfos.getUserGearInfoById(user.id))
+      setLoadingRemove(false)
+    }).catch(err => {
+      console.error(err)
+      alert("Ocorreu um erro ao remover o item")
+      setLoadingRemove(false)
+    })
   }
 
   return (
@@ -259,7 +270,7 @@ function SettingsMyGearPage () {
                             variant='subtle'
                             fullWidth
                             fw='440'
-                            onClick={() => deleteGear(item.id)}
+                            onClick={() => openModalConfirmation(item.id, item.productName)}
                           >
                             Remover
                           </Button>
@@ -273,6 +284,25 @@ function SettingsMyGearPage () {
           </Grid.Col>
         </Grid>
       </Container>
+      <Modal
+        withCloseButton={false}
+        opened={modalConfirmDelete}
+        onClose={() => setModalConfirmDelete(false)}
+        size='xs'
+        centered
+      >
+        <Text>
+          Tem certeza que deseja remover <strong>{itemToRemove.name}</strong> do seu equipamento?
+        </Text>
+        <Group justify='flex-end' gap={7} mt={20}>
+          <Button variant='outline' color='gray' size='sm' onClick={() => setModalConfirmDelete(false)}>
+            Cancelar
+          </Button>
+          <Button color='red' size='sm' onClick={() => deleteGear(itemToRemove.id)} loading={loadingRemove}>
+            Remover
+          </Button>
+        </Group>
+      </Modal>
       <Modal 
         title='Adicionar novo item'
         opened={modalAddNewProductOpen} 
@@ -340,19 +370,16 @@ function SettingsMyGearPage () {
                 <Radio color='violet' value='0' label='Não' />
                 </Group>
               </Radio.Group>
-              <Flex>
-                <Input.Label>Preço de venda:</Input.Label>
-                <IntlCurrencyInput 
-                  disabled={(for_sale === '1' || for_sale === 1) ? false : true}
-                  currency='BRL' 
-                  config={currencyConfig}
-                  id='price'
-                  name='price'
-                  value={price}
-                  onChange={handleChangePrice} 
-                  style={{backgroundColor:'transparent'}}
-                />
-              </Flex>
+              <CurrencyInput
+                value={price}
+                locale='pt-BR'
+                disabled={(for_sale === '1' || for_sale === 1) ? false : true}
+                onChangeValue={(event, originalValue, maskedValue) => {
+                  // console.log(event, originalValue, maskedValue);
+                  setPrice(originalValue);
+                }}
+                InputElement={<TextInput label='Preço de venda:' />} 
+              />
               {(productSelected && productInfo) &&
                 <Image
                   radius='md'
@@ -362,10 +389,10 @@ function SettingsMyGearPage () {
                 />
               }
               <Group justify='flex-end' gap={7} mt={20}>
-                <Button variant='outline' color='violet' size='xs' onClick={() => setModalEditItemOpen(false)}>
+                <Button variant='outline' color='violet' size='sm' onClick={() => setModalEditItemOpen(false)}>
                   Cancelar
                 </Button>
-                <Button color='violet' size='xs' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using)} loading={!isLoaded}>
+                <Button color='violet' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using)} loading={!isLoaded}>
                   Salvar
                 </Button>
               </Group>
