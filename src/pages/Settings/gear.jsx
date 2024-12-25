@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, TextInput, em } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, TextInput, em } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -37,6 +37,7 @@ function SettingsMyGearPage () {
   const [categorySelected, setCategorySelected] = useState('')
   const [products, setProducts] = useState([])
   const [productSelected, setProductSelected] = useState('')
+  const [loadingAddNewProduct, setLoadingAddNewProduct] = useState(false)
   const productInfo = products.filter((product) => { return product.id === Number(productSelected)}) 
 
   const selectBrand = (brandId) => {
@@ -54,7 +55,7 @@ function SettingsMyGearPage () {
   }
 
   const addProductToGear = (productId, featured, for_sale, price, currently_using) => {
-    setIsLoaded(false)
+    setLoadingAddNewProduct(true)
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/user/addGearItem', {
         method: 'post',
@@ -66,7 +67,7 @@ function SettingsMyGearPage () {
         body: JSON.stringify({productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
       }).then((response) => {
         dispatch(userInfos.getUserGearInfoById(loggedUser.id))
-        setIsLoaded(true)
+        setLoadingAddNewProduct(false)
         setModalAddNewProductOpen(false)
         setBrandSelected('')
         setCategorySelected('')
@@ -74,7 +75,7 @@ function SettingsMyGearPage () {
       }).catch(err => {
         console.error(err)
         alert("Ocorreu um erro ao adicionar o produto")
-        setIsLoaded(true)
+        setLoadingAddNewProduct(false)
       })
     }, 300);
   }
@@ -175,9 +176,9 @@ function SettingsMyGearPage () {
   const [modalConfirmDelete, setModalConfirmDelete] = useState(false)
   const [loadingRemove, setLoadingRemove] = useState(false)
   const [itemToRemove, setItemToRemove] = useState({id: '', name: ''})
-  const openModalConfirmation = (productId, productName) => {
+  const openModalConfirmation = (productId, brandName, productName) => {
     setModalConfirmDelete(true)
-    setItemToRemove({id: productId, name: productName})
+    setItemToRemove({id: productId, brand: brandName, name: productName})
   }
   const deleteGear = (userGearId) => {
     setLoadingRemove(true)
@@ -249,7 +250,7 @@ function SettingsMyGearPage () {
                         withBorder
                         px='16'
                         py='12'
-                        mb='14'
+                        mb='4'
                         className='mublinModule'
                       >
                         <Center mb='md'>
@@ -306,7 +307,7 @@ function SettingsMyGearPage () {
                             variant='subtle'
                             fullWidth
                             fw='440'
-                            onClick={() => openModalConfirmation(item.id, item.productName)}
+                            onClick={() => openModalConfirmation(item.id, item.brandName ,item.productName)}
                           >
                             Remover
                           </Button>
@@ -328,7 +329,7 @@ function SettingsMyGearPage () {
         centered
       >
         <Text>
-          Tem certeza que deseja remover <strong>{itemToRemove.name}</strong> do seu equipamento?
+          Tem certeza que deseja remover <strong>{itemToRemove.brand} {itemToRemove.name}</strong> do seu equipamento?
         </Text>
         <Group justify='flex-end' gap={7} mt={20}>
           <Button variant='outline' color='gray' size='sm' onClick={() => setModalConfirmDelete(false)}>
@@ -402,18 +403,22 @@ function SettingsMyGearPage () {
             />
           </Center>
         ) : (
-          <Paper>
-            Selecione o produto para carregar a imagem
-          </Paper>
+          <Center mt={14} mb={20}>
+            <Card w='120' p={4}>
+              <Text size='sm' ta='center' c='dimmed'>
+                Selecione o produto para carregar a imagem
+              </Text>
+            </Card>
+          </Center>
         )}
-        <Anchor href='/gear/submit/product' className='websiteLink'>
-          Não encontrei meu produto na lista
+        <Anchor href='/gear/submit/product' underline='hover' className='websiteLink'>
+          <Text>Não encontrei meu produto na lista</Text>
         </Anchor>
         <Group justify='flex-end' gap={7} mt={20}>
           <Button variant='outline' color='violet' size='sm' onClick={() => setModalAddNewProductOpen(false)}>
             Cancelar
           </Button>
-          <Button color='violet' size='sm' onClick={() => addProductToGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={!isLoaded}>
+          <Button color='violet' size='sm' onClick={() => addProductToGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={loadingAddNewProduct}>
             Salvar
           </Button>
         </Group>

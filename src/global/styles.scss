@@ -149,7 +149,7 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 
 :root[data-mantine-color-scheme='dark'] {
   .websiteLink {
-    color: #67adf5;
+    color: #67adf5!important;
     display: block;
     width: fit-content;
   }
@@ -163,7 +163,7 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 }
 :root[data-mantine-color-scheme='light'] {
   .websiteLink {
-    color: #0a66c2;
+    color: #0a66c2!important;
     display: block;
     width: fit-content;
   }
