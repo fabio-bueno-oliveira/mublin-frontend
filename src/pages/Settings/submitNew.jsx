@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { miscInfos } from '../../store/actions/misc'
 import { Grid, Container, Modal, Checkbox, Center, Group, Flex, Alert, Loader, Input, Image, NativeSelect, Button, Stack, Text, Breadcrumbs, Anchor, TextInput } from '@mantine/core'
@@ -13,6 +14,7 @@ function SettingsNewProductPage () {
 
   const user = useSelector(state => state.user)
   let dispatch = useDispatch()
+  let navigate = useNavigate()
 
   document.title = 'Cadastrar novo produto | Mublin'
 
@@ -157,7 +159,7 @@ function SettingsNewProductPage () {
         if (addNewProductToMyGear) {
           addProductToMyGear(result.id)
         } else {
-          history.push('/career/my-gear')
+          navigate('/settings/my-gear')
         }
       }).catch(err => {
         console.error(err)
@@ -305,7 +307,7 @@ function SettingsNewProductPage () {
                   <Center>
                     <Image src='https://ik.imagekit.io/mublin/misc/product-image-upload-guide_SRC738Rba.png' height='215' />
                     {picture && 
-                      <Image src={'https://ik.imagekit.io/mublin/tr:h-300,cm-pad_resize,bg-FFFFFF/products/'+picture} height='205' />
+                      <Image src={'https://ik.imagekit.io/mublin/tr:h-300,cm-pad_resize,bg-FFFFFF/products/'+picture} height='205' ml='10' />
                     }
                   </Center>
                   <div className={picture ? 'd-none' : ''}>
