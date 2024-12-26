@@ -33,6 +33,7 @@ import GearProductPage from './pages/Gear/product';
 import GearBrandPage from './pages/Gear/brand';
 import SettingsProfileEdit from './pages/Settings/profile';
 import SettingsMyGear from './pages/Settings/gear';
+import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
 import MenuMobilePage from './pages/MenuMobile';
 import CheckoutSuccess from './pages/Checkout/success';
 import AdminPage from './pages/Admin';
@@ -75,6 +76,7 @@ function AppRoutes () {
           <Route path="/gear/product/:productId" element={<GearProductPage />} />
           <Route path="/gear/brand/:brandUrlName" element={<GearBrandPage />} />
           <Route path="/settings/my-gear" element={<SettingsMyGear />} />
+          <Route path="/settings/submit-product" element={<SettingsSubmitNewGearProduct />} />
           <Route path="/settings" element={<SettingsProfileEdit />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/new/project" element={<NewProject />} />

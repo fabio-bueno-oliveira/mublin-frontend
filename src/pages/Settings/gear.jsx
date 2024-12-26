@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, TextInput, em } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, TextInput } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -27,9 +27,6 @@ function SettingsMyGearPage () {
   const [categories, setCategories] = useState([])
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
-  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
-
-  const [modalEditOpen, setModalEditOpen] = useState(false)
 
   // Modal Add New Gear
   const [modalAddNewProductOpen, setModalAddNewProductOpen] = useState(false)
@@ -213,7 +210,7 @@ function SettingsMyGearPage () {
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 9 }} pl={isLargeScreen ? 26 : 0}>
             <Breadcrumbs mb={16} separator="›" separatorMargin="xs">
-              <Anchor href='/teste'>
+              <Anchor href='/settings'>
                 <Text fw='400'>Configurações</Text>
               </Anchor>
               <Text fw='500'>Meus equipamentos</Text>
@@ -230,12 +227,12 @@ function SettingsMyGearPage () {
                     color='violet'
                     onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
                   >
-                    Adicionar novo item
+                    Adicionar novo equipamento
                   </Button>
                 ) : (
                   <>
                     <Button disabled>
-                      <IconPlus name='plus' /> Adicionar novo item à lista
+                      <IconPlus name='plus' /> Adicionar novo equipamento
                     </Button>
                     <Alert variant="light" color="yellow" title="Funcionalidade exclusiva">
                       Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento
@@ -341,7 +338,7 @@ function SettingsMyGearPage () {
         </Group>
       </Modal>
       <Modal 
-        title='Adicionar novo item'
+        title='Adicionar novo equipamento'
         opened={modalAddNewProductOpen} 
         onClose={() => setModalAddNewProductOpen(false)} 
         size='sm'
@@ -411,7 +408,7 @@ function SettingsMyGearPage () {
             </Card>
           </Center>
         )}
-        <Anchor href='/gear/submit/product' underline='hover' className='websiteLink'>
+        <Anchor href='/settings/submit-product' underline='hover' className='websiteLink'>
           <Text>Não encontrei meu produto na lista</Text>
         </Anchor>
         <Group justify='flex-end' gap={7} mt={20}>
@@ -490,14 +487,6 @@ function SettingsMyGearPage () {
                 }}
                 InputElement={<TextInput label='Preço de venda:' />} 
               />
-              {(productSelected && productInfo) &&
-                <Image
-                  radius='md'
-                  h={100}
-                  w={100}
-                  src={productInfo[0].picture ? productInfo[0].picture : undefined}
-                />
-              }
               <Group justify='flex-end' gap={7} mt={20}>
                 <Button variant='outline' color='violet' size='sm' onClick={() => setModalEditItemOpen(false)}>
                   Cancelar

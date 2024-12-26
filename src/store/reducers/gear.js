@@ -31,6 +31,9 @@ const initialState = {
       productId: '',
       created: ''
     }
+  ],
+  brands: [
+    { id: '', name: '', logo: '' }
   ]
 }
 
@@ -81,6 +84,25 @@ export function gear(state = initialState, action) {
       return {
         ...state,
         requesting: false,
+        error: "A solicitação falhou"
+      };
+    case gearTypes.GET_GEAR_BRANDS_REQUEST:
+      return {
+        ...state,
+        brands: initialState.brands,
+        requesting: true
+      };
+    case gearTypes.GET_GEAR_BRANDS_SUCCESS:
+      return {
+        ...state,
+        brands: action.list,
+        requesting: false,
+      };
+    case gearTypes.GET_GEAR_BRANDS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        brands: initialState.brands,
         error: "A solicitação falhou"
       };
     default:
