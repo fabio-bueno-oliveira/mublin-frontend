@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, TextInput } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, em } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -26,6 +26,7 @@ function SettingsMyGearPage () {
   const [brands, setBrands] = useState([])
   const [categories, setCategories] = useState([])
 
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   // Modal Add New Gear
@@ -35,6 +36,7 @@ function SettingsMyGearPage () {
   const [products, setProducts] = useState([])
   const [productSelected, setProductSelected] = useState('')
   const [loadingAddNewProduct, setLoadingAddNewProduct] = useState(false)
+  const [shareNewProductOnFeed, setShareNewProductOnFeed] = useState(true)
   const productInfo = products.filter((product) => { return product.id === Number(productSelected)}) 
 
   const selectBrand = (brandId) => {
@@ -51,7 +53,21 @@ function SettingsMyGearPage () {
       getProducts(brandSelected,categoryId)
   }
 
-  const addProductToGear = (productId, featured, for_sale, price, currently_using) => {
+  const sendToFeed = (productId) => {
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/feed/newFeedPostGear', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + loggedUser.token
+        },
+        body: JSON.stringify({id_item_fk: productId})
+      })
+    }, 300);
+  }
+
+  const addProductToMyGear = (productId, featured, for_sale, price, currently_using) => {
     setLoadingAddNewProduct(true)
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/user/addGearItem', {
@@ -69,6 +85,9 @@ function SettingsMyGearPage () {
         setBrandSelected('')
         setCategorySelected('')
         setProductSelected('')
+        if (shareNewProductOnFeed) {
+          sendToFeed(productId)
+        }
       }).catch(err => {
         console.error(err)
         alert("Ocorreu um erro ao adicionar o produto")
@@ -209,12 +228,14 @@ function SettingsMyGearPage () {
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 9 }} pl={isLargeScreen ? 26 : 0}>
-            <Breadcrumbs mb={16} separator="›" separatorMargin="xs">
-              <Anchor href='/settings'>
-                <Text fw='400'>Configurações</Text>
-              </Anchor>
-              <Text fw='500'>Meus equipamentos</Text>
-            </Breadcrumbs>
+            {isMobile && 
+              <Breadcrumbs mb={16} separator="›" separatorMargin="xs">
+                <Anchor href='/settings'>
+                  <Text fw='400'>Configurações</Text>
+                </Anchor>
+                <Text fw='500'>Meus equipamentos</Text>
+              </Breadcrumbs>
+            }
             {user.requesting ? (
               <Center mt='60'>
                 <Loader active inline='centered' />
@@ -359,7 +380,7 @@ function SettingsMyGearPage () {
         </NativeSelect>
         <NativeSelect
           withAsterisk
-          label='Marca'
+          label='Categoria'
           onChange={(e) => selectCategory(e.target.options[e.target.selectedIndex].value)}
           value={categorySelected}
           defaultValue={categorySelected}
@@ -376,7 +397,7 @@ function SettingsMyGearPage () {
         </NativeSelect>
         <NativeSelect
           withAsterisk
-          label='Marca'
+          label='Produto'
           onChange={(e) => setProductSelected(e.target.options[e.target.selectedIndex].value)}
           value={productSelected}
         >
@@ -390,6 +411,11 @@ function SettingsMyGearPage () {
             <option key={key} value={product.id} disabled={!!user.gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {product.colorName && product.colorName} {!!user.gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
           )}
         </NativeSelect>
+        {loggedUser.id === 1 &&
+          <Anchor mt='xs' href='/settings/submit-product' underline='hover' className='websiteLink'>
+            <Text ta='right' size='sm'>Não encontrei meu produto na lista</Text>
+          </Anchor>
+        }
         {(productSelected && productInfo) ? (
           <Center p={12}>
             <Image 
@@ -408,14 +434,18 @@ function SettingsMyGearPage () {
             </Card>
           </Center>
         )}
-        <Anchor href='/settings/submit-product' underline='hover' className='websiteLink'>
-          <Text>Não encontrei meu produto na lista</Text>
-        </Anchor>
-        <Group justify='flex-end' gap={7} mt={20}>
+        <Flex justify='flex-end'>
+          <Checkbox
+            label='Compartilhar no feed'
+            checked={shareNewProductOnFeed ? true : false}
+            onChange={() => setShareNewProductOnFeed(value => !value)}
+          />
+        </Flex>
+        <Group justify='flex-end' gap={7} mt={16}>
           <Button variant='outline' color='violet' size='sm' onClick={() => setModalAddNewProductOpen(false)}>
             Cancelar
           </Button>
-          <Button color='violet' size='sm' onClick={() => addProductToGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={loadingAddNewProduct}>
+          <Button color='violet' size='sm' onClick={() => addProductToMyGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={loadingAddNewProduct}>
             Salvar
           </Button>
         </Group>

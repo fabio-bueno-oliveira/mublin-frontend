@@ -257,7 +257,6 @@ function ProfilePage () {
         username={username}
         profileId={profile.id}
         showBackIcon={true}
-        hideLogo
       />
       {profile.requesting && 
         <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10}>
@@ -403,7 +402,7 @@ function ProfilePage () {
                     </Flex>
                   </Anchor>
                 }
-                <Flex gap={5} mt={isMobile ? 14 : 20} mb={isMobile ? 0 : 20}>
+                <Flex gap={5} mt={isMobile ? 20 : 20} mb={isMobile ? 14 : 20}>
                   {loggedUser.id !== profile.id ? (
                     <Button 
                       size='xs'

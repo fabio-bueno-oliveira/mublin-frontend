@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
-import { Loader, Modal, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem, em } from '@mantine/core'
+import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled } from '@tabler/icons-react'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 
@@ -89,7 +89,7 @@ function FeedCard ({ item, likes }) {
         mb='10'
         className='mublinModule'
       >
-        <Flex gap={5} align='center'>
+        <Flex gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
             <Avatar 
               size='45px'
@@ -98,7 +98,7 @@ function FeedCard ({ item, likes }) {
               alt={'Foto de '+item.relatedUserName}
             />
           </Link>
-          <Box>
+          <Box style={{flexGrow:'1'}}>
             <Flex gap={4} align='center' mb={2}>
               <Text size={isMobile ? '1.04rem' : 'sm'}>
                 <Anchor size='md' fw={460} style={{lineHeight:'normal'}} href={`/${item.relatedUserUsername}`}>
@@ -118,6 +118,18 @@ function FeedCard ({ item, likes }) {
               há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
             </Text>
           </Box>
+          {item.relatedUserUsername === loggedUser.username && 
+            <Menu shadow="md" position="bottom-end" width={200}>
+              <Menu.Target className='point'>
+                <IconDotsVertical style={{ width: rem(18), height: rem(18), marginTop: '-20px', opacity: '0.5'}} />
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}>
+                  Deletar post
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          }
         </Flex>
         {(item.action && item.categoryId !== 8) && 
           <Text size='0.85em' mt='7px' style={{lineHeight:'1.25em',opacity:'0.8'}}>
@@ -130,8 +142,8 @@ function FeedCard ({ item, likes }) {
           </Text>
         }
         {item.relatedProjectPicture && 
-          <Link to={{ pathname: `/project/${item.relatedProjectUsername}` }}>
-            <Card className='mublinModule' withBorder p={8} mt={8} radius='md'>
+          <Link to={{ pathname: `/project/${item.relatedProjectUsername}` }} style={{width:'fit-content'}}>
+            <Card className='mublinModule' withBorder p={8} mt={8} radius='md' style={{width:'fit-content'}}>
               <Flex gap={4} align='center'>
                 <Image 
                   radius='md'
@@ -150,8 +162,8 @@ function FeedCard ({ item, likes }) {
           </Link>
         }
         {(item.category === 'gear' && item.relatedGearPicture) && 
-          <Link to={{ pathname: `/gear/product/${item.relatedGearId}` }}>
-            <Card className='mublinModule' withBorder p={8} mt={8} radius='md'>
+          <Link to={{ pathname: `/gear/product/${item.relatedGearId}` }} style={{width:'fit-content'}}>
+            <Card className='mublinModule' withBorder p={8} mt={8} radius='md' style={{width:'fit-content'}}>
               <Flex gap={4} align='center'>
                 <Image 
                   radius='md'

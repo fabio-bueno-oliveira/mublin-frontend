@@ -123,7 +123,7 @@ function Header (props) {
                 {!props.hideLogo && 
                   <Link 
                     to={{ pathname: '/home' }} 
-                    className='mublinLogo'
+                    className={(isMobile && props.page === 'profile') ? 'mublinLogo showOnlyInLargeScreen' : 'mublinLogo'}
                     onClick={() => setRefreshCounter(refreshCounter + 1)}
                   >
                     <Image 
@@ -135,14 +135,13 @@ function Header (props) {
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
                 <>
-                  <Divider size="xs" mx={0} orientation="vertical" className='showOnlyInLargeScreen' />
+                  <Divider size='xs' mx={0} orientation='vertical' className='showOnlyInLargeScreen' />
                   <Box w={isMobile ? 160 : 130}>
                     <Text 
-                      mr={10} 
+                      mr='10' 
                       style={{lineHeight:'normal'}} 
-                      pt={isMobile ? 2 : 0}
-                      truncate="end"
-                      size={isMobile ? 'lg' : 'md'}
+                      truncate='end'
+                      size={isMobile ? '1.2rem' : 'md'}
                     >
                       {props.username}
                     </Text>
