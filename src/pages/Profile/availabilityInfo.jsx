@@ -51,7 +51,7 @@ function AvailabilityInfo (props) {
           </Flex>
         )}
       </Group>
-      <Text fz='0.64rem' fw={300} mb={8} mt={14}>
+      <Text size='0.83em' fw={300} mb={8} mt={14}>
         Tipos de trabalho:
       </Text>
       {profile.availabilityItems[0].id ? (
@@ -63,7 +63,7 @@ function AvailabilityInfo (props) {
           )}
         </Flex>
       ) : (
-        <Text fz='0.64rem' fw={300} c='dimmed'>
+        <Text size='0.83em' fw={300} mx={0} c='dimmed'>
           Não informado
         </Text>
       )}

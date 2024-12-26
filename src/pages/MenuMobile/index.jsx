@@ -161,36 +161,36 @@ function MenuMobile () {
         </Center>
         <Flex
           direction='column'
-          gap='md'
+          gap='0.35rem'
         >
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconUser style={iconMenuStyle} />} rightSection={<IconChevronRight/>} onClick={() => navigate('/'+user.username)} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconUser style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href={'/'+user.username} fw='420'>
             Ir para meu perfil
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconEdit style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href='/settings' fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconEdit style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href='/settings' fw='420'>
             Editar meus dados
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconAdjustmentsHorizontal style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconAdjustmentsHorizontal style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='420'>
             Preferências musicais
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconCalendarMonth style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconCalendarMonth style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='420'>
             Disponibilidade para gigs
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconHeartHandshake style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconHeartHandshake style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='420'>
             Parceiros e Endorsements
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconPackages style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500' onClick={() => navigate('/settings/my-gear')}>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconPackages style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='420' onClick={() => navigate('/settings/my-gear')}>
             Meus equipamentos
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconLock style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconLock style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='420'>
             Senha
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconStar style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconStar style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='420'>
             Assinatura Mublin PRO
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconEye style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='500'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconEye style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='420'>
             Privacidade da conta
           </Button>
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='compact-sm' justify='space-between' leftSection={<IconLogout style={iconMenuStyle} />} rightSection={<IconChevronRight />} onClick={() => logout()}>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconLogout style={iconMenuStyle} />} rightSection={<IconChevronRight />} onClick={() => logout()} fw='420'>
             Sair
           </Button>
         </Flex>
