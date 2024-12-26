@@ -257,6 +257,7 @@ function ProfilePage () {
         username={username}
         profileId={profile.id}
         showBackIcon={true}
+        hideLogo
       />
       {profile.requesting && 
         <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10}>
@@ -296,12 +297,12 @@ function ProfilePage () {
                     src={profile.picture}
                   />
                   <Box style={{overflow:'hidden'}}>
-                    <Flex align={'baseline'} mt={0} mb={1}>
+                    <Flex align='baseline' mt={0} mb={1}>
                       <Title order={3} fw={460}>
                         {profile.name} {profile.lastname}
                       </Title>
                       {!!profile.verified && 
-                        <Tooltip label="Usuário Verificado">
+                        <Tooltip label='Usuário Verificado'>
                           <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
                         </Tooltip>
                       }
@@ -523,7 +524,7 @@ function ProfilePage () {
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
                 py={isMobile ? 0 : 12}
-                mb={14}
+                mb={20}
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                 className='mublinModule'
               >

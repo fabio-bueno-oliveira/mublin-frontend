@@ -113,23 +113,25 @@ function Header (props) {
         >
           <Group>
             <>
-              <Flex align='flex-end' gap={9}>
+              <Flex align='flex-end' gap={7}>
                 {(props.showBackIcon && isMobile) && 
                   <IconChevronLeft 
                     style={{width:'21px',height:'21px'}} 
                     onClick={() => navigate(-1)}
                   />
                 }
-                <Link 
-                  to={{ pathname: '/home' }} 
-                  className='mublinLogo'
-                  onClick={() => setRefreshCounter(refreshCounter + 1)}
-                >
-                  <Image 
-                    src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} 
-                    h={27}
-                  />
-                </Link>
+                {!props.hideLogo && 
+                  <Link 
+                    to={{ pathname: '/home' }} 
+                    className='mublinLogo'
+                    onClick={() => setRefreshCounter(refreshCounter + 1)}
+                  >
+                    <Image 
+                      src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} 
+                      h={27}
+                    />
+                  </Link>
+                }
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
                 <>

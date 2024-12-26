@@ -82,13 +82,12 @@ function FeedCard ({ item, likes }) {
     <>
       <Card 
         key={item.id}
-        radius={isMobile ? 0 : 'md'}
-        withBorder={isMobile ? false : true}
-        px={isMobile ? 0 : 15}
-        pt={isMobile ? 4 : 11}
-        pb={isMobile ? 10 : 11}
-        mb={isMobile ? 8 : 12}
-        className='mublinModule feedCard'
+        radius='lg'
+        withBorder
+        px='15'
+        py='11'
+        mb='10'
+        className='mublinModule'
       >
         <Flex gap={5} align='center'>
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
