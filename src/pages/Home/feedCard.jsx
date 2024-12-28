@@ -119,8 +119,13 @@ function FeedCard ({ item, likes }) {
           </Link>
           <Box style={{flexGrow:'1'}}>
             <Flex gap={4} align='center' mb={2}>
-              <Text size={isMobile ? '1.04rem' : 'sm'}>
-                <Anchor size='md' fw={460} style={{lineHeight:'normal'}} href={`/${item.relatedUserUsername}`}>
+              <Text size='0.9rem' className='op80'>
+                <Anchor 
+                  underline='hover'
+                  fw={460} 
+                  style={{lineHeight:'normal'}} 
+                  href={`/${item.relatedUserUsername}`}
+                >
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Anchor>
               </Text>

@@ -42,55 +42,66 @@ function Home () {
   return (
     <>
       {isMobile ? (
-        <HeaderMobile page="home" />
+        <HeaderMobile page='home' />
       ) : (
-        <Header page="home" />
+        <Header page='home' />
       )}
-      <Container size={'lg'} mb={'lg'} mt={largeScreen ? 20 : 0}>
+      <Container size='lg' mb='lg' mt={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 
-            <Grid.Col span={{ base: 12, md: 12, lg: 2 }} pt={8}>
+            <Grid.Col span={{ base: 12, md: 12, lg: 2.5 }} pt={8}>
               {projects.requesting || !user.success ? (
                 <>
                   <Skeleton height={56} circle />
                   <Skeleton height={16} width={125} mt={10} radius="md" />
                 </>
               ) : (
-                <Card 
-                  padding={12} 
-                  radius={"md"} 
-                  withBorder
-                  className="mublinModule"
-                >
-                  <Center>
-                    <Link to={{ pathname: `/${user.username}` }}>
-                      <Avatar 
-                        size="lg"
-                        src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null} 
-                      />
-                    </Link>
-                  </Center>
-                  <Title fw={500} order={5} mb={1} mt={10} ta="center">
-                    Olá, {user?.name}
-                  </Title>
-                  {user.plan === 'Pro' && 
+                <>
+                  <Card 
+                    padding={12} 
+                    radius={"md"} 
+                    withBorder
+                    className="mublinModule"
+                  >
                     <Center>
-                      <Badge size='xs' variant='light' color='violet'>PRO</Badge>
+                      <Link to={{ pathname: `/${user.username}` }}>
+                        <Avatar 
+                          size="lg"
+                          src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null} 
+                        />
+                      </Link>
                     </Center>
-                  }
-                  <Text ta="center" c="dimmed" fw="400" size="13px" mt={13}>
-                    {user.roles.map((role, key) => 
-                      <span className="comma" key={key}>{role.description}</span>
-                    )}
-                  </Text>
-                  <Text ta="center"  size="xs" mt={9} c="dimmed">
-                    {user.bio}
-                  </Text>
-                </Card>
+                    <Title fw='460' fz='1.1rem' mb={1} mt={10} ta='center' className='op80'>
+                      Olá, {user?.name}
+                    </Title>
+                    {user.plan === 'Pro' && 
+                      <Center>
+                        <Badge size='xs' variant='light' color='violet'>PRO</Badge>
+                      </Center>
+                    }
+                    <Text ta="center" c="dimmed" fw="400" size="13px" mt={13}>
+                      {user.roles.map((role, key) => 
+                        <span className="comma" key={key}>{role.description}</span>
+                      )}
+                    </Text>
+                    {/* <Text ta="center"  size="xs" mt={9} c="dimmed">
+                      {user.bio}
+                    </Text> */}
+                  </Card>
+                  <Card 
+                    mt='10'
+                    padding={12} 
+                    radius={"md"} 
+                    withBorder
+                    className="mublinModule"
+                  >
+                    <Text>Meus Projetos</Text>
+                  </Card>
+                </>
               )}
             </Grid.Col>
           }
-          <Grid.Col span={{ base: 12, md: 12, lg: 7 }} mb={isMobile ? 60 : 20}>
+          <Grid.Col span={{ base: 12, md: 12, lg: 6.5 }} mb={isMobile ? 60 : 20}>
             <Card 
               px='md' pt='sm' pb='lg'
               radius='md' 
@@ -101,7 +112,7 @@ function Home () {
               <Flex>
                 
               </Flex>
-              Meus projetos
+              Publicar
             </Card>
             <Divider my="xs" label="Atualizações" labelPosition="center" />
             {feed.requesting ? (
@@ -185,7 +196,7 @@ function Home () {
           }
         </Grid>
       </Container>
-      <FooterMenuMobile />
+      <FooterMenuMobile page='home' />
     </>
   );
 };

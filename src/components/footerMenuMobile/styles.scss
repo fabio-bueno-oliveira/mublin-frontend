@@ -13,6 +13,7 @@ footer.menuMobile {
     height: 100%;
   
     div {
+      -webkit-tap-highlight-color: transparent;
       color: #3a3a3a;
       cursor: pointer;
       font-size: 1.6rem;

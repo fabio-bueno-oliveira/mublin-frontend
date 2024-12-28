@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { userInfos } from '../../store/actions/user';
+import { miscInfos } from '../../store/actions/misc';
+import { userProjectsInfos } from '../../store/actions/userProjects';
 import { useMantineColorScheme, Drawer, Box, Flex, Button, Text } from '@mantine/core';
 import { IconMusicPlus, IconBulb, IconSend, IconUserPlus, IconChevronRight, IconBox, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic } from '@tabler/icons-react';
 import './styles.scss';
 
-const FooterMenuMobile = () => {
+const FooterMenuMobile = (props) => {
 
+  const dispatch = useDispatch()
   let navigate = useNavigate()
   let currentPath = window.location.pathname
+
+  const user = useSelector(state => state.user)
   const { colorScheme } = useMantineColorScheme()
   const [drawerNewIsOpen, setDrawerNewIsOpen] = useState(false)
+  const [refreshCounter, setRefreshCounter] = useState(0)
+
+  const handleHomeClick = () => {
+    navigate("/home")
+    setRefreshCounter(refreshCounter + 1)
+  }
+
+  useEffect(() => {
+    if (props.page === 'home' && refreshCounter > 0) {
+      dispatch(userInfos.getInfo())
+      dispatch(miscInfos.getFeed())
+      dispatch(miscInfos.getFeedLikes())
+      dispatch(userProjectsInfos.getUserProjects(user.id,'all'))
+    }
+  }, [refreshCounter])
 
   return (
     <>
@@ -17,7 +39,7 @@ const FooterMenuMobile = () => {
         <div>
           <div
             className={currentPath === '/home' ? 'active' : undefined} 
-            onClick={() => navigate("/home")}
+            onClick={() => handleHomeClick()}
           >
             <IconHome />
           </div>

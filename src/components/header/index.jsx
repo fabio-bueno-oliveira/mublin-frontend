@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
+import { miscInfos } from '../../store/actions/misc';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Divider, Drawer, Image, CloseButton, rem, em } from '@mantine/core';
@@ -52,6 +53,8 @@ function Header (props) {
   useEffect(() => { 
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
+      dispatch(miscInfos.getFeed());
+      dispatch(miscInfos.getFeedLikes());
       dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
     }
   }, [refreshCounter])

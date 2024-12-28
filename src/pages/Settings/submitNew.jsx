@@ -313,10 +313,10 @@ function SettingsNewProductPage () {
                   <div className={picture ? 'd-none' : ''}>
                     <IKUpload 
                       id='picture'
-                      fileName="avatar.jpg"
+                      // fileName="avatar.jpg"
                       folder={imageUploadPath}
                       tags={["gear"]}
-                      useUniqueFileName={true}
+                      useUniqueFileName={false}
                       isPrivateFile= {false}
                       onError={onUploadError}
                       onSuccess={onUploadSuccess}
