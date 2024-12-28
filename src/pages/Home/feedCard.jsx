@@ -22,14 +22,14 @@ function FeedCard ({ item, likes }) {
   const totalLikes = likes?.likes;
   const likedByMe = likes?.likedByMe;
 
-  const [loadingLikeAction, isLoadingLikeAction] = useState(0);
+  const [loadingAction, isLoadingAction] = useState(0);
   const [showModalLikes, setShowModalLikes] = useState(false);
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '5px' };
 
   const likeFeedPost = (feedId) => {
-    isLoadingLikeAction(feedId);
+    isLoadingAction(feedId);
     fetch('https://mublin.herokuapp.com/feed/'+feedId+'/like', {
       method: 'POST',
       headers: {
@@ -40,16 +40,16 @@ function FeedCard ({ item, likes }) {
     })
     .then(() => {
       dispatch(miscInfos.getFeedLikes());
-      isLoadingLikeAction(0);
+      isLoadingAction(0);
     }).catch(err => {
       console.error(err);
       alert("Ocorreu um erro ao curtir a postagem");
-      isLoadingLikeAction(0);
+      isLoadingAction(0);
     })
   }
 
   const unlikeFeedPost = (feedId) => {
-    isLoadingLikeAction(feedId);
+    isLoadingAction(feedId);
     fetch('https://mublin.herokuapp.com/feed/'+feedId+'/unlike', {
       method: 'DELETE',
       headers: {
@@ -60,11 +60,11 @@ function FeedCard ({ item, likes }) {
     })
     .then((response) => {
       dispatch(miscInfos.getFeedLikes())
-      isLoadingLikeAction(0);
+      isLoadingAction(0);
     }).catch(err => {
       console.error(err);
       alert("Ocorreu um erro ao curtir a postagem");
-      isLoadingLikeAction(0);
+      isLoadingAction(0);
     })
   }
 
@@ -76,6 +76,25 @@ function FeedCard ({ item, likes }) {
   const goToProfile = (username) => {
     setShowModalLikes(false);
     navigate('/'+username);
+  }
+
+  const deleteFeedPost = (postId) => {
+    isLoadingAction(true)
+    fetch('https://mublin.herokuapp.com/feed/'+postId+'/deleteFeedItem', {
+      method: 'delete',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + loggedUser.token
+      }
+    }).then((response) => {
+      isLoadingAction(false)
+      dispatch(miscInfos.getFeed())
+    }).catch(err => {
+      console.error(err)
+      isLoadingAction(false)
+      alert("Ocorreu um erro ao remover o post. Tente novamente em instantes")
+    })
   }
 
   return (
@@ -124,7 +143,11 @@ function FeedCard ({ item, likes }) {
                 <IconDotsVertical style={{ width: rem(18), height: rem(18), marginTop: '-20px', opacity: '0.5'}} />
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Item leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}>
+                <Menu.Item
+                  disabled={loadingAction}
+                  leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
+                  onClick={() => deleteFeedPost(item.id)}
+                >
                   Deletar post
                 </Menu.Item>
               </Menu.Dropdown>
@@ -188,7 +211,7 @@ function FeedCard ({ item, likes }) {
             gap={4}
             mt={12}
           >
-            {loadingLikeAction === item.id ? (
+            {loadingAction === item.id ? (
               <Loader color='violet' size={18} />
             ) : (
               <>
