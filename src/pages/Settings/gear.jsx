@@ -11,12 +11,13 @@ import { CurrencyInput } from 'react-currency-mask'
 
 function SettingsMyGearPage () {
 
-  const user = useSelector(state => state.user)
   let dispatch = useDispatch()
 
   document.title = 'Meu equipamento | Mublin'
 
   let loggedUser = JSON.parse(localStorage.getItem('user'))
+  const requesting = useSelector(state => state.user.requesting)
+  const gear = useSelector(state => state.user.gear)
 
   useEffect(() => { 
     dispatch(userInfos.getUserGearInfoById(loggedUser.id))
@@ -163,7 +164,7 @@ function SettingsMyGearPage () {
       setCurrentlyUsing(currently_using)
   }
 
-  const itemInfo = user.gear.filter((item) => { return item.productId === modalItemManagementProductId })
+  const itemInfo = gear.filter((item) => { return item.productId === modalItemManagementProductId })
 
   const editGearItem = (itemId, productId, featured, for_sale, price, currently_using) => {
     setIsLoaded(false)
@@ -177,7 +178,7 @@ function SettingsMyGearPage () {
         },
         body: JSON.stringify({id: itemId, productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
       }).then((response) => {
-        dispatch(userInfos.getUserGearInfoById(user.id));
+        dispatch(userInfos.getUserGearInfoById(loggedUser.id));
         setIsLoaded(true)
         setModalEditItemOpen(false)
       }).catch(err => {
@@ -206,7 +207,7 @@ function SettingsMyGearPage () {
         'Authorization': 'Bearer ' + loggedUser.token
       }
     }).then((response) => {
-      dispatch(userInfos.getUserGearInfoById(user.id))
+      dispatch(userInfos.getUserGearInfoById(loggedUser.id))
       setLoadingRemove(false)
       setModalConfirmDelete(false)
     }).catch(err => {
@@ -236,14 +237,14 @@ function SettingsMyGearPage () {
                 <Text fw='500'>Meus equipamentos</Text>
               </Breadcrumbs>
             }
-            {user.requesting ? (
+            {requesting ? (
               <Center mt='60'>
                 <Loader active inline='centered' />
               </Center>
             ) : (
               <>
                 <Group justify='flex-end'>
-                  {user.plan === 'Pro' ? (
+                  {loggedUser.plan === 'Pro' ? (
                     <Button
                       leftSection={<IconPlus size={14} />}
                       color='violet'
@@ -263,7 +264,7 @@ function SettingsMyGearPage () {
                   )}
                 </Group>
                 <Grid mt='lg'>
-                  {user.gear.map((item, key) => (
+                  {gear.map((item, key) => (
                     <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>
                       <Paper
                         radius='md'
@@ -410,7 +411,7 @@ function SettingsMyGearPage () {
             <option value=''>{!categorySelected ? 'Selecione primeiro a categoria' : 'Selecione o produto'}</option>
           }
           {products.map((product,key) =>
-            <option key={key} value={product.id} disabled={!!user.gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {product.colorName && product.colorName} {!!user.gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
+            <option key={key} value={product.id} disabled={!!gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {product.colorName && product.colorName} {!!gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
           )}
         </NativeSelect>
         {loggedUser.id === 1 &&

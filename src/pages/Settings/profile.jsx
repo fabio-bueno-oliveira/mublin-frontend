@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
-import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, NavLink, Group, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider, em } from '@mantine/core';
-import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconSearch, IconHeartHandshake, IconPackages, IconTargetArrow, IconWorld } from '@tabler/icons-react';
+import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, Group, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider } from '@mantine/core';
+import { IconSearch, IconWorld } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
@@ -11,12 +11,13 @@ import SettingsMenu from './menu';
 
 function SettingsPage () {
 
-  const user = useSelector(state => state.user);
   let dispatch = useDispatch();
 
-  document.title = "Configurações | Mublin";
+  document.title = 'Editar meus dados | Mublin';
 
+  const user = useSelector(state => state.user);
   const loggedUser = JSON.parse(localStorage.getItem('user'));
+
   const isLargeScreen = useMediaQuery('(min-width: 60em)');
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState('');
@@ -140,9 +141,9 @@ function SettingsPage () {
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
-              <Box pos="relative" p={10}>
+              <Box pos='relative' p={10}>
                 {success && 
-                  <Alert color="green" mb={8}>
+                  <Alert color='green' mb={8}>
                     Dados atualizados com sucesso
                   </Alert>
                 }
@@ -156,7 +157,7 @@ function SettingsPage () {
                       <IconWorld size='17' /><Text>Tornar meu perfil público</Text>
                     </Group>
                   }
-                  description="Exibir meu perfil nas buscas internas e nos mecanismos"
+                  description='Exibir meu perfil nas buscas internas e nos mecanismos'
                   key={form.key('public')}
                   {...form.getInputProps('public', { type: 'checkbox' })}
                 />
@@ -273,40 +274,40 @@ function SettingsPage () {
                     form.setFieldValue("cityName","");
                   }}
                 >
-                  <option value="">Selecione</option>
-                  <option value="415">Acre</option>
-                  <option value="422">Alagoas</option>
-                  <option value="406">Amapa</option>
-                  <option value="407">Amazonas</option>
-                  <option value="402">Bahia</option>
-                  <option value="409">Ceara</option>
-                  <option value="424">Distrito Federal</option>
-                  <option value="401">Espirito Santo</option>
-                  <option value="411">Goias</option>
-                  <option value="419">Maranhao</option>
-                  <option value="418">Mato Grosso</option>
-                  <option value="399">Mato Grosso do Sul</option>
-                  <option value="404">Minas Gerais</option>
-                  <option value="408">Para</option>
-                  <option value="405">Paraiba</option>
-                  <option value="413">Parana</option>
-                  <option value="417">Pernambuco</option>
-                  <option value="416">Piaui</option>
-                  <option value="410">Rio de Janeiro</option>
-                  <option value="414">Rio Grande do Norte</option>
-                  <option value="400">Rio Grande do Sul</option>
-                  <option value="403">Rondonia</option>
-                  <option value="421">Roraima</option>
-                  <option value="398">Santa Catarina</option>
-                  <option value="412">São Paulo</option>
-                  <option value="423">Sergipe</option>
-                  <option value="420">Tocantins</option>
+                  <option value=''>Selecione</option>
+                  <option value='415'>Acre</option>
+                  <option value='422'>Alagoas</option>
+                  <option value='406'>Amapa</option>
+                  <option value='407'>Amazonas</option>
+                  <option value='402'>Bahia</option>
+                  <option value='409'>Ceara</option>
+                  <option value='424'>Distrito Federal</option>
+                  <option value='401'>Espirito Santo</option>
+                  <option value='411'>Goias</option>
+                  <option value='419'>Maranhao</option>
+                  <option value='418'>Mato Grosso</option>
+                  <option value='399'>Mato Grosso do Sul</option>
+                  <option value='404'>Minas Gerais</option>
+                  <option value='408'>Para</option>
+                  <option value='405'>Paraiba</option>
+                  <option value='413'>Parana</option>
+                  <option value='417'>Pernambuco</option>
+                  <option value='416'>Piaui</option>
+                  <option value='410'>Rio de Janeiro</option>
+                  <option value='414'>Rio Grande do Norte</option>
+                  <option value='400'>Rio Grande do Sul</option>
+                  <option value='403'>Rondonia</option>
+                  <option value='421'>Roraima</option>
+                  <option value='398'>Santa Catarina</option>
+                  <option value='412'>São Paulo</option>
+                  <option value='423'>Sergipe</option>
+                  <option value='420'>Tocantins</option>
                 </NativeSelect>
                 {form?.getValues()?.cityName ? ( 
-                  <Input.Wrapper label="Cidade" mt="xs">
+                  <Input.Wrapper label='Cidade' mt='xs'>
                     <Input 
-                      component="button"
-                      size={isLargeScreen ? "sm" : "md"}
+                      component='button'
+                      size={isLargeScreen ? 'sm' : 'md'}
                       pointer
                       onClick={() => setModalCityOpen(true)}
                     >

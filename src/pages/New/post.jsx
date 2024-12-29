@@ -103,7 +103,9 @@ function NewPost () {
 
   return (
     <>
-      <Header />
+      {isLargeScreen && 
+        <Header />
+      }
       <Container size="xs" mt='md' mb={40}>
         {/* <Title fz='1.14rem' fw={460} className='op80' mb='10' ta='left' px={isMobile ? 0 : 16}>
           Novo post

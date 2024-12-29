@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { userInfos } from '../../store/actions/user';
-import { userProjectsInfos } from '../../store/actions/userProjects';
-import { useMantineColorScheme, Container, Flex, Image } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
-import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
-import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
-import s from './header.module.css';
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { userInfos } from '../../store/actions/user'
+import { userProjectsInfos } from '../../store/actions/userProjects'
+import { useMantineColorScheme, Container, Flex, Image } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
+import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
+import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg'
+import s from './header.module.css'
 
 function Header (props) {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const user = useSelector(state => state.user);
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
 
-  const { colorScheme } = useMantineColorScheme();
-  const largeScreen = useMediaQuery('(min-width: 60em)');
-  const [refreshCounter, setRefreshCounter] = useState(0);
+  const { colorScheme } = useMantineColorScheme()
+  const largeScreen = useMediaQuery('(min-width: 60em)')
+  const [refreshCounter, setRefreshCounter] = useState(0)
 
   useEffect(() => { 
     if (props.reloadUserInfo) {
@@ -28,9 +28,9 @@ function Header (props) {
   useEffect(() => { 
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
-      dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
+      dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
     }
-  }, [refreshCounter]);
+  }, [refreshCounter])
 
   return (
     <>
@@ -42,10 +42,10 @@ function Header (props) {
       >
         <Flex
           mih={50}
-          gap="md"
-          justify="center"
-          align="center"
-          direction="row"
+          gap='md'
+          justify='center'
+          align='center'
+          direction='row'
         >
           <Link 
             to={{ pathname: '/home' }} 

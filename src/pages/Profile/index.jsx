@@ -6,7 +6,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil, IconPlus } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil, IconPlus, IconSettings } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -15,8 +15,6 @@ import PartnersModule from './partners'
 import CarouselProjects from './carouselProjects'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
-import { formatDistance } from 'date-fns';
-import pt from 'date-fns/locale/pt-BR';
 import AvailabilityInfo from './availabilityInfo';
 import FeedCard from '../Home/feedCard';
 import './styles.scss';
@@ -26,8 +24,8 @@ function ProfilePage () {
   let navigate = useNavigate()
   const params = useParams()
   const username = params?.username
+
   const loggedUser = JSON.parse(localStorage.getItem('user'))
-  const user = useSelector(state => state.user)
   const profile = useSelector(state => state.profile)
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
@@ -525,52 +523,6 @@ function ProfilePage () {
                 radius='md'
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
-                py={isMobile ? 0 : 12}
-                mb={20}
-                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                className='mublinModule'
-              >
-                <Group justify='space-between' align='center' gap={8} mb={13}>
-                  <Title fz='1.14rem' fw={460} className='op80'>Postagens</Title>
-                  {(profile.id === loggedUser.id && !profile.requesting) && 
-                    <Button 
-                      size='xs'
-                      radius='lg'
-                      variant='light'
-                      color={colorScheme === 'light' ? 'dark' : 'gray'}
-                      leftSection={<IconPlus size={14} />}
-                      onClick={() => setModalStrengthsOpen(true)}
-                    >
-                      Nova postagem
-                    </Button>
-                  }
-                </Group>
-                {profile.requesting ? ( 
-                  <Text size='sm'>Carregando...</Text>
-                ) : (
-                  profile.recentActivity.total ? (
-                    <>
-                      {profile.recentActivity.result.slice(0, 1).map((activity) =>
-                        <Box style={{height:'210px'}}>
-                          <FeedCard 
-                            key={activity.id} 
-                            item={activity} 
-                            compact
-                          />
-                        </Box>
-                      )}
-                    </>
-                  ) : (
-                    <Text size='sm' color='dimmed'>Nenhuma postagem até o momento</Text>
-                  )
-                )}
-                <Text className='op80 point' ta='center' size='md' mt='14' fw='460'>Ver mais postagens</Text>
-              </Paper>
-              <Divider mb={18} className='showOnlyInMobile' />
-              <Paper
-                radius='md'
-                withBorder={isLargeScreen ? true : false}
-                px={isMobile ? 0 : 16}
                 pt={isMobile ? 0 : 12}
                 pb={isMobile ? 3 : 12}
                 mb={14}
@@ -697,9 +649,27 @@ function ProfilePage () {
                     style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                     className='mublinModule'
                   >
-                    <Title fz='1.14rem' fw={460} className='op80' mb={13}>
+                    {/* <Title fz='1.14rem' fw={460} className='op80' mb={13}>
                       Equipamento ({profile.gear.length})
-                    </Title>
+                    </Title> */}
+                    <Group justify='space-between' align='center' gap={8} mb={13}>
+                      <Title fz='1.14rem' fw={460} className='op80'>
+                        Equipamento ({profile.gear.length})
+                      </Title>
+                      {(profile.id === loggedUser.id && !profile.requesting) && 
+                        <Button 
+                          size='xs'
+                          radius='lg'
+                          variant='light'
+                          color={colorScheme === 'light' ? 'dark' : 'gray'}
+                          // leftSection={<IconSettings size={14} />}
+                          component='a'
+                          href='/settings/my-gear'
+                        >
+                          Gerenciar
+                        </Button>
+                      }
+                    </Group>
                     {profile.requesting ? ( 
                       <Text size='sm'>Carregando...</Text>
                     ) : (
@@ -811,7 +781,7 @@ function ProfilePage () {
                 </>
               ) : (
                 <>
-                  {user.id === profile.id && 
+                  {loggedUser.id === profile.id && 
                     <>
                       <Divider mb={18} className='showOnlyInMobile' />
                       <Group gap={3} mb={8}>
@@ -844,25 +814,70 @@ function ProfilePage () {
                   }
                 </>
               )}
+              <Paper
+                radius='md'
+                withBorder={isLargeScreen ? true : false}
+                px={isMobile ? 0 : 16}
+                py={isMobile ? 0 : 12}
+                mb={20}
+                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                className='mublinModule'
+              >
+                <Group justify='space-between' align='center' gap={8} mb={13}>
+                  <Title fz='1.14rem' fw={460} className='op80'>Postagens</Title>
+                  {(profile.id === loggedUser.id && !profile.requesting) && 
+                    <Button 
+                      size='xs'
+                      radius='lg'
+                      variant='light'
+                      color={colorScheme === 'light' ? 'dark' : 'gray'}
+                      leftSection={<IconPlus size={14} />}
+                      onClick={() => setModalStrengthsOpen(true)}
+                    >
+                      Nova postagem
+                    </Button>
+                  }
+                </Group>
+                {profile.requesting ? ( 
+                  <Text size='sm'>Carregando...</Text>
+                ) : (
+                  profile.recentActivity.total ? (
+                    <>
+                      {profile.recentActivity.result.slice(0, 1).map((activity) =>
+                        <Box style={{height:'210px'}}>
+                          <FeedCard 
+                            key={activity.id} 
+                            item={activity} 
+                            compact
+                          />
+                        </Box>
+                      )}
+                    </>
+                  ) : (
+                    <Text size='sm' color='dimmed'>Nenhuma postagem até o momento</Text>
+                  )
+                )}
+                <Text className='op80 point' ta='center' size='md' mt='14' fw='460'>Ver mais postagens</Text>
+              </Paper>
             </Grid.Col>
           </Grid>
         </Container>
       }
-      <Modal 
+      <Modal
         centered
-        opened={modalFollowInfoOpen} 
-        onClose={() => setModalFollowInfoOpen(false)} 
+        opened={modalFollowInfoOpen}
+        onClose={() => setModalFollowInfoOpen(false)}
         title={
           <Group mt={12} gap={8}>
             <Avatar
-              size="md"
+              size='md'
               src={profile.picture}
             />
-            <Flex direction="column">
-              <Text size="sm" fw="500">
+            <Flex direction='column'>
+              <Text size='sm' fw='500'>
                 {`${profile.name} ${profile.lastname}`}
               </Text>
-              <Text size="xs" c="dimmed">
+              <Text size='xs' c='dimmed'>
                 {username}
               </Text>
             </Flex>
