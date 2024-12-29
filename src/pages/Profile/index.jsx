@@ -391,18 +391,18 @@ function ProfilePage () {
                     target="_blank" 
                     underline="hover" 
                     className='websiteLink'
-                    mt={isMobile ? 12 : 9}
-                    mb={isMobile ? 12 : 6}
+                    mt={isMobile ? 14 : 9}
+                    mb={isMobile ? 8 : 6}
                   >
                     <Flex gap={2} align='center' w={isMobile ? 290 : 390}>
                       <IconLink size={13} />
-                      <Text size={isMobile ? '0.92em' : '0.83em'} truncate='end'>
+                      <Text size={isMobile ? '0.92em' : '0.83em'} truncate='end' className='lhNormal'>
                         {profile.website}
                       </Text>
                     </Flex>
                   </Anchor>
                 }
-                <Flex gap={5} mt={isMobile ? 20 : 20} mb={isMobile ? 14 : 20}>
+                <Flex gap={5} mt={isMobile ? 17 : 20} mb={isMobile ? 14 : 20}>
                   {loggedUser.id !== profile.id ? (
                     <Button 
                       size='xs'
@@ -689,9 +689,9 @@ function ProfilePage () {
                   )}
                 </>
               </Paper>
-              <Divider mb={18} className='showOnlyInMobile' />
               {profile.plan === 'Pro' ? ( 
                 <>
+                  <Divider mb={18} className='showOnlyInMobile' />
                   <Paper
                     radius='md'
                     withBorder={isLargeScreen ? true : false}
@@ -818,6 +818,7 @@ function ProfilePage () {
                 <>
                   {user.id === profile.id && 
                     <>
+                      <Divider mb={18} className='showOnlyInMobile' />
                       <Group gap={3} mb={8}>
                         <Title order={5} fw={500}>Equipamento</Title>
                         <IconLockSquareRoundedFilled size={22} color="gray" /> 
@@ -1092,10 +1093,10 @@ function ProfilePage () {
       </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>
-          <Title order={3} ta='center' mt={40}>
+          <Title order={4} fw='480' ta='center' mt='40' mb='10'>
             Esta página não está disponível.
           </Title>
-          <Text size='md' ta='center'>
+          <Text size='md' ta='center' px='16'>
             O link em que você clicou pode não estar funcionando, ou a página pode ter sido removida.
           </Text>
         </>

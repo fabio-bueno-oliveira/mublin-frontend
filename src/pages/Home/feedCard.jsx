@@ -165,9 +165,19 @@ function FeedCard ({ item, likes }) {
           </Text>
         }
         {(item.categoryId === 8) && 
-          <Text size='0.89em' mt='7px' style={{lineHeight:'1.25em',opacity:'0.8'}}>
-            {item.extraText}
-          </Text>
+          <>
+            <Text size='0.89em' mt='12px' style={{lineHeight:'1.25em',opacity:'0.8'}}>
+              {item.extraText}
+            </Text>
+            {item.image && 
+              <Image
+                mt='10' 
+                w='100%'
+                fit='contain'
+                src={item.image}
+              />
+            }
+          </>
         }
         {item.relatedProjectPicture && 
           <Link to={{ pathname: `/project/${item.relatedProjectUsername}` }} style={{width:'fit-content'}}>
@@ -182,28 +192,38 @@ function FeedCard ({ item, likes }) {
                   src={item.relatedProjectPicture}
                 />
                 <Box>
-                  <Text size='xs' fw={500}>{item.relatedProjectName}</Text>
+                  <Text size='xs' fw='500'>{item.relatedProjectName}</Text>
                   <Text size='xs' c='dimmed'>{item.relatedProjectType}</Text>
                 </Box>
               </Flex>
             </Card>
           </Link>
         }
-        {(item.category === 'gear' && item.relatedGearPicture) && 
+        {item.relatedGearPicture && 
           <Link to={{ pathname: `/gear/product/${item.relatedGearId}` }} style={{width:'fit-content'}}>
             <Card className='mublinModule' withBorder p={8} mt={8} radius='md' style={{width:'fit-content'}}>
               <Flex gap={4} align='center'>
                 <Image 
                   radius='md'
-                  h={70}
-                  w={70}
+                  h='70'
+                  w='70'
                   fit='contain'
                   size='66px'
                   src={item.relatedGearPicture}
                 />
                 <Box>
-                  <Text size='xs' fw={500}>{item.relatedGearName}</Text>
+                  <Text size='xs' fw='500'>{item.relatedGearName}</Text>
                   <Text size='xs' c='dimmed'>{item.relatedGearBrand}</Text>
+                  {!!item.relatedGearForSale && 
+                    <Group mt='3' gap='2'>
+                      <Badge size='xs' color='gray'>À venda!</Badge>
+                      {!!item.relatedGearPrice && 
+                        <Text size='10px' fw={300}>
+                          {item.relatedGearPrice.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                        </Text>
+                      }
+                    </Group>
+                  }
                 </Box>
               </Flex>
             </Card>

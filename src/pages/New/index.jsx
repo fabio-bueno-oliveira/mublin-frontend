@@ -18,11 +18,28 @@ function New () {
       <Header />
       <Container size={'xs'} mt={32}>
         <Flex mb={24} mt={18} direction="column" gap={18}>
+        <Box>
+            <Button
+              variant='outline'
+              color={colorScheme === "light" ? 'violet' : 'violet'}
+              size='sm'
+              radius='xl'
+              leftSection={<IconMusicPlus size={19} />}
+              rightSection={<IconChevronRight size={12} />}
+              fullWidth
+              onClick={() => navigate('/new/post')}
+            >
+              Nova postagem
+            </Button>
+            <Text ta="center" size="xs" c="dimmed" mt={5} px={20}>
+              Crie um post para o feed do Mublin
+            </Text>
+          </Box>
           <Box>
             <Button
               variant='outline'
               color={colorScheme === "light" ? 'violet' : 'violet'}
-              size='lg'
+              size='sm'
               radius='xl'
               leftSection={<IconMusicPlus size={19} />}
               rightSection={<IconChevronRight size={12} />}
@@ -39,7 +56,7 @@ function New () {
             <Button
               variant='outline'
               color={colorScheme === "light" ? 'violet' : 'violet'}
-              size='lg'
+              size='sm'
               radius='xl'
               leftSection={<IconBulb size={19} />}
               rightSection={<IconChevronRight size={12} />}
@@ -55,7 +72,7 @@ function New () {
             <Button
               variant='outline'
               color={colorScheme === "light" ? 'violet' : 'violet'}
-              size='lg'
+              size='sm'
               radius='xl'
               leftSection={<IconBox size={22} />}
               rightSection={<IconChevronRight size={12} />}
@@ -64,14 +81,14 @@ function New () {
               Novo equipamento
             </Button>
             <Text ta="center" size="xs" c="dimmed" mt={5} px={20}>
-              Cadastre um projeto ainda em idealização para atrair interessados em participar
+              Cadastre um novo produto em sua lista de equipamentos
             </Text>
           </Box>
           <Box>
             <Button
               variant='outline'
               color={colorScheme === "light" ? 'violet' : 'violet'}
-              size='lg'
+              size='sm'
               radius='xl'
               leftSection={<IconUserPlus size={19} />}
               rightSection={<IconChevronRight size={12} />}
@@ -87,7 +104,7 @@ function New () {
             <Button
               variant='outline'
               color={colorScheme === "light" ? 'violet' : 'violet'}
-              size='lg'
+              size='sm'
               radius='xl'
               leftSection={<IconSend size={19} />}
               rightSection={<IconChevronRight size={12} />}

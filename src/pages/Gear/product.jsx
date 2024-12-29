@@ -29,13 +29,13 @@ function GearProductPage () {
       <Header showBackIcon={true} />
       <Container size={'lg'} mt={largeScreen ? 20 : 0}>
         <Box mb={20}>
-          <Link to={{ pathname: `/gear/brand/${product.brandSlug}` }}>
-            {product.brandName}
-          </Link>
-          <Text>
+          <Text mb='10' size='sm' c='dimmed'>
             {product.requesting ? 'Carregando marca...' : product.categoryName}
           </Text>
-          <Title order={3} mb={20}>
+          <Link to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
+            {product.brandName}
+          </Link>
+          <Title order={3} fw='450' mb={20}>
             {product.requesting ? 'Carregando produto...' : product.name}
           </Title>
           {product.requesting ? (

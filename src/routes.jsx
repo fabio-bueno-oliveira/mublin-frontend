@@ -23,6 +23,7 @@ import StartStep3Page from './pages/Start/step3';
 import StartStep4Page from './pages/Start/step4';
 import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search';
+import NewPost from './pages/New/post';
 import NewProject from './pages/New/project';
 import New from './pages/New';
 import ProjectPage from './pages/ProjectPage';
@@ -79,6 +80,7 @@ function AppRoutes () {
           <Route path="/settings/submit-product" element={<SettingsSubmitNewGearProduct />} />
           <Route path="/settings" element={<SettingsProfileEdit />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/new/post" element={<NewPost />} />
           <Route path="/new/project" element={<NewProject />} />
           <Route path="/new" element={<New />} />
           <Route path="/admin" element={<AdminPage />} />

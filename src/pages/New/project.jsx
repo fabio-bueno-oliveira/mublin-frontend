@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSearchParams, Link, useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../store/actions/misc';
 import { usernameCheckInfos } from '../../store/actions/usernameCheck';
 import { userProjectsInfos } from '../../store/actions/userProjects';
