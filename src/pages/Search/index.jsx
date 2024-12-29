@@ -82,12 +82,12 @@ function Search () {
                 event, event.currentTarget.value, null
               )}
               leftSection={<IconSearch size={16} />}
-              rightSectionPointerEvents="all"
+              rightSectionPointerEvents='all'
               rightSection={
                 <CloseButton
-                  aria-label="Apagar"
+                  aria-label='Apagar'
                   onClick={(event) => handleChangeSearch(
-                    event, "", null
+                    event, '', null
                   )}
                   style={{ display: searchQuery ? undefined : 'none' }}
                 />
@@ -102,7 +102,7 @@ function Search () {
                 Músicos em destaque
               </Title>
               {searchResults.suggestedFeaturedUsers.map((user, key) => (
-                <Flex key={key} align={'center'} mb={13} gap={6} justify="space-between">
+                <Flex key={key} align='center' mb={13} gap={6} justify='space-between'>
                   <Link to={{ pathname: `/${user.username}` }}>
                     <Avatar 
                       src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
@@ -110,10 +110,10 @@ function Search () {
                     />
                   </Link>
                   <Flex
-                    justify="flex-start"
-                    align="flex-start"
-                    direction="column"
-                    wrap="wrap"
+                    justify='flex-start'
+                    align='flex-start'
+                    direction='column'
+                    wrap='wrap'
                     gap={4}
                     style={{flexGrow:'2'}}
                   >
@@ -157,8 +157,8 @@ function Search () {
               <Title fz='1.14rem' fw={460} className='op80' mb={14}>
                 Projetos em destaque
               </Title>
-              {searchResults.featuredProjects.result.map((project, key) => (
-                <Flex key={key} align='flex-start' mb={13} gap={6} justify="space-between">
+              {searchResults.featuredProjects.result.map((project, index) => (
+                <Flex key={index} align='flex-start' mb={13} gap={6} justify="space-between">
                   <Link to={{ pathname: `/projects/${project.username}` }}>
                     <Image 
                       radius='md'
@@ -253,8 +253,8 @@ function Search () {
               <Text mb={14} className='showOnlyInMobile'>Pessoas</Text>
               {searchResults.users[0].id && 
                 <Box>
-                  {searchResults.users.map((user, key) =>
-                    <Flex key={key} align={'center'} mb={13} gap={6} justify="space-between">
+                  {searchResults.users.map(user =>
+                    <Flex key={user.id} align={'center'} mb={13} gap={6} justify="space-between">
                       <Link to={{ pathname: `/${user.username}` }}>
                         <Avatar 
                           src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
@@ -314,9 +314,9 @@ function Search () {
             <Tabs.Panel value={isMobile ? 'all' : 'projects'} pl={8} pt={6}>
               <Text mb={14} className='showOnlyInMobile'>Projetos</Text>
               <Box>
-                {searchResults.projects.result.map((project, key) => 
+                {searchResults.projects.result.map(project => 
                   <>
-                    <Flex key={key} align={'center'} mb={13} gap={6} justify="space-between">
+                    <Flex key={project.id} align='center' mb={13} gap={6} justify='space-between'>
                       <Link to={{ pathname: `/${project.username}` }}>
                         <Avatar 
                           src={project.picture ? project.picture : undefined} 

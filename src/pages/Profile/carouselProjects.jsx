@@ -52,9 +52,11 @@ function CarouselProjects (props) {
                 wrap='wrap'
               >
                 <Text fz='10px' fw='340' truncate='end' c='dimmed'>{project.workTitle}</Text>
-                <Text size='11px' fw={320} mb={3} truncate='end'>
-                  {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
-                </Text>
+                <Box w={106}>
+                  <Text size='11px' fw={320} mb={3} truncate='end'>
+                    {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
+                  </Text>
+                </Box>
                 <Box w={106}>
                   <Text size='0.91rem' fw='420' mb={3} truncate='end' title={project.name} className='lhNormal'>
                     {project.name} {!!project.featured && <IconStarFilled style={{ width: '11px', height: '11px' }} color='gold' />}

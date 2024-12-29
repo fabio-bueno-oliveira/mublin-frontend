@@ -18,6 +18,7 @@ import '@splidejs/react-splide/css/skyblue'
 import { formatDistance } from 'date-fns';
 import pt from 'date-fns/locale/pt-BR';
 import AvailabilityInfo from './availabilityInfo';
+import FeedCard from '../Home/feedCard';
 import './styles.scss';
 
 function ProfilePage () {
@@ -38,7 +39,9 @@ function ProfilePage () {
 
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username))
-    dispatch(followInfos.checkProfileFollowing(username))
+    if (loggedUser.username !== username) {
+      dispatch(followInfos.checkProfileFollowing(username))
+    }
     dispatch(profileInfos.getProfileAvailabilityItems(username))
     dispatch(profileInfos.getProfileFollowers(username))
     dispatch(profileInfos.getProfileFollowing(username))
@@ -92,10 +95,10 @@ function ProfilePage () {
   const [gearSetup, setGearSetup] = useState('');
   const [gearCategorySelected, setGearCategorySelected] = useState('');
 
-  const selectSetup = (setupId) => {
-    setGearCategorySelected('');
-    setGearSetup(setupId);
-  }
+  // const selectSetup = (setupId) => {
+  //   setGearCategorySelected('');
+  //   setGearSetup(setupId);
+  // }
 
   const gear = useSelector(state => state.profile.gear).filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
 
@@ -103,7 +106,7 @@ function ProfilePage () {
     return profile.gearSetups.products.find(x => x.id === product.productId && x.setupId === Number(gearSetup)) 
   }) : gear;
 
-  const gearTotal = gearFiltered.filter((product) => { return product.productId > 0 });
+  // const gearTotal = gearFiltered.filter((product) => { return product.productId > 0 });
 
   // Modal Follow Info
   const [modalFollowInfoOpen, setModalFollowInfoOpen] = useState(false);
@@ -546,30 +549,22 @@ function ProfilePage () {
                   <Text size='sm'>Carregando...</Text>
                 ) : (
                   profile.recentActivity.total ? (
-                    profile.recentActivity.result.slice(0,2).map((activity, key) =>
-                      <Box key={key}>
-                        <Group gap={3} mb={6}>
-                          <Avatar src={profile.picture} />
-                          <Flex direction='column'>
-                            <Text size='xs' fw={400}>{profile.name} {profile.lastname}</Text>
-                            <Text size='xs' c='dimmed' title={activity.created_date}>
-                              há {formatDistance(new Date(activity.created * 1000), new Date(), {locale:pt})}
-                            </Text>
-                          </Flex>
-                        </Group>
-                        <Text 
-                          size={isMobile ? 'sm' : '0.83em'}
-                          style={{lineHeight:'1.24em'}}
-                          className='op80'
-                        >
-                          {activity.extraText}
-                        </Text>
-                      </Box>
-                    )
+                    <>
+                      {profile.recentActivity.result.slice(0, 1).map((activity) =>
+                        <Box style={{height:'210px'}}>
+                          <FeedCard 
+                            key={activity.id} 
+                            item={activity} 
+                            compact
+                          />
+                        </Box>
+                      )}
+                    </>
                   ) : (
                     <Text size='sm' color='dimmed'>Nenhuma postagem até o momento</Text>
                   )
                 )}
+                <Text className='op80 point' ta='center' size='md' mt='14' fw='460'>Ver mais postagens</Text>
               </Paper>
               <Divider mb={18} className='showOnlyInMobile' />
               <Paper
@@ -711,7 +706,7 @@ function ProfilePage () {
                       <>
                         {profile.gear[0]?.brandId && 
                           <Group gap={10} mb={14}>
-                            <NativeSelect 
+                            {/* <NativeSelect 
                               // description='Setups'
                               size={isLargeScreen ? "xs" : "sm"}
                               w={155}
@@ -724,7 +719,7 @@ function ProfilePage () {
                                   {setup.name}
                                 </option>
                               )}
-                            </NativeSelect>
+                            </NativeSelect> */}
                             {!gearSetup && 
                               <NativeSelect
                                 // description='Tipo de equipamentp'

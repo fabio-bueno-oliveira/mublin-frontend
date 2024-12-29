@@ -242,24 +242,26 @@ function SettingsMyGearPage () {
               </Center>
             ) : (
               <>
-                {user.plan === 'Pro' ? (
-                  <Button
-                    leftSection={<IconPlus size={14} />}
-                    color='violet'
-                    onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
-                  >
-                    Adicionar novo equipamento
-                  </Button>
-                ) : (
-                  <>
-                    <Button disabled>
-                      <IconPlus name='plus' /> Adicionar novo equipamento
+                <Group justify='flex-end'>
+                  {user.plan === 'Pro' ? (
+                    <Button
+                      leftSection={<IconPlus size={14} />}
+                      color='violet'
+                      onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
+                    >
+                      Adicionar novo equipamento
                     </Button>
-                    <Alert variant="light" color="yellow" title="Funcionalidade exclusiva">
-                      Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento
-                    </Alert>
-                  </>
-                )}
+                  ) : (
+                    <>
+                      <Button disabled leftSection={<IconPlus size={14} />}>
+                        Adicionar novo equipamento
+                      </Button>
+                      <Alert variant="light" color="yellow" title="Funcionalidade exclusiva">
+                        Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento
+                      </Alert>
+                    </>
+                  )}
+                </Group>
                 <Grid mt='lg'>
                   {user.gear.map((item, key) => (
                     <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>

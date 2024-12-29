@@ -100,3 +100,17 @@
   outline: none;
   outline-offset: 0;
 }
+
+.mantine-Textarea-input:focus-within, .mantine-Textarea-input:focus {
+  outline: none;
+  --input-bd: transparent;
+}
+
+.mantine-NativeSelect-input {
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus, .m_8fb7ebe7:focus-within {
+    outline: none;
+    --input-bd: transparent;
+  }
+}

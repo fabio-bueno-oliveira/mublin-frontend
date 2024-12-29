@@ -20,7 +20,9 @@ function Header (props) {
   const [refreshCounter, setRefreshCounter] = useState(0);
 
   useEffect(() => { 
-    dispatch(userInfos.getInfo());
+    if (props.reloadUserInfo) {
+      dispatch(userInfos.getInfo())
+    }
   }, []);
 
   useEffect(() => { 

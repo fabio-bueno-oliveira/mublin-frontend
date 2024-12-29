@@ -187,3 +187,25 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 .lhNormal {
   line-height: normal;
 }
+
+.newPost {
+  background-color: transparent!important;
+
+  .mantine-Textarea-input {
+    background-color: transparent!important;
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+    outline: 0;
+  }
+}
+
+.player-wrapper {
+  position: relative;
+  padding-top: 56.25%; /* Player ratio: 100 / (1280 / 720) */
+
+  .react-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}

@@ -1,9 +1,9 @@
-import { useMantineColorScheme, Flex, Box, Group, Avatar, Text, rem } from '@mantine/core';
+import { useMantineColorScheme, Flex, Box, Group, Avatar, Text, Anchor, rem } from '@mantine/core';
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
 
 export function UserCard({ 
-  mt, id, name, lastname, username, mainRole, picture, verified, legend, city, region
+  mt, name, lastname, username, mainRole, picture, verified, legend, city, region
 }) {
 
   const { colorScheme } = useMantineColorScheme();
@@ -16,9 +16,13 @@ export function UserCard({
         <Avatar size="md" src={picture ? picture : undefined} />
       </Link>
       <Flex direction="column">
-        <Link to={{ pathname: `/${username}` }} className='displayBlockLink'>
+        <Anchor 
+          underline='never'
+          style={{lineHeight:'normal'}} 
+          href={`/${username}`}
+        >
           <Group gap={0}>
-            <Text size="13.5px" fw="500" c={colorScheme === "light" ? 'dark' : 'gray'}>
+            <Text size='0.88rem' className='op80' fw="460" c={colorScheme === "light" ? 'dark' : 'gray'}>
               {name} {lastname}
             </Text>
             {verified && 
@@ -28,14 +32,20 @@ export function UserCard({
               <IconShieldCheckFilled style={iconLegendStyle} />
             }
           </Group>
-        </Link>
+        </Anchor>
         <Box w={170}>
-          <Link to={{ pathname: `/${username}` }} className='displayBlockLink'>
-            <Text size="11px" mt={3} mb={4} truncate="end" c={colorScheme === "light" ? 'dark' : 'gray'}>
+          <Anchor 
+            underline='never'
+            style={{lineHeight:'normal'}} 
+            href={`/${username}`}
+          >
+            <Text size='11px' mt={3} mb={4} truncate='end' c={colorScheme === 'light' ? 'dark' : 'gray'}>
               {username}
             </Text>
-          </Link>
-          <Text size="10px" c="dimmed" truncate="end">{mainRole} {region && `• ${region}`}</Text>
+          </Anchor>
+          <Text size='10px' c='dimmed' truncate='end'>
+            {mainRole} {region && `• ${region}`}
+          </Text>
         </Box>
       </Flex>
     </Flex>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../store/actions/user';
 import { miscInfos } from '../../store/actions/misc';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { useMantineColorScheme, Drawer, Box, Flex, Button, Text } from '@mantine/core';
-import { IconMusicPlus, IconBulb, IconSend, IconUserPlus, IconChevronRight, IconBox, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic } from '@tabler/icons-react';
+import { IconMusicPlus, IconBulb, IconSend, IconUserPlus, IconChevronRight, IconBox, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic, IconPencil } from '@tabler/icons-react';
 import './styles.scss';
 
 const FooterMenuMobile = (props) => {
@@ -14,7 +14,8 @@ const FooterMenuMobile = (props) => {
   let navigate = useNavigate()
   let currentPath = window.location.pathname
 
-  const user = useSelector(state => state.user)
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
+
   const { colorScheme } = useMantineColorScheme()
   const [drawerNewIsOpen, setDrawerNewIsOpen] = useState(false)
   const [refreshCounter, setRefreshCounter] = useState(0)
@@ -22,6 +23,7 @@ const FooterMenuMobile = (props) => {
   const handleHomeClick = () => {
     navigate("/home")
     setRefreshCounter(refreshCounter + 1)
+    setDrawerNewIsOpen(false)
   }
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const FooterMenuMobile = (props) => {
       dispatch(userInfos.getInfo())
       dispatch(miscInfos.getFeed())
       dispatch(miscInfos.getFeedLikes())
-      dispatch(userProjectsInfos.getUserProjects(user.id,'all'))
+      dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'))
     }
   }, [refreshCounter])
 
@@ -66,6 +68,23 @@ const FooterMenuMobile = (props) => {
         position='bottom'
       >
         <Flex mb={76} mt={4} direction='column' gap={18}>
+        <Box>
+            <Button
+              variant='outline'
+              color={colorScheme === 'light' ? 'violet' : 'violet'}
+              size='md'
+              radius='xl'
+              leftSection={<IconPencil size={19} />}
+              rightSection={<IconChevronRight size={12} />}
+              fullWidth
+              onClick={() => navigate('/new/post')}
+            >
+              Novo post
+            </Button>
+            <Text ta='center' size='xs' c='dimmed' mt={5} px={10}>
+              Cadastre projetos de música (novos ou já em atividade)
+            </Text>
+          </Box>
           <Box>
             <Button
               variant='outline'

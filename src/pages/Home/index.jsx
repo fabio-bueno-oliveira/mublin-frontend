@@ -42,14 +42,14 @@ function Home () {
   return (
     <>
       {isMobile ? (
-        <HeaderMobile page='home' />
+        <HeaderMobile page='home' reloadUserInfo />
       ) : (
-        <Header page='home' />
+        <Header page='home' reloadUserInfo />
       )}
       <Container size='lg' mb='lg' mt={largeScreen ? 20 : 0}>
         <Grid>
           {largeScreen && 
-            <Grid.Col span={{ base: 12, md: 12, lg: 2.5 }} pt={8}>
+            <Grid.Col span={{ base: 12, md: 12, lg: 2.5 }} pt='8'>
               {projects.requesting || !user.success ? (
                 <>
                   <Skeleton height={56} circle />
@@ -58,10 +58,10 @@ function Home () {
               ) : (
                 <>
                   <Card 
-                    padding={12} 
-                    radius={"md"} 
+                    padding={12}
+                    radius='md'
                     withBorder
-                    className="mublinModule"
+                    className='mublinModule'
                   >
                     <Center>
                       <Link to={{ pathname: `/${user.username}` }}>
@@ -101,7 +101,7 @@ function Home () {
               )}
             </Grid.Col>
           }
-          <Grid.Col span={{ base: 12, md: 12, lg: 6.5 }} mb={isMobile ? 60 : 20}>
+          <Grid.Col span={{ base: 12, md: 12, lg: 6.2 }} mb={isMobile ? 60 : 20}>
             <Card 
               px='md' pt='sm' pb='lg'
               radius='md' 
@@ -147,16 +147,16 @@ function Home () {
             )}
           </Grid.Col>
           {largeScreen && 
-            <Grid.Col span={3}>
-              <Card shadow="sm" px="md" pt="sm" pb="lg" radius="md" withBorder className="mublinModule">
-                <Text fw={400} size="lg">Músicos em destaque</Text>
+            <Grid.Col span={3.3}>
+              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder className='mublinModule'>
+                <Text fw='400' size='lg'>Músicos em destaque</Text>
                 {search.requesting ? (
-                  <Text size="13px" mt={7}>Carregando...</Text>
+                  <Text size='13px' mt={7}>Carregando...</Text>
                 ) : (
-                  search.suggestedFeaturedUsers.map((user, key) => (
+                  search.suggestedFeaturedUsers.map(user => (
                     <UserCard 
                       mt={14}
-                      key={key}
+                      key={user.id}
                       name={user.name}
                       lastname={user.lastname}
                       username={user.username}

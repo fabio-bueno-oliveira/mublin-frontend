@@ -130,15 +130,15 @@ function SettingsPage () {
 
   return (
     <>
-      <Header />
-      <Container size={'sm'} mb={100}>
-        <Grid mt={isLargeScreen ? 30 : 0}>
+      <Header reloadUserInfo />
+      <Container size='lg' mb={100}>
+        <Grid mt='15'>
           {isLargeScreen && 
-            <Grid.Col span={5} p={24}>
+            <Grid.Col span={4} pt='20'>
               <SettingsMenu page='profileEdit' />
             </Grid.Col>
           }
-          <Grid.Col span={{ base: 12, md: 12, lg: 7 }} pl={isLargeScreen ? 26 : 0}>
+          <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos="relative" p={10}>
                 {success && 
@@ -188,6 +188,15 @@ function SettingsPage () {
                   description="O username não pode ser alterado no momento"
                   defaultValue={user.username}
                   disabled
+                />
+                <Textarea
+                  size={isLargeScreen ? "sm" : "md"}
+                  mt="xs"
+                  label="Bio"
+                  rows="4"
+                  maxLength="220"
+                  key={form.key('bio')}
+                  {...form.getInputProps('bio')}
                 />
                 <TextInput
                   size={isLargeScreen ? "sm" : "md"}
@@ -318,15 +327,6 @@ function SettingsPage () {
                     </Input>
                   </Input.Wrapper>
                 )}
-                <Textarea
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  label="Bio"
-                  rows="4"
-                  maxLength="220"
-                  key={form.key('bio')}
-                  {...form.getInputProps('bio')}
-                />
                 <Group justify="end" mt="lg">
                   <Button
                     type="submit"

@@ -6,10 +6,13 @@ const initialState = {
   list: [
     { 
       id: '',
+      created: '',
       relatedItemId: '',
       extraText: '',
       extraInfo: '',
-      created: '',
+      image: '',
+      videoUrl: '',
+      relatedItemType: '',
       relatedUserName: '',
       relatedUserLastname: '',
       relatedUserPicture: '',

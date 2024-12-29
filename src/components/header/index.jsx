@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { miscInfos } from '../../store/actions/misc';
 import { userProjectsInfos } from '../../store/actions/userProjects';
@@ -33,21 +33,23 @@ function Header (props) {
 
   const openMenuDrawerFromProfile = props.openMenuDrawerFromProfile;
 
-  const user = useSelector(state => state.user);
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
 
   const { colorScheme, setColorScheme } = useMantineColorScheme()
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   const [searchParams] = useSearchParams()
-  const searchedKeywords = searchParams.get('keywords')
+  const searchedKeywords = searchParams.get('keywords') ? searchParams.get('keywords') : ''
   const [refreshCounter, setRefreshCounter] = useState(0)
   // const [showMobileMenu, setShowMobileMenu] = useState(true)
 
   let currentPath = window.location.pathname
 
-  useEffect(() => { 
-    dispatch(userInfos.getInfo());
+  useEffect(() => {
+    if (props.reloadUserInfo) {
+      dispatch(userInfos.getInfo())
+    }
   }, [])
 
   useEffect(() => { 
@@ -55,7 +57,7 @@ function Header (props) {
       dispatch(userInfos.getInfo());
       dispatch(miscInfos.getFeed());
       dispatch(miscInfos.getFeedLikes());
-      dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
+      dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
     }
   }, [refreshCounter])
 
@@ -158,9 +160,9 @@ function Header (props) {
                 // onFocus={() => setShowMobileMenu(false)}
                 // onBlur={() => setShowMobileMenu(true)}
               >
-                <Input 
-                  variant={colorScheme === 'light' ? 'filled' : 'unstyled'} 
-                  size="md"
+                <Input
+                  variant={colorScheme === 'light' ? 'filled' : 'unstyled'}
+                  size='md'
                   w={320}
                   placeholder='Pessoa, instrumento ou cidade...'
                   value={searchQuery}
@@ -169,12 +171,12 @@ function Header (props) {
                     event, event.currentTarget.value, null
                   )}
                   // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
-                  rightSectionPointerEvents="all"
+                  rightSectionPointerEvents='all'
                   rightSection={
                     <CloseButton
-                      aria-label="Apagar"
+                      aria-label='Apagar'
                       onClick={(event) => handleChangeSearch(
-                        event, "", null
+                        event, '', null
                       )}
                       style={{ display: searchQuery ? undefined : 'none' }}
                     />
@@ -240,7 +242,7 @@ function Header (props) {
             </Link>
             {isLargeScreen && 
               <>
-                {/* {user.plan === 'Pro' && 
+                {/* {loggedUser.plan === 'Pro' && 
                   <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
                 } */}
                 <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
@@ -248,23 +250,23 @@ function Header (props) {
                     <Avatar
                       size="md"
                       className="point"
-                      src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined}
-                      alt={user.username}
+                      src={loggedUser.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+loggedUser.picture : undefined}
+                      alt={loggedUser.username}
                       ml={8}
                     />
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Menu.Label>
-                      {user.name} {user.lastname} 
-                      {user.plan === 'Pro' && 
+                      {loggedUser.name} {loggedUser.lastname} 
+                      {loggedUser.plan === 'Pro' && 
                         <Badge size='sm' variant='light' color='violet' ml={6}>PRO</Badge>
                       }
                     </Menu.Label>
                     <Menu.Item 
                       leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
-                      // onClick={() => navigate(`/${user.username}`)}
+                      // onClick={() => navigate(`/${loggedUser.username}`)}
                       // onClick={() => console.log("foi")}
-                      onClick={() => navigate('/'+user.username)}
+                      onClick={() => navigate('/'+loggedUser.username)}
                     >
                       Ver perfil
                     </Menu.Item>
