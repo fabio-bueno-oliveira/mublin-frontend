@@ -23,6 +23,8 @@ jobs:
         run: yarn install
       - name: Build
         run: yarn build
+        env: 
+          MY_SECRET_1: ${{ secrets.VITE_IMAGEKIT_PRIVATE_KEY }}
       - name: Upload bundle
         uses: actions/upload-artifact@master
         with:
