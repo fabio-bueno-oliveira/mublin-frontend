@@ -5,7 +5,7 @@ import { userInfos } from '../../../store/actions/user';
 import { Container, Stepper, Group, Center, Title, Image, Button, Loader, rem } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconUpload } from '@tabler/icons-react';
 import {IKUpload} from "imagekitio-react";
 import HeaderWelcome from '../../../components/header/welcome';
 
@@ -102,13 +102,20 @@ function StartFirstStep () {
           <IKUpload 
             fileName="avatar.jpg"
             folder={userAvatarPath}
-            tags={["tag1"]}
+            tags={['avatar','user']}
+            name='file-input'
+            id='file-input'
+            className='file-input__input'
             useUniqueFileName={true}
             isPrivateFile= {false}
             onError={onUploadError}
             onSuccess={onUploadSuccess}
             onUploadStart={onUploadStart}
           />
+          <label className="file-input__label" for="file-input">
+            <IconUpload />
+            <span>Selecionar arquivo</span>
+          </label>
         </div>
       </Container>
       <footer className='onFooter'>

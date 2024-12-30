@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { userActions } from '../../store/actions/authentication'
-import { userInfos } from '../../store/actions/user'
-import { useMantineColorScheme, Container, Flex, Center, Image, Button, Text, Anchor, Avatar, Badge, ActionIcon, Modal, Loader } from '@mantine/core'
+import { LoadingOverlay, useMantineColorScheme, Container, Flex, Center, Image, Button, Text, Anchor, Avatar, Badge, ActionIcon, Modal } from '@mantine/core'
 import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera,  IconHeartHandshake, IconPackages, IconCalendarMonth,
-  IconChevronRight, IconLogout, IconBrightnessUp, IconMoon, IconEdit, IconStar } from '@tabler/icons-react'
+  IconChevronRight, IconLogout, IconBrightnessUp, IconMoon, IconEdit, IconStar, IconUpload } from '@tabler/icons-react'
 import FooterMenuMobile from '../../components/footerMenuMobile'
+import { notifications } from '@mantine/notifications'
 import {IKUpload} from 'imagekitio-react'
 
 function MenuMobile () {
@@ -14,14 +14,14 @@ function MenuMobile () {
   document.title = 'Menu | Mublin'
 
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
   let navigate = useNavigate()
-  const { colorScheme, setColorScheme,  } = useMantineColorScheme()
-  const [showModalPicture, setShowModalPicture] = useState(false)
 
-  useEffect(() => { 
-    dispatch(userInfos.getInfo())
-  }, [])
+  let loggedUser = JSON.parse(localStorage.getItem('user'))
+
+  const { colorScheme, setColorScheme,  } = useMantineColorScheme()
+
+  const [picture, setPicture] = useState(loggedUser.picture)
+  const [showModalPicture, setShowModalPicture] = useState(false)
 
   const setNewColorTheme = (option) => {
     setColorScheme(option)
@@ -33,40 +33,43 @@ function MenuMobile () {
   }
 
   // Picture upload
-  const userAvatarPath = '/users/avatars/'+user.id+'/'
+  const userAvatarPath = '/users/avatars/'+loggedUser.id+'/'
   const [uploading, setUploading] = useState(false)
   const onUploadStart = evt => {
     console.log('Start uplading', evt)
     setUploading(true)
   };
   const onUploadSuccess = res => {
-    notifications.show({
-      title: 'Sucesso!',
-      message: 'Foto de perfil carregada com sucesso',
-      color: 'lime',
-      position: 'top-right'
-    })
     let n = res.filePath.lastIndexOf('/');
     let fileName = res.filePath.substring(n + 1);
-    updatePicture(user.id,fileName);
-    setUploading(false);
+    updatePicture(loggedUser.id,fileName);
   }
   const updatePicture = (userId, value) => {
-    let user = JSON.parse(localStorage.getItem('user'));
     fetch('https://mublin.herokuapp.com/user/'+userId+'/picture', {
         method: 'PUT',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + user.token
+          'Authorization': 'Bearer ' + loggedUser.token
         },
         body: JSON.stringify({picture: value})
       }).then((response) => {
         response.json().then((response) => {
-          dispatch(userInfos.getInfo());
+          loggedUser.picture = value;
+          localStorage.setItem('user', JSON.stringify(loggedUser));
+          setPicture(value)
+          setUploading(false)
+          notifications.show({
+            title: 'Sucesso!',
+            message: 'Foto de perfil carregada com sucesso',
+            color: 'lime',
+            position: 'top-center'
+          })
+          setShowModalPicture(false)
         })
       }).catch(err => {
         console.error(err)
+        setUploading(false)
       })
   }
   const onUploadError = err => {
@@ -81,14 +84,15 @@ function MenuMobile () {
         size={'xs'}
         mb={100}
         mt={20}
+        className='menuMobile'
       >
         <Center>
           <Avatar 
             radius='lg'
             size='82px'
             src={
-              user.picture 
-              ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
+              loggedUser.picture 
+              ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+picture
               : undefined
             }
             alt='Foto de perfil'
@@ -104,23 +108,24 @@ function MenuMobile () {
           <ActionIcon
             variant='filled'
             radius='xl'
-            color='violet'
+            size='lg'
+            color='gray'
             onClick={() => setShowModalPicture(true)}
           >
             <IconCamera style={{width:'70%',height:'70%',marginLeft:'2px'}} stroke={1.5} />
           </ActionIcon>
         </Center>
-        <Text ta='center' size='lg' mt={7}>
-          Olá, <span style={{fontWeight:'500'}}>{user.name}</span>!
+        <Text ta='center' size='lg' mt={9}>
+          Olá, <span style={{fontWeight:'500'}}>{loggedUser.name}</span>!
         </Text>
         <Center>
-          {user.plan === 'Pro' ? (
+          {loggedUser.plan === 'Pro' ? (
             <Badge color='violet' size='sm'>conta pro</Badge>
           ) : (
             <Flex direction='column' align='center' mt={8}>
               <Badge color='gray' size='sm'>conta grátis</Badge>
               <Anchor 
-                href={`https://buy.stripe.com/8wM03sfPadmmc4EaEE?client_reference_id=${user.id}&prefilled_email=${user.email}&utm_source=gear`} 
+                href={`https://buy.stripe.com/8wM03sfPadmmc4EaEE?client_reference_id=${loggedUser.id}&prefilled_email=${loggedUser.email}&utm_source=gear`} 
                 target='_blank'
                 underline='hover'
               >
@@ -163,7 +168,7 @@ function MenuMobile () {
           direction='column'
           gap='0.35rem'
         >
-          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconUser style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href={'/'+user.username} fw='420'>
+          <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconUser style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href={'/'+loggedUser.username} fw='420'>
             Ir para meu perfil
           </Button>
           <Button variant='transparent' color={colorScheme === 'light' ? 'dark' : 'light'} size='md' justify='space-between' leftSection={<IconEdit style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href='/settings' fw='420'>
@@ -204,24 +209,21 @@ function MenuMobile () {
         size='xs'
       >
         <Center>
-          {uploading || user.requesting ? (
-            <Loader size={61} />
+          <LoadingOverlay 
+            visible={uploading} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} 
+          />
+          {!loggedUser.picture ? (
+            <Image
+              radius={'md'}
+              src='https://ik.imagekit.io/mublin/tr:h-140,w-140,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'
+              w={140}
+            />
           ) : (
-            <>
-              {!user.picture ? (
-                <Image
-                  radius={'md'}
-                  src='https://ik.imagekit.io/mublin/tr:h-140,w-140,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'
-                  w={140}
-                />
-              ) : (
-                <Image
-                  radius={'md'}
-                  src={'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}
-                  w={140}
-                />
-              )}
-            </>
+            <Image
+              radius={'md'}
+              src={'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+picture}
+              w={140}
+            />
           )}
         </Center>
         <Center>
@@ -229,13 +231,20 @@ function MenuMobile () {
             <IKUpload 
               fileName='avatar.jpg'
               folder={userAvatarPath}
-              tags={['tag1']}
+              tags={['avatar','user']}
+              name='file-input'
+              id='file-input'
+              className='file-input__input'
               useUniqueFileName={true}
               isPrivateFile= {false}
               onError={onUploadError}
               onSuccess={onUploadSuccess}
               onUploadStart={onUploadStart}
             />
+            <label className="file-input__label" for="file-input">
+              <IconUpload />
+              <span>Selecionar arquivo</span>
+            </label>
           </div>
         </Center>
       </Modal>

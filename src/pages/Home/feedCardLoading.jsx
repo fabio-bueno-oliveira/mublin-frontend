@@ -7,7 +7,7 @@ function FeedCardLoading () {
       <Card 
         px='md'
         pt='sm'
-        mb='10px'
+        mb='14px'
         radius='md'
         withBorder
         className='mublinModule'
@@ -17,17 +17,17 @@ function FeedCardLoading () {
           <Skeleton height={45} circle />
           <Box>
             <Skeleton height={13} radius="xl" />
-            <Skeleton height={10} width={200} radius="xl" mt={10} />
+            <Skeleton height={6} width={200} radius="xl" mt={10} />
           </Box>
         </Flex>
         <Skeleton height={10} width={300} radius="xl" mt={10} />
         <Skeleton height={10} width={300} radius="xl" mt={10} />
-        <Skeleton height={10} width={300} radius="xl" mt={10} />
+        <Skeleton height={10} width={300} radius="xl" mt={10} mb={24} />
       </Card>
       <Card 
         px='md'
         pt='sm'
-        mb='10px'
+        mb='14px'
         radius='md'
         withBorder
         className='mublinModule'
@@ -37,12 +37,12 @@ function FeedCardLoading () {
           <Skeleton height={45} circle />
           <Box>
             <Skeleton height={13} radius="xl" />
-            <Skeleton height={10} width={200} radius="xl" mt={10} />
+            <Skeleton height={6} width={200} radius="xl" mt={10} />
           </Box>
         </Flex>
         <Skeleton height={10} width={300} radius="xl" mt={10} />
         <Skeleton height={10} width={300} radius="xl" mt={10} />
-        <Skeleton height={10} width={300} radius="xl" mt={10} />
+        <Skeleton height={10} width={300} radius="xl" mt={10} mb={24} />
       </Card>
       <Card 
         px='md'
@@ -57,12 +57,12 @@ function FeedCardLoading () {
           <Skeleton height={45} circle />
           <Box>
             <Skeleton height={13} radius="xl" />
-            <Skeleton height={10} width={200} radius="xl" mt={10} />
+            <Skeleton height={6} width={200} radius="xl" mt={10} />
           </Box>
         </Flex>
         <Skeleton height={10} width={300} radius="xl" mt={10} />
         <Skeleton height={10} width={300} radius="xl" mt={10} />
-        <Skeleton height={10} width={300} radius="xl" mt={10} />
+        <Skeleton height={10} width={300} radius="xl" mt={10} mb={24} />
       </Card>
     </>
   )

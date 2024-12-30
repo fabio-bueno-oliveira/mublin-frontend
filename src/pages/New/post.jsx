@@ -9,7 +9,7 @@ import { useForm } from '@mantine/form'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import {IKUpload} from "imagekitio-react"
-import { IconTrash, IconSend } from '@tabler/icons-react'
+import { IconTrash, IconSend, IconCamera } from '@tabler/icons-react'
 import { format } from 'date-fns'
 
 function NewPost () {
@@ -28,7 +28,10 @@ function NewPost () {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+
   const [postImage, setPostImage] = useState('')
+  const [uploading, setUploading] = useState(false)
+  const [fileId, setFileId] = useState('')
 
   useEffect(() => {
     dispatch(userInfos.getUserGearInfoById(loggedUser.id))
@@ -64,18 +67,19 @@ function NewPost () {
 
   // Image upload to imagekit.io
   const postsImagePath = '/posts/'
+  const onUploadStart = evt => {
+    console.log('Start uplading', evt)
+    setUploading(true)
+  }
   const onUploadError = err => {
-      alert("Ocorreu um erro ao enviar a imagem do projeto. Tente novamente em alguns minutos.");
-  };
+    alert("Ocorreu um erro ao enviar a imagem do projeto. Tente novamente em alguns minutos.");
+  }
   const onUploadSuccess = res => {
-      let n = res.filePath.lastIndexOf('/');
-      let fileName = res.filePath.substring(n + 1);
-      setPostImage(fileName);
-  };
-
-  const removeImage = () => {
-    setPostImage('');
-    document.querySelector('#postImage').value = null;
+    let n = res.filePath.lastIndexOf('/')
+    let fileName = res.filePath.substring(n + 1)
+    setFileId(res.fileId)
+    setPostImage(fileName)
+    setUploading(false)
   }
 
   const handleSubmitNewPost = (values) => {
@@ -99,6 +103,29 @@ function NewPost () {
       console.error(error)
       alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.");
     })
+  }
+
+  const handleRemoveImageFromServer = async (fileId) => {
+    const url = 'https://api.imagekit.io/v1/files/'+fileId;
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Basic ' + import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY
+      }
+    };
+
+    try {
+      await fetch(url, options);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const removeImage = () => {
+    handleRemoveImageFromServer(fileId)
+    setPostImage('')
+    document.querySelector('#postImage').value = null
   }
 
   return (
@@ -139,42 +166,56 @@ function NewPost () {
               key={form.key('extra_text')}
               {...form.getInputProps('extra_text')}
             />
-            <Divider mt='lg' mb='sm' label='Imagem' labelPosition='center' />
-            <Flex direction="column">
-              <div style={postImage ? {display: "none"} : undefined}>
+            <Divider mt='lg' label='Imagem' labelPosition='center' />
+            <Flex direction='column'>
+              <div
+                className='customFileUpload'
+                style={postImage ? {display: 'none'} : undefined}
+              >
                 <IKUpload 
                   id='postImage'
                   fileName={`post_user-${loggedUser.id}_${format(new Date(), 'yyyy-MM-dd-HH:mm:ssXX')}.jpg`}
                   folder={postsImagePath}
-                  tags={["post"]}
-                  style={{fontSize:'14px'}}
+                  tags={['post']}
+                  name='file-input'
+                  className='file-input__input'
                   useUniqueFileName={true}
                   isPrivateFile= {false}
+                  onUploadStart={onUploadStart}
                   onError={onUploadError}
                   onSuccess={onUploadSuccess}
                   accept="image/x-png,image/gif,image/jpeg" 
                 />
+                <Button
+                  component='label'
+                  htmlFor='postImage'
+                  leftSection={<IconCamera size={14} />}
+                  color='violet'
+                  size='sm'
+                >
+                  {uploading ? 'Enviando...' : 'Inserir imagem'}
+                </Button>
               </div>
             </Flex>
             {postImage && 
-              <Flex gap={10}>
-                <Image 
-                  radius='md'
-                  h='auto'
-                  w='130'
-                  src={'https://ik.imagekit.io/mublin/tr:w-130/posts/'+postImage} 
-                /> 
+              <Flex align='center' justify='space-between' mt='18' mb='14'>
                 <Button 
-                  size='xs' 
+                  size='sm' 
                   color='red' 
                   onClick={() => removeImage()}
                   leftSection={<IconTrash size={14} />}
                 >
                   Remover
                 </Button>
+                <Image
+                  radius='md'
+                  h='auto'
+                  w='60'
+                  src={'https://ik.imagekit.io/mublin/tr:w-130/posts/'+postImage}
+                />
               </Flex>
             }
-            <Divider mt='lg' mb='sm' label='Vídeo do Youtube' labelPosition='center' />
+            <Divider mb='sm' label='Vídeo do Youtube' labelPosition='center' />
             <TextInput
               size='md'
               mt='xs'

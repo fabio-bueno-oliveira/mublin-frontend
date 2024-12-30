@@ -90,7 +90,7 @@ a.displayBlockLink {
 
 .customFileUpload {
   font-size: 14px;
-  text-align: center;
+  text-align: left;
   margin: 20px 0 20px 0;
 }
 
@@ -207,5 +207,29 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
     position: absolute;
     top: 0;
     left: 0;
+  }
+}
+
+.customFileUpload {
+  input.file-input__input {
+    display: none;
+  }
+  
+  .file-input__label {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    font-weight: 500;
+    color: #fff;
+    font-size: 15px;
+    padding: 10px 12px;
+    background-color: #6741d9;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  }
+  
+  .file-input__label svg {
+    height: 21px;
+    margin-right: 4px;
   }
 }

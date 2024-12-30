@@ -6,7 +6,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil, IconPlus, IconSettings } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil, IconPlus } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -15,9 +15,9 @@ import PartnersModule from './partners'
 import CarouselProjects from './carouselProjects'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
-import AvailabilityInfo from './availabilityInfo';
-import FeedCard from '../Home/feedCard';
-import './styles.scss';
+import AvailabilityInfo from './availabilityInfo'
+import FeedCard from '../Home/feedCard'
+import './styles.scss'
 
 function ProfilePage () {
 
@@ -81,8 +81,6 @@ function ProfilePage () {
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '2px', cursor: "pointer" };
 
-  const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
-
   // Projects
   const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
   // const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
@@ -108,7 +106,9 @@ function ProfilePage () {
 
   // const gearTotal = gearFiltered.filter((product) => { return product.productId > 0 });
 
-  // Modal Follow Info
+  // Modal User Picture
+  const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
+  // Modal Follow 
   const [modalFollowInfoOpen, setModalFollowInfoOpen] = useState(false);
   // Modal Bio
   const [modalBioOpen, setModalBioOpen] = useState(false);
@@ -252,7 +252,7 @@ function ProfilePage () {
 
   return (
     <>
-      {profile.id && 
+      {(profile.id && !modalBioOpen && !modalFollowersOpen && !modalFollowingOpen) && 
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
@@ -301,7 +301,7 @@ function ProfilePage () {
                   />
                   <Box style={{overflow:'hidden'}}>
                     <Flex align='baseline' mt={0} mb={1}>
-                      <Title order={3} fw={460}>
+                      <Title fz='1.26rem' fw='450'>
                         {profile.name} {profile.lastname}
                       </Title>
                       {!!profile.verified && 
@@ -342,11 +342,8 @@ function ProfilePage () {
                         </SplideSlide>
                       )}
                     </Splide>
-                    <Text size='13px' fw='400' c='dimmed' mt={5}>
-                      {profile.city}{profile.region && `, ${profile.region}`}
-                    </Text>
                     {profile.plan === 'Pro' && 
-                      <Badge size='xs' variant='light' color='gray' title='Usuário PRO'>
+                      <Badge mt='4' size='sm' variant='light' color='gray' title='Usuário PRO'>
                         PRO
                       </Badge>
                     }
@@ -359,7 +356,7 @@ function ProfilePage () {
                 >
                   <Text 
                     className='point'
-                    size={isLargeScreen ? '0.9rem' : '1rem'}
+                    size={isMobile ? '1.08rem' : '0.9rem'}
                     fw='430'
                     onClick={() => setModalFollowersOpen(true)}
                     style={{lineHeight: 'normal'}}
@@ -368,7 +365,7 @@ function ProfilePage () {
                   </Text>
                   <Text 
                     className='point'
-                    size={isLargeScreen ? '0.9rem' : '1rem'}
+                    size={isMobile ? '1.08rem' : '0.9rem'}
                     fw='430'
                     onClick={() => setModalFollowingOpen(true)}
                     style={{lineHeight: 'normal'}}
@@ -379,14 +376,19 @@ function ProfilePage () {
                 {(profile.bio && profile.bio !== 'null') && 
                   <Text 
                     size={isMobile ? 'sm' : '0.83em'}
+                    fw='400'
                     mt={5}
                     lineClamp={3}
                     onClick={isMobile ? () => setModalBioOpen(true) : undefined}
                     pr={isMobile ? 0 : 26}
                     style={{lineHeight:'1.24em'}}
-                    className='op80'
                   >
                     {profile.bio}
+                  </Text>
+                }
+                {profile.city && 
+                  <Text size='0.83em' c='dimmed' mt={9}>
+                    {profile.city}{profile.region && `, ${profile.region}`}
                   </Text>
                 }
                 {profile.website && 
@@ -487,7 +489,7 @@ function ProfilePage () {
                       />
                       <Text 
                         fz='15px'
-                        fw={480}
+                        fw='480'
                         className='lhNormal'
                       >
                         {profile.availabilityTitle}
@@ -499,7 +501,7 @@ function ProfilePage () {
                     {isMobile && 
                       <Accordion chevronPosition="left">
                         <Accordion.Item value="Exibir preferências musicais e de trabalho" style={{border:'0px'}}>
-                          <Accordion.Control p={0} fz="sm"  withBorder={false}>
+                          <Accordion.Control p={0} fz='sm'>
                             Exibir preferências musicais e de trabalho
                           </Accordion.Control>
                           <Accordion.Panel pb={12}>
@@ -533,7 +535,7 @@ function ProfilePage () {
                 className="mublinModule"
               >
                 <Group justify='space-between' align='center' gap={8} mb={15}>
-                  <Title fz='1.14rem' fw={460} className='op80'>Pontos Fortes</Title>
+                  <Title fz='1.14rem' fw={460}>Pontos Fortes</Title>
                   {(profile.id !== loggedUser.id && !profile.requesting) && 
                     <Button 
                       size='xs'
@@ -574,10 +576,10 @@ function ProfilePage () {
                               className="carousel-strengths"
                             >
                               <i className={strength.icon}></i>
-                              <Text fw={400} size='sm' align='center'>
+                              <Text fw='430' size='0.84rem' align='center'>
                                 {strength.strengthTitle}
                               </Text>
-                              <Text size='11px' fw={300} c='dimmed'>
+                              <Text size='11px' fw='390' c='dimmed'>
                                 {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
                               </Text>
                             </Flex>
@@ -603,7 +605,7 @@ function ProfilePage () {
                 className='mublinModule'
               >
                 <Group justify='space-between' align='center' gap={8} mb={15}>
-                  <Title fz='1.14rem' fw={460} className='op80'>
+                  <Title fz='1.14rem' fw={460}>
                     Projetos ({profile?.projects?.length})
                   </Title>
                   {(profile.id === loggedUser.id && !profile.requesting && profile.plan === "Free") && 
@@ -653,7 +655,7 @@ function ProfilePage () {
                     className='mublinModule'
                   >
                     <Group justify='space-between' align='center' gap={8} mb={13}>
-                      <Title fz='1.14rem' fw={460} className='op80'>
+                      <Title fz='1.14rem' fw={460}>
                         Equipamento ({profile.gear.length})
                       </Title>
                       {(profile.id === loggedUser.id && !profile.requesting) && 
@@ -823,7 +825,7 @@ function ProfilePage () {
                 className='mublinModule'
               >
                 <Group justify='space-between' align='center' gap={8} mb={13}>
-                  <Title fz='1.14rem' fw={460} className='op80'>Postagens</Title>
+                  <Title fz='1.14rem' fw={460}>Postagens</Title>
                   {(profile.id === loggedUser.id && !profile.requesting) && 
                     <Button 
                       size='xs'
@@ -841,17 +843,14 @@ function ProfilePage () {
                   <Text size='sm'>Carregando...</Text>
                 ) : (
                   profile.recentActivity.total ? (
-                    <>
-                      {profile.recentActivity.result.slice(0, 1).map((activity) =>
-                        <Box style={{height:'210px'}}>
-                          <FeedCard 
-                            key={activity.id} 
-                            item={activity} 
-                            compact
-                          />
-                        </Box>
-                      )}
-                    </>
+                    profile.recentActivity.result.slice(0, 1).map(activity =>
+                      <Box style={{height:'210px'}} key={activity.id}>
+                        <FeedCard
+                          item={activity}
+                          compact
+                        />
+                      </Box>
+                    )
                   ) : (
                     <Text size='sm' color='dimmed'>Nenhuma postagem até o momento</Text>
                   )
@@ -931,24 +930,25 @@ function ProfilePage () {
         scrollAreaComponent={ScrollArea.Autosize}
         fullScreen={isMobile ? true : false}
       >
-        <Text size={'sm'}>{profile.bio}</Text>
+        <Text size='md'>{profile.bio}</Text>
         {profile.website && 
           <Anchor 
             href={profile.website} 
-            target="_blank" 
-            underline="hover" 
+            target='_blank'
+            underline='hover'
+            className='websiteLink'
             style={{display:'block',width:'fit-content'}}
           >
-            <Flex gap={2} align="center" mt={9}>
+            <Flex gap={2} align='center' mt={9}>
               <IconLink size={13} />
-              <Text size={isLargeScreen ? "0.83em" : "0.82em"} fw={500}>
+              <Text size='md' fw='420' className='lhNormal'>
                 {profile.website}
               </Text>
             </Flex>
           </Anchor>
         }
         {profile.phone && 
-          <Text size="13px" mt={8}>
+          <Text size='md' fw='420' mt={8}>
             Telefone: {profile.phone}
           </Text>
         }
@@ -1111,12 +1111,12 @@ function ProfilePage () {
         centered
         size='lg'
         overlayProps={{
-          backgroundOpacity: 0.55,
-          blur: 3,
+          backgroundOpacity: 0.7,
+          blur: 4,
         }}
         className='modalAvatarExpanded'
       >
-        <Center>
+        <Center onClick={() => setModalAvatarOpen(false)}>
           <Avatar w={200} h={200} src={profile.picture ? profile.picture : undefined} />
         </Center>
       </Modal>
@@ -1130,7 +1130,11 @@ function ProfilePage () {
           </Text>
         </>
       }
-      <FooterMenuMobile />
+      <FooterMenuMobile
+        hide={
+          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen
+        }
+      />
     </>
   );
 };

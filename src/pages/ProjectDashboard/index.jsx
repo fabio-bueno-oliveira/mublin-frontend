@@ -5,10 +5,8 @@ import { projectInfos } from '../../store/actions/project';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Box, Flex, Group, Title, Button, Card, Text, Image, Skeleton, Avatar, Paper, Divider } from '@mantine/core';
 import { IconMusic, IconLayoutDashboardFilled } from '@tabler/icons-react';
-import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
-import useEmblaCarousel from 'embla-carousel-react';
 import './styles.scss';
 
 function ProjectDashboardPage () {
@@ -27,18 +25,6 @@ function ProjectDashboardPage () {
   document.title = project.name+' | Mublin';
 
   const members = project.members.filter((member) => { return member.confirmed === 1 });
-  const largeScreen = useMediaQuery('(min-width: 60em)');
-
-  const [emblaRef] = useEmblaCarousel(
-    {
-      active: (
-        (largeScreen && members.length < 10) || (!largeScreen && members.length < 3)
-      ) ? false : true,
-      loop: false, 
-      dragFree: true, 
-      align: 'start' 
-    }
-  )
 
   return (
     <>
@@ -115,10 +101,8 @@ function ProjectDashboardPage () {
             </Text>
             <Divider my="md" />
             <Title size="h4" mt={2} mb={11}>Integrantes e Equipe</Title>
-            <div className="embla" ref={emblaRef}>
-              <div className="embla__container">
                 {members.map((member, key) =>
-                  <div className="embla__slide" key={key}>
+                  <div key={key}>
                     <Card withBorder style={{ backgroundColor: 'transparent' }}>
                       <Flex
                         justify="center"
@@ -139,8 +123,6 @@ function ProjectDashboardPage () {
                     </Card>
                   </div>
                 )}
-              </div>
-            </div>
           </>
         }
       </Container>

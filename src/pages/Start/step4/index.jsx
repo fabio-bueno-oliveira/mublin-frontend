@@ -10,10 +10,9 @@ import { usernameCheckInfos } from '../../../store/actions/usernameCheck';
 import {IKUpload} from "imagekitio-react";
 import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Textarea, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { IconArrowLeft, IconWorld, IconLock, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock } from '@tabler/icons-react';
+import { IconArrowLeft, IconWorld, IconLock, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock, IconUpload } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback  } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
-import useEmblaCarousel from 'embla-carousel-react';
 import ModalDeleteParticipationContent from './modalDeleteParticipation';
 import './styles.scss';
 
@@ -77,15 +76,6 @@ function StartFourthStep () {
   const [modalProjectEndYear, setModalEndYear] = useState('');
 
   const members = project.members.filter((member) => { return member.confirmed === 1 });
-
-  const [emblaRef1] = useEmblaCarousel(
-    {
-      active: true,
-      loop: false, 
-      dragFree: true, 
-      align: 'center' 
-    }
-  )
 
   // Modal para cadastro de imagem do novo projeto cadastrado
   const [modalNewProjectPictureOpen, setModalNewProjectPictureOpen] = useState(false);
@@ -886,12 +876,19 @@ function StartFourthStep () {
             <IKUpload 
               fileName={projectUserName+'_avatar.jpg'}
               folder={userAvatarPath}
-              tags={["avatar"]}
+              tags={['avatar','project']}
+              name='file-input'
+              id='file-input'
+              className='file-input__input'
               useUniqueFileName={true}
               isPrivateFile= {false}
               onError={onUploadError}
               onSuccess={onUploadSuccess}
             />
+            <label className="file-input__label" for="file-input">
+              <IconUpload />
+              <span>Selecionar arquivo</span>
+            </label>
           </div>
         </Center>
         {pictureIsLoading &&
@@ -920,10 +917,10 @@ function StartFourthStep () {
       </Modal>
       <footer className='onFooter step4Page'>
         {userProjects.list[0]?.id && 
-          <Container size={'sm'} className="embla projects" ref={emblaRef1}>
-            <div className="embla__container">
+          <Container size={'sm'}>
+
               {userProjects.list.map((project, key) =>
-                <Flex gap={3} align={'center'} key={key} className="embla__slide">
+                <Flex gap={3} align={'center'} key={key}>
                   <Avatar 
                     src={project.picture ? cdnPath+project.picture : undefined} 
                     alt={project.name}
@@ -955,7 +952,7 @@ function StartFourthStep () {
                   </Flex>
                 </Flex>
               )}
-            </div>
+
           </Container>
         }
         <Group justify="center" mt="lg">

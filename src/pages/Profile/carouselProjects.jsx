@@ -51,20 +51,20 @@ function CarouselProjects (props) {
                 align='flex-start'
                 wrap='wrap'
               >
-                <Text fz='10px' fw='340' truncate='end' c='dimmed'>
+                <Text fz='10px' fw='390' truncate='end' c='dimmed'>
                   {project.workTitle}
                 </Text>
                 <Box w={106}>
-                  <Text size='11px' fw={320} mb={3} truncate='end'>
+                  <Text size='11px' fw='390' mb={3} truncate='end'>
                     {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
                   </Text>
                 </Box>
                 <Box w={106}>
-                  <Text size='0.91rem' fw='420' mb={3} truncate='end' title={project.name} className='lhNormal'>
+                  <Text size='0.91rem' fw='430' mb={3} truncate='end' title={project.name} className='lhNormal'>
                     {project.name} {!!project.featured && <IconStarFilled style={{ width: '11px', height: '11px' }} color='gray' />}
                   </Text>
                 </Box>
-                <Text size='12px' fw='210' c='dimmed'>{project.type}</Text>
+                <Text size='12px' fw='380' c='dimmed'>{project.type}</Text>
                 {/* <Text size='12px'>{project.workTitle}</Text> */}
                 {project.endYear && 
                   <Text size='10px' c='dimmed' mt={3}>

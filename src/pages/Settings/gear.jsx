@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Badge, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, Textarea, em } from '@mantine/core'
-import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, Textarea, em } from '@mantine/core'
+import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -253,13 +253,15 @@ function SettingsMyGearPage () {
               <SettingsMenu page='myGear' />
             </Grid.Col>
           }
-          <Grid.Col span={{ base: 12, md: 12, lg: 9 }} pl={isLargeScreen ? 26 : 0}>
-            <Breadcrumbs mb={16} separator='›' separatorMargin='xs' className='showOnlyMobile'>
-              <Anchor href='/settings'>
-                <Text fw='400'>Configurações</Text>
+          <Grid.Col span={{ base: 12, md: 12, lg: 9 }}>
+            <Flex align='normal' gap='8' mb='8' className='showOnlyInMobile'>
+              <Anchor href='/menu'>
+                <IconChevronLeft 
+                  style={{width:'22px',height:'22px'}} 
+                />
               </Anchor>
-              <Text fw='500'>Meus equipamentos</Text>
-            </Breadcrumbs>
+              <Text size='1.164rem' fw='500' className='lhNormal'>Meus equipamentos</Text>
+            </Flex>
             {requesting ? (
               <Center mt='60'>
                 <Loader active inline='centered' />

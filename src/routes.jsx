@@ -32,7 +32,7 @@ import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
 import GearProductPage from './pages/Gear/product';
 import GearBrandPage from './pages/Gear/brand';
-import SettingsProfileEdit from './pages/Settings/profile';
+import SettingsProfileEdit from './pages/Settings/profileEdit';
 import SettingsMyGear from './pages/Settings/gear';
 import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
 import MenuMobilePage from './pages/MenuMobile';

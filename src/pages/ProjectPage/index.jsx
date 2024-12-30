@@ -8,7 +8,6 @@ import { IconMusic, IconLayoutDashboardFilled } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
-import useEmblaCarousel from 'embla-carousel-react';
 import './styles.scss';
 
 function ProjectPage () {
@@ -28,17 +27,6 @@ function ProjectPage () {
 
   const members = project.members.filter((member) => { return member.confirmed === 1 });
   const largeScreen = useMediaQuery('(min-width: 60em)');
-
-  const [emblaRef] = useEmblaCarousel(
-    {
-      active: (
-        (largeScreen && members.length < 10) || (!largeScreen && members.length < 3)
-      ) ? false : true,
-      loop: false, 
-      dragFree: true, 
-      align: 'start' 
-    }
-  )
 
   return (
     <>
@@ -115,32 +103,28 @@ function ProjectPage () {
             </Text>
             <Divider my="md" />
             <Title size="h4" mt={2} mb={11}>Integrantes e Equipe</Title>
-            <div className="embla" ref={emblaRef}>
-              <div className="embla__container">
-                {members.map((member, key) =>
-                  <div className="embla__slide" key={key}>
-                    <Card withBorder style={{ backgroundColor: 'transparent' }}>
-                      <Flex
-                        justify="center"
-                        align="center"
-                        direction="column"
-                      >
-                        <Link to={{ pathname: `/${member.username}` }}>
-                          <Avatar size="lg" name={member.name} src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture} />
-                        </Link>
-                        <Text ta="center" size={'12px'} fw={500} mt={8} mb={3} lineClamp={1}>
-                          {member.name+' '+member.lastname}
-                        </Text>
-                        <Text ta="center" size={'11px'} lineClamp={1}>
-                          {member.role1}{member.role2 && ', '+member.role2}{member.role3 && ', '+member.role3}
-                        </Text>
-                        <Text ta="center" c="dimmed" size={'10px'} mt={4}>Desde {member.joinedIn}</Text>
-                      </Flex>
-                    </Card>
-                  </div>
-                )}
+            {members.map((member, key) =>
+              <div key={key}>
+                <Card withBorder style={{ backgroundColor: 'transparent' }}>
+                  <Flex
+                    justify="center"
+                    align="center"
+                    direction="column"
+                  >
+                    <Link to={{ pathname: `/${member.username}` }}>
+                      <Avatar size="lg" name={member.name} src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture} />
+                    </Link>
+                    <Text ta="center" size={'12px'} fw={500} mt={8} mb={3} lineClamp={1}>
+                      {member.name+' '+member.lastname}
+                    </Text>
+                    <Text ta="center" size={'11px'} lineClamp={1}>
+                      {member.role1}{member.role2 && ', '+member.role2}{member.role3 && ', '+member.role3}
+                    </Text>
+                    <Text ta="center" c="dimmed" size={'10px'} mt={4}>Desde {member.joinedIn}</Text>
+                  </Flex>
+                </Card>
               </div>
-            </div>
+            )}
           </>
         }
       </Container>

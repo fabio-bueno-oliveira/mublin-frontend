@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
-import { Grid, Container, Modal, Center, Alert, Loader, Box, Breadcrumbs, ScrollArea, Group, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider } from '@mantine/core';
-import { IconSearch, IconWorld } from '@tabler/icons-react';
+import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, Group, Flex, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider } from '@mantine/core';
+import { IconSearch, IconWorld, IconChevronLeft } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
@@ -142,12 +142,14 @@ function SettingsPage () {
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-            <Breadcrumbs mb={16} separator='›' separatorMargin='xs' className='showOnlyMobile'>
-              <Anchor href='/settings'>
-                <Text fw='400'>Configurações</Text>
+            <Flex align='normal' gap='8' mb='8' className='showOnlyInMobile'>
+              <Anchor href='/menu'>
+                <IconChevronLeft 
+                  style={{width:'22px',height:'22px'}} 
+                />
               </Anchor>
-              <Text fw='500'>Meus dados</Text>
-            </Breadcrumbs>
+              <Text size='1.164rem' fw='500' className='lhNormal'>Meus dados</Text>
+            </Flex>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos='relative' p={10}>
                 {success && 
