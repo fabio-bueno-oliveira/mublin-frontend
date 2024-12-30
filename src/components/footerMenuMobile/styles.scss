@@ -4,7 +4,7 @@ footer.menuMobile {
   background-color: #FFF;
   height: 70px;
   width: 100%;
-  z-index: 999;
+  z-index: 250;
 
   > div {
     display: flex;
@@ -61,7 +61,7 @@ footer.menuMobile {
           top: -21px;
           left: 0;
           width: 100%;
-          z-index: 9999;
+          z-index: 251;
         }
 
         svg {

@@ -100,15 +100,15 @@ function GearProductPage () {
                           <Text size='sm' fw={500}>
                             {owner.name+' '+owner.lastname}
                           </Text>
-                          <Text size='xs'>
+                          <Text size='xs' c='gray'>
                             {owner.city && <span>{owner.city}/{owner.region}</span>}
                           </Text>
                           <Group gap={3}>
                             {!!owner.currentlyUsing && 
-                              <Badge size='xs' color='dark'>Em uso</Badge>
+                              <Badge size='xs' color='green'>Em uso</Badge>
                             } 
                             {!!owner.forSale && 
-                              <Badge size='xs' color='violet'>À venda</Badge>
+                              <Badge size='xs' color='black'>À venda</Badge>
                             } 
                             {!!owner.price && 
                               <Text size='xs'>
@@ -145,7 +145,7 @@ function GearProductPage () {
       >
         <Image src={product.largePicture} onClick={() => setModalZoomOpen(false)} />
       </Modal>
-      <FooterMenuMobile />
+      <FooterMenuMobile hide={modalZoomOpen} />
     </>
   );
 };
