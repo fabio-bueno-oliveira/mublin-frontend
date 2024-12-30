@@ -649,9 +649,6 @@ function ProfilePage () {
                     style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                     className='mublinModule'
                   >
-                    {/* <Title fz='1.14rem' fw={460} className='op80' mb={13}>
-                      Equipamento ({profile.gear.length})
-                    </Title> */}
                     <Group justify='space-between' align='center' gap={8} mb={13}>
                       <Title fz='1.14rem' fw={460} className='op80'>
                         Equipamento ({profile.gear.length})
@@ -725,11 +722,11 @@ function ProfilePage () {
                             >
                               {gearFiltered.map((product, key) =>
                               <SplideSlide key={key}>
-                                <Flex 
-                                  direction='column' 
-                                  justify='flex-start' 
-                                  align='center' 
-                                  className='carousel-gear' 
+                                <Flex
+                                  direction='column'
+                                  justify='flex-start'
+                                  align='center'
+                                  className='carousel-gear'
                                 >
                                   <Link to={{ pathname: `/gear/product/${product.productId}` }}>
                                     <Image 
@@ -750,7 +747,7 @@ function ProfilePage () {
                                   </Box>
                                   {product.tuning && 
                                     <>
-                                      <Group gap={2} mt={4}>
+                                      <Group gap={2} mt={4} mb='2'>
                                         <Text size='9px' fw={450}>Afinação: {product.tuning}</Text>
                                       </Group>
                                       <Text size='9px' c='dimmed'>{product.tuningDescription}</Text>
@@ -770,7 +767,6 @@ function ProfilePage () {
                                 </SplideSlide>
                               )}
                             </Splide>
-                            
                           </>
                         ) : (
                           <Text size='xs'>Nenhum equipamento cadastrado</Text>

@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
+import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
-import { Container, Flex, Center, Box, Card, Divider, Title, Badge, Text, Grid, Skeleton, Avatar, em } from '@mantine/core'
+import { Container, Center, Card, Title, Badge, Text, Grid, Skeleton, Avatar, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import UserCard from '../../components/userCard'
+import ProjectCard from '../../components/projectCard'
 import FeedCard from './feedCard'
+import FeedCardLoading from './feedCardLoading'
 import Header from '../../components/header'
 import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -29,6 +32,7 @@ function Home () {
   const feed = useSelector(state => state.feed)
 
   useEffect(() => {
+    dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
     dispatch(miscInfos.getFeed());
     dispatch(miscInfos.getFeedLikes());
     dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
@@ -50,7 +54,7 @@ function Home () {
         <Grid>
           {largeScreen && 
             <Grid.Col span={{ base: 12, md: 12, lg: 2.5 }} pt='8'>
-              {projects.requesting || !user.success ? (
+              {user.requesting ? (
                 <>
                   <Skeleton height={56} circle />
                   <Skeleton height={16} width={125} mt={10} radius="md" />
@@ -76,12 +80,12 @@ function Home () {
                     </Title>
                     {user.plan === 'Pro' && 
                       <Center>
-                        <Badge size='xs' variant='light' color='violet'>PRO</Badge>
+                        <Badge size='xs' variant='light' color='gray'>PRO</Badge>
                       </Center>
                     }
-                    <Text ta="center" c="dimmed" fw="400" size="13px" mt={13}>
-                      {user.roles.map((role, key) => 
-                        <span className="comma" key={key}>{role.description}</span>
+                    <Text ta="center" c="dimmed" fw='400' fz='0.8rem' className='lhNormal' mt={13}>
+                      {user.roles.map(role => 
+                        <span className="comma" key={role.id}>{role.description}</span>
                       )}
                     </Text>
                     {/* <Text ta="center"  size="xs" mt={9} c="dimmed">
@@ -95,45 +99,30 @@ function Home () {
                     withBorder
                     className="mublinModule"
                   >
-                    <Text>Meus Projetos</Text>
+                    {/* <Text fw='400' size='lg'>Meus projetos</Text> */}
+                    {projects.list.map(project =>
+                      <>
+                        <ProjectCard 
+                          key={project.projectid}
+                          mb={14}
+                          picture={project.picture}
+                          name={project.name}
+                          username={project.username}
+                          type={project.ptname}
+                          city={project.cityName}
+                          region={project.regionName}
+                          confirmed={project.confirmed}
+                        />
+                      </>
+                    )}
                   </Card>
                 </>
               )}
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 6.2 }} mb={isMobile ? 60 : 20}>
-            <Card 
-              px='md' pt='sm' pb='lg'
-              radius='md' 
-              withBorder 
-              className='mublinModule' 
-              id='feed'
-            >
-              <Flex>
-                
-              </Flex>
-              Publicar
-            </Card>
-            <Divider my="xs" label="Atualizações" labelPosition="center" />
             {feed.requesting ? (
-              <Card 
-                px='md'
-                pt='sm'
-                mb='xs'
-                radius='md'
-                withBorder
-                className='mublinModule'
-                id='feed'
-              >
-                <Flex gap={5} align='center'>
-                  <Skeleton height={45} circle />
-                  <Box>
-                    <Skeleton height={13} radius="xl" />
-                    <Skeleton height={10} width={200} radius="xl" mt={10} />
-                  </Box>
-                </Flex>
-                <Skeleton height={10} width={300} radius="xl" mt={10} />
-              </Card>
+              <FeedCardLoading />
             ) : (
               feed.list.map((item, key) => 
                 <FeedCard 

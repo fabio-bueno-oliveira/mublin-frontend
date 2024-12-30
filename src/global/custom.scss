@@ -85,7 +85,7 @@
 }
 
 .splide__pagination {
-  top: 172px;
+  top: 200px;
 }
 
 .splide__pagination__page.is-active {
@@ -101,16 +101,18 @@
   outline-offset: 0;
 }
 
-.mantine-Textarea-input:focus-within, .mantine-Textarea-input:focus {
-  outline: none;
-  --input-bd: transparent;
-}
-
-.mantine-NativeSelect-input {
-  -webkit-tap-highlight-color: transparent;
-
-  &:focus, .m_8fb7ebe7:focus-within {
+form.writeNewPost {
+  .mantine-Textarea-input:focus-within, .mantine-Textarea-input:focus {
     outline: none;
     --input-bd: transparent;
+  }
+  
+  .mantine-NativeSelect-input {
+    -webkit-tap-highlight-color: transparent;
+  
+    &:focus, .m_8fb7ebe7:focus-within {
+      outline: none;
+      --input-bd: transparent;
+    }
   }
 }

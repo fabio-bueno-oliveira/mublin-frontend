@@ -41,11 +41,15 @@ const initialState = {
       productId: '',
       productName: '',
       category: '',
+      macroCategory: '',
       picture: '',
       currentlyUsing: '',
       featured: '',
       forSale: '',
-      price: ''
+      price: '',
+      tuningId: '',
+      tuningName: '',
+      tuningDescription: '',
     }
   ],
   gearLoaded: false,

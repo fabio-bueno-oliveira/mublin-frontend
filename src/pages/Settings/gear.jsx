@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, em } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Badge, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, Textarea, em } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -25,6 +25,7 @@ function SettingsMyGearPage () {
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [brands, setBrands] = useState([])
+  const [tuningTypes, setTuningTypes] = useState([])
   const [categories, setCategories] = useState([])
 
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
@@ -107,7 +108,18 @@ function SettingsMyGearPage () {
         },
         (error) => {
           setIsLoaded(true)
-          alert(error)
+          console.error(error)
+        }
+      )
+
+    fetch("https://mublin.herokuapp.com/gear/tuning")
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setTuningTypes(result)
+        },
+        (error) => {
+          console.error(error)
         }
       )
   }, [])
@@ -123,7 +135,7 @@ function SettingsMyGearPage () {
       },
       (error) => {
         setIsLoaded(true);
-        alert(error);
+        console.error(error);
       }
     )
   }
@@ -131,17 +143,17 @@ function SettingsMyGearPage () {
   const getProducts = (brandId, categoryId) => {
     setIsLoaded(false);
     fetch("https://mublin.herokuapp.com/gear/brand/"+brandId+"/"+categoryId+"/products")
-        .then(res => res.json())
-        .then(
+      .then(res => res.json())
+      .then(
         (result) => {
             setIsLoaded(true);
             setProducts(result);
         },
         (error) => {
             setIsLoaded(true);
-            alert(error);
+            console.error(error);
         }
-    )
+      )
   }
 
   // Edit item
@@ -153,8 +165,12 @@ function SettingsMyGearPage () {
   const [price, setPrice] = useState('')
   const [currently_using, setCurrentlyUsing] = useState('')
 
+  const [productDetail, setProductDetail] = useState(
+    { ownerComments: '', macroCategory: '', tuning: '' }
+  )
+
   const [itemIdToEdit, setItemIdToEdit] = useState('')
-  const openModalItemManagement = (itemId, productId, featured, for_sale, price, currently_using) => {
+  const openModalItemManagement = (itemId, productId, featured, for_sale, price, currently_using, tuning, owner_comments, macroCategory) => {
       setModalItemManagementProductId(productId)
       setItemIdToEdit(itemId)
       setModalEditItemOpen(true)
@@ -162,11 +178,18 @@ function SettingsMyGearPage () {
       setForSale(for_sale)
       setPrice(price)
       setCurrentlyUsing(currently_using)
+      setProductDetail(
+        { 
+          tuning: tuning,
+          ownerComments: owner_comments ? owner_comments : '', 
+          macroCategory: macroCategory
+        }
+      )
   }
 
   const itemInfo = gear.filter((item) => { return item.productId === modalItemManagementProductId })
 
-  const editGearItem = (itemId, productId, featured, for_sale, price, currently_using) => {
+  const editGearItem = (itemId, productId, featured, for_sale, price, currently_using, tuning, owner_comments) => {
     setIsLoaded(false)
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/user/updateGearItem', {
@@ -176,14 +199,14 @@ function SettingsMyGearPage () {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + loggedUser.token
         },
-        body: JSON.stringify({id: itemId, productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
+        body: JSON.stringify({id: itemId, productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using, tuning: tuning, owner_comments: owner_comments})
       }).then((response) => {
         dispatch(userInfos.getUserGearInfoById(loggedUser.id));
         setIsLoaded(true)
         setModalEditItemOpen(false)
       }).catch(err => {
         console.error(err)
-        alert("Ocorreu um erro ao adicionar a atividade")
+        alert('Ocorreu um erro ao editar os dados do equipamento')
         setIsLoaded(true)
       })
     }, 300);
@@ -220,9 +243,11 @@ function SettingsMyGearPage () {
 
   return (
     <>
-      <Header />
+      {isLargeScreen && 
+        <Header />
+      }
       <Container size='lg' mb={100}>
-        <Grid mt={isLargeScreen ? 30 : 0}>
+        <Grid mt='20px'>
           {isLargeScreen && 
             <Grid.Col span={3}>
               <SettingsMenu page='myGear' />
@@ -243,7 +268,7 @@ function SettingsMyGearPage () {
               </Center>
             ) : (
               <>
-                <Group justify='flex-end'>
+                <Group justify='flex-start'>
                   {loggedUser.plan === 'Pro' ? (
                     <Button
                       leftSection={<IconPlus size={14} />}
@@ -284,7 +309,8 @@ function SettingsMyGearPage () {
                         </Center>
                         <Box>
                           <Text size='xs' c='dimmed'>{item.brandName}</Text>
-                          <Text size='sm' mb='3'>{item.productName}</Text>
+                          <Text size='sm' mb='1'>{item.productName}</Text>
+                          {item.tuningId && <Badge size='xs' color='gray'>Afinação: {item.tuningName}</Badge>}
                           <Group gap='3'>
                             {item.featured ? (
                               <IconToggleRightFilled color='#7950f2' />
@@ -318,7 +344,7 @@ function SettingsMyGearPage () {
                             variant='subtle'
                             fullWidth
                             fw='440'
-                            onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing)}
+                            onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
                           >
                             Editar
                           </Button>
@@ -453,11 +479,12 @@ function SettingsMyGearPage () {
           </Button>
         </Group>
       </Modal>
-      <Modal 
+      <Modal
         title='Editar detalhes do item'
         centered
-        opened={modalEditItemOpen} 
-        onClose={() => setModalEditItemOpen(false)} 
+        fullScreen={isMobile}
+        opened={modalEditItemOpen}
+        onClose={() => setModalEditItemOpen(false)}
         size='sm'
       >
         <>
@@ -471,14 +498,14 @@ function SettingsMyGearPage () {
                   src={item.picture ? item.picture : undefined} 
                 />
               </Center>
-              <Text size='xs' c='dimmed' mt={8}>{item.brandName}</Text>
-              <Text size='sm'>{item.productName}</Text>
+              <Text ta='center' size='xs' c='dimmed' mt={8}>{item.brandName}</Text>
+              <Text ta='center' size='sm'>{item.productName}</Text>
               <Radio.Group
                 mt={8}
                 value={String(featured)}
                 onChange={setFeatured}
                 name='editItemFeatured'
-                label='Em destaque'
+                label='Em destaque (exibir entre os primeiros)'
               >
                 <Group>
                 <Radio color='violet' value='1' label='Sim' />
@@ -497,6 +524,20 @@ function SettingsMyGearPage () {
                 <Radio color='violet' value='0' label='Não' />
                 </Group>
               </Radio.Group>
+              <NativeSelect
+                className={productDetail.macroCategory !== 'chords' ? 'd-none' : undefined}
+                mt={8}
+                label='Afinação atual'
+                defaultValue={productDetail.tuning}
+                onChange={(e) => setProductDetail({...productDetail, tuning: e.target.options[e.target.selectedIndex].value})}
+              >
+                {!brandSelected &&
+                  <option>Não informado</option>
+                } 
+                {tuningTypes.map((type) =>
+                  <option key={type.id} value={type.id}>{type.namePTBR}</option>
+                )}
+              </NativeSelect>
               <Radio.Group
                 mt={8}
                 mb={8}
@@ -506,25 +547,45 @@ function SettingsMyGearPage () {
                 label='À venda'
               >
                 <Group>
-                <Radio color='violet' value='1' label='Sim' />
-                <Radio color='violet' value='0' label='Não' />
+                  <Radio color='violet' value='1' label='Sim' />
+                  <Radio color='violet' value='0' label='Não' />
+                  {(for_sale === '1' || for_sale === 1) && 
+                  <CurrencyInput
+                    value={price}
+                    locale='pt-BR'
+                    disabled={(for_sale === '1' || for_sale === 1) ? false : true}
+                    onChangeValue={(event, originalValue, maskedValue) => {
+                      // console.log(event, originalValue, maskedValue);
+                      setPrice(originalValue);
+                    }}
+                    InputElement={<TextInput w='155px' placeholder='Preço de venda' />} 
+                  />
+                }
                 </Group>
               </Radio.Group>
-              <CurrencyInput
-                value={price}
-                locale='pt-BR'
-                disabled={(for_sale === '1' || for_sale === 1) ? false : true}
-                onChangeValue={(event, originalValue, maskedValue) => {
-                  // console.log(event, originalValue, maskedValue);
-                  setPrice(originalValue);
-                }}
-                InputElement={<TextInput label='Preço de venda:' />} 
+              {/* {(for_sale === '1' || for_sale === 1) && 
+                <CurrencyInput
+                  value={price}
+                  locale='pt-BR'
+                  disabled={(for_sale === '1' || for_sale === 1) ? false : true}
+                  onChangeValue={(event, originalValue, maskedValue) => {
+                    // console.log(event, originalValue, maskedValue);
+                    setPrice(originalValue);
+                  }}
+                  InputElement={<TextInput label='Preço de venda:' />} 
+                />
+              } */}
+              <Textarea
+                mt={8}
+                label='Meus comentários pessoais'
+                value={productDetail.ownerComments}
+                onChange={(event) => setProductDetail({...productDetail, ownerComments: event.currentTarget.value})}
               />
               <Group justify='flex-end' gap={7} mt={20}>
                 <Button variant='outline' color='violet' size='sm' onClick={() => setModalEditItemOpen(false)}>
                   Cancelar
                 </Button>
-                <Button color='violet' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using)} loading={!isLoaded}>
+                <Button color='violet' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={!isLoaded}>
                   Salvar
                 </Button>
               </Group>

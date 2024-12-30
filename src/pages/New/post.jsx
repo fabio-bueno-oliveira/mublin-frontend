@@ -117,7 +117,7 @@ function NewPost () {
           py={isMobile ? 0 : 6}
           className='mublinModule newPost'
         >
-          <form onSubmit={form.onSubmit(handleSubmitNewPost)}>
+          <form onSubmit={form.onSubmit(handleSubmitNewPost)} className='writeNewPost'>
             <Textarea
               data-autofocus
               size='lg'
@@ -174,7 +174,7 @@ function NewPost () {
               value={formValues.video_url}
               onChange={(e) => setFormValues({...formValues, video_url: e.target.value})}
             />
-            <Divider mt='lg' mb='sm' label='Adicionar card no post' labelPosition='center' />
+            <Divider mt='lg' mb='sm' label='Adicionar card na postagem' labelPosition='center' />
             <NativeSelect
               mt='xs'
               size='md'
@@ -182,7 +182,7 @@ function NewPost () {
               value={formValues.related_item_type}
               onChange={(e) => setFormValues({...formValues, id_item_fk: '', related_item_type: e.target.options[e.target.selectedIndex].value})}
             >
-              <option value=''>Nenhum card</option>
+              <option value=''>Não adicionar card</option>
               <option value='project'>Adicionar card de um projeto</option>
               <option value='gear'>Adicionar card de um equipamento</option>
             </NativeSelect>
