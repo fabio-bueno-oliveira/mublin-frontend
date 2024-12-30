@@ -29,7 +29,10 @@ const initialState = {
       price: '',
       photo: '',
       productId: '',
-      created: ''
+      created: '',
+      ownerComments: '',
+      tuning: '',
+      tuningDescription: '',
     }
   ],
   brands: [
@@ -43,13 +46,17 @@ export function gear(state = initialState, action) {
       return {
         ...state,
         requesting: true,
-        error: ""
+        name: '',
+        picture: '',
+        largePicture: '',
+        brandName: '',
+        error: '',
       };
     case gearTypes.GET_PRODUCT_INFO_SUCCESS:
       return {
         ...state,
         requesting: false,
-        error: "",
+        error: '',
         id: action.info.id,
         name: action.info.name,
         picture: action.info.picture,
@@ -65,26 +72,28 @@ export function gear(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        error: "A solicitação falhou"
+        error: 'A solicitação falhou'
       };
     case gearTypes.GET_PRODUCT_OWNERS_REQUEST:
       return {
         ...state,
         requesting: true,
-        error: ""
+        owners: initialState.owners,
+        error: ''
       };
     case gearTypes.GET_PRODUCT_OWNERS_SUCCESS:
       return {
         ...state,
         requesting: false,
-        error: "",
         owners: action.list,
+        error: '',
       };
     case gearTypes.GET_PRODUCT_OWNERS_FAILURE:
       return {
         ...state,
         requesting: false,
-        error: "A solicitação falhou"
+        owners: initialState.owners,
+        error: 'A solicitação falhou'
       };
     case gearTypes.GET_GEAR_BRANDS_REQUEST:
       return {
@@ -103,7 +112,7 @@ export function gear(state = initialState, action) {
         ...state,
         requesting: false,
         brands: initialState.brands,
-        error: "A solicitação falhou"
+        error: 'A solicitação falhou'
       };
     default:
       return state
