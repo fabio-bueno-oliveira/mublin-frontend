@@ -124,8 +124,8 @@ function GearProductPage () {
                           {owner.ownerComments}
                         </Text>
                       ) : (
-                        <Text size='sm'>
-                          {`Nenhum comentário de ${owner.name} sobre este item até o momento`}
+                        <Text size='sm' c='dimmed'>
+                          Nenhum comentário até o momento
                         </Text>
                       )}
                     </Paper>
