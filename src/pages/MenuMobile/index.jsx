@@ -134,7 +134,7 @@ function MenuMobile () {
         <Center mt={22} mb={22}>
           {colorScheme === 'dark' && 
             <Button
-              size='xs'
+              size='md'
               fw='500'
               variant='outline'
               radius='xl'
@@ -147,7 +147,7 @@ function MenuMobile () {
           }
           {colorScheme === 'light' && 
             <Button
-              size='xs'
+              size='md'
               fw='500'
               variant='outline'
               radius='xl'

@@ -243,25 +243,23 @@ function SettingsMyGearPage () {
 
   return (
     <>
-      {isLargeScreen && 
+      <div className='showOnlyInLargeScreen'>
         <Header />
-      }
+      </div>
       <Container size='lg' mb={100}>
-        <Grid mt='20px'>
+        <Grid mt='15'>
           {isLargeScreen && 
             <Grid.Col span={3}>
               <SettingsMenu page='myGear' />
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 9 }} pl={isLargeScreen ? 26 : 0}>
-            {isMobile && 
-              <Breadcrumbs mb={16} separator="›" separatorMargin="xs">
-                <Anchor href='/settings'>
-                  <Text fw='400'>Configurações</Text>
-                </Anchor>
-                <Text fw='500'>Meus equipamentos</Text>
-              </Breadcrumbs>
-            }
+            <Breadcrumbs mb={16} separator='›' separatorMargin='xs' className='showOnlyMobile'>
+              <Anchor href='/settings'>
+                <Text fw='400'>Configurações</Text>
+              </Anchor>
+              <Text fw='500'>Meus equipamentos</Text>
+            </Breadcrumbs>
             {requesting ? (
               <Center mt='60'>
                 <Loader active inline='centered' />
@@ -295,7 +293,8 @@ function SettingsMyGearPage () {
                         radius='md'
                         withBorder
                         px='16'
-                        py='12'
+                        pt='14'
+                        pb='7'
                         mb='4'
                         className='mublinModule'
                       >
@@ -305,12 +304,13 @@ function SettingsMyGearPage () {
                             h={100}
                             w={100}
                             src={item.picture ? item.picture : undefined}
+                            onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
                           />
                         </Center>
                         <Box>
                           <Text size='xs' c='dimmed'>{item.brandName}</Text>
                           <Text size='sm' mb='1'>{item.productName}</Text>
-                          {item.tuningId && <Badge size='xs' color='gray'>Afinação: {item.tuningName}</Badge>}
+                          {/* {item.tuningId && <Badge size='xs' color='gray'>Afinação: {item.tuningName}</Badge>} */}
                           <Group gap='3'>
                             {item.featured ? (
                               <IconToggleRightFilled color='#7950f2' />
@@ -339,7 +339,7 @@ function SettingsMyGearPage () {
                         </Box> 
                         <Flex mt='10' gap='4' justify='space-between'>
                           <Button 
-                            size='compact-sm'
+                            size='md'
                             color='violet'
                             variant='subtle'
                             fullWidth
@@ -349,7 +349,7 @@ function SettingsMyGearPage () {
                             Editar
                           </Button>
                           <Button 
-                            size='compact-sm'
+                            size='md'
                             color='gray'
                             variant='subtle'
                             fullWidth

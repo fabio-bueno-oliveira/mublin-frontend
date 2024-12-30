@@ -81,6 +81,8 @@ function ProfilePage () {
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '2px', cursor: "pointer" };
 
+  const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
+
   // Projects
   const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
   // const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
@@ -295,6 +297,7 @@ function ProfilePage () {
                   <Avatar
                     size='xl'
                     src={profile.picture}
+                    onClick={() => setModalAvatarOpen(true)}
                   />
                   <Box style={{overflow:'hidden'}}>
                     <Flex align='baseline' mt={0} mb={1}>
@@ -853,7 +856,11 @@ function ProfilePage () {
                     <Text size='sm' color='dimmed'>Nenhuma postagem até o momento</Text>
                   )
                 )}
-                <Text className='op80 point' ta='center' size='md' mt='14' fw='460'>Ver mais postagens</Text>
+                {profile.recentActivity.total > 2 && 
+                  <Text size='sm' className='op80 point' ta='center' mt='14' fw='460'>
+                    Ver mais postagens
+                  </Text>
+                }
               </Paper>
             </Grid.Col>
           </Grid>
@@ -1096,6 +1103,22 @@ function ProfilePage () {
         <Text size='xs' mt='lg' c='dimmed'>
           Este selo é atribuído pela equipe do Mublin baseado em critérios internos
         </Text>
+      </Modal>
+      <Modal 
+        opened={modalAvatarOpen}
+        onClose={() => setModalAvatarOpen(false)}
+        withCloseButton={false}
+        centered
+        size='lg'
+        overlayProps={{
+          backgroundOpacity: 0.55,
+          blur: 3,
+        }}
+        className='modalAvatarExpanded'
+      >
+        <Center>
+          <Avatar w={200} h={200} src={profile.picture ? profile.picture : undefined} />
+        </Center>
       </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>

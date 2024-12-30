@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
-import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, Group, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider } from '@mantine/core';
+import { Grid, Container, Modal, Center, Alert, Loader, Box, Breadcrumbs, ScrollArea, Group, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider } from '@mantine/core';
 import { IconSearch, IconWorld } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
@@ -131,7 +131,9 @@ function SettingsPage () {
 
   return (
     <>
-      <Header reloadUserInfo />
+      <div className='showOnlyInLargeScreen'>
+        <Header reloadUserInfo />
+      </div>
       <Container size='lg' mb={100}>
         <Grid mt='15'>
           {isLargeScreen && 
@@ -140,6 +142,12 @@ function SettingsPage () {
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
+            <Breadcrumbs mb={16} separator='›' separatorMargin='xs' className='showOnlyMobile'>
+              <Anchor href='/settings'>
+                <Text fw='400'>Configurações</Text>
+              </Anchor>
+              <Text fw='500'>Meus dados</Text>
+            </Breadcrumbs>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos='relative' p={10}>
                 {success && 

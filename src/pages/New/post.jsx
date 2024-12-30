@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userInfos } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, Flex, Paper, Image, Textarea, TextInput, NativeSelect, Button, Divider, em } from '@mantine/core'
+import { Container, Flex, Box, Text, Paper, Avatar, Image, Textarea, TextInput, NativeSelect, Button, Divider, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
 import Header from '../../components/header'
@@ -86,7 +86,7 @@ function NewPost () {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + loggedUser.token
-      },  
+      },
       body: JSON.stringify({ id_user_1_fk: loggedUser.id, id_item_fk: values.id_item_fk ? values.id_item_fk : '', related_item_type: formValues.related_item_type, id_feed_type_fk: 8, extra_text: values.extra_text, image: postImage ? postImage : '', video_url: formValues.video_url ? formValues.video_url : '' })
     })
     .then(response => {
@@ -110,6 +110,16 @@ function NewPost () {
         {/* <Title fz='1.14rem' fw={460} className='op80' mb='10' ta='left' px={isMobile ? 0 : 16}>
           Novo post
         </Title> */}
+        <Flex gap='14' align='center'>
+          <Avatar 
+            w='50px'
+            h='50px'
+            src={loggedUser.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+loggedUser.picture : null} 
+          />
+          <Box>
+            <Text>{loggedUser.name} {loggedUser.lastname}</Text>
+          </Box>
+        </Flex>
         <Paper
           radius='md'
           withBorder={isLargeScreen ? true : false}
@@ -117,16 +127,15 @@ function NewPost () {
           py={isMobile ? 0 : 6}
           className='mublinModule newPost'
         >
-          <form onSubmit={form.onSubmit(handleSubmitNewPost)} className='writeNewPost'>
+          <form onSubmit={form.onSubmit(handleSubmitNewPost)}>
             <Textarea
-              data-autofocus
-              size='lg'
-              variant='filled'
+              size='md'
               placeholder='Sobre o que você quer falar hoje?'
               maxLength='1000'
               autosize
               minRows={3}
               maxRows={6}
+              mt='20'
               key={form.key('extra_text')}
               {...form.getInputProps('extra_text')}
             />

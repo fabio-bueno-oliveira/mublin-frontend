@@ -68,17 +68,17 @@ function Home () {
                     className='mublinModule'
                   >
                     <Center>
-                      <Link to={{ pathname: `/${user.username}` }}>
+                      <Link to={{ pathname: `/${loggedUser.username}` }}>
                         <Avatar 
                           size="lg"
-                          src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null} 
+                          src={loggedUser.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+loggedUser.picture : null} 
                         />
                       </Link>
                     </Center>
                     <Title fw='460' fz='1.1rem' mb={1} mt={10} ta='center' className='op80'>
-                      Olá, {user?.name}
+                      Olá, {loggedUser?.name}
                     </Title>
-                    {user.plan === 'Pro' && 
+                    {loggedUser.plan === 'Pro' && 
                       <Center>
                         <Badge size='xs' variant='light' color='gray'>PRO</Badge>
                       </Center>

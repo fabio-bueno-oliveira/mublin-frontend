@@ -153,7 +153,11 @@ function FeedCard ({ item, likes, compact }) {
                   leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
                   onClick={() => goToProfile(item.relatedUserUsername)}
                 >
-                  Ver perfil de {item.relatedUserName}
+                  {item.relatedUserUsername === loggedUser.username ? (
+                    <>Ver meu perfil</>
+                  ) : (
+                    <>Ver perfil de {item.relatedUserName}</>
+                  )}
                 </Menu.Item>
               }
               {item.relatedUserUsername === loggedUser.username && 

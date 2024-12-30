@@ -87,3 +87,9 @@
     margin-right: 2px;
   }
 }
+
+.modalAvatarExpanded {
+  .mantine-Modal-content {
+    background-color: transparent!important;
+  }
+}
