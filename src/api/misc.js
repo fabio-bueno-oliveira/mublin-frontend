@@ -5,15 +5,14 @@ export const history = createBrowserHistory();
 const BASE_URL = "https://mublin.herokuapp.com";
 
 export function authHeader() {
-  // return authorization header with jwt token
-  let user = JSON.parse(localStorage.getItem('user'));
+  let token = localStorage.getItem('token');
 
-  if (user && user.token) {
-    return { 'Authorization': 'Bearer ' + user.token };
+  if (token) {
+      return { 'Authorization': 'Bearer ' + token };
   } else {
-    return {};
+      return {};
   }
-}
+};
 
 export const miscService = {
   getNotifications,
@@ -30,7 +29,7 @@ export const miscService = {
   logout
 };
 
-function getFeed() {
+async function getFeed() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -38,7 +37,7 @@ function getFeed() {
   return fetch(`${BASE_URL}/feed`, requestOptions).then(handleResponse);
 }
 
-function getFeedLikes() {
+async function getFeedLikes() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -46,7 +45,7 @@ function getFeedLikes() {
   return fetch(`${BASE_URL}/feedTotalLikes`, requestOptions).then(handleResponse);
 }
 
-function getItemLikes(feedId) {
+async function getItemLikes(feedId) {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -54,7 +53,7 @@ function getItemLikes(feedId) {
   return fetch(`${BASE_URL}/${feedId}/feedLikes`, requestOptions).then(handleResponse);
 }
 
-function getNotifications() {
+async function getNotifications() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -62,7 +61,7 @@ function getNotifications() {
   return fetch(`${BASE_URL}/notifications`, requestOptions).then(handleResponse);
 }
 
-function getAllMusicGenres() {
+async function getAllMusicGenres() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -70,7 +69,7 @@ function getAllMusicGenres() {
   return fetch(`${BASE_URL}/music/genres`, requestOptions).then(handleResponse);
 }
 
-function getAllMusicGenresCategories() {
+async function getAllMusicGenresCategories() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -78,7 +77,7 @@ function getAllMusicGenresCategories() {
   return fetch(`${BASE_URL}/music/genresCategories`, requestOptions).then(handleResponse);
 }
 
-function getAllRoles() {
+async function getAllRoles() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -86,7 +85,7 @@ function getAllRoles() {
   return fetch(`${BASE_URL}/music/roles`, requestOptions).then(handleResponse);
 }
 
-function getAllGearBrands() {
+async function getAllGearBrands() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -94,7 +93,7 @@ function getAllGearBrands() {
   return fetch(`${BASE_URL}/gear/allBrands`, requestOptions).then(handleResponse);
 }
 
-function getAvailabilityStatuses() {
+async function getAvailabilityStatuses() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -102,7 +101,7 @@ function getAvailabilityStatuses() {
   return fetch(`${BASE_URL}/availabilityStatuses`, requestOptions).then(handleResponse);
 }
 
-function getAvailabilityItems() {
+async function getAvailabilityItems() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -110,7 +109,7 @@ function getAvailabilityItems() {
   return fetch(`${BASE_URL}/availabilityItems`, requestOptions).then(handleResponse);
 }
 
-function getAvailabilityFocuses() {
+async function getAvailabilityFocuses() {
   const requestOptions = {
     method: 'GET',
     headers: authHeader()
@@ -119,8 +118,10 @@ function getAvailabilityFocuses() {
 }
 
 function logout() {
-  localStorage.removeItem('user');
+  // remove user from local storage to log user out
   localStorage.removeItem('token');
+  localStorage.removeItem('loginInfo');
+  localStorage.removeItem('userInfo');
 }
 
 function handleResponse(response) {

@@ -5,15 +5,14 @@ export const history = createBrowserHistory();
 const BASE_URL = "https://mublin.herokuapp.com";
 
 export function authHeader() {
-    // return authorization header with jwt token
-    let user = JSON.parse(localStorage.getItem('user'));
+  let token = localStorage.getItem('token');
 
-    if (user && user.token) {
-        return { 'Authorization': 'Bearer ' + user.token };
-    } else {
-        return {};
-    }
-}
+  if (token) {
+      return { 'Authorization': 'Bearer ' + token };
+  } else {
+      return {};
+  }
+};
 
 export const searchService = {
     getUserLastSearches,
@@ -28,7 +27,7 @@ export const searchService = {
     logout
 };
 
-function getUserLastSearches() {
+async function getUserLastSearches() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -36,7 +35,7 @@ function getUserLastSearches() {
     return fetch(`${BASE_URL}/search/queries/userLastSearches`, requestOptions).then(handleResponse);
 }
 
-function getSearchUsersResults(query) {
+async function getSearchUsersResults(query) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -44,7 +43,7 @@ function getSearchUsersResults(query) {
     return fetch(`${BASE_URL}/search/users/${query}`, requestOptions).then(handleResponse);
 }
 
-function getSearchProjectsResults(query) {
+async function getSearchProjectsResults(query) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -52,7 +51,7 @@ function getSearchProjectsResults(query) {
     return fetch(`${BASE_URL}/search/projects/${query}`, requestOptions).then(handleResponse);
 }
 
-function getSearchResults(query) {
+async function getSearchResults(query) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -60,7 +59,7 @@ function getSearchResults(query) {
     return fetch(`${BASE_URL}/search/${query}`, requestOptions).then(handleResponse);
 }
 
-function getSearchProjectResults(query) {
+async function getSearchProjectResults(query) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -68,7 +67,7 @@ function getSearchProjectResults(query) {
     return fetch(`${BASE_URL}/quickSearch/project/${query}`, requestOptions).then(handleResponse);
 }
 
-function getSuggestedUsersResults() {
+async function getSuggestedUsersResults() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -76,7 +75,7 @@ function getSuggestedUsersResults() {
     return fetch(`${BASE_URL}/search/explore/suggestedUsers`, requestOptions).then(handleResponse);
 }
 
-function getSuggestedFeaturedUsers() {
+async function getSuggestedFeaturedUsers() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -84,7 +83,7 @@ function getSuggestedFeaturedUsers() {
     return fetch(`${BASE_URL}/search/explore/featuredUsers`, requestOptions).then(handleResponse);
 }
 
-function getSuggestedNewUsers() {
+async function getSuggestedNewUsers() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -102,8 +101,9 @@ async function getFeaturedProjects() {
 
 function logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('loginInfo');
+    localStorage.removeItem('userInfo');
 }
 
 function handleResponse(response) {

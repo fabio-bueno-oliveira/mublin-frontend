@@ -7,9 +7,7 @@ export const history = createBrowserHistory();
 export const userActions = {
     login,
     logout,
-    validate,
     register,
-    getAll,
     delete: _delete
 };
 
@@ -57,28 +55,6 @@ function login(email, password) {
     function failure(error) { return { type: authenticationTypes.LOGIN_FAILURE, error } }
 }
 
-function validate (token) {
-    return dispatch => {
-        dispatch(request({ token }));
-
-        userService.validate(token)
-            .then(
-                user => { 
-                    dispatch(success(user));
-                    history.push('/login');
-                    window.location.href = window.location.href;
-                },
-                error => {
-                    dispatch(failure(error.toString()));
-                }
-            );
-    };
-
-    function request(user) { return { type: authenticationTypes.VALIDATE_REQUEST, user } }
-    function success(user) { return { type: authenticationTypes.VALIDATE_SUCCESS, user } }
-    function failure(error) { return { type: authenticationTypes.VALIDATE_FAILURE, error } }
-}
-
 function logout() {
     userService.logout();
     return { type: authenticationTypes.LOGOUT };
@@ -103,22 +79,6 @@ function register(user) {
     function request(user) { return { type: authenticationTypes.REGISTER_REQUEST, user } }
     function success(user) { return { type: authenticationTypes.REGISTER_SUCCESS, user } }
     function failure(error) { return { type: authenticationTypes.REGISTER_FAILURE, error } }
-}
-
-function getAll() {
-    return dispatch => {
-        dispatch(request());
-
-        userService.getAll()
-            .then(
-                users => dispatch(success(users)),
-                error => dispatch(failure(error.toString()))
-            );
-    };
-
-    function request() { return { type: authenticationTypes.GETALL_REQUEST } }
-    function success(users) { return { type: authenticationTypes.GETALL_SUCCESS, users } }
-    function failure(error) { return { type: authenticationTypes.GETALL_FAILURE, error } }
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

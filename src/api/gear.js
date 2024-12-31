@@ -5,13 +5,14 @@ export const history = createBrowserHistory();
 const BASE_URL = "https://mublin.herokuapp.com";
 
 export function authHeader() {
-    let user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.token) {
-        return { 'Authorization': 'Bearer ' + user.token };
+    let token = localStorage.getItem('token');
+
+    if (token) {
+        return { 'Authorization': 'Bearer ' + token };
     } else {
         return {};
     }
-}
+};
 
 export const gearService = {
     getBrandInfo,
@@ -21,7 +22,7 @@ export const gearService = {
     logout
 };
 
-function getBrandInfo(brandUrlName) {
+async function getBrandInfo(brandUrlName) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -29,7 +30,7 @@ function getBrandInfo(brandUrlName) {
     return fetch(`${BASE_URL}/gear/brand/${brandUrlName}`, requestOptions).then(handleResponse);
 }
 
-function gerBrandProducts(brandUrlName) {
+async function gerBrandProducts(brandUrlName) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -37,7 +38,7 @@ function gerBrandProducts(brandUrlName) {
     return fetch(`${BASE_URL}/gear/${brandUrlName}/products`, requestOptions).then(handleResponse);
 }
 
-function getProductInfo(productId) {
+async function getProductInfo(productId) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -45,7 +46,7 @@ function getProductInfo(productId) {
     return fetch(`${BASE_URL}/gear/product/${productId}/productInfo`, requestOptions).then(handleResponse);
 }
 
-function getProductOwners(productId) {
+async function getProductOwners(productId) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -55,8 +56,9 @@ function getProductOwners(productId) {
 
 function logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('loginInfo');
+    localStorage.removeItem('userInfo');
 }
 
 function handleResponse(response) {

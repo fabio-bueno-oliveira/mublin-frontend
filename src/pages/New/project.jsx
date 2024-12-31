@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../store/actions/misc';
@@ -20,7 +21,11 @@ function New () {
 
   document.title = 'Criar novo projeto | Mublin'
 
-  let loggedUser = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
 
   const projectUsernameAvailability = useSelector(state => state.projectUsernameCheck);
   const roles = useSelector(state => state.roles);
@@ -30,7 +35,7 @@ function New () {
 
   useEffect(() => { 
     dispatch(miscInfos.getRoles());
-  }, [loggedUser.id]);
+  }, [userInfo.id]);
 
   const checkUsername = useDebouncedCallback(async (string) => {
     if (string.length) {
@@ -223,16 +228,16 @@ function New () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: values.projectName, projectUserName: values.projectUserName, projectImage: projectImage, foundation_year: values.foundation_year, end_year: values.end_year ? values.end_year : null, bio: values.bio, type: values.type, kind: values.kind, activity_status: values.activity_status, public: values.publicProject, id_country_fk: values.id_country_fk, id_region_fk: values.id_region_fk, id_city_fk: formValues.id_city_fk })
+      body: JSON.stringify({ id_user_creator_fk: loggedUserId, projectName: values.projectName, projectUserName: values.projectUserName, projectImage: projectImage, foundation_year: values.foundation_year, end_year: values.end_year ? values.end_year : null, bio: values.bio, type: values.type, kind: values.kind, activity_status: values.activity_status, public: values.publicProject, id_country_fk: values.id_country_fk, id_region_fk: values.id_region_fk, id_city_fk: formValues.id_city_fk })
     })
     .then(response => {
       return response.json();
     }).then(jsonResponse => {
       setIsSubmitting(true);
       handleSubmitParticipationToNewProject(
-        loggedUser.id, jsonResponse.id, formValues.type, formValues.npMain_role_fk, values.featured
+        loggedUserId, jsonResponse.id, formValues.type, formValues.npMain_role_fk, values.featured
       );
     }).catch (error => {
       setIsSubmitting(false);
@@ -248,11 +253,11 @@ function New () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({ userId: newProjectUserId, projectId: newProjectProjectId, active: '1', status: newProjectType === 7 ? 3 : 1, main_role_fk: newProjectMain_role_fk, joined_in: currentYear, left_in: null, leader: '1', featured: featured, confirmed: '1', admin: '1', portfolio: '0' })
     }).then((response) => {
-        dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
+        dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
         setIsSubmitting(false)
         navigate({
           // pathname: '/projects/'+projectUsernameFinal,

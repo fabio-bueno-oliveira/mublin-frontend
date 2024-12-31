@@ -1,5 +1,4 @@
 import { userTypes } from '../types/users';
-import { userProjectsTypes } from '../types/userProjects';
 import { userService } from '../../api/users';
 import { createBrowserHistory } from 'history';
 
@@ -7,7 +6,6 @@ export const history = createBrowserHistory();
 
 export const userInfos = {
     getInfo: getInfo,
-    getInfoById: getInfoById,
     getUserGenresInfoById: getUserGenresInfoById,
     getUserRolesInfoById: getUserRolesInfoById,
     getUserGearInfoById: getUserGearInfoById,
@@ -30,22 +28,6 @@ function getInfo() {
     function request() { return { type: userTypes.GET_USER_INFO_REQUEST } }
     function success(info) { return { type: userTypes.GET_USER_INFO_SUCCESS, info } }
     function failure(error) { return { type: userTypes.GET_USER_INFO_FAILURE, error } }
-}
-
-function getInfoById(id) {
-  return dispatch => {
-      dispatch(request(id));
-
-      userService.getInfoById(id)
-          .then(
-              user => dispatch(success(id)),
-              error => dispatch(failure(id, error.toString()))
-          );
-  };
-
-  function request(id) { return { type: userTypes.GET_USERID_INFO_REQUEST, id } }
-  function success(id) { return { type: userTypes.GET_USERID_INFO_SUCCESS, id } }
-  function failure(id, error) { return { type: userTypes.GET_USERID_INFO_FAILURE, id, error } }
 }
 
 function getUserGenresInfoById(id) {

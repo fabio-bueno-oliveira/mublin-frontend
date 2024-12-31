@@ -13,7 +13,7 @@ function CarouselProjects (props) {
   const profile = props.profile
   const profilePlan = props.profilePlan
 
-  const loggedUser = JSON.parse(localStorage.getItem('user'))
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   const projects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
 
@@ -84,7 +84,7 @@ function CarouselProjects (props) {
             </Flex>
           </SplideSlide>
         )}
-        {(profile.id === loggedUser.id && !profile.requesting && profile.plan === 'Free') && 
+        {(profile.id === userInfo.id && !profile.requesting && profile.plan === 'Free') && 
           <SplideSlide>
             <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>
               <Avatar

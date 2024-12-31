@@ -17,6 +17,8 @@ function StartThirdStep () {
   const largeScreen = useMediaQuery('(min-width: 60em)');
 
   let loggedUser = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem('token');
+
   const user = useSelector(state => state.user);
   const genresCategories = useSelector(state => state.musicGenres.categories);
   const genres = useSelector(state => state.musicGenres);
@@ -74,7 +76,7 @@ function StartThirdStep () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
           userId: loggedUser.id, musicGenreId: value, musicGenreMain: setMainGenre
@@ -98,7 +100,7 @@ function StartThirdStep () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({userId: loggedUser.id, userGenreId: value})
     }).then((response) => {
@@ -122,7 +124,7 @@ function StartThirdStep () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
           userId: loggedUser.id, roleId: value, roleMain: setMainActivity
@@ -146,7 +148,7 @@ function StartThirdStep () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({userId: loggedUser.id, userRoleId: value})
     }).then((response) => {

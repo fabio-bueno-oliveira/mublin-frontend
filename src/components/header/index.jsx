@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { miscInfos } from '../../store/actions/misc';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Divider, Drawer, Image, CloseButton, rem, em } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, rem, em } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon, 
@@ -33,7 +34,12 @@ function Header (props) {
 
   const openMenuDrawerFromProfile = props.openMenuDrawerFromProfile;
 
-  const loggedUser = JSON.parse(localStorage.getItem('user'))
+  const token = localStorage.getItem('token');
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
+  const plan = decoded.result.plan;
+
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   const { colorScheme, setColorScheme } = useMantineColorScheme()
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
@@ -57,7 +63,7 @@ function Header (props) {
       dispatch(userInfos.getInfo());
       dispatch(miscInfos.getFeed());
       dispatch(miscInfos.getFeedLikes());
-      dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
+      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     }
   }, [refreshCounter])
 
@@ -140,17 +146,13 @@ function Header (props) {
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
                 <>
-                  {/* <Divider
-                    size='xs'
-                    orientation='vertical'
-                    className='showOnlyInLargeScreen'
-                  /> */}
                   <Box w={isMobile ? 160 : 130} className='showOnlyInMobile'>
                     <Text 
                       mr='10' 
-                      style={{lineHeight:'normal'}} 
+                      className='lhNormal'
                       truncate='end'
-                      size={isMobile ? '1.2rem' : 'md'}
+                      size={isMobile ? '1.10rem' : 'md'}
+                      fw='600'
                     >
                       {props.username}
                     </Text>
@@ -246,7 +248,7 @@ function Header (props) {
             </Link>
             {isLargeScreen && 
               <>
-                {/* {loggedUser.plan === 'Pro' && 
+                {/* {plan === 'Pro' && 
                   <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
                 } */}
                 <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
@@ -254,23 +256,23 @@ function Header (props) {
                     <Avatar
                       size="md"
                       className="point"
-                      src={loggedUser.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+loggedUser.picture : undefined}
-                      alt={loggedUser.username}
+                      src={userInfo.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                      alt={userInfo.username}
                       ml={8}
                     />
                   </Menu.Target>
                   <Menu.Dropdown>
                     <Menu.Label>
-                      {loggedUser.name} {loggedUser.lastname} 
-                      {loggedUser.plan === 'Pro' && 
+                      {userInfo.name} {userInfo.lastname} 
+                      {plan === 'Pro' && 
                         <Badge size='sm' variant='light' color='violet' ml={6}>PRO</Badge>
                       }
                     </Menu.Label>
                     <Menu.Item 
                       leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
-                      // onClick={() => navigate(`/${loggedUser.username}`)}
+                      // onClick={() => navigate(`/${userInfo.username}`)}
                       // onClick={() => console.log("foi")}
-                      onClick={() => navigate('/'+loggedUser.username)}
+                      onClick={() => navigate('/'+userInfo.username)}
                     >
                       Ver perfil
                     </Menu.Item>

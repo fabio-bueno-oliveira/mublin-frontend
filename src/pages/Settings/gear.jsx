@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
 import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, Textarea, em } from '@mantine/core'
@@ -15,13 +16,18 @@ function SettingsMyGearPage () {
 
   document.title = 'Meu equipamento | Mublin'
 
-  let loggedUser = JSON.parse(localStorage.getItem('user'))
+  const token = localStorage.getItem('token')
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
+  const plan = decoded.result.plan;
+
   const requesting = useSelector(state => state.user.requesting)
   const gear = useSelector(state => state.user.gear)
 
   useEffect(() => { 
-    dispatch(userInfos.getUserGearInfoById(loggedUser.id))
-  }, [dispatch, loggedUser.id])
+    dispatch(userInfos.getUserGearInfoById(loggedUserId))
+  }, [dispatch, loggedUserId])
 
   const [isLoaded, setIsLoaded] = useState(false)
   const [brands, setBrands] = useState([])
@@ -62,7 +68,7 @@ function SettingsMyGearPage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({id_item_fk: productId})
       })
@@ -77,11 +83,11 @@ function SettingsMyGearPage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
       }).then((response) => {
-        dispatch(userInfos.getUserGearInfoById(loggedUser.id))
+        dispatch(userInfos.getUserGearInfoById(loggedUserId))
         setLoadingAddNewProduct(false)
         setModalAddNewProductOpen(false)
         setBrandSelected('')
@@ -197,11 +203,11 @@ function SettingsMyGearPage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({id: itemId, productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using, tuning: tuning, owner_comments: owner_comments})
       }).then((response) => {
-        dispatch(userInfos.getUserGearInfoById(loggedUser.id));
+        dispatch(userInfos.getUserGearInfoById(loggedUserId));
         setIsLoaded(true)
         setModalEditItemOpen(false)
       }).catch(err => {
@@ -227,10 +233,10 @@ function SettingsMyGearPage () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       }
     }).then((response) => {
-      dispatch(userInfos.getUserGearInfoById(loggedUser.id))
+      dispatch(userInfos.getUserGearInfoById(loggedUserId))
       setLoadingRemove(false)
       setModalConfirmDelete(false)
     }).catch(err => {
@@ -264,12 +270,12 @@ function SettingsMyGearPage () {
             </Flex>
             {requesting ? (
               <Center mt='60'>
-                <Loader active inline='centered' />
+                <Loader />
               </Center>
             ) : (
               <>
                 <Group justify='flex-start'>
-                  {loggedUser.plan === 'Pro' ? (
+                  {plan === 'Pro' ? (
                     <Button
                       leftSection={<IconPlus size={14} />}
                       color='violet'
@@ -442,7 +448,7 @@ function SettingsMyGearPage () {
             <option key={key} value={product.id} disabled={!!gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {product.colorName && product.colorName} {!!gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
           )}
         </NativeSelect>
-        {loggedUser.id === 1 &&
+        {loggedUserId === 1 &&
           <Anchor mt='xs' href='/settings/submit-product' underline='hover' className='websiteLink'>
             <Text ta='right' size='sm'>Não encontrei meu produto na lista</Text>
           </Anchor>

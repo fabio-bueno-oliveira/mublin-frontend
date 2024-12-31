@@ -9,20 +9,20 @@ export const userProjectsInfos = {
   getUserProjectsBasicInfo: getUserProjectsBasicInfo,
 };
 
-function getUserProjects(id,type) {
+function getUserProjects(userId,type) {
   return dispatch => {
-    dispatch(request(id));
+    dispatch(request(userId));
 
-    userService.getUserProjects(id,type)
+    userService.getUserProjects(userId,type)
       .then(
         list => dispatch(success(list)),
-        error => dispatch(failure(id, error.toString()))
+        error => dispatch(failure(userId, error.toString()))
       );
   };
 
-  function request(id) { return { type: userProjectsTypes.GET_USER_PROJECTS_REQUEST, id } }
+  function request(userId) { return { type: userProjectsTypes.GET_USER_PROJECTS_REQUEST, userId } }
   function success(list) { return { type: userProjectsTypes.GET_USER_PROJECTS_SUCCESS, list } }
-  function failure(id, error) { return { type: userProjectsTypes.GET_USER_PROJECTS_FAILURE, id, error } }
+  function failure(userId, error) { return { type: userProjectsTypes.GET_USER_PROJECTS_FAILURE, userId, error } }
 }
 
 function getUserProjectsBasicInfo(id) {

@@ -10,7 +10,8 @@ import ReactPlayer from 'react-player/youtube'
 
 function FeedCard ({ item, likes, compact }) {
 
-  const loggedUser = JSON.parse(localStorage.getItem('user'))
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   let navigate = useNavigate()
   let dispatch = useDispatch()
@@ -33,7 +34,7 @@ function FeedCard ({ item, likes, compact }) {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       }
     })
     .then(() => {
@@ -53,7 +54,7 @@ function FeedCard ({ item, likes, compact }) {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       }
     })
     .then((response) => {
@@ -83,7 +84,7 @@ function FeedCard ({ item, likes, compact }) {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       }
     }).then((response) => {
       isLoadingAction(false)
@@ -158,14 +159,14 @@ function FeedCard ({ item, likes, compact }) {
                   leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
                   onClick={() => goToProfile(item.relatedUserUsername)}
                 >
-                  {item.relatedUserUsername === loggedUser.username ? (
+                  {item.relatedUserUsername === userInfo.username ? (
                     <>Ver meu perfil</>
                   ) : (
                     <>Ver perfil de {item.relatedUserName}</>
                   )}
                 </Menu.Item>
               }
-              {item.relatedUserUsername === loggedUser.username && 
+              {item.relatedUserUsername === userInfo.username && 
                 <Menu.Item
                   disabled={loadingAction}
                   leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}

@@ -17,6 +17,7 @@ function MenuMobile () {
   let navigate = useNavigate()
 
   let loggedUser = JSON.parse(localStorage.getItem('user'))
+  const token = localStorage.getItem('token')
 
   const { colorScheme, setColorScheme,  } = useMantineColorScheme()
 
@@ -50,7 +51,7 @@ function MenuMobile () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({picture: value})
       }).then((response) => {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { eventsInfos } from '../../store/actions/events';
+// import { eventsInfos } from '../../store/actions/events';
 import { userInfos } from '../../store/actions/user';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
@@ -22,16 +23,20 @@ function Home () {
   let dispatch = useDispatch();
   let navigate = useNavigate();
 
+  const token = localStorage.getItem('token')
+
+  const decoded = jwtDecode(token)
+  const loggedUserId = decoded.result.id
+
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
 
   const [showEndedProjects, setShowEndedProjects] = useState(true);
 
   const user = useSelector(state => state.user);
   const projects = useSelector(state => state.userProjects);
   const projectsTerminated = projects.list.filter((project) => { return project.yearEnd });
-  const events = useSelector(state => state.events.list);
+  // const events = useSelector(state => state.events.list);
   const totalProjects = projects.totalProjects;
   const search = useSelector(state => state.search);
 
@@ -40,9 +45,9 @@ function Home () {
     : projects?.list.filter((project) => { return !project.yearEnd })
 
   useEffect(() => {
-    dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
-    dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
-    // dispatch(eventsInfos.getUserEvents(loggedUser.id));
+    dispatch(userInfos.getUserRolesInfoById(loggedUserId));
+    dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
+    // dispatch(eventsInfos.getUserEvents(loggedUserId));
     dispatch(searchInfos.getSuggestedFeaturedUsers());
     dispatch(searchInfos.getSuggestedNewUsers());
     if (user.success && user.first_access !== 0) {

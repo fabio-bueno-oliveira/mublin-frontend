@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { searchInfos } from '../../../store/actions/search';
@@ -23,8 +24,12 @@ function StartFourthStep () {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const token = localStorage.getItem('token');
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
+
   const largeScreen = useMediaQuery('(min-width: 60em)');
-  let loggedUser = JSON.parse(localStorage.getItem('user'));
   const currentYear = new Date().getFullYear();
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -53,9 +58,9 @@ function StartFourthStep () {
   const cdnPath = 'https://ik.imagekit.io/mublin/projects/tr:h-200,w-200,c-maintain_ratio/';
 
   useEffect(() => { 
-    dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
+    dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     dispatch(miscInfos.getRoles());
-  }, [loggedUser.id]);
+  }, [loggedUserId]);
 
   const [modalNewProjectOpen, setModalNewProjectOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -182,7 +187,7 @@ function StartFourthStep () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({userId: userId, picture: value})
     }).then((response) => {
@@ -233,8 +238,8 @@ function StartFourthStep () {
     setModalDeleteConfirmationOpen(true);
   }
   const adminsModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.admin);
-  const myselfModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.userId === loggedUser.id)[0];
-  const myselfAdminModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.admin && m.userId === loggedUser.id);
+  const myselfModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.userId === loggedUserId)[0];
+  const myselfAdminModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.admin && m.userId === loggedUserId);
 
   const handleSubmitParticipation = () => {
     setIsLoading(true)
@@ -243,11 +248,11 @@ function StartFourthStep () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: mainRole, joined_in: joinedIn, left_in: leftIn ? leftIn : null, leader: '0', featured: featured, confirmed: '2', admin: '0', portfolio: '0' })
     }).then((response) => {
-      dispatch(userProjectsInfos.getUserProjects(user.id))
+      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
       setMainRole('')
       setIsLoading(false)
       closeModalParticipation()
@@ -265,12 +270,12 @@ function StartFourthStep () {
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + loggedUser.token
+            'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({userId: loggedUser.id, userProjectParticipationId: userProjectParticipationId})
+        body: JSON.stringify({userId: loggedUserId, userProjectParticipationId: userProjectParticipationId})
     }).then((response) => {
         // console.log(response);
-        dispatch(userProjectsInfos.getUserProjects(loggedUser.id));
+        dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
         setIsDeleting(false);
         setModalDeleteConfirmationOpen(false);
     }).catch(err => {
@@ -287,11 +292,11 @@ function StartFourthStep () {
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + loggedUser.token
+            'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({ userId: newProjectUserId, projectId: newProjectProjectId, active: '1', status: newProjectUserStatus, main_role_fk: newProjectMain_role_fk, joined_in: currentYear, left_in: null, leader: '1', featured: checkboxNewProjectFeatured, confirmed: '1', admin: '1', portfolio: portfolioNewProject })
     }).then((response) => {
-        dispatch(userProjectsInfos.getUserProjects(loggedUser.id))
+        dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
         setIsLoading(false)
         setModalNewProjectOpen(false)
         setModalNewProjectPictureOpen(true)
@@ -309,9 +314,9 @@ function StartFourthStep () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({ id_user_creator_fk: loggedUser.id, projectName: projectName, projectUserName: projectUserName, foundation_year: npFoundationYear, end_year: endYear, id_country_fk: npCountry, id_region_fk: npRegion, id_city_fk: '', bio: bio, type: type, kind: kind, public: publicProject })
+      body: JSON.stringify({ id_user_creator_fk: loggedUserId, projectName: projectName, projectUserName: projectUserName, foundation_year: npFoundationYear, end_year: endYear, id_country_fk: npCountry, id_region_fk: npRegion, id_city_fk: '', bio: bio, type: type, kind: kind, public: publicProject })
     })
     .then(response => {
         return response.json();
@@ -319,7 +324,7 @@ function StartFourthStep () {
         setIsLoading(false);
         setIdNewProject(jsonResponse.id);
         handleSubmitParticipationToNewProject(
-          loggedUser.id, jsonResponse.id, userStatus, npMain_role_fk
+          loggedUserId, jsonResponse.id, userStatus, npMain_role_fk
         );
         setProjectUserName('');
         setNpFoundationYear(currentYear);
@@ -347,7 +352,7 @@ function StartFourthStep () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + user.token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({step: 0})
     }).then((response) => {
@@ -906,7 +911,7 @@ function StartFourthStep () {
             <Button 
               color='violet'
               onClick={() => { 
-                dispatch(userProjectsInfos.getUserProjects(user.id));
+                dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
                 closeModalPicture();
               }}
             >

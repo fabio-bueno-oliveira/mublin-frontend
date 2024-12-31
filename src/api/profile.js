@@ -5,15 +5,14 @@ export const history = createBrowserHistory();
 const BASE_URL = "https://mublin.herokuapp.com";
 
 export function authHeader() {
-    // return authorization header with jwt token
-    let user = JSON.parse(localStorage.getItem('user'));
+    let token = localStorage.getItem('token');
 
-    if (user && user.token) {
-        return { 'Authorization': 'Bearer ' + user.token };
+    if (token) {
+        return { 'Authorization': 'Bearer ' + token };
     } else {
         return {};
     }
-}
+};
 
 export const profileService = {
     getProfileInfo,
@@ -35,7 +34,7 @@ export const profileService = {
     logout
 };
 
-function getProfileInfo(username) {
+async function getProfileInfo(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -43,7 +42,7 @@ function getProfileInfo(username) {
     return fetch(`${BASE_URL}/profile/${username}`, requestOptions).then(handleResponse);
 }
 
-function getProfileProjects(username) {
+async function getProfileProjects(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -51,7 +50,7 @@ function getProfileProjects(username) {
     return fetch(`${BASE_URL}/profile/${username}/projects`, requestOptions).then(handleResponse);
 }
 
-function getProfileRoles(username) {
+async function getProfileRoles(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -59,7 +58,7 @@ function getProfileRoles(username) {
     return fetch(`${BASE_URL}/profile/${username}/roles`, requestOptions).then(handleResponse);
 }
 
-function getProfileGenres(username) {
+async function getProfileGenres(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -67,7 +66,7 @@ function getProfileGenres(username) {
     return fetch(`${BASE_URL}/profile/${username}/genres`, requestOptions).then(handleResponse);
 }
 
-function getProfileFollowers(username) {
+async function getProfileFollowers(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -75,7 +74,7 @@ function getProfileFollowers(username) {
     return fetch(`${BASE_URL}/profile/${username}/followers`, requestOptions).then(handleResponse);
 }
 
-function getProfileFollowing(username) {
+async function getProfileFollowing(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -83,7 +82,7 @@ function getProfileFollowing(username) {
     return fetch(`${BASE_URL}/profile/${username}/following`, requestOptions).then(handleResponse);
 }
 
-function checkProfileFollowing(username) {
+async function checkProfileFollowing(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -91,7 +90,7 @@ function checkProfileFollowing(username) {
     return fetch(`${BASE_URL}/profile/${username}/checkFollow`, requestOptions).then(handleResponse);
 }
 
-function getProfilePosts(username) {
+async function getProfilePosts(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -99,7 +98,7 @@ function getProfilePosts(username) {
     return fetch(`${BASE_URL}/profile/${username}/posts`, requestOptions).then(handleResponse);
 }
 
-function getProfileGear(username) {
+async function getProfileGear(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -107,7 +106,7 @@ function getProfileGear(username) {
     return fetch(`${BASE_URL}/profile/${username}/gear`, requestOptions).then(handleResponse);
 }
 
-function getProfileGearSetups(username) {
+async function getProfileGearSetups(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -115,7 +114,7 @@ function getProfileGearSetups(username) {
     return fetch(`${BASE_URL}/profile/${username}/gearSetups`, requestOptions).then(handleResponse);
 }
 
-function getProfilePartners(username) {
+async function getProfilePartners(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -123,7 +122,7 @@ function getProfilePartners(username) {
     return fetch(`${BASE_URL}/profile/${username}/partners`, requestOptions).then(handleResponse);
 }
 
-function getProfileAvailabilityItems(username) {
+async function getProfileAvailabilityItems(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -131,7 +130,7 @@ function getProfileAvailabilityItems(username) {
     return fetch(`${BASE_URL}/profile/${username}/availabilityItems`, requestOptions).then(handleResponse);
 }
 
-function getProfileStrengths(username) {
+async function getProfileStrengths(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -139,7 +138,7 @@ function getProfileStrengths(username) {
     return fetch(`${BASE_URL}/profile/${username}/strengths`, requestOptions).then(handleResponse);
 }
 
-function getProfileStrengthsTotalVotes(username) {
+async function getProfileStrengthsTotalVotes(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -147,7 +146,7 @@ function getProfileStrengthsTotalVotes(username) {
     return fetch(`${BASE_URL}/profile/${username}/strengthsTotalVotes`, requestOptions).then(handleResponse);
 }
 
-function getProfileStrengthsRaw(username) {
+async function getProfileStrengthsRaw(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -155,7 +154,7 @@ function getProfileStrengthsRaw(username) {
     return fetch(`${BASE_URL}/profile/${username}/strengthsRaw`, requestOptions).then(handleResponse);
 }
 
-function getProfileTestimonials(username) {
+async function getProfileTestimonials(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -165,8 +164,9 @@ function getProfileTestimonials(username) {
 
 function logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('loginInfo');
+    localStorage.removeItem('userInfo');
 }
 
 function handleResponse(response) {

@@ -28,9 +28,9 @@ function GearProductPage () {
     <>
       <Header showBackIcon={true} />
       <Container size={'lg'} mt={largeScreen ? 20 : 0}>
-        <Grid>
+        <Grid mb='70'>
           <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-            <Box mb={20}>
+            <Box mb={8}>
               <Text mb='3' size='sm' c='dimmed'>
                 {product.requesting ? 'Carregando marca...' : product.categoryName}
               </Text>
@@ -51,15 +51,20 @@ function GearProductPage () {
                   />
                 </Center>
               ) : (
-                <Center className="gearProductImage">
-                  <Image 
-                    src={product.picture ? product.picture : undefined}
-                    rounded
-                    w={170}
-                    onClick={() => setModalZoomOpen(true)}
-                    style={{cursor:'pointer'}}
-                  />
-                </Center>
+                <>
+                  <Center className="gearProductImage">
+                    <Image 
+                      src={product.picture ? product.picture : undefined}
+                      rounded
+                      w={170}
+                      onClick={() => setModalZoomOpen(true)}
+                      style={{cursor:'pointer'}}
+                    />
+                    <Text ta='center' size='xs' c='gray'>
+                      Toque na imagem para ampliar
+                    </Text>
+                  </Center>
+                </>
               )}
             </Box>
           </Grid.Col>
@@ -97,7 +102,7 @@ function GearProductPage () {
                           direction="column"
                           wrap="wrap"
                         >
-                          <Text size='sm' fw={500}>
+                          <Text size='sm' c='gray' fw='500'>
                             {owner.name+' '+owner.lastname}
                           </Text>
                           <Text size='xs' c='gray'>

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
@@ -24,7 +25,13 @@ function Home () {
 
   const largeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
-  const loggedUser = JSON.parse(localStorage.getItem('user'))
+
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
+  const plan = decoded.result.plan;
 
   const user = useSelector(state => state.user)
   const projects = useSelector(state => state.userProjects)
@@ -32,10 +39,10 @@ function Home () {
   const feed = useSelector(state => state.feed)
 
   useEffect(() => {
-    dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'));
+    dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     dispatch(miscInfos.getFeed());
     dispatch(miscInfos.getFeedLikes());
-    dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+    dispatch(userInfos.getUserRolesInfoById(loggedUserId));
     dispatch(searchInfos.getSuggestedFeaturedUsers());
     dispatch(searchInfos.getSuggestedNewUsers());
     if (user.success && user.first_access !== 0) {
@@ -68,17 +75,17 @@ function Home () {
                     className='mublinModule'
                   >
                     <Center>
-                      <Link to={{ pathname: `/${loggedUser.username}` }}>
-                        <Avatar 
-                          size="lg"
-                          src={loggedUser.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+loggedUser.picture : null} 
+                      <Link to={{ pathname: `/${userInfo.username}` }}>
+                        <Avatar
+                          size='lg'
+                          src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
                         />
                       </Link>
                     </Center>
                     <Title fw='460' fz='1.1rem' mb={1} mt={10} ta='center' className='op80'>
-                      Olá, {loggedUser?.name}
+                      Olá, {userInfo?.name}
                     </Title>
-                    {loggedUser.plan === 'Pro' && 
+                    {plan === 'Pro' && 
                       <Center>
                         <Badge size='xs' variant='light' color='gray'>PRO</Badge>
                       </Center>
@@ -101,19 +108,17 @@ function Home () {
                   >
                     {/* <Text fw='400' size='lg'>Meus projetos</Text> */}
                     {projects.list.map(project =>
-                      <>
-                        <ProjectCard 
-                          key={project.projectid}
-                          mb={14}
-                          picture={project.picture}
-                          name={project.name}
-                          username={project.username}
-                          type={project.ptname}
-                          city={project.cityName}
-                          region={project.regionName}
-                          confirmed={project.confirmed}
-                        />
-                      </>
+                      <ProjectCard 
+                        key={project.projectid}
+                        mb={14}
+                        picture={project.picture}
+                        name={project.name}
+                        username={project.username}
+                        type={project.ptname}
+                        city={project.cityName}
+                        region={project.regionName}
+                        confirmed={project.confirmed}
+                      />
                     )}
                   </Card>
                 </>

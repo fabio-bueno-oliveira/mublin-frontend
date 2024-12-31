@@ -25,7 +25,9 @@ function ProfilePage () {
   const params = useParams()
   const username = params?.username
 
-  const loggedUser = JSON.parse(localStorage.getItem('user'))
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  const token = localStorage.getItem('token')
+
   const profile = useSelector(state => state.profile)
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
@@ -39,7 +41,7 @@ function ProfilePage () {
 
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username))
-    if (loggedUser.username !== username) {
+    if (userInfo.username !== username) {
       dispatch(followInfos.checkProfileFollowing(username))
     }
     dispatch(profileInfos.getProfileAvailabilityItems(username))
@@ -59,7 +61,7 @@ function ProfilePage () {
     fetch('https://mublin.herokuapp.com/strengths/getAllStrengths', {
       method: 'GET',
       headers: new Headers({
-          'Authorization': 'Bearer '+loggedUser.token
+          'Authorization': 'Bearer '+token
       }),
     })
       .then(res => res.json())
@@ -137,7 +139,7 @@ function ProfilePage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         }
       })
       .then((response) => {
@@ -155,7 +157,7 @@ function ProfilePage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         }
       })
       .then((response) => {
@@ -175,7 +177,7 @@ function ProfilePage () {
       headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({id: id, followedId: followedId, option: option})
         }).then((response) => {
@@ -200,7 +202,7 @@ function ProfilePage () {
   const [strengthVoted, setStrengthVoted] = useState(null)
   const [strengthVotedName, setStrengthVotedName] = useState('')
 
-  const myVotes = profile.strengthsRaw.filter((x) => { return x.idUserFrom === loggedUser.id})
+  const myVotes = profile.strengthsRaw.filter((x) => { return x.idUserFrom === userInfo.id})
     .map(x => ({ 
       id: x.id,
       idUserTo: x.idUserTo,
@@ -217,7 +219,7 @@ function ProfilePage () {
       headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({strengthId: strengthId, profileId: profile.id, nameTo: profile.name, emailTo: profile.email, strengthTitle: strengthTitle})
     })
@@ -240,7 +242,7 @@ function ProfilePage () {
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + loggedUser.token
+            'Authorization': 'Bearer ' + token
         }
     })
     .then((response) => {
@@ -421,7 +423,7 @@ function ProfilePage () {
                   </Anchor>
                 }
                 <Flex gap={5} mt={isMobile ? 17 : 20} mb={isMobile ? 14 : 20}>
-                  {loggedUser.id !== profile.id ? (
+                  {userInfo.id !== profile.id ? (
                     <Button 
                       size='xs'
                       fz='14px'
@@ -555,7 +557,7 @@ function ProfilePage () {
               >
                 <Group justify='space-between' align='center' gap={8} mb={15}>
                   <Title fz='1.13rem' fw='480'>Pontos Fortes</Title>
-                  {(profile.id !== loggedUser.id && !profile.requesting) && 
+                  {(profile.id !== userInfo.id && !profile.requesting) && 
                     <Button 
                       size='xs'
                       radius='lg'
@@ -630,7 +632,7 @@ function ProfilePage () {
                       <Title fz='1.13rem' fw='480'>
                         Equipamento ({profile.gear.length})
                       </Title>
-                      {(profile.id === loggedUser.id && !profile.requesting) && 
+                      {(profile.id === userInfo.id && !profile.requesting) && 
                         <Button 
                           size='xs'
                           radius='lg'
@@ -693,8 +695,8 @@ function ProfilePage () {
                                 autoWidth: true,
                                 arrows: false,
                                 gap: '22px',
-                                dots: isMobile ? false : true,
-                                pagination: isMobile ? false : true,
+                                dots: true,
+                                pagination: true,
                               }}
                             >
                               {gearFiltered.map(product =>
@@ -755,7 +757,7 @@ function ProfilePage () {
                 </>
               ) : (
                 <>
-                  {loggedUser.id === profile.id && 
+                  {userInfo.id === profile.id && 
                     <>
                       <Divider mb={18} className='showOnlyInMobile' />
                       <Group gap={3} mb={8}>
@@ -800,7 +802,7 @@ function ProfilePage () {
               >
                 <Group justify='space-between' align='center' gap={8} mb={13}>
                   <Title fz='1.13rem' fw='480'>Postagens</Title>
-                  {(profile.id === loggedUser.id && !profile.requesting) && 
+                  {(profile.id === userInfo.id && !profile.requesting) && 
                     <Button 
                       size='xs'
                       radius='lg'

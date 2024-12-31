@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userInfos } from '../../store/actions/user'
@@ -15,11 +16,15 @@ import { format } from 'date-fns'
 function NewPost () {
 
   const dispatch = useDispatch()
+  let navigate = useNavigate()
 
   document.title = 'Novo post | Mublin'
 
-  let loggedUser = JSON.parse(localStorage.getItem('user'))
-  let navigate = useNavigate()
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
 
   const user = useSelector(state => state.user)
   const projects = useSelector(state => state.userProjects)
@@ -34,8 +39,8 @@ function NewPost () {
   const [fileId, setFileId] = useState('')
 
   useEffect(() => {
-    dispatch(userInfos.getUserGearInfoById(loggedUser.id))
-    dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUser.id))
+    dispatch(userInfos.getUserGearInfoById(loggedUserId))
+    dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUserId))
   }, []);
 
   const [formValues, setFormValues] = useState({
@@ -89,9 +94,9 @@ function NewPost () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({ id_user_1_fk: loggedUser.id, id_item_fk: values.id_item_fk ? values.id_item_fk : '', related_item_type: formValues.related_item_type, id_feed_type_fk: 8, extra_text: values.extra_text, image: postImage ? postImage : '', video_url: formValues.video_url ? formValues.video_url : '' })
+      body: JSON.stringify({ id_user_1_fk: loggedUserId, id_item_fk: values.id_item_fk ? values.id_item_fk : '', related_item_type: formValues.related_item_type, id_feed_type_fk: 8, extra_text: values.extra_text, image: postImage ? postImage : '', video_url: formValues.video_url ? formValues.video_url : '' })
     })
     .then(response => {
       return response.json()
@@ -141,10 +146,10 @@ function NewPost () {
           <Avatar 
             w='50px'
             h='50px'
-            src={loggedUser.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUser.id+'/'+loggedUser.picture : null} 
+            src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+userInfo.picture : null} 
           />
           <Box>
-            <Text>{loggedUser.name} {loggedUser.lastname}</Text>
+            <Text>{userInfo.name} {userInfo.lastname}</Text>
           </Box>
         </Flex>
         <Paper
@@ -174,7 +179,7 @@ function NewPost () {
               >
                 <IKUpload 
                   id='postImage'
-                  fileName={`post_user-${loggedUser.id}_${format(new Date(), 'yyyy-MM-dd-HH:mm:ssXX')}.jpg`}
+                  fileName={`post_user-${userInfo.id}_${format(new Date(), 'yyyy-MM-dd-HH:mm:ssXX')}.jpg`}
                   folder={postsImagePath}
                   tags={['post']}
                   name='file-input'

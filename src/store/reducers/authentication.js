@@ -1,6 +1,6 @@
 import { authenticationTypes } from '../types/authentication';
 
-let user = JSON.parse(localStorage.getItem('user'));
+let user = JSON.parse(localStorage.getItem('loginInfo'));
 const initialState = user ? { loggedIn: true, user } : { loggedIn: false, loggingIn: false, error: null } ;
 
 export function authentication(state = initialState, action) {

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { projectInfos } from '../../store/actions/project';
-import { Container, Indicator, Grid, Center, Divider, Group, Flex, ScrollArea, NavLink, Box, Table, Avatar, Title, Text, Button, Badge, Select, NativeSelect, Card, Image, Loader, em } from '@mantine/core';
+import { Container, Grid, Center, Divider, Group, Flex, ScrollArea, NavLink, Box, Avatar, Title, Text, Button, Badge, Select, NativeSelect, Card, Image, Loader, em } from '@mantine/core';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import { DatesProvider, Calendar } from '@mantine/dates';
@@ -17,7 +18,12 @@ function MyProjects () {
   document.title = 'Meus projetos | Mublin';
 
   let dispatch = useDispatch();
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
+
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+  const token = localStorage.getItem('token');
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
 
   const [searchParams] = useSearchParams();
   const selectedProjectViaUrl = searchParams.get('p');
@@ -43,12 +49,12 @@ function MyProjects () {
   const members = project.members;
 
   useEffect(() => {
-    dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUser.id));
+    dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUserId));
     if (selectedProjectViaUrl) {
       dispatch(projectInfos.getProjectInfo(selectedProjectViaUrl));
       dispatch(projectInfos.getProjectMembers(selectedProjectViaUrl));
     }
-  }, [loggedUser.id, dispatch]);
+  }, [userInfo.id, dispatch]);
 
   const cdnProjectPath = 'https://ik.imagekit.io/mublin/projects/tr:h-200,w-200,c-maintain_ratio/';
 
@@ -235,7 +241,7 @@ function MyProjects () {
                           <Avatar
                             size="50px" 
                             name={member.name} 
-                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-50,w-50,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                            src={member.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-50,w-50,c-maintain_ratio/'+member.id+'/'+member.picture : undefined} 
                           />
                           <Text size="12px">
                             {member.name}

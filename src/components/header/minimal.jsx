@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
@@ -13,7 +14,10 @@ function Header (props) {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(state => state.user);
+  const token = localStorage.getItem('token');
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
 
   const { colorScheme } = useMantineColorScheme();
   const largeScreen = useMediaQuery('(min-width: 60em)');
@@ -26,7 +30,7 @@ function Header (props) {
   useEffect(() => { 
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
-      dispatch(userProjectsInfos.getUserProjects(user.id,'all'));
+      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     }
   }, [refreshCounter]);
 

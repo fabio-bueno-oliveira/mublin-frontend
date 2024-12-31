@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../store/actions/user';
@@ -14,7 +15,10 @@ const FooterMenuMobile = (props) => {
   let navigate = useNavigate()
   let currentPath = window.location.pathname
 
-  const loggedUser = JSON.parse(localStorage.getItem('user'))
+  const token = localStorage.getItem('token')
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
 
   const { colorScheme } = useMantineColorScheme()
   const [drawerNewIsOpen, setDrawerNewIsOpen] = useState(false)
@@ -31,7 +35,7 @@ const FooterMenuMobile = (props) => {
       dispatch(userInfos.getInfo())
       dispatch(miscInfos.getFeed())
       dispatch(miscInfos.getFeedLikes())
-      dispatch(userProjectsInfos.getUserProjects(loggedUser.id,'all'))
+      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     }
   }, [refreshCounter])
 

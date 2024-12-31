@@ -7,7 +7,7 @@ import App from './App.jsx'
 import './global/styles.scss'
 import './global/custom.scss'
 
-const loggedUser = JSON.parse(localStorage.getItem('user'))
+const sessionToken = localStorage.getItem('token')
 
 // Imagekit Image Upload Authenticator
 const publicKey = "public_vFOVSJ4ZRbnv5fT4XZFbo82R2DE="
@@ -15,7 +15,7 @@ const urlEndpoint = "https://ik.imagekit.io/mublin"
 const authenticator = async () => {
   try {
     const headers = {
-      'Authorization': `Bearer ${loggedUser?.token}`,
+      'Authorization': `Bearer ${sessionToken}`,
       'CustomHeader': 'CustomValue'
     };
     const response = await fetch("https://mublin.herokuapp.com/imagekit", {

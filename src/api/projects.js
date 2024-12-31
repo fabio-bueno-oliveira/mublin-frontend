@@ -5,15 +5,14 @@ export const history = createBrowserHistory();
 const BASE_URL = "https://mublin.herokuapp.com";
 
 export function authHeader() {
-    // return authorization header with jwt token
-    let user = JSON.parse(localStorage.getItem('user'));
+    let token = localStorage.getItem('token');
 
-    if (user && user.token) {
-        return { 'Authorization': 'Bearer ' + user.token };
+    if (token) {
+        return { 'Authorization': 'Bearer ' + token };
     } else {
         return {};
     }
-}
+};
 
 export const projectService = {
     getProjectInfo,
@@ -30,7 +29,7 @@ export const projectService = {
     logout
 };
 
-function getProjectInfo(username) {
+async function getProjectInfo(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -38,7 +37,7 @@ function getProjectInfo(username) {
     return fetch(`${BASE_URL}/project/${username}`, requestOptions).then(handleResponse);
 }
 
-function getProjectAdminAccessInfo(username) {
+async function getProjectAdminAccessInfo(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -46,7 +45,7 @@ function getProjectAdminAccessInfo(username) {
     return fetch(`${BASE_URL}/user/${username}/admin`, requestOptions).then(handleResponse);
 }
 
-function getProjectMembers(username) {
+async function getProjectMembers(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -54,7 +53,7 @@ function getProjectMembers(username) {
     return fetch(`${BASE_URL}/project/${username}/members`, requestOptions).then(handleResponse);
 }
 
-function getProjectMembersByProjectId(id) {
+async function getProjectMembersByProjectId(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -62,7 +61,7 @@ function getProjectMembersByProjectId(id) {
     return fetch(`${BASE_URL}/project/id/${id}/members`, requestOptions).then(handleResponse);
 }
 
-function getProjectOpportunities(username) {
+async function getProjectOpportunities(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -70,7 +69,7 @@ function getProjectOpportunities(username) {
     return fetch(`${BASE_URL}/project/${username}/opportunities`, requestOptions).then(handleResponse);
 }
 
-function getProjectNotes(username) {
+async function getProjectNotes(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -78,7 +77,7 @@ function getProjectNotes(username) {
     return fetch(`${BASE_URL}/project/${username}/notes`, requestOptions).then(handleResponse);
 }
 
-function getProjectEvents(username) {
+async function getProjectEvents(username) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -86,7 +85,7 @@ function getProjectEvents(username) {
     return fetch(`${BASE_URL}/project/${username}/events`, requestOptions).then(handleResponse);
 }
 
-function getProjectRelatedProjects(username,projectId,projectCity,projectMainGenre) {
+async function getProjectRelatedProjects(username,projectId,projectCity,projectMainGenre) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -94,7 +93,7 @@ function getProjectRelatedProjects(username,projectId,projectCity,projectMainGen
     return fetch(`${BASE_URL}/project/${username}/${projectId}/${projectCity}/${projectMainGenre}/relatedProjects`, requestOptions).then(handleResponse);
 }
 
-function getUserMainProjects(id) {
+async function getUserMainProjects(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -102,7 +101,7 @@ function getUserMainProjects(id) {
     return fetch(`${BASE_URL}/secure/projects/user/${id}/main`, requestOptions).then(handleResponse);
 }
 
-function getUserPortfolioProjects(id) {
+async function getUserPortfolioProjects(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -110,7 +109,7 @@ function getUserPortfolioProjects(id) {
     return fetch(`${BASE_URL}/secure/projects/user/${id}/portfolio`, requestOptions).then(handleResponse);
 }
 
-function getUserProjects(id) {
+async function getUserProjects(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -120,8 +119,9 @@ function getUserProjects(id) {
 
 function logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('loginInfo');
+    localStorage.removeItem('userInfo');
 }
 
 function handleResponse(response) {

@@ -16,7 +16,9 @@ function SettingsPage () {
   document.title = 'Editar meus dados | Mublin';
 
   const user = useSelector(state => state.user);
+
   const loggedUser = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem('token');
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)');
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +64,7 @@ function SettingsPage () {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + loggedUser.token
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify({userId: loggedUser.id, name: values.name, lastname: values.lastname, email: values.email, phone_mobile: values.phone, phone_mobile_public: values.phoneIsPublic ? 1 : 0, website: values.website, instagram: values.instagram, gender: values.gender, bio: values.bio, id_country_fk: Number(values.country), id_region_fk: Number(values.region), id_city_fk: Number(values.city), public: values.public ? 1 : 0})
     }).then((response) => {

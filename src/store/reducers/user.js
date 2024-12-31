@@ -71,6 +71,10 @@ const initialState = {
   ]
 }
 
+const updateUserInfoInLocalStorage = (values) => {
+  localStorage.setItem('userInfo', JSON.stringify(values));
+}
+
 export function user(state = initialState, action) {
   switch (action.type) {
     case userTypes.GET_USER_INFO_REQUEST:
@@ -80,7 +84,7 @@ export function user(state = initialState, action) {
         requesting: true
       };
     case userTypes.GET_USER_INFO_SUCCESS:
-      return {
+      return updateUserInfoInLocalStorage(action.info), {
         ...state,
         success: true,
         requesting: false,
