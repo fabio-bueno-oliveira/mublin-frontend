@@ -101,6 +101,10 @@
   outline-offset: 0;
 }
 
+.mantine-Skeleton-root {
+  opacity: 0.2;
+}
+
 form.writeNewPost {
   .mantine-Textarea-input:focus-within, .mantine-Textarea-input:focus {
     outline: none;

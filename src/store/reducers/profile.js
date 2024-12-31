@@ -168,7 +168,8 @@ const initialState = {
       forSale: '',
       price: '',
       tuning: '',
-      tuningDescription: ''
+      tuningDescription: '',
+      ownerComments: ''
     }
   ],
   gearSetups: {

@@ -140,8 +140,12 @@ function Header (props) {
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
                 <>
-                  <Divider size='xs' mx={0} orientation='vertical' className='showOnlyInLargeScreen' />
-                  <Box w={isMobile ? 160 : 130}>
+                  {/* <Divider
+                    size='xs'
+                    orientation='vertical'
+                    className='showOnlyInLargeScreen'
+                  /> */}
+                  <Box w={isMobile ? 160 : 130} className='showOnlyInMobile'>
                     <Text 
                       mr='10' 
                       style={{lineHeight:'normal'}} 

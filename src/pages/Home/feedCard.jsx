@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle } from '@tabler/icons-react'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
@@ -95,6 +95,11 @@ function FeedCard ({ item, likes, compact }) {
     })
   }
 
+  const getYoutubeId = (url) => {
+    url = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0];
+  }
+
   return (
     <>
       <Card 
@@ -184,7 +189,7 @@ function FeedCard ({ item, likes, compact }) {
                 {item.extraText}
               </Text>
             </Box>
-            {item.image && 
+            {(item.image && !compact) && 
               <Image
                 mt='10'
                 mb='8'
@@ -193,7 +198,18 @@ function FeedCard ({ item, likes, compact }) {
                 src={item.image}
               />
             }
-            {item.videoUrl && 
+            {(item.image && compact) && 
+              <Image
+                mt='10'
+                mb='8'
+                ml='15'
+                h={90}
+                w={120}
+                fit='contain'
+                src={item.image}
+              />
+            }
+            {(item.videoUrl && !compact) && 
               <div className='player-wrapper' style={{marginTop:'10px'}}>
                 <ReactPlayer
                   className='react-player'
@@ -204,6 +220,17 @@ function FeedCard ({ item, likes, compact }) {
                 />
               </div>
             }
+            {(item.videoUrl && compact) && (
+              <Group gap='8' ml='15'>
+                <Image
+                  src={`https://img.youtube.com/vi/${getYoutubeId(item.videoUrl)}/mqdefault.jpg`}
+                  h={90}
+                  w={120}
+                  fit='contain'
+                />
+                <IconBrandYoutubeFilled />
+              </Group>
+            )}
           </>
         }
         {item.relatedProjectPicture && 

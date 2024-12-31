@@ -15,11 +15,11 @@ function FloaterHeader ({
       w='100%'
       position={{ top: 0, left: 0 }} 
     >
-      <Transition 
-        transition='slide-down' 
-        duration={400} 
-        timingFunction='ease' 
-        mounted={isLargeScreen ? scrollY > 100 : scrollY > 50}
+      <Transition
+        transition='slide-down'
+        duration={400}
+        timingFunction='ease'
+        mounted={scrollY > 85}
       >
         {(transitionStyles) => (
           <Container className='floatingMenu' style={transitionStyles} fluid h={50} py={9}>

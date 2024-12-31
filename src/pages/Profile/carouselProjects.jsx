@@ -13,6 +13,8 @@ function CarouselProjects (props) {
   const profile = props.profile
   const profilePlan = props.profilePlan
 
+  const loggedUser = JSON.parse(localStorage.getItem('user'))
+
   const projects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
 
   const goToProject = (username) => {
@@ -28,46 +30,53 @@ function CarouselProjects (props) {
           perPage: isMobile ? 1 : 1,
           autoWidth: true,
           arrows: false,
-          gap: '22px',
+          gap: '16px',
           dots: false,
           pagination: false,
         }}
       >
         {projects.splice(0 , profilePlan === 'Free' ? 2 : 300).map(project =>
           <SplideSlide key={project.id}>
-            <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>
+            <Flex align='flex-start' gap={6} mb={5} className='carousel-project'>
               <Avatar 
                 variant='filled' 
                 radius='md' 
-                size='82px' 
+                size='64px' 
                 color='violet'
                 name={'🎵'}
                 src={project.picture ? project.picture : undefined} 
                 onClick={() => goToProject(project.username)}
               />
               <Flex 
-                direction={'column'}
+                direction='column'
                 justify='flex-start'
                 align='flex-start'
                 wrap='wrap'
               >
-                <Text fz='10px' fw='390' truncate='end' c='dimmed'>
+                <Text fz='0.65rem' fw='390' truncate='end' c='dimmed'>
                   {project.workTitle}
                 </Text>
-                <Box w={106}>
-                  <Text size='11px' fw='390' mb={3} truncate='end'>
+                <Box w={107}>
+                  <Text size='11.5px' fw='390' mb={3} truncate='end'>
                     {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
                   </Text>
                 </Box>
-                <Box w={106}>
-                  <Text size='0.91rem' fw='430' mb={3} truncate='end' title={project.name} className='lhNormal'>
+                <Box w={107}>
+                  <Text
+                    size='0.91rem'
+                    fw='440'
+                    mb={3}
+                    truncate='end' 
+                    title={project.name} 
+                    className='lhNormal'
+                  >
                     {project.name} {!!project.featured && <IconStarFilled style={{ width: '11px', height: '11px' }} color='gray' />}
                   </Text>
                 </Box>
-                <Text size='12px' fw='380' c='dimmed'>{project.type}</Text>
+                {/* <Text size='12px' fw='380' c='dimmed'>{project.type}</Text> */}
                 {/* <Text size='12px'>{project.workTitle}</Text> */}
                 {project.endYear && 
-                  <Text size='10px' c='dimmed' mt={3}>
+                  <Text size='10px' c='dimmed'>
                     encerrado em {project.endYear}
                   </Text>
                 }
@@ -75,6 +84,35 @@ function CarouselProjects (props) {
             </Flex>
           </SplideSlide>
         )}
+        {(profile.id === loggedUser.id && !profile.requesting && profile.plan === 'Free') && 
+          <SplideSlide>
+            <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>
+              <Avatar
+                variant='filled'
+                radius='md'
+                size='64px'
+                color='violet'
+                name={'🎵'}
+                src={undefined}
+              />
+              <Flex 
+                direction='column'
+                justify='flex-start'
+                align='flex-start'
+                wrap='wrap'
+              >
+                <Text fz='10px' fw='390' truncate='end' c='dimmed'>
+                  Assine o Mublin PRO
+                </Text>
+                <Box w={110}>
+                  <Text size='0.77rem' fw='430' mb={3} className='lhNormal'>
+                    E gerencie quantos projetos quiser!
+                  </Text>
+                </Box>
+              </Flex>
+            </Flex>
+          </SplideSlide>
+        }
       </Splide>
     </>
   );

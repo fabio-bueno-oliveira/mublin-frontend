@@ -4,9 +4,9 @@ import { useNavigate, Link } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Grid, Space, Card, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconMail, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil, IconPlus } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil, IconPlus, IconMapPin } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -31,6 +31,8 @@ function ProfilePage () {
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const { colorScheme } = useMantineColorScheme()
+
+  const truncateString = (input, maxLength) => input.length > maxLength ? `${input.substring(0, maxLength)}...` : input
 
   let dispatch = useDispatch()
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
@@ -63,12 +65,12 @@ function ProfilePage () {
       .then(res => res.json())
       .then(
         (result) => {
-            setStrengthsLoaded(true)
-            setStrengths(result)
+          setStrengthsLoaded(true)
+          setStrengths(result)
         },
         (error) => {
-            setStrengthsLoaded(true)
-            console.error(error)
+          setStrengthsLoaded(true)
+          console.error(error)
         }
       )
   }, [username]);
@@ -118,6 +120,13 @@ function ProfilePage () {
   const [modalFollowersOpen, setModalFollowersOpen] = useState(false);
   // Modal Following
   const [modalFollowingOpen, setModalFollowingOpen] = useState(false);
+  // Modal Gear Item Detail
+  const [modalGearItemOpen, setModalGearItemOpen] = useState(false);
+  const [gearItemDetail, setGearItemDetail] = useState({});
+  const openModalGearDetail = (data) => {
+    setModalGearItemOpen(true)
+    setGearItemDetail(data)
+  };
 
   const followUnfollow = () => {
     setModalFollowInfoOpen(false);
@@ -252,7 +261,7 @@ function ProfilePage () {
 
   return (
     <>
-      {(profile.id && !modalBioOpen && !modalFollowersOpen && !modalFollowingOpen) && 
+      {(profile.id && !modalBioOpen && !modalFollowersOpen && !modalFollowingOpen && !modalGearItemOpen) && 
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
@@ -262,7 +271,7 @@ function ProfilePage () {
         showBackIcon={true}
       />
       {profile.requesting && 
-        <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10}>
+        <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10} className='profilePage'>
           <Group justify='flex-start'>
             <Skeleton height={84} circle />
             <SimpleGrid cols={1} spacing='xs' verticalSpacing='xs'>
@@ -271,8 +280,8 @@ function ProfilePage () {
               <Skeleton height={14} width={180} radius='xl' />
             </SimpleGrid>
           </Group>
-          <Skeleton height={15} width={280} mt={16} radius='xl' />
-          <Skeleton height={15} width={280} mt={5} mb={20} radius='xl' />
+          <Skeleton height={15} width={315} mt={16} radius='xl' />
+          <Skeleton height={15} width={315} mt={5} mb={20} radius='xl' />
         </Container>
       }
       {profile.id && 
@@ -292,7 +301,7 @@ function ProfilePage () {
                   direction='row'
                   wrap='nowrap'
                   columnGap='xs'
-                  mt={isMobile ? 0 : 14}
+                  mt={isMobile ? 0 : 11}
                 >
                   <Avatar
                     size='xl'
@@ -300,8 +309,8 @@ function ProfilePage () {
                     onClick={() => setModalAvatarOpen(true)}
                   />
                   <Box style={{overflow:'hidden'}}>
-                    <Flex align='baseline' mt={0} mb={1}>
-                      <Title fz='1.26rem' fw='450'>
+                    <Flex align='baseline' mb={1}>
+                      <Title fz='1.4rem' fw='450'>
                         {profile.name} {profile.lastname}
                       </Title>
                       {!!profile.verified && 
@@ -343,7 +352,7 @@ function ProfilePage () {
                       )}
                     </Splide>
                     {profile.plan === 'Pro' && 
-                      <Badge mt='4' size='sm' variant='light' color='gray' title='Usuário PRO'>
+                      <Badge radius='xs' mt='4' size='xs' variant='outline' color='gray' title='Usuário PRO'>
                         PRO
                       </Badge>
                     }
@@ -387,23 +396,26 @@ function ProfilePage () {
                   </Text>
                 }
                 {profile.city && 
-                  <Text size='0.83em' c='dimmed' mt={9}>
-                    {profile.city}{profile.region && `, ${profile.region}`}
-                  </Text>
+                  <Flex gap={2} align='center' mt={9}>
+                    <IconMapPin size={13} style={{color:'#8d8d8d'}} />
+                    <Text size={isMobile ? '0.92em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
+                      {profile.city}{profile.region && `, ${profile.region}`}{profile.country && `, ${profile.country}`}
+                    </Text>
+                  </Flex>
                 }
                 {profile.website && 
                   <Anchor 
                     href={profile.website} 
-                    target="_blank" 
-                    underline="hover" 
+                    target='_blank'
+                    underline='hover'
                     className='websiteLink'
-                    mt={isMobile ? 14 : 9}
+                    mt={isMobile ? 4 : 4}
                     mb={isMobile ? 8 : 6}
                   >
-                    <Flex gap={2} align='center' w={isMobile ? 290 : 390}>
+                    <Flex gap={2} align='center'>
                       <IconLink size={13} />
-                      <Text size={isMobile ? '0.92em' : '0.83em'} truncate='end' className='lhNormal'>
-                        {profile.website}
+                      <Text size={isMobile ? '0.92em' : '0.83em'} className='lhNormal'>
+                        {truncateString(profile.website, 35)}
                       </Text>
                     </Flex>
                   </Anchor>
@@ -447,7 +459,6 @@ function ProfilePage () {
                     fw='470'
                     variant='light'
                     color={colorScheme === "light" ? "dark" : "gray"}
-                    leftSection={<IconMail size={14} />} 
                     fullWidth={isMobile}
                     onClick={() => setModalContactOpen(true)}
                   >
@@ -463,6 +474,7 @@ function ProfilePage () {
                         component="a"
                         href={`https://instagram.com/${profile.instagram}`}
                         target='_blank'
+                        title='Instagram'
                       >
                         <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
                       </ActionIcon>
@@ -483,7 +495,7 @@ function ProfilePage () {
                         inline
                         processing={profile.availabilityId}
                         color={profile.availabilityColor}
-                        size={8}
+                        size={11}
                         ml={5}
                         mr={7}
                       />
@@ -524,18 +536,25 @@ function ProfilePage () {
               }
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
+              <CarouselProjects 
+                profile={profile}
+                projects={allProjects}
+                profilePlan={profile.plan}
+              />
+              <Divider mt={12} mb={15} className='showOnlyInMobile' />
               <Paper
                 radius='md'
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
                 pt={isMobile ? 0 : 12}
                 pb={isMobile ? 3 : 12}
-                mb={14}
+                mt='12'
+                mb='14'
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                 className="mublinModule"
               >
                 <Group justify='space-between' align='center' gap={8} mb={15}>
-                  <Title fz='1.14rem' fw={460}>Pontos Fortes</Title>
+                  <Title fz='1.13rem' fw='480'>Pontos Fortes</Title>
                   {(profile.id !== loggedUser.id && !profile.requesting) && 
                     <Button 
                       size='xs'
@@ -594,53 +613,6 @@ function ProfilePage () {
                   </Box>
                 )}
               </Paper>
-              <Divider mb={18} className='showOnlyInMobile' />
-              <Paper 
-                radius='md'
-                withBorder={isLargeScreen ? true : false}
-                px={isMobile ? 0 : 16}
-                py={isMobile ? 0 : 12}
-                mb={14}
-                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                className='mublinModule'
-              >
-                <Group justify='space-between' align='center' gap={8} mb={15}>
-                  <Title fz='1.14rem' fw={460}>
-                    Projetos ({profile?.projects?.length})
-                  </Title>
-                  {(profile.id === loggedUser.id && !profile.requesting && profile.plan === "Free") && 
-                    <Text 
-                      size="sm"
-                      c="dimmed"
-                    >
-                      Assine Mublin PRO e gerencie quantos projetos quiser!
-                    </Text>
-                  }
-                  {(profile.id === loggedUser.id && !profile.requesting) && 
-                    <Button 
-                      size='xs'
-                      radius='lg'
-                      variant='light'
-                      color={colorScheme === 'light' ? 'dark' : 'gray'}
-                      leftSection={<IconPlus size={14} />}
-                      onClick={() => setModalStrengthsOpen(true)}
-                    >
-                      Novo projeto
-                    </Button>
-                  }
-                </Group>
-                <>
-                  {profile.requesting ? ( 
-                    <Text size='sm'>Carregando...</Text>
-                  ) : (
-                    <CarouselProjects 
-                      profile={profile}
-                      projects={allProjects}
-                      profilePlan={profile.plan}
-                    />
-                  )}
-                </>
-              </Paper>
               {profile.plan === 'Pro' ? ( 
                 <>
                   <Divider mb={18} className='showOnlyInMobile' />
@@ -650,12 +622,12 @@ function ProfilePage () {
                     px={isMobile ? 0 : 16}
                     pt={isMobile ? 0 : 12}
                     pb={(isLargeScreen && profile.gear.length > 5) ? 34 : 12}
-                    mb={20}
+                    mb={14}
                     style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                     className='mublinModule'
                   >
                     <Group justify='space-between' align='center' gap={8} mb={13}>
-                      <Title fz='1.14rem' fw={460}>
+                      <Title fz='1.13rem' fw='480'>
                         Equipamento ({profile.gear.length})
                       </Title>
                       {(profile.id === loggedUser.id && !profile.requesting) && 
@@ -694,8 +666,8 @@ function ProfilePage () {
                             </NativeSelect> */}
                             {!gearSetup && 
                               <NativeSelect
-                                // description='Tipo de equipamentp'
-                                size={isLargeScreen ? "xs" : "sm"}
+                                // description='Tipo de equipamento'
+                                size='xs'
                                 w={145}
                                 onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
                               >
@@ -725,50 +697,51 @@ function ProfilePage () {
                                 pagination: isMobile ? false : true,
                               }}
                             >
-                              {gearFiltered.map((product, key) =>
-                              <SplideSlide key={key}>
-                                <Flex
-                                  direction='column'
-                                  justify='flex-start'
-                                  align='center'
-                                  className='carousel-gear'
-                                >
-                                  <Link to={{ pathname: `/gear/product/${product.productId}` }}>
+                              {gearFiltered.map(product =>
+                                <SplideSlide key={product.productId}>
+                                  <Flex
+                                    direction='column'
+                                    justify='flex-start'
+                                    align='center'
+                                    className='carousel-gear'
+                                  >
                                     <Image 
                                       src={'https://ik.imagekit.io/mublin/products/tr:h-240,w-240,cm-pad_resize,bg-FFFFFF/'+product.pictureFilename} 
                                       w={120}
                                       mb={10}
                                       radius='md'
-                                      onClick={() => history.push('/gear/product/'+product.productId)}
+                                      onClick={() => openModalGearDetail(product)}
                                     />
-                                  </Link>
-                                  <Box w={110}>
-                                    <Text size='11px' fw={550} mb={3} truncate="end" title={product.brandName}>
-                                      {product.brandName}
-                                    </Text>
-                                    <Text size="sm" truncate="end" title={product.productName}>
-                                      {product.productName}
-                                    </Text>
-                                  </Box>
-                                  {product.tuning && 
-                                    <>
+                                    <Box w={110}>
+                                      <Text size='11px' fw={550} mb={3} truncate="end" title={product.brandName}>
+                                        {product.brandName}
+                                      </Text>
+                                      <Text size="sm" truncate="end" title={product.productName}>
+                                        {product.productName}
+                                      </Text>
+                                    </Box>
+                                    {product.tuning && 
                                       <Group gap={2} mt={4} mb='2'>
-                                        <Text size='9px' fw={450}>Afinação: {product.tuning}</Text>
-                                      </Group>
-                                      <Text size='9px' c='dimmed'>{product.tuningDescription}</Text>
-                                    </>
-                                  }
-                                  {!!product.forSale && 
-                                    <Flex direction='column' align='center' gap={4} mt={4}>
-                                      <Badge size='xs' color='dark'>À venda</Badge>
-                                      {!!product.price && 
-                                        <Text size='10px' fw={500}>
-                                          {product.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                                        <Text
+                                          size='9px'
+                                          fw='450'
+                                          c='dimmed'
+                                        >
+                                          Afinação: {product.tuning}
                                         </Text>
-                                      }
-                                    </Flex>
-                                  }
-                                </Flex>
+                                      </Group>
+                                    }
+                                    {!!product.forSale && 
+                                      <Flex direction='column' align='center' gap={4} mt={4}>
+                                        <Badge size='xs' color='dark'>À venda</Badge>
+                                        {!!product.price && 
+                                          <Text size='10px' fw={500}>
+                                            {product.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                                          </Text>
+                                        }
+                                      </Flex>
+                                    }
+                                  </Flex>
                                 </SplideSlide>
                               )}
                             </Splide>
@@ -786,7 +759,7 @@ function ProfilePage () {
                     <>
                       <Divider mb={18} className='showOnlyInMobile' />
                       <Group gap={3} mb={8}>
-                        <Title order={5} fw={500}>Equipamento</Title>
+                        <Title order={5} fw='500'>Equipamento</Title>
                         <IconLockSquareRoundedFilled size={22} color="gray" /> 
                       </Group>
                       <Paper 
@@ -815,6 +788,7 @@ function ProfilePage () {
                   }
                 </>
               )}
+              <Divider mb={16} className='showOnlyInMobile' />
               <Paper
                 radius='md'
                 withBorder={isLargeScreen ? true : false}
@@ -825,7 +799,7 @@ function ProfilePage () {
                 className='mublinModule'
               >
                 <Group justify='space-between' align='center' gap={8} mb={13}>
-                  <Title fz='1.14rem' fw={460}>Postagens</Title>
+                  <Title fz='1.13rem' fw='480'>Postagens</Title>
                   {(profile.id === loggedUser.id && !profile.requesting) && 
                     <Button 
                       size='xs'
@@ -892,9 +866,9 @@ function ProfilePage () {
           gap="xs"
         >
           {followedByMe.inspiration ? (
-            <Button 
-              size="sm" 
-              color={colorScheme === "light" ? "dark" : "gray"}
+            <Button
+              size='sm' 
+              color={colorScheme === 'light' ? 'dark' : 'gray'}
               variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
               rightSection={<IconStarFilled size={14} />}
               onClick={() => changeInspirationStatus(followedByMe.id, profile.id, "0")}
@@ -937,12 +911,11 @@ function ProfilePage () {
             target='_blank'
             underline='hover'
             className='websiteLink'
-            style={{display:'block',width:'fit-content'}}
           >
             <Flex gap={2} align='center' mt={9}>
               <IconLink size={13} />
               <Text size='md' fw='420' className='lhNormal'>
-                {profile.website}
+                {truncateString(profile.website, 35)}
               </Text>
             </Flex>
           </Anchor>
@@ -1120,6 +1093,62 @@ function ProfilePage () {
           <Avatar w={200} h={200} src={profile.picture ? profile.picture : undefined} />
         </Center>
       </Modal>
+      <Modal 
+        opened={modalGearItemOpen}
+        onClose={() => setModalGearItemOpen(false)}
+        centered
+        size='md'
+      >
+        <Center>
+          <Image 
+            src={'https://ik.imagekit.io/mublin/products/tr:h-240,w-240,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename} 
+            w={170}
+            mb={10}
+            radius='md'
+            onClick={() => openModalGearDetail(product)}
+          />
+        </Center>
+        <Text ta='center' size='sm' c='dimmed' fw='450'>
+          {gearItemDetail.brandName}
+        </Text>
+        <Text ta='center' size='md'>
+          {gearItemDetail.productName}
+        </Text>
+        {gearItemDetail.tuning && 
+          <Box my='xs'>
+            <Text ta='center' size='xs' fw='380'>Afinação: {gearItemDetail.tuning}</Text>
+            <Text ta='center' size='xs' c='dimmed'>{gearItemDetail.tuningDescription}</Text>
+          </Box>
+        }
+        {!!gearItemDetail.forSale && 
+          <Flex align='center' justify='center' gap='4' mt='4'>
+            <Badge size='md' color='dark'>À venda</Badge>
+            {!!gearItemDetail.price && 
+              <Text size='xs' fw='450'>
+                {gearItemDetail.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+              </Text>
+            }
+          </Flex>
+        }
+        {gearItemDetail.ownerComments && 
+          <Card className='mublinModule' px='10' py='10' mt='sm'>
+            <ScrollArea h='60' type='auto'>
+              <Text size='sm'>{gearItemDetail.ownerComments}</Text>
+            </ScrollArea>
+          </Card>
+        }
+        <Button
+          fullWidth
+          color='violet'
+          size='sm'
+          mt='md'
+          component='a'
+          href={`/gear/product/${gearItemDetail.productId}`}
+          variant='light'
+        >
+          Ir para a página do item
+        </Button>
+      </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>
           <Title order={4} fw='480' ta='center' mt='40' mb='10'>
@@ -1132,7 +1161,7 @@ function ProfilePage () {
       }
       <FooterMenuMobile
         hide={
-          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen
+          modalBioOpen || modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalGearItemOpen
         }
       />
     </>
