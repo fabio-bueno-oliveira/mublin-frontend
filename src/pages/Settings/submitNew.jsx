@@ -18,7 +18,8 @@ function SettingsNewProductPage () {
 
   document.title = 'Cadastrar novo produto | Mublin'
 
-  let loggedUser = JSON.parse(localStorage.getItem('user'))
+  let token = localStorage.getItem('token')  
+  let userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
@@ -121,9 +122,9 @@ function SettingsNewProductPage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({name: newBrandName, logo: newBrandLogo, id_user_creator: loggedUser.id})
+        body: JSON.stringify({name: newBrandName, logo: newBrandLogo, id_user_creator: userInfo.id})
       }).then(res => res.json()).then((result) => {
         dispatch(miscInfos.getGearBrands())
         setIsLoading(false)
@@ -147,9 +148,9 @@ function SettingsNewProductPage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({name: name, id_brand: brandId, id_category: categoryId, year: null, color: colorId, picture: picture, id_user_creator: loggedUser.id})
+        body: JSON.stringify({name: name, id_brand: brandId, id_category: categoryId, year: null, color: colorId, picture: picture, id_user_creator: userInfo.id})
       }).then(res => res.json()).then((result) => {
         setIsLoading(false)
         setName(null)
@@ -177,7 +178,7 @@ function SettingsNewProductPage () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({productId: newProductId, featured: 0, for_sale: 0, price: null, currently_using: 1})
       }).then((response) => {

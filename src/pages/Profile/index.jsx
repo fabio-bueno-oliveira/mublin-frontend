@@ -713,6 +713,7 @@ function ProfilePage () {
                                       mb={10}
                                       radius='md'
                                       onClick={() => openModalGearDetail(product)}
+                                      className='point'
                                     />
                                     <Box w={110}>
                                       <Text size='11px' fw={550} mb={3} truncate="end" title={product.brandName}>
@@ -1099,13 +1100,14 @@ function ProfilePage () {
         opened={modalGearItemOpen}
         onClose={() => setModalGearItemOpen(false)}
         centered
+        withCloseButton={false}
         size='md'
       >
         <Center>
           <Image 
             src={'https://ik.imagekit.io/mublin/products/tr:h-240,w-240,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename} 
-            w={170}
-            mb={10}
+            w='160'
+            mb='10'
             radius='md'
             onClick={() => openModalGearDetail(product)}
           />
@@ -1133,23 +1135,30 @@ function ProfilePage () {
           </Flex>
         }
         {gearItemDetail.ownerComments && 
-          <Card className='mublinModule' px='10' py='10' mt='sm'>
-            <ScrollArea h='60' type='auto'>
+          <Card className='mublinModule' px='10' py='10' mt='xs'>
+            <ScrollArea h='72' type='auto'>
               <Text size='sm'>{gearItemDetail.ownerComments}</Text>
             </ScrollArea>
           </Card>
         }
-        <Button
-          fullWidth
-          color='violet'
-          size='sm'
-          mt='md'
-          component='a'
-          href={`/gear/product/${gearItemDetail.productId}`}
-          variant='light'
-        >
-          Ir para a página do item
-        </Button>
+        <Group gap='8' mt='md' justify='center'>
+          <Button
+            color='violet'
+            variant='outline'
+            size='sm'
+            onClick={() => setModalGearItemOpen(false)}
+          >
+            Fechar
+          </Button>
+          <Button
+            color='violet'
+            size='sm'
+            component='a'
+            href={`/gear/product/${gearItemDetail.productId}`}
+          >
+            Mais detalhes do item
+          </Button>
+        </Group>
       </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>

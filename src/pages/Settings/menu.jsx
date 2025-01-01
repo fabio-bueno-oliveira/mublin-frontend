@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink } from '@mantine/core';
-import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera, IconHeartHandshake, IconPackages, IconTargetArrow } from '@tabler/icons-react';
+import { NavLink, Flex, Badge, Text } from '@mantine/core';
+import { IconUser, IconLock, IconAdjustmentsHorizontal, IconCamera, IconHeartHandshake, IconPackages, IconTargetArrow } from '@tabler/icons-react';
 
 function SettingsMenu (props) {
   return (
@@ -43,7 +43,21 @@ function SettingsMenu (props) {
       <NavLink
         color='violet'
         href='/settings/my-gear'
-        label='Meus equipamentos'
+        label={
+          <Flex align='flex-start' gap='4'>
+            <Text>Meus equipamentos</Text>
+            <Badge 
+              radius='xs' 
+              mt='4' 
+              size='xs' 
+              variant='outline' 
+              color='gray' 
+              title='Usuário PRO'
+            >
+              PRO
+            </Badge>
+          </Flex>
+        }
         leftSection={<IconPackages size='1rem' stroke={1.5} />}
         active={props.page === 'myGear'}
       />

@@ -3,7 +3,8 @@ import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, Flex, Paper, Group, Center, Box, Title, Text, Image, Avatar, Divider, Badge, Modal, ScrollArea } from '@mantine/core';
+import { Container, Grid, Flex, Paper, Group, Center, Box, Title, Text, Image, Avatar, Badge, Modal, ScrollArea } from '@mantine/core';
+import { IconZoom } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -23,30 +24,55 @@ function GearProductPage () {
   }, []);
 
   const [modalZoomOpen, setModalZoomOpen] = useState(false);
+  const [extraColors, setExtraColors] = useState([{}]);
+  
+  const [modalZoomExtraOpen, setModalZoomExtraOpen] = useState(false);
+  const [extra, setExtra] = useState(null);
+  const openExtraModal = (data) => {
+    setExtra(data);
+    setModalZoomExtraOpen(true);
+  }
+
+  const baseUrlExtraThumb = 'https://ik.imagekit.io/mublin/products/tr:h-134,w-134,cm-pad_resize,bg-FFFFFF/'
+  const baseUrlExtraExpanded = 'https://ik.imagekit.io/mublin/products/tr:w-600,cm-pad_resize,bg-FFFFFF/'
+
+  useEffect(() => {
+    fetch(`https://mublin.herokuapp.com/gear/product/${productId}/productExtraColors`)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          result && setExtraColors(result)
+        },
+        (error) => {
+          console.error(error)
+          setExtraColors([{}])
+        }
+      )
+  }, [])
 
   return (
     <>
       <Header showBackIcon={true} />
-      <Container size={'lg'} mt={largeScreen ? 20 : 0}>
+      <Container size='lg' mt={largeScreen ? 20 : 0}>
+        <Text mb='3' size='sm' c='dimmed'>
+          {product.requesting ? 'Carregando marca...' : product.categoryName}
+        </Text>
+        <Link to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
+          {product.brandName}
+        </Link>
+        <Title order={4} fw='450' mb={20}>
+          {product.requesting ? 'Carregando produto...' : product.name}
+        </Title>
         <Grid mb='70'>
-          <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+          <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
             <Box mb={8}>
-              <Text mb='3' size='sm' c='dimmed'>
-                {product.requesting ? 'Carregando marca...' : product.categoryName}
-              </Text>
-              <Link to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
-                {product.brandName}
-              </Link>
-              <Title order={4} fw='450' mb={20}>
-                {product.requesting ? 'Carregando produto...' : product.name}
-              </Title>
               {product.requesting ? (
                 <Center className='gearProductImage'>
                   <Image
                     radius='md'
                     src={null}
-                    w={170}
-                    h={130}
+                    w={300}
+                    h={300}
                     fallbackSrc='https://placehold.co/170x130?text=Carregando...'
                   />
                 </Center>
@@ -55,22 +81,37 @@ function GearProductPage () {
                   <Center className="gearProductImage">
                     <Image 
                       src={product.picture ? product.picture : undefined}
-                      rounded
-                      w={170}
+                      radius='md'
+                      w={300}
+                      h={300}
                       onClick={() => setModalZoomOpen(true)}
                       style={{cursor:'pointer'}}
                     />
-                    <Text ta='center' size='xs' c='gray'>
-                      Toque na imagem para ampliar
-                    </Text>
+                    <Center>
+                      <Group gap='4'>
+                        <IconZoom size='14' style={{color:'gray'}} />
+                        <Text ta='center' size='xs' c='gray'>
+                          Toque na imagem para ampliar
+                        </Text>
+                      </Group>
+                    </Center>
                   </Center>
+                  <Flex w='340px' px='10px' wrap='wrap' justify='center' align='center'>
+                    {extraColors.length && extraColors?.map((product, key) =>
+                      <Image
+                        key={key}
+                        src={product.image ? baseUrlExtraThumb+product.image : undefined}
+                        onClick={() => openExtraModal(product)}
+                      />
+                    )}
+                  </Flex>
                 </>
               )}
             </Box>
           </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+          <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
             <Title order={5} fw='450' mb={14}>
-              Quem possui: {product?.owners?.length && '('+product?.owners?.length+')'}
+              Quem possui {product?.owners?.length && '('+product?.owners?.length+')'}
             </Title>
             {product.requesting ? (
               <Text>
@@ -97,10 +138,10 @@ function GearProductPage () {
                           </Avatar.Group>
                         </Link>
                         <Flex
-                          justify="flex-start"
-                          align="flex-start"
-                          direction="column"
-                          wrap="wrap"
+                          justify='flex-start'
+                          align='flex-start'
+                          direction='column'
+                          wrap='wrap'
                         >
                           <Text size='sm' c='gray' fw='500'>
                             {owner.name+' '+owner.lastname}
@@ -143,14 +184,29 @@ function GearProductPage () {
       </Container>
       <Modal 
         centered
-        opened={modalZoomOpen} 
-        title={product.brandName + ' | ' + product.name}
+        opened={modalZoomOpen}
+        title={product.brandName + ' | ' + product.name + ' | ' + product.colorNamePTBR}
         onClose={() => setModalZoomOpen(false)} 
         scrollAreaComponent={ScrollArea.Autosize}
+        size='xl'
       >
-        <Image src={product.largePicture} onClick={() => setModalZoomOpen(false)} />
+        <Center>
+          <Image w='300' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
+        </Center> 
       </Modal>
-      <FooterMenuMobile hide={modalZoomOpen} />
+      <Modal 
+        centered
+        opened={modalZoomExtraOpen} 
+        title={product.brandName + ' | ' + product.name + ' | ' + extra?.colorNamePTBR}
+        onClose={() => setModalZoomExtraOpen(false)} 
+        scrollAreaComponent={ScrollArea.Autosize}
+        size='xl'
+      >
+        <Center>
+          <Image w='300' src={baseUrlExtraExpanded+extra?.image ? baseUrlExtraExpanded+extra?.image : undefined} onClick={() => setModalZoomExtraOpen(false)} />
+        </Center> 
+      </Modal>
+      <FooterMenuMobile hide={modalZoomExtraOpen} />
     </>
   );
 };

@@ -85,15 +85,19 @@
 }
 
 .splide__pagination {
-  top: 103%;
+  top: 102%;
+
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
 }
 
 .splide__pagination__page.is-active {
-  background: #7950f2;
+  background: #353535;
 }
 
 .splide__pagination__page:hover {
-  background: #b49df7;
+  background: #969696;
 }
 
 .mantine-focus-auto:focus-visible {

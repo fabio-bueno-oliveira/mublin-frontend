@@ -13,6 +13,9 @@ const initialState = {
   brandSlug: '',
   categoryId: '',
   categoryName: '',
+  colorId: '',
+  colorName: '',
+  colorNamePTBR: '',
   owners: [
     { 
       id: '',
@@ -66,7 +69,10 @@ export function gear(state = initialState, action) {
         brandLogo: action.info.brandLogo,
         brandSlug: action.info.brandSlug,
         categoryId: action.info.categoryId,
-        categoryName: action.info.categoryName
+        categoryName: action.info.categoryName,
+        colorId: action.info.colorId,
+        colorName: action.info.colorName,
+        colorNamePTBR: action.info.colorNamePTBR
       };
     case gearTypes.GET_PRODUCT_INFO_FAILURE:
       return {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Affix, Transition, Container, Flex, Group, Box, Avatar, Text, Image, em } from '@mantine/core'
+import { Affix, Transition, Container, Flex, Group, Box, Avatar, Text, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 
 function FloaterHeader ({ 
@@ -17,9 +17,9 @@ function FloaterHeader ({
     >
       <Transition
         transition='slide-down'
-        duration={400}
+        duration='400'
         timingFunction='ease'
-        mounted={scrollY > 85}
+        mounted={scrollY > 100}
       >
         {(transitionStyles) => (
           <Container className='floatingMenu' style={transitionStyles} fluid h={50} py={9}>

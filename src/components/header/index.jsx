@@ -6,16 +6,15 @@ import { userInfos } from '../../store/actions/user';
 import { miscInfos } from '../../store/actions/misc';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, rem, em } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, rem, em } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
-  IconMoon, 
-  IconBrightnessUp, 
-  IconSearch, 
-  IconDotsVertical, 
-  IconSettings, 
-  IconMessageCircle, 
-  IconUserCircle, 
+  IconMoon,
+  IconBrightnessUp,
+  IconSearch,
+  IconDotsVertical,
+  IconSettings,
+  IconUserCircle,
   IconHome,
   IconChevronLeft,
   IconMicrophone2,
@@ -268,17 +267,22 @@ function Header (props) {
                         <Badge size='sm' variant='light' color='violet' ml={6}>PRO</Badge>
                       }
                     </Menu.Label>
-                    <Menu.Item 
-                      leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
-                      // onClick={() => navigate(`/${userInfo.username}`)}
-                      // onClick={() => console.log("foi")}
-                      onClick={() => navigate('/'+userInfo.username)}
+                    <Anchor 
+                      underline='never'
+                      style={{lineHeight:'normal'}} 
+                      href={`/${userInfo.username}`}
                     >
-                      Ver perfil
-                    </Menu.Item>
-                    <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
+                      <Menu.Item 
+                        leftSection={
+                          <IconUserCircle style={{ width: rem(14), height: rem(14) }} />
+                        }
+                      >
+                        Ver perfil
+                      </Menu.Item>
+                    </Anchor>
+                    {/* <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
                       Mensagens
-                    </Menu.Item>
+                    </Menu.Item> */}
                     <Menu.Divider />
                     <Menu.Item 
                       leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}

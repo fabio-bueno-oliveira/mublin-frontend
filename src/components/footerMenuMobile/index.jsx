@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { userInfos } from '../../store/actions/user';
-import { miscInfos } from '../../store/actions/misc';
-import { userProjectsInfos } from '../../store/actions/userProjects';
-import { useMantineColorScheme, Drawer, Box, Flex, Button, Text } from '@mantine/core';
-import { IconMusicPlus, IconBulb, IconSend, IconUserPlus, IconChevronRight, IconBox, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic, IconPencil } from '@tabler/icons-react';
-import './styles.scss';
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { userInfos } from '../../store/actions/user'
+import { miscInfos } from '../../store/actions/misc'
+import { userProjectsInfos } from '../../store/actions/userProjects'
+import { useMantineColorScheme, Drawer, Box, Flex, Button, Text } from '@mantine/core'
+import { IconMusicPlus, IconBulb, IconSend, IconUserPlus, IconChevronRight, IconBox, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic, IconPencil } from '@tabler/icons-react'
+import './styles.scss'
 
 const FooterMenuMobile = (props) => {
 
@@ -17,8 +17,8 @@ const FooterMenuMobile = (props) => {
 
   const token = localStorage.getItem('token')
 
-  const decoded = jwtDecode(token);
-  const loggedUserId = decoded.result.id;
+  const decoded = jwtDecode(token)
+  const loggedUserId = decoded.result.id
 
   const { colorScheme } = useMantineColorScheme()
   const [drawerNewIsOpen, setDrawerNewIsOpen] = useState(false)

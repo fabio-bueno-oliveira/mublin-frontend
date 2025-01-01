@@ -250,7 +250,7 @@ function SettingsMyGearPage () {
   return (
     <>
       <div className='showOnlyInLargeScreen'>
-        <Header />
+        <Header reloadUserInfo />
       </div>
       <Container size='lg' mb={100}>
         <Grid mt='15'>
@@ -279,13 +279,14 @@ function SettingsMyGearPage () {
                     <Button
                       leftSection={<IconPlus size={14} />}
                       color='violet'
+                      size='sm'
                       onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
                     >
                       Adicionar novo equipamento
                     </Button>
                   ) : (
                     <>
-                      <Button disabled leftSection={<IconPlus size={14} />}>
+                      <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
                         Adicionar novo equipamento
                       </Button>
                       <Alert variant="light" color="yellow" title="Funcionalidade exclusiva">
@@ -312,6 +313,7 @@ function SettingsMyGearPage () {
                             h={100}
                             w={100}
                             src={item.picture ? item.picture : undefined}
+                            className='point'
                             onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
                           />
                         </Center>
@@ -347,7 +349,7 @@ function SettingsMyGearPage () {
                         </Box> 
                         <Flex mt='10' gap='4' justify='space-between'>
                           <Button 
-                            size='md'
+                            size='sm'
                             color='violet'
                             variant='subtle'
                             fullWidth
@@ -357,7 +359,7 @@ function SettingsMyGearPage () {
                             Editar
                           </Button>
                           <Button 
-                            size='md'
+                            size='sm'
                             color='gray'
                             variant='subtle'
                             fullWidth
@@ -488,7 +490,7 @@ function SettingsMyGearPage () {
         </Group>
       </Modal>
       <Modal
-        title='Editar detalhes do item'
+        title='Editar detalhes do meu item'
         centered
         fullScreen={isMobile}
         opened={modalEditItemOpen}
