@@ -6,7 +6,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
-import { Container, Center, Card, Title, Badge, Text, Grid, Skeleton, Avatar, em } from '@mantine/core'
+import { Container, Center, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import UserCard from '../../components/userCard'
 import ProjectCard from '../../components/projectCard'
@@ -79,6 +79,7 @@ function Home () {
                     radius='md'
                     withBorder
                     className='mublinModule'
+                    mb='10'
                   >
                     <Center>
                       <Link to={{ pathname: `/${userInfo.username}` }}>
@@ -91,32 +92,54 @@ function Home () {
                     <Title fw='460' fz='1.1rem' mb={1} mt={10} ta='center' className='op80'>
                       Olá, {userInfo?.name}
                     </Title>
-                    {plan === 'Pro' && 
+                    {plan === 'Pro' ? ( 
                       <Center>
-                        <Badge size='xs' variant='light' color='gray'>PRO</Badge>
+                        <Badge size='sm' variant='light' color='gray' mb='6'>
+                          PRO
+                        </Badge>
                       </Center>
-                    }
-                    <Text ta="center" c="dimmed" fw='400' fz='0.8rem' className='lhNormal' mt={13}>
+                    ) : (
+                      <Center>
+                        <Anchor
+                          variant='gradient'
+                          gradient={{ from: 'violet', to: 'blue' }}
+                          fw='420'
+                          fz='xs'
+                          href='/pro'
+                          underline='hover'
+                        >
+                          Assine o Mublin PRO!
+                        </Anchor>
+                      </Center>
+                    )}
+                    <Text
+                      ta='center'
+                      c='dimmed'
+                      fw='400'
+                      fz='0.77rem'
+                      mt='3'
+                      className='lhNormal'
+                    >
                       {user.roles.map(role => 
-                        <span className="comma" key={role.id}>{role.description}</span>
+                        <span className='comma' key={role.id}>{role.description}</span>
                       )}
                     </Text>
                     {/* <Text ta="center"  size="xs" mt={9} c="dimmed">
                       {user.bio}
                     </Text> */}
                   </Card>
-                  <Card 
-                    mt='10'
-                    padding={12} 
-                    radius={"md"} 
-                    withBorder
-                    className="mublinModule"
-                  >
-                    {/* <Text fw='400' size='lg'>Meus projetos</Text> */}
-                    {projects.list.map(project =>
+                  {/* <Text fw='400' size='lg'>Meus projetos</Text> */}
+                  {projects.list.map(project =>
+                    <Card 
+                      mt='10'
+                      padding={12} 
+                      radius={"md"} 
+                      withBorder
+                      className="mublinModule"
+                    >
                       <ProjectCard 
                         key={project.projectid}
-                        mb={14}
+                        mb={0}
                         picture={project.picture}
                         name={project.name}
                         username={project.username}
@@ -125,8 +148,8 @@ function Home () {
                         region={project.regionName}
                         confirmed={project.confirmed}
                       />
-                    )}
-                  </Card>
+                    </Card>
+                  )}
                 </>
               )}
             </Grid.Col>
@@ -149,7 +172,7 @@ function Home () {
           {largeScreen && 
             <Grid.Col span={3.3}>
               <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder className='mublinModule'>
-                <Text fw='400' size='lg'>Músicos em destaque</Text>
+                <Title fz='1.13rem' fw='490'>Músicos em destaque</Title>
                 {search.requesting ? (
                   <Text size='13px' mt={7}>Carregando...</Text>
                 ) : (
@@ -170,10 +193,10 @@ function Home () {
                   ))
                 )}
               </Card>
-              <Card shadow="sm" px="md" pt="sm" pb="lg" radius="md" withBorder mt={10} className="mublinModule">
-                <Text fw={400} size="lg">Novos usuários</Text>
+              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder mt={10} className='mublinModule'>
+                <Title fz='1.13rem' fw='490'>Novos usuários</Title>
                 {search.requesting ? (
-                  <Text size="13px" mt={7}>Carregando...</Text>
+                  <Text size='13px' mt={7}>Carregando...</Text>
                 ) : (
                   search.suggestedNewUsers.map((user, key) => (
                     <UserCard 

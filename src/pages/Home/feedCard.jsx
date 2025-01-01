@@ -114,8 +114,8 @@ function FeedCard ({ item, likes, compact }) {
         width={compact ? {height:'50%'} : undefined}
         style={compact ? {height:'100%'} : undefined}
       >
-        {item.suggested && 
-          <Text ml='15' fz='11px' c='dimmed' mb='8'>Sugerido</Text>
+        {!!item.suggested && 
+          <Text ml='15' fz='11px' c='dimmed' mb='8'>Publicação sugerida</Text>
         }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>

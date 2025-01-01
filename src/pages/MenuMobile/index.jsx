@@ -131,7 +131,7 @@ function MenuMobile () {
             <Flex direction='column' align='center' mt={8}>
               <Badge color='gray' size='sm'>conta grátis</Badge>
               <Anchor 
-                href={`https://buy.stripe.com/8wM03sfPadmmc4EaEE?client_reference_id=${userInfo.id}&prefilled_email=${userInfo.email}&utm_source=gear`} 
+                href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${decoded.result.id}&prefilled_email=${decoded.result.email}&utm_source=menuMobile`}
                 target='_blank'
                 underline='hover'
               >

@@ -231,7 +231,7 @@ export function profile(state = initialState, action) {
       return {
         ...state,
         id: '',
-        name: 'Carregando...',
+        name: '',
         lastname: '',
         email: '',
         phone: "",
@@ -240,7 +240,7 @@ export function profile(state = initialState, action) {
         bio: '',
         country: '',
         region: '',
-        city: 'Carregando...',
+        city: '.',
         availabilityId: '',
         availabilityTitle: '',
         availabilityColor: '',

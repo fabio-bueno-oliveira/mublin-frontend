@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
@@ -77,13 +77,13 @@ function ProfilePage () {
       )
   }, [username]);
 
-  document.title = `${profile.name} ${profile.lastname} | Mublin`;
+  document.title = !profile.success && !profile.id ? 'Não encontrado | Mublin' : `${profile.name} ${profile.lastname} | Mublin`;
 
   const followedByMe = useSelector(state => state.followedByMe);
   const [loadingFollow, setLoadingFollow] = useState(false);
 
-  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
-  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '2px', cursor: "pointer" };
+  const iconVerifiedStyle = { width: rem(18), height: rem(18), marginLeft: '5px', cursor: 'pointer' };
+  const iconLegendStyle = { color: '#DAA520', width: rem(18), height: rem(18), marginLeft: '2px', cursor: 'pointer' };
 
   // Projects
   const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
@@ -91,6 +91,7 @@ function ProfilePage () {
   // const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
   // Badges
+  const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false);
   const [modalLegendOpen, setModalLegendOpen] = useState(false);
 
   // Gear
@@ -317,14 +318,20 @@ function ProfilePage () {
                       </Title>
                       {!!profile.verified && 
                         <Tooltip label='Usuário Verificado'>
-                          <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                          <IconRosetteDiscountCheckFilled 
+                            color='blue' 
+                            style={iconVerifiedStyle} 
+                            onClick={() => setModalVerifiedOpen(true)}
+                          />
                         </Tooltip>
                       }
                       {!!profile.legend && 
-                        <IconShieldCheckFilled
-                          style={iconLegendStyle}
-                          onClick={() => setModalLegendOpen(true)}
-                        />
+                        <Tooltip label='Lenda da Música'>
+                          <IconShieldCheckFilled
+                            style={iconLegendStyle}
+                            onClick={() => setModalLegendOpen(true)}
+                          />
+                        </Tooltip>
                       }
                     </Flex>
                     <Splide 
@@ -389,10 +396,10 @@ function ProfilePage () {
                     size={isMobile ? 'sm' : '0.83em'}
                     fw='400'
                     mt={5}
-                    lineClamp={3}
+                    lineClamp={6}
                     onClick={isMobile ? () => setModalBioOpen(true) : undefined}
                     pr={isMobile ? 0 : 26}
-                    style={{lineHeight:'1.24em'}}
+                    style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}
                   >
                     {profile.bio}
                   </Text>
@@ -503,7 +510,7 @@ function ProfilePage () {
                       />
                       <Text 
                         fz='15px'
-                        fw='480'
+                        fw='490'
                         className='lhNormal'
                       >
                         {profile.availabilityTitle}
@@ -556,7 +563,7 @@ function ProfilePage () {
                 className="mublinModule"
               >
                 <Group justify='space-between' align='center' gap={8} mb={profile.strengths.total ? 15 : 8}>
-                  <Title fz='1.13rem' fw='480'>Pontos Fortes</Title>
+                  <Title fz='1.13rem' fw='490'>Pontos Fortes</Title>
                   {(profile.id !== userInfo.id && !profile.requesting) && 
                     <Button 
                       size='xs'
@@ -629,7 +636,7 @@ function ProfilePage () {
                     className='mublinModule'
                   >
                     <Group justify='space-between' align='center' gap={8} mb={13}>
-                      <Title fz='1.13rem' fw='480'>
+                      <Title fz='1.13rem' fw='490'>
                         Equipamento ({profile.gear.length})
                       </Title>
                       {(profile.id === userInfo.id && !profile.requesting) && 
@@ -759,35 +766,36 @@ function ProfilePage () {
               ) : (
                 <>
                   {userInfo.id === profile.id && 
-                    <>
+                    <Paper
+                      radius='md'
+                      withBorder={isLargeScreen ? true : false}
+                      px={isMobile ? 0 : 16}
+                      pt={isMobile ? 0 : 12}
+                      pb={(isLargeScreen && profile.gear.length > 5) ? 34 : 12}
+                      mb={14}
+                      style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                      className='mublinModule'
+                    >
                       <Divider mb={18} className='showOnlyInMobile' />
                       <Group gap={3} mb={8}>
-                        <Title order={5} fw='500'>Equipamento</Title>
+                        <Title fz='1.13rem' fw='490'>Equipamento</Title>
                         <IconLockSquareRoundedFilled size={22} color="gray" /> 
                       </Group>
-                      <Paper 
-                        radius='md'
-                        withBorder={isLargeScreen ? true : false}
-                        px={isMobile ? 0 : 16}
-                        py={isMobile ? 0 : 12}
-                        mb={20}
-                        style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                        className='mublinModule'
+                      <Text size='sm'>
+                        Torne-se PRO para habilitar esta funcionalidade em seu perfil!
+                      </Text>
+                      <Anchor
+                        variant='gradient'
+                        gradient={{ from: 'violet', to: 'blue' }}
+                        fw='420'
+                        fz='sm'
+                        underline='hover'
+                        href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
+                        target='_blank'
                       >
-                        <Text size='sm'>
-                          Torne-se PRO para liberar esta funcionalidade em seu perfil!
-                        </Text>
-                        <Anchor 
-                          href={`https://buy.stripe.com/8wM03sfPadmmc4EaEE?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=gear`} 
-                          target='_blank'
-                          underline='never'
-                        >
-                          <Text size='xs' c='violet'>
-                            Assinar Mublin PRO - R$ 30,00 por 3 meses (pagamento único)
-                          </Text>
-                        </Anchor>
-                      </Paper>
-                    </>
+                        Assinar Mublin PRO - R$ 29,90 por 3 meses (pagamento único)
+                      </Anchor>
+                    </Paper>
                   }
                 </>
               )}
@@ -802,7 +810,7 @@ function ProfilePage () {
                 className='mublinModule'
               >
                 <Group justify='space-between' align='center' gap={8} mb={13}>
-                  <Title fz='1.13rem' fw='480'>Postagens</Title>
+                  <Title fz='1.13rem' fw='490'>Postagens</Title>
                   {(profile.id === userInfo.id && !profile.requesting) && 
                     <Button 
                       size='xs'
@@ -1060,9 +1068,30 @@ function ProfilePage () {
         </Group>
       </Modal>
       <Modal 
+        opened={modalVerifiedOpen}
+        onClose={() => setModalVerifiedOpen(false)}
+        title='Usuário verificado'
+        centered
+        size='xs'
+      >
+        <Center>
+          <IconRosetteDiscountCheckFilled 
+            style={
+              { color: 'blue', width: rem(45), height: rem(45), marginLeft: '5px' }
+            } 
+          />
+        </Center>
+        <Text size='sm' mt='lg'>
+          {`${profile.name} ${profile.lastname} possui o selo de usuário verificado pois teve a identidade reconhecida nesta plataforma`}
+        </Text>
+        <Text size='xs' mt='lg' c='dimmed'>
+          Este selo é atribuído pela equipe do Mublin baseado em critérios internos. A aquisição do <nobr>Mublin PRO</nobr> garante mais agilidade na atribuição do selo de verificação.
+        </Text>
+      </Modal>
+      <Modal 
         opened={modalLegendOpen}
         onClose={() => setModalLegendOpen(false)}
-        title={`Lenda da música`}
+        title='Lenda da Música'
         centered
         size='xs'
       >
@@ -1162,7 +1191,7 @@ function ProfilePage () {
       </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>
-          <Title order={4} fw='480' ta='center' mt='40' mb='10'>
+          <Title order={4} fw='490' ta='center' mt='40' mb='10'>
             Esta página não está disponível.
           </Title>
           <Text size='md' ta='center' px='16'>

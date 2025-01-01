@@ -53,17 +53,17 @@ function CarouselProjects (props) {
                 align='flex-start'
                 wrap='wrap'
               >
-                <Text fz='0.65rem' fw='390' truncate='end' c='dimmed'>
+                <Text fz='0.66rem' fw='390' truncate='end' c='dimmed'>
                   {project.workTitle}
                 </Text>
                 <Box w={107}>
-                  <Text size='11.5px' fw='390' mb={3} truncate='end'>
+                  <Text size='0.71rem' fw='390' mb={3} truncate='end'>
                     {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
                   </Text>
                 </Box>
                 <Box w={107}>
                   <Text
-                    size='0.91rem'
+                    size='0.93rem'
                     fw='440'
                     mb={3}
                     truncate='end' 
@@ -106,7 +106,7 @@ function CarouselProjects (props) {
                 </Text>
                 <Box w={110}>
                   <Text size='0.77rem' fw='430' mb={3} className='lhNormal'>
-                    E gerencie quantos projetos quiser!
+                    Gerencie quantos projetos quiser!
                   </Text>
                 </Box>
               </Flex>
