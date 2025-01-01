@@ -33,7 +33,7 @@ function GearProductPage () {
     setModalZoomExtraOpen(true);
   }
 
-  const baseUrlExtraThumb = 'https://ik.imagekit.io/mublin/products/tr:h-134,w-134,cm-pad_resize,bg-FFFFFF/'
+  const baseUrlExtraThumb = 'https://ik.imagekit.io/mublin/products/tr:h-160,w-160,cm-pad_resize,bg-FFFFFF/'
   const baseUrlExtraExpanded = 'https://ik.imagekit.io/mublin/products/tr:w-600,cm-pad_resize,bg-FFFFFF/'
 
   useEffect(() => {
@@ -96,10 +96,12 @@ function GearProductPage () {
                       </Group>
                     </Center>
                   </Center>
-                  <Flex w='340px' px='10px' wrap='wrap' justify='center' align='center'>
+                  <Flex mt='12' w='340px' px='10px' wrap='wrap' justify='center' align='center'>
                     {extraColors.length && extraColors?.map((product, key) =>
                       <Image
                         key={key}
+                        w='80px'
+                        h='80px'
                         src={product.image ? baseUrlExtraThumb+product.image : undefined}
                         onClick={() => openExtraModal(product)}
                       />
@@ -185,7 +187,7 @@ function GearProductPage () {
       <Modal 
         centered
         opened={modalZoomOpen}
-        title={product.brandName + ' | ' + product.name + ' | ' + product.colorNamePTBR}
+        title={`${product.brandName} | ${product.name} ${product.colorNamePTBR && ' | Cor: ' + product.colorNamePTBR}`}
         onClose={() => setModalZoomOpen(false)} 
         scrollAreaComponent={ScrollArea.Autosize}
         size='xl'

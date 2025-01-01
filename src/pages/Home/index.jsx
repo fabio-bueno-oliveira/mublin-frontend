@@ -50,6 +50,12 @@ function Home () {
     }
   }, [])
 
+  useEffect(() => {
+    if (user.success && user.first_access !== 0) {
+      navigate('/start/intro/')
+    }
+  }, [user.success])
+
   return (
     <>
       {isMobile ? (

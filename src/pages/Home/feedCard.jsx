@@ -24,7 +24,7 @@ function FeedCard ({ item, likes, compact }) {
   const [loadingAction, isLoadingAction] = useState(0);
   const [showModalLikes, setShowModalLikes] = useState(false);
 
-  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '3px' };
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '5px' };
 
   const likeFeedPost = (feedId) => {
@@ -114,6 +114,9 @@ function FeedCard ({ item, likes, compact }) {
         width={compact ? {height:'50%'} : undefined}
         style={compact ? {height:'100%'} : undefined}
       >
+        {item.suggested && 
+          <Text ml='15' fz='11px' c='dimmed' mb='8'>Sugerido</Text>
+        }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
             <Avatar 
@@ -124,7 +127,7 @@ function FeedCard ({ item, likes, compact }) {
             />
           </Link>
           <Box style={{flexGrow:'1'}}>
-            <Flex gap={4} align='center' mb={2}>
+            <Flex gap={3} align='center' mb={2}>
               <Text size='0.9rem' className='op80'>
                 <Anchor 
                   underline='hover'
@@ -135,10 +138,16 @@ function FeedCard ({ item, likes, compact }) {
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Anchor>
               </Text>
+              {!!item.relatedUserVerified &&
+                <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+              }
+              {!!item.relatedUserLegend &&
+                <IconShieldCheckFilled style={iconLegendStyle} />
+              }
               {item.relatedUserPlan === "Pro" && <Badge size='xs' variant='light' color='gray'>PRO</Badge>}
             </Flex>
             <Text c='dimmed' size='11px' fw={420} mb={3}>
-              {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
+              {item.relatedUserUsername === 'fabio' && 'CEO do Mublin • '} {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
             </Text>
             <Text 
               c='dimmed' 

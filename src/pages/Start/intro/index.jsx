@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Center, Title, Text, Button, Alert, Image  } from '@mantine/core';
-import { IconArrowRight, IconMoodSmile  } from '@tabler/icons-react';
+import { Container, Center, Title, Text, Button, Image, Modal, Group } from '@mantine/core';
+import { IconArrowRight  } from '@tabler/icons-react';
 import HeaderWelcome from '../../../components/header/welcome';
 
 function StartFirstStep () {
@@ -16,11 +16,11 @@ function StartFirstStep () {
 
   const imageAstronaut = 'https://ik.imagekit.io/mublin/misc/astronaut-musician-3.png?updatedAt=1731982735493';
   
-  const [showAlertSavedData, setShowAlertSavedData] = useState(false);
+  const [showPreviouslyRegisteredAlert, setShowPreviouslyRegisteredAlert] = useState(false);
 
   useEffect(() => { 
     if (user.previously_registered || user.bio || user.gender || user.picture) {
-      setShowAlertSavedData(true);
+      setShowPreviouslyRegisteredAlert(true);
     }
   }, [user.id]);
 
@@ -29,7 +29,7 @@ function StartFirstStep () {
       <HeaderWelcome />
       <Container size={'sm'} mt={70}>
         <Title ta="center" order={3}>Vamos lá, {user.name}!</Title>
-        <Text ta="center" order={4}>Você está a alguns passos de tornar sua vida de artista mais produtiva.</Text>
+        <Text ta="center" order={4}>Estamos prestes a tornar sua vida na música ainda mais produtiva e conectada.</Text>
         {/* <Center>
           <Blockquote color="violet" cite="– Fabio Bueno, CTO do Mublin" mt="xl" p={23}>
             <Text size={'sm'}>Olá! Estamos felizes que tenha dado uma chance de conhecer nossa plataforma. O Mublin foi desenvolvido para ser uma comunidade focada na vida de quem trabalha com música. Estamos em fase inicial de lançamento e buscando evoluir diariamente. Esperamos que goste do Mublin!</Text>
@@ -42,18 +42,15 @@ function StartFirstStep () {
             fit={'contain'}
           />
         </Center>
-        {showAlertSavedData && 
-          <Alert 
-            variant="light" 
-            color="violet" 
-            title="Aguns dados do seu cadastro já foram preenchidos anteriormente"
-            icon={<IconMoodSmile />}
-            mt={50}
-          >
-            <Text size='sm' mb={10}>Oba! Você já iniciou os primeiros passos anteriormente, ou alguns dos seus dados foram previamente cadastrados por outro usuário para facilitar sua jornada</Text>
-          </Alert>
-        }
       </Container>
+      <Modal opened={showPreviouslyRegisteredAlert} onClose={() => setShowPreviouslyRegisteredAlert(false)} title="Oba!" centered>
+        <Text>Alguns dos seus dados já foram previamente cadastrados por você ou outro usuário para facilitar sua jornada :)</Text>
+        <Group justify='flex-end' mt='14'>
+          <Button color='violet' onClick={() => setShowPreviouslyRegisteredAlert(false)}>
+            Entendi!
+          </Button>
+        </Group>
+      </Modal>
       <footer className='onFooter'>
         <Button 
           color='violet' 

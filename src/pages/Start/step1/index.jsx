@@ -12,11 +12,14 @@ import HeaderWelcome from '../../../components/header/welcome';
 function StartFirstStep () {
 
   document.title = "Passo 1";
+
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const user = useSelector(state => state.user);
 
   let navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const token = localStorage.getItem('token')
 
   const userAvatarPath = "/users/avatars/"+user.id+"/"
 
@@ -27,7 +30,7 @@ function StartFirstStep () {
         headers: {
             'Accept': 'application/json, text/plain, */*',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + user.token
+            'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({picture: value})
       }).then((response) => {
@@ -61,7 +64,7 @@ function StartFirstStep () {
   const onUploadSuccess = res => {
     notifications.show({
       title: 'Sucesso!',
-      message: 'Foto de perfil carregada com sucesso',
+      message: 'Foto de perfil carregada com sucesso!',
       color: 'lime',
       position: 'top-right'
     })
@@ -89,11 +92,11 @@ function StartFirstStep () {
             <>
               {!user.picture ? (
                 <Image 
-                  radius={'md'} 
+                  radius='md'
                   src='https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' w={100} 
                 />
               ) : (
-                <Image radius={'md'} src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} w={100} />
+                <Image radius='md' src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} w={100} />
               )}
             </>
           )}
@@ -112,10 +115,12 @@ function StartFirstStep () {
             onSuccess={onUploadSuccess}
             onUploadStart={onUploadStart}
           />
-          <label className="file-input__label" for="file-input">
-            <IconUpload />
-            <span>Selecionar arquivo</span>
-          </label>
+          <Center>
+            <label className="file-input__label" htmlFor="file-input">
+              <IconUpload />
+              <span>Selecionar arquivo</span>
+            </label>
+          </Center>
         </div>
       </Container>
       <footer className='onFooter'>

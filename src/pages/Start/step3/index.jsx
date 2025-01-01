@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../../store/actions/user';
 import { useNavigate } from 'react-router-dom';
 import { miscInfos } from '../../../store/actions/misc';
-import { Container, Title, Text, NativeSelect, Stepper, Button, Group, Badge, Divider, rem } from '@mantine/core';
+import { Container, Box, Title, Text, NativeSelect, Stepper, Button, Group, Badge, Divider, rem } from '@mantine/core';
 import { IconArrowRight, IconArrowLeft, IconX } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
@@ -16,8 +17,11 @@ function StartThirdStep () {
   const dispatch = useDispatch();
   const largeScreen = useMediaQuery('(min-width: 60em)');
 
-  let loggedUser = JSON.parse(localStorage.getItem('user'));
+  let userInfo = JSON.parse(localStorage.getItem('userInfo'));
   const token = localStorage.getItem('token');
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
 
   const user = useSelector(state => state.user);
   const genresCategories = useSelector(state => state.musicGenres.categories);
@@ -32,9 +36,9 @@ function StartThirdStep () {
   useEffect(() => { 
     dispatch(miscInfos.getMusicGenres());
     dispatch(miscInfos.getMusicGenresCategories());
-    dispatch(userInfos.getUserGenresInfoById(loggedUser.id));
+    dispatch(userInfos.getUserGenresInfoById(userInfo.id));
     dispatch(miscInfos.getRoles());
-    dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+    dispatch(userInfos.getUserRolesInfoById(loggedUserId));
   }, []);
 
   const userGenres = user.genres;
@@ -79,11 +83,11 @@ function StartThirdStep () {
           'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
-          userId: loggedUser.id, musicGenreId: value, musicGenreMain: setMainGenre
+          userId: loggedUserId, musicGenreId: value, musicGenreMain: setMainGenre
         })
       }).then((response) => {
         //console.log(response);
-        dispatch(userInfos.getUserGenresInfoById(loggedUser.id));
+        dispatch(userInfos.getUserGenresInfoById(loggedUserId));
         setIsAddingGenre(false);
       }).catch(err => {
         console.error(err);
@@ -102,10 +106,10 @@ function StartThirdStep () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({userId: loggedUser.id, userGenreId: value})
+      body: JSON.stringify({userId: loggedUserId, userGenreId: value})
     }).then((response) => {
       //console.log(response);
-      dispatch(userInfos.getUserGenresInfoById(loggedUser.id));
+      dispatch(userInfos.getUserGenresInfoById(loggedUserId));
       setIsDeletingGenre(false);
     }).catch(err => {
       console.error(err);
@@ -127,11 +131,11 @@ function StartThirdStep () {
           'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
-          userId: loggedUser.id, roleId: value, roleMain: setMainActivity
+          userId: loggedUserId, roleId: value, roleMain: setMainActivity
         })
       }).then((response) => {
         //console.log(response);
-        dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+        dispatch(userInfos.getUserRolesInfoById(loggedUserId));
         setIsAddingRole(false);
       }).catch(err => {
         console.error(err);
@@ -150,10 +154,10 @@ function StartThirdStep () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({userId: loggedUser.id, userRoleId: value})
+      body: JSON.stringify({userId: loggedUserId, userRoleId: value})
     }).then((response) => {
       //console.log(response);
-      dispatch(userInfos.getUserRolesInfoById(loggedUser.id));
+      dispatch(userInfos.getUserRolesInfoById(loggedUserId));
       setIsDeletingRole(false);
     }).catch(err => {
       console.error(err);
@@ -215,7 +219,7 @@ function StartThirdStep () {
               </Text>
               <Group mb={16} gap={5}>
                 {userGenres.map((genre, key) =>
-                  <>
+                  <Box key={key}>
                     {/* <Pill 
                       key={key} 
                       withRemoveButton 
@@ -237,7 +241,7 @@ function StartThirdStep () {
                     >
                       {genre.name}
                     </Badge>
-                  </>
+                  </Box>
                 )}
                 {isAddingGenre &&
                   <Badge variant="light" color="violet" size="sm">
@@ -268,7 +272,7 @@ function StartThirdStep () {
               </Text>
               <Group mb={12} gap={5}>
                 {userRoles.map((role, key) =>
-                  <>
+                  <Box key={key}>
                     {/* <Pill 
                       key={key} 
                       withRemoveButton 
@@ -290,7 +294,7 @@ function StartThirdStep () {
                     >
                       {role.name}
                     </Badge>
-                  </>
+                  </Box>
                 )}
                 {isAddingRole &&
                   <Badge variant="light" color="violet" size="sm">

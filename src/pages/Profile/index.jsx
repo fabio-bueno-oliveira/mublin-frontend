@@ -555,7 +555,7 @@ function ProfilePage () {
                 style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                 className="mublinModule"
               >
-                <Group justify='space-between' align='center' gap={8} mb={15}>
+                <Group justify='space-between' align='center' gap={8} mb={profile.strengths.total ? 15 : 8}>
                   <Title fz='1.13rem' fw='480'>Pontos Fortes</Title>
                   {(profile.id !== userInfo.id && !profile.requesting) && 
                     <Button 
@@ -608,7 +608,7 @@ function ProfilePage () {
                         )}
                       </Splide>
                     ) : (
-                      <Text size='xs'>
+                      <Text size='sm'>
                         Nenhum ponto forte votado para {profile.name} até o momento
                       </Text>
                     )}

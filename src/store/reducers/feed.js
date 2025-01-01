@@ -12,6 +12,7 @@ const initialState = {
       extraInfo: '',
       image: '',
       videoUrl: '',
+      suggested: '',
       relatedItemType: '',
       relatedUserName: '',
       relatedUserLastname: '',

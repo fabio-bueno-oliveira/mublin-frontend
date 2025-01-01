@@ -9,9 +9,9 @@ import { miscInfos } from '../../../store/actions/misc';
 import { projectInfos } from '../../../store/actions/project';
 import { usernameCheckInfos } from '../../../store/actions/usernameCheck';
 import {IKUpload} from "imagekitio-react";
-import { Container, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Textarea, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { IconArrowLeft, IconWorld, IconLock, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock, IconUpload } from '@tabler/icons-react';
+import { Container, Box, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Textarea, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
+import { useForm, isNotEmpty, isInRange } from '@mantine/form';
+import { IconArrowLeft, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock, IconTrash, IconCamera } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback  } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 import ModalDeleteParticipationContent from './modalDeleteParticipation';
@@ -30,13 +30,18 @@ function StartFourthStep () {
   const loggedUserId = decoded.result.id;
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
+
   const currentYear = new Date().getFullYear();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const [projectImage, setProjectImage] = useState('');
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const user = useSelector(state => state.user);
   const userProjects = useSelector(state => state.userProjects);
   const searchProject = useSelector(state => state.searchProject);
+  const searchProjects = useSelector(state => state.search);
   const roles = useSelector(state => state.roles);
   const project = useSelector(state => state.project);
   const projectUsernameAvailability = useSelector(state => state.projectUsernameCheck);
@@ -82,11 +87,6 @@ function StartFourthStep () {
 
   const members = project.members.filter((member) => { return member.confirmed === 1 });
 
-  // Modal para cadastro de imagem do novo projeto cadastrado
-  const [modalNewProjectPictureOpen, setModalNewProjectPictureOpen] = useState(false);
-  const [pictureIsLoading, SetPictureIsLoading] = useState(false);
-  const [newProjectPicture, setNewProjectPicture] = useState('');
-
   const [query, setQuery] = useState('')
   const [lastQuery, setLastQuery] = useState('')
 
@@ -99,14 +99,18 @@ function StartFourthStep () {
     }
   }
 
-  const handleTypeChange = (value) => {
-    setType(value)
-    if (value === 7) {
-      setUserStatus('3')
-    } else {
-      setUserStatus('1')
-    }
-  }
+  const [formValues, setFormValues] = useState({
+    projectName: '',
+    foundation_year: '',
+    end_year: '',
+    bio: '',
+    npMain_role_fk: '',
+    type: '',
+    activity_status: '',
+    id_region_fk: '',
+    id_city_fk: '',
+    cityName: ''
+  })
 
   const checkUsername = useDebouncedCallback(async (string) => {
     if (string.length) {
@@ -114,30 +118,62 @@ function StartFourthStep () {
     }
   }, 800);
 
-  // Campos do form de cadastro de novo projeto
-  const [projectName, setProjectName] = useState('')
-  const [projectUserName, setProjectUserName] = useState('')
-  const [npFoundationYear, setNpFoundationYear] = useState(currentYear)
-  const [npRegion, setNpRegion] = useState('')
-  const [npCountry, setNpCountry] = useState('')
-  const [checkboxProjectActive, setCheckboxProjectActive] = useState(true)
-  const [endYear, setEndYear] = useState(null)
-  const [bio, setBio] = useState('')
-  const [type, setType] = useState('2')
-  const [kind, setKind] = useState('1')
-  const [npMain_role_fk, setNpMain_role_fk] = useState('')
-  const [publicProject, setPublicProject] = useState('1')
-  const [portfolioNewProject, setPortfolioNewProject] = useState('0')
-  const [checkboxNewProjectFeatured, setCheckboxNewProjectFeatured] = useState(true)
-  const [userStatus, setUserStatus] = useState('1')
-  const [idNewProject, setIdNewProject] = useState('')
-
-  const handleChangeProjectUserName = (value) => {
-    setProjectUserName(value.replace(/[^A-Z0-9]/ig, "").toLowerCase())
-  }
+  const [projectUsernameFinal, setProjectUsernameFinal] = useState('');
 
   const form = useForm({
-    mode: 'uncontrolled'
+    mode: 'uncontrolled',
+    validateInputOnChange: true,
+    initialValues: {
+      projectName: '',
+      projectUserName: '',
+      foundation_year: currentYear,
+      end_year: null,
+      bio: '',
+      npMain_role_fk: '',
+      type: '2',
+      kind: '1',
+      activity_status: '1',
+      publicProject: '1',
+      featured: false,
+      id_country_fk: '27',
+      id_region_fk: ''
+    },
+
+    onValuesChange: (values) => {
+      let usernameFormatted = values.projectUserName.replace(/[^A-Z0-9]/ig, "").toLowerCase();
+      form.setFieldValue("projectUserName", usernameFormatted);
+      setFormValues({
+        ...formValues,
+        projectName: values.projectName,
+        foundation_year: values.foundation_year,
+        end_year: values.end_year,
+        bio: values.bio,
+        npMain_role_fk: values.npMain_role_fk,
+        type: values.type,
+        activity_status: values.activity_status,
+        id_region_fk: values.id_region_fk
+      })
+      if (usernameFormatted !== projectUsernameFinal && usernameFormatted.length > 1) {
+        setProjectUsernameFinal(usernameFormatted);
+        checkUsername(values.projectUserName);
+      }
+      if (values.activity_status !== "2") {
+        form.setFieldValue("end_year", "");
+      }
+    },
+
+    validate: {
+      projectName: (value) => (value.length < 2 ? 'O nome do projeto deve ter no mínimo 2 letras' : null),
+      projectUserName: (value) => (value.length < 2 ? 'O username do projeto deve ter no mínimo 2 letras' : null),
+      foundation_year: isInRange({ min: 1800, max: currentYear }, 'O ano de fundação deve ser entre 1800 e o ano atual'),
+      end_year: (value, values) => ((!value && values.activity_status === "2") ? 'Informe o ano de encerramento do projeto' : null),
+      npMain_role_fk: isNotEmpty('Informe sua principal atividade neste projeto'),
+      type: isNotEmpty('Informe o tipo do projeto'),
+      kind: isNotEmpty('Informe o conteúdo do projeto'),
+      activity_status: isNotEmpty('Informe o status do projeto'),
+      id_country_fk: isNotEmpty('Informe o País de origem do projeto'),
+      id_region_fk: isNotEmpty('Informe o Estado de origem do projeto'),
+    },
   });
 
   const formSearch = useForm({
@@ -166,57 +202,46 @@ function StartFourthStep () {
     };
   }
 
-  const handleCheckboxProjectActive = (x) => {
-    setCheckboxProjectActive(value => !value)
-    if (x) {
-        setEndYear(foundationYear)
-    } else {
-        setEndYear('')
-    }
-  }
-
-  // Update project avatar picture filename in bd
-  const closeModalPicture = () => {
-    setProjectName('');
-    setModalNewProjectPictureOpen(false);
-  }
-  const updatePicture = (projectId, userId, value) => {
-    SetPictureIsLoading(true)
-    fetch('https://mublin.herokuapp.com/project/'+projectId+'/picture', {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify({userId: userId, picture: value})
-    }).then((response) => {
-        response.json().then((response) => {
-          // console.log(response);
-          SetPictureIsLoading(false);
-          setNewProjectPicture(response.picture);
-          setProjectName('');
-        })
-      }).catch(err => {
-        SetPictureIsLoading(false);
-        console.error(err);
-    })
+  // Image upload to imagekit.io
+  const [uploading, setUploading] = useState(false)
+  const [fileId, setFileId] = useState('')
+  const projectImagePath = "/projects/"
+  const onUploadStart = evt => {
+    console.log('Start uplading', evt)
+    setUploading(true)
   };
-
-  // Image Upload to ImageKit.io
-  const userAvatarPath = "/projects/"
-  const [pictureFilename, setPictureFilename] = useState('')
-
   const onUploadError = err => {
-      alert("Ocorreu um erro ao enviar a imagem. Tente novamente em alguns minutos.");
+      alert("Ocorreu um erro ao enviar a imagem do projeto. Tente novamente em alguns minutos.");
   };
-
   const onUploadSuccess = res => {
       let n = res.filePath.lastIndexOf('/');
       let fileName = res.filePath.substring(n + 1);
-      updatePicture(idNewProject,user.id,fileName)
-      setPictureFilename(fileName)
+      setFileId(res.fileId);
+      setProjectImage(fileName);
+      setUploading(false);
   };
+
+  const handleRemoveImageFromServer = async (fileId) => {
+    const url = 'https://api.imagekit.io/v1/files/'+fileId;
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Basic ' + import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY
+      }
+    };
+
+    try {
+      await fetch(url, options);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const removeImage = () => {
+    handleRemoveImageFromServer(fileId)
+    setProjectImage('');
+    document.querySelector('#projectImage').value = null;
+  }
 
   const handleResultSelect = (result) => {
     dispatch(projectInfos.getProjectMembers(result.username));
@@ -241,8 +266,54 @@ function StartFourthStep () {
   const myselfModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.userId === loggedUserId)[0];
   const myselfAdminModalDelete = userProjects.members.filter(m => m.projectId === modalDeleteData.projectid && m.admin && m.userId === loggedUserId);
 
+  const selectCityOnModalList = (cityId, cityName) => {
+    setFormValues({...formValues, id_city_fk: cityId, cityName: cityName});
+    setModalCityOpen(false);
+  }
+
+  const searchCity = useDebouncedCallback(async (query) => {
+    if (query?.length > 1) {
+      setCitySearchIsLoading(true);
+      setNoCitySearchResults(false);
+      fetch('https://mublin.herokuapp.com/search/cities/'+query+'/'+formValues.id_region_fk, {
+        method: 'GET'
+      })
+        .then(res => res.json())
+        .then(
+          (result) => {
+            if (result?.length) {
+              setQueryCities(
+                result.map(e => { return { value: String(e.value), label: e.text }})
+              );
+              setNoCitySearchResults(false)
+            } else {
+              setNoCitySearchResults(true);
+            }
+            setCitySearchIsLoading(false);
+          },
+          (error) => {
+            console.log(error)
+            setCitySearchIsLoading(false);
+            setNoCitySearchResults(true);
+            alert("Ocorreu um erro ao tentar pesquisar a cidade");
+        })
+      }
+  },500);
+
+  // City search
+  const [modalCityOpen, setModalCityOpen] = useState(false);
+  const [queryCities, setQueryCities] = useState([]);
+  const [citySearchIsLoading, setCitySearchIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [noCitySearchResults, setNoCitySearchResults] = useState(false);
+  const handleSearchCity = (e, value) => {
+    e.preventDefault();
+    searchCity(value);
+    setNoCitySearchResults(false);
+  }
+
   const handleSubmitParticipation = () => {
-    setIsLoading(true)
+    setIsSubmitting(true)
     fetch('https://mublin.herokuapp.com/user/add/project', {
       method: 'POST',
       headers: {
@@ -250,11 +321,11 @@ function StartFourthStep () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({ userId: user.id, projectId: projectId, active: active, status: status, main_role_fk: mainRole, joined_in: joinedIn, left_in: leftIn ? leftIn : null, leader: '0', featured: featured, confirmed: '2', admin: '0', portfolio: '0' })
+      body: JSON.stringify({ userId: loggedUserId, projectId: projectId, active: active, status: status, main_role_fk: mainRole, joined_in: joinedIn, left_in: leftIn ? leftIn : null, leader: '0', featured: featured, confirmed: '2', admin: '0', portfolio: '0' })
     }).then((response) => {
       dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
       setMainRole('')
-      setIsLoading(false)
+      setIsSubmitting(false)
       closeModalParticipation()
     }).catch(err => {
       console.error(err)
@@ -285,8 +356,8 @@ function StartFourthStep () {
     })
   }
 
-  const handleSubmitParticipationToNewProject = (newProjectUserId, newProjectProjectId, newProjectUserStatus, newProjectMain_role_fk) => {
-    setIsLoading(true)
+  const handleSubmitParticipationToNewProject = (newProjectUserId, newProjectProjectId, newProjectType, newProjectMain_role_fk, featured) => {
+    setIsSubmitting(true)
     fetch('https://mublin.herokuapp.com/user/add/project', {
         method: 'POST',
         headers: {
@@ -294,12 +365,11 @@ function StartFourthStep () {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ userId: newProjectUserId, projectId: newProjectProjectId, active: '1', status: newProjectUserStatus, main_role_fk: newProjectMain_role_fk, joined_in: currentYear, left_in: null, leader: '1', featured: checkboxNewProjectFeatured, confirmed: '1', admin: '1', portfolio: portfolioNewProject })
+        body: JSON.stringify({ userId: newProjectUserId, projectId: newProjectProjectId, active: '1', status: newProjectType === 7 ? 3 : 1, main_role_fk: newProjectMain_role_fk, joined_in: currentYear, left_in: null, leader: '1', featured: featured, confirmed: '1', admin: '1', portfolio: '0' })
     }).then((response) => {
         dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
-        setIsLoading(false)
+        setIsSubmitting(false)
         setModalNewProjectOpen(false)
-        setModalNewProjectPictureOpen(true)
     }).catch(err => {
         console.error(err)
         alert("Ocorreu um erro ao te relacionar ao projeto criado. Use a busca para ingressar no projeto criado.")
@@ -307,8 +377,8 @@ function StartFourthStep () {
     })
   }
 
-  const handleSubmitNewProject = () => {
-    setIsLoading(true);
+  const handleSubmitNewProject = (values) => {
+    setIsSubmitting(true);
     fetch('https://mublin.herokuapp.com/project/create', {
       method: 'POST',
       headers: {
@@ -316,38 +386,27 @@ function StartFourthStep () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({ id_user_creator_fk: loggedUserId, projectName: projectName, projectUserName: projectUserName, foundation_year: npFoundationYear, end_year: endYear, id_country_fk: npCountry, id_region_fk: npRegion, id_city_fk: '', bio: bio, type: type, kind: kind, public: publicProject })
+      body: JSON.stringify({ id_user_creator_fk: loggedUserId, projectName: values.projectName, projectUserName: values.projectUserName, projectImage: projectImage, foundation_year: values.foundation_year, end_year: values.end_year ? values.end_year : null, bio: values.bio, type: values.type, kind: values.kind, activity_status: values.activity_status, public: values.publicProject, id_country_fk: values.id_country_fk, id_region_fk: values.id_region_fk, id_city_fk: formValues.id_city_fk })
     })
     .then(response => {
         return response.json();
     }).then(jsonResponse => {
-        setIsLoading(false);
-        setIdNewProject(jsonResponse.id);
-        handleSubmitParticipationToNewProject(
-          loggedUserId, jsonResponse.id, userStatus, npMain_role_fk
-        );
-        setProjectUserName('');
-        setNpFoundationYear(currentYear);
-        setNpRegion('');
-        setNpCountry('');
-        setCheckboxProjectActive(true);
-        setBio('');
-        setType('2');
-        setKind('1');
-        setNpMain_role_fk('');
-        setPublicProject('1');
+      setIsSubmitting(true);
+      handleSubmitParticipationToNewProject(
+        loggedUserId, jsonResponse.id, formValues.type, formValues.npMain_role_fk, values.featured
+      );
     }).catch (error => {
-        console.error(error);
-        setIsLoading(false);
-        alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.");
-        setModalNewProjectOpen(false);
+      console.error(error);
+      setIsSubmitting(false);
+      alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.");
+      setModalNewProjectOpen(false);
     })
   }
 
   const handleFormSubmit = () => {
-    setIsLoading(true)
+    setIsSubmitting(true)
     let user = JSON.parse(localStorage.getItem('user'));
-    fetch('https://mublin.herokuapp.com/user/'+user.id+'/firstAccess', {
+    fetch('https://mublin.herokuapp.com/user/'+loggedUserId+'/firstAccess', {
       method: 'PUT',
       headers: {
         'Accept': 'application/json, text/plain, */*',
@@ -363,7 +422,7 @@ function StartFourthStep () {
           }, 400);
         })
       }).catch(err => {
-        setIsLoading(false)
+        setIsSubmitting(false)
         console.error(err)
     })
   }
@@ -478,196 +537,320 @@ function StartFourthStep () {
         centered
         size={'md'}
       >
-        <TextInput
-          label="Nome do projeto"
-          placeholder="Ex: Viajantes do Espaço"
-          mb={5}
-          value={projectName}
-          onChange={(e) => setProjectName(e.target.value)}
-        />
-        <TextInput
-          label="Username do projeto"
-          placeholder="Ex: viajantesdoexpaco"
-          description={"mublin.com/project/"+projectUserName}
-          mb={5}
-          value={projectUserName}
-          onChange={(e) => handleChangeProjectUserName(e.target.value)}
-          onKeyUp={e => {
-            checkUsername(e.target.value)
-          }}
-          leftSection={(projectUserName && projectUsernameAvailability.available) && <IconCheck size={20} color='green' />}
-          rightSection={projectUsernameAvailability?.requesting && <Loader size={20} />}
-          disabled={projectUsernameAvailability?.requesting}
-          error={(projectUserName && projectUsernameAvailability.requested &&  !projectUsernameAvailability.available) && "Username indisponível "}
-        />
-        <NumberInput
-          label="Ano de formação"
-          min={1800} 
-          max={currentYear}
-          mb={5}
-          error={npFoundationYear > currentYear && "O ano deve ser inferior ao atual"}
-          onChange={(_value) => setNpFoundationYear(_value)}
-          defaultValue={currentYear}
-          value={npFoundationYear}
-        />
-        <NumberInput
-          label="Ano de encerramento"
-          min={npFoundationYear} 
-          max={currentYear}
-          error={endYear > currentYear && "O ano deve ser inferior ao atual"}
-          onChange={(_value) => setEndYear(_value)}
-          defaultValue={currentYear}
-          disabled={checkboxProjectActive}
-          value={endYear}
-        />
-        <Checkbox
-          my={10}
-          color='violet'
-          label="Em atividade"
-          checked={checkboxProjectActive}
-          onChange={() => handleCheckboxProjectActive(checkboxProjectActive)}
-        />
-        <Grid mb={10}>
-          <Grid.Col span={6}>
-            <NativeSelect
-              label="País"
-              value={npCountry}
-              onChange={(e) => {
-                setNpCountry(e.currentTarget.value);
-              }}
-            >
-              <option value="">Selecione</option>
-              <option value='27'>Brasil</option>
-            </NativeSelect>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <NativeSelect
-              label="Estado"
-              value={npRegion}
-              onChange={(e) => {
-                setNpRegion(e.currentTarget.value);
-              }}
-            >
-              <option value="">Selecione</option>
-              <option value="415">Acre</option>
-              <option value="422">Alagoas</option>
-              <option value="406">Amapa</option>
-              <option value="407">Amazonas</option>
-              <option value="402">Bahia</option>
-              <option value="409">Ceara</option>
-              <option value="424">Distrito Federal</option>
-              <option value="401">Espirito Santo</option>
-              <option value="411">Goias</option>
-              <option value="419">Maranhao</option>
-              <option value="418">Mato Grosso</option>
-              <option value="399">Mato Grosso do Sul</option>
-              <option value="404">Minas Gerais</option>
-              <option value="408">Para</option>
-              <option value="405">Paraiba</option>
-              <option value="413">Parana</option>
-              <option value="417">Pernambuco</option>
-              <option value="416">Piaui</option>
-              <option value="410">Rio de Janeiro</option>
-              <option value="414">Rio Grande do Norte</option>
-              <option value="400">Rio Grande do Sul</option>
-              <option value="403">Rondonia</option>
-              <option value="421">Roraima</option>
-              <option value="398">Santa Catarina</option>
-              <option value="412">São Paulo</option>
-              <option value="423">Sergipe</option>
-              <option value="420">Tocantins</option>
-            </NativeSelect>
-          </Grid.Col>
-        </Grid>
-        <Textarea
-          label="Descrição sobre o projeto (opcional)"
-          error={bio.length === "200" && "A bio atingiu o limite de 200 caracteres"}
-          value={bio}
-          maxLength='220'
-          autosize
-          minRows={2}
-          maxRows={4}
-          onChange={(e) => setBio(e.target.value)}
-        />
-        <NativeSelect
-          label="Sua principal função no projeto"
-          mt={6}
-          data={[
-            { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
-            { group: 'Gestão, produção e outros', items: rolesListManagement },
-            { group: 'Instrumentos', items: rolesListMusicians },
-          ]}
-          value={npMain_role_fk}
-          onChange={(e) => setNpMain_role_fk(e.currentTarget.value)}
-        />
-        <NativeSelect
-          mt={6}
-          label="Tipo de projeto"
-          value={type}
-          onChange={(e) => {
-            handleTypeChange(e.currentTarget.value);
-          }}
+        <form 
+          onSubmit={form.onSubmit(handleSubmitNewProject)}
         >
-          <option value="">Selecione</option>
-          <option value='2'>Banda</option>
-          <option value='3'>Projeto</option>
-          <option value='1'>Artista Solo</option>
-          <option value='8'>DJ</option>
-          <option value='4'>Duo</option>
-          <option value='5'>Trio</option>
-          <option value='7'>Ideia no papel</option>
-        </NativeSelect>
-        <NativeSelect
-          mt={6}
-          label="Conteúdo principal"
-          value={kind}
-          onChange={(e) => {
-            setKind(e.currentTarget.value);
-          }}
-        >
-          <option value='1'>Autoral</option>
-          <option value='2'>Cover</option>
-          <option value='3'>Autoral + Cover</option>
-        </NativeSelect>
-        <Radio.Group
-          label="Visibilidade no Mublin"
-          value={publicProject}
-          mb={10}
-          mt={6}
-        >
-          <Group mt="xs">
-            <Radio 
-              color='violet' 
-              value="1" 
-              label={<Group gap={2}><IconWorld style={{ width: rem(18), height: rem(18) }} /> Público</Group>} 
-              onChange={() => setPublicProject('1')} 
-            />
-            <Radio 
-              color='violet' 
-              value="0"
-              label={<Group gap={2}><IconLock style={{ width: rem(18), height: rem(18) }} /> Privado</Group>}  
-              onChange={() => setPublicProject('0')}
-            />
-          </Group>
-        </Radio.Group>
-        <Checkbox
-          my={10}
-          color='violet'
-          label='Definir como um dos meus projetos principais'
-          checked={checkboxNewProjectFeatured}
-          onChange={() => setCheckboxNewProjectFeatured(value => !value)}
-        />
-        <Group justify="flex-end" mt="md">
-          <Button variant='default' color='violet' onClick={() => setModalNewProjectOpen(false)} >Fechar</Button>
-          <Button 
-            color='violet'
-            onClick={handleSubmitNewProject}
-            loading={isLoading}
-            disabled={(projectName && projectUserName && npFoundationYear && npCountry && npRegion && type && kind && publicProject && npMain_role_fk && projectUsernameAvailability.available) ? false : true }
+          <TextInput
+            withAsterisk
+            label="Nome do projeto"
+            placeholder="Ex: Viajantes do Espaço"
+            key={form.key('projectName')}
+            {...form.getInputProps('projectName')}
+          />
+          <Checkbox
+            mt={8}
+            color="violet"
+            label="Definir como um dos meus projetos principais"
+            key={form.key('featured')}
+            {...form.getInputProps('featured', { type: 'checkbox' })}
+          />
+          {!!searchProjects.projects.total && 
+            <Paper shadow="xs" withBorder p="sm" mt={8} mb={14}>
+              <Text size="xs" fw={500}>Encontramos projetos com nomes parecidos</Text>
+              <Text size="xs" c="dimmed">Será que seu projeto já está cadastrado?</Text>
+              <ScrollArea 
+                w="100%" 
+                h={60} 
+                type="always" 
+                scrollbarSize={10} 
+                scrollHideDelay={500}
+              >
+                <Flex direction="row" gap={14} w="max-content">
+                  {searchProjects.projects.result.map((project, key) => 
+                    <Group key={key} gap={3} mt={6}>
+                      <Anchor href={`/project/${project?.username}`}>
+                        <Avatar size="md" src={project.picture ? project.picture : undefined} />
+                      </Anchor>
+                      <Flex direction="column">
+                        <Text size="xs" fw={500}>{project.name} ({project.type}{project.mainGenre ? " • " + project.mainGenre : null})</Text>
+                        <Text size="11px" c="dimmed">{project.city ? project.city : null}{project.region ? ", " + project.region : null}{project.country ? ", " + project.country : null}</Text>
+                      </Flex>
+                    </Group>
+                  )}
+                </Flex>
+              </ScrollArea>
+            </Paper>
+          }
+          <TextInput
+            mt={8}
+            withAsterisk
+            label="Username do projeto"
+            placeholder="Ex: viajantesdoexpaco"
+            description={
+              "mublin.com/project/"+projectUsernameFinal
+            }
+            leftSection={
+              (
+                projectUsernameFinal && 
+                projectUsernameAvailability.available && 
+                !projectUsernameAvailability?.requesting
+              ) && 
+                <IconCheck size={20} color='green' />
+            }
+            rightSection={projectUsernameAvailability?.requesting && <Loader size={20} />}
+            maxLength={70}
+            disabled={projectUsernameAvailability?.requesting}
+            key={form.key('projectUserName')}
+            {...form.getInputProps('projectUserName')}
+          />
+          {(projectUsernameFinal && projectUsernameAvailability.requested && projectUsernameAvailability.available === false) && 
+            <Badge size="xs" color="red">Nome de usuário do projeto não disponível</Badge>
+          }
+          <Divider mt="xs" mb="sm" label="Imagem" labelPosition="center" />
+          <Flex direction="column">
+            {/* <Input.Label>Foto</Input.Label> */}
+            <div className='customFileUpload' style={projectImage ? {display: 'none'} : undefined}>
+              <IKUpload 
+                id='projectImage'
+                fileName={projectUsernameFinal+"_.jpg"}
+                folder={projectImagePath}
+                tags={["project", "avatar"]}
+                name='file-input'
+                className='file-input__input'
+                useUniqueFileName={true}
+                isPrivateFile= {false}
+                onError={onUploadError}
+                onUploadStart={onUploadStart}
+                onSuccess={onUploadSuccess}
+                accept="image/x-png,image/gif,image/jpeg" 
+              />
+              <Button
+                component='label'
+                htmlFor='projectImage'
+                leftSection={<IconCamera size={14} />}
+                color='violet'
+                size='sm'
+              >
+                {uploading ? 'Enviando...' : 'Inserir imagem'}
+              </Button>
+            </div>
+          </Flex>
+          {projectImage && 
+            <Flex gap={10}>
+              <Image 
+                radius="md"
+                h="auto"
+                w={130}
+                // fit="fill"
+                src={'https://ik.imagekit.io/mublin/tr:w-130/projects/'+projectImage} 
+              /> 
+              <Button 
+                size="xs" 
+                color="red" 
+                onClick={() => removeImage()}
+                leftSection={<IconTrash size={14} />}
+              >
+                Remover
+              </Button>
+            </Flex>
+          }
+          <Divider mb="xs" mt="sm" label="Informações adicionais" labelPosition="center" />
+          <Grid mt={8}>
+            <Grid.Col span={6}>
+              <NativeSelect
+                withAsterisk
+                label="Tipo de projeto"
+                key={form.key('type')}
+                {...form.getInputProps('type')}
+              >
+                <option value='2'>Banda</option>
+                <option value='3'>Projeto</option>
+                <option value='1'>Artista Solo</option>
+                <option value='8'>DJ</option>
+                <option value='4'>Dupla</option>
+                <option value='5'>Trio</option>
+                <option value='9'>Grupo</option>
+              </NativeSelect>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NativeSelect
+                withAsterisk
+                label="Conteúdo principal"
+                key={form.key('kind')}
+                {...form.getInputProps('kind')}
+              >
+                <option value='1'>Autoral</option>
+                <option value='2'>Cover</option>
+                <option value='3'>Autoral + Cover</option>
+              </NativeSelect>
+            </Grid.Col>
+          </Grid>
+          <NativeSelect
+            withAsterisk
+            label="Status do projeto"
+            mt={6}
+            key={form.key('activity_status')}
+            {...form.getInputProps('activity_status')}
           >
-            Cadastrar
-          </Button>
-        </Group>
+            <option value=''>Selecione</option>
+            <option value='1'>Projeto em atividade</option>
+            <option value='2'>Projeto encerrado</option>
+            <option value='3'>Projeto ativo vez em quando</option>
+            <option value='4'>Projeto sazonal / de temporada</option>
+            <option value='5'>Projeto ainda em construção</option>
+            <option value='6'>Projeto em Hiato/Parado</option>
+          </NativeSelect>
+          <Grid mt={8}>
+            <Grid.Col span={6}>
+              <NumberInput
+                withAsterisk
+                label="Ano de formação"
+                min={1800} 
+                max={formValues.end_year ? formValues.end_year : currentYear}
+                key={form.key('foundation_year')}
+                {...form.getInputProps('foundation_year')}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NumberInput
+                withAsterisk={formValues.activity_status === "2"}
+                label="Ano de encerramento"
+                min={formValues.foundation_year} 
+                max={currentYear}
+                disabled={formValues.activity_status !== "2"}
+                key={form.key('end_year')}
+                {...form.getInputProps('end_year')}
+              />
+            </Grid.Col>
+          </Grid>
+          <Grid mt={2}>
+            <Grid.Col span={6}>
+              <NativeSelect
+                label="País de origem"
+                key={form.key('id_country_fk')}
+                {...form.getInputProps('id_country_fk')}
+              >
+                <option value="">Selecione</option>
+                <option value='27'>Brasil</option>
+              </NativeSelect>
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <NativeSelect
+                label="Estado"
+                key={form.key('id_region_fk')}
+                {...form.getInputProps('id_region_fk')}
+              >
+                <option value="">Selecione</option>
+                <option value="415">Acre</option>
+                <option value="422">Alagoas</option>
+                <option value="406">Amapa</option>
+                <option value="407">Amazonas</option>
+                <option value="402">Bahia</option>
+                <option value="409">Ceara</option>
+                <option value="424">Distrito Federal</option>
+                <option value="401">Espirito Santo</option>
+                <option value="411">Goias</option>
+                <option value="419">Maranhao</option>
+                <option value="418">Mato Grosso</option>
+                <option value="399">Mato Grosso do Sul</option>
+                <option value="404">Minas Gerais</option>
+                <option value="408">Para</option>
+                <option value="405">Paraiba</option>
+                <option value="413">Parana</option>
+                <option value="417">Pernambuco</option>
+                <option value="416">Piaui</option>
+                <option value="410">Rio de Janeiro</option>
+                <option value="414">Rio Grande do Norte</option>
+                <option value="400">Rio Grande do Sul</option>
+                <option value="403">Rondonia</option>
+                <option value="421">Roraima</option>
+                <option value="398">Santa Catarina</option>
+                <option value="412">São Paulo</option>
+                <option value="423">Sergipe</option>
+                <option value="420">Tocantins</option>
+              </NativeSelect>
+            </Grid.Col>
+          </Grid>
+          {formValues.id_city_fk ? ( 
+            <Input.Wrapper 
+              label={
+                <Group gap={2} mt={8}>
+                  Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />}
+                </Group>
+              }
+            >
+              <Input 
+                size="sm" 
+                pointer
+                onClick={() => setModalCityOpen(true)}
+                value={formValues.cityName}
+              />
+            </Input.Wrapper>
+          ) : (
+            <Input.Wrapper 
+              label={
+                <Group gap={2} mt={8}>
+                  Cidade: {citySearchIsLoading && <Loader color="blue" size="xs" />}
+                </Group>
+              }
+            >
+              <Input 
+                value={formValues.id_region_fk ? "Selecione..." : "Selecione o Estado antes"}
+                size="sm"
+                pointer
+                rightSection={formValues.id_region_fk ? <IconSearch size={16} /> : undefined}
+                onClick={() => setModalCityOpen(true)}
+                disabled={!formValues.id_region_fk}
+              />
+            </Input.Wrapper>
+          )}
+          <Textarea
+            mt={8}
+            label="Bio"
+            description={formValues.bio.length+'/220'}
+            placeholder="Conte um pouco sobre o projeto (opcional)"
+            maxLength="220"
+            key={form.key('bio')}
+            {...form.getInputProps('bio', { type: 'checkbox' })}
+          />
+          <NativeSelect
+            withAsterisk
+            label="Sua principal função no projeto"
+            description="Você também será atribuído automaticamente como Administrador deste novo projeto"
+            mt={6}
+            data={[
+              { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
+              { group: 'Gestão, produção e outros', items: rolesListManagement },
+              { group: 'Instrumentos', items: rolesListMusicians },
+            ]}
+            key={form.key('npMain_role_fk')}
+            {...form.getInputProps('npMain_role_fk')}
+          />
+          <Radio.Group
+            mt={8}
+            name="favoriteFramework"
+            label="Visibilidade"
+            description="Exibir o projeto nas buscas do Mublin e mecanismos externos?"
+            key={form.key('publicProject')}
+            {...form.getInputProps('publicProject')}
+          >
+            <Group mt="xs">
+              <Radio color="violet" value="1" label="Público" />
+              <Radio color="violet" value="0" label="Privado" />
+            </Group>
+          </Radio.Group>
+          <Group justify="flex-end" mt="md">
+            <Button 
+              size="md"
+              type="submit"
+              color="violet"
+              loading={isSubmitting}
+              disabled={(projectUsernameFinal && projectUsernameAvailability.requested && projectUsernameAvailability.available === false)}
+            >
+              Cadastrar
+            </Button>
+          </Group>
+        </form>
       </Modal>
       <Modal 
         fullScreen={largeScreen ? false : true}
@@ -820,7 +1003,7 @@ function StartFourthStep () {
             type="submit" 
             color='violet'
             onClick={() => handleSubmitParticipation()}
-            loading={isLoading}
+            loading={isSubmitting}
             disabled={!joinedIn || !mainRole || !status}
           >
             Solicitar aprovação
@@ -854,78 +1037,12 @@ function StartFourthStep () {
           </Button>
         </Group>
       </Modal>
-      <Modal 
-        title={`Definir foto para ${projectName}?`}
-        opened={modalNewProjectPictureOpen} 
-        onClose={() => closeModalPicture()} 
-        centered
-        size={'sm'}
-      >
-        {!newProjectPicture ? (
-          <>
-            {/* <Image centered rounded src='https://ik.imagekit.io/mublin/tr:h-200,w-200/sample-folder/avatar-undefined_-dv9U6dcv3.jpg' size='small' className="mb-3" /> */}
-          </>
-        ) : (
-          <Center>
-            <Image 
-              src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/projects/'+newProjectPicture} 
-              radius="md" 
-              h={100}
-              w="auto"
-              fit="contain" 
-            />
-          </Center>
-        )}
-        <Center>
-          <div className="customFileUpload">
-            <IKUpload 
-              fileName={projectUserName+'_avatar.jpg'}
-              folder={userAvatarPath}
-              tags={['avatar','project']}
-              name='file-input'
-              id='file-input'
-              className='file-input__input'
-              useUniqueFileName={true}
-              isPrivateFile= {false}
-              onError={onUploadError}
-              onSuccess={onUploadSuccess}
-            />
-            <label className="file-input__label" for="file-input">
-              <IconUpload />
-              <span>Selecionar arquivo</span>
-            </label>
-          </div>
-        </Center>
-        {pictureIsLoading &&
-          <Center>
-            <Loader />
-          </Center>
-        }
-        <Group mt="sm" justify="flex-end">
-          {!pictureFilename && 
-            <Button variant="default" onClick={() => closeModalPicture()}>
-              Enviar depois
-            </Button>
-          }
-          {pictureFilename && 
-            <Button 
-              color='violet'
-              onClick={() => { 
-                dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
-                closeModalPicture();
-              }}
-            >
-              Concluir
-            </Button>
-          }
-        </Group>
-      </Modal>
       <footer className='onFooter step4Page'>
         {userProjects.list[0]?.id && 
           <Container size={'sm'}>
-
+            <Flex gap='17'>
               {userProjects.list.map((project, key) =>
-                <Flex gap={3} align={'center'} key={key}>
+                <Flex gap={3} align='center' key={key}>
                   <Avatar 
                     src={project.picture ? cdnPath+project.picture : undefined} 
                     alt={project.name}
@@ -957,7 +1074,7 @@ function StartFourthStep () {
                   </Flex>
                 </Flex>
               )}
-
+            </Flex>
           </Container>
         }
         <Group justify="center" mt="lg">
@@ -969,11 +1086,67 @@ function StartFourthStep () {
           >
             Voltar
           </Button>
-          <Button color='violet' size='lg' onClick={handleFormSubmit} loading={isLoading}>
+          <Button color='violet' size='lg' onClick={handleFormSubmit} loading={isSubmitting}>
             Concluir
           </Button>
         </Group>
         {/* <Text size="xs" mt={10}>Você poderá ingressar ou criar projetos mais tarde se preferir</Text> */}
+        <Modal
+          title='Selecionar cidade'
+          opened={modalCityOpen}
+          onClose={() => setModalCityOpen(false)}
+          size={'sm'}
+        >
+          <Grid>
+            <Grid.Col span={7}>
+              <form onSubmit={(e) => handleSearchCity(e, searchValue)}>
+                <TextInput
+                  placeholder="Digite e selecione..."
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  value={searchValue}
+                  mb={5}
+                  data-autofocus
+                />
+              </form>
+            </Grid.Col>
+            <Grid.Col span={5}>
+              <Button color="violet" onClick={() => searchCity(searchValue)}>
+                Pesquisar
+              </Button>
+            </Grid.Col>
+          </Grid>
+          {citySearchIsLoading && 
+            <Center my={20}>
+              <Loader color="violet" size="sm" type="bars" />
+            </Center>
+          }
+          {!!(queryCities.length && !citySearchIsLoading) && 
+            <>
+              <Text size='xs' c='dimmed' mt={10} mb={10}>
+                {queryCities.length} {queryCities.length === 1 ? "cidade localizada" : "cidades localizadas"} 
+              </Text>
+              <ScrollArea h={170} type="always" offsetScrollbars>
+                {queryCities.map((city, key) =>
+                  <Box key={key} py={3}>
+                    <Anchor 
+                      size='lg' 
+                      my={10} 
+                      onClick={() => selectCityOnModalList(city.value, city.label)}
+                    >
+                      {city.label}
+                    </Anchor>
+                    <Divider />
+                  </Box>
+                )}
+              </ScrollArea>
+            </>
+          }
+          {noCitySearchResults &&
+            <Text size='xs' c='dimmed' mt={10} mb={10}>
+              Nenhuma cidade localizada a partir desta pesquisa no Estado escolhido
+            </Text>
+          }
+        </Modal>
       </footer>
     </>
   );

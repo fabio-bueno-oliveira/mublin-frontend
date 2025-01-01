@@ -219,11 +219,11 @@ function SignupPage () {
                 Continuar
               </Button>
             </Group>
-            {process.env.NODE_ENV === "production" && 
+            {/* {process.env.NODE_ENV === "production" &&  */}
               <Alert variant="light" color="red" mt={14}>
                 Novos cadastros serão liberados em breve!
               </Alert>
-            }
+            {/* } */}
           </form>
         </Container>
         <Footer />

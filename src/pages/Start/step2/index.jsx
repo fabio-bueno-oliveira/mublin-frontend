@@ -12,7 +12,8 @@ function StartSecondStep () {
   document.title = "Passo 2";
 
   const largeScreen = useMediaQuery('(min-width: 60em)');
-  let loggedUser = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem('token');
+
   let navigate = useNavigate();
 
   const user = useSelector(state => state.user);
@@ -27,7 +28,11 @@ function StartSecondStep () {
   })
 
   const [formValues, setFormValues] = useState({
-    gender: user.gender, bio: user.bio, region: user.region, city: user.city, cityName: user.cityName
+    gender: user.gender, 
+    bio: user.bio, 
+    region: user.region, 
+    city: user.city, 
+    cityName: user.cityName
   })
 
   useEffect(() => { 
@@ -91,7 +96,7 @@ function StartSecondStep () {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + loggedUser.token
+          'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify({
           userId: user.id, 
@@ -183,7 +188,7 @@ function StartSecondStep () {
             mt={18}
             size='md'
             label={<Group gap={2}>Bio (opcional): {formValues.bio && <IconCheck size={16} color='green' />}</Group>}
-            description={"("+formValues.bio?.length+"/220)"}
+            description={formValues.bio?.length ? "("+formValues.bio?.length+"/220)" : undefined}
             placeholder="Escreva pouco sobre você..."
             value={formValues.bio ? formValues.bio : undefined}
             onChange={(e) => setFormValues({...formValues, bio: e.target.value})}
@@ -218,6 +223,7 @@ function StartSecondStep () {
               />
             </Grid.Col>
           </Grid>
+          <Text c='dimmed' size='xs' mt={12}>Por enquanto aceitamos apenas cadastros no Brasil. Iremos expandir para outros países em breve!</Text>
           <Grid mt={18}>
             <Grid.Col span={6}>
               <NativeSelect
