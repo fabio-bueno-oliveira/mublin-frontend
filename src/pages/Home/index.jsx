@@ -131,6 +131,7 @@ function Home () {
                   {/* <Text fw='400' size='lg'>Meus projetos</Text> */}
                   {projects.list.map(project =>
                     <Card 
+                      key={project.projectid}
                       mt='10'
                       padding={12} 
                       radius={"md"} 
@@ -138,7 +139,6 @@ function Home () {
                       className="mublinModule"
                     >
                       <ProjectCard 
-                        key={project.projectid}
                         mb={0}
                         picture={project.picture}
                         name={project.name}
