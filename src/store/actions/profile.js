@@ -9,6 +9,7 @@ export const profileInfos = {
     getProfileFollowers: getProfileFollowers,
     getProfileFollowing: getProfileFollowing,
     checkProfileFollowing: checkProfileFollowing,
+    getProfileRelatedUsers: getProfileRelatedUsers,
     getProfilePosts: getProfilePosts,
     getProfileGear: getProfileGear,
     getProfileGearSetups: getProfileGearSetups,
@@ -114,6 +115,22 @@ function getProfileFollowing(username) {
     function request(username) { return { type: profileTypes.GET_PROFILE_FOLLOWING_REQUEST, username } }
     function success(list) { return { type: profileTypes.GET_PROFILE_FOLLOWING_SUCCESS, list } }
     function failure(username, error) { return { type: profileTypes.GET_PROFILE_FOLLOWING_FAILURE, username, error } }
+
+}
+function getProfileRelatedUsers(username) {
+    return dispatch => {
+        dispatch(request(username));
+
+        profileService.getProfileRelatedUsers(username)
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(username, error.toString()))
+            );
+    };
+  
+    function request(username) { return { type: profileTypes.GET_PROFILE_RELATED_USERS_REQUEST, username } }
+    function success(list) { return { type: profileTypes.GET_PROFILE_RELATED_USERS_SUCCESS, list } }
+    function failure(username, error) { return { type: profileTypes.GET_PROFILE_RELATED_USERS_FAILURE, username, error } }
 }
 
 function checkProfileFollowing(username) {

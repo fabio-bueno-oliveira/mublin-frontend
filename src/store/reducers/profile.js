@@ -88,6 +88,7 @@ const initialState = {
         id: '',
         followerId: '',
         followedId: '',
+        userId: '',
         name: '',
         lastname: '',
         username: '',
@@ -103,10 +104,26 @@ const initialState = {
         id: '',
         followerId: '',
         followedId: '',
+        userId: '',
         name: '',
         lastname: '',
         username: '',
         picture: ''
+      }
+    ]
+  },
+  relatedUsers: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        name: '',
+        lastname: '',
+        username: '',
+        picture: '',
+        verified: '',
+        legendBadge: ''
       }
     ]
   },
@@ -153,25 +170,38 @@ const initialState = {
       created: ''
     }
   ],
-  gear: [
-    {
-      brandId: '',
-      brandName: '',
-      brandLogo: '',
-      productId: '',
-      productName: '',
-      category: '',
-      picture: '',
-      pictureFilename: '',
-      currentlyUsing: '',
-      featured: '',
-      forSale: '',
-      price: '',
-      tuning: '',
-      tuningDescription: '',
-      ownerComments: ''
-    }
-  ],
+  gear: {
+    total: 0,
+    list: [
+      {
+        brandId: '',
+        brandName: '',
+        brandLogo: '',
+        productId: '',
+        productName: '',
+        category: '',
+        picture: '',
+        pictureFilename: '',
+        currentlyUsing: '',
+        featured: '',
+        forSale: '',
+        price: '',
+        tuning: '',
+        tuningDescription: '',
+        ownerComments: ''
+      }
+    ]
+  },
+  gearCategories: {
+    total: 0,
+    list: [
+      {
+        category: '',
+        macro_category: '',
+        total: '',
+      }
+    ]
+  },
   gearSetups: {
     total: 0,
     success: true,
@@ -188,9 +218,6 @@ const initialState = {
       }
     ],
   },
-  gearCategories: [
-    { category: '', macroCategory: '', total: 0 }
-  ],
   partners: {
     total: 0,
     success: false,
@@ -392,6 +419,26 @@ export function profile(state = initialState, action) {
         requestingFollowingActions: false,
         error: "A solicitação falhou"
       };
+    // RELATED USERS
+    case profileTypes.GET_PROFILE_RELATED_USERS_REQUEST:
+      return {
+        ...state,
+        relatedUsers: initialState.relatedUsers,
+        requesting: true
+      };
+    case profileTypes.GET_PROFILE_RELATED_USERS_SUCCESS:
+      return {
+        ...state,
+        relatedUsers: action.list,
+        requesting: false,
+      };
+    case profileTypes.GET_PROFILE_RELATED_USERS_FAILURE:
+      return {
+        ...state,
+        relatedUsers: initialState.relatedUsers,
+        requesting: false,
+        error: "A solicitação falhou"
+      };
     // POSTS (RECENT ACTIVITY)
     case profileTypes.GET_PROFILE_POSTS_REQUEST:
       return {
@@ -417,22 +464,21 @@ export function profile(state = initialState, action) {
       return {
         ...state,
         gear: initialState.gear,
+        gearCategories: initialState.gearCategories,
         requesting: true
       };
     case profileTypes.GET_PROFILE_GEAR_SUCCESS:
-      return {
+      return { 
         ...state,
-        gear: action.list[0],
-        gearCategories: action.list[1],
+        gear: action.list.products,
+        gearCategories: action.list.categories,
         requesting: false,
       };
     case profileTypes.GET_PROFILE_GEAR_FAILURE:
       return {
         ...state,
         gear: initialState.gear,
-        gearCategories: [
-          { category: '', macroCategory: '', total: 0 }
-        ],
+        gearCategories: initialState.gearCategories,
         requesting: false,
         error: "A solicitação falhou"
       };

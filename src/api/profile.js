@@ -22,6 +22,7 @@ export const profileService = {
     getProfileFollowers,
     getProfileFollowing,
     checkProfileFollowing,
+    getProfileRelatedUsers,
     getProfilePosts,
     getProfileGear,
     getProfileGearSetups,
@@ -80,6 +81,14 @@ async function getProfileFollowing(username) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/profile/${username}/following`, requestOptions).then(handleResponse);
+}
+
+async function getProfileRelatedUsers(username) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/profile/${username}/relatedUsers`, requestOptions).then(handleResponse);
 }
 
 async function checkProfileFollowing(username) {

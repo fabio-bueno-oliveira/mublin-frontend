@@ -26,7 +26,7 @@ function AvailabilityInfo (props) {
           )}
         </>
       ) : (
-        <Text size='0.78em' fw='390' mt='1' c='dimmed'>
+        <Text size='0.79em' fw='390' mt='5' c='dimmed'>
           Nenhum estilo cadastrado
         </Text>
       )}
@@ -38,16 +38,12 @@ function AvailabilityInfo (props) {
           <Text size='xs' mx={0}>Carregando...</Text>
         ) : (
           <Flex gap={3} mx={0} pt={1}>
-            {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-              <Badge variant='default' size='md'>
-                Autorais
-              </Badge>
-            }
-            {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-              <Badge variant='default' size='md'>
-                Contrato
-              </Badge>
-            }
+            <Badge variant={(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) ? 'default' : 'light'} color={(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) ? 'gray' : 'gray'} size='md'>
+              Projetos próprios
+            </Badge>
+            <Badge variant={(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) ? 'default' : 'light'} color={(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) ? 'gray' : 'gray'} size='md'>
+              Sideman
+            </Badge>
           </Flex>
         )}
       </Group>
@@ -63,7 +59,7 @@ function AvailabilityInfo (props) {
           )}
         </Flex>
       ) : (
-        <Text size='0.78em' fw='390' mt='1' c='dimmed'>
+        <Text size='0.79em' fw='390' mt='5' c='dimmed'>
           Não informado
         </Text>
       )}

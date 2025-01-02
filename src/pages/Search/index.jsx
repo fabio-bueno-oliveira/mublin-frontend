@@ -314,7 +314,7 @@ function Search () {
             <Tabs.Panel value={isMobile ? 'all' : 'projects'} pl={8} pt={6}>
               <Text mb={14} className='showOnlyInMobile'>Projetos</Text>
               <Box>
-                {searchResults.projects.result.map(project => 
+                {searchResults.projects.total ? searchResults.projects.result.map(project => 
                   <>
                     <Flex key={project.id} align='center' mb={13} gap={6} justify='space-between'>
                       <Link to={{ pathname: `/${project.username}` }}>
@@ -357,6 +357,10 @@ function Search () {
                       </Box>
                     </Flex>
                   </>
+                ): (
+                  <Text size='sm' c='dimmed' mb='10'>
+                    Nenhum projeto encontrado
+                  </Text>
                 )}
               </Box>
             </Tabs.Panel>

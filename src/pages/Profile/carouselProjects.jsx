@@ -13,7 +13,7 @@ function CarouselProjects (props) {
   const profile = props.profile
   const profilePlan = props.profilePlan
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  // const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   const projects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
 
@@ -27,7 +27,7 @@ function CarouselProjects (props) {
         options={{
           drag: 'free',
           snap: false,
-          perPage: isMobile ? 1 : 1,
+          perPage: 1,
           autoWidth: true,
           arrows: false,
           gap: '16px',
@@ -84,15 +84,16 @@ function CarouselProjects (props) {
             </Flex>
           </SplideSlide>
         )}
-        {(profile.id === userInfo.id && !profile.requesting && profile.plan === 'Free') && 
+        {/* {(profile.id === userInfo.id && !profile.requesting && profilePlan === 'Free') && 
           <SplideSlide>
             <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>
               <Avatar
-                variant='filled'
+                variant='gradient'
+                gradient={{ from: 'violet', to: 'blue' }}
                 radius='md'
                 size='64px'
-                color='violet'
-                name={'🎵'}
+                color='white'
+                name='❯'
                 src={undefined}
               />
               <Flex 
@@ -112,7 +113,7 @@ function CarouselProjects (props) {
               </Flex>
             </Flex>
           </SplideSlide>
-        }
+        } */}
       </Splide>
     </>
   );

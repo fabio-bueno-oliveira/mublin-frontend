@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import { useParams } from 'react-router'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
@@ -17,6 +18,7 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 import AvailabilityInfo from './availabilityInfo'
 import FeedCard from '../Home/feedCard'
+import RelatedProfiles from './relatedProfiles'
 import './styles.scss'
 
 function ProfilePage () {
@@ -25,8 +27,11 @@ function ProfilePage () {
   const params = useParams()
   const username = params?.username
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const token = localStorage.getItem('token')
+
+  const decoded = jwtDecode(token)
+  const loggedUserId = decoded.result.id
+  const loggedUserEmail = decoded.result.id
 
   const profile = useSelector(state => state.profile)
 
@@ -41,12 +46,13 @@ function ProfilePage () {
 
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username))
-    if (userInfo.username !== username) {
+    if (loggedUserEmail !== username) {
       dispatch(followInfos.checkProfileFollowing(username))
     }
     dispatch(profileInfos.getProfileAvailabilityItems(username))
     dispatch(profileInfos.getProfileFollowers(username))
     dispatch(profileInfos.getProfileFollowing(username))
+    dispatch(profileInfos.getProfileRelatedUsers(username))
     dispatch(profileInfos.getProfilePosts(username))
     dispatch(profileInfos.getProfileProjects(username))
     dispatch(profileInfos.getProfileRoles(username))
@@ -77,7 +83,7 @@ function ProfilePage () {
       )
   }, [username]);
 
-  document.title = !profile.success && !profile.id ? 'Não encontrado | Mublin' : `${profile.name} ${profile.lastname} | Mublin`;
+  document.title = !profile.success && !profile.id ? 'Mublin' : `${profile.name} ${profile.lastname} | Mublin`;
 
   const followedByMe = useSelector(state => state.followedByMe);
   const [loadingFollow, setLoadingFollow] = useState(false);
@@ -103,7 +109,7 @@ function ProfilePage () {
   //   setGearSetup(setupId);
   // }
 
-  const gear = useSelector(state => state.profile.gear).filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
+  const gear = useSelector(state => state.profile.gear.list).filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
 
   const gearFiltered = gearSetup ? gear.filter((product) => { 
     return profile.gearSetups.products.find(x => x.id === product.productId && x.setupId === Number(gearSetup)) 
@@ -203,7 +209,7 @@ function ProfilePage () {
   const [strengthVoted, setStrengthVoted] = useState(null)
   const [strengthVotedName, setStrengthVotedName] = useState('')
 
-  const myVotes = profile.strengthsRaw.filter((x) => { return x.idUserFrom === userInfo.id})
+  const myVotes = profile.strengthsRaw.filter((x) => { return x.idUserFrom === loggedUserId})
     .map(x => ({ 
       id: x.id,
       idUserTo: x.idUserTo,
@@ -274,7 +280,12 @@ function ProfilePage () {
         showBackIcon={true}
       />
       {profile.requesting && 
-        <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10} className='profilePage'>
+        <Container 
+          size='lg' 
+          mb={isMobile ? 82 : 30} 
+          pt={isMobile ? 0 : 10} 
+          className='profilePage'
+        >
           <Group justify='flex-start'>
             <Skeleton height={84} circle />
             <SimpleGrid cols={1} spacing='xs' verticalSpacing='xs'>
@@ -288,9 +299,14 @@ function ProfilePage () {
         </Container>
       }
       {profile.id && 
-        <Container size='lg' mb={isMobile ? 82 : 30} pt={isMobile ? 0 : 10} className='profilePage'>
+        <Container 
+          size='lg' 
+          mb={isMobile ? 82 : 30} 
+          pt={isMobile ? 0 : 10} 
+          className='profilePage'
+        >
           <Grid>
-            <Grid.Col pr={22} span={{ base: 12, md: 12, lg: 4 }}>
+            <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
               <Paper 
                 radius='md'
                 withBorder={false}
@@ -304,7 +320,6 @@ function ProfilePage () {
                   direction='row'
                   wrap='nowrap'
                   columnGap='xs'
-                  mt={isMobile ? 0 : 11}
                 >
                   <Avatar
                     size='xl'
@@ -430,7 +445,7 @@ function ProfilePage () {
                   </Anchor>
                 }
                 <Flex gap={5} mt={isMobile ? 17 : 20} mb={isMobile ? 14 : 20}>
-                  {userInfo.id !== profile.id ? (
+                  {loggedUserId !== profile.id ? (
                     <Button 
                       size='xs'
                       fz='14px'
@@ -496,7 +511,7 @@ function ProfilePage () {
                     <Flex 
                       align='center'
                       justify='flex-start'
-                      gap={4} 
+                      gap={6} 
                       mt='md'
                       mb={isMobile ? 0 : 12} 
                     >
@@ -509,9 +524,10 @@ function ProfilePage () {
                         mr={7}
                       />
                       <Text 
-                        fz='15px'
+                        fz='14.2px'
                         fw='490'
                         className='lhNormal'
+                        pt='1px'
                       >
                         {profile.availabilityTitle}
                       </Text>
@@ -534,15 +550,18 @@ function ProfilePage () {
                   </>
                 }
               </Paper>
-              {(isMobile && profile.availabilityId) && 
-                <Divider mb={2} mt={6} />
+              {profile.availabilityId && 
+                <Divider mb={2} mt={6} className='showOnlyInMobile' />
               }
               {(profile.plan === 'Pro' && profile.total) && 
                 <PartnersModule loading={profile.requesting} partners={profile.partners} />
               }
-              {(isMobile && !profile.availabilityId) && 
-                <Space h='xs' />
+              {!profile.availabilityId && 
+                <Space h='xs' className='showOnlyInMobile' />
               }
+              <Box className='showOnlyInLargeScreen' pr='lg'>
+                <RelatedProfiles relatedUsers={profile.relatedUsers?.result} />
+              </Box>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
               <CarouselProjects 
@@ -564,7 +583,7 @@ function ProfilePage () {
               >
                 <Group justify='space-between' align='center' gap={8} mb={profile.strengths.total ? 15 : 8}>
                   <Title fz='1.13rem' fw='490'>Pontos Fortes</Title>
-                  {(profile.id !== userInfo.id && !profile.requesting) && 
+                  {(profile.id !== loggedUserId && !profile.requesting) && 
                     <Button 
                       size='xs'
                       radius='lg'
@@ -630,16 +649,16 @@ function ProfilePage () {
                     withBorder={isLargeScreen ? true : false}
                     px={isMobile ? 0 : 16}
                     pt={isMobile ? 0 : 12}
-                    pb={(isLargeScreen && profile.gear.length > 5) ? 34 : 12}
+                    pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 12}
                     mb={14}
                     style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                     className='mublinModule'
                   >
                     <Group justify='space-between' align='center' gap={8} mb={13}>
                       <Title fz='1.13rem' fw='490'>
-                        Equipamento ({profile.gear.length})
+                        Equipamento {!!profile.gear.total && `(${profile.gear.total})`}
                       </Title>
-                      {(profile.id === userInfo.id && !profile.requesting) && 
+                      {(profile.id === loggedUserId && !profile.requesting) && 
                         <Button 
                           size='xs'
                           radius='lg'
@@ -657,7 +676,7 @@ function ProfilePage () {
                       <Text size='sm'>Carregando...</Text>
                     ) : (
                       <>
-                        {profile.gear[0]?.brandId && 
+                        {!!profile.gear.total && 
                           <Group gap={10} mb={14}>
                             {/* <NativeSelect 
                               // description='Setups'
@@ -683,7 +702,7 @@ function ProfilePage () {
                                 <option value="">
                                   Exibir tudo
                                 </option>
-                                {profile.gearCategories.map((gearCategory, key) =>
+                                {profile.gearCategories.list.map((gearCategory, key) =>
                                   <option key={key} value={gearCategory.category}>
                                     {truncate(gearCategory.category) + '(' + gearCategory.total + ')'}
                                   </option>
@@ -692,7 +711,7 @@ function ProfilePage () {
                             }
                           </Group>
                         }
-                        {profile.gear[0]?.brandId ? ( 
+                        {profile.gear.total ? ( 
                           <>
                             <Splide 
                               options={{
@@ -757,7 +776,7 @@ function ProfilePage () {
                             </Splide>
                           </>
                         ) : (
-                          <Text size='xs'>Nenhum equipamento cadastrado</Text>
+                          <Text size='sm' c='dimmed'>Nenhum equipamento cadastrado</Text>
                         )}
                       </>
                     )}
@@ -765,14 +784,14 @@ function ProfilePage () {
                 </>
               ) : (
                 <>
-                  {userInfo.id === profile.id && 
+                  {loggedUserId === profile.id && 
                     <Paper
                       radius='md'
                       withBorder={isLargeScreen ? true : false}
                       px={isMobile ? 0 : 16}
                       pt={isMobile ? 0 : 12}
-                      pb={(isLargeScreen && profile.gear.length > 5) ? 34 : 12}
-                      mb={14}
+                      pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 12}
+                      mb={8}
                       style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                       className='mublinModule'
                     >
@@ -787,13 +806,13 @@ function ProfilePage () {
                       <Anchor
                         variant='gradient'
                         gradient={{ from: 'violet', to: 'blue' }}
-                        fw='420'
+                        fw='440'
                         fz='sm'
                         underline='hover'
                         href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
                         target='_blank'
                       >
-                        Assinar Mublin PRO - R$ 29,90 por 3 meses (pagamento único)
+                        Assinar Mublin PRO - R$ 29,90 por 3 meses
                       </Anchor>
                     </Paper>
                   }
@@ -811,7 +830,7 @@ function ProfilePage () {
               >
                 <Group justify='space-between' align='center' gap={8} mb={13}>
                   <Title fz='1.13rem' fw='490'>Postagens</Title>
-                  {(profile.id === userInfo.id && !profile.requesting) && 
+                  {(profile.id === loggedUserId && !profile.requesting) && 
                     <Button 
                       size='xs'
                       radius='lg'
@@ -837,7 +856,7 @@ function ProfilePage () {
                       </Box>
                     )
                   ) : (
-                    <Text size='sm' color='dimmed'>Nenhuma postagem até o momento</Text>
+                    <Text size='sm' c='dimmed'>Nenhuma postagem até o momento</Text>
                   )
                 )}
                 {profile.recentActivity.total > 2 && 
@@ -846,6 +865,9 @@ function ProfilePage () {
                   </Text>
                 }
               </Paper>
+              <Box className='showOnlyInMobile' pr='lg'>
+                <RelatedProfiles relatedUsers={profile.relatedUsers?.result} />
+              </Box>
             </Grid.Col>
           </Grid>
         </Container>
@@ -958,8 +980,8 @@ function ProfilePage () {
         scrollAreaComponent={ScrollArea.Autosize}
       >
         {profile.followers.total ?  (
-          profile.followers.result.map((follower, key) => 
-            <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(follower.username)} key={key}>
+          profile.followers.result.map(follower => 
+            <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(follower.username)} key={follower.id}>
               <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
@@ -992,8 +1014,8 @@ function ProfilePage () {
         scrollAreaComponent={ScrollArea.Autosize}
       >
         {profile.following.total ?  (
-          profile.following.result.map((following, key) => 
-            <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(following.username)} key={key}>
+          profile.following.result.map(following => 
+            <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(following.username)} key={following.id}>
               <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
@@ -1103,7 +1125,7 @@ function ProfilePage () {
           />
         </Center>
         <Text size='sm' mt='lg'>
-          {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante e que contribuiu no cenário musical`}
+          {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante e que com grande contribuição no cenário musical`}
         </Text>
         <Text size='xs' mt='lg' c='dimmed'>
           Este selo é atribuído pela equipe do Mublin baseado em critérios internos
@@ -1172,16 +1194,19 @@ function ProfilePage () {
         }
         <Group gap='8' mt='md' justify='center'>
           <Button
-            color='violet'
-            variant='outline'
-            size='sm'
+            size='xs'
+            radius='lg'
+            variant='light'
+            color={colorScheme === 'light' ? 'dark' : 'gray'}
             onClick={() => setModalGearItemOpen(false)}
           >
             Fechar
           </Button>
           <Button
-            color='violet'
-            size='sm'
+            size='xs'
+            radius='lg'
+            variant='light'
+            color={colorScheme === 'light' ? 'dark' : 'gray'}
             component='a'
             href={`/gear/product/${gearItemDetail.productId}`}
           >
