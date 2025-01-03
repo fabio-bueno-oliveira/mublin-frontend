@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
-import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
+import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Button, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
+import { truncateString } from '../../utils/formatter'
 
 function FeedCard ({ item, likes, compact }) {
 
@@ -26,8 +27,6 @@ function FeedCard ({ item, likes, compact }) {
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '1px' };
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) };
-
-  const truncateString = (input, maxLength) => input.length > maxLength ? `${input.substring(0, maxLength)}...` : input;
 
   const likeFeedPost = (feedId) => {
     isLoadingAction(feedId);
@@ -130,7 +129,7 @@ function FeedCard ({ item, likes, compact }) {
           </Link>
           <Box style={{flexGrow:'1'}}>
             <Flex gap={2} align='center' mb={2}>
-              <Text size='0.9rem'>
+              <Text size='1rem'>
                 <Anchor 
                   fw='600' 
                   style={{lineHeight:'normal'}} 
@@ -147,12 +146,12 @@ function FeedCard ({ item, likes, compact }) {
               }
               {/* {item.relatedUserPlan === 'Pro' && <Badge size='xs' variant='light' color='gray'>PRO</Badge>} */}
             </Flex>
-            <Text size='11px' fw='420'>
+            <Text size='0.76rem' fw='420'>
               {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
             </Text>
             <Text 
               c='dimmed' 
-              size='11px'
+              size='0.74rem'
               fw='420'
               mt='4'
               title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
@@ -312,8 +311,8 @@ function FeedCard ({ item, likes, compact }) {
         {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting && !compact) && 
           <Flex 
             align='center'
-            gap={4}
-            mt={12}
+            gap='1'
+            mt='12'
             px='15'
           >
             {loadingAction === item.id ? (
@@ -337,15 +336,16 @@ function FeedCard ({ item, likes, compact }) {
               </>
             )}
             {totalLikes > 0 && 
-              <Text 
-                size='13px' 
-                c='dimmed' 
-                pt={1} 
-                className='point'
+              <Button 
+                variant='transparent' 
+                px='8'
+                pt='1'
+                size='sm' 
+                color='gray'
                 onClick={() => openModalLikes(item.id)}
               >
-                {totalLikes}
-              </Text>
+                {totalLikes}33
+              </Button>
             }
           </Flex> 
         }
