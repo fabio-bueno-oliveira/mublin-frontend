@@ -64,15 +64,16 @@ function LandingPage () {
       <Header />
         <Container size="sm" pt={45}>
           <Title 
-            size="32px"
+            size="30px"
+            fw='500'
             ta="center"
           >
-            <span style={{fontWeight:'700'}}>Acompanhe</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
+            <span style={{fontWeight:'700'}}>Gerencie</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
           </Title>
           <Title 
-            size="21px"
+            size="19px"
             ta="center" 
-            fw="300"
+            fw="430"
           >
             Aumente suas chances de tocar em gigs interessantes
           </Title>
@@ -88,7 +89,7 @@ function LandingPage () {
               </Button>
             </Link>
           </Center>
-          <Text size="lg" lh="sm" ta="center" mt={47} mb={56}>
+          <Text size="17px" lh="sm" ta="center" mt={47} mb={56}>
             O Mublin é a comunidade onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
           </Text>
         </Container>
