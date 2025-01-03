@@ -387,7 +387,7 @@ function ProfilePage () {
                 >
                   <Text 
                     className='point'
-                    size={isMobile ? '1.06rem' : '0.87rem'}
+                    size={isMobile ? '1.04rem' : '0.87rem'}
                     fw='600'
                     onClick={() => setModalFollowersOpen(true)}
                     style={{lineHeight: 'normal'}}
@@ -396,7 +396,7 @@ function ProfilePage () {
                   </Text>
                   <Text 
                     className='point'
-                    size={isMobile ? '1.06rem' : '0.87rem'}
+                    size={isMobile ? '1.04rem' : '0.87rem'}
                     fw='600'
                     onClick={() => setModalFollowingOpen(true)}
                     style={{lineHeight: 'normal'}}
@@ -645,7 +645,7 @@ function ProfilePage () {
                     withBorder={isLargeScreen ? true : false}
                     px={isMobile ? 0 : 16}
                     pt={isMobile ? 0 : 12}
-                    pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 12}
+                    pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 9}
                     mb={14}
                     style={isMobile ? { backgroundColor: 'transparent' } : undefined}
                     className='mublinModule'
@@ -1133,16 +1133,16 @@ function ProfilePage () {
               {gearItemDetail.brandName} {gearItemDetail.productName}
             </Text>
             <Text size='xs' c='dimmed'>
-              Faz parte do equipamento de {profile.name}
+              Parte do equipamento de {profile.name}
             </Text>
           </Flex>
         }
         withCloseButton
         size='md'
       >
-        <Center mt='md'>
+        <Center>
           <Image 
-            src={'https://ik.imagekit.io/mublin/products/tr:w-310,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+gearItemDetail.pictureFilename}
+            src={'https://ik.imagekit.io/mublin/products/tr:w-280,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+gearItemDetail.pictureFilename}
             h={240}
             mah={240}
             w='auto'
@@ -1174,12 +1174,12 @@ function ProfilePage () {
             </ScrollArea>
           </Card>
         }
-        <Button 
+        <Button
           size='sm'
-          color='violet'
-          variant='transparent'
+          variant='light'
+          color={colorScheme === 'light' ? 'dark' : 'gray'}
           fullWidth
-          fw='440'
+          fw='600'
           component='a'
           href={`/gear/product/${gearItemDetail.productId}`}
         >

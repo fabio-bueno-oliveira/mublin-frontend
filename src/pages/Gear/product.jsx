@@ -4,7 +4,7 @@ import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Grid, Flex, Paper, Group, Center, Box, Title, Text, Image, Avatar, Badge, Modal, ScrollArea } from '@mantine/core';
-import { IconZoom } from '@tabler/icons-react'
+import { IconZoom, IconArrowRight } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -54,16 +54,19 @@ function GearProductPage () {
     <>
       <Header showBackIcon={true} />
       <Container size='lg' mt={largeScreen ? 20 : 0}>
-        <Text mb='3' size='sm' c='dimmed'>
+        <Text mb='3' fw='500' size='sm' c='dimmed'>
           {product.requesting ? 'Carregando marca...' : product.categoryName}
         </Text>
-        <Link to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
-          {product.brandName}
-        </Link>
-        <Title order={4} fw='450' mb={20}>
-          {product.requesting ? 'Carregando produto...' : product.name}
+        <Title fz='1.33rem' fw='540'>
+          {product.brandName} {product.requesting ? 'Carregando produto...' : product.name}
         </Title>
-        <Grid mb='70'>
+        <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
+          <Group gap='2'>
+            <IconArrowRight size={13} /> 
+            Ver todos os produtos da {product.brandName}
+          </Group>
+        </Link>
+        <Grid mt='20' mb='70'>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
             <Box mb={8}>
               {product.requesting ? (
