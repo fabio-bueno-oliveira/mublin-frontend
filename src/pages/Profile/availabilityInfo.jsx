@@ -7,8 +7,8 @@ function AvailabilityInfo (props) {
   const profile = useSelector(state => state.profile)
 
   return (
-    <Box mt={props.mt}>
-      <Text size='0.83em' fw='400' mb={6}>
+    <Box mt={props.mt} className={props.screen === 'largeScreen' ? 'showOnlyInLargeScreen' : 'showOnlyInMobile'}>
+      <Text size='0.83em' fw='400' mb={8}>
         Principais estilos musicais:
       </Text>
       {profile.genres[0].id ? (
@@ -18,7 +18,7 @@ function AvailabilityInfo (props) {
           ) : (
             <Flex gap={3} mx={0} pt={1}>
               {profile.genres[0].id && profile.genres.map((genre, key) =>
-                <Badge variant='default' size='md' key={key}>
+                <Badge variant='light' color='gray' size='md' key={key}>
                   {genre.name}
                 </Badge>
               )}
@@ -26,11 +26,11 @@ function AvailabilityInfo (props) {
           )}
         </>
       ) : (
-        <Text size='0.79em' fw='390' mt='5' c='dimmed'>
+        <Text size='0.83em' fw='390' mt='5' c='dimmed'>
           Nenhum estilo cadastrado
         </Text>
       )}
-      <Text size='0.83em' fw='390' mb={6} mt={14}>
+      <Text size='0.83em' fw='390' mb={8} mt={14}>
         Tipos de projetos:
       </Text>
       <Group gap={4}>
@@ -38,28 +38,32 @@ function AvailabilityInfo (props) {
           <Text size='xs' mx={0}>Carregando...</Text>
         ) : (
           <Flex gap={3} mx={0} pt={1}>
-            <Badge variant={(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) ? 'default' : 'light'} color={(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) ? 'gray' : 'gray'} size='md'>
-              Projetos próprios
-            </Badge>
-            <Badge variant={(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) ? 'default' : 'light'} color={(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) ? 'gray' : 'gray'} size='md'>
-              Sideman
-            </Badge>
+            {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
+              <Badge variant='light' color='gray' size='md'>
+                Projetos próprios
+              </Badge>
+            }
+            {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
+              <Badge variant='light' color='gray' size='md'>
+                Sideman
+              </Badge>
+            }
           </Flex>
         )}
       </Group>
-      <Text size='0.83em' fw='390' mb={6} mt={14}>
+      <Text size='0.83em' fw='390' mb={8} mt={14}>
         Tipos de trabalho:
       </Text>
       {profile.availabilityItems[0].id ? (
         <Flex gap={3} mx={0} pt={1}>
           {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-            <Badge variant='default' size='md' key={key}>
+            <Badge variant='light' color='gray' size='md' key={key}>
               {item.itemName}
             </Badge>
           )}
         </Flex>
       ) : (
-        <Text size='0.79em' fw='390' mt='5' c='dimmed'>
+        <Text size='0.83em' fw='390' mt='5' c='dimmed'>
           Não informado
         </Text>
       )}

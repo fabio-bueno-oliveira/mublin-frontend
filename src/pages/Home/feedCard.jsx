@@ -24,8 +24,10 @@ function FeedCard ({ item, likes, compact }) {
   const [loadingAction, isLoadingAction] = useState(0);
   const [showModalLikes, setShowModalLikes] = useState(false);
 
-  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '3px' };
-  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '5px' };
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '1px' };
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) };
+
+  const truncateString = (input, maxLength) => input.length > maxLength ? `${input.substring(0, maxLength)}...` : input;
 
   const likeFeedPost = (feedId) => {
     isLoadingAction(feedId);
@@ -115,23 +117,22 @@ function FeedCard ({ item, likes, compact }) {
         style={compact ? {height:'100%'} : undefined}
       >
         {!!item.suggested && 
-          <Text ml='15' fz='11px' c='dimmed' mb='8'>Publicação sugerida</Text>
+          <Text ml='15' fz='0.8rem' c='dimmed' mb='8'>Publicação sugerida</Text>
         }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
             <Avatar 
               size='45px'
-              radius="xl"
+              radius='xl'
               src={item.relatedUserPicture ? item.relatedUserPicture : undefined}
               alt={'Foto de '+item.relatedUserName}
             />
           </Link>
           <Box style={{flexGrow:'1'}}>
-            <Flex gap={3} align='center' mb={2}>
-              <Text size='0.9rem' className='op80'>
+            <Flex gap={2} align='center' mb={2}>
+              <Text size='0.9rem'>
                 <Anchor 
-                  underline='hover'
-                  fw={460} 
+                  fw='600' 
                   style={{lineHeight:'normal'}} 
                   href={`/${item.relatedUserUsername}`}
                 >
@@ -139,53 +140,58 @@ function FeedCard ({ item, likes, compact }) {
                 </Anchor>
               </Text>
               {!!item.relatedUserVerified &&
-                <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} title='Perfil verificado' />
               }
               {!!item.relatedUserLegend &&
-                <IconShieldCheckFilled style={iconLegendStyle} />
+                <IconShieldCheckFilled style={iconLegendStyle} title='Lenda da música' />
               }
-              {item.relatedUserPlan === "Pro" && <Badge size='xs' variant='light' color='gray'>PRO</Badge>}
+              {/* {item.relatedUserPlan === 'Pro' && <Badge size='xs' variant='light' color='gray'>PRO</Badge>} */}
             </Flex>
-            <Text c='dimmed' size='11px' fw={420} mb={3}>
-              {item.relatedUserUsername === 'fabio' && 'CEO do Mublin • '} {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
+            <Text size='11px' fw={420}>
+              {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
             </Text>
             <Text 
               c='dimmed' 
-              size='11px' 
+              size='11px'
+              fw={420}
+              mt='4'
               title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
+              className='fitContent'
             >
               há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
             </Text>
           </Box>
-          <Menu shadow="md" position="bottom-end" width={200}>
-            <Menu.Target className='point'>
-              <IconDotsVertical style={{ width: rem(18), height: rem(18), marginTop: '-20px', opacity: '0.5'}} />
-            </Menu.Target>
-            <Menu.Dropdown>
-              {!compact && 
-                <Menu.Item
-                  disabled={loadingAction}
-                  leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
-                  onClick={() => goToProfile(item.relatedUserUsername)}
-                >
-                  {item.relatedUserUsername === userInfo.username ? (
-                    <>Ver meu perfil</>
-                  ) : (
-                    <>Ver perfil de {item.relatedUserName}</>
-                  )}
-                </Menu.Item>
-              }
-              {item.relatedUserUsername === userInfo.username && 
-                <Menu.Item
-                  disabled={loadingAction}
-                  leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
-                  onClick={() => deleteFeedPost(item.id)}
-                >
-                  Deletar post
-                </Menu.Item>
-              }
-            </Menu.Dropdown>
-          </Menu>
+          {!compact &&
+            <Menu shadow="md" position="bottom-end" width={200}>
+              <Menu.Target className='point'>
+                <IconDotsVertical style={{ width: rem(18), height: rem(18), marginTop: '-20px', opacity: '0.5'}} />
+              </Menu.Target>
+              <Menu.Dropdown>
+                {!compact && 
+                  <Menu.Item
+                    disabled={loadingAction}
+                    leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
+                    onClick={() => goToProfile(item.relatedUserUsername)}
+                  >
+                    {item.relatedUserUsername === userInfo.username ? (
+                      <>Ver meu perfil</>
+                    ) : (
+                      <>Ver perfil de {item.relatedUserName}</>
+                    )}
+                  </Menu.Item>
+                }
+                {item.relatedUserUsername === userInfo.username && 
+                  <Menu.Item
+                    disabled={loadingAction}
+                    leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
+                    onClick={() => deleteFeedPost(item.id)}
+                  >
+                    Deletar post
+                  </Menu.Item>
+                }
+              </Menu.Dropdown>
+            </Menu>
+          }
         </Flex>
         {(item.action && item.categoryId !== 8) && 
           <Text px='15' size='0.85em' mt='7px' style={{lineHeight:'1.25em',opacity:'0.8'}}>
@@ -195,7 +201,11 @@ function FeedCard ({ item, likes, compact }) {
         {(item.categoryId === 8) && 
           <>
             <Box>
-              <Text lineClamp={compact ? 2 : undefined} px='15' size='0.89em' mt='12px' style={{lineHeight:'1.25em',opacity:'0.8'}}>
+              <Text 
+                lineClamp={compact ? 2 : undefined} 
+                px='15' size='0.87em' mt='12px' 
+                style={{lineHeight:'1.25em',opacity:'0.8'}}
+              >
                 {item.extraText}
               </Text>
             </Box>
@@ -297,6 +307,7 @@ function FeedCard ({ item, likes, compact }) {
             </Link>
           </Box>
         }
+        <Flex justify='space-between' align='flex-end'>
         {/* START Like/Unlike */}
         {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting && !compact) && 
           <Flex 
@@ -338,6 +349,18 @@ function FeedCard ({ item, likes, compact }) {
             }
           </Flex> 
         }
+        {/* <Text 
+          c='dimmed' 
+          size='11px'
+          px='20'
+          mb='3'
+          ta='right'
+          title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
+          className='fitContent op80'
+        >
+          há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
+        </Text> */}
+        </Flex>
       </Card>
       <Modal
         centered
@@ -363,7 +386,7 @@ function FeedCard ({ item, likes, compact }) {
                     {user.name} {user.lastname}
                   </Text>
                   {user.verified &&
-                    <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                    <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
                   }
                   {user.legend_badge &&
                     <IconShieldCheckFilled style={iconLegendStyle} />

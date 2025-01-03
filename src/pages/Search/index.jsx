@@ -123,7 +123,7 @@ function Search () {
                           {user.name+' '+user.lastname}
                         </Text>
                         {!!user.verified && 
-                          <IconRosetteDiscountCheckFilled color='blue' 
+                          <IconRosetteDiscountCheckFilled color='#7950f2' 
                           style={iconVerifiedStyle} />
                         }
                         {!!user.legend && 
@@ -274,7 +274,7 @@ function Search () {
                               {user.name+' '+user.lastname}
                             </Text>
                             {!!user.verified && 
-                              <IconRosetteDiscountCheckFilled color='blue' 
+                              <IconRosetteDiscountCheckFilled color='#7950f2' 
                               style={iconVerifiedStyle} />
                             }
                             {!!user.legend && 

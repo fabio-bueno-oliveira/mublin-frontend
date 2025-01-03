@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { Store } from './store'
-import {IKContext} from 'imagekitio-react'
+import { IKContext } from 'imagekitio-react'
 import App from './App.jsx'
 import './global/styles.scss'
 import './global/custom.scss'
@@ -17,10 +17,10 @@ const authenticator = async () => {
     const headers = {
       'Authorization': `Bearer ${sessionToken}`,
       'CustomHeader': 'CustomValue'
-    };
+    }
     const response = await fetch("https://mublin.herokuapp.com/imagekit", {
         headers
-    });
+    })
     if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Request failed with status ${response.status}: ${errorText}`);

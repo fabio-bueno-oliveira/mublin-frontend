@@ -13,8 +13,8 @@ function RelatedProfiles ({
 
   return (
     <Box mb='18'>
-      <Divider mb={8} />
-      <Title fz='1.06rem' fw='490' mt='lg' mb='xs'>Mais perfis pra você</Title>
+      <Divider mt={20} />
+      <Title fz='1.06rem' fw='490' mt='md' mb='xs'>Mais perfis pra você</Title>
       <Splide 
         options={{
           drag: 'free',
@@ -44,20 +44,20 @@ function RelatedProfiles ({
                   style={{lineHeight:'normal'}}
                   href={`/${user.username}`}
                 >
-                  <Text ta='center' size='0.87rem' fw='490' className='lhNormal'>
+                  <Text ta='center' size='0.83rem' fw='490' className='lhNormal'>
                     {/* {truncateString(user.name + ' ' + user.lastname, 12)} */}
                     {user.name + ' ' + user.lastname}
                   </Text>
                 </Anchor>
-                <Flex gap='1' align='center'>
-                  <Text ta='center' size='0.74rem' mt='4' fw='400' c='dimmed'>
+                <Flex gap='1' align='center' mt='1'>
+                  <Text ta='center' size='0.74rem' fw='400' c='dimmed'>
                     {truncateString(user.username, (user.verified || user.legendBadge) ? 9 : 12)}
                   </Text>
                   {!!user.verified && 
-                    <IconRosetteDiscountCheckFilled title='Usuário verificado' color='blue' style={{ width: rem(15), height: rem(15) }} />
+                    <IconRosetteDiscountCheckFilled title='Usuário verificado' color='#7950f2' style={{ width: rem(13), height: rem(13) }} />
                   }
                   {!!user.legendBadge && 
-                    <IconShieldCheckFilled title='Lenda da Música' style={{ color: '#DAA520', width: rem(15), height: rem(15) }} />
+                    <IconShieldCheckFilled title='Lenda da Música' style={{ color: '#DAA520', width: rem(13), height: rem(13) }} />
                   }
                 </Flex>
               </Flex>

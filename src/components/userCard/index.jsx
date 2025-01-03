@@ -22,11 +22,11 @@ export function UserCard({
           href={`/${username}`}
         >
           <Group gap={0}>
-            <Text size='0.88rem' className='op80' fw="460" c={colorScheme === "light" ? 'dark' : 'gray'}>
+            <Text size='0.88rem' fw="600" c={colorScheme === "light" ? 'dark' : 'gray'}>
               {name} {lastname}
             </Text>
             {verified && 
-              <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+              <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
             }
             {legend && 
               <IconShieldCheckFilled style={iconLegendStyle} />

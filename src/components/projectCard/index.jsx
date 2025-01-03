@@ -29,8 +29,7 @@ export function ProjectCard({
         >
           <Group gap={0}>
             <Text 
-              size='0.85rem' 
-              className='op80' 
+              size='0.85rem'
               fw='460' 
               c={colorScheme === 'light' ? 'dark' : 'gray'}
             >

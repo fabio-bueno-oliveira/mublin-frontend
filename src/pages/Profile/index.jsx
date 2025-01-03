@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useParams } from 'react-router'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
@@ -31,7 +31,7 @@ function ProfilePage () {
 
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
-  const loggedUserEmail = decoded.result.id
+  const loggedUsername = decoded.result.username
 
   const profile = useSelector(state => state.profile)
 
@@ -46,7 +46,7 @@ function ProfilePage () {
 
   useEffect(() => {
     dispatch(profileInfos.getProfileInfo(username))
-    if (loggedUserEmail !== username) {
+    if (loggedUsername !== username) {
       dispatch(followInfos.checkProfileFollowing(username))
     }
     dispatch(profileInfos.getProfileAvailabilityItems(username))
@@ -121,8 +121,6 @@ function ProfilePage () {
   const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
   // Modal Follow 
   const [modalFollowInfoOpen, setModalFollowInfoOpen] = useState(false);
-  // Modal Bio
-  const [modalBioOpen, setModalBioOpen] = useState(false);
   // Modal Contact
   const [modalContactOpen, setModalContactOpen] = useState(false);
   // Modal Followers
@@ -270,7 +268,7 @@ function ProfilePage () {
 
   return (
     <>
-      {(profile.id && !modalBioOpen && !modalFollowersOpen && !modalFollowingOpen && !modalGearItemOpen) && 
+      {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalGearItemOpen) && 
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
@@ -328,13 +326,13 @@ function ProfilePage () {
                   />
                   <Box style={{overflow:'hidden'}}>
                     <Flex align='baseline' mb={1}>
-                      <Title fz='1.4rem' fw='450'>
+                      <Title fz='1.30rem' fw='600'>
                         {profile.name} {profile.lastname}
                       </Title>
                       {!!profile.verified && 
                         <Tooltip label='Usuário Verificado'>
                           <IconRosetteDiscountCheckFilled 
-                            color='blue' 
+                            color='#7950f2' 
                             style={iconVerifiedStyle} 
                             onClick={() => setModalVerifiedOpen(true)}
                           />
@@ -384,13 +382,13 @@ function ProfilePage () {
                 </Flex>
                 <Group 
                   gap={12} 
-                  mt={isMobile ? 12 : 16} 
+                  mt={isMobile ? 10 : 15} 
                   mb={isMobile ? 9 : 10}
                 >
                   <Text 
                     className='point'
-                    size={isMobile ? '1.08rem' : '0.9rem'}
-                    fw='430'
+                    size={isMobile ? '1.06rem' : '0.87rem'}
+                    fw='600'
                     onClick={() => setModalFollowersOpen(true)}
                     style={{lineHeight: 'normal'}}
                   >
@@ -398,8 +396,8 @@ function ProfilePage () {
                   </Text>
                   <Text 
                     className='point'
-                    size={isMobile ? '1.08rem' : '0.9rem'}
-                    fw='430'
+                    size={isMobile ? '1.06rem' : '0.87rem'}
+                    fw='600'
                     onClick={() => setModalFollowingOpen(true)}
                     style={{lineHeight: 'normal'}}
                   >
@@ -412,7 +410,6 @@ function ProfilePage () {
                     fw='400'
                     mt={5}
                     lineClamp={6}
-                    onClick={isMobile ? () => setModalBioOpen(true) : undefined}
                     pr={isMobile ? 0 : 26}
                     style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}
                   >
@@ -532,9 +529,7 @@ function ProfilePage () {
                         {profile.availabilityTitle}
                       </Text>
                     </Flex>
-                    {isLargeScreen && 
-                      <AvailabilityInfo mt={18} />
-                    }
+                    <AvailabilityInfo mt={18} screen='largeScreen' />
                     {isMobile && 
                       <Accordion chevronPosition="left">
                         <Accordion.Item value="Exibir preferências musicais e de trabalho" style={{border:'0px'}}>
@@ -542,7 +537,7 @@ function ProfilePage () {
                             Exibir preferências musicais e de trabalho
                           </Accordion.Control>
                           <Accordion.Panel pb={12}>
-                            <AvailabilityInfo mt={4} />
+                            <AvailabilityInfo screen='mobile' mt={4} />
                           </Accordion.Panel>
                         </Accordion.Item>
                       </Accordion>
@@ -585,8 +580,8 @@ function ProfilePage () {
                   <Title fz='1.13rem' fw='490'>Pontos Fortes</Title>
                   {(profile.id !== loggedUserId && !profile.requesting) && 
                     <Button 
-                      size='xs'
-                      radius='lg'
+                      size='sm'
+                      radius='md'
                       variant='light'
                       color={colorScheme === 'light' ? 'dark' : 'gray'}
                       onClick={() => setModalStrengthsOpen(true)}
@@ -660,8 +655,8 @@ function ProfilePage () {
                       </Title>
                       {(profile.id === loggedUserId && !profile.requesting) && 
                         <Button 
-                          size='xs'
-                          radius='lg'
+                          size='sm'
+                          radius='md'
                           variant='light'
                           color={colorScheme === 'light' ? 'dark' : 'gray'}
                           // leftSection={<IconSettings size={14} />}
@@ -680,7 +675,7 @@ function ProfilePage () {
                           <Group gap={10} mb={14}>
                             {/* <NativeSelect 
                               // description='Setups'
-                              size={isLargeScreen ? "xs" : "sm"}
+                              size='sm'
                               w={155}
                               // onChange={(e) => setGearSetup(e.target.options[e.target.selectedIndex].value)}
                               onChange={(e) => selectSetup(e.target.options[e.target.selectedIndex].value)}
@@ -695,7 +690,7 @@ function ProfilePage () {
                             {!gearSetup && 
                               <NativeSelect
                                 // description='Tipo de equipamento'
-                                size='xs'
+                                size='sm'
                                 w={145}
                                 onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
                               >
@@ -733,19 +728,27 @@ function ProfilePage () {
                                     align='center'
                                     className='carousel-gear'
                                   >
-                                    <Image 
-                                      src={'https://ik.imagekit.io/mublin/products/tr:h-240,w-240,cm-pad_resize,bg-FFFFFF/'+product.pictureFilename} 
-                                      w={120}
+                                    <Image
+                                      src={'https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.pictureFilename}
+                                      h={120}
+                                      mah={120}
+                                      w='auto'
+                                      fit='contain'
                                       mb={10}
                                       radius='md'
                                       onClick={() => openModalGearDetail(product)}
                                       className='point'
                                     />
+                                    {/* <Image 
+                                      src={'https://ik.imagekit.io/mublin/tr:h-300,cm-pad_resize,bg-FFFFFF/products/'+picture}
+                                      height='205' 
+                                      ml='10' 
+                                    /> */}
                                     <Box w={110}>
-                                      <Text size='11px' fw={550} mb={3} truncate="end" title={product.brandName}>
+                                      <Text size='11px' fw={550} mb={3} truncate='end' title={product.brandName}>
                                         {product.brandName}
                                       </Text>
-                                      <Text size="sm" truncate="end" title={product.productName}>
+                                      <Text size='sm' truncate='end' title={product.productName}>
                                         {product.productName}
                                       </Text>
                                     </Box>
@@ -832,11 +835,11 @@ function ProfilePage () {
                   <Title fz='1.13rem' fw='490'>Postagens</Title>
                   {(profile.id === loggedUserId && !profile.requesting) && 
                     <Button 
-                      size='xs'
-                      radius='lg'
+                      size='sm'
+                      radius='md'
                       variant='light'
                       color={colorScheme === 'light' ? 'dark' : 'gray'}
-                      leftSection={<IconPlus size={14} />}
+                      // leftSection={<IconPlus size={14} />}
                       onClick={() => setModalStrengthsOpen(true)}
                     >
                       Nova postagem
@@ -847,14 +850,18 @@ function ProfilePage () {
                   <Text size='sm'>Carregando...</Text>
                 ) : (
                   profile.recentActivity.total ? (
-                    profile.recentActivity.result.slice(0, 1).map(activity =>
-                      <Box style={{height:'210px'}} key={activity.id}>
-                        <FeedCard
-                          item={activity}
-                          compact
-                        />
-                      </Box>
-                    )
+                    <Grid>
+                      {profile.recentActivity.result.slice(0, 2).map(activity =>
+                        <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                          <Box style={{height: (activity.image || activity.videoUrl) ? '180px' :  '120px'}} key={activity.id}>
+                            <FeedCard
+                              item={activity}
+                              compact
+                            />
+                          </Box>
+                        </Grid.Col>
+                      )}
+                    </Grid>
                   ) : (
                     <Text size='sm' c='dimmed'>Nenhuma postagem até o momento</Text>
                   )
@@ -931,38 +938,6 @@ function ProfilePage () {
       </Modal>
       <Modal 
         centered
-        opened={modalBioOpen} 
-        onClose={() => setModalBioOpen(false)} 
-        title={'Sobre '+profile.name}
-        scrollAreaComponent={ScrollArea.Autosize}
-        fullScreen={isMobile ? true : false}
-      >
-        <Text size='md'>{profile.bio}</Text>
-        {profile.website && 
-          <Anchor 
-            href={profile.website} 
-            target='_blank'
-            underline='hover'
-            className='websiteLink'
-          >
-            <Flex gap={2} align='center' mt={9}>
-              <IconLink size={13} />
-              <Text size='md' fw='420' className='lhNormal'>
-                {truncateString(profile.website, 35)}
-              </Text>
-            </Flex>
-          </Anchor>
-        }
-        {profile.phone && 
-          <Text size='md' fw='420' mt={8}>
-            Telefone: {profile.phone}
-          </Text>
-        }
-        <Space h="md" />
-        <AvailabilityInfo mt={16} />
-      </Modal>
-      <Modal 
-        centered
         opened={modalContactOpen} 
         onClose={() => setModalContactOpen(false)} 
         title={'Entrar em contato com '+profile.name}
@@ -989,7 +964,7 @@ function ProfilePage () {
                     {follower.name} {follower.lastname}
                   </Text>
                   {follower.verified && 
-                    <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                    <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
                   }
                   {follower.legend_badge && 
                     <IconShieldCheckFilled style={iconLegendStyle} />
@@ -1023,7 +998,7 @@ function ProfilePage () {
                     {following.name} {following.lastname}
                   </Text>
                   {following.verified && 
-                    <IconRosetteDiscountCheckFilled color='blue' style={iconVerifiedStyle} />
+                    <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
                   }
                   {following.legend_badge && 
                     <IconShieldCheckFilled style={iconLegendStyle} />
@@ -1099,8 +1074,8 @@ function ProfilePage () {
         <Center>
           <IconRosetteDiscountCheckFilled 
             style={
-              { color: 'blue', width: rem(45), height: rem(45), marginLeft: '5px' }
-            } 
+              { color: '#7950f2', width: rem(45), height: rem(45), marginLeft: '5px' }
+            }
           />
         </Center>
         <Text size='sm' mt='lg'>
@@ -1151,26 +1126,32 @@ function ProfilePage () {
         opened={modalGearItemOpen}
         onClose={() => setModalGearItemOpen(false)}
         centered
-        withCloseButton={false}
+        title={
+          <Flex direction='column'>
+            <Text size='md' fw='500'>
+              {gearItemDetail.brandName} {gearItemDetail.productName}
+            </Text>
+            <Text size='xs' c='dimmed'>
+              Faz parte do equipamento de {profile.name}
+            </Text>
+          </Flex>
+        }
+        withCloseButton
         size='md'
       >
-        <Center>
+        <Center mt='md'>
           <Image 
-            src={'https://ik.imagekit.io/mublin/products/tr:h-240,w-240,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename} 
-            w='160'
+            src={'https://ik.imagekit.io/mublin/products/tr:w-310,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+gearItemDetail.pictureFilename}
+            h={240}
+            mah={240}
+            w='auto'
+            fit='contain'
             mb='10'
             radius='md'
-            onClick={() => openModalGearDetail(product)}
           />
         </Center>
-        <Text ta='center' size='sm' c='dimmed' fw='450'>
-          {gearItemDetail.brandName}
-        </Text>
-        <Text ta='center' size='md'>
-          {gearItemDetail.productName}
-        </Text>
         {gearItemDetail.tuning && 
-          <Box my='xs'>
+          <Box>
             <Text ta='center' size='xs' fw='380'>Afinação: {gearItemDetail.tuning}</Text>
             <Text ta='center' size='xs' c='dimmed'>{gearItemDetail.tuningDescription}</Text>
           </Box>
@@ -1192,27 +1173,17 @@ function ProfilePage () {
             </ScrollArea>
           </Card>
         }
-        <Group gap='8' mt='md' justify='center'>
-          <Button
-            size='xs'
-            radius='lg'
-            variant='light'
-            color={colorScheme === 'light' ? 'dark' : 'gray'}
-            onClick={() => setModalGearItemOpen(false)}
-          >
-            Fechar
-          </Button>
-          <Button
-            size='xs'
-            radius='lg'
-            variant='light'
-            color={colorScheme === 'light' ? 'dark' : 'gray'}
-            component='a'
-            href={`/gear/product/${gearItemDetail.productId}`}
-          >
-            Mais detalhes do item
-          </Button>
-        </Group>
+        <Button 
+          size='sm'
+          color='violet'
+          variant='transparent'
+          fullWidth
+          fw='440'
+          component='a'
+          href={`/gear/product/${gearItemDetail.productId}`}
+        >
+          Ver mais detalhes do produto
+        </Button>
       </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>
@@ -1226,7 +1197,7 @@ function ProfilePage () {
       }
       <FooterMenuMobile
         hide={
-          modalBioOpen || modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalGearItemOpen
+          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalGearItemOpen
         }
       />
     </>

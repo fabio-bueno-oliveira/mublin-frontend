@@ -1,6 +1,6 @@
 import React from 'react'
 import AppRoutes from './routes'
-import { MantineProvider, ColorSchemeScript, Anchor, createTheme } from '@mantine/core'
+import { MantineProvider, ColorSchemeScript, Anchor, createTheme, Button } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
 import '@mantine/core/styles.css'
@@ -21,10 +21,15 @@ const theme = createTheme({
         underline: 'never',
       },
     }),
+    Button: Button.extend({
+      defaultProps: {
+        fw: '440',
+      },
+    }),
   },
-  fontFamily: '"Rubik", Helvetica, Arial, sans-serif',
-  fontFamilyMonospace: '"Rubik", Helvetica, Arial, monospace',
-  headings: { fontFamily: '"Rubik", Helvetica, Arial, sans-serif' }
+  fontFamily: 'Geist, Helvetica, Arial, sans-serif',
+  fontFamilyMonospace: 'Geist, Helvetica, Arial, monospace',
+  headings: { fontFamily: 'Geist, Helvetica, Arial, sans-serif' }
 });
 
 function App() {
