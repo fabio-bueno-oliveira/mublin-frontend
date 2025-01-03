@@ -656,8 +656,7 @@ function ProfilePage () {
                       </Title>
                       {(profile.id === loggedUserId && !profile.requesting) && 
                         <Button 
-                          size='sm'
-                          radius='md'
+                          size='xs'
                           variant='light'
                           color={colorScheme === 'light' ? 'dark' : 'gray'}
                           // leftSection={<IconSettings size={14} />}
@@ -838,11 +837,10 @@ function ProfilePage () {
                   <Title fz='1.03rem' fw='640'>Postagens</Title>
                   {(profile.id === loggedUserId && !profile.requesting) && 
                     <Button 
-                      size='sm'
-                      radius='md'
+                      size='xs'
                       variant='light'
                       color={colorScheme === 'light' ? 'dark' : 'gray'}
-                      // leftSection={<IconPlus size={14} />}
+                      leftSection={<IconPlus size={14} />}
                       onClick={() => setModalStrengthsOpen(true)}
                     >
                       Nova postagem

@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import { IconClock } from '@tabler/icons-react'
 
 export function ProjectCard({ 
-  mb, picture, name, username, type, city, region, confirmed, size, genre
+  mb, picture, isPictureFullUrl, name, username, type, city, region, confirmed, size, genre
 }) {
 
   const { colorScheme } = useMantineColorScheme();
   const imgPath = 'https://ik.imagekit.io/mublin/projects/tr:h-165,w-165,c-maintain_ratio/'
+
+  const imageSrc = isPictureFullUrl ? (picture ? picture : undefined) : (picture ? imgPath+picture : undefined);
 
   return (
     <Flex mb={mb} gap={6} align='center'>
@@ -18,7 +20,7 @@ export function ProjectCard({
           w={55}
           fit='contain'
           name='🎵'
-          src={picture ? imgPath+picture : undefined} 
+          src={imageSrc} 
         />
       </Link>
       <Flex direction='column'>
@@ -34,17 +36,13 @@ export function ProjectCard({
           </Group>
         </Anchor>
         <Box w={170}>
-          {confirmed === 1 &&
-            <>
-              <Text size='11px' className='op80' fw='300' mt={3} mb={4} truncate='end'>
-                {type} {genre && `• ${genre}`}
-              </Text>
-              {city && 
-                <Text size='11px' fw='300' c='dimmed' truncate='end'>
-                  {city && city} {region && `• ${region}`}
-                </Text>
-              }
-            </>
+          <Text size='11px' className='op80' fw='300' mt={3} mb={4} truncate='end'>
+            {type} {genre && `• ${genre}`}
+          </Text>
+          {city && 
+            <Text size='11px' fw='300' c='dimmed' truncate='end'>
+              {city && city} {region && `• ${region}`}
+            </Text>
           }
           {confirmed === 2 && 
             <Badge size='xs' color='gray' variant='light' leftSection={<IconClock size='10px' />}>

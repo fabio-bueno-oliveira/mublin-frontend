@@ -8,6 +8,7 @@ import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import UserCard from '../../components/userCard';
+import ProjectCard from '../../components/projectCard';
 
 function Search () {
 
@@ -99,7 +100,7 @@ function Search () {
         {(!searchedKeywords && !searchResults.requesting) && 
           <Grid>
             <Grid.Col span={{ base: 12, md: 9, lg: 9 }}>
-              <Title fz='1.14rem' fw={460} className='op80' mb={14}>
+              <Title fz='1.03rem' fw='640' mb={14}>
                 Músicos em destaque
               </Title>
               {searchResults.suggestedFeaturedUsers.map(user => (
@@ -121,55 +122,24 @@ function Search () {
               ))}
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-              <Title fz='1.14rem' fw={460} className='op80' mb={14}>
+              <Title fz='1.03rem' fw='640' mb={14}>
                 Projetos em destaque
               </Title>
               {searchResults.featuredProjects.result.map((project, index) => (
-                <Flex key={index} align='flex-start' mb={13} gap={6} justify="space-between">
-                  <Link to={{ pathname: `/projects/${project.username}` }}>
-                    <Image 
-                      radius='md'
-                      h={55}
-                      w={55}
-                      fit='contain'
-                      name='🎵'
-                      src={project.picture ? project.picture : undefined} 
-                    />
-                  </Link>
-                  <Flex
-                    justify="flex-start"
-                    align="flex-start"
-                    direction="column"
-                    wrap="wrap"
-                    gap={4}
-                    style={{flexGrow:'2'}}
-                  >
-                    <Anchor href={`/projects/${project.username}`}>
-                      <Flex gap={3} align={'center'}>
-                        <Box w={isMobile ? 300 : 128}>
-                          <Text 
-                            size='md'
-                            pt={1}
-                            fw={460}
-                            style={{lineHeight:'normal'}}
-                            truncate='end'
-                            title={project.name}
-                          >
-                            {project.name}
-                          </Text>
-                        </Box>
-                      </Flex>
-                    </Anchor>
-                    <Text size='0.82rem' c='dimmed'>
-                      {project.type}{project.genre1 && ` · ${project.genre1}`}
-                    </Text>
-                    {project.city && 
-                      <Text size='0.82rem' c='dimmed'>
-                        {project.city && `${project.city} - ${project.region}`}
-                      </Text>
-                    }
-                  </Flex>
-                </Flex>
+                <ProjectCard 
+                  mb={14}
+                  key={index}
+                  size='md'
+                  picture={project.picture}
+                  isPictureFullUrl={true}
+                  name={project.name}
+                  username={project.username}
+                  type={project.type}
+                  city={project.city}
+                  region={project.region}
+                  confirmed={undefined}
+                  genre={project.genre1}
+                />
               ))}
             </Grid.Col>
           </Grid>

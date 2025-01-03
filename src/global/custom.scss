@@ -28,6 +28,10 @@
     }
   }
   --mantine-color-anchor: #222222;
+  // .mantine-Badge-root {
+  //   --badge-bg: #6b6b6b;
+  //   background-color: #6b6b6b;
+  // }
 }
 
 :root[data-mantine-color-scheme='dark'] {
@@ -79,6 +83,11 @@
       background: var(--overlay-bg, rgba(0, 0, 0, 0.83));
     }
     .mantine-Anchor-root {
+      color: #FFFFFF;
+    }
+    .mantine-Badge-root {
+      --badge-bg: #1f262c;
+      background-color: #1f262c;
       color: #FFFFFF;
     }
   }

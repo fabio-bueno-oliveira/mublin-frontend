@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Flex, Box, Text, Avatar, em  } from '@mantine/core'
+import { Flex, Box, Text, Title, Avatar, em  } from '@mantine/core'
 import { IconStarFilled } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
@@ -37,7 +37,7 @@ function CarouselProjects (props) {
       >
         {projects.splice(0 , profilePlan === 'Free' ? 2 : 300).map(project =>
           <SplideSlide key={project.id}>
-            <Flex align='flex-start' gap={6} mb={5} className='carousel-project'>
+            <Flex align='center' gap={6} mb={5} className='carousel-project'>
               <Avatar 
                 variant='filled' 
                 radius='md' 
@@ -53,24 +53,24 @@ function CarouselProjects (props) {
                 align='flex-start'
                 wrap='wrap'
               >
-                <Text fz='0.66rem' fw='390' truncate='end' c='dimmed'>
+                <Text size='10.5px' fw='420' mb='2' truncate='end' c='dimmed'>
                   {project.workTitle}
                 </Text>
                 <Box w={107}>
-                  <Text size='0.71rem' fw='390' mb={3} truncate='end'>
+                  <Text size='11px' fw='460' mb='2' truncate='end'>
                     {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
                   </Text>
                 </Box>
                 <Box w={107}>
                   <Text
-                    size='0.93rem'
-                    fw='440'
-                    mb={3}
-                    truncate='end' 
-                    title={project.name} 
+                    size='0.86rem'
+                    fw='590'
+                    mb='3'
+                    truncate='end'
+                    title={project.name}
                     className='lhNormal'
                   >
-                    {project.name} {!!project.featured && <IconStarFilled style={{ width: '11px', height: '11px' }} color='gray' />}
+                    {project.name} {!!project.featured && <IconStarFilled style={{ width: '9px', height: '9px' }} color='gray' />}
                   </Text>
                 </Box>
                 {/* <Text size='12px' fw='380' c='dimmed'>{project.type}</Text> */}

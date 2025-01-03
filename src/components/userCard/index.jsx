@@ -21,14 +21,21 @@ export function UserCard({
           href={`/${username}`}
         >
           <Group gap={0}>
-            <Text size={size === 'lg' ? '0.90rem' : '0.88rem'} fw='600'>
+            <Text size='0.86rem' fw='600'>
               {name} {lastname}
             </Text>
             {verified && 
-              <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
+              <IconRosetteDiscountCheckFilled 
+                color='#7950f2' 
+                style={iconVerifiedStyle} 
+                title='Perfil verificado'
+              />
             }
             {legend && 
-              <IconShieldCheckFilled style={iconLegendStyle} />
+              <IconShieldCheckFilled 
+                style={iconLegendStyle} 
+                title='Lenda da música'
+              />
             }
           </Group>
         </Anchor>
@@ -38,11 +45,11 @@ export function UserCard({
             style={{lineHeight:'normal'}} 
             href={`/${username}`}
           >
-            <Text size='11px' fw='300' mt={3} mb={4} truncate='end'>
+            <Text size='11px' fw='420' mt={3} mb={4} truncate='end'>
               {username}
             </Text>
           </Anchor>
-          <Text size='11px' fw='300' c='dimmed' truncate='end'>
+          <Text c='dimmed' size='11px' fw='420' truncate='end'>
             {mainRole} {city && `• ${city}`}{region && `, ${region}`}
           </Text>
         </Box>

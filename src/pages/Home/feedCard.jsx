@@ -147,13 +147,13 @@ function FeedCard ({ item, likes, compact }) {
               }
               {/* {item.relatedUserPlan === 'Pro' && <Badge size='xs' variant='light' color='gray'>PRO</Badge>} */}
             </Flex>
-            <Text size='11px' fw={420}>
+            <Text size='11px' fw='420'>
               {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
             </Text>
             <Text 
               c='dimmed' 
               size='11px'
-              fw={420}
+              fw='420'
               mt='4'
               title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
               className='fitContent'

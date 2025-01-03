@@ -8,7 +8,7 @@ function AvailabilityInfo (props) {
 
   return (
     <Box mt={props.mt} className={props.screen === 'largeScreen' ? 'showOnlyInLargeScreen' : 'showOnlyInMobile'}>
-      <Text size='0.83em' fw='400' mb={8}>
+      <Text size='0.83em' fw='500' mb={8}>
         Principais estilos musicais:
       </Text>
       {profile.genres[0].id ? (
@@ -18,7 +18,7 @@ function AvailabilityInfo (props) {
           ) : (
             <Flex gap={3} mx={0} pt={1}>
               {profile.genres[0].id && profile.genres.map((genre, key) =>
-                <Badge variant='light' color='gray' size='md' key={key}>
+                <Badge variant='light' color='dark' key={key}>
                   {genre.name}
                 </Badge>
               )}
@@ -30,7 +30,7 @@ function AvailabilityInfo (props) {
           Nenhum estilo cadastrado
         </Text>
       )}
-      <Text size='0.83em' fw='390' mb={8} mt={14}>
+      <Text size='0.83em' fw='500' mb={8} mt={14}>
         Tipos de projetos:
       </Text>
       <Group gap={4}>
@@ -39,25 +39,25 @@ function AvailabilityInfo (props) {
         ) : (
           <Flex gap={3} mx={0} pt={1}>
             {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-              <Badge variant='light' color='gray' size='md'>
+              <Badge variant='light' color='dark' size='md'>
                 Projetos próprios
               </Badge>
             }
             {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-              <Badge variant='light' color='gray' size='md'>
-                Sideman
+              <Badge variant='light' color='dark' size='md'>
+                Contrato/Sideman
               </Badge>
             }
           </Flex>
         )}
       </Group>
-      <Text size='0.83em' fw='390' mb={8} mt={14}>
+      <Text size='0.83em' fw='500' mb={8} mt={14}>
         Tipos de trabalho:
       </Text>
       {profile.availabilityItems[0].id ? (
         <Flex gap={3} mx={0} pt={1}>
           {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-            <Badge variant='light' color='gray' size='md' key={key}>
+            <Badge variant='light' color='dark' key={key}>
               {item.itemName}
             </Badge>
           )}
