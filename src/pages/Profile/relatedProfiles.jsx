@@ -14,7 +14,9 @@ function RelatedProfiles ({
   return (
     <Box mb='18'>
       <Divider mt={20} />
-      <Title fz='1.06rem' fw='490' mt='md' mb='xs'>Mais perfis pra você</Title>
+      <Title fz='1.03rem' fw='640' mt='md' mb='xs'>
+        Mais perfis pra você
+      </Title>
       <Splide 
         options={{
           drag: 'free',

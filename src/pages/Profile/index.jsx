@@ -577,11 +577,12 @@ function ProfilePage () {
                 className="mublinModule"
               >
                 <Group justify='space-between' align='center' gap={8} mb={profile.strengths.total ? 15 : 8}>
-                  <Title fz='1.13rem' fw='490'>Pontos Fortes</Title>
+                  <Title fz='1.03rem' fw='640'>
+                    Pontos Fortes
+                  </Title>
                   {(profile.id !== loggedUserId && !profile.requesting) && 
                     <Button 
-                      size='sm'
-                      radius='md'
+                      size='xs'
                       variant='light'
                       color={colorScheme === 'light' ? 'dark' : 'gray'}
                       onClick={() => setModalStrengthsOpen(true)}
@@ -650,7 +651,7 @@ function ProfilePage () {
                     className='mublinModule'
                   >
                     <Group justify='space-between' align='center' gap={8} mb={13}>
-                      <Title fz='1.13rem' fw='490'>
+                      <Title fz='1.03rem' fw='640'>
                         Equipamento {!!profile.gear.total && `(${profile.gear.total})`}
                       </Title>
                       {(profile.id === loggedUserId && !profile.requesting) && 
@@ -800,7 +801,9 @@ function ProfilePage () {
                     >
                       <Divider mb={18} className='showOnlyInMobile' />
                       <Group gap={3} mb={8}>
-                        <Title fz='1.13rem' fw='490'>Equipamento</Title>
+                        <Title fz='1.03rem' fw='640'>
+                          Equipamento
+                        </Title>
                         <IconLockSquareRoundedFilled size={22} color="gray" /> 
                       </Group>
                       <Text size='sm'>
@@ -832,7 +835,7 @@ function ProfilePage () {
                 className='mublinModule'
               >
                 <Group justify='space-between' align='center' gap={8} mb={13}>
-                  <Title fz='1.13rem' fw='490'>Postagens</Title>
+                  <Title fz='1.03rem' fw='640'>Postagens</Title>
                   {(profile.id === loggedUserId && !profile.requesting) && 
                     <Button 
                       size='sm'
@@ -890,7 +893,7 @@ function ProfilePage () {
               src={profile.picture}
             />
             <Flex direction='column'>
-              <Text size='sm' fw='500'>
+              <Text size='sm' fw='620'>
                 {`${profile.name} ${profile.lastname}`}
               </Text>
               <Text size='xs' c='dimmed'>
@@ -1019,7 +1022,7 @@ function ProfilePage () {
         onClose={() => setModalStrengthsOpen(false)}
         title={`Votar pontos fortes de ${profile.name} ${profile.lastname}`}
         centered
-        // fullScreen
+        fullScreen={isMobile ? true : false}
       >
         <Alert variant='light' mb={10} p='xs' color='gray'>
           <Text size='xs'>Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter o Mublin uma comunidade com credibilidade :)</Text>
@@ -1197,7 +1200,7 @@ function ProfilePage () {
       }
       <FooterMenuMobile
         hide={
-          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalGearItemOpen
+          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalGearItemOpen || modalVerifiedOpen || modalLegendOpen
         }
       />
     </>

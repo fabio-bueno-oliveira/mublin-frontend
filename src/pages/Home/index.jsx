@@ -140,6 +140,7 @@ function Home () {
                     >
                       <ProjectCard 
                         mb={0}
+                        size='md'
                         picture={project.picture}
                         name={project.name}
                         username={project.username}
@@ -147,6 +148,7 @@ function Home () {
                         city={project.cityName}
                         region={project.regionName}
                         confirmed={project.confirmed}
+                        genre={project.genre1}
                       />
                     </Card>
                   )}
@@ -172,7 +174,9 @@ function Home () {
           {largeScreen && 
             <Grid.Col span={3.3}>
               <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder className='mublinModule'>
-                <Title fz='1.13rem' fw='490'>Músicos em destaque</Title>
+                <Title fz='1.03rem' fw='640'>
+                  Músicos em destaque
+                </Title>
                 {search.requesting ? (
                   <Text size='13px' mt={7}>Carregando...</Text>
                 ) : (
@@ -180,6 +184,7 @@ function Home () {
                     <UserCard 
                       mt={14}
                       key={user.id}
+                      size='md'
                       name={user.name}
                       lastname={user.lastname}
                       username={user.username}
@@ -193,15 +198,18 @@ function Home () {
                   ))
                 )}
               </Card>
-              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder mt={10} className='mublinModule'>
-                <Title fz='1.13rem' fw='490'>Novos usuários</Title>
+              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder mt={10} className='mublinModule'> 
+                <Title fz='1.03rem' fw='640'>
+                  Novos usuários
+                </Title>
                 {search.requesting ? (
                   <Text size='13px' mt={7}>Carregando...</Text>
                 ) : (
-                  search.suggestedNewUsers.map((user, key) => (
+                  search.suggestedNewUsers.map(user => (
                     <UserCard 
                       mt={14}
-                      key={key}
+                      key={user.id}
+                      size='md'
                       name={user.name}
                       lastname={user.lastname}
                       username={user.username}

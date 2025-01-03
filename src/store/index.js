@@ -6,8 +6,8 @@ import rootReducer from './reducers';
 const middleware = [thunk];
 
 if (process.env.NODE_ENV !== 'production') {
-    // const loggerMiddleware = createLogger();
-    // middleware.push(loggerMiddleware);
+    const loggerMiddleware = createLogger();
+    middleware.push(loggerMiddleware);
 }
 
 export const Store = createStore(

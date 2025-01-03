@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Group, Flex, Tabs, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Button, Center, Loader, Badge, Skeleton, SimpleGrid, rem, em } from '@mantine/core';
+import { Container, Grid, Group, Flex, Tabs, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Button, Skeleton, SimpleGrid, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
+import UserCard from '../../components/userCard';
 
 function Search () {
 
@@ -101,56 +102,22 @@ function Search () {
               <Title fz='1.14rem' fw={460} className='op80' mb={14}>
                 Músicos em destaque
               </Title>
-              {searchResults.suggestedFeaturedUsers.map((user, key) => (
-                <Flex key={key} align='center' mb={13} gap={6} justify='space-between'>
-                  <Link to={{ pathname: `/${user.username}` }}>
-                    <Avatar 
-                      src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
-                      size='lg'
-                    />
-                  </Link>
-                  <Flex
-                    justify='flex-start'
-                    align='flex-start'
-                    direction='column'
-                    wrap='wrap'
-                    gap={4}
-                    style={{flexGrow:'2'}}
-                  >
-                    <Anchor href={`/${user.username}`}>
-                      <Flex gap={3} align={'center'}>
-                        <Text size='md' fw={460} style={{lineHeight:'normal'}}>
-                          {user.name+' '+user.lastname}
-                        </Text>
-                        {!!user.verified && 
-                          <IconRosetteDiscountCheckFilled color='#7950f2' 
-                          style={iconVerifiedStyle} />
-                        }
-                        {!!user.legend && 
-                          <IconShieldCheckFilled color='#DAA520' 
-                          style={iconVerifiedStyle} />
-                        }
-                      </Flex>
-                    </Anchor>
-                    <Text size='0.82rem' c='dimmed'>
-                      {user.role}
-                    </Text>
-                    <Text size='0.82rem' c='dimmed'>
-                      {user.city && user.city+' - '+user.region}
-                    </Text>
-                  </Flex>
-                  {/* <Box>
-                    <Button 
-                      size='sm' 
-                      color='violet' 
-                      variant='light'
-                      component="a"
-                      href={`/${user.username}`}
-                    >
-                      Ver perfil
-                    </Button>
-                  </Box> */}
-                </Flex>
+              {searchResults.suggestedFeaturedUsers.map(user => (
+                <UserCard 
+                  key={user.id}
+                  mt={0}
+                  mb={14}
+                  size='lg'
+                  name={user.name}
+                  lastname={user.lastname}
+                  username={user.username}
+                  mainRole={user.role}
+                  picture={user.picture}
+                  verified={user.verified}
+                  legend={user.legend}
+                  city={user.city}
+                  region={user.region}
+                />
               ))}
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>

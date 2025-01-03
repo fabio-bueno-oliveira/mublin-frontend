@@ -23,7 +23,8 @@ const theme = createTheme({
     }),
     Button: Button.extend({
       defaultProps: {
-        fw: '440',
+        fw: '550',
+        radius: 'md'
       },
     }),
   },
