@@ -149,14 +149,14 @@ function MenuMobile () {
             </Flex>
           )}
         </Center>
-        <Center mt={22} mb={22}>
+        <Center mt={22} mb={16}>
           {colorScheme === 'dark' && 
             <Button
               size='sm'
               fw='500'
               variant='outline'
               radius='xl'
-              color='violet'
+              color='white'
               leftSection={<IconBrightnessUp size='1.5rem' stroke={1.5} />}
               onClick={() => setNewColorTheme('light')}
             >
@@ -169,7 +169,7 @@ function MenuMobile () {
               fw='500'
               variant='outline'
               radius='xl'
-              color='violet'
+              color='dark'
               leftSection={<IconMoon size='1.5rem' stroke={1.5} />}
               onClick={() => setNewColorTheme('dark')}
             >

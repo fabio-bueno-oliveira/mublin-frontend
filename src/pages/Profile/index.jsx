@@ -7,7 +7,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Card, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPencil, IconPlus, IconMapPin } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPlus, IconMapPin } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -443,64 +443,64 @@ function ProfilePage () {
                 }
                 <Flex gap={5} mt={isMobile ? 17 : 20} mb={isMobile ? 14 : 20}>
                   {loggedUserId !== profile.id ? (
-                    <Button 
-                      size='xs'
-                      fz='14px'
-                      fw='500'
-                      color={colorScheme === "light" ? "dark" : "gray"}
-                      variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
-                      loading={loadingFollow}
-                      rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
-                      fullWidth={isMobile}
-                      onClick={
-                        followedByMe?.following === 'true' 
-                          ? () => setModalFollowInfoOpen(true)
-                          : () => followUnfollow() 
+                    <>
+                      <Button 
+                        size='xs'
+                        fz='14px'
+                        fw='500'
+                        color={colorScheme === "light" ? "dark" : "gray"}
+                        variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
+                        loading={loadingFollow}
+                        rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
+                        fullWidth={isMobile}
+                        onClick={
+                          followedByMe?.following === 'true' 
+                            ? () => setModalFollowInfoOpen(true)
+                            : () => followUnfollow() 
+                        }
+                      >
+                        {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
+                      </Button>
+                      <Button 
+                        size='xs'
+                        fz='0.84rem'
+                        fw='470'
+                        variant='light'
+                        color={colorScheme === "light" ? "dark" : "gray"}
+                        fullWidth={isMobile}
+                        onClick={() => setModalContactOpen(true)}
+                      >
+                        Contato
+                      </Button>
+                      {profile.instagram && 
+                        <ActionIcon 
+                          size={isLargeScreen ? "30px" : "30"}
+                          w={isLargeScreen ? "30px" : "30"}
+                          variant='light'
+                          color={colorScheme === "light" ? "dark" : "gray"}
+                          component="a"
+                          href={`https://instagram.com/${profile.instagram}`}
+                          target='_blank'
+                          title='Instagram'
+                        >
+                          <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                        </ActionIcon>
                       }
-                    >
-                      {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
-                    </Button>
+                    </>
                   ) : (
                     <Button 
                       size='xs'
                       fz='0.84rem'
-                      fw='470'
+                      fw='570'
                       variant='light'
                       color={colorScheme === "light" ? "dark" : "gray"}
                       fullWidth={isMobile}
-                      leftSection={<IconPencil size={14} />} 
+                      // leftSection={<IconPencil size={14} />} 
                       onClick={() => navigate('/settings')}
                     >
-                      Editar perfil
+                      Editar meu perfil
                     </Button>
                   )}
-                  <Button 
-                    size='xs'
-                    fz='0.84rem'
-                    fw='470'
-                    variant='light'
-                    color={colorScheme === "light" ? "dark" : "gray"}
-                    fullWidth={isMobile}
-                    onClick={() => setModalContactOpen(true)}
-                  >
-                    Contato
-                  </Button>
-                  {profile.instagram && 
-                    <>
-                      <ActionIcon 
-                        size={isLargeScreen ? "30px" : "30"}
-                        w={isLargeScreen ? "30px" : "30"}
-                        variant='light'
-                        color={colorScheme === "light" ? "dark" : "gray"}
-                        component="a"
-                        href={`https://instagram.com/${profile.instagram}`}
-                        target='_blank'
-                        title='Instagram'
-                      >
-                        <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                      </ActionIcon>
-                    </>
-                  }
                 </Flex>
                 {profile.availabilityId && 
                   <>
@@ -945,7 +945,7 @@ function ProfilePage () {
       >
         <Text size='sm'><strong>Localidade:</strong> {profile.city}, {profile.region}, {profile.country}</Text>
         <Text size='sm'><strong>E-mail:</strong> {profile.email}</Text>
-        <Text size='sm' mb='md'><strong>Celular:</strong> {profile.phone ? profile.phone : 'Não informado'}</Text>
+        <Text size='sm'><strong>Celular:</strong> {profile.phone ? profile.phone : 'Não informado'}</Text>
       </Modal>
       <Modal 
         centered
@@ -1142,9 +1142,9 @@ function ProfilePage () {
       >
         <Center>
           <Image 
-            src={'https://ik.imagekit.io/mublin/products/tr:w-280,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+gearItemDetail.pictureFilename}
-            h={240}
-            mah={240}
+            src={'https://ik.imagekit.io/mublin/products/tr:h-500,w-500,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
+            h={250}
+            mah={250}
             w='auto'
             fit='contain'
             mb='10'

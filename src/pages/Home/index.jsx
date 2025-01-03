@@ -6,8 +6,9 @@ import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
-import { Container, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, em } from '@mantine/core'
+import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
 import ProjectCard from '../../components/projectCard'
 import FeedCard from './feedCard'
@@ -156,19 +157,22 @@ function Home () {
                 </>
               )}
             </Box>
-            <ScrollArea w='100%' h={80} type='never'>
+            <ScrollArea w='100%' h={94} type='never'>
               <Box className='fitContent'>
-                <Flex gap={14}>
-                  {projects.list.map(project =>
-                    <Flex 
+                <Flex gap={18}>
+                  {projects.requesting && 
+                    <Loader size='63px' />
+                  }
+                  {!projects.requesting && projects.list.map(project =>
+                    <Flex
                       key={project.projectid}
                       direction='column'
                       align='center'
                       gap='10'
                     >
-                      <Avatar size='55px' src={'https://ik.imagekit.io/mublin/projects/tr:h-110,w-110,c-maintain_ratio/'+project.picture} />
-                      <Text size='0.7rem' fw='500'>
-                        {truncateString(project.name, 7)}
+                      <Avatar size='65px' src={'https://ik.imagekit.io/mublin/projects/tr:h-130,w-130,c-maintain_ratio/'+project.picture} />
+                      <Text size='0.76rem' fw='470'>
+                        {truncateString(project.name, 8)}
                       </Text>
                       {/* <ProjectCard 
                         mb={0}
@@ -184,6 +188,18 @@ function Home () {
                       /> */}
                     </Flex>
                   )}
+                  <Flex
+                    direction='column'
+                    align='center'
+                    gap='10'
+                  >
+                     <Avatar size='65px' color='violet' radius='xl'>
+                      <IconPlus size="1.5rem" />
+                    </Avatar>
+                    <Text size='0.8rem' fw='530'>
+                      Criar novo
+                    </Text>
+                  </Flex>
                 </Flex>
               </Box>
             </ScrollArea>
