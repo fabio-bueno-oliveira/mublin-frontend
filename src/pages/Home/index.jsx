@@ -6,7 +6,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
-import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, em } from '@mantine/core'
+import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
@@ -157,25 +157,10 @@ function Home () {
                 </>
               )}
             </Box>
-            <ScrollArea w='100%' h={94} type='never' className='showOnlyInMobile'>
+            <Divider mb="xs" label="Meus projetos" labelPosition="left"  className='showOnlyInMobile' />
+            <ScrollArea w='100%' h={100} type='never' className='showOnlyInMobile'>
               <Box className='fitContent'>
                 <Flex gap={18}>
-                  {projects.requesting && 
-                    <Loader color='violet' size='63px' />
-                  }
-                  {!projects.requesting && projects.list.map(project =>
-                    <Flex
-                      key={project.projectid}
-                      direction='column'
-                      align='center'
-                      gap='10'
-                    >
-                      <Avatar size='65px' src={'https://ik.imagekit.io/mublin/projects/tr:h-130,w-130,c-maintain_ratio/'+project.picture} />
-                      <Text size='0.75rem' fw='480'>
-                        {truncateString(project.name, 9)}
-                      </Text>
-                    </Flex>
-                  )}
                   <Flex
                     direction='column'
                     align='center'
@@ -192,9 +177,26 @@ function Home () {
                       Criar novo
                     </Text>
                   </Flex>
+                  {projects.requesting && 
+                    <Loader color='violet' size='63px' />
+                  }
+                  {!projects.requesting && projects.list.map(project =>
+                    <Flex
+                      key={project.projectid}
+                      direction='column'
+                      align='center'
+                      gap='10'
+                    >
+                      <Avatar size='65px' src={'https://ik.imagekit.io/mublin/projects/tr:h-130,w-130,c-maintain_ratio/'+project.picture} />
+                      <Text size='0.75rem' fw='480'>
+                        {truncateString(project.name, 9)}
+                      </Text>
+                    </Flex>
+                  )}
                 </Flex>
               </Box>
             </ScrollArea>
+            <Divider mt="xs" label="Atualizações da minha rede" labelPosition="left"  className='showOnlyInMobile' />
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 12, lg: 6.2 }} mb={isMobile ? 60 : 20}>
             {feed.requesting ? (
