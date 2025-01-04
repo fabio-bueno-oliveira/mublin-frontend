@@ -145,7 +145,7 @@ function Header (props) {
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
                 <>
-                  <Box w={isMobile ? 160 : 130} className='showOnlyInMobile'>
+                  <Box w={isMobile ? 225 : 130} className='showOnlyInMobile'>
                     <Text 
                       mr='10' 
                       className='lhNormal'

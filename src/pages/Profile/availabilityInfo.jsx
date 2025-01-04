@@ -18,7 +18,7 @@ function AvailabilityInfo (props) {
           ) : (
             <Flex gap={3} mx={0} pt={1}>
               {profile.genres[0].id && profile.genres.map((genre, key) =>
-                <Badge variant='light' color='dark' key={key}>
+                <Badge variant='light' color='dark' key={key} className='availability'>
                   {genre.name}
                 </Badge>
               )}
@@ -39,12 +39,12 @@ function AvailabilityInfo (props) {
         ) : (
           <Flex gap={3} mx={0} pt={1}>
             {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-              <Badge variant='light' color='dark' size='md'>
+              <Badge variant='light' color='dark' size='md' className='availability'>
                 Projetos próprios
               </Badge>
             }
             {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-              <Badge variant='light' color='dark' size='md'>
+              <Badge variant='light' color='dark' size='md' className='availability'>
                 Contrato/Sideman
               </Badge>
             }
@@ -57,7 +57,7 @@ function AvailabilityInfo (props) {
       {profile.availabilityItems[0].id ? (
         <Flex gap={3} mx={0} pt={1}>
           {profile.availabilityItems[0].id && profile.availabilityItems.map((item, key) =>
-            <Badge variant='light' color='dark' key={key}>
+            <Badge variant='light' color='dark' key={key} className='availability'>
               {item.itemName}
             </Badge>
           )}

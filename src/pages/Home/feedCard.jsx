@@ -129,7 +129,7 @@ function FeedCard ({ item, likes, compact }) {
           </Link>
           <Box style={{flexGrow:'1'}}>
             <Flex gap={2} align='center' mb={2}>
-              <Text size='1rem'>
+              <Text size='0.93rem'>
                 <Anchor 
                   fw='600' 
                   style={{lineHeight:'normal'}} 
@@ -311,7 +311,7 @@ function FeedCard ({ item, likes, compact }) {
         {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting && !compact) && 
           <Flex 
             align='center'
-            gap='1'
+            gap='9'
             mt='12'
             px='15'
           >
@@ -336,16 +336,16 @@ function FeedCard ({ item, likes, compact }) {
               </>
             )}
             {totalLikes > 0 && 
-              <Button 
-                variant='transparent' 
-                px='8'
+              <Text 
+                size='13px'
+                fw='500'
+                c='dimmed' 
                 pt='1'
-                size='sm' 
-                color='gray'
+                className='point'
                 onClick={() => openModalLikes(item.id)}
               >
-                {totalLikes}33
-              </Button>
+                {totalLikes}
+              </Text>
             }
           </Flex> 
         }

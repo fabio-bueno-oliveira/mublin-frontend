@@ -157,11 +157,11 @@ function Home () {
                 </>
               )}
             </Box>
-            <ScrollArea w='100%' h={94} type='never'>
+            <ScrollArea w='100%' h={94} type='never' className='showOnlyInMobile'>
               <Box className='fitContent'>
                 <Flex gap={18}>
                   {projects.requesting && 
-                    <Loader size='63px' />
+                    <Loader color='violet' size='63px' />
                   }
                   {!projects.requesting && projects.list.map(project =>
                     <Flex
@@ -171,21 +171,9 @@ function Home () {
                       gap='10'
                     >
                       <Avatar size='65px' src={'https://ik.imagekit.io/mublin/projects/tr:h-130,w-130,c-maintain_ratio/'+project.picture} />
-                      <Text size='0.76rem' fw='470'>
-                        {truncateString(project.name, 8)}
+                      <Text size='0.75rem' fw='480'>
+                        {truncateString(project.name, 9)}
                       </Text>
-                      {/* <ProjectCard 
-                        mb={0}
-                        size='md'
-                        picture={project.picture}
-                        name={project.name}
-                        username={project.username}
-                        type={project.ptname}
-                        city={project.cityName}
-                        region={project.regionName}
-                        confirmed={project.confirmed}
-                        genre={project.genre1}
-                      /> */}
                     </Flex>
                   )}
                   <Flex
@@ -193,10 +181,14 @@ function Home () {
                     align='center'
                     gap='10'
                   >
-                     <Avatar size='65px' color='violet' radius='xl'>
+                     <Avatar 
+                      size='65px' color='violet' radius='xl'
+                      className='point'
+                      onClick={() => navigate('/new/')}
+                     >
                       <IconPlus size="1.5rem" />
                     </Avatar>
-                    <Text size='0.8rem' fw='530'>
+                    <Text size='0.75rem' fw='480'>
                       Criar novo
                     </Text>
                   </Flex>

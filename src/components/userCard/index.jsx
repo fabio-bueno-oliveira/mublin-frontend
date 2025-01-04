@@ -21,7 +21,7 @@ export function UserCard({
           href={`/${username}`}
         >
           <Group gap={0}>
-            <Text size='0.86rem' fw='600'>
+            <Text size='0.88rem' fw='600'>
               {name} {lastname}
             </Text>
             {verified && 
@@ -40,16 +40,16 @@ export function UserCard({
           </Group>
         </Anchor>
         <Box w={170}>
-          <Anchor 
+          <Anchor
             underline='never'
-            style={{lineHeight:'normal'}} 
+            style={{lineHeight:'normal'}}
             href={`/${username}`}
           >
-            <Text size='11px' fw='420' mt={3} mb={4} truncate='end'>
+            <Text size='0.75rem' fw='420' mt={3} mb={4} truncate='end'>
               {username}
             </Text>
           </Anchor>
-          <Text c='dimmed' size='11px' fw='420' truncate='end'>
+          <Text c='dimmed' size='0.75rem' fw='420' truncate='end'>
             {mainRole} {city && `• ${city}`}{region && `, ${region}`}
           </Text>
         </Box>

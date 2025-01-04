@@ -52,7 +52,12 @@ function GearProductPage () {
 
   return (
     <>
-      <Header showBackIcon={true} />
+      <Header
+        page='profile'
+        username='Detalhes do produto'
+        profileId={product.id}
+        showBackIcon={true}
+      />
       <Container size='lg' mt={largeScreen ? 20 : 0}>
         <Text mb='3' fw='500' size='sm' c='dimmed'>
           {product.requesting ? 'Carregando marca...' : product.categoryName}
@@ -63,7 +68,7 @@ function GearProductPage () {
         <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
           <Group gap='2'>
             <IconArrowRight size={13} /> 
-            Ver todos os produtos da {product.brandName}
+            Ver todos os produtos de {product.brandName}
           </Group>
         </Link>
         <Grid mt='20' mb='70'>
@@ -115,7 +120,7 @@ function GearProductPage () {
             </Box>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
-            <Title order={5} fw='450' mb={14}>
+            <Title fz='1.0rem' fw='640' mb={14}>
               Quem possui {product?.owners?.length && '('+product?.owners?.length+')'}
             </Title>
             {product.requesting ? (
@@ -123,7 +128,7 @@ function GearProductPage () {
                 Carregando...
               </Text>
             ) : (
-              <>
+              <Box mb={30}>
                 {product.owners[0].id && 
                   product?.owners?.map(owner => 
                     <Paper 
@@ -148,10 +153,10 @@ function GearProductPage () {
                           direction='column'
                           wrap='wrap'
                         >
-                          <Text size='sm' c='gray' fw='500'>
+                          <Text size='sm' fw='550'>
                             {owner.name+' '+owner.lastname}
                           </Text>
-                          <Text size='xs' c='gray'>
+                          <Text size='xs' fw='500' c='dimmed'>
                             {owner.city && <span>{owner.city}/{owner.region}</span>}
                           </Text>
                           <Group gap={3}>
@@ -169,7 +174,6 @@ function GearProductPage () {
                           </Group>
                         </Flex>
                       </Flex>
-                      <Text size='xs' mt='xs' c='dimmed'>Comentários de {owner.name} sobre este item</Text>
                       {owner.ownerComments ? (
                         <Text size='sm'>
                           {owner.ownerComments}
@@ -182,7 +186,7 @@ function GearProductPage () {
                     </Paper>
                   )
                 }
-              </>
+              </Box>
             )}
           </Grid.Col>
         </Grid>
