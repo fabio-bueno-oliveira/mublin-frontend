@@ -56,26 +56,24 @@ function LandingPage () {
       {loggedIn &&
         <Navigate to="/home" />
       }
-      <Box bg="black" c="white" py="14">
-        <Text ta="center" size={isMobile ? "12px" : "15px"} fw="200" c="dimmed">
+      <Box bg='black' c='white' py='14'>
+        <Text ta='center' size={isMobile ? '12px' : '15px'} fw='200' c='dimmed'>
           🚀 40% off no lançamento: Mublin PRO por 3 meses
         </Text>
       </Box>
       <Header />
-        <Container size="sm" pt={45}>
+        <Container size='sm' pt={45}>
           <Title 
-            size="2.4rem"
-            fw='420'
-            ta="center"
-            style={{fontFamily:'Roboto Condensed'}}
+            size='2rem'
+            fw='550'
+            ta='center'
           >
-            <span style={{fontWeight:'700'}}>Gerencie</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
+            <span style={{fontWeight:'800'}}>Gerencie</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
           </Title>
           <Title 
-            size="19px"
-            ta="center" 
-            fw="430"
-            style={{fontFamily:'Roboto Condensed'}}
+            size='19px'
+            ta='center' 
+            fw='500'
           >
             Aumente suas chances de tocar em gigs interessantes
           </Title>
@@ -110,7 +108,7 @@ function LandingPage () {
                   <IconShieldCheckFilled style={iconLegendStyle} />
                 }
               </Flex>
-              <Text size="xs" ta="center">{user.role}</Text>
+              <Text size="xs" ta="center">{user.role} {user.genre && ' • ' + user.genre}</Text>
               {user.city && 
                 <Text size="11px" ta="center" c="dimmed">{user.city}, {user.uf}</Text>
               }
@@ -127,7 +125,7 @@ function LandingPage () {
             </Grid.Col>
             <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">
-                <IconAutomaticGearbox size={isMobile ? 42 : 66} color="#252525" />
+                <IconAutomaticGearbox size={isMobile ? 42 : 60} color="#252525" />
                 <Text c="#252525" size={isMobile ? "13px" : "16px"}>Gerencie projetos</Text>
               </Flex>
             </Grid.Col>

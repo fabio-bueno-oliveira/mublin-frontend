@@ -47,6 +47,7 @@ function Header (props) {
   const projectsActive = projects?.list
     .filter(p => p.activityStatusId !== 2 && p.activityStatusId !== 6)
     .map(project => ({ 
+      id: project.projectid,
       name: project.name,
       username: project.username,
       picture: project.picture
@@ -55,8 +56,10 @@ function Header (props) {
   const projectsInactive = projects?.list
     .filter(p => p.activityStatusId === 2 || p.activityStatusId === 6)
     .map(project => ({ 
+      id: project.projectid,
       name: project.name,
       username: project.username,
+      picture: project.picture
     }));
 
   const { colorScheme, setColorScheme } = useMantineColorScheme()
@@ -76,7 +79,7 @@ function Header (props) {
     }
   }, [])
 
-  useEffect(() => { 
+  useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
@@ -135,10 +138,10 @@ function Header (props) {
       >
         <Flex
           mih={50}
-          gap="md"
-          justify="space-between"
-          align="center"
-          direction="row"
+          gap='md'
+          justify='space-between'
+          align='center'
+          direction='row'
         >
           <Group>
             <>
@@ -209,7 +212,7 @@ function Header (props) {
               </form>
             }
           </Group>
-          <Flex align={"center"} className="menuHeader">
+          <Flex align='center' className='menuHeader'>
             <Link to={{ pathname: '/home' }}>
               <Button 
                 size='sm'
@@ -245,7 +248,7 @@ function Header (props) {
                   color={currentPath === '/projects' ? 'violet' : menuTextColor}
                   leftSection={<IconMusic size={14} />}
                   rightSection={<IconChevronDown size={14} />}
-                  rightSectionPointerEvents='all'
+                  // rightSectionPointerEvents='all'
                   p='xs'
                   visibleFrom='md'
                 >
@@ -255,7 +258,7 @@ function Header (props) {
               <Menu.Dropdown>
                 <Menu.Label>Projetos em atividade</Menu.Label>
                 {projectsActive.map(project =>
-                  <Menu.Item>
+                  <Menu.Item key={project.id}>
                     <Group gap={5}>
                       <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
                       <Text size='0.85rem' fw='500'>{project.name}</Text>
@@ -272,7 +275,7 @@ function Header (props) {
                     </Menu.Target>
                     <Menu.Dropdown>
                       {projectsInactive.map(project =>
-                        <Menu.Item>
+                        <Menu.Item key={project.id}>
                           {project.name}
                         </Menu.Item>
                       )}
@@ -309,7 +312,7 @@ function Header (props) {
                 leftSection={<IconMicrophone2 size={14} />}
                 p={'xs'}
                 visibleFrom='md'
-                mx='sm'
+                mx='xs'
               >
                 Quero tocar
               </Button>

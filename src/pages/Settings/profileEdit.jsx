@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
-import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, Group, Flex, Button, TextInput, Input, Text, Textarea, NativeSelect, Checkbox, Anchor, Divider } from '@mantine/core';
-import { IconSearch, IconWorld, IconChevronLeft } from '@tabler/icons-react';
+import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, Group, Flex, Button, TextInput, Input, Text, Textarea, NativeSelect, Anchor, Divider } from '@mantine/core';
+import { IconSearch, IconChevronLeft } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
@@ -17,8 +18,11 @@ function SettingsPage () {
 
   const user = useSelector(state => state.user);
 
-  const loggedUser = JSON.parse(localStorage.getItem('user'));
   const token = localStorage.getItem('token');
+
+  const decoded = jwtDecode(token);
+  const loggedUserId = decoded.result.id;
+  const loggedUsername = decoded.result.username;
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)');
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +46,7 @@ function SettingsPage () {
       region: '',
       city: '',
       cityName: '',
-      public: ''
+      public: 1
     },
     validate: {
       name: hasLength({ min: 3 }, 'O nome deve ter no mínimo 2 caracteres'),
@@ -66,7 +70,7 @@ function SettingsPage () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({userId: loggedUser.id, name: values.name, lastname: values.lastname, email: values.email, phone_mobile: values.phone, phone_mobile_public: values.phoneIsPublic ? 1 : 0, website: values.website, instagram: values.instagram, gender: values.gender, bio: values.bio, id_country_fk: Number(values.country), id_region_fk: Number(values.region), id_city_fk: Number(values.city), public: values.public ? 1 : 0})
+      body: JSON.stringify({userId: loggedUserId, name: values.name, lastname: values.lastname, email: values.email, phone_mobile: values.phone, phone_mobile_public: values.phoneIsPublic ? 1 : 0, website: values.website, instagram: values.instagram, gender: values.gender, bio: values.bio, id_country_fk: Number(values.country), id_region_fk: Number(values.region), id_city_fk: Number(values.city), public: values.public ? 1 : 0})
     }).then((response) => {
       response.json().then((response) => {
         window.scrollTo(0, 0);
@@ -162,7 +166,7 @@ function SettingsPage () {
                 {error && 
                   <Alert color="red">Erro ao atualizar os dados. Tente novamente em instantes</Alert>
                 }
-                <Checkbox
+                {/* <Checkbox
                   color='violet'
                   label={
                     <Group gap={3}>
@@ -172,8 +176,8 @@ function SettingsPage () {
                   description='Exibir meu perfil nas buscas internas e nos mecanismos'
                   key={form.key('public')}
                   {...form.getInputProps('public', { type: 'checkbox' })}
-                />
-                <Divider my={10} />
+                /> */}
+                {/* <Divider my={10} /> */}
                 <Grid>
                   <Grid.Col span={6}>
                     <TextInput
@@ -199,7 +203,7 @@ function SettingsPage () {
                   mt="xs"
                   label="Username"
                   description="O username não pode ser alterado no momento"
-                  defaultValue={user.username}
+                  defaultValue={loggedUsername}
                   disabled
                 />
                 <Textarea

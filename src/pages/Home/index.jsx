@@ -41,7 +41,6 @@ function Home () {
   const feed = useSelector(state => state.feed)
 
   useEffect(() => {
-    dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     dispatch(miscInfos.getFeed());
     dispatch(miscInfos.getFeedLikes());
     dispatch(userInfos.getUserRolesInfoById(loggedUserId));
