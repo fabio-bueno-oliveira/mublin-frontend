@@ -64,9 +64,10 @@ function LandingPage () {
       <Header />
         <Container size="sm" pt={45}>
           <Title 
-            size="30px"
-            fw='500'
+            size="2.4rem"
+            fw='420'
             ta="center"
+            style={{fontFamily:'Roboto Condensed'}}
           >
             <span style={{fontWeight:'700'}}>Gerencie</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
           </Title>
@@ -74,6 +75,7 @@ function LandingPage () {
             size="19px"
             ta="center" 
             fw="430"
+            style={{fontFamily:'Roboto Condensed'}}
           >
             Aumente suas chances de tocar em gigs interessantes
           </Title>

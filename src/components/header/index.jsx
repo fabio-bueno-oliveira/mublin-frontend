@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { miscInfos } from '../../store/actions/misc';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, rem, em } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, Select, rem, em } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon,
@@ -20,7 +20,9 @@ import {
   IconMicrophone2,
   IconMusic,
   IconPlus,
-  IconLogout
+  IconLogout,
+  IconChevronDown,
+  IconChevronRight
 } from '@tabler/icons-react';
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
@@ -40,6 +42,23 @@ function Header (props) {
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
+  const projects = useSelector(state => state.userProjects)
+
+  const projectsActive = projects?.list
+    .filter(p => p.activityStatusId !== 2 && p.activityStatusId !== 6)
+    .map(project => ({ 
+      name: project.name,
+      username: project.username,
+      picture: project.picture
+    }));
+
+  const projectsInactive = projects?.list
+    .filter(p => p.activityStatusId === 2 || p.activityStatusId === 6)
+    .map(project => ({ 
+      name: project.name,
+      username: project.username,
+    }));
+
   const { colorScheme, setColorScheme } = useMantineColorScheme()
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
@@ -58,11 +77,11 @@ function Header (props) {
   }, [])
 
   useEffect(() => { 
+    dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
       dispatch(miscInfos.getFeed());
       dispatch(miscInfos.getFeedLikes());
-      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     }
   }, [refreshCounter])
 
@@ -217,26 +236,76 @@ function Header (props) {
                 Novo
               </Button>
             </Link>
-            <Link to={{ pathname: '/projects' }}>
-              <Button
-                size='sm'
-                fw={400}
-                variant='transparent'
-                color={currentPath === '/projects' ? 'violet' : menuTextColor}
-                leftSection={<><IconMusic size={14} /></>}
-                p='xs'
-                visibleFrom='md'
-              >
-                Meus Projetos
-              </Button>
-            </Link>
+            <Menu shadow='md' width={200} position='bottom'>
+              <Menu.Target>
+                <Button
+                  size='sm'
+                  fw={400}
+                  variant='transparent'
+                  color={currentPath === '/projects' ? 'violet' : menuTextColor}
+                  leftSection={<IconMusic size={14} />}
+                  rightSection={<IconChevronDown size={14} />}
+                  rightSectionPointerEvents='all'
+                  p='xs'
+                  visibleFrom='md'
+                >
+                  Meus Projetos
+                </Button>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Label>Projetos em atividade</Menu.Label>
+                {projectsActive.map(project =>
+                  <Menu.Item>
+                    <Group gap={5}>
+                      <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                      <Text size='0.85rem' fw='500'>{project.name}</Text>
+                    </Group>
+                  </Menu.Item>
+                )}
+                {!!projectsInactive.length && 
+                  <Menu width={200} shadow="md" position='right' closeOnItemClick={false}>
+                    <Menu.Target>
+                      <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
+                        {/* Projetos encerrados */}
+                        <Menu.Label>Projetos encerrados</Menu.Label>
+                      </Menu.Item>
+                    </Menu.Target>
+                    <Menu.Dropdown>
+                      {projectsInactive.map(project =>
+                        <Menu.Item>
+                          {project.name}
+                        </Menu.Item>
+                      )}
+                    </Menu.Dropdown>
+                  </Menu>
+                }
+              </Menu.Dropdown>
+            </Menu>
+            {/* <Select
+              pt={2}
+              w='180'
+              mx='xs'
+              size='sm'
+              value=''
+              variant="unstyled"
+              // label="Your favorite library"
+              placeholder="Meus Projetos"
+              // data={['React', 'Angular', 'Vue', 'Svelte']}
+              data={[
+                { label: projects.requesting ? 'Carregando...' : 'Selecione', value: '' },
+                { group: 'Gestão, produção e outros', items: ['React', 'Angular', 'Vue', 'Svelte'] },
+                { group: 'Instrumentos', items: ['React2', 'Angular2', 'Vue2', 'Svelte2'] },
+              ]}
+              // searchable
+              // nothingFoundMessage="Nothing found..."
+            /> */}
             <Link to={{ pathname: '/projects' }}>
               <Button 
                 size='sm'
                 fw={400}
                 variant='outline'
                 radius="xl"
-                color={currentPath === '/opportunities' ? 'violet' : menuTextColor}
+                color={menuTextColor}
                 leftSection={<IconMicrophone2 size={14} />}
                 p={'xs'}
                 visibleFrom='md'

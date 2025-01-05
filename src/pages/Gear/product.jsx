@@ -60,14 +60,14 @@ function GearProductPage () {
       />
       <Container size='lg' mt={largeScreen ? 20 : 0}>
         <Text mb='3' fw='500' size='sm' c='dimmed'>
-          {product.requesting ? 'Carregando marca...' : product.categoryName}
+          {product.requesting ? 'Carregando...' : product.categoryName + ' | ' + product.brandName}
         </Text>
         <Title fz='1.33rem' fw='540'>
-          {product.brandName} {product.requesting ? 'Carregando produto...' : product.name}
+          {product.requesting ? 'Carregando produto...' : product.name}
         </Title>
         <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
           <Group gap='2'>
-            <IconArrowRight size={13} /> 
+            <IconArrowRight size={13} />
             Ver todos os produtos de {product.brandName}
           </Group>
         </Link>
@@ -140,7 +140,7 @@ function GearProductPage () {
                       mb='12'
                       style={{ backgroundColor: 'transparent' }}
                     >
-                      <Flex gap={7}>
+                      <Flex gap={7} mb='xs'>
                         <Link to={{ pathname: `/${owner.username}` }}>
                           <Avatar.Group>
                             <Avatar size='lg' src={owner.picture} />

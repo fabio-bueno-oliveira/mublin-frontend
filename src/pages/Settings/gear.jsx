@@ -509,7 +509,7 @@ function SettingsMyGearPage () {
                 />
               </Center>
               <Text ta='center' size='xs' c='dimmed' mt={8}>{item.brandName}</Text>
-              <Text ta='center' size='sm'>{item.productName}</Text>
+              <Text ta='center' size='sm' fw='500'>{item.productName}</Text>
               <Radio.Group
                 mt={8}
                 value={String(featured)}

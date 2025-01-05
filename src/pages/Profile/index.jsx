@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Container, Flex, Grid, Space, Card, Paper, Center, Stack, Title, Text, Anchor, Image, NativeSelect, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPlus, IconMapPin } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -14,11 +14,13 @@ import FooterMenuMobile from '../../components/footerMenuMobile'
 import { useMediaQuery } from '@mantine/hooks'
 import PartnersModule from './partners'
 import CarouselProjects from './carouselProjects'
+import GearSection from './gear'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 import AvailabilityInfo from './availabilityInfo'
 import FeedCard from '../Home/feedCard'
 import RelatedProfiles from './relatedProfiles'
+import { truncateString } from '../../utils/formatter'
 import './styles.scss'
 
 function ProfilePage () {
@@ -38,8 +40,6 @@ function ProfilePage () {
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const { colorScheme } = useMantineColorScheme()
-
-  const truncateString = (input, maxLength) => input.length > maxLength ? `${input.substring(0, maxLength)}...` : input
 
   let dispatch = useDispatch()
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
@@ -100,23 +100,6 @@ function ProfilePage () {
   const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false);
   const [modalLegendOpen, setModalLegendOpen] = useState(false);
 
-  // Gear
-  const [gearSetup, setGearSetup] = useState('');
-  const [gearCategorySelected, setGearCategorySelected] = useState('');
-
-  // const selectSetup = (setupId) => {
-  //   setGearCategorySelected('');
-  //   setGearSetup(setupId);
-  // }
-
-  const gear = useSelector(state => state.profile.gear.list).filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
-
-  const gearFiltered = gearSetup ? gear.filter((product) => { 
-    return profile.gearSetups.products.find(x => x.id === product.productId && x.setupId === Number(gearSetup)) 
-  }) : gear;
-
-  // const gearTotal = gearFiltered.filter((product) => { return product.productId > 0 });
-
   // Modal User Picture
   const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
   // Modal Follow 
@@ -127,13 +110,6 @@ function ProfilePage () {
   const [modalFollowersOpen, setModalFollowersOpen] = useState(false);
   // Modal Following
   const [modalFollowingOpen, setModalFollowingOpen] = useState(false);
-  // Modal Gear Item Detail
-  const [modalGearItemOpen, setModalGearItemOpen] = useState(false);
-  const [gearItemDetail, setGearItemDetail] = useState({});
-  const openModalGearDetail = (data) => {
-    setModalGearItemOpen(true)
-    setGearItemDetail(data)
-  };
 
   const followUnfollow = () => {
     setModalFollowInfoOpen(false);
@@ -268,7 +244,7 @@ function ProfilePage () {
 
   return (
     <>
-      {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalGearItemOpen) && 
+      {(profile.id && !modalFollowersOpen && !modalFollowingOpen) && 
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
@@ -406,7 +382,7 @@ function ProfilePage () {
                 </Group>
                 {(profile.bio && profile.bio !== 'null') && 
                   <Text 
-                    size={isMobile ? 'sm' : '0.83em'}
+                    size={isMobile ? '0.92em' : '0.83em'}
                     fw='400'
                     mt={5}
                     lineClamp={6}
@@ -419,7 +395,7 @@ function ProfilePage () {
                 {profile.city && 
                   <Flex gap={2} align='center' mt={9}>
                     <IconMapPin size={13} style={{color:'#8d8d8d'}} />
-                    <Text size={isMobile ? '0.92em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
+                    <Text size={isMobile ? '0.91em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
                       {profile.city}{profile.region && `, ${profile.region}`}{profile.country && `, ${profile.country}`}
                     </Text>
                   </Flex>
@@ -435,7 +411,7 @@ function ProfilePage () {
                   >
                     <Flex gap={2} align='center'>
                       <IconLink size={13} />
-                      <Text size={isMobile ? '0.92em' : '0.83em'} className='lhNormal'>
+                      <Text size={isMobile ? '0.91em' : '0.83em'} className='lhNormal'>
                         {truncateString(profile.website, 35)}
                       </Text>
                     </Flex>
@@ -638,153 +614,7 @@ function ProfilePage () {
                 )}
               </Paper>
               {profile.plan === 'Pro' ? ( 
-                <>
-                  <Divider mb={18} className='showOnlyInMobile' />
-                  <Paper
-                    radius='md'
-                    withBorder={isLargeScreen ? true : false}
-                    px={isMobile ? 0 : 16}
-                    pt={isMobile ? 0 : 12}
-                    pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 9}
-                    mb={14}
-                    style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                    className='mublinModule'
-                  >
-                    <Group justify='space-between' align='center' gap={8} mb={13}>
-                      <Title fz='1.03rem' fw='640'>
-                        Equipamento {!!profile.gear.total && `(${profile.gear.total})`}
-                      </Title>
-                      {(profile.id === loggedUserId && !profile.requesting) && 
-                        <Button 
-                          size='xs'
-                          variant='light'
-                          color={colorScheme === 'light' ? 'dark' : 'gray'}
-                          // leftSection={<IconSettings size={14} />}
-                          component='a'
-                          href='/settings/my-gear'
-                        >
-                          Gerenciar
-                        </Button>
-                      }
-                    </Group>
-                    {profile.requesting ? ( 
-                      <Text size='sm'>Carregando...</Text>
-                    ) : (
-                      <>
-                        {!!profile.gear.total && 
-                          <Group gap={10} mb={14}>
-                            {/* <NativeSelect 
-                              // description='Setups'
-                              size='sm'
-                              w={155}
-                              // onChange={(e) => setGearSetup(e.target.options[e.target.selectedIndex].value)}
-                              onChange={(e) => selectSetup(e.target.options[e.target.selectedIndex].value)}
-                            >
-                              <option value="">Setup completo</option>
-                              {profile.gearSetups.total && profile.gearSetups.setups.map((setup, key) =>
-                                <option key={key} value={setup.id}>
-                                  {setup.name}
-                                </option>
-                              )}
-                            </NativeSelect> */}
-                            {!gearSetup && 
-                              <NativeSelect
-                                // description='Tipo de equipamento'
-                                size='sm'
-                                w={145}
-                                onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
-                              >
-                                <option value="">
-                                  Exibir tudo
-                                </option>
-                                {profile.gearCategories.list.map((gearCategory, key) =>
-                                  <option key={key} value={gearCategory.category}>
-                                    {truncate(gearCategory.category) + '(' + gearCategory.total + ')'}
-                                  </option>
-                                )}
-                              </NativeSelect>
-                            }
-                          </Group>
-                        }
-                        {profile.gear.total ? ( 
-                          <>
-                            <Splide 
-                              options={{
-                                drag: 'free',
-                                snap: false,
-                                perPage: isMobile ? 2 : 5,
-                                autoWidth: true,
-                                arrows: false,
-                                gap: '22px',
-                                dots: true,
-                                pagination: true,
-                              }}
-                            >
-                              {gearFiltered.map(product =>
-                                <SplideSlide key={product.productId}>
-                                  <Flex
-                                    direction='column'
-                                    justify='flex-start'
-                                    align='center'
-                                    className='carousel-gear'
-                                  >
-                                    <Image
-                                      src={'https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.pictureFilename}
-                                      h={120}
-                                      mah={120}
-                                      w='auto'
-                                      fit='contain'
-                                      mb={10}
-                                      radius='md'
-                                      onClick={() => openModalGearDetail(product)}
-                                      className='point'
-                                    />
-                                    {/* <Image 
-                                      src={'https://ik.imagekit.io/mublin/tr:h-300,cm-pad_resize,bg-FFFFFF/products/'+picture}
-                                      height='205' 
-                                      ml='10' 
-                                    /> */}
-                                    <Box w={110}>
-                                      <Text size='11px' fw={550} mb={3} truncate='end' title={product.brandName}>
-                                        {product.brandName}
-                                      </Text>
-                                      <Text size='sm' truncate='end' title={product.productName}>
-                                        {product.productName}
-                                      </Text>
-                                    </Box>
-                                    {product.tuning && 
-                                      <Group gap={2} mt={4} mb='2'>
-                                        <Text
-                                          size='9px'
-                                          fw='450'
-                                          c='dimmed'
-                                        >
-                                          Afinação: {product.tuning}
-                                        </Text>
-                                      </Group>
-                                    }
-                                    {!!product.forSale && 
-                                      <Flex direction='column' align='center' gap={4} mt={4}>
-                                        <Badge size='xs' color='dark'>À venda</Badge>
-                                        {!!product.price && 
-                                          <Text size='10px' fw={500}>
-                                            {product.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
-                                          </Text>
-                                        }
-                                      </Flex>
-                                    }
-                                  </Flex>
-                                </SplideSlide>
-                              )}
-                            </Splide>
-                          </>
-                        ) : (
-                          <Text size='sm' c='dimmed'>Nenhum equipamento cadastrado</Text>
-                        )}
-                      </>
-                    )}
-                  </Paper>
-                </>
+                <GearSection loggedUserId={loggedUserId} />
               ) : (
                 <>
                   {loggedUserId === profile.id && 
@@ -1123,69 +953,6 @@ function ProfilePage () {
           <Avatar w={200} h={200} src={profile.picture ? profile.picture : undefined} />
         </Center>
       </Modal>
-      <Modal 
-        opened={modalGearItemOpen}
-        onClose={() => setModalGearItemOpen(false)}
-        centered
-        title={
-          <Flex direction='column'>
-            <Text size='md' fw='500'>
-              {gearItemDetail.brandName} {gearItemDetail.productName}
-            </Text>
-            <Text size='xs' c='dimmed'>
-              Parte do equipamento de {profile.name}
-            </Text>
-          </Flex>
-        }
-        withCloseButton
-        size='md'
-      >
-        <Center>
-          <Image 
-            src={'https://ik.imagekit.io/mublin/products/tr:h-500,w-500,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
-            h={250}
-            mah={250}
-            w='auto'
-            fit='contain'
-            mb='10'
-            radius='md'
-          />
-        </Center>
-        {gearItemDetail.tuning && 
-          <Box>
-            <Text ta='center' size='xs' fw='380'>Afinação: {gearItemDetail.tuning}</Text>
-            <Text ta='center' size='xs' c='dimmed'>{gearItemDetail.tuningDescription}</Text>
-          </Box>
-        }
-        {!!gearItemDetail.forSale && 
-          <Flex align='center' justify='center' gap='4' mt='4'>
-            <Badge size='md' color='dark'>À venda</Badge>
-            {!!gearItemDetail.price && 
-              <Text size='xs' fw='450'>
-                {gearItemDetail.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
-              </Text>
-            }
-          </Flex>
-        }
-        {gearItemDetail.ownerComments && 
-          <Card className='mublinModule' px='10' py='10' mt='xs'>
-            <ScrollArea h='72' type='auto'>
-              <Text size='sm'>{gearItemDetail.ownerComments}</Text>
-            </ScrollArea>
-          </Card>
-        }
-        <Button
-          size='sm'
-          variant='light'
-          color={colorScheme === 'light' ? 'dark' : 'gray'}
-          fullWidth
-          fw='600'
-          component='a'
-          href={`/gear/product/${gearItemDetail.productId}`}
-        >
-          Ver mais detalhes do produto
-        </Button>
-      </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>
           <Title order={4} fw='490' ta='center' mt='40' mb='10'>
@@ -1198,7 +965,7 @@ function ProfilePage () {
       }
       <FooterMenuMobile
         hide={
-          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalGearItemOpen || modalVerifiedOpen || modalLegendOpen
+          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalVerifiedOpen || modalLegendOpen
         }
       />
     </>

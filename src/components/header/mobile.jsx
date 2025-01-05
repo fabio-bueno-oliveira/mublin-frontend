@@ -39,9 +39,9 @@ function Header (props) {
   return (
     <>
       <Container 
-        size={'lg'} 
-        mt={8} 
-        mb={8} 
+        size='lg'
+        mt={8}
+        mb={8}
         className={s.headerContainer}
       >
         <Flex
@@ -58,7 +58,7 @@ function Header (props) {
           >
             <Flex align='center'>
               {/* <Image src={colorScheme === 'light' ? PianoLogoBlack : PianoLogoWhite} h={largeScreen ? 43 : 27} /> */}
-              <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 28} />
+              <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 22 : 32} />
             </Flex>
           </Link>
         </Flex>

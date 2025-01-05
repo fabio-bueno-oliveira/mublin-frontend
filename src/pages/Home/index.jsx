@@ -91,13 +91,19 @@ function Home () {
                         />
                       </Link>
                     </Center>
-                    <Title fw='460' fz='1.1rem' mb={1} mt={10} ta='center' className='op80'>
+                    <Title fw='580' fz='1.04rem' mb={1} mt={10} ta='center' className='op80'>
                       Olá, {userInfo?.name}
                     </Title>
-                    {plan === 'Pro' ? ( 
+                    {/* {plan === 'Pro' ? ( 
                       <Center>
-                        <Badge size='sm' variant='light' color='gray' mb='6'>
-                          PRO
+                        <Badge 
+                          color='violet' 
+                          size='sm'
+                          my={5}
+                          variant='gradient'
+                          gradient={{ from: 'violet', to: 'blue' }}
+                        >
+                          conta pro
                         </Badge>
                       </Center>
                     ) : (
@@ -113,7 +119,7 @@ function Home () {
                           Assine o Mublin PRO!
                         </Anchor>
                       </Center>
-                    )}
+                    )} */}
                     <Text
                       ta='center'
                       c='dimmed'

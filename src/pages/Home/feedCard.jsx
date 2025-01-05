@@ -2,12 +2,11 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
-import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Button, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
+import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
-import { truncateString } from '../../utils/formatter'
 
 function FeedCard ({ item, likes, compact }) {
 
