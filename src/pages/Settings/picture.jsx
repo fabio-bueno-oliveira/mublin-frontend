@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
-import { Grid, Container, Center, Loader, Box, Flex, Button, Image, Text, Anchor } from '@mantine/core'
+import { useNavigate } from 'react-router-dom'
+import { Grid, Container, Center, Loader, Box, Flex, Button, Image, Text } from '@mantine/core'
 import { IconChevronLeft, IconCamera } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -16,6 +17,7 @@ function SettingsPicturePage () {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const token = localStorage.getItem('token')
 
+  let navigate = useNavigate()
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
 
@@ -84,12 +86,17 @@ function SettingsPicturePage () {
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
             <Flex align='normal' gap={8} mb={8} className='showOnlyInMobile'>
-              <Anchor href='/menu'>
-                <IconChevronLeft 
-                  style={{width:'22px',height:'22px'}} 
-                />
-              </Anchor>
-              <Text size='1.164rem' fw='500' className='lhNormal'>
+              <IconChevronLeft 
+                style={{width:'21px',height:'21px'}} 
+                onClick={() => navigate(-1)}
+              />
+              <Text 
+                mr='10' 
+                className='lhNormal'
+                truncate='end'
+                size='1.10rem'
+                fw='600'
+              >
                 Foto de perfil
               </Text>
             </Flex>

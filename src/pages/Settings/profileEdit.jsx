@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, Group, Flex, Button, TextInput, Input, Text, Textarea, NativeSelect, Anchor, Divider } from '@mantine/core';
@@ -13,6 +14,7 @@ import SettingsMenu from './menu';
 function SettingsPage () {
 
   let dispatch = useDispatch();
+  let navigate = useNavigate();
 
   document.title = 'Editar meus dados | Mublin';
 
@@ -149,12 +151,19 @@ function SettingsPage () {
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
             <Flex align='normal' gap='8' mb='8' className='showOnlyInMobile'>
-              <Anchor href='/menu'>
-                <IconChevronLeft 
-                  style={{width:'22px',height:'22px'}} 
-                />
-              </Anchor>
-              <Text size='1.164rem' fw='500' className='lhNormal'>Meus dados</Text>
+              <IconChevronLeft 
+                style={{width:'21px',height:'21px'}} 
+                onClick={() => navigate(-1)}
+              />
+              <Text 
+                mr='10' 
+                className='lhNormal'
+                truncate='end'
+                size='1.10rem'
+                fw='600'
+              >
+                Meus dados
+              </Text>
             </Flex>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos='relative' p={10}>

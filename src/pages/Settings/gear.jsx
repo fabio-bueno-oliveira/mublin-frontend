@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
 import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, Textarea, em } from '@mantine/core'
@@ -13,6 +14,7 @@ import { CurrencyInput } from 'react-currency-mask'
 function SettingsMyGearPage () {
 
   let dispatch = useDispatch()
+  let navigate = useNavigate()
 
   document.title = 'Meu equipamento | Mublin'
 
@@ -260,13 +262,20 @@ function SettingsMyGearPage () {
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 9 }}>
-            <Flex align='normal' gap='8' mb='8' className='showOnlyInMobile'>
-              <Anchor href='/menu'>
-                <IconChevronLeft 
-                  style={{width:'22px',height:'22px'}} 
-                />
-              </Anchor>
-              <Text size='1.164rem' fw='500' className='lhNormal'>Meus equipamentos</Text>
+            <Flex align='normal' gap='8' mb={14} className='showOnlyInMobile'>
+              <IconChevronLeft 
+                style={{width:'21px',height:'21px'}} 
+                onClick={() => navigate(-1)}
+              />
+              <Text 
+                mr='10' 
+                className='lhNormal'
+                truncate='end'
+                size='1.10rem'
+                fw='600'
+              >
+                Meus equipamentos
+              </Text>
             </Flex>
             {requesting ? (
               <Center mt='60'>

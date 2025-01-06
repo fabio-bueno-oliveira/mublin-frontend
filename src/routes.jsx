@@ -33,13 +33,13 @@ import PublicProfilePage from './pages/Profile/Public';
 import GearProductPage from './pages/Gear/product';
 import GearBrandPage from './pages/Gear/brand';
 import SettingsProfileEdit from './pages/Settings/profileEdit';
-import SettingsMyPicture from './pages/Settings/profilePicture';
+import SettingsMyPicture from './pages/Settings/picture';
 import SettingsMyGear from './pages/Settings/gear';
 import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
 import MenuMobilePage from './pages/MenuMobile';
 import CheckoutSuccess from './pages/Checkout/success';
 import AdminPage from './pages/Admin';
-import SettingsMusicalPreferences from './pages/Settings/musicalPreferences';
+import SettingsMusicalPreferences from './pages/Settings/preferences';
 
 function AppRoutes () {
 

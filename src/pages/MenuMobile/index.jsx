@@ -189,7 +189,7 @@ function MenuMobile () {
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconEdit style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href='/settings' fw='550'>
             Editar meus dados
           </Button>
-          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconAdjustmentsHorizontal style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>
+          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconAdjustmentsHorizontal style={iconMenuStyle} />} rightSection={<IconChevronRight />} component='a' href='/settings/preferences' fw='550'>
             Preferências musicais
           </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconCalendarMonth style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
 import { Grid, Container, Modal, Card, NativeSelect, Group, Radio, Box, Flex, Badge, Button, Title, Text, Anchor, Divider } from '@mantine/core'
@@ -16,6 +17,7 @@ function SettingsMusicalPreferences () {
   document.title = 'Preferências musicais | Mublin'
 
   let dispatch = useDispatch()
+  let navigate = useNavigate()
 
   const user = useSelector(state => state.user)
   const genresCategories = useSelector(state => state.musicGenres.categories)
@@ -243,12 +245,17 @@ function SettingsMusicalPreferences () {
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
             <Flex align='normal' gap={8} mb={8} className='showOnlyInMobile'>
-              <Anchor href='/menu'>
-                <IconChevronLeft
-                  style={{width:'22px',height:'22px'}}
-                />
-              </Anchor>
-              <Text size='1.164rem' fw='500' className='lhNormal'>
+              <IconChevronLeft 
+                style={{width:'21px',height:'21px'}} 
+                onClick={() => navigate(-1)}
+              />
+              <Text 
+                mr='10' 
+                className='lhNormal'
+                truncate='end'
+                size='1.10rem'
+                fw='600'
+              >
                 Preferências musicais
               </Text>
             </Flex>
@@ -299,6 +306,7 @@ function SettingsMusicalPreferences () {
                     my={4}
                     leftSection={<IconPlus size={14} />}
                     onClick={() => setModalWorkIsOpen(true)}
+                    fullWidth
                   >
                     Adicionar novo trabalho
                   </Button>
@@ -318,12 +326,11 @@ function SettingsMusicalPreferences () {
                       defaultValue={user.availabilityStatus}
                     />
                   </Modal>
-                  <Title order={5} mt={10}>Disponível para:</Title>
+                  <Title order={5} mt={10}>Vínculo de preferência:</Title>
                   <Radio.Group
                     value={userSelectedAvailabilityItems}
                     onChange={updateAvailabilityStatus}
                     name="availabilityFocus"
-                    label="Disponível para:"
                   >
                     <Radio value='1' label="Projetos próprios e autorais" />
                     <Radio value='2' label="Contratado (convidado/sideman/sidewoman)" />
