@@ -244,7 +244,7 @@ function SettingsMusicalPreferences () {
             </Grid.Col>
           }
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-            <Flex align='normal' gap={8} mb={8} className='showOnlyInMobile'>
+            <Flex align='normal' gap={8} mb={14} className='showOnlyInMobile'>
               <IconChevronLeft 
                 style={{width:'21px',height:'21px'}} 
                 onClick={() => navigate(-1)}
@@ -259,11 +259,14 @@ function SettingsMusicalPreferences () {
                 Preferências musicais
               </Text>
             </Flex>
-            <Box pos='relative' p={10}>
-              <Card shadow='sm' p={10} withBorder mb={20} className='mublinModule'>
-                <Title order={5}>
-                  Minha disponibilidade atual
+            <Box>
+              <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule'>
+                <Title order={4}>
+                  Disponibilidade
                 </Title>
+                <Text size='xs' c='dimmed'>
+                  Minha disponibilidade atual para trabalhos e projetos
+                </Text>
                 <NativeSelect
                   size='md'
                   mt={8}
@@ -276,10 +279,10 @@ function SettingsMusicalPreferences () {
                 <Box>
                   <Divider my={10} />
                   <Title order={5} mt={10}>
-                    Para os seguintes trabalhos:
+                    Trabalhos:
                   </Title>
                   {/* {alert(JSON.stringify(availabilityItemsSelected, null, 2))} */}
-                  <Group gap={3} my={10}>
+                  <Group gap={3} my={8}>
                     {user.availabilityItems.map(item =>
                       <Badge 
                         key={item.idItem}
@@ -300,7 +303,7 @@ function SettingsMusicalPreferences () {
                     )}
                   </Group>
                   <Button
-                    size='xs'
+                    size='sm'
                     variant='light'
                     color='violet'
                     my={4}
@@ -332,9 +335,9 @@ function SettingsMusicalPreferences () {
                     onChange={updateAvailabilityStatus}
                     name="availabilityFocus"
                   >
-                    <Radio value='1' label="Projetos próprios e autorais" />
-                    <Radio value='2' label="Contratado (convidado/sideman/sidewoman)" />
-                    <Radio value='3' label="Todos (próprios e contratado)" />
+                    <Radio my={2} value='1' label="Projetos próprios e autorais" />
+                    <Radio my={2} value='2' label="Contrato (convidado/sideman/sidewoman)" />
+                    <Radio my={2} value='3' label="Todos (próprios e contratado)" />
                   </Radio.Group>
                   {/* <Form.Group grouped>
                     <Form.Field
@@ -370,10 +373,13 @@ function SettingsMusicalPreferences () {
                   </Form.Group> */}
                 </Box>
               </Card>
-              <Card shadow='sm' p={10} withBorder mb={20} className='mublinModule'>
-                <Title order={5}>
-                  Principais gêneros musicais relacionados à minha atuação na música
+              <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule'>
+                <Title order={4}>
+                  Gêneros e estilos
                 </Title>
+                <Text size='xs' c='dimmed'>
+                  Principais gêneros musicais relacionados à minha atuação na música
+                </Text>
                 <Flex gap={4} my={10}>
                   {user.genres.map((genre, key) =>
                     <Badge 
@@ -395,7 +401,7 @@ function SettingsMusicalPreferences () {
                   )}
                 </Flex>
                 <Button 
-                  size='xs' 
+                  size='sm' 
                   variant='light' 
                   color='violet'
                   my={4}
@@ -433,10 +439,13 @@ function SettingsMusicalPreferences () {
                   </NativeSelect>
                 </Modal>
               </Card>
-              <Card shadow='sm' p={10} withBorder mb={80} className='mublinModule'>
-                <Title order={5}>
-                  Minhas principais atividades e atuações na música
+              <Card shadow='sm' p={14} withBorder className='mublinModule'>
+                <Title order={4}>
+                  Atuação na música
                 </Title>
+                <Text size='xs' c='dimmed'>
+                  Minhas principais atividades e atuações na música
+                </Text>
                 <Flex gap={4} my={10}>
                   {user.roles.map(role =>
                     <Badge 
@@ -458,7 +467,7 @@ function SettingsMusicalPreferences () {
                   )}
                 </Flex>
                 <Button
-                  size='xs'
+                  size='sm'
                   variant='light'
                   color='violet'
                   my={4}
