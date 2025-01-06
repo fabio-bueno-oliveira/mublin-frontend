@@ -279,7 +279,7 @@ function SettingsMusicalPreferences () {
                 <Box>
                   <Divider my={10} />
                   <Title order={5} mt={10}>
-                    Trabalhos:
+                    Tipos de trabalho:
                   </Title>
                   {/* {alert(JSON.stringify(availabilityItemsSelected, null, 2))} */}
                   <Group gap={3} my={8}>
@@ -306,7 +306,7 @@ function SettingsMusicalPreferences () {
                     size='sm'
                     variant='light'
                     color='violet'
-                    my={4}
+                    mt={14}
                     leftSection={<IconPlus size={14} />}
                     onClick={() => setModalWorkIsOpen(true)}
                     fullWidth
@@ -322,56 +322,57 @@ function SettingsMusicalPreferences () {
                   >
                     <NativeSelect
                       size='md'
-                      mt={8}
                       placeholder='Selecione'
                       onChange={(e) => addAvailabilityItem(e.currentTarget.value)}
                       data={availabilityItems}
                       defaultValue={user.availabilityStatus}
                     />
                   </Modal>
-                  <Title order={5} mt={10}>Vínculo de preferência:</Title>
-                  <Radio.Group
-                    value={userSelectedAvailabilityItems}
-                    onChange={updateAvailabilityStatus}
-                    name="availabilityFocus"
-                  >
-                    <Radio my={2} value='1' label="Projetos próprios e autorais" />
-                    <Radio my={2} value='2' label="Contrato (convidado/sideman/sidewoman)" />
-                    <Radio my={2} value='3' label="Todos (próprios e contratado)" />
-                  </Radio.Group>
-                  {/* <Form.Group grouped>
-                    <Form.Field
-                      disabled={user.requesting}
-                      label='Projetos próprios'
-                      control='input'
-                      type='radio'
-                      name='availabilityFocus'
-                      value={1}
-                      checked={user.availabilityFocus === 1 && true}
-                      onClick={() => updateAvailabilityFocus(1)}
-                    />
-                    <Form.Field
-                      disabled={user.requesting}
-                      label='Outros projetos (convidado)'
-                      control='input'
-                      type='radio'
-                      name='availabilityFocus'
-                      value={2}
-                      checked={user.availabilityFocus === 2 && true}
-                      onClick={() => updateAvailabilityFocus(2)}
-                    />
-                    <Form.Field
-                      disabled={user.requesting}
-                      label='Todos os projetos (próprios e convidado)'
-                      control='input'
-                      type='radio'
-                      name='availabilityFocus'
-                      value={3}
-                      checked={user.availabilityFocus === 3 && true}
-                      onClick={() => updateAvailabilityFocus(3)}
-                    />
-                  </Form.Group> */}
                 </Box>
+              </Card>
+              <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule'>
+                <Title order={5} >Vínculo de preferência:</Title>
+                <Radio.Group
+                  value={userSelectedAvailabilityItems}
+                  onChange={updateAvailabilityStatus}
+                  name="availabilityFocus"
+                >
+                  <Radio my={2} value='1' label="Projetos próprios e autorais" />
+                  <Radio my={2} value='2' label="Contrato (convidado/sideman/sidewoman)" />
+                  <Radio my={2} value='3' label="Todos (próprios e contratado)" />
+                </Radio.Group>
+                {/* <Form.Group grouped>
+                  <Form.Field
+                    disabled={user.requesting}
+                    label='Projetos próprios'
+                    control='input'
+                    type='radio'
+                    name='availabilityFocus'
+                    value={1}
+                    checked={user.availabilityFocus === 1 && true}
+                    onClick={() => updateAvailabilityFocus(1)}
+                  />
+                  <Form.Field
+                    disabled={user.requesting}
+                    label='Outros projetos (convidado)'
+                    control='input'
+                    type='radio'
+                    name='availabilityFocus'
+                    value={2}
+                    checked={user.availabilityFocus === 2 && true}
+                    onClick={() => updateAvailabilityFocus(2)}
+                  />
+                  <Form.Field
+                    disabled={user.requesting}
+                    label='Todos os projetos (próprios e convidado)'
+                    control='input'
+                    type='radio'
+                    name='availabilityFocus'
+                    value={3}
+                    checked={user.availabilityFocus === 3 && true}
+                    onClick={() => updateAvailabilityFocus(3)}
+                  />
+                </Form.Group> */}
               </Card>
               <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule'>
                 <Title order={4}>
