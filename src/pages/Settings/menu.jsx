@@ -43,21 +43,7 @@ function SettingsMenu (props) {
       <NavLink
         color='violet'
         href='/settings/my-gear'
-        label={
-          <Flex align='flex-start' gap='4'>
-            <Text>Meus equipamentos</Text>
-            <Badge 
-              radius='xs' 
-              mt='4' 
-              size='xs' 
-              variant='outline' 
-              color='gray' 
-              title='Usuário PRO'
-            >
-              PRO
-            </Badge>
-          </Flex>
-        }
+        label='Meus equipamentos'
         leftSection={<IconPackages size='1rem' stroke={1.5} />}
         active={props.page === 'myGear'}
       />

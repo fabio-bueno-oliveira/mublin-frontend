@@ -134,7 +134,8 @@ function FeedCard ({ item, likes, compact }) {
                   style={{lineHeight:'normal'}} 
                   href={`/${item.relatedUserUsername}`}
                 >
-                  {item.relatedUserName} {item.relatedUserLastname}
+                  {/* {item.relatedUserName} {item.relatedUserLastname} */}
+                  {item.relatedUserUsername}
                 </Anchor>
               </Text>
               {!!item.relatedUserVerified &&

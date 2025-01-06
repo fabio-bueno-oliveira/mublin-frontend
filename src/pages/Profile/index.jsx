@@ -7,7 +7,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPlus, IconMapPin } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPlus, IconMapPin, IconPencil } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -471,7 +471,7 @@ function ProfilePage () {
                       variant='light'
                       color={colorScheme === "light" ? "dark" : "gray"}
                       fullWidth={isMobile}
-                      // leftSection={<IconPencil size={14} />} 
+                      leftSection={<IconPencil size={14} />} 
                       onClick={() => navigate('/settings')}
                     >
                       Editar meu perfil
@@ -490,7 +490,7 @@ function ProfilePage () {
                     >
                       <Indicator 
                         inline
-                        processing={profile.availabilityId}
+                        processing={profile.availabilityId === 1}
                         color={profile.availabilityColor}
                         size={11}
                         ml={5}

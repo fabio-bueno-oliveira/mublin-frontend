@@ -4,6 +4,7 @@ import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-ro
 import { useDispatch, useSelector } from 'react-redux';
 import { userInfos } from '../../store/actions/user';
 import { miscInfos } from '../../store/actions/misc';
+import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, Select, rem, em } from '@mantine/core';
@@ -45,12 +46,26 @@ function Header (props) {
   const projects = useSelector(state => state.userProjects)
 
   const projectsActive = projects?.list
-    .filter(p => p.activityStatusId !== 2 && p.activityStatusId !== 6)
+    .filter(p => p.activityStatusId !== 2 && p.activityStatusId !== 6 && !p.yearLeftTheProject)
     .map(project => ({ 
       id: project.projectid,
       name: project.name,
       username: project.username,
-      picture: project.picture
+      picture: project.picture,
+      type: project.ptname,
+      genre: project.genre1,
+
+    }));
+
+  const projectsActiveILeft = projects?.list
+    .filter(p => p.activityStatusId !== 2 && p.activityStatusId !== 6 && p.yearLeftTheProject)
+    .map(project => ({ 
+      id: project.projectid,
+      name: project.name,
+      username: project.username,
+      picture: project.picture,
+      type: project.ptname,
+      genre: project.genre1,
     }));
 
   const projectsInactive = projects?.list
@@ -59,7 +74,9 @@ function Header (props) {
       id: project.projectid,
       name: project.name,
       username: project.username,
-      picture: project.picture
+      picture: project.picture,
+      type: project.ptname,
+      genre: project.genre1,
     }));
 
   const { colorScheme, setColorScheme } = useMantineColorScheme()
@@ -85,6 +102,8 @@ function Header (props) {
       dispatch(userInfos.getInfo());
       dispatch(miscInfos.getFeed());
       dispatch(miscInfos.getFeedLikes());
+      dispatch(searchInfos.getSuggestedFeaturedUsers());
+      dispatch(searchInfos.getSuggestedNewUsers());
     }
   }, [refreshCounter])
 
@@ -256,52 +275,66 @@ function Header (props) {
                 </Button>
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Label>Projetos em atividade</Menu.Label>
+                <Menu.Label>Projetos em atividade que faço parte</Menu.Label>
                 {projectsActive.map(project =>
                   <Menu.Item key={project.id}>
                     <Group gap={5}>
                       <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
-                      <Text size='0.85rem' fw='500'>{project.name}</Text>
+                      <Flex direction='column'>
+                        <Text size='0.85rem' fw='500'>{project.name}</Text>
+                        <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                      </Flex>
                     </Group>
                   </Menu.Item>
                 )}
-                {!!projectsInactive.length && 
-                  <Menu width={200} shadow="md" position='right' closeOnItemClick={false}>
+                <Menu.Divider />
+                {!!projectsActiveILeft.length && 
+                  <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
                     <Menu.Target>
                       <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
                         {/* Projetos encerrados */}
-                        <Menu.Label>Projetos encerrados</Menu.Label>
+                        <Menu.Label>Projetos ativos que não faço mais parte</Menu.Label>
                       </Menu.Item>
                     </Menu.Target>
                     <Menu.Dropdown>
-                      {projectsInactive.map(project =>
+                      {projectsActiveILeft.map(project =>
                         <Menu.Item key={project.id}>
-                          {project.name}
+                          <Group gap={5}>
+                            <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                            <Flex direction='column'>
+                              <Text size='0.85rem' fw='500'>{project.name}</Text>
+                              <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                            </Flex>
+                          </Group>
                         </Menu.Item>
                       )}
                     </Menu.Dropdown>
                   </Menu>
                 }
+                <Menu.Divider />
+                <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
+                  <Menu.Target>
+                    <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
+                      {/* Projetos encerrados */}
+                      <Menu.Label>Projetos encerrados</Menu.Label>
+                    </Menu.Item>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    {projectsInactive.length ? ( projectsInactive.map(project =>
+                      <Menu.Item key={project.id}>
+                        <Group gap={5}>
+                          <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                          <Flex direction='column'>
+                            <Text size='0.85rem' fw='500'>{project.name}</Text>
+                            <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                          </Flex>
+                        </Group>
+                      </Menu.Item>
+                    )) : (<Text size='0.85rem' fw='500'>Nenhum projeto encontrado</Text>)}
+                  </Menu.Dropdown>
+                </Menu>
               </Menu.Dropdown>
             </Menu>
-            {/* <Select
-              pt={2}
-              w='180'
-              mx='xs'
-              size='sm'
-              value=''
-              variant="unstyled"
-              // label="Your favorite library"
-              placeholder="Meus Projetos"
-              // data={['React', 'Angular', 'Vue', 'Svelte']}
-              data={[
-                { label: projects.requesting ? 'Carregando...' : 'Selecione', value: '' },
-                { group: 'Gestão, produção e outros', items: ['React', 'Angular', 'Vue', 'Svelte'] },
-                { group: 'Instrumentos', items: ['React2', 'Angular2', 'Vue2', 'Svelte2'] },
-              ]}
-              // searchable
-              // nothingFoundMessage="Nothing found..."
-            /> */}
             <Link to={{ pathname: '/projects' }}>
               <Button 
                 size='sm'

@@ -2,6 +2,7 @@ import { musicGenresTypes } from '../types/musicGenres';
 import { rolesTypes } from '../types/roles';
 import { feedTypes } from '../types/feed';
 import { gearTypes } from '../types/gear';
+import { availabilityOptionsTypes } from '../types/availabilityOptions';
 import { miscService } from '../../api/misc';
 
 export const miscInfos = {
@@ -13,9 +14,9 @@ export const miscInfos = {
   getRoles: getRoles,
   getGearBrands: getGearBrands,
   // getNotifications: getNotifications,
-  // getAvailabilityStatuses: getAvailabilityStatuses,
-  // getAvailabilityItems: getAvailabilityItems,
-  // getAvailabilityFocuses: getAvailabilityFocuses
+  getAvailabilityStatuses: getAvailabilityStatuses,
+  getAvailabilityItems: getAvailabilityItems,
+  getAvailabilityFocuses: getAvailabilityFocuses
 };
 
 function getFeed() {
@@ -128,4 +129,52 @@ function getGearBrands() {
   function request() { return { type: gearTypes.GET_GEAR_BRANDS_REQUEST} }
   function success(list) { return { type: gearTypes.GET_GEAR_BRANDS_SUCCESS, list } }
   function failure(error) { return { type: gearTypes.GET_GEAR_BRANDS_FAILURE, error } }
+}
+
+function getAvailabilityStatuses() {
+  return dispatch => {
+      dispatch(request());
+
+      miscService.getAvailabilityStatuses()
+          .then(
+              list => dispatch(success(list)),
+              error => dispatch(failure(error.toString()))
+          );
+      };
+
+  function request() { return { type: availabilityOptionsTypes.GET_AVAILABILITY_STATUSES_REQUEST} }
+  function success(list) { return { type: availabilityOptionsTypes.GET_AVAILABILITY_STATUSES_SUCCESS, list } }
+  function failure(error) { return { type: availabilityOptionsTypes.GET_AVAILABILITY_STATUSES_FAILURE, error } }
+}
+
+function getAvailabilityItems() {
+  return dispatch => {
+      dispatch(request());
+
+      miscService.getAvailabilityItems()
+          .then(
+              list => dispatch(success(list)),
+              error => dispatch(failure(error.toString()))
+          );
+      };
+
+  function request() { return { type: availabilityOptionsTypes.GET_AVAILABILITY_ITEMS_REQUEST} }
+  function success(list) { return { type: availabilityOptionsTypes.GET_AVAILABILITY_ITEMS_SUCCESS, list } }
+  function failure(error) { return { type: availabilityOptionsTypes.GET_AVAILABILITY_ITEMS_FAILURE, error } }
+}
+
+function getAvailabilityFocuses() {
+  return dispatch => {
+      dispatch(request());
+
+      miscService.getAvailabilityFocuses()
+          .then(
+              list => dispatch(success(list)),
+              error => dispatch(failure(error.toString()))
+          );
+      };
+
+  function request() { return { type: availabilityOptionsTypes.GET_AVAILABILITY_FOCUSES_REQUEST} }
+  function success(list) { return { type: availabilityOptionsTypes.GET_AVAILABILITY_FOCUSES_SUCCESS, list } }
+  function failure(error) { return { type: availabilityOptionsTypes.GET_AVAILABILITY_FOCUSES_FAILURE, error } }
 }

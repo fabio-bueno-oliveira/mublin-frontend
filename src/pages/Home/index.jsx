@@ -17,6 +17,7 @@ import Header from '../../components/header'
 import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
+import UserCardLoading from '../../components/userCard/loading'
 
 function Home () {
 
@@ -136,7 +137,7 @@ function Home () {
                     </Text> */}
                   </Card>
                   {/* <Text fw='400' size='lg'>Meus projetos</Text> */}
-                  {projects.list.map(project =>
+                  {/* {projects.list.map(project =>
                     <Card 
                       key={project.projectid}
                       mt='10'
@@ -158,7 +159,7 @@ function Home () {
                         genre={project.genre1}
                       />
                     </Card>
-                  )}
+                  )} */}
                 </>
               )}
             </Box>
@@ -225,7 +226,9 @@ function Home () {
                   Músicos em destaque
                 </Title>
                 {search.requesting ? (
-                  <Text size='13px' mt={7}>Carregando...</Text>
+                  <UserCardLoading 
+                    mt={14}
+                  />
                 ) : (
                   search.suggestedFeaturedUsers.map(user => (
                     <UserCard 
@@ -250,7 +253,9 @@ function Home () {
                   Novos usuários
                 </Title>
                 {search.requesting ? (
-                  <Text size='13px' mt={7}>Carregando...</Text>
+                  <UserCardLoading 
+                    mt={14}
+                  />
                 ) : (
                   search.suggestedNewUsers.map(user => (
                     <UserCard 
