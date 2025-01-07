@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useMantineColorScheme, Modal, Center, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Button, Divider, em  } from '@mantine/core'
+import { useMantineColorScheme, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Button, Divider, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { truncateString } from '../../utils/formatter'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
