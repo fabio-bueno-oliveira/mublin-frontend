@@ -65,17 +65,17 @@ function LandingPage () {
         <Container size='sm' pt={45}>
           <Title 
             size='2rem'
-            fw='550'
+            fw='800'
             ta='center'
           >
-            <span style={{fontWeight:'800'}}>Gerencie</span> <span style={{fontWeight:'500'}}>seus projetos de música 🎵</span>
+            Gerencie seus projetos de música 🎵
           </Title>
           <Title 
             size='19px'
             ta='center' 
             fw='500'
           >
-            Aumente suas chances de tocar em gigs interessantes
+            Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.
           </Title>
           <Center>
             <Link to={{ pathname: '/signup' }}>
@@ -116,6 +116,9 @@ function LandingPage () {
           )}
         </Marquee>
         <Container size="sm"mt={50}>
+          <Title order={2} ta='center'>
+            Aumente suas chances de tocar em <nobr>gigs interessantes</nobr>
+          </Title>
           <Grid mt={56}>
             <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">

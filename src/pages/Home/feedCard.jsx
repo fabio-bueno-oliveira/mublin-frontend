@@ -127,37 +127,37 @@ function FeedCard ({ item, likes, compact }) {
             />
           </Link>
           <Box style={{flexGrow:'1'}}>
-            <Flex gap={2} align='center' mb={2}>
-              <Text size='0.93rem'>
-                <Anchor 
-                  fw='600' 
-                  style={{lineHeight:'normal'}} 
-                  href={`/${item.relatedUserUsername}`}
-                >
-                  {item.relatedUserName} {item.relatedUserLastname}
-                </Anchor>
-              </Text>
-              {!!item.relatedUserVerified &&
-                <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} title='Perfil verificado' />
-              }
-              {!!item.relatedUserLegend &&
-                <IconShieldCheckFilled style={iconLegendStyle} title='Lenda da música' />
-              }
-              {/* {item.relatedUserPlan === 'Pro' && <Badge size='xs' variant='light' color='gray'>PRO</Badge>} */}
-            </Flex>
-            <Text size='0.76rem' fw='420'>
-              {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
-            </Text>
-            <Text 
-              c='dimmed' 
-              size='0.74rem'
-              fw='420'
-              mt='4'
-              title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
-              className='fitContent'
+            <Anchor 
+              fw='600' 
+              style={{lineHeight:'normal'}} 
+              href={`/${item.relatedUserUsername}`}
             >
-              há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-            </Text>
+              <Flex gap={2} align='center' mb={2}>
+                <Text size='0.93rem'>
+                  {item.relatedUserName} {item.relatedUserLastname}
+                </Text>
+                {!!item.relatedUserVerified &&
+                  <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} title='Perfil verificado' />
+                }
+                {!!item.relatedUserLegend &&
+                  <IconShieldCheckFilled style={iconLegendStyle} title='Lenda da música' />
+                }
+                {/* {item.relatedUserPlan === 'Pro' && <Badge size='xs' variant='light' color='gray'>PRO</Badge>} */}
+              </Flex>
+              <Text size='0.76rem' c='dimmed' fw='420'>
+                {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
+              </Text>
+              <Text 
+                c='dimmed' 
+                size='0.74rem'
+                fw='420'
+                mt='4'
+                title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
+                className='fitContent'
+              >
+                há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
+              </Text>
+            </Anchor>
           </Box>
           {!compact &&
             <Menu shadow="md" position="bottom-end" width={200}>

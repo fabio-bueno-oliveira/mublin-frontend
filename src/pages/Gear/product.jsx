@@ -221,7 +221,9 @@ function GearProductPage () {
           <Image w='300' src={baseUrlExtraExpanded+extra?.image ? baseUrlExtraExpanded+extra?.image : undefined} onClick={() => setModalZoomExtraOpen(false)} />
         </Center> 
       </Modal>
-      <FooterMenuMobile hide={modalZoomExtraOpen || modalZoomOpen} />
+      {(!modalZoomExtraOpen && !modalZoomOpen) &&
+        <FooterMenuMobile />
+      }
     </>
   );
 };
