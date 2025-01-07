@@ -197,11 +197,15 @@ function GearProductPage () {
         title={`${product.brandName} | ${product.name} ${product.colorNamePTBR ? ' | Cor: ' + product.colorNamePTBR : ''}`}
         onClose={() => setModalZoomOpen(false)} 
         scrollAreaComponent={ScrollArea.Autosize}
-        size='xl'
+        size='md'
       >
-        <Center>
-          <Image src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
-        </Center> 
+        <Box w='380px' h='300px'>
+        <ScrollArea h='100%'>
+          <Center>
+            <Image w='auto' fit='cover' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
+          </Center>
+        </ScrollArea>
+        </Box>
       </Modal>
       <Modal 
         centered
