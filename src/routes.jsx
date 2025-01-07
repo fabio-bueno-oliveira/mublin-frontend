@@ -36,10 +36,11 @@ import SettingsProfileEdit from './pages/Settings/profileEdit';
 import SettingsMyPicture from './pages/Settings/picture';
 import SettingsMyGear from './pages/Settings/gear';
 import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
+import SettingsMusicalPreferences from './pages/Settings/preferences';
+import SettingsAvailability from './pages/Settings/availability';
 import MenuMobilePage from './pages/MenuMobile';
 import CheckoutSuccess from './pages/Checkout/success';
 import AdminPage from './pages/Admin';
-import SettingsMusicalPreferences from './pages/Settings/preferences';
 
 function AppRoutes () {
 
@@ -80,6 +81,7 @@ function AppRoutes () {
           <Route path="/gear/brand/:brandUrlName" element={<GearBrandPage />} />
           <Route path="/settings/picture" element={<SettingsMyPicture />} />
           <Route path="/settings/preferences" element={<SettingsMusicalPreferences />} />
+          <Route path="/settings/availability" element={<SettingsAvailability />} />
           <Route path="/settings/my-gear" element={<SettingsMyGear />} />
           <Route path="/settings/submit-product" element={<SettingsSubmitNewGearProduct />} />
           <Route path="/settings" element={<SettingsProfileEdit />} />

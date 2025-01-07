@@ -28,7 +28,7 @@ function SettingsMenu (props) {
       />
       <NavLink
         color='violet'
-        href='#required-for-focus'
+        href='/settings/availability'
         label='Disponibilidade'
         leftSection={<IconTargetArrow size='1rem' stroke={1.5} />}
         active={props.page === 'availability'}
