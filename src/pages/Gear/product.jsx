@@ -200,7 +200,7 @@ function GearProductPage () {
         size='xl'
       >
         <Center>
-          <Image w='300' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
+          <Image src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
         </Center> 
       </Modal>
       <Modal 
