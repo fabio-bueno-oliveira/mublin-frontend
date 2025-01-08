@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { userInfos } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
-import { Grid, Container, Modal, Card, NativeSelect, Group, Radio, Box, Flex, Badge, Button, Title, Text, Anchor, Divider } from '@mantine/core'
+import { Grid, Container, Modal, Card, NativeSelect, Skeleton, Group, Radio, Box, Flex, Badge, Button, Title, Text, Anchor, Divider } from '@mantine/core'
 import { IconChevronLeft, IconPlus, IconX } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -25,12 +25,15 @@ function SettingsMusicalPreferences () {
   const roles = useSelector(state => state.roles)
   const availabilityOptions = useSelector(state => state.availabilityOptions)
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const token = localStorage.getItem('token')
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isAddingGenre, setIsAddingGenre] = useState(false)
+  const [isDeletingGenre,setIsDeletingGenre] = useState(false)
+
+  const [isAddingRole, setIsAddingRole] = useState(false)
+  const [isDeletingRole,setIsDeletingRole] = useState(false)
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
@@ -93,7 +96,7 @@ function SettingsMusicalPreferences () {
     id: item.idItem
   })).map(function (obj) {
       return obj.id;
-  });
+  })
 
   const [modalWorkIsOpen, setModalWorkIsOpen] = useState(false)
 
@@ -113,15 +116,29 @@ function SettingsMusicalPreferences () {
           userId: loggedUserId, musicGenreId: value, musicGenreMain: setMainGenre
         })
       }).then((response) => {
-        //console.log(response);
-        dispatch(userInfos.getUserGenresInfoById(loggedUserId));
-        setIsAddingGenre(false);
+        console.log(response)
+        dispatch(userInfos.getUserGenresInfoById(loggedUserId))
+        setIsAddingGenre(false)
+        setModalGenresIsOpen(false)
+        notifications.show({
+          autoClose: 1000,
+          title: 'Boa!',
+          message: 'O gênero foi adicionado aos seus estilos musicais',
+          color: 'lime',
+          position: 'top-center'
+        })
       }).catch(err => {
         console.error(err);
-        alert("Ocorreu um erro ao adicionar o gênero");
-        setIsAddingGenre(false);
+        setIsAddingGenre(false)
+        notifications.show({
+          autoClose: 1000,
+          title: 'Desculpe...',
+          message: 'Ocorreu um erro ao adicionar o gênero. Tente novamente em instantes',
+          color: 'red',
+          position: 'top-center'
+        })
       })
-    }, 400);
+    }, 400)
   }
 
   const deleteGenre = (value) => {
@@ -136,12 +153,19 @@ function SettingsMusicalPreferences () {
       body: JSON.stringify({userId: loggedUserId, userGenreId: value})
     }).then((response) => {
       //console.log(response);
-      dispatch(userInfos.getUserGenresInfoById(loggedUserId));
-      setIsDeletingGenre(false);
+      dispatch(userInfos.getUserGenresInfoById(loggedUserId))
+      setIsDeletingGenre(false)
+      notifications.show({
+        autoClose: 1000,
+        title: 'Certo!',
+        message: 'O gênero foi removido com sucesso',
+        color: 'lime',
+        position: 'top-center'
+      })
     }).catch(err => {
       console.error(err);
-      alert("Ocorreu um erro ao remover o gênero");
-      setIsDeletingGenre(false);
+      alert("Ocorreu um erro ao remover o gênero")
+      setIsDeletingGenre(false)
     })
   }
 
@@ -161,13 +185,27 @@ function SettingsMusicalPreferences () {
           userId: loggedUserId, roleId: value, roleMain: setMainActivity
         })
       }).then((response) => {
-        //console.log(response);
-        dispatch(userInfos.getUserRolesInfoById(loggedUserId));
-        setIsAddingRole(false);
+        //console.log(response)
+        dispatch(userInfos.getUserRolesInfoById(loggedUserId))
+        setIsAddingRole(false)
+        setModalRolesIsOpen(false)
+        notifications.show({
+          autoClose: 1000,
+          title: 'Boa!',
+          message: 'A atividade foi adicionado ao seu perfil',
+          color: 'lime',
+          position: 'top-center'
+        })
       }).catch(err => {
         console.error(err);
-        alert("Ocorreu um erro ao adicionar a atividade");
-        setIsAddingRole(false);
+        setIsAddingRole(false)
+        notifications.show({
+          autoClose: 1000,
+          title: 'Desculpe...',
+          message: 'Ocorreu um erro ao adicionar a atividade. Tente novamente em instantes',
+          color: 'red',
+          position: 'top-center'
+        })
       })
     }, 400);
   }
@@ -183,13 +221,20 @@ function SettingsMusicalPreferences () {
       },
       body: JSON.stringify({userId: loggedUserId, userRoleId: value})
     }).then((response) => {
-      //console.log(response);
-      dispatch(userInfos.getUserRolesInfoById(loggedUserId));
-      setIsDeletingRole(false);
+      //console.log(response)
+      dispatch(userInfos.getUserRolesInfoById(loggedUserId))
+      setIsDeletingRole(false)
+      notifications.show({
+        autoClose: 1000,
+        title: 'Certo!',
+        message: 'A atividade foi removida com sucesso',
+        color: 'lime',
+        position: 'top-center'
+      })
     }).catch(err => {
-      console.error(err);
-      alert("Ocorreu um erro ao remover a atividade");
-      setIsDeletingRole(false);
+      console.error(err)
+      alert("Ocorreu um erro ao remover a atividade")
+      setIsDeletingRole(false)
     })
   }
 
@@ -229,36 +274,46 @@ function SettingsMusicalPreferences () {
                 <Text size='xs' c='dimmed'>
                   Principais gêneros musicais relacionados à minha atuação na música
                 </Text>
-                <Flex gap={4} my={10}>
-                  {user.genres.map((genre, key) =>
-                    <Badge 
-                      key={key}
-                      color="violet"
-                      variant='filled'
-                      size='sm'
-                      rightSection={
-                        <IconX 
-                          style={xIconStyle} 
-                          stroke={3} 
-                          onClick={() => deleteGenre(genre.id)} 
-                          title='Remover'
-                        />
-                      }
+                {(user.requesting || isDeletingGenre) ? (
+                  <Flex gap={7} mt={10}>
+                    <Skeleton width={70} height={20} radius="xl" />
+                    <Skeleton width={70} height={20} radius="xl" />
+                    <Skeleton width={70} height={20} radius="xl" />
+                  </Flex>
+                ) : (
+                  <>
+                    <Flex gap={4} my={10}>
+                      {user.genres[0].id ? user.genres.map((genre, key) =>
+                        <Badge 
+                          key={key}
+                          color="violet"
+                          variant='filled'
+                          size='sm'
+                          rightSection={
+                            <IconX 
+                              style={xIconStyle} 
+                              stroke={3} 
+                              onClick={() => deleteGenre(genre.id)} 
+                              title='Remover'
+                            />
+                          }
+                        >
+                          {genre.name}
+                        </Badge>
+                      ) : (<Text size='sm'>Nenhum gênero cadastrado</Text>)}
+                    </Flex>
+                    <Button 
+                      size='sm' 
+                      variant='light' 
+                      color='violet'
+                      my={4}
+                      leftSection={<IconPlus size={14} />}
+                      onClick={() => setModalGenresIsOpen(true)}
                     >
-                      {genre.name}
-                    </Badge>
-                  )}
-                </Flex>
-                <Button 
-                  size='sm' 
-                  variant='light' 
-                  color='violet'
-                  my={4}
-                  leftSection={<IconPlus size={14} />}
-                  onClick={() => setModalGenresIsOpen(true)}
-                >
-                  Adicionar novo gênero/estilo
-                </Button>
+                      Adicionar novo gênero/estilo
+                    </Button>
+                  </>
+                )}
                 <Modal
                   size='sm'
                   opened={modalGenresIsOpen}
@@ -270,6 +325,7 @@ function SettingsMusicalPreferences () {
                     size='md'
                     placeholder='Selecione...'
                     onChange={(e) => addGenre(e.currentTarget.value)}
+                    disabled={isAddingGenre}
                   >
                     <option value=''>
                       {genres.requesting ? "Carregando..." : "Selecione"}
@@ -295,36 +351,46 @@ function SettingsMusicalPreferences () {
                 <Text size='xs' c='dimmed'>
                   Minhas principais atividades e atuações na música
                 </Text>
-                <Flex gap={4} my={10}>
-                  {user.roles.map(role =>
-                    <Badge 
-                      key={role.id}
-                      color="violet"
-                      variant='filled'
+                {user.requesting ? (
+                  <Flex gap={7} mt={10}>
+                    <Skeleton width={70} height={20} radius="xl" />
+                    <Skeleton width={70} height={20} radius="xl" />
+                    <Skeleton width={70} height={20} radius="xl" />
+                  </Flex>
+                ) : (
+                  <>
+                    <Flex gap={4} my={10}>
+                      {user.roles[0].id ? user.roles.map(role =>
+                        <Badge 
+                          key={role.id}
+                          color="violet"
+                          variant='filled'
+                          size='sm'
+                          rightSection={
+                            <IconX
+                              style={xIconStyle}
+                              stroke={3}
+                              onClick={() => deleteRole(role.id)}
+                              title='Remover'
+                            />
+                          }
+                        >
+                          {role.name}
+                        </Badge>
+                      ) : (<Text size='sm'>Nenhuma atividade cadastrada</Text>)}
+                    </Flex>
+                    <Button
                       size='sm'
-                      rightSection={
-                        <IconX
-                          style={xIconStyle}
-                          stroke={3}
-                          onClick={() => deleteRole(role.id)}
-                          title='Remover'
-                        />
-                      }
+                      variant='light'
+                      color='violet'
+                      my={4}
+                      leftSection={<IconPlus size={14} />}
+                      onClick={() => setModalRolesIsOpen(true)}
                     >
-                      {role.name}
-                    </Badge>
-                  )}
-                </Flex>
-                <Button
-                  size='sm'
-                  variant='light'
-                  color='violet'
-                  my={4}
-                  leftSection={<IconPlus size={14} />}
-                  onClick={() => setModalRolesIsOpen(true)}
-                >
-                  Adicionar nova atividade
-                </Button>
+                      Adicionar nova atividade
+                    </Button>
+                  </>
+                )}
                 <Modal
                   size='sm'
                   opened={modalRolesIsOpen}
@@ -336,6 +402,7 @@ function SettingsMusicalPreferences () {
                     size='md'
                     placeholder='Selecione...'
                     onChange={(e) => addRole(e.currentTarget.value)}
+                    disabled={isAddingRole}
                     data={[
                       { label: roles.requesting ? 'Carregando...' : 'Selecione', value: '' },
                       { group: 'Gestão, produção e outros', items: rolesListManagement },

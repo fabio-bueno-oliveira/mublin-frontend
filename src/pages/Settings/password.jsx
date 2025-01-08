@@ -85,7 +85,7 @@ function SettingsPasswordPage () {
                 style={{width:'21px',height:'21px'}} 
                 onClick={() => navigate(-1)}
               />
-              <Text 
+              <Text
                 mr='10'
                 mb='xl'
                 className='lhNormal'
@@ -97,7 +97,7 @@ function SettingsPasswordPage () {
               </Text>
             </Flex>
             <Box maw={340} mx='auto'>
-              <Text 
+              <Text
                 mr='10'
                 mb='xl'
                 className='lhNormal'

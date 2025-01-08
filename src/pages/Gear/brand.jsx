@@ -29,9 +29,8 @@ function BrandPage () {
         <Box mx='auto' h={140}>
           <BackgroundImage
             src={brand.cover ? 'https://ik.imagekit.io/mublin/products/brands/'+brand.cover : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
-            radius='sm'
-            h={134}
-            // pl={40}
+            radius='md'
+            h={140}
             pt={62}
           >
             <Flex align='center' justify='center'>
@@ -41,9 +40,6 @@ function BrandPage () {
                 alt={brand.name} 
                 size='140px'
               />
-              {/* <Title order={2} mt={30} c='white'>
-                {brand.name}
-              </Title> */}
             </Flex>
           </BackgroundImage>
         </Box>
