@@ -7,7 +7,6 @@ import { miscService } from '../../api/misc';
 
 export const miscInfos = {
   getFeed: getFeed,
-  getFeedLikes: getFeedLikes,
   getItemLikes: getItemLikes,
   getMusicGenres: getMusicGenres,
   getMusicGenresCategories: getMusicGenresCategories,
@@ -33,22 +32,6 @@ function getFeed() {
   function request() { return { type: feedTypes.GET_USER_FEED_REQUEST} }
   function success(list) { return { type: feedTypes.GET_USER_FEED_SUCCESS, list } }
   function failure(error) { return { type: feedTypes.GET_USER_FEED_FAILURE, error } }
-}
-
-function getFeedLikes() {
-  return dispatch => {
-    dispatch(request());
-
-    miscService.getFeedLikes()
-      .then(
-        likes => dispatch(success(likes)),
-        error => dispatch(failure(error.toString()))
-      );
-    };
-
-  function request() { return { type: feedTypes.GET_USER_FEED_LIKES_REQUEST} }
-  function success(likes) { return { type: feedTypes.GET_USER_FEED_LIKES_SUCCESS, likes } }
-  function failure(error) { return { type: feedTypes.GET_USER_FEED_LIKES_FAILURE, error } }
 }
 
 function getItemLikes(feedId) {

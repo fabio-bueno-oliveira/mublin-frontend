@@ -7,6 +7,8 @@ const initialState = {
     { 
       id: '',
       created: '',
+      likes: 0,
+      likedByMe: 0,
       relatedItemId: '',
       extraText: '',
       extraInfo: '',
@@ -38,13 +40,6 @@ const initialState = {
       relatedEventTitle: ''
     }
   ],
-  likes: [
-    {
-      feedId: '',
-      likes: '',
-      likedByMe: '',
-    }
-  ],
   itemLikes: {
     total: 0,
     success: '',
@@ -63,6 +58,10 @@ const initialState = {
       },
     ],
   },
+  likedNow: {
+    items: [],
+    removeLikedByMe: []
+  }
 }
 
 export function feed(state = initialState, action) {
@@ -126,6 +125,26 @@ export function feed(state = initialState, action) {
         itemLikes: initialState.itemLikes,
         requestingLikes: false,
         error: "A solicitação falhou"
+      };
+    case feedTypes.INSERT_SESSION_LIKE:
+      return state.likedNow.items.push(action.itemId), {
+        ...state,
+        likedNow: {
+          items: state.likedNow.items,
+          removeLikedByMe: state.likedNow.removeLikedByMe.filter(function(item) {
+            return item !== action.itemId
+          })
+        }
+      };
+    case feedTypes.REMOVE_SESSION_LIKE:
+      return state.likedNow.removeLikedByMe.push(action.itemId), {
+        ...state,
+        likedNow: {
+          items: state.likedNow.items.filter(function(item) {
+            return item !== action.itemId
+          }),
+          removeLikedByMe: state.likedNow.removeLikedByMe,
+        }
       };
     default:
       return state

@@ -101,7 +101,6 @@ function Header (props) {
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
       dispatch(miscInfos.getFeed());
-      dispatch(miscInfos.getFeedLikes());
       dispatch(searchInfos.getSuggestedFeaturedUsers());
       dispatch(searchInfos.getSuggestedNewUsers());
     }

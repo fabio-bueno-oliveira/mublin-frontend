@@ -683,12 +683,8 @@ function ProfilePage () {
                   profile.recentActivity.total ? (
                     <Grid>
                       {profile.recentActivity.result.slice(0, 2).map(activity =>
-                        <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                          <Box 
-                            key={activity.id}
-                            // style={{height: (activity.image || activity.videoUrl) ? '180px' :  '120px'}} 
-                            style={{height:'auto'}} 
-                          >
+                        <Grid.Col span={{ base: 12, md: 6, lg: 6 }} key={activity.id}>
+                          <Box style={{height:'auto'}}>
                             <FeedCard
                               item={activity}
                               compact

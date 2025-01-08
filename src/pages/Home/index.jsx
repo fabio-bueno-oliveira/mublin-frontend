@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
-import { userProjectsInfos } from '../../store/actions/userProjects'
+// import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
 import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
-import ProjectCard from '../../components/projectCard'
+// import ProjectCard from '../../components/projectCard'
 import FeedCard from './feedCard'
 import FeedCardLoading from './feedCardLoading'
 import Header from '../../components/header'
@@ -34,7 +34,7 @@ function Home () {
 
   const decoded = jwtDecode(token);
   const loggedUserId = decoded.result.id;
-  const plan = decoded.result.plan;
+  // const plan = decoded.result.plan;
 
   const user = useSelector(state => state.user)
   const projects = useSelector(state => state.userProjects)
@@ -43,7 +43,6 @@ function Home () {
 
   useEffect(() => {
     dispatch(miscInfos.getFeed());
-    dispatch(miscInfos.getFeedLikes());
     dispatch(userInfos.getUserRolesInfoById(loggedUserId));
     dispatch(searchInfos.getSuggestedFeaturedUsers());
     dispatch(searchInfos.getSuggestedNewUsers());
@@ -212,9 +211,6 @@ function Home () {
                 <FeedCard 
                   key={key} 
                   item={item} 
-                  likes={
-                    feed.likes.filter((feed) => { return feed.feedId === item.id })[0]
-                  } 
                 />
               )
             )}

@@ -34,7 +34,6 @@ const FooterMenuMobile = (props) => {
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo())
       dispatch(miscInfos.getFeed())
-      dispatch(miscInfos.getFeedLikes())
       dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     }
   }, [refreshCounter])

@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
-import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
+import { feedActions } from '../../store/actions/feed'
+import { Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
 import ReadMoreReact from 'read-more-react'
 
-function FeedCard ({ item, likes, compact }) {
+function FeedCard ({ item, compact }) {
 
   const token = localStorage.getItem('token')
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
@@ -19,9 +20,6 @@ function FeedCard ({ item, likes, compact }) {
 
   const feed = useSelector(state => state.feed)
 
-  const totalLikes = likes?.likes;
-  const likedByMe = likes?.likedByMe;
-
   const [loadingAction, isLoadingAction] = useState(0);
   const [showModalLikes, setShowModalLikes] = useState(false);
 
@@ -29,7 +27,6 @@ function FeedCard ({ item, likes, compact }) {
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) };
 
   const likeFeedPost = (feedId) => {
-    isLoadingAction(feedId);
     fetch('https://mublin.herokuapp.com/feed/'+feedId+'/like', {
       method: 'POST',
       headers: {
@@ -39,17 +36,14 @@ function FeedCard ({ item, likes, compact }) {
       }
     })
     .then(() => {
-      dispatch(miscInfos.getFeedLikes());
-      isLoadingAction(0);
+      dispatch(feedActions.addLikedNow(feedId));
     }).catch(err => {
       console.error(err);
       alert("Ocorreu um erro ao curtir a postagem");
-      isLoadingAction(0);
     })
   }
 
   const unlikeFeedPost = (feedId) => {
-    isLoadingAction(feedId);
     fetch('https://mublin.herokuapp.com/feed/'+feedId+'/unlike', {
       method: 'DELETE',
       headers: {
@@ -59,12 +53,10 @@ function FeedCard ({ item, likes, compact }) {
       }
     })
     .then((response) => {
-      dispatch(miscInfos.getFeedLikes())
-      isLoadingAction(0);
+      dispatch(feedActions.removeLikedNow(feedId))
     }).catch(err => {
       console.error(err);
       alert("Ocorreu um erro ao curtir a postagem");
-      isLoadingAction(0);
     })
   }
 
@@ -313,61 +305,46 @@ function FeedCard ({ item, likes, compact }) {
             </Link>
           </Box>
         }
-        <Flex justify='space-between' align='flex-end'>
         {/* START Like/Unlike */}
-        {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting && !compact) && 
+        {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting) && 
           <Flex 
             align='center'
             gap='9'
             mt='12'
             px='15'
           >
-            {loadingAction === item.id ? (
-              <Loader color='violet' size={18} />
+            {((item.likedByMe || (feed.likedNow.items.includes(item.id))) && !feed.likedNow.removeLikedByMe.includes(item.id)) ? (
+              <IconHeartFilled
+                size={20}
+                color='#E32636'
+                style={{cursor:'pointer'}}
+                onClick={() => unlikeFeedPost(item.id)}
+              />
             ) : (
-              <>
-                {likedByMe ? (
-                  <IconHeartFilled
-                    size={20}
-                    color='#E32636'
-                    style={{cursor:'pointer'}}
-                    onClick={() => unlikeFeedPost(item.id)}
-                  />
-                ) : (
-                  <IconHeart
-                    size={20}
-                    style={{cursor:'pointer'}}
-                    onClick={() => likeFeedPost(item.id)}
-                  />
-                )}
-              </>
+              <IconHeart
+                size={20}
+                style={{cursor:'pointer'}}
+                onClick={() => likeFeedPost(item.id)}
+              />
             )}
-            {totalLikes > 0 && 
-              <Text 
+            {(item.likes > 0 || feed.likedNow.items.includes(item.id)) && 
+              <Text
                 size='13px'
                 fw='500'
-                c='dimmed' 
+                c='dimmed'
                 pt='1'
                 className='point'
                 onClick={() => openModalLikes(item.id)}
               >
-                {totalLikes}
+                {(feed.likedNow.items.includes(item.id) && !item.likedByMe) ? (
+                  item.likes + 1
+                ) : (
+                  (feed.likedNow.removeLikedByMe.includes(item.id) && item.likedByMe) ? item.likes - 1 : item.likes
+                )}
               </Text>
             }
-          </Flex> 
+          </Flex>
         }
-        {/* <Text 
-          c='dimmed' 
-          size='11px'
-          px='20'
-          mb='3'
-          ta='right'
-          title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
-          className='fitContent op80'
-        >
-          há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-        </Text> */}
-        </Flex>
       </Card>
       <Modal
         centered
