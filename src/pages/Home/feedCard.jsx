@@ -20,11 +20,11 @@ function FeedCard ({ item, compact }) {
 
   const feed = useSelector(state => state.feed)
 
-  const [loadingAction, isLoadingAction] = useState(0);
-  const [showModalLikes, setShowModalLikes] = useState(false);
+  const [loadingAction, isLoadingAction] = useState(0)
+  const [showModalLikes, setShowModalLikes] = useState(false)
 
-  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '1px' };
-  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) };
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '1px' }
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) }
 
   const likeFeedPost = (feedId) => {
     fetch('https://mublin.herokuapp.com/feed/'+feedId+'/like', {
@@ -39,7 +39,7 @@ function FeedCard ({ item, compact }) {
       dispatch(feedActions.addLikedNow(feedId));
     }).catch(err => {
       console.error(err);
-      alert("Ocorreu um erro ao curtir a postagem");
+      alert('Ocorreu um erro ao curtir a postagem');
     })
   }
 
@@ -56,18 +56,18 @@ function FeedCard ({ item, compact }) {
       dispatch(feedActions.removeLikedNow(feedId))
     }).catch(err => {
       console.error(err);
-      alert("Ocorreu um erro ao curtir a postagem");
+      alert('Ocorreu um erro ao curtir a postagem');
     })
   }
 
   const openModalLikes = (idFeed) => {
-    dispatch(miscInfos.getItemLikes(idFeed));
-    setShowModalLikes(true);
+    dispatch(miscInfos.getItemLikes(idFeed))
+    setShowModalLikes(true)
   }
 
   const goToProfile = (username) => {
-    setShowModalLikes(false);
-    navigate('/'+username);
+    setShowModalLikes(false)
+    navigate('/'+username)
   }
 
   const deleteFeedPost = (postId) => {
@@ -90,8 +90,8 @@ function FeedCard ({ item, compact }) {
   }
 
   const getYoutubeId = (url) => {
-    url = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-    return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0];
+    url = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+    return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0]
   }
 
   return (
@@ -121,7 +121,7 @@ function FeedCard ({ item, compact }) {
           </Link>
           <Box style={{flexGrow:'1'}}>
             <Anchor
-              style={{lineHeight:'normal'}} 
+              style={{lineHeight:'normal'}}
               href={`/${item.relatedUserUsername}`}
             >
               <Flex gap={2} align='center' mb={2}>
@@ -154,7 +154,7 @@ function FeedCard ({ item, compact }) {
             </Anchor>
           </Box>
           {!compact &&
-            <Menu shadow="md" position="bottom-end" width={200}>
+            <Menu shadow='md' position='bottom-end' width={200}>
               <Menu.Target className='point'>
                 <IconDotsVertical style={{ width: rem(18), height: rem(18), marginTop: '-20px', opacity: '0.5'}} />
               </Menu.Target>
@@ -193,17 +193,17 @@ function FeedCard ({ item, compact }) {
         {(item.categoryId === 8) && 
           <>
             <Box>
-              <Text 
-                lineClamp={compact ? 2 : undefined} 
-                px='15' size='0.87em' mt='12px' 
+              <Text
+                lineClamp={compact ? 2 : undefined}
+                px='15' size='0.87em' mt='12px'
                 style={{lineHeight:'1.25em',opacity:'0.8'}}
               >
-                <ReadMoreReact 
+                <ReadMoreReact
                   text={item.extraText}
                   min={220}
                   ideal={270}
                   max={2000}
-                  readMoreText="...mais"
+                  readMoreText='...mais'
                 />
               </Text>
             </Box>

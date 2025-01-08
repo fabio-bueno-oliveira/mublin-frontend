@@ -49,10 +49,10 @@ function SettingsMenu (props) {
       />
       <NavLink
         color='violet'
-        href='#required-for-focus'
+        href='/settings/password'
         label='Senha'
         leftSection={<IconLock size='1rem' stroke={1.5} />}
-        active={props.page === 'passwordChange'}
+        active={props.page === 'password'}
       />
       {/* <NavLink
         color='violet'

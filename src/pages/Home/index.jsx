@@ -4,13 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
-// import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
 import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
-// import ProjectCard from '../../components/projectCard'
 import FeedCard from './feedCard'
 import FeedCardLoading from './feedCardLoading'
 import Header from '../../components/header'
@@ -32,9 +30,9 @@ function Home () {
   const token = localStorage.getItem('token')
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
-  const decoded = jwtDecode(token);
-  const loggedUserId = decoded.result.id;
-  // const plan = decoded.result.plan;
+  const decoded = jwtDecode(token)
+  const loggedUserId = decoded.result.id
+  const plan = decoded.result.plan
 
   const user = useSelector(state => state.user)
   const projects = useSelector(state => state.userProjects)
@@ -42,10 +40,10 @@ function Home () {
   const feed = useSelector(state => state.feed)
 
   useEffect(() => {
-    dispatch(miscInfos.getFeed());
-    dispatch(userInfos.getUserRolesInfoById(loggedUserId));
-    dispatch(searchInfos.getSuggestedFeaturedUsers());
-    dispatch(searchInfos.getSuggestedNewUsers());
+    dispatch(miscInfos.getFeed())
+    dispatch(userInfos.getUserRolesInfoById(loggedUserId))
+    dispatch(searchInfos.getSuggestedFeaturedUsers())
+    dispatch(searchInfos.getSuggestedNewUsers())
     if (user.success && user.first_access !== 0) {
       navigate('/start/intro/')
     }
@@ -93,7 +91,7 @@ function Home () {
                     <Title fw='580' fz='1.04rem' mb={1} mt={10} ta='center' className='op80'>
                       Olá, {userInfo?.name}
                     </Title>
-                    {/* {plan === 'Pro' ? ( 
+                    {plan === 'Pro' ? ( 
                       <Center>
                         <Badge 
                           color='violet' 
@@ -118,7 +116,7 @@ function Home () {
                           Assine o Mublin PRO!
                         </Anchor>
                       </Center>
-                    )} */}
+                    )}
                     <Text
                       ta='center'
                       c='dimmed'
@@ -131,11 +129,11 @@ function Home () {
                         <span className='comma' key={role.id}>{role.description}</span>
                       )}
                     </Text>
-                    {/* <Text ta="center"  size="xs" mt={9} c="dimmed">
+                    <Text ta="center"  size="xs" mt={9} c="dimmed">
                       {user.bio}
-                    </Text> */}
+                    </Text>
                   </Card>
-                  {/* <Text fw='400' size='lg'>Meus projetos</Text> */}
+                  {/* <Text fw='400' size='lg'>Compromissos próximos:</Text> */}
                   {/* {projects.list.map(project =>
                     <Card 
                       key={project.projectid}
@@ -145,18 +143,7 @@ function Home () {
                       withBorder
                       className="mublinModule"
                     >
-                      <ProjectCard 
-                        mb={0}
-                        size='md'
-                        picture={project.picture}
-                        name={project.name}
-                        username={project.username}
-                        type={project.ptname}
-                        city={project.cityName}
-                        region={project.regionName}
-                        confirmed={project.confirmed}
-                        genre={project.genre1}
-                      />
+                      Exemplo
                     </Card>
                   )} */}
                 </>
@@ -182,7 +169,7 @@ function Home () {
                       Criar novo
                     </Text>
                   </Flex>
-                  {projects.requesting && 
+                  {projects.requesting &&
                     <Loader color='violet' size='63px' />
                   }
                   {!projects.requesting && projects.list.map(project =>
@@ -207,10 +194,10 @@ function Home () {
             {feed.requesting ? (
               <FeedCardLoading />
             ) : (
-              feed.list.map((item, key) => 
-                <FeedCard 
-                  key={key} 
-                  item={item} 
+              feed.list.map((item, key) =>
+                <FeedCard
+                  key={key}
+                  item={item}
                 />
               )
             )}
@@ -277,7 +264,7 @@ function Home () {
       </Container>
       <FooterMenuMobile page='home' />
     </>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

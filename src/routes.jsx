@@ -38,6 +38,7 @@ import SettingsMyGear from './pages/Settings/gear';
 import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
 import SettingsMusicalPreferences from './pages/Settings/preferences';
 import SettingsAvailability from './pages/Settings/availability';
+import SettingsPassword from './pages/Settings/password';
 import MenuMobilePage from './pages/MenuMobile';
 import CheckoutSuccess from './pages/Checkout/success';
 import AdminPage from './pages/Admin';
@@ -84,6 +85,7 @@ function AppRoutes () {
           <Route path="/settings/availability" element={<SettingsAvailability />} />
           <Route path="/settings/my-gear" element={<SettingsMyGear />} />
           <Route path="/settings/submit-product" element={<SettingsSubmitNewGearProduct />} />
+          <Route path="/settings/password" element={<SettingsPassword />} />
           <Route path="/settings" element={<SettingsProfileEdit />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/new/post" element={<NewPost />} />

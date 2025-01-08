@@ -8,6 +8,9 @@ import '@mantine/dates/styles.css'
 
 const theme = createTheme({
   autoContrast: true,
+  focusRing: 'never',
+  defaultRadius: 'md',
+  luminanceThreshold: 0.3,
   colorScheme: 'light',
   colors: {
     deepBlue: [

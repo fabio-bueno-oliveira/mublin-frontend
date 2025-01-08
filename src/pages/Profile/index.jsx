@@ -980,7 +980,7 @@ function ProfilePage () {
           </Text>
         </>
       }
-      {!modalAvatarOpen || !modalFollowersOpen || !modalFollowingOpen || !modalStrengthsOpen || !modalVerifiedOpen || !modalLegendOpen || !modalProfileFeedOpen &&
+      {(!modalAvatarOpen || !modalFollowersOpen || !modalFollowingOpen || !modalStrengthsOpen || !modalVerifiedOpen || !modalLegendOpen || !modalProfileFeedOpen) &&
         <FooterMenuMobile />
       }
     </>
