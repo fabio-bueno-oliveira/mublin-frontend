@@ -4,6 +4,7 @@ import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Box, Grid, Anchor, Center, BackgroundImage, Flex, Title, Avatar, Card, Image, Text, Group } from '@mantine/core';
+import { IconUsers } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -29,7 +30,7 @@ function BrandPage () {
         <Box mx='auto' h={140}>
           <BackgroundImage
             src={brand.cover ? 'https://ik.imagekit.io/mublin/products/brands/'+brand.cover : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
-            radius='md'
+            radius='lg'
             h={140}
             pt={62}
           >
@@ -43,25 +44,25 @@ function BrandPage () {
             </Flex>
           </BackgroundImage>
         </Box>
-        <Grid>
+        <Grid mt={70}>
           <Grid.Col span={{ base: 12, md: 6, lg: 4 }}>
-            <Title order={2} mt={60}>
+            <Title order={2}>
               {brand.name}
             </Title>
             {/* <Text size='sm' fw={500}>Website</Text> */}
             <Text size='sm'>
-              <Anchor href={brand.website} target='_blank'>
+              <Anchor href={brand.website} underline='hover' target='_blank'>
                 {brand.website}
               </Anchor>
             </Text>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 6, lg: 8 }}>
-            <Text size='sm'>
+            <Text size='xs'>
               {brand.description}
             </Text>
           </Grid.Col>
         </Grid>
-        <Grid mb={100}>
+        <Grid mb={100} mt={10}>
           {brand.products.map((product, key) =>
           <Grid.Col span={{ base: 6, md: 6, lg: 3 }} key={key}>
             <Card shadow='sm' padding='lg' radius='md' withBorder>
@@ -78,16 +79,20 @@ function BrandPage () {
                   </Link>
                 </Center>
               </Card.Section>
-              <Group justify='space-between' mt='md' mb='xs'>
+              <Group justify='space-between' mt='md'>
                 <Text size='sm' fw={500}>{product.name}</Text>
-                {/* <Badge color='pink'>{product.categoryName}</Badge> */}
               </Group>
-              <Text size='xs' c='dimmed'>
-                {product.categoryName}
-              </Text>
-              {/* <Button color='blue' fullWidth mt='md' radius='md'>
-                Usuários deste produto
-              </Button> */}
+              <Flex gap={3} mt={4} align='center' justify='space-between'>
+                <Text size='xs' c='dimmed'>
+                  {product.categoryName}
+                </Text>
+                <Flex c='dimmed' gap={3} align='center' title={product.totalOwners + ' pessoas possuem'}>
+                  <IconUsers style={{width:'13px',height:'13px'}} />
+                  <Text size='xs'>
+                    {product.totalOwners}
+                  </Text>
+                </Flex>
+              </Flex>
             </Card>
           </Grid.Col>
           )}

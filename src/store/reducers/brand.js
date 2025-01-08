@@ -18,6 +18,7 @@ const initialState = {
   products: [
     { 
       id: '',
+      totalOwners: 0,
       name: '',
       picture: '',
       brandId: '',
