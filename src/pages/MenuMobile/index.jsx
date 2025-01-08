@@ -201,7 +201,7 @@ function MenuMobile () {
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconPackages style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550' onClick={() => navigate('/settings/my-gear')}>
             Meus equipamentos
           </Button>
-          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconLock style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>
+          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconLock style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550' onClick={() => navigate('/settings/password')}>
             Senha
           </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconStar style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>
