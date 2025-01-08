@@ -36,6 +36,12 @@ a.displayBlockLink {
   display: none;
 }
 
+.read-more-button {
+  cursor: pointer;
+  display: block;
+  width: fit-content;
+}
+
 .mublinLogo {
   text-decoration: none;
 
@@ -182,7 +188,7 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 
 // Text utils
 .op80 {
-  opacity: 0.80;
+  opacity: 0.65;
 }
 .lhNormal {
   line-height: normal;

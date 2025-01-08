@@ -33,6 +33,7 @@
     "react-redux": "^9.2.0",
     "react-responsive-masonry": "^2.4.1",
     "react-router-dom": "^6.27.0",
+    "read-more-react": "^1.0.10",
     "recharts": "^2.12.7",
     "redux": "^5.0.1",
     "redux-logger": "^3.0.6",

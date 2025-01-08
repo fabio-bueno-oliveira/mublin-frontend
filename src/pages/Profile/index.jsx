@@ -97,19 +97,21 @@ function ProfilePage () {
   // const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
   // Badges
-  const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false);
-  const [modalLegendOpen, setModalLegendOpen] = useState(false);
+  const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false)
+  const [modalLegendOpen, setModalLegendOpen] = useState(false)
 
   // Modal User Picture
   const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
-  // Modal Follow 
-  const [modalFollowInfoOpen, setModalFollowInfoOpen] = useState(false);
+  // Modal Follow
+  const [modalFollowInfoOpen, setModalFollowInfoOpen] = useState(false)
   // Modal Contact
-  const [modalContactOpen, setModalContactOpen] = useState(false);
+  const [modalContactOpen, setModalContactOpen] = useState(false)
   // Modal Followers
-  const [modalFollowersOpen, setModalFollowersOpen] = useState(false);
+  const [modalFollowersOpen, setModalFollowersOpen] = useState(false)
   // Modal Following
-  const [modalFollowingOpen, setModalFollowingOpen] = useState(false);
+  const [modalFollowingOpen, setModalFollowingOpen] = useState(false)
+  // Modal Profile Feed
+  const [modalProfileFeedOpen, setModalProfileFeedOpen] = useState(false)
 
   const followUnfollow = () => {
     setModalFollowInfoOpen(false);
@@ -240,11 +242,9 @@ function ProfilePage () {
 
   const [scroll] = useWindowScroll();
 
-  const truncate = (input) => input.length > 17 ? `${input.substring(0, 17)}...` : input;
-
   return (
     <>
-      {(profile.id && !modalFollowersOpen && !modalFollowingOpen) && 
+      {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalProfileFeedOpen) && 
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
@@ -684,7 +684,11 @@ function ProfilePage () {
                     <Grid>
                       {profile.recentActivity.result.slice(0, 2).map(activity =>
                         <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                          <Box style={{height: (activity.image || activity.videoUrl) ? '180px' :  '120px'}} key={activity.id}>
+                          <Box 
+                            key={activity.id}
+                            // style={{height: (activity.image || activity.videoUrl) ? '180px' :  '120px'}} 
+                            style={{height:'auto'}} 
+                          >
                             <FeedCard
                               item={activity}
                               compact
@@ -697,9 +701,9 @@ function ProfilePage () {
                     <Text size='sm' c='dimmed'>Nenhuma postagem até o momento</Text>
                   )
                 )}
-                {profile.recentActivity.total > 2 && 
-                  <Text size='sm' className='op80 point' ta='center' mt='14' fw='460'>
-                    Ver mais postagens
+                {profile.recentActivity.total && 
+                  <Text size='sm' className='op80 point' ta='center' mt='14' fw='460' onClick={() => setModalProfileFeedOpen(true)}>
+                    Ver postagens
                   </Text>
                 }
               </Paper>
@@ -710,6 +714,22 @@ function ProfilePage () {
           </Grid>
         </Container>
       }
+      <Modal
+        centered
+        opened={modalProfileFeedOpen}
+        onClose={() => setModalProfileFeedOpen(false)}
+        title={`Postagens de ${profile.name} ${profile.lastname}`}
+        size='lg'
+      >
+        { profile.recentActivity.total && profile.recentActivity.result.map(activity =>
+          <Box 
+            key={activity.id}
+            style={{height:'auto'}} 
+          >
+            <FeedCard item={activity} />
+          </Box>
+        )}
+      </Modal>
       <Modal
         centered
         opened={modalFollowInfoOpen}
@@ -776,6 +796,7 @@ function ProfilePage () {
         <Text size='sm'><strong>Localidade:</strong> {profile.city}, {profile.region}, {profile.country}</Text>
         <Text size='sm'><strong>E-mail:</strong> {profile.email}</Text>
         <Text size='sm'><strong>Celular:</strong> {profile.phone ? profile.phone : 'Não informado'}</Text>
+        <Text size='sm'><strong>Website:</strong> {profile.website ? profile.website : 'Não informado'}</Text>
       </Modal>
       <Modal 
         centered
@@ -963,11 +984,9 @@ function ProfilePage () {
           </Text>
         </>
       }
-      <FooterMenuMobile
-        hide={
-          modalAvatarOpen || modalFollowersOpen || modalFollowingOpen || modalStrengthsOpen || modalVerifiedOpen || modalLegendOpen
-        }
-      />
+      {!modalAvatarOpen || !modalFollowersOpen || !modalFollowingOpen || !modalStrengthsOpen || !modalVerifiedOpen || !modalLegendOpen || !modalProfileFeedOpen &&
+        <FooterMenuMobile />
+      }
     </>
   );
 };

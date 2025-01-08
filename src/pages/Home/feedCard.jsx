@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { Loader, Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled } from '@tabler/icons-react'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
+import ReadMoreReact from 'read-more-react'
 
 function FeedCard ({ item, likes, compact }) {
 
@@ -127,13 +128,12 @@ function FeedCard ({ item, likes, compact }) {
             />
           </Link>
           <Box style={{flexGrow:'1'}}>
-            <Anchor 
-              fw='600' 
+            <Anchor
               style={{lineHeight:'normal'}} 
               href={`/${item.relatedUserUsername}`}
             >
               <Flex gap={2} align='center' mb={2}>
-                <Text size='0.93rem'>
+                <Text size='0.93rem' fw='550'>
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Text>
                 {!!item.relatedUserVerified &&
@@ -147,16 +147,18 @@ function FeedCard ({ item, likes, compact }) {
               <Text size='0.76rem' c='dimmed' fw='420'>
                 {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
               </Text>
-              <Text 
-                c='dimmed' 
-                size='0.74rem'
-                fw='420'
-                mt='4'
-                title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
-                className='fitContent'
-              >
-                há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-              </Text>
+              <Flex gap={2} align='flex-end'>
+                <Text
+                  c='dimmed'
+                  size='0.74rem'
+                  fw='420'
+                  mt='4'
+                  className='fitContent'
+                >
+                  há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
+                </Text>
+                <IconClock color='gray' style={{width:'11px',height:'11px'}} title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')} />
+              </Flex>
             </Anchor>
           </Box>
           {!compact &&
@@ -204,7 +206,13 @@ function FeedCard ({ item, likes, compact }) {
                 px='15' size='0.87em' mt='12px' 
                 style={{lineHeight:'1.25em',opacity:'0.8'}}
               >
-                {item.extraText}
+                <ReadMoreReact 
+                  text={item.extraText}
+                  min={220}
+                  ideal={270}
+                  max={2000}
+                  readMoreText="...mais"
+                />
               </Text>
             </Box>
             {(item.image && !compact) && 

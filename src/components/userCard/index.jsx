@@ -15,25 +15,25 @@ export function UserCard({
         <Avatar size={size} src={picture ? picture : undefined} />
       </Link>
       <Flex direction='column'>
-        <Anchor 
+        <Anchor
           underline='never'
-          style={{lineHeight:'normal'}} 
+          style={{lineHeight:'normal'}}
           href={`/${username}`}
         >
           <Group gap={0}>
             <Text size='0.88rem' fw='600'>
               {name} {lastname}
             </Text>
-            {verified && 
-              <IconRosetteDiscountCheckFilled 
-                color='#7950f2' 
-                style={iconVerifiedStyle} 
+            {verified &&
+              <IconRosetteDiscountCheckFilled
+                color='#7950f2'
+                style={iconVerifiedStyle}
                 title='Perfil verificado'
               />
             }
-            {legend && 
-              <IconShieldCheckFilled 
-                style={iconLegendStyle} 
+            {legend &&
+              <IconShieldCheckFilled
+                style={iconLegendStyle}
                 title='Lenda da música'
               />
             }
@@ -45,11 +45,11 @@ export function UserCard({
             style={{lineHeight:'normal'}}
             href={`/${username}`}
           >
-            <Text size='0.75rem' fw='420' mt={3} mb={4} truncate='end'>
+            <Text size='0.75rem' className='op80' fw='420' mt={3} mb={4} truncate='end'>
               {username}
             </Text>
           </Anchor>
-          <Text c='dimmed' size='0.75rem' fw='420' truncate='end'>
+          <Text size='0.75rem' className='op80' fw='420' truncate='end'>
             {mainRole} {city && `• ${city}`}{region && `, ${region}`}
           </Text>
         </Box>
