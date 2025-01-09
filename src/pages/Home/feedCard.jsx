@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
+import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
-import { Modal, Menu, Card, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, rem } from '@mantine/core'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock } from '@tabler/icons-react'
+import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, Textarea, Button, rem } from '@mantine/core'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconMessageCircle } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
@@ -13,7 +14,10 @@ import ReadMoreReact from 'read-more-react'
 function FeedCard ({ item, compact }) {
 
   const token = localStorage.getItem('token')
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+  const decoded = jwtDecode(token)
+  const loggedUserId = decoded.result.id
+  const loggedUsername = decoded.result.username
 
   let navigate = useNavigate()
   let dispatch = useDispatch()
@@ -21,7 +25,13 @@ function FeedCard ({ item, compact }) {
   const feed = useSelector(state => state.feed)
 
   const [loadingAction, isLoadingAction] = useState(0)
+  const [deletingPost, setDeletingPost] = useState(0)
+  const [postingComment, setPostingComment] = useState(false)
+  
   const [showModalLikes, setShowModalLikes] = useState(false)
+  const [showModalComments, setShowModalComments] = useState(false)
+
+  const [comment, setComment] = useState('')
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '1px' }
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) }
@@ -65,6 +75,11 @@ function FeedCard ({ item, compact }) {
     setShowModalLikes(true)
   }
 
+  const openModalComments = (idFeed) => {
+    dispatch(feedActions.getItemComments(idFeed))
+    setShowModalComments(true)
+  }
+
   const goToProfile = (username) => {
     setShowModalLikes(false)
     navigate('/'+username)
@@ -86,6 +101,47 @@ function FeedCard ({ item, compact }) {
       console.error(err)
       isLoadingAction(false)
       alert("Ocorreu um erro ao remover o post. Tente novamente em instantes")
+    })
+  }
+
+  const postComment = (feedId) => {
+    setPostingComment(true)
+    fetch('https://mublin.herokuapp.com/feed/'+feedId+'/postComment', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({text: comment})
+    })
+    .then(() => {
+      dispatch(feedActions.getItemComments(feedId))
+      setComment('')
+      setPostingComment(false)
+    }).catch(err => {
+      console.error(err)
+      alert('Ocorreu um erro ao curtir a postagem')
+      setPostingComment(false)
+    })
+  }
+
+  const deleteFeedComment = (commentId) => {
+    setDeletingPost(commentId)
+    fetch('https://mublin.herokuapp.com/feed/'+commentId+'/deletePostComment', {
+      method: 'delete',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    }).then((response) => {
+      setDeletingPost(0)
+      dispatch(feedActions.getItemComments(item.id))
+    }).catch(err => {
+      console.error(err)
+      setDeletingPost(0)
+      alert("Ocorreu um erro ao remover o comentário. Tente novamente em instantes")
     })
   }
 
@@ -165,14 +221,14 @@ function FeedCard ({ item, compact }) {
                     leftSection={<IconUserCircle style={{ width: rem(14), height: rem(14) }} />}
                     onClick={() => goToProfile(item.relatedUserUsername)}
                   >
-                    {item.relatedUserUsername === userInfo.username ? (
+                    {item.relatedUserUsername === loggedUsername ? (
                       <>Ver meu perfil</>
                     ) : (
                       <>Ver perfil de {item.relatedUserName}</>
                     )}
                   </Menu.Item>
                 }
-                {item.relatedUserUsername === userInfo.username && 
+                {item.relatedUserUsername === loggedUsername && 
                   <Menu.Item
                     disabled={loadingAction}
                     leftSection={<IconTrash style={{ width: rem(14), height: rem(14) }} />}
@@ -305,46 +361,50 @@ function FeedCard ({ item, compact }) {
             </Link>
           </Box>
         }
-        {/* START Like/Unlike */}
-        {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting) && 
-          <Flex 
-            align='center'
-            gap='9'
-            mt='12'
-            px='15'
-          >
-            {((item.likedByMe || (feed.likedNow.items.includes(item.id))) && !feed.likedNow.removeLikedByMe.includes(item.id)) ? (
-              <IconHeartFilled
-                size={20}
-                color='#E32636'
-                style={{cursor:'pointer'}}
-                onClick={() => unlikeFeedPost(item.id)}
-              />
-            ) : (
-              <IconHeart
-                size={20}
-                style={{cursor:'pointer'}}
-                onClick={() => likeFeedPost(item.id)}
-              />
-            )}
-            {(item.likes > 0 || feed.likedNow.items.includes(item.id)) && 
-              <Text
-                size='13px'
-                fw='500'
-                c='dimmed'
-                pt='1'
-                className='point'
-                onClick={() => openModalLikes(item.id)}
-              >
-                {(feed.likedNow.items.includes(item.id) && !item.likedByMe) ? (
-                  item.likes + 1
-                ) : (
-                  (feed.likedNow.removeLikedByMe.includes(item.id) && item.likedByMe) ? item.likes - 1 : item.likes
-                )}
-              </Text>
-            }
+        <Flex px='15' justify='space-between' align='flex-end'>
+          {/* START Like/Unlike */}
+          {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting) && 
+            <Flex 
+              align='center'
+              gap='9'
+              mt='12'
+            >
+              {((item.likedByMe || (feed.likedNow.items.includes(item.id))) && !feed.likedNow.removeLikedByMe.includes(item.id)) ? (
+                <IconHeartFilled
+                  size={20}
+                  color='#E32636'
+                  style={{cursor:'pointer'}}
+                  onClick={() => unlikeFeedPost(item.id)}
+                />
+              ) : (
+                <IconHeart
+                  size={20}
+                  style={{cursor:'pointer'}}
+                  onClick={() => likeFeedPost(item.id)}
+                />
+              )}
+              {(item.likes > 0 || feed.likedNow.items.includes(item.id)) && 
+                <Text
+                  size='13px'
+                  fw='500'
+                  c='dimmed'
+                  pt='1'
+                  className='point'
+                  onClick={() => openModalLikes(item.id)}
+                >
+                  {(feed.likedNow.items.includes(item.id) && !item.likedByMe) ? (
+                    item.likes + 1
+                  ) : (
+                    (feed.likedNow.removeLikedByMe.includes(item.id) && item.likedByMe) ? item.likes - 1 : item.likes
+                  )}
+                </Text>
+              }
+            </Flex>
+          }
+          <Flex align='center' gap={8} mr='' className='point' onClick={() => openModalComments(item.id)}>
+            <IconMessageCircle style={{width:'14px',height:'14px'}} color='gray' /> <Text size='xs' c='dimmed'>{item.totalComments} comentários</Text>
           </Flex>
-        }
+        </Flex>
       </Card>
       <Modal
         centered
@@ -382,6 +442,66 @@ function FeedCard ({ item, compact }) {
               </Flex>
             </Flex>
           )
+        )}
+      </Modal>
+      <Modal
+        centered
+        opened={showModalComments}
+        onClose={() => setShowModalComments(false)}
+        title={feed.requestingComments ? 'Carregando...' : feed.itemComments.total + ' comentários'}
+        scrollAreaComponent={ScrollArea.Autosize}
+      >
+        <Box mb={10}>
+          <Textarea
+            value={comment}
+            onChange={(event) => setComment(event.currentTarget.value)}
+            maxLength={300}
+          />
+          <Flex justify='flex-end' mt={5}>
+            <Button 
+              loading={postingComment}
+              variant='subtle' 
+              color='violet' 
+              size='xs' 
+              onClick={() => postComment(item.id)}
+            >
+              Publicar
+            </Button>
+          </Flex>
+        </Box>
+        {feed.requestingComments ? (
+          <Flex gap={6} align='center'>
+            <Skeleton height={46} circle />
+            <Flex direction='column'>
+              <Box w={170}>
+                <Skeleton height={10} width={160} radius='xl' mb={7} />
+                <Skeleton height={10} width={110} mb={7} radius='xl' />
+              </Box>
+            </Flex>
+          </Flex>
+        ) : (
+          feed.itemComments.total ? feed.itemComments.list.map((comment, key) => 
+            <Flex key={key} align='flex-start' gap={7} mb={14}>
+              <Avatar 
+                className='point' 
+                radius='xl' 
+                size='35px' 
+                src={comment.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-35,w-35,c-maintain_ratio/'+comment.userId+'/'+comment.picture : undefined} 
+              />
+              <Box>
+                <Text size='sm'>
+                  <span className='point' style={{fontWeight:'550'}}>{comment.username}</span> {!!comment.verified &&
+                    <IconRosetteDiscountCheckFilled color='#7950f2' style={{ width: rem(13), height: rem(13) }} />
+                  } {!!comment.legend_badge &&
+                    <IconShieldCheckFilled style={{ color: '#DAA520', width: rem(13), height: rem(13) }} />
+                  } {comment.text}
+                </Text>
+                <Text size='11px' c='dimmed' fw='550' mt={7}>
+                  {comment.created} {(comment.userId === loggedUserId) && <span className='point' onClick={() => deleteFeedComment(comment.id)}>| Remover</span>} {deletingPost === comment.id && " | Removendo..."}
+                </Text>
+              </Box>
+            </Flex>
+          ) : (<Text size='sm' c='dimmed' ta='center'>Nenhum comentário até o momento</Text>)
         )}
       </Modal>
     </>

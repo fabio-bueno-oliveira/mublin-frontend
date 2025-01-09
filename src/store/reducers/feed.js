@@ -9,6 +9,7 @@ const initialState = {
       created: '',
       likes: 0,
       likedByMe: 0,
+      totalComments: 0,
       relatedItemId: '',
       extraText: '',
       extraInfo: '',
@@ -58,6 +59,24 @@ const initialState = {
       },
     ],
   },
+  requestingComments: false,
+  itemComments: {
+    total: 0,
+    success: '',
+    list: [
+      {
+        id: '',
+        created: '',
+        text: '',
+        userId: '',
+        name: '',
+        lastname: '',
+        picture: '',
+        username: '',
+        role: '',
+      },
+    ],
+  },
   likedNow: {
     items: [],
     removeLikedByMe: []
@@ -85,26 +104,6 @@ export function feed(state = initialState, action) {
         requesting: false,
         error: "A solicitação falhou"
       };
-    case feedTypes.GET_USER_FEED_LIKES_REQUEST:
-      return {
-        ...state,
-        requestingLikes: true,
-        error: ""
-      };
-    case feedTypes.GET_USER_FEED_LIKES_SUCCESS:
-      return {
-        ...state,
-        likes: action.likes,
-        requestingLikes: false,
-        error: ""
-      };
-    case feedTypes.GET_USER_FEED_LIKES_FAILURE:
-      return {
-        ...state,
-        likes: initialState.likes,
-        requestingLikes: false,
-        error: "A solicitação falhou"
-      };
     case feedTypes.GET_ITEM_LIKES_REQUEST:
       return {
         ...state,
@@ -124,6 +123,27 @@ export function feed(state = initialState, action) {
         ...state,
         itemLikes: initialState.itemLikes,
         requestingLikes: false,
+        error: "A solicitação falhou"
+      };
+    case feedTypes.GET_ITEM_COMMENTS_REQUEST:
+      return {
+        ...state,
+        itemComments: initialState.itemComments,
+        requestingComments: true,
+        error: ""
+      };
+    case feedTypes.GET_ITEM_COMMENTS_SUCCESS:
+      return {
+        ...state,
+        itemComments: action.result,
+        requestingComments: false,
+        error: ""
+      };
+    case feedTypes.GET_ITEM_COMMENTS_FAILURE:
+      return {
+        ...state,
+        itemComments: initialState.itemComments,
+        requestingComments: false,
         error: "A solicitação falhou"
       };
     case feedTypes.INSERT_SESSION_LIKE:

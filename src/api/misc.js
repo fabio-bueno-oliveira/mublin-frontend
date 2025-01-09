@@ -18,6 +18,7 @@ export const miscService = {
   getNotifications,
   getFeed,
   getItemLikes,
+  getItemComments,
   getAllMusicGenres,
   getAllMusicGenresCategories,
   getAllRoles,
@@ -42,6 +43,14 @@ async function getItemLikes(feedId) {
     headers: authHeader()
   };
   return fetch(`${BASE_URL}/${feedId}/feedLikes`, requestOptions).then(handleResponse);
+}
+
+async function getItemComments(feedId) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  };
+  return fetch(`${BASE_URL}/feed/${feedId}/feedComments`, requestOptions).then(handleResponse);
 }
 
 async function getNotifications() {
