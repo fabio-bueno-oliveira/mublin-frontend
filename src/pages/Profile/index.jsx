@@ -716,6 +716,7 @@ function ProfilePage () {
         onClose={() => setModalProfileFeedOpen(false)}
         title={`Postagens de ${profile.name} ${profile.lastname}`}
         size='lg'
+        scrollAreaComponent={ScrollArea.Autosize}
       >
         { profile.recentActivity.total && profile.recentActivity.result.map(activity =>
           <Box 

@@ -121,7 +121,7 @@ function GearProductPage () {
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
             <Title fz='1.0rem' fw='640' mb={14}>
-              Quem possui {product?.owners?.length && '('+product?.owners?.length+')'}
+              Quem possui {product.owners[0].id ? '('+product?.owners?.length+')' : '(0)'}
             </Title>
             {product.requesting ? (
               <Text>
