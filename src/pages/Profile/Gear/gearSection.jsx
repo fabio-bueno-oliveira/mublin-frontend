@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useMantineColorScheme, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Button, Divider, em  } from '@mantine/core'
+import { useMantineColorScheme, ActionIcon, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Button, Divider, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconLayoutDashboardFilled } from '@tabler/icons-react'
+import { IconArrowsMaximize, IconSettings } from '@tabler/icons-react'
 import { truncateString } from '../../../utils/formatter'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
@@ -54,7 +54,7 @@ function GearSection ({ loggedUserId, loggedUsername }) {
                 size='xs'
                 variant='light'
                 color={colorScheme === 'light' ? 'dark' : 'gray'}
-                leftSection={<IconLayoutDashboardFilled size={14} />}
+                leftSection={<IconArrowsMaximize size={14} />}
                 component='a'
                 href={`/${loggedUsername}/gear`}
               >
@@ -62,16 +62,18 @@ function GearSection ({ loggedUserId, loggedUsername }) {
               </Button>
             }
             {(profile.id === loggedUserId && !profile.requesting) && 
-              <Button 
-                size='xs'
-                variant='light'
-                color={colorScheme === 'light' ? 'dark' : 'gray'}
-                // leftSection={<IconSettings size={14} />}
+              <ActionIcon 
+                variant="transparent" 
+                size="lg" 
+                aria-label="Gerenciar" 
                 component='a'
                 href='/settings/my-gear'
               >
-                Gerenciar
-              </Button>
+                <IconSettings 
+                  color={colorScheme === 'light' ? 'black' : 'gray'}
+                  style={{ width: '70%', height: '70%' }} stroke={1.5}
+                />
+              </ActionIcon>
             }
           </Group>
         </Group>

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../../store/actions/profile'
-import { Skeleton, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, em } from '@mantine/core'
+import { useMantineColorScheme, Modal, Skeleton, ScrollArea, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, em } from '@mantine/core'
 import { useWindowScroll, useMediaQuery } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import Header from '../../../components/header'
@@ -19,11 +19,15 @@ function ProfileGearExpanded () {
   const params = useParams()
   const username = params?.username
 
+  const { colorScheme } = useMantineColorScheme()
+
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   const profile = useSelector(state => state.profile)
   const gear = useSelector(state => state.profile.gear)
+
+  document.title = !profile.success && !profile.id ? 'Mublin' : `Equipamento de ${profile.name} ${profile.lastname} | Mublin`;
 
   const [scroll] = useWindowScroll()
 
@@ -33,6 +37,14 @@ function ProfileGearExpanded () {
       dispatch(profileInfos.getProfileGearSetups(username))
   }, [username])
 
+  // Modal Gear Item Detail
+  const [modalGearItemOpen, setModalGearItemOpen] = useState(false)
+  const [gearItemDetail, setGearItemDetail] = useState({})
+  const openModalGearDetail = (data) => {
+    setModalGearItemOpen(true)
+    setGearItemDetail(data)
+  }
+
   return (
     <>
       <Header
@@ -41,7 +53,7 @@ function ProfileGearExpanded () {
         profileId={profile.id}
         showBackIcon={true}
       />
-      {(profile.id) &&
+      {(profile.id && !modalGearItemOpen) &&
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Container size='lg' my={14}>
@@ -91,7 +103,7 @@ function ProfileGearExpanded () {
         )}
       </Container>
       {profile.plan === 'Pro' && 
-        <Container size='lg'>
+        <Container size='lg' mb={100}>
           {profile.requesting ? (
             <GearExpandedLoading />
           ) : (
@@ -102,12 +114,16 @@ function ProfileGearExpanded () {
                 {gear.list.map(product =>
                   <Card
                     radius='md'
-                    withBorder={isLargeScreen ? true : false}
-                    style={isMobile ? { backgroundColor: 'transparent' } : undefined}
+                    withBorder
                     className='mublinModule'
+                    key={product.productId}
                   >
                     <Center>
-                      <Image src={product.brandLogo ? product.brandLogo : undefined} h={100} w={100} />
+                      <Image 
+                        src={product.brandLogo ? product.brandLogo : undefined} 
+                        h={100} 
+                        w={100} 
+                      />
                     </Center>
                     <Center>
                       <Image
@@ -118,6 +134,8 @@ function ProfileGearExpanded () {
                         fit='contain'
                         mb={10}
                         radius='md'
+                        onClick={() => openModalGearDetail(product)}
+                        className='point'
                       />
                     </Center>
                     <Text
@@ -165,10 +183,69 @@ function ProfileGearExpanded () {
           )}
         </Container>
       }
+      <Modal
+        opened={modalGearItemOpen}
+        onClose={() => setModalGearItemOpen(false)}
+        centered
+        title={
+          <Flex direction='column'>
+            <Text size='md' fw='500'>
+              {gearItemDetail.brandName} {gearItemDetail.productName}
+            </Text>
+            <Text size='xs' c='dimmed'>
+              {gearItemDetail.category} • Parte do equipamento de {profile.name}
+            </Text>
+          </Flex>
+        }
+        withCloseButton
+        size='md'
+      >
+        <Center>
+          <Image 
+            src={'https://ik.imagekit.io/mublin/products/tr:w-400,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
+            w={200}
+            fit='contain'
+            mb='10'
+            radius='md'
+          />
+        </Center>
+        {gearItemDetail.tuning && 
+          <Box>
+            <Text ta='center' size='xs' fw='380'>Afinação: {gearItemDetail.tuning}</Text>
+            <Text ta='center' size='xs' c='dimmed'>{gearItemDetail.tuningDescription}</Text>
+          </Box>
+        }
+        {!!gearItemDetail.forSale && 
+          <Flex align='center' justify='center' gap='4' mt='4'>
+            <Badge size='md' color='dark'>À venda</Badge>
+            {!!gearItemDetail.price && 
+              <Text size='xs' fw='450'>
+                {gearItemDetail.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+              </Text>
+            }
+          </Flex>
+        }
+        <Button
+          size='sm'
+          color='violet'
+          fullWidth
+          fw='600'
+          component='a'
+          href={`/gear/product/${gearItemDetail.productId}`}
+        >
+          Mais detalhes do produto
+        </Button>
+      </Modal>
       {profile.plan === 'Free' && 
-        <Text>Visualização de equipamento não disponível para este perfil</Text>
+        <Container size='lg' mt={80}>
+          <Text ta='center'>
+            Visualização de equipamento não disponível para este perfil
+          </Text>
+        </Container>
       }
-      <FooterMenuMobile />
+      {!modalGearItemOpen && 
+        <FooterMenuMobile />
+      }
     </>
   )
 }
