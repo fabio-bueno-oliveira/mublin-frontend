@@ -50,7 +50,7 @@ function GearSection ({ loggedUserId, loggedUsername }) {
             Equipamento {!!profile.gear.total && `(${profile.gear.total})`}
           </Title>
           <Group gap={2}>
-            {profile.gear.total && 
+            {!!profile.gear.total && 
               <Button 
                 variant='transparent' 
                 size='compact-sm' 
@@ -242,8 +242,7 @@ function GearSection ({ loggedUserId, loggedUsername }) {
         }
         <Button
           size='sm'
-          variant='light'
-          color={colorScheme === 'light' ? 'dark' : 'gray'}
+          color='violet'
           fullWidth
           fw='600'
           component='a'

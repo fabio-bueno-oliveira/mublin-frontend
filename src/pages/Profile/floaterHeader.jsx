@@ -2,18 +2,15 @@ import React from 'react'
 import { Affix, Transition, Container, Flex, Group, Box, Avatar, Text, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 
-function FloaterHeader ({ 
-    profile,
-    scrollY
-}) {
+function FloaterHeader ({ profile, scrollY }) {
 
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   return (
-    <Affix 
+    <Affix
       w='100%'
-      position={{ top: 0, left: 0 }} 
+      position={{ top: 0, left: 0 }}
     >
       <Transition
         transition='slide-down'
@@ -26,23 +23,23 @@ function FloaterHeader ({
             <Container size={isLargeScreen ? 'lg' : undefined} p={isMobile ? 0 : undefined}>
               <Group gap={3}>
                 <Avatar
-                  size={isLargeScreen ? 'sm' : 'sm'}
+                  size='sm'
                   src={profile.picture ? profile.picture : undefined}
                   mr={4}
                 />
                 <Flex direction='column'>
                   <Box w={isLargeScreen ? 400 : 200}>
-                    <Text fw='500' size={isLargeScreen ? '14px' : '12px'} >
+                    <Text fw='550' size='13px'>
                       {profile.name} {profile.lastname}
                     </Text>
-                    <Text size='11px' truncate='end'>
+                    <Text size='0.65rem' truncate='end' mt={1}>
                       {profile.roles.map((role, key) =>
                       <span key={key} className='comma'>
                         {role.description}
                       </span>
                       )}
                     </Text>
-                    <Text c='dimmed' size='9px' mt={2}>
+                    <Text c='dimmed' size='0.65rem'>
                       {!!profile.city && profile.city}{profile.region && `, ${profile.region}`}
                     </Text>
                   </Box>
@@ -53,7 +50,7 @@ function FloaterHeader ({
         )}
       </Transition>
     </Affix>
-  );
-};
+  )
+}
 
-export default FloaterHeader;
+export default FloaterHeader

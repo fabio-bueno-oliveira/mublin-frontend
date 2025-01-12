@@ -3,7 +3,7 @@ import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../../store/actions/profile'
-import { useMantineColorScheme, Modal, Skeleton, ScrollArea, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, em } from '@mantine/core'
+import { useMantineColorScheme, Modal, Skeleton, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, em } from '@mantine/core'
 import { useWindowScroll, useMediaQuery } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import Header from '../../../components/header'
@@ -11,6 +11,7 @@ import FloaterHeader from '../floaterHeader'
 import FooterMenuMobile from '../../../components/footerMenuMobile'
 import GearExpandedLoading from './gearExpandedLoading'
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry'
+import '../styles.scss'
 
 function ProfileGearExpanded () {
 
@@ -34,7 +35,7 @@ function ProfileGearExpanded () {
   useEffect(() => {
       dispatch(profileInfos.getProfileInfo(username))
       dispatch(profileInfos.getProfileGear(username))
-      dispatch(profileInfos.getProfileGearSetups(username))
+      dispatch(profileInfos.getProfileRoles(username))
   }, [username])
 
   // Modal Gear Item Detail
