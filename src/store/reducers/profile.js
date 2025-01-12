@@ -5,6 +5,7 @@ const initialState = {
   requested: false,
   requestingFollowingActions: false,
   success: false,
+  activeModal: null,
   id: '',
   name: '',
   lastname: '',
@@ -618,6 +619,11 @@ export function profile(state = initialState, action) {
         testimonials: initialState.testimonials,
         requesting: false,
         error: "A solicitação falhou"
+      };
+    case profileTypes.SET_ACTIVE_MODAL:
+      return {
+        ...state,
+        activeModal: action.modalName
       };
     default:
       return state

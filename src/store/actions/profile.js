@@ -18,7 +18,8 @@ export const profileInfos = {
     getProfileStrengthsTotalVotes: getProfileStrengthsTotalVotes,
     getProfileStrengthsRaw: getProfileStrengthsRaw,
     getProfileAvailabilityItems: getProfileAvailabilityItems,
-    getProfileTestimonials: getProfileTestimonials
+    getProfileTestimonials: getProfileTestimonials,
+    setActiveModal: setActiveModal
 };
 
 function getProfileInfo(username) {
@@ -291,4 +292,8 @@ function getProfileTestimonials(username) {
     function request(username) { return { type: profileTypes.GET_PROFILE_TESTIMONIALS_REQUEST, username } }
     function success(list) { return { type: profileTypes.GET_PROFILE_TESTIMONIALS_SUCCESS, list } }
     function failure(username, error) { return { type: profileTypes.GET_PROFILE_TESTIMONIALS_FAILURE, username, error } }
+}
+
+function setActiveModal(modalName) {
+    return { type: profileTypes.SET_ACTIVE_MODAL, modalName }
 }

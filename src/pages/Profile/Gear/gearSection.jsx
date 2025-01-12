@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { profileInfos } from '../../../store/actions/profile'
 import { useMantineColorScheme, ActionIcon, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Button, Divider, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconArrowsMaximize, IconSettings } from '@tabler/icons-react'
@@ -9,8 +9,8 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 
 function GearSection ({ loggedUserId, loggedUsername }) {
-  
-  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
@@ -29,6 +29,7 @@ function GearSection ({ loggedUserId, loggedUsername }) {
   const openModalGearDetail = (data) => {
     setModalGearItemOpen(true)
     setGearItemDetail(data)
+    dispatch(profileInfos.setActiveModal('gearDetail'))
   }
 
   return (
@@ -48,11 +49,11 @@ function GearSection ({ loggedUserId, loggedUsername }) {
           <Title fz='1.03rem' fw='640'>
             Equipamento {!!profile.gear.total && `(${profile.gear.total})`}
           </Title>
-          <Group>
+          <Group gap={2}>
             {profile.gear.total && 
               <Button 
-                size='xs'
-                variant='light'
+                variant='transparent' 
+                size='compact-sm' 
                 color={colorScheme === 'light' ? 'dark' : 'gray'}
                 leftSection={<IconArrowsMaximize size={14} />}
                 component='a'
@@ -62,10 +63,10 @@ function GearSection ({ loggedUserId, loggedUsername }) {
               </Button>
             }
             {(profile.id === loggedUserId && !profile.requesting) && 
-              <ActionIcon 
-                variant="transparent" 
-                size="lg" 
-                aria-label="Gerenciar" 
+              <ActionIcon
+                variant='transparent'
+                size='md'
+                aria-label='Gerenciar'
                 component='a'
                 href='/settings/my-gear'
               >
@@ -180,7 +181,10 @@ function GearSection ({ loggedUserId, loggedUsername }) {
       </Paper>
       <Modal 
         opened={modalGearItemOpen}
-        onClose={() => setModalGearItemOpen(false)}
+        onClose={() => {
+          setModalGearItemOpen(false)
+          dispatch(profileInfos.setActiveModal(null))
+        }}
         centered
         title={
           <Flex direction='column'>
@@ -196,11 +200,18 @@ function GearSection ({ loggedUserId, loggedUsername }) {
         size='md'
       >
         <Center>
-          <Image 
+          {/* <Image 
             src={'https://ik.imagekit.io/mublin/products/tr:h-500,w-500,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
             h={250}
             mah={250}
             w='auto'
+            fit='contain'
+            mb='10'
+            radius='md'
+          /> */}
+          <Image 
+            src={'https://ik.imagekit.io/mublin/products/tr:w-400,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
+            w={200}
             fit='contain'
             mb='10'
             radius='md'

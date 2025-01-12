@@ -611,7 +611,10 @@ function ProfilePage () {
                 )}
               </Paper>
               {profile.plan === 'Pro' ? ( 
-                <GearSection loggedUserId={loggedUserId} loggedUsername={loggedUsername} />
+                <GearSection
+                  loggedUserId={loggedUserId}
+                  loggedUsername={loggedUsername}
+                />
               ) : (
                 <>
                   {loggedUserId === profile.id && 
@@ -978,8 +981,9 @@ function ProfilePage () {
           </Text>
         </>
       }
-      {(!modalAvatarOpen || !modalFollowersOpen || !modalFollowingOpen || !modalStrengthsOpen || !modalVerifiedOpen || !modalLegendOpen || !modalProfileFeedOpen) &&
-        <FooterMenuMobile />
+      {
+        (!modalAvatarOpen && !modalFollowersOpen && !modalFollowingOpen && !modalStrengthsOpen && !modalVerifiedOpen && !modalLegendOpen && !modalProfileFeedOpen && !profile.activeModal) &&
+          <FooterMenuMobile />
       }
     </>
   );
