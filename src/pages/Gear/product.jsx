@@ -175,11 +175,11 @@ function GearProductPage () {
                         </Flex>
                       </Flex>
                       {owner.ownerComments ? (
-                        <Text size='sm'>
+                        <Text size='xs'>
                           {owner.ownerComments}
                         </Text>
                       ) : (
-                        <Text size='sm' c='dimmed'>
+                        <Text size='xs' c='dimmed'>
                           Nenhum comentário até o momento
                         </Text>
                       )}

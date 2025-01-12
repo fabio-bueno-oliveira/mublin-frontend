@@ -36,6 +36,22 @@ a.displayBlockLink {
   display: none;
 }
 
+.iconVerified {
+  color: #7950f2;
+  width: calc(1.15rem);
+  height: calc(1.15rem);
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.iconLegend {
+  color: #DAA520;
+  width: calc(1.15rem);
+  height: calc(1.15rem);
+  margin-left: 2px;
+  cursor: pointer;
+}
+
 .read-more-button {
   cursor: pointer;
   display: block;

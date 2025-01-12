@@ -1,31 +1,35 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { useMantineColorScheme, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Button, Divider, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { truncateString } from '../../utils/formatter'
+import { IconLayoutDashboardFilled } from '@tabler/icons-react'
+import { truncateString } from '../../../utils/formatter'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 
-function GearSection ({ loggedUserId }) {
+function GearSection ({ loggedUserId, loggedUsername }) {
+  
+  const navigate = useNavigate()
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const { colorScheme } = useMantineColorScheme()
 
   const gear = useSelector(state => state.profile.gear.list)
-    .filter((product) => { return product.productId > 0 });
+    .filter((product) => { return product.productId > 0 })
 
-  const gearFiltered = gear;
+  const gearFiltered = gear
 
   const profile = useSelector(state => state.profile)
 
   // Modal Gear Item Detail
-  const [modalGearItemOpen, setModalGearItemOpen] = useState(false);
-  const [gearItemDetail, setGearItemDetail] = useState({});
+  const [modalGearItemOpen, setModalGearItemOpen] = useState(false)
+  const [gearItemDetail, setGearItemDetail] = useState({})
   const openModalGearDetail = (data) => {
     setModalGearItemOpen(true)
     setGearItemDetail(data)
-  };
+  }
 
   return (
     <>
@@ -44,18 +48,32 @@ function GearSection ({ loggedUserId }) {
           <Title fz='1.03rem' fw='640'>
             Equipamento {!!profile.gear.total && `(${profile.gear.total})`}
           </Title>
-          {(profile.id === loggedUserId && !profile.requesting) && 
-            <Button 
-              size='xs'
-              variant='light'
-              color={colorScheme === 'light' ? 'dark' : 'gray'}
-              // leftSection={<IconSettings size={14} />}
-              component='a'
-              href='/settings/my-gear'
-            >
-              Gerenciar
-            </Button>
-          }
+          <Group>
+            {profile.gear.total && 
+              <Button 
+                size='xs'
+                variant='light'
+                color={colorScheme === 'light' ? 'dark' : 'gray'}
+                leftSection={<IconLayoutDashboardFilled size={14} />}
+                component='a'
+                href={`/${loggedUsername}/gear`}
+              >
+                Ampliar
+              </Button>
+            }
+            {(profile.id === loggedUserId && !profile.requesting) && 
+              <Button 
+                size='xs'
+                variant='light'
+                color={colorScheme === 'light' ? 'dark' : 'gray'}
+                // leftSection={<IconSettings size={14} />}
+                component='a'
+                href='/settings/my-gear'
+              >
+                Gerenciar
+              </Button>
+            }
+          </Group>
         </Group>
         {profile.requesting ? ( 
           <Text size='sm'>Carregando...</Text>
@@ -222,7 +240,7 @@ function GearSection ({ loggedUserId }) {
         </Button>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default GearSection;
+export default GearSection

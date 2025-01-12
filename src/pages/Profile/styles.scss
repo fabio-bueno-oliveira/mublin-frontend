@@ -25,7 +25,6 @@
     outline: none;
     outline-offset: none;
   }
-
   .carousel-roles {
     width: 96%;
 
@@ -39,7 +38,6 @@
       overflow: hidden;
     }
   }
-
   .carousel-project, .carousel-gear {
     cursor: default;
     user-select: none;
@@ -48,7 +46,6 @@
       margin-right: 19px;
     }
   }
-
   .carousel-strengths {
     cursor: default;
     user-select: none;
@@ -57,11 +54,9 @@
       margin-right: 35px;
     }
   }
-
   .carousel-gear {
     text-align: center;
   }
-
   .rolesList {
     width: 97%;
     scrollbar-width: none;
@@ -82,7 +77,6 @@
       filter: brightness(0) invert(1);
     }
   }
-
   .mantine-Badge-section {
     margin-right: 2px;
   }

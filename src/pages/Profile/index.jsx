@@ -14,7 +14,7 @@ import FooterMenuMobile from '../../components/footerMenuMobile'
 import { useMediaQuery } from '@mantine/hooks'
 import PartnersModule from './partners'
 import CarouselProjects from './carouselProjects'
-import GearSection from './gear'
+import GearSection from './Gear/gearSection'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 import AvailabilityInfo from './availabilityInfo'
@@ -25,7 +25,9 @@ import './styles.scss'
 
 function ProfilePage () {
 
-  let navigate = useNavigate()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   const params = useParams()
   const username = params?.username
 
@@ -41,7 +43,6 @@ function ProfilePage () {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const { colorScheme } = useMantineColorScheme()
 
-  let dispatch = useDispatch()
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
 
   useEffect(() => {
@@ -87,9 +88,6 @@ function ProfilePage () {
 
   const followedByMe = useSelector(state => state.followedByMe);
   const [loadingFollow, setLoadingFollow] = useState(false);
-
-  const iconVerifiedStyle = { width: rem(18), height: rem(18), marginLeft: '5px', cursor: 'pointer' };
-  const iconLegendStyle = { color: '#DAA520', width: rem(18), height: rem(18), marginLeft: '2px', cursor: 'pointer' };
 
   // Projects
   const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
@@ -308,8 +306,7 @@ function ProfilePage () {
                       {!!profile.verified && 
                         <Tooltip label='Usuário Verificado'>
                           <IconRosetteDiscountCheckFilled 
-                            color='#7950f2' 
-                            style={iconVerifiedStyle} 
+                            className='iconVerified'
                             onClick={() => setModalVerifiedOpen(true)}
                           />
                         </Tooltip>
@@ -317,7 +314,7 @@ function ProfilePage () {
                       {!!profile.legend && 
                         <Tooltip label='Lenda da Música'>
                           <IconShieldCheckFilled
-                            style={iconLegendStyle}
+                            className='iconLegend'
                             onClick={() => setModalLegendOpen(true)}
                           />
                         </Tooltip>
@@ -481,14 +478,14 @@ function ProfilePage () {
                 {profile.availabilityId && 
                   <>
                     {/* <Divider mt='md' mb='xs' label='Disponibilidade:' labelPosition='left' /> */}
-                    <Flex 
+                    <Flex
                       align='center'
                       justify='flex-start'
-                      gap={6} 
+                      gap={6}
                       mt='md'
-                      mb={isMobile ? 0 : 12} 
+                      mb={isMobile ? 0 : 12}
                     >
-                      <Indicator 
+                      <Indicator
                         inline
                         processing={profile.availabilityId === 1}
                         color={profile.availabilityColor}
@@ -496,7 +493,7 @@ function ProfilePage () {
                         ml={5}
                         mr={7}
                       />
-                      <Text 
+                      <Text
                         fz='14.2px'
                         fw='490'
                         className='lhNormal'
@@ -506,7 +503,7 @@ function ProfilePage () {
                       </Text>
                     </Flex>
                     <AvailabilityInfo mt={18} screen='largeScreen' />
-                    {isMobile && 
+                    {isMobile &&
                       <Accordion chevronPosition="left">
                         <Accordion.Item value="Exibir preferências musicais e de trabalho" style={{border:'0px'}}>
                           <Accordion.Control p={0} fz='sm'>
@@ -614,7 +611,7 @@ function ProfilePage () {
                 )}
               </Paper>
               {profile.plan === 'Pro' ? ( 
-                <GearSection loggedUserId={loggedUserId} />
+                <GearSection loggedUserId={loggedUserId} loggedUsername={loggedUsername} />
               ) : (
                 <>
                   {loggedUserId === profile.id && 
@@ -813,10 +810,10 @@ function ProfilePage () {
                     {follower.name} {follower.lastname}
                   </Text>
                   {follower.verified && 
-                    <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
+                    <IconRosetteDiscountCheckFilled className='iconVerified' title='Perfil verificado' />
                   }
                   {follower.legend_badge && 
-                    <IconShieldCheckFilled style={iconLegendStyle} />
+                    <IconShieldCheckFilled className='iconLegend' title='Lenda da música' />
                   }
                 </Group>
                 <Text size='xs'>
@@ -847,10 +844,10 @@ function ProfilePage () {
                     {following.name} {following.lastname}
                   </Text>
                   {following.verified && 
-                    <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
+                    <IconRosetteDiscountCheckFilled className='verified' />
                   }
                   {following.legend_badge && 
-                    <IconShieldCheckFilled style={iconLegendStyle} />
+                    <IconShieldCheckFilled className='legend' />
                   }
                 </Group>
                 <Text size='xs' color='dimmed'>

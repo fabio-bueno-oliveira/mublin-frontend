@@ -30,6 +30,7 @@ import ProjectPage from './pages/ProjectPage';
 import ProjectDashboardPage from './pages/ProjectDashboard';
 import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
+import ProfileGear from './pages/Profile/Gear/gearExpanded';
 import GearProductPage from './pages/Gear/product';
 import GearBrandPage from './pages/Gear/brand';
 import SettingsProfileEdit from './pages/Settings/profileEdit';
@@ -93,6 +94,7 @@ function AppRoutes () {
           <Route path="/new" element={<New />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route exact path="/:username" element={<ProfilePage />} />
+          <Route exact path="/:username/gear" element={<ProfileGear />} />
           <Route exact path="/menu" element={<MenuMobilePage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
