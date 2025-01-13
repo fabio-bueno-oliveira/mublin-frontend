@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
-import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, Textarea, Button, rem } from '@mantine/core'
+import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, Textarea, Button, rem, em } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend } from '@tabler/icons-react'
+import { useMediaQuery } from '@mantine/hooks'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
@@ -34,10 +35,13 @@ function FeedCard ({ item, compact }) {
 
   const [comment, setComment] = useState('')
 
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
+
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '1px' }
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) }
 
   const likeFeedPost = (feedId) => {
+    dispatch(feedActions.addLikedNow(feedId))
     fetch('https://mublin.herokuapp.com/feed/'+feedId+'/like', {
       method: 'POST',
       headers: {
@@ -47,7 +51,7 @@ function FeedCard ({ item, compact }) {
       }
     })
     .then(() => {
-      dispatch(feedActions.addLikedNow(feedId));
+      // dispatch(feedActions.addLikedNow(feedId));
     }).catch(err => {
       console.error(err);
       alert('Ocorreu um erro ao curtir a postagem');
@@ -66,8 +70,8 @@ function FeedCard ({ item, compact }) {
     .then((response) => {
       dispatch(feedActions.removeLikedNow(feedId))
     }).catch(err => {
-      console.error(err);
-      alert('Ocorreu um erro ao curtir a postagem');
+      console.error(err)
+      alert('Ocorreu um erro ao curtir a postagem')
     })
   }
 
@@ -191,7 +195,10 @@ function FeedCard ({ item, compact }) {
               href={`/${item.relatedUserUsername}`}
             >
               <Flex gap={2} align='center' mb={2}>
-                <Text size='0.93rem' fw='550'>
+                <Text
+                  size={isMobile ? '0.98rem' : '0.93rem'} 
+                  fw='550'
+                >
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Text>
                 {!!item.relatedUserVerified &&
@@ -261,7 +268,9 @@ function FeedCard ({ item, compact }) {
             <Box>
               <Text
                 lineClamp={compact ? 2 : undefined}
-                px='15' size='0.87em' mt='12px'
+                px='15'
+                size={isMobile ? '0.9em' : '0.86em'}
+                mt='12px'
                 style={{lineHeight:'1.25em',opacity:'0.8'}}
               >
                 <ReadMoreReact
@@ -371,54 +380,70 @@ function FeedCard ({ item, compact }) {
             </Link>
           </Box>
         }
-        <Flex px='15' justify='space-between' align='flex-end'>
+        <Flex px='15' justify='flex-start' align='flex-end'>
           {/* START Like/Unlike */}
           {(item.categoryId !== 6 && item.categoryId !== 7 && !feed.requesting) && 
-            <Flex 
-              align='center'
-              gap='9'
-              mt='12'
-            >
-              {((item.likedByMe || (feed.likedNow.items.includes(item.id))) && !feed.likedNow.removeLikedByMe.includes(item.id)) ? (
-                <IconHeartFilled
+            <>
+              <Flex 
+                align='center'
+                gap='7'
+                mt='12'
+              >
+                {((item.likedByMe || (feed.likedNow.items.includes(item.id))) && !feed.likedNow.removeLikedByMe.includes(item.id)) ? (
+                  <IconHeartFilled
+                    size={20}
+                    color='#E32636'
+                    style={{cursor:'pointer'}}
+                    onClick={() => unlikeFeedPost(item.id)}
+                  />
+                ) : (
+                  <IconHeart
+                    size={20}
+                    style={{cursor:'pointer'}}
+                    onClick={() => likeFeedPost(item.id)}
+                  />
+                )}
+                {(item.likes > 0 || feed.likedNow.items.includes(item.id)) && 
+                  <Text
+                    size='13px'
+                    fw='500'
+                    pt='1'
+                    className='point'
+                    onClick={() => openModalLikes(item.id)}
+                  >
+                    {(feed.likedNow.items.includes(item.id) && !item.likedByMe) ? (
+                      item.likes + 1
+                    ) : (
+                      (feed.likedNow.removeLikedByMe.includes(item.id) && item.likedByMe) ? item.likes - 1 : item.likes
+                    )}
+                  </Text>
+                }
+              </Flex>
+              <Flex 
+                align='center'
+                gap='7'
+                mt='12'
+                ml='15'
+              >
+                <IconMessageCircle
                   size={20}
-                  color='#E32636'
                   style={{cursor:'pointer'}}
-                  onClick={() => unlikeFeedPost(item.id)}
+                  onClick={() => openModalComments(item.id)}
                 />
-              ) : (
-                <IconHeart
-                  size={20}
-                  style={{cursor:'pointer'}}
-                  onClick={() => likeFeedPost(item.id)}
-                />
-              )}
-              {(item.likes > 0 || feed.likedNow.items.includes(item.id)) && 
-                <Text
-                  size='13px'
-                  fw='500'
-                  c='dimmed'
-                  pt='1'
-                  className='point'
-                  onClick={() => openModalLikes(item.id)}
-                >
-                  {(feed.likedNow.items.includes(item.id) && !item.likedByMe) ? (
-                    item.likes + 1
-                  ) : (
-                    (feed.likedNow.removeLikedByMe.includes(item.id) && item.likedByMe) ? item.likes - 1 : item.likes
-                  )}
-                </Text>
-              }
-            </Flex>
+                {item.totalComments > 1 && 
+                  <Text
+                    size='13px'
+                    fw='500'
+                    pt='1'
+                    className='point'
+                    onClick={() => openModalComments(item.id)}
+                  >
+                    {item.totalComments === 1 ? '1 comentário' : item.totalComments + ' comentários'}
+                  </Text>
+                }
+              </Flex>
+            </>
           }
-            <Text
-              size='0.77rem'
-              c='dimmed'
-              className='point'
-              onClick={() => openModalComments(item.id)}
-            >
-              {item.totalComments} comentários
-            </Text>
         </Flex>
       </Card>
       <Modal
