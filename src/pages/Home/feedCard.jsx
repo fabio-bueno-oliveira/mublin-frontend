@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
-import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, Textarea, Button, rem, em } from '@mantine/core'
+import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, TextInput, Button, rem, em } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle } from '@tabler/icons-react'
@@ -485,23 +485,23 @@ function FeedCard ({ item, compact }) {
         )}
       </Modal>
       <Modal
-        centered
         opened={showModalComments}
         onClose={() => setShowModalComments(false)}
         title={feed.requestingComments ? 'Carregando...' : feed.itemComments.total + ' comentários'}
         scrollAreaComponent={ScrollArea.Autosize}
       >
         <Box mb={10}>
-          <Textarea
+          <TextInput
             value={comment}
             onChange={(event) => setComment(event.currentTarget.value)}
+            onKeyDown={(e) => (e.key === 'Enter') ? postComment(item.id) : undefined}
             maxLength={300}
           />
           <Flex justify='flex-end' mt={5}>
-            <Button 
+            <Button
               loading={postingComment}
-              color='violet' 
-              size='xs' 
+              color='violet'
+              size='xs'
               onClick={() => postComment(item.id)}
               rightSection={<IconSend size={14} />}
             >

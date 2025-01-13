@@ -171,6 +171,7 @@ export function feed(state = initialState, action) {
         ...state,
         itemComments: {
           ...state.itemComments,
+          total: (state.itemComments.total - 1),
           list: state.itemComments.list.filter(function(x) {
             return x.id !== action.commentId
           })

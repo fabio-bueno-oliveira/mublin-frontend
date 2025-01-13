@@ -3,7 +3,7 @@ import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../../store/actions/profile'
-import { useMantineColorScheme, Modal, Skeleton, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, em } from '@mantine/core'
+import { useMantineColorScheme, Modal, Skeleton, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, em, Anchor } from '@mantine/core'
 import { useWindowScroll, useMediaQuery } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import Header from '../../../components/header'
@@ -97,8 +97,15 @@ function ProfileGearExpanded () {
                 }
               </Flex>
               <Text size='sm'>
-                {gear.total} produtos no equipamento de {profile.name} {profile.lastname}
+                {gear.total} itens no equipamento de {profile.name} {profile.lastname}
               </Text>
+              <Anchor 
+                href={`/${username}`}
+                underline='never'
+                className='websiteLink'
+              >
+                <Text size='xs'>Voltar ao perfil</Text>
+              </Anchor>
             </Box>
           </Flex>
         )}
@@ -116,7 +123,10 @@ function ProfileGearExpanded () {
                   <Card
                     radius='md'
                     withBorder
-                    className='mublinModule'
+                    className='mublinModule gearDetailCard'
+                    px={10}
+                    pb={10}
+                    pt={0}
                     key={product.productId}
                   >
                     <Center>

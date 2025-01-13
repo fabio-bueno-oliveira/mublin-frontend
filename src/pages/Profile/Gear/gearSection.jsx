@@ -8,7 +8,7 @@ import { truncateString } from '../../../utils/formatter'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 
-function GearSection ({ loggedUserId, loggedUsername }) {
+function GearSection ({ loggedUserId, username }) {
 
   const dispatch = useDispatch()
 
@@ -51,16 +51,18 @@ function GearSection ({ loggedUserId, loggedUsername }) {
           </Title>
           <Group gap={2}>
             {!!profile.gear.total && 
-              <Button 
-                variant='transparent' 
-                size='compact-sm' 
-                color={colorScheme === 'light' ? 'dark' : 'gray'}
-                leftSection={<IconArrowsMaximize size={14} />}
+              <ActionIcon
+                variant='transparent'
+                size='md'
+                aria-label='Gerenciar'
                 component='a'
-                href={`/${loggedUsername}/gear`}
+                href={`/${username}/gear`}
               >
-                Ampliar
-              </Button>
+                <IconArrowsMaximize 
+                  color={colorScheme === 'light' ? 'black' : 'white'}
+                  style={{ width: '70%', height: '70%' }} stroke={1.5}
+                />
+              </ActionIcon>
             }
             {(profile.id === loggedUserId && !profile.requesting) && 
               <ActionIcon
@@ -71,8 +73,8 @@ function GearSection ({ loggedUserId, loggedUsername }) {
                 href='/settings/my-gear'
               >
                 <IconSettings 
-                  color={colorScheme === 'light' ? 'black' : 'gray'}
-                  style={{ width: '70%', height: '70%' }} stroke={1.5}
+                  color={colorScheme === 'light' ? 'black' : 'white'}
+                  style={{ width: '78%', height: '78%' }} stroke={1.5}
                 />
               </ActionIcon>
             }

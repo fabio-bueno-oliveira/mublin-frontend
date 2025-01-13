@@ -409,7 +409,7 @@ function ProfilePage () {
                     <Flex gap={2} align='center'>
                       <IconLink size={13} />
                       <Text size={isMobile ? '0.91em' : '0.83em'} className='lhNormal'>
-                        {truncateString(profile.website, 35)}
+                        {truncateString(profile.website, 37)}
                       </Text>
                     </Flex>
                   </Anchor>
@@ -612,7 +612,7 @@ function ProfilePage () {
               {profile.plan === 'Pro' ? ( 
                 <GearSection
                   loggedUserId={loggedUserId}
-                  loggedUsername={loggedUsername}
+                  username={username}
                 />
               ) : (
                 <>
