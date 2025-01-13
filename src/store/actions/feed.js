@@ -4,7 +4,8 @@ import { miscService } from '../../api/misc';
 export const feedActions = {
   getItemComments: getItemComments,
   addLikedNow: addLikedNow,
-  removeLikedNow: removeLikedNow
+  removeLikedNow: removeLikedNow,
+  removeComment: removeComment
 };
 
 function getItemComments(feedId) {
@@ -29,4 +30,8 @@ function addLikedNow(itemId) {
 
 function removeLikedNow(itemId) {
   return { type: feedTypes.REMOVE_SESSION_LIKE, itemId }
+}
+
+function removeComment(commentId) {
+  return { type: feedTypes.REMOVE_COMMENT, commentId }
 }

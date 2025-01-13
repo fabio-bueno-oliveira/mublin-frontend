@@ -5,7 +5,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
 import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, Textarea, Button, rem } from '@mantine/core'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconMessageCircle } from '@tabler/icons-react'
+import { notifications } from '@mantine/notifications'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
@@ -105,25 +106,34 @@ function FeedCard ({ item, compact }) {
   }
 
   const postComment = (feedId) => {
-    setPostingComment(true)
-    fetch('https://mublin.herokuapp.com/feed/'+feedId+'/postComment', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify({text: comment})
-    })
-    .then(() => {
-      dispatch(feedActions.getItemComments(feedId))
-      setComment('')
-      setPostingComment(false)
-    }).catch(err => {
-      console.error(err)
-      alert('Ocorreu um erro ao curtir a postagem')
-      setPostingComment(false)
-    })
+    if (!comment) {
+      notifications.show({
+        title: 'Ops!',
+        message: 'O comentário não pode ser vazio',
+        color: 'red',
+        position: 'top-center'
+      })
+    } else {
+      setPostingComment(true)
+      fetch('https://mublin.herokuapp.com/feed/'+feedId+'/postComment', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({text: comment})
+      })
+      .then(() => {
+        dispatch(feedActions.getItemComments(feedId))
+        setComment('')
+        setPostingComment(false)
+      }).catch(err => {
+        console.error(err)
+        alert('Ocorreu um erro ao curtir a postagem')
+        setPostingComment(false)
+      })
+    }
   }
 
   const deleteFeedComment = (commentId) => {
@@ -137,7 +147,7 @@ function FeedCard ({ item, compact }) {
       }
     }).then((response) => {
       setDeletingPost(0)
-      dispatch(feedActions.getItemComments(item.id))
+      dispatch(feedActions.removeComment(commentId))
     }).catch(err => {
       console.error(err)
       setDeletingPost(0)
@@ -401,9 +411,14 @@ function FeedCard ({ item, compact }) {
               }
             </Flex>
           }
-          <Flex align='center' gap={8} mr='' className='point' onClick={() => openModalComments(item.id)}>
-            <IconMessageCircle style={{width:'14px',height:'14px'}} color='gray' /> <Text size='xs' c='dimmed'>{item.totalComments} comentários</Text>
-          </Flex>
+            <Text
+              size='0.77rem'
+              c='dimmed'
+              className='point'
+              onClick={() => openModalComments(item.id)}
+            >
+              {item.totalComments} comentários
+            </Text>
         </Flex>
       </Card>
       <Modal
@@ -460,10 +475,10 @@ function FeedCard ({ item, compact }) {
           <Flex justify='flex-end' mt={5}>
             <Button 
               loading={postingComment}
-              variant='subtle' 
               color='violet' 
               size='xs' 
               onClick={() => postComment(item.id)}
+              rightSection={<IconSend size={14} />}
             >
               Publicar
             </Button>
@@ -496,7 +511,7 @@ function FeedCard ({ item, compact }) {
                     <IconShieldCheckFilled style={{ color: '#DAA520', width: rem(13), height: rem(13) }} />
                   } {comment.text}
                 </Text>
-                <Text size='11px' c='dimmed' fw='550' mt={7}>
+                <Text size='11px' c='dimmed' fw='550' mt={5}>
                   {comment.created} {(comment.userId === loggedUserId) && <span className='point' onClick={() => deleteFeedComment(comment.id)}>| Remover</span>} {deletingPost === comment.id && " | Removendo..."}
                 </Text>
               </Box>

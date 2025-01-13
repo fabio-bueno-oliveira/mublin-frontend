@@ -166,6 +166,16 @@ export function feed(state = initialState, action) {
           removeLikedByMe: state.likedNow.removeLikedByMe,
         }
       };
+    case feedTypes.REMOVE_COMMENT:
+      return {
+        ...state,
+        itemComments: {
+          ...state.itemComments,
+          list: state.itemComments.list.filter(function(x) {
+            return x.id !== action.commentId
+          })
+        }
+      };
     default:
       return state
   }
