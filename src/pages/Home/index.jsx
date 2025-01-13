@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { searchInfos } from '../../store/actions/search'
+import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
@@ -40,6 +41,7 @@ function Home () {
   const feed = useSelector(state => state.feed)
 
   useEffect(() => {
+    dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     dispatch(miscInfos.getFeed())
     dispatch(userInfos.getUserRolesInfoById(loggedUserId))
     dispatch(searchInfos.getSuggestedFeaturedUsers())

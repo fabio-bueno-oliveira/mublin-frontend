@@ -12,6 +12,7 @@ import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ReactPlayer from 'react-player/youtube'
 import ReadMoreReact from 'read-more-react'
+import './styles.scss'
 
 function FeedCard ({ item, compact }) {
 
@@ -164,6 +165,10 @@ function FeedCard ({ item, compact }) {
     return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0]
   }
 
+  // var frame = document.querySelector("iframe");
+  // header = frame.contentDocument.querySelector(".Embed");
+  // header.remove();
+
   return (
     <>
       <Card 
@@ -173,7 +178,7 @@ function FeedCard ({ item, compact }) {
         px='0'
         py='11'
         mb='10'
-        className='mublinModule'
+        className='mublinModule feedCard'
         width={compact ? {height:'50%'} : undefined}
         style={compact ? {height:'100%'} : undefined}
       >
@@ -303,15 +308,19 @@ function FeedCard ({ item, compact }) {
               />
             }
             {(item.videoUrl && !compact) && 
-              <div className='player-wrapper' style={{marginTop:'10px'}}>
+              <>
+              {/* <div className='player-wrapper' style={{marginTop:'10px'}}>
                 <ReactPlayer
+                  pip={true}
                   className='react-player'
-                  stopOnUnmount={true}
+                  stopOnUnmount={false}
                   width='100%'
                   height='100%'
                   url={item.videoUrl}
                 />
-              </div>
+              </div> */}
+              <iframe height='400' src="https://www.instagram.com/p/DExcdqQM6iz/embed/" allowtransparency="true" allowfullscreen="false" frameborder="0">Iframe not supported</iframe>
+              </>
             }
             {(item.videoUrl && compact) && (
               <Group gap='8' ml='15'>

@@ -163,7 +163,7 @@ function NewPost () {
             <Textarea
               size='md'
               placeholder='Sobre o que você quer falar hoje?'
-              maxLength='1000'
+              maxLength='10000'
               autosize
               minRows={3}
               maxRows={6}

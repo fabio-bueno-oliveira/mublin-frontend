@@ -99,7 +99,7 @@ function Header (props) {
   const [fetchProjects, setFetchProjects] = useState(0)
 
   useEffect(() => {
-    if (fetchProjects === 1) {
+    if (fetchProjects === 1 && props.page !== 'home') {
       dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     }
   }, [fetchProjects])
