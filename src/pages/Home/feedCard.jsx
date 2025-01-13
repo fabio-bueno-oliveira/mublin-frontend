@@ -160,10 +160,22 @@ function FeedCard ({ item, compact }) {
     })
   }
 
-  const getYoutubeId = (url) => {
-    url = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/)
-    return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0]
-  }
+  // const getYoutubeId = (url) => {
+  //   url = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/)
+  //   return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0]
+  // }
+
+  // const shortcodeToInstaID = (Shortcode) => {
+  //   var char
+  //   var id = 0
+  //   var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_'
+  //   for (var i = 0; i < Shortcode.length; i++) {
+  //     char = Shortcode[i]
+  //     var mul = id * 64
+  //     id = mul + alphabet.indexOf(char)
+  //   }
+  //   return console.log(id)
+  // }
 
   return (
     <>
@@ -315,7 +327,7 @@ function FeedCard ({ item, compact }) {
                   url={item.videoUrl}
                 />
               </div> */}
-              <iframe height='400' src="https://www.instagram.com/p/DExcdqQM6iz/embed" scrolling="no" allowtransparency="true" allowfullscreen="false" frameborder="0">Iframe not supported</iframe>
+              {/* <iframe style={{marginTop:'10px'}} height='300' width='auto' src="https://www.instagram.com/p/DExcdqQM6iz/embed" scrolling="no" allowtransparency="true" allowfullscreen="false" frameborder="0">Iframe not supported</iframe>  */}
               </>
             }
             {(item.videoUrl && compact) && (

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userInfos } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, Flex, Box, Text, Paper, Avatar, Image, Textarea, TextInput, NativeSelect, Button, Divider, em } from '@mantine/core'
+import { Container, Flex, Box, Text, Paper, Avatar, Image, Textarea, NativeSelect, Button, Divider, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
 import Header from '../../components/header'
@@ -220,7 +220,7 @@ function NewPost () {
                 />
               </Flex>
             }
-            <Divider mb='sm' label='Vídeo do Youtube' labelPosition='center' />
+            {/* <Divider mb='sm' label='Vídeo do Youtube' labelPosition='center' />
             <TextInput
               size='md'
               mt='xs'
@@ -228,8 +228,8 @@ function NewPost () {
               placeholder='URL do vídeo no Youtube'
               value={formValues.video_url}
               onChange={(e) => setFormValues({...formValues, video_url: e.target.value})}
-            />
-            <Divider mt='lg' mb='sm' label='Adicionar card na postagem' labelPosition='center' />
+            /> */}
+            <Divider mb='sm' label='Adicionar card na postagem' labelPosition='center' />
             <NativeSelect
               mt='xs'
               size='md'
