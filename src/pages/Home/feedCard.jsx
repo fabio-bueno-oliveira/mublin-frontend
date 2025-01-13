@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
@@ -165,10 +165,6 @@ function FeedCard ({ item, compact }) {
     return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0]
   }
 
-  // var frame = document.querySelector("iframe");
-  // header = frame.contentDocument.querySelector(".Embed");
-  // header.remove();
-
   return (
     <>
       <Card 
@@ -319,7 +315,7 @@ function FeedCard ({ item, compact }) {
                   url={item.videoUrl}
                 />
               </div> */}
-              <iframe height='400' src="https://www.instagram.com/p/DExcdqQM6iz/embed/" allowtransparency="true" allowfullscreen="false" frameborder="0">Iframe not supported</iframe>
+              <iframe height='400' src="https://www.instagram.com/p/DExcdqQM6iz/embed" scrolling="no" allowtransparency="true" allowfullscreen="false" frameborder="0">Iframe not supported</iframe>
               </>
             }
             {(item.videoUrl && compact) && (
