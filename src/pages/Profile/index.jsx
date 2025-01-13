@@ -414,7 +414,7 @@ function ProfilePage () {
                     </Flex>
                   </Anchor>
                 }
-                <Flex gap={5} mt={isMobile ? 17 : 20} mb={isMobile ? 14 : 20}>
+                <Flex gap={5} mt={17} mb={isMobile ? 14 : 20}>
                   {loggedUserId !== profile.id ? (
                     <>
                       <Button 
@@ -462,13 +462,12 @@ function ProfilePage () {
                     </>
                   ) : (
                     <Button 
-                      size='xs'
+                      size='sm'
                       fz='0.84rem'
                       fw='570'
                       variant='light'
                       color={colorScheme === "light" ? "dark" : "gray"}
                       fullWidth={isMobile}
-                      leftSection={<IconPencil size={14} />} 
                       onClick={() => navigate('/settings')}
                     >
                       Editar meu perfil
@@ -809,7 +808,7 @@ function ProfilePage () {
               <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
-                  <Text size='md' fw={420} style={{lineHeight:'normal'}}>
+                  <Text size='sm' fw={550} className='lhNormal'>
                     {follower.name} {follower.lastname}
                   </Text>
                   {follower.verified && 
@@ -843,14 +842,14 @@ function ProfilePage () {
               <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
-                  <Text size='md' fw={420} style={{lineHeight:'normal'}}>
+                  <Text size='sm' fw={550} className='lhNormal'>
                     {following.name} {following.lastname}
                   </Text>
                   {following.verified && 
-                    <IconRosetteDiscountCheckFilled className='verified' />
+                    <IconRosetteDiscountCheckFilled className='iconVerified' title='Perfil verificado' />
                   }
                   {following.legend_badge && 
-                    <IconShieldCheckFilled className='legend' />
+                    <IconShieldCheckFilled className='iconLegend' title='Lenda da música' />
                   }
                 </Group>
                 <Text size='xs' color='dimmed'>
