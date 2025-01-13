@@ -462,7 +462,7 @@ function ProfilePage () {
                     </>
                   ) : (
                     <Button 
-                      size='sm'
+                      size='xs'
                       fz='0.84rem'
                       fw='570'
                       variant='light'

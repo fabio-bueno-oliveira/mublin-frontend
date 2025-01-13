@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Breadcrumbs, Anchor, Checkbox, TextInput, Textarea, em } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -283,7 +283,10 @@ function SettingsMyGearPage () {
               </Center>
             ) : (
               <>
-                <Group justify='flex-start'>
+                <Title fz='1.03rem' fw='640'>
+                  Gerenciar meu equipamento
+                </Title>
+                <Group justify='flex-start' mt={12}>
                   {plan === 'Pro' ? (
                     <Button
                       leftSection={<IconPlus size={14} />}
@@ -291,12 +294,12 @@ function SettingsMyGearPage () {
                       size='sm'
                       onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
                     >
-                      Adicionar novo equipamento
+                      Adicionar novo item
                     </Button>
                   ) : (
                     <>
                       <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
-                        Adicionar novo equipamento
+                        Adicionar novo item
                       </Button>
                       <Alert variant="light" color="yellow" title="Funcionalidade exclusiva">
                         Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento
@@ -327,16 +330,20 @@ function SettingsMyGearPage () {
                           />
                         </Center>
                         <Box>
-                          <Text size='xs' c='dimmed'>{item.brandName}</Text>
-                          <Text size='sm' mb='1'>{item.productName}</Text>
-                          {/* {item.tuningId && <Badge size='xs' color='gray'>Afinação: {item.tuningName}</Badge>} */}
+                          <Text size='xs' c='dimmed' ta='center' truncate="end">
+                            {item.brandName}
+                          </Text>
+                          <Text size='sm' mb='1' ta='center' truncate="end">
+                            {item.productName}
+                          </Text>
+                          <Divider my={10} />
                           <Group gap='3'>
                             {item.featured ? (
                               <IconToggleRightFilled color='#7950f2' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='xs'>Em destaque</Text>
+                            <Text size='sm'>Em destaque</Text>
                           </Group>
                           <Group gap='3'>
                             {item.currentlyUsing ? (
@@ -344,7 +351,7 @@ function SettingsMyGearPage () {
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='xs'>Em uso</Text>
+                            <Text size='sm'>Em uso</Text>
                           </Group>
                           <Group gap='3'>
                             {item.forSale ? (
@@ -352,13 +359,16 @@ function SettingsMyGearPage () {
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='xs'>À venda</Text>
-                            <Text size='xs' c='dimmed'>{!!item.forSale && '('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')'}</Text>
+                            <Text size='sm'>À venda</Text>
+                            <Text size='xs' c='dimmed'>
+                              {!!item.forSale && '('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')'}
+                            </Text>
                           </Group>
+                          <Divider my={10} />
                         </Box> 
                         <Flex mt='10' gap='4' justify='space-between'>
                           <Button 
-                            size='sm'
+                            size='compact-md'
                             color='violet'
                             variant='subtle'
                             fullWidth
@@ -368,7 +378,7 @@ function SettingsMyGearPage () {
                             Editar
                           </Button>
                           <Button 
-                            size='sm'
+                            size='compact-md'
                             color='gray'
                             variant='subtle'
                             fullWidth
