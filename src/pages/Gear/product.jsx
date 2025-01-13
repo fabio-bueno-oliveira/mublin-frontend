@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, Flex, Paper, Group, Center, Box, Title, Text, Image, Avatar, Badge, Modal, ScrollArea } from '@mantine/core';
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton } from '@mantine/core';
 import { IconZoom, IconArrowRight } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -59,18 +59,36 @@ function GearProductPage () {
         showBackIcon={true}
       />
       <Container size='lg' mt={largeScreen ? 20 : 0}>
-        <Text mb='3' fw='500' size='sm' c='dimmed'>
-          {product.requesting ? 'Carregando...' : product.categoryName + ' | ' + product.brandName}
-        </Text>
-        <Title fz='1.33rem' fw='540'>
-          {product.requesting ? 'Carregando produto...' : product.name}
-        </Title>
-        <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
-          <Group gap='2'>
-            <IconArrowRight size={13} />
-            Ver todos os produtos de {product.brandName}
-          </Group>
-        </Link>
+        <Flex gap={12}>
+          {product.requesting ? (
+            <Skeleton height={75} width={75} radius="lg" />
+          ) : (
+            <Anchor
+              href={`/gear/brand/${product.brandSlug}`}
+            >
+              <Image
+                src={product.brandLogo ? `https://ik.imagekit.io/mublin/products/brands/tr:h-150,w-150,cm-pad_resize,bg-FFFFFF/${product.brandLogo}` : undefined}
+                h={75}
+                w={75}
+                radius='lg'
+              />
+            </Anchor>
+          )}
+          <Flex direction='column'>
+            <Text fw='480' size='xs' c='dimmed'>
+              {product.requesting ? 'Carregando...' : product.categoryName + ' • ' + product.brandName}
+            </Text>
+            <Title fz='1.20rem' fw='560'>
+              {product.requesting ? 'Carregando produto...' : product.name}
+            </Title>
+            <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
+              <Group gap='2'>
+                <IconArrowRight size={13} />
+                Ver todos os produtos de {product.brandName}
+              </Group>
+            </Link>
+          </Flex>
+        </Flex>
         <Grid mt='20' mb='70'>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
             <Box mb={8}>

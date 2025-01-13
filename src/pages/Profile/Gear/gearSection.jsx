@@ -16,12 +16,12 @@ function GearSection ({ loggedUserId, username }) {
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const { colorScheme } = useMantineColorScheme()
 
-  const gear = useSelector(state => state.profile.gear.list)
-    .filter((product) => { return product.productId > 0 })
-
-  const gearFiltered = gear
-
   const profile = useSelector(state => state.profile)
+
+  // Gear
+  const [gearCategorySelected, setGearCategorySelected] = useState('');
+
+  const gear = useSelector(state => state.profile.gear.list).filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
 
   // Modal Gear Item Detail
   const [modalGearItemOpen, setModalGearItemOpen] = useState(false)
@@ -97,7 +97,7 @@ function GearSection ({ loggedUserId, username }) {
                   </option>
                   {profile.gearCategories.list.map((gearCategory, key) =>
                     <option key={key} value={gearCategory.category}>
-                      {truncateString(gearCategory.category) + '(' + gearCategory.total + ')'}
+                      {truncateString(`(${gearCategory.total}) ${gearCategory.category}`,28)}
                     </option>
                   )}
                 </NativeSelect>
@@ -117,7 +117,7 @@ function GearSection ({ loggedUserId, username }) {
                     pagination: true,
                   }}
                 >
-                  {gearFiltered.map(product =>
+                  {gear.map(product =>
                     <SplideSlide key={product.productId}>
                       <Flex
                         direction='column'

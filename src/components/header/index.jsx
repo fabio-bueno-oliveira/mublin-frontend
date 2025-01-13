@@ -96,8 +96,15 @@ function Header (props) {
     }
   }, [])
 
+  const [fetchProjects, setFetchProjects] = useState(0)
+
   useEffect(() => {
-    dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
+    if (fetchProjects === 1) {
+      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
+    }
+  }, [fetchProjects])
+
+  useEffect(() => {
     if (props.page === 'home' && refreshCounter > 0) {
       dispatch(userInfos.getInfo());
       dispatch(miscInfos.getFeed());
@@ -266,60 +273,20 @@ function Header (props) {
                   color={currentPath === '/projects' ? 'violet' : menuTextColor}
                   leftSection={<IconMusic size={14} />}
                   rightSection={<IconChevronDown size={14} />}
-                  // rightSectionPointerEvents='all'
                   p='xs'
                   visibleFrom='md'
+                  onClick={() => setFetchProjects(fetchProjects + 1)}
                 >
                   Meus Projetos
                 </Button>
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Label>Projetos em atividade que faço parte</Menu.Label>
-                {projectsActive.map(project =>
-                  <Menu.Item key={project.id}>
-                    <Group gap={5}>
-                      <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
-                      <Flex direction='column'>
-                        <Text size='0.85rem' fw='500'>{project.name}</Text>
-                        <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
-                      </Flex>
-                    </Group>
-                  </Menu.Item>
-                )}
-                <Menu.Divider />
-                {!!projectsActiveILeft.length && 
-                  <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
-                    <Menu.Target>
-                      <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
-                        {/* Projetos encerrados */}
-                        <Menu.Label>Projetos ativos que não faço mais parte</Menu.Label>
-                      </Menu.Item>
-                    </Menu.Target>
-                    <Menu.Dropdown>
-                      {projectsActiveILeft.map(project =>
-                        <Menu.Item key={project.id}>
-                          <Group gap={5}>
-                            <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
-                            <Flex direction='column'>
-                              <Text size='0.85rem' fw='500'>{project.name}</Text>
-                              <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
-                            </Flex>
-                          </Group>
-                        </Menu.Item>
-                      )}
-                    </Menu.Dropdown>
-                  </Menu>
-                }
-                <Menu.Divider />
-                <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
-                  <Menu.Target>
-                    <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
-                      {/* Projetos encerrados */}
-                      <Menu.Label>Projetos encerrados</Menu.Label>
-                    </Menu.Item>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    {projectsInactive.length ? ( projectsInactive.map(project =>
+                {projects.requesting ? (
+                  <Menu.Label>Carregando meus projetos...</Menu.Label>
+                ) : (
+                  <>
+                    <Menu.Label>Projetos em atividade que faço parte</Menu.Label>
+                    {projectsActive.map(project =>
                       <Menu.Item key={project.id}>
                         <Group gap={5}>
                           <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
@@ -329,9 +296,55 @@ function Header (props) {
                           </Flex>
                         </Group>
                       </Menu.Item>
-                    )) : (<Text size='0.85rem' fw='500'>Nenhum projeto encontrado</Text>)}
-                  </Menu.Dropdown>
-                </Menu>
+                    )}
+                    <Menu.Divider />
+                    {!!projectsActiveILeft.length && 
+                      <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
+                        <Menu.Target>
+                          <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
+                            {/* Projetos encerrados */}
+                            <Menu.Label>Projetos ativos que não faço mais parte</Menu.Label>
+                          </Menu.Item>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                          {projectsActiveILeft.map(project =>
+                            <Menu.Item key={project.id}>
+                              <Group gap={5}>
+                                <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                                <Flex direction='column'>
+                                  <Text size='0.85rem' fw='500'>{project.name}</Text>
+                                  <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                                </Flex>
+                              </Group>
+                            </Menu.Item>
+                          )}
+                        </Menu.Dropdown>
+                      </Menu>
+                    }
+                    <Menu.Divider />
+                    <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
+                      <Menu.Target>
+                        <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
+                          {/* Projetos encerrados */}
+                          <Menu.Label>Projetos encerrados</Menu.Label>
+                        </Menu.Item>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        {projectsInactive.length ? ( projectsInactive.map(project =>
+                          <Menu.Item key={project.id}>
+                            <Group gap={5}>
+                              <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                              <Flex direction='column'>
+                                <Text size='0.85rem' fw='500'>{project.name}</Text>
+                                <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                              </Flex>
+                            </Group>
+                          </Menu.Item>
+                        )) : (<Text size='0.85rem' fw='500'>Nenhum projeto encontrado</Text>)}
+                      </Menu.Dropdown>
+                    </Menu>
+                  </>
+                )}
               </Menu.Dropdown>
             </Menu>
             <Link to={{ pathname: '/projects' }}>

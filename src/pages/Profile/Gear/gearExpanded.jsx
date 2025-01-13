@@ -3,8 +3,8 @@ import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../../store/actions/profile'
-import { useMantineColorScheme, Modal, Skeleton, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, em, Anchor } from '@mantine/core'
-import { useWindowScroll, useMediaQuery } from '@mantine/hooks'
+import { Modal, Skeleton, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, Anchor } from '@mantine/core'
+import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import Header from '../../../components/header'
 import FloaterHeader from '../floaterHeader'
@@ -19,11 +19,6 @@ function ProfileGearExpanded () {
   const dispatch = useDispatch()
   const params = useParams()
   const username = params?.username
-
-  const { colorScheme } = useMantineColorScheme()
-
-  const isLargeScreen = useMediaQuery('(min-width: 60em)')
-  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   const profile = useSelector(state => state.profile)
   const gear = useSelector(state => state.profile.gear)
@@ -111,7 +106,7 @@ function ProfileGearExpanded () {
         )}
       </Container>
       {profile.plan === 'Pro' && 
-        <Container size='lg' mb={100}>
+        <Container size='lg' mb={100} mt={30}>
           {profile.requesting ? (
             <GearExpandedLoading />
           ) : (
@@ -130,11 +125,15 @@ function ProfileGearExpanded () {
                     key={product.productId}
                   >
                     <Center>
-                      <Image 
-                        src={product.brandLogo ? product.brandLogo : undefined} 
-                        h={100} 
-                        w={100} 
-                      />
+                      <Anchor
+                        href={`/gear/brand/${product.brandSlug}`}
+                      >
+                        <Image
+                          src={product.brandLogoFilename ? `https://ik.imagekit.io/mublin/products/brands/tr:h-150,w-150,cm-pad_resize,bg-FFFFFF/${product.brandLogoFilename}` : undefined}
+                          h={75}
+                          w={75}
+                        />
+                      </Anchor>
                     </Center>
                     <Center>
                       <Image
