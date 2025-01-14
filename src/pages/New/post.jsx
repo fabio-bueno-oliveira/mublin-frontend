@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userInfos } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, Flex, Box, Text, Paper, Avatar, Image, Textarea, NativeSelect, Button, Divider, em } from '@mantine/core'
+import { Container, Flex, Box, Text, Paper, Avatar, Image, Textarea, NativeSelect, Button, Divider, Group, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { useForm } from '@mantine/form'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import {IKUpload} from "imagekitio-react"
-import { IconTrash, IconSend, IconCamera } from '@tabler/icons-react'
+import { IconTrash, IconSend, IconPhoto, IconVideo, IconInfoSquareRounded } from '@tabler/icons-react'
 import { format } from 'date-fns'
 
 function NewPost () {
@@ -139,19 +139,6 @@ function NewPost () {
         <Header />
       }
       <Container size="xs" mt='md' mb={40}>
-        {/* <Title fz='1.14rem' fw={460} className='op80' mb='10' ta='left' px={isMobile ? 0 : 16}>
-          Novo post
-        </Title> */}
-        <Flex gap='14' align='center'>
-          <Avatar 
-            w='50px'
-            h='50px'
-            src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+userInfo.picture : null} 
-          />
-          <Box>
-            <Text>{userInfo.name} {userInfo.lastname}</Text>
-          </Box>
-        </Flex>
         <Paper
           radius='md'
           withBorder={isLargeScreen ? true : false}
@@ -159,6 +146,21 @@ function NewPost () {
           py={isMobile ? 0 : 6}
           className='mublinModule newPost'
         >
+          <Flex gap={8} mt={8} align='center'>
+            <Avatar 
+              w='45px'
+              h='45px'
+              src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-90,w-90,r-max,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+userInfo.picture : null} 
+            />
+            <Box>
+              <Text size='md' fw={500}>
+                {userInfo.name} {userInfo.lastname}
+              </Text>
+              <Text size='xs' c='dimmed'>
+                Publicar no Mublin
+              </Text>
+            </Box>
+          </Flex>
           <form onSubmit={form.onSubmit(handleSubmitNewPost)}>
             <Textarea
               size='md'
@@ -167,7 +169,7 @@ function NewPost () {
               autosize
               minRows={3}
               maxRows={6}
-              mt='20'
+              mt='14'
               key={form.key('extra_text')}
               {...form.getInputProps('extra_text')}
             />
@@ -195,11 +197,21 @@ function NewPost () {
                   component='label'
                   htmlFor='postImage'
                   variant='outline'
-                  leftSection={<IconCamera size={14} />}
+                  leftSection={<IconPhoto size={18} />}
                   color='violet'
                   size='sm'
                 >
-                  {uploading ? 'Enviando...' : 'Inserir imagem'}
+                  {uploading ? 'Enviando...' : 'Imagem'}
+                </Button>
+                <Button
+                  variant='outline'
+                  leftSection={<IconVideo size={18} />}
+                  color='violet'
+                  size='sm'
+                  disabled
+                  ml={10}
+                >
+                  Vídeo
                 </Button>
               </div>
             </Flex>
@@ -230,11 +242,16 @@ function NewPost () {
               value={formValues.video_url}
               onChange={(e) => setFormValues({...formValues, video_url: e.target.value})}
             /> */}
+            <Group gap={2} mb={14}>
+              <IconInfoSquareRounded color='orange' style={{width:'15px',height:'15px'}} />
+              <Text size='xs' c='#56585b'>
+                Estamos preparando tudo para aceitar upload de vídeos em breve!
+              </Text>
+            </Group>
             <Divider mb='sm' label='Adicionar card na postagem' labelPosition='center' />
             <NativeSelect
               mt='xs'
-              size='md'
-              variant='filled'
+              size='sm'
               value={formValues.related_item_type}
               onChange={(e) => setFormValues({...formValues, id_item_fk: '', related_item_type: e.target.options[e.target.selectedIndex].value})}
             >
