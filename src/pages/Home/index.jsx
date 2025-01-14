@@ -6,7 +6,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { searchInfos } from '../../store/actions/search'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, em } from '@mantine/core'
+import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
@@ -77,7 +77,7 @@ function Home () {
                 <>
                   <Card 
                     padding={12}
-                    radius='md'
+                    radius='lg'
                     withBorder
                     className='mublinModule'
                     mb='10'
@@ -193,6 +193,30 @@ function Home () {
             <Divider mt="xs" label="Atualizações da minha rede" labelPosition="left"  className='showOnlyInMobile' />
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 12, lg: 6.2 }} mb={isMobile ? 60 : 20}>
+            <Card
+              radius='lg'
+              withBorder
+              px='15'
+              py='11'
+              mb='10'
+              className='mublinModule'
+            >
+              <Flex gap={16} justify='space-between' align='center'>
+                <Link to={{ pathname: `/${userInfo.username}` }}>
+                  <Avatar
+                    size='35px'
+                    src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-70,w-70,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                  />
+                </Link>
+                <Button 
+                  fullWidth variant="light" color="gray" radius="xl"
+                  component='a'
+                  href='/new/post'
+                >
+                  Escrever uma publicação
+                </Button>
+              </Flex>
+            </Card>
             {feed.requesting ? (
               <FeedCardLoading />
             ) : (
@@ -206,7 +230,7 @@ function Home () {
           </Grid.Col>
           {largeScreen && 
             <Grid.Col span={3.3}>
-              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder className='mublinModule'>
+              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='lg' withBorder className='mublinModule'>
                 <Title fz='1.03rem' fw='640'>
                   Músicos em destaque
                 </Title>
@@ -233,7 +257,7 @@ function Home () {
                   ))
                 )}
               </Card>
-              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='md' withBorder mt={10} className='mublinModule'> 
+              <Card shadow='sm' px='md' pt='sm' pb='lg' radius='lg' withBorder mt={10} className='mublinModule'> 
                 <Title fz='1.03rem' fw='640'>
                   Novos usuários
                 </Title>

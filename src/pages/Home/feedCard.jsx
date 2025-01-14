@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
@@ -10,9 +10,8 @@ import { useMediaQuery } from '@mantine/hooks'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
-import ReactPlayer from 'react-player/youtube'
+// import ReactPlayer from 'react-player/youtube'
 import ReadMoreReact from 'read-more-react'
-import './styles.scss'
 
 function FeedCard ({ item, compact }) {
 
@@ -186,7 +185,7 @@ function FeedCard ({ item, compact }) {
         px='0'
         py='11'
         mb='10'
-        className='mublinModule feedCard'
+        className='mublinModule'
         width={compact ? {height:'50%'} : undefined}
         style={compact ? {height:'100%'} : undefined}
       >

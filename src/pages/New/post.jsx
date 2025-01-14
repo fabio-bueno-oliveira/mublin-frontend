@@ -194,6 +194,7 @@ function NewPost () {
                 <Button
                   component='label'
                   htmlFor='postImage'
+                  variant='outline'
                   leftSection={<IconCamera size={14} />}
                   color='violet'
                   size='sm'
