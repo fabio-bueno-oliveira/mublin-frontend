@@ -97,7 +97,7 @@ function LoginPage () {
         <Space h="lg" />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput 
-            label="Email ou nome de usuário" 
+            label="Email ou username" 
             placeholder="seu@email.com ou usuário" 
             size="md"
             autoFocus
@@ -132,7 +132,7 @@ function LoginPage () {
         <Text c="dimmed" size="sm" ta="center" mt={15} mb={7}>
           Ainda não possui cadastro?{' '}
           <Link to={{ pathname: '/signup' }}>
-            <Anchor size="md" component="button">
+            <Anchor fw="550" component="button">
               Crie sua conta grátis
             </Anchor>
           </Link>

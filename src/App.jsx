@@ -1,6 +1,6 @@
 import React from 'react'
 import AppRoutes from './routes'
-import { MantineProvider, ColorSchemeScript, Anchor, createTheme, Button } from '@mantine/core'
+import { MantineProvider, ColorSchemeScript, Anchor, createTheme, Button, Card, Checkbox, Paper } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
 import '@mantine/core/styles.css'
@@ -43,6 +43,21 @@ const theme = createTheme({
       defaultProps: {
         fw: '550',
         radius: 'md'
+      },
+    }),
+    Card: Card.extend({
+      defaultProps: {
+        radius: 'lg'
+      },
+    }),
+    Paper: Paper.extend({
+      defaultProps: {
+        radius: 'lg'
+      },
+    }),
+    Checkbox: Checkbox.extend({
+      defaultProps: {
+        radius: 'sm'
       },
     }),
   },

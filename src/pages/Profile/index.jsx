@@ -280,7 +280,6 @@ function ProfilePage () {
           <Grid>
             <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
               <Paper 
-                radius='md'
                 withBorder={false}
                 px='0'
                 py='0'
@@ -538,7 +537,6 @@ function ProfilePage () {
               />
               <Divider mt={12} mb={15} className='showOnlyInMobile' />
               <Paper
-                radius='md'
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
                 pt={isMobile ? 0 : 12}
@@ -618,7 +616,6 @@ function ProfilePage () {
                 <>
                   {loggedUserId === profile.id && 
                     <Paper
-                      radius='md'
                       withBorder={isLargeScreen ? true : false}
                       px={isMobile ? 0 : 16}
                       pt={isMobile ? 0 : 12}
@@ -654,7 +651,6 @@ function ProfilePage () {
               )}
               <Divider mb={16} className='showOnlyInMobile' />
               <Paper
-                radius='md'
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
                 py={isMobile ? 0 : 12}

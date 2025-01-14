@@ -75,7 +75,7 @@ function Home () {
                 </>
               ) : (
                 <>
-                  <Card 
+                  <Card
                     padding={12}
                     radius='lg'
                     withBorder
@@ -190,7 +190,6 @@ function Home () {
                 </Flex>
               </Box>
             </ScrollArea>
-            <Divider mt="xs" label="Atualizações da minha rede" labelPosition="left"  className='showOnlyInMobile' />
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 12, lg: 6.2 }} mb={isMobile ? 60 : 20}>
             <Card
@@ -201,17 +200,22 @@ function Home () {
               mb='10'
               className='mublinModule'
             >
-              <Flex gap={16} justify='space-between' align='center'>
+              <Flex gap={12} justify='space-between' align='center'>
                 <Link to={{ pathname: `/${userInfo.username}` }}>
                   <Avatar
-                    size='35px'
-                    src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-70,w-70,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                    size='40px'
+                    src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-80,w-80,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
                   />
                 </Link>
-                <Button 
-                  fullWidth variant="light" color="gray" radius="xl"
+                <Button
+                  fullWidth variant="light"
+                  color="gray"
+                  radius="xl"
                   component='a'
                   href='/new/post'
+                  size='md'
+                  fw={480}
+                  fz='sm'
                 >
                   Escrever uma publicação
                 </Button>

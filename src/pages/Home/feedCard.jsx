@@ -503,7 +503,11 @@ function FeedCard ({ item, compact }) {
       <Modal
         opened={showModalComments}
         onClose={() => setShowModalComments(false)}
-        title={feed.requestingComments ? 'Carregando...' : feed.itemComments.total + ' comentários'}
+        title={<>
+          <Text>{feed.requestingComments ? 'Carregando...' : `${feed.itemComments.total} comentários`}</Text>
+          <Text size='xs' c='dimmed'>Postagem de {item.relatedUserName} {item.relatedUserLastname}</Text>
+        </>
+        }
         scrollAreaComponent={ScrollArea.Autosize}
       >
         <Box mb={10}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { userInfos } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Container, Flex, Box, Text, Paper, Avatar, Image, Textarea, NativeSelect, Button, Divider, Group, em } from '@mantine/core'
@@ -147,11 +147,13 @@ function NewPost () {
           className='mublinModule newPost'
         >
           <Flex gap={8} mt={8} align='center'>
-            <Avatar 
-              w='45px'
-              h='45px'
-              src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-90,w-90,r-max,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+userInfo.picture : null} 
-            />
+            <Link to={{ pathname: `/${userInfo.username}` }}>
+              <Avatar 
+                w='45px'
+                h='45px'
+                src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-90,w-90,r-max,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+userInfo.picture : null} 
+              />
+            </Link>
             <Box>
               <Text size='md' fw={500}>
                 {userInfo.name} {userInfo.lastname}
@@ -173,7 +175,6 @@ function NewPost () {
               key={form.key('extra_text')}
               {...form.getInputProps('extra_text')}
             />
-            <Divider mt='lg' label='Imagem' labelPosition='center' />
             <Flex direction='column'>
               <div
                 className='customFileUpload'
@@ -233,7 +234,7 @@ function NewPost () {
                 />
               </Flex>
             }
-            {/* <Divider mb='sm' label='Vídeo do Youtube' labelPosition='center' />
+            {/* <Divider mb='sm' label='Vídeo do Youtube' labelPosition='left' />
             <TextInput
               size='md'
               mt='xs'
@@ -245,10 +246,10 @@ function NewPost () {
             <Group gap={2} mb={14}>
               <IconInfoSquareRounded color='orange' style={{width:'15px',height:'15px'}} />
               <Text size='xs' c='#56585b'>
-                Estamos preparando tudo para aceitar upload de vídeos em breve!
+                Estamos preparando tudo para aceitar upload de vídeos <nobr>em breve!</nobr>
               </Text>
             </Group>
-            <Divider mb='sm' label='Adicionar card na postagem' labelPosition='center' />
+            <Divider mb='sm' label='Adicionar card na postagem' labelPosition='left' />
             <NativeSelect
               mt='xs'
               size='sm'

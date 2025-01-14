@@ -36,7 +36,6 @@ function GearSection ({ loggedUserId, username }) {
     <>
       <Divider mb={18} className='showOnlyInMobile' />
       <Paper
-        radius='md'
         withBorder={isLargeScreen ? true : false}
         px={isMobile ? 0 : 16}
         pt={isMobile ? 0 : 12}
@@ -49,7 +48,7 @@ function GearSection ({ loggedUserId, username }) {
           <Title fz='1.03rem' fw='640'>
             Equipamento {!!profile.gear.total && `(${profile.gear.total})`}
           </Title>
-          <Group gap={2}>
+          <Group gap={10}>
             {!!profile.gear.total && 
               <ActionIcon
                 variant='transparent'
@@ -57,10 +56,11 @@ function GearSection ({ loggedUserId, username }) {
                 aria-label='Gerenciar'
                 component='a'
                 href={`/${username}/gear`}
+                title='Ver ampliado'
               >
                 <IconArrowsMaximize 
                   color={colorScheme === 'light' ? 'black' : 'white'}
-                  style={{ width: '70%', height: '70%' }} stroke={1.5}
+                  style={{ width: '80%', height: '80%' }} stroke={1.5}
                 />
               </ActionIcon>
             }
@@ -71,10 +71,11 @@ function GearSection ({ loggedUserId, username }) {
                 aria-label='Gerenciar'
                 component='a'
                 href='/settings/my-gear'
+                title='Gerenciar'
               >
                 <IconSettings 
                   color={colorScheme === 'light' ? 'black' : 'white'}
-                  style={{ width: '78%', height: '78%' }} stroke={1.5}
+                  style={{ width: '91%', height: '91%' }} stroke={1.5}
                 />
               </ActionIcon>
             }

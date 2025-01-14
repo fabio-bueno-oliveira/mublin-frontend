@@ -3,9 +3,9 @@ import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../../store/actions/profile'
-import { Modal, Skeleton, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, Anchor } from '@mantine/core'
+import { Modal, Skeleton, Group, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, Anchor } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconArrowLeft } from '@tabler/icons-react'
 import Header from '../../../components/header'
 import FloaterHeader from '../floaterHeader'
 import FooterMenuMobile from '../../../components/footerMenuMobile'
@@ -99,7 +99,10 @@ function ProfileGearExpanded () {
                 underline='never'
                 className='websiteLink'
               >
-                <Text size='xs'>Voltar ao perfil</Text>
+                <Group gap={3}>
+                  <IconArrowLeft size={13}  />
+                  <Text size='xs'>Voltar ao perfil</Text>
+                </Group>
               </Anchor>
             </Box>
           </Flex>
@@ -116,7 +119,6 @@ function ProfileGearExpanded () {
               <Masonry gutter='8px'>
                 {gear.list.map(product =>
                   <Card
-                    radius='md'
                     withBorder
                     className='mublinModule gearDetailCard'
                     px={10}
@@ -157,7 +159,7 @@ function ProfileGearExpanded () {
                     </Text>
                     <Text
                       ta='center'
-                      size='sm'
+                      size='md'
                       fw={550}
                     >
                       {product.productName}
@@ -240,10 +242,11 @@ function ProfileGearExpanded () {
           color='violet'
           fullWidth
           fw='600'
+          mt={14}
           component='a'
           href={`/gear/product/${gearItemDetail.productId}`}
         >
-          Mais detalhes do produto
+          Mais detalhes do item
         </Button>
       </Modal>
       {profile.plan === 'Free' && 
