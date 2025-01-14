@@ -246,7 +246,7 @@ function NewPost () {
             <Group gap={2} mb={14}>
               <IconInfoSquareRounded color='orange' style={{width:'15px',height:'15px'}} />
               <Text size='xs' c='#56585b'>
-                Estamos preparando tudo para aceitar upload de vídeos <nobr>em breve!</nobr>
+                Estamos preparando tudo para aceitar upload de vídeos em breve!
               </Text>
             </Group>
             <Divider mb='sm' label='Adicionar card na postagem' labelPosition='left' />

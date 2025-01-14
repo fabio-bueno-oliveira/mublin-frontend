@@ -198,7 +198,7 @@ function Home () {
               px='15'
               py='11'
               mb='10'
-              className='mublinModule'
+              className='mublinModule mantine-visible-from-sm'
             >
               <Flex gap={12} justify='space-between' align='center'>
                 <Link to={{ pathname: `/${userInfo.username}` }}>
