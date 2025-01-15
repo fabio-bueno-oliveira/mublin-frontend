@@ -20,6 +20,7 @@ export const searchService = {
     getSearchProjectsResults,
     getSearchResults,
     getSearchProjectResults,
+    getSearchGearResults,
     getSuggestedUsersResults,
     getSuggestedFeaturedUsers,
     getSuggestedNewUsers,
@@ -65,6 +66,14 @@ async function getSearchProjectResults(query) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/quickSearch/project/${query}`, requestOptions).then(handleResponse);
+}
+
+async function getSearchGearResults(query) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/gear/${query}`, requestOptions).then(handleResponse);
 }
 
 async function getSuggestedUsersResults() {

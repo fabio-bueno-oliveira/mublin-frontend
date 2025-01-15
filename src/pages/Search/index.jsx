@@ -41,6 +41,7 @@ function Search () {
     if (searchedKeywords) {
       dispatch(searchInfos.getSearchUsersResults(searchedKeywords));
       dispatch(searchInfos.getSearchProjectsResults(searchedKeywords));
+      dispatch(searchInfos.getSearchGearResults(searchedKeywords));
     }
     dispatch(searchInfos.getSuggestedFeaturedUsers());
     dispatch(searchInfos.getFeaturedProjects());
@@ -183,7 +184,7 @@ function Search () {
                 {`Projetos (${searchResults.projects.total})`}
               </Tabs.Tab>
               <Tabs.Tab value={isMobile ? 'all' : 'gear'} mb={15}>
-                Equipamentos
+                {`Equipamento (${searchResults.gear.total})`}
               </Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value={isMobile ? 'all' : 'people'} pl={8} pt={6}>
@@ -302,8 +303,56 @@ function Search () {
               </Box>
             </Tabs.Panel>
             <Tabs.Panel value={isMobile ? 'all' : 'gear'} pl={8} pt={6}>
+            <Text mb={14} className='showOnlyInMobile'>Projetos</Text>
               <Box>
-                Equipamentos
+                {searchResults.gear.total ? searchResults.gear.result.map(product => 
+                  <>
+                    <Flex key={product.productId} align='center' mb={13} gap={6} justify='space-between'>
+                      <Link to={{ pathname: `/gear/product/${product.productId}` }}>
+                        <Avatar 
+                          src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:h-200,w-200,cm-pad_resize,bg-FFFFFF/${product.productPicture}` : undefined} 
+                          size='100px'
+                        />
+                      </Link>
+                      <Flex
+                        justify="flex-start"
+                        align="flex-start"
+                        direction="column"
+                        wrap="wrap"
+                        style={{flexGrow:'2'}}
+                      >
+                        <Anchor href={`/gear/product/${product.productId}`}>
+                          <Flex gap={3} align={'center'}>
+                            <Text size='md' fw={500} style={{lineHeight:'normal'}}>
+                              {product.productName}
+                            </Text>
+                          </Flex>
+                        </Anchor>
+                        <Text size='sm'>
+                          {product.name_ptbr} • {product.brand}
+                        </Text>
+                        <Text size='11px' c='dimmed'>
+                          {product.totalOwners} possuem
+                        </Text>
+                      </Flex>
+                      <Box>
+                        <Button 
+                          size='sm' 
+                          color='violet' 
+                          variant='light'
+                          component="a"
+                          href={`/gear/product/${product.productId}`}
+                        >
+                          Ver detalhes
+                        </Button>
+                      </Box>
+                    </Flex>
+                  </>
+                ): (
+                  <Text size='sm' c='dimmed' mb='10'>
+                    Nenhum item encontrado
+                  </Text>
+                )}
               </Box>
             </Tabs.Panel>
           </Tabs>

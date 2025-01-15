@@ -64,6 +64,25 @@ const initialState = {
       }
     ]
   },
+  gear: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        productId: '',
+        productName: '',
+        productPicture: '',
+        brand: '',
+        brandSlug: '',
+        brandLogo: '',
+        colorPTBR: '',
+        color: '',
+        name_ptbr: '',
+        macro_category: '',
+        totalOwners: 0
+      }
+    ]
+  },
   suggestedUsers: [
     {
       id: '',
@@ -179,6 +198,28 @@ export function search(state = initialState, action) {
         projects: initialState.projects,
         requesting: false,
         error: 'Nenhum projeto encontrado'
+      };
+    // GEAR
+    case searchTypes.SEARCH_GEAR_REQUEST:
+      return {
+        ...state,
+        gear: initialState.projects,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.SEARCH_GEAR_SUCCESS:
+      return {
+        ...state,
+        gear: action.results,
+        requesting: false,
+        error: ''
+      };
+    case searchTypes.SEARCH_GEAR_FAILURE:
+      return {
+        ...state,
+        gear: initialState.gear,
+        requesting: false,
+        error: 'Nenhum equipamento encontrado'
       };
     // SUGGESTED USERS
     case searchTypes.GET_SUGGESTEDUSERS_REQUEST:
