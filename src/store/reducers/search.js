@@ -6,34 +6,36 @@ const initialState = {
     { query: '' }
   ],
   errorLastSearches: '',
-  users: [
-    {
-      id: '',
-      name: '',
-      lastname: '',
-      username: '',
-      picture: '',
-      publicProfile: '',
-      plan: '',
-      status: '',
-      city: '',
-      region: '',
-      verified: '',
-      country: '',
-      roleName: '',
-      mainRole: '',
-      projectRelated: '',
-      projectType: '',
-      availabilityStatus: '',
-      availability_color: '',
-      legend: '',
-      totalProjects: '',
-      instrumentalist: '',
-      projects: [
-        { id: '', name: '', username: '', picture: '' }
-      ]
-    }
-  ],
+  users: {
+    total: 0,
+    success: false,
+      result: [
+      {
+        id: '',
+        name: '',
+        lastname: '',
+        username: '',
+        picture: '',
+        publicProfile: '',
+        plan: '',
+        status: '',
+        legend: '',
+        verified: '',
+        city: '',
+        region: '',
+        country: '',
+        roleName: '',
+        mainRole: '',
+        instrumentalist: '',
+        projectRelated: '',
+        projectPublic: '',
+        availabilityStatus: '',
+        availability_color: '',
+        projectType: '',
+        totalProjects: 0,
+      }
+    ]
+  },
   projects: {
     total: 0,
     success: false,
@@ -58,9 +60,11 @@ const initialState = {
         endYear: '',
         participationStatus: '',
         participationId: '',
-        members: [
-          { id: '', name: '', lastname: '', username: '', picture: '' }
-        ]
+        relatedUserName: '',
+        relatedUserLastname: '',
+        relatedUserUsername: '',
+        relatedUserPicture: '',
+        relatedUserId: '',
       }
     ]
   },
@@ -203,7 +207,7 @@ export function search(state = initialState, action) {
     case searchTypes.SEARCH_GEAR_REQUEST:
       return {
         ...state,
-        gear: initialState.projects,
+        gear: initialState.gear,
         requesting: true,
         error: ''
       };

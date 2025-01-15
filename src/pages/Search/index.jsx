@@ -167,28 +167,28 @@ function Search () {
         }
         {(searchedKeywords && !searchResults.requesting) && 
           <Tabs 
-            defaultValue={isMobile ? 'all' : 'people'}
-            orientation='horizontal' 
+            defaultValue={'all'}
+            orientation="vertical"
             variant='pills' 
             color='violet'
             mb={140}
           >
-            <Tabs.List className='showOnlyInLargeScreen'>
-              <Tabs.Tab value={isMobile ? 'all' : 'people'} mb={15}>
+            {/* <Tabs.List className=''>
+              <Tabs.Tab value={'all'} mb={15}>
                 {searchResults.users[0].id
                   ?  'Pessoas ('+searchResults.users.length+')' 
                   : 'Pessoas (0)'
                 }
               </Tabs.Tab>
-              <Tabs.Tab value={isMobile ? 'all' : 'projects'} mb={15}>
+              <Tabs.Tab value={'all'} mb={15}>
                 {`Projetos (${searchResults.projects.total})`}
               </Tabs.Tab>
-              <Tabs.Tab value={isMobile ? 'all' : 'gear'} mb={15}>
+              <Tabs.Tab value={'all'} mb={15}>
                 {`Equipamento (${searchResults.gear.total})`}
               </Tabs.Tab>
-            </Tabs.List>
-            <Tabs.Panel value={isMobile ? 'all' : 'people'} pl={8} pt={6}>
-              <Text mb={14} className='showOnlyInMobile'>Pessoas</Text>
+            </Tabs.List> */}
+            <Tabs.Panel value={'all'} pl={8} pt={6}>
+              <Text mb={14} className=''>Pessoas</Text>
               {searchResults.users[0].id && 
                 <Box>
                   {searchResults.users.map(user =>
@@ -208,7 +208,7 @@ function Search () {
                       >
                         <Anchor href={`/${user.username}`}>
                           <Flex gap={3} align={'center'}>
-                            <Text size='md' fw={500} style={{lineHeight:'normal'}}>
+                            <Text size='sm' fw={550} className='lhNormal'>
                               {user.name+' '+user.lastname}
                             </Text>
                             {!!user.verified && 
@@ -235,7 +235,7 @@ function Search () {
                       </Flex>
                       <Box>
                         <Button 
-                          size='sm' 
+                          size='xs' 
                           color='violet' 
                           variant='light'
                           component="a"
@@ -249,12 +249,12 @@ function Search () {
                 </Box>
               }
             </Tabs.Panel>
-            <Tabs.Panel value={isMobile ? 'all' : 'projects'} pl={8} pt={6}>
-              <Text mb={14} className='showOnlyInMobile'>Projetos</Text>
+            <Tabs.Panel value={'all'} pl={8} pt={6}>
+              <Text mb={14} className=''>Projetos</Text>
               <Box>
                 {searchResults.projects.total ? searchResults.projects.result.map(project => 
                   <>
-                    <Flex key={project.id} align='center' mb={13} gap={6} justify='space-between'>
+                    <Flex key={project.id} align='flex-start' mb={13} gap={6} justify='space-between'>
                       <Link to={{ pathname: `/${project.username}` }}>
                         <Avatar 
                           src={project.picture ? project.picture : undefined} 
@@ -270,7 +270,7 @@ function Search () {
                       >
                         <Anchor href={`/${project.username}`}>
                           <Flex gap={3} align={'center'}>
-                            <Text size='md' fw={500} style={{lineHeight:'normal'}}>
+                            <Text size='sm' fw={550} className='lhNormal'>
                               {project.name}
                             </Text>
                           </Flex>
@@ -284,7 +284,7 @@ function Search () {
                       </Flex>
                       <Box>
                         <Button 
-                          size='sm' 
+                          size='xs'
                           color='violet' 
                           variant='light'
                           component="a"
@@ -302,16 +302,17 @@ function Search () {
                 )}
               </Box>
             </Tabs.Panel>
-            <Tabs.Panel value={isMobile ? 'all' : 'gear'} pl={8} pt={6}>
-            <Text mb={14} className='showOnlyInMobile'>Projetos</Text>
+            <Tabs.Panel value={'all'} pl={8} pt={6}>
+            <Text mb={14} className=''>Equipamento</Text>
               <Box>
                 {searchResults.gear.total ? searchResults.gear.result.map(product => 
                   <>
-                    <Flex key={product.productId} align='center' mb={13} gap={6} justify='space-between'>
+                    <Flex key={product.productId} align='flex-start' mb={13} gap={8} justify='space-between'>
                       <Link to={{ pathname: `/gear/product/${product.productId}` }}>
-                        <Avatar 
-                          src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:h-200,w-200,cm-pad_resize,bg-FFFFFF/${product.productPicture}` : undefined} 
-                          size='100px'
+                        <Image
+                          src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:h-112,w-112,cm-pad_resize,bg-FFFFFF/${product.productPicture}` : undefined}
+                          w='56px'
+                          h='56px'
                         />
                       </Link>
                       <Flex
@@ -323,7 +324,7 @@ function Search () {
                       >
                         <Anchor href={`/gear/product/${product.productId}`}>
                           <Flex gap={3} align={'center'}>
-                            <Text size='md' fw={500} style={{lineHeight:'normal'}}>
+                            <Text size='sm' fw={550} className='lhNormal'>
                               {product.productName}
                             </Text>
                           </Flex>
@@ -337,7 +338,7 @@ function Search () {
                       </Flex>
                       <Box>
                         <Button 
-                          size='sm' 
+                          size='xs'
                           color='violet' 
                           variant='light'
                           component="a"
