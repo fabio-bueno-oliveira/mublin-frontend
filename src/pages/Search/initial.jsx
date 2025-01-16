@@ -182,10 +182,10 @@ function Search () {
                           }
                         </Flex>
                       </Anchor>
-                      <Text size='xs' fw={300}>
+                      <Text size='xs' fw={400}>
                         {user.mainRole && user.mainRole} {!!user.totalProjects && ` • ${user.totalProjects} projetos ativos`}
                       </Text>
-                      <Text size='xs' fw={300} c='dimmed'>
+                      <Text size='xs' fw={400} c='dimmed'>
                         {user.city && user.city+' - '+user.region}
                       </Text>
                       {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
@@ -239,8 +239,8 @@ function Search () {
                               size='15px'
                             />
                           </Link>
-                          <Text size='10px' fw={400} c='dimmed' className='lhNormal'>
-                            Pessoa relacionada à busca: {project.relatedUserName} {project.relatedUserLastname}
+                          <Text size='0.7rem' fw={400} c='dimmed' className='lhNormal'>
+                            {project.relatedUserName} {project.relatedUserLastname}
                           </Text>
                         </Group>
                       }
@@ -258,9 +258,13 @@ function Search () {
                   <Flex key={product.productId} align='flex-start' mb={13} gap={8} justify='space-between'>
                     <Link to={{ pathname: `/gear/product/${product.productId}` }}>
                       <Image
-                        src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:h-112,w-112,cm-pad_resize,bg-FFFFFF/${product.productPicture}` : undefined}
-                        w='56px'
-                        h='56px'
+                        src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${product.productPicture}` : undefined}
+                        h={56}
+                        mah={56}
+                        w='auto'
+                        fit='contain'
+                        mb={10}
+                        radius='md'
                       />
                     </Link>
                     <Flex

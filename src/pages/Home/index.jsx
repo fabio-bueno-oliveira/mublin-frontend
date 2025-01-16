@@ -305,6 +305,7 @@ function Home () {
         opened={showModalNewPost} 
         onClose={() => setShowModalNewPost(false)} 
         title='Escrever uma publicação'
+        centered
       >
         <NewPost />
       </Modal>

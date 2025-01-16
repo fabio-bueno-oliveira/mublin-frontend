@@ -21,7 +21,7 @@ export function UserCard({
           href={`/${username}`}
         >
           <Group gap={0}>
-            <Text size='0.88rem' fw='550'>
+            <Text size='0.97rem' fw={570} className='lhNormal'>
               {name} {lastname}
             </Text>
             {verified &&
@@ -45,11 +45,11 @@ export function UserCard({
             style={{lineHeight:'normal'}}
             href={`/${username}`}
           >
-            <Text size='0.75rem' className='op80' fw='420' mt={3} mb={4} truncate='end'>
+            <Text size='xs' fw={400} className='lhNormal' truncate='end'>
               {username}
             </Text>
           </Anchor>
-          <Text size='0.75rem' className='op80' fw='420' truncate='end'>
+          <Text size='xs' fw={400} c='dimmed' className='lhNormal' truncate='end'>
             {mainRole} {city && `• ${city}`}{region && `, ${region}`}
           </Text>
         </Box>

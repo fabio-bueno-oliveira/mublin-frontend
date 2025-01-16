@@ -207,10 +207,7 @@ function FeedCard ({ item, compact }) {
               href={`/${item.relatedUserUsername}`}
             >
               <Flex gap={2} align='center' mb={2}>
-                <Text
-                  size={isMobile ? '0.98rem' : '0.93rem'} 
-                  fw='550'
-                >
+                <Text size='0.97rem' fw={570}>
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Text>
                 {!!item.relatedUserVerified &&
@@ -542,11 +539,11 @@ function FeedCard ({ item, compact }) {
         ) : (
           feed.itemComments.total ? feed.itemComments.list.map((comment, key) => 
             <Flex key={key} align='flex-start' gap={7} mb={14}>
-              <Avatar 
-                className='point' 
-                radius='xl' 
-                size='35px' 
-                src={comment.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-35,w-35,c-maintain_ratio/'+comment.userId+'/'+comment.picture : undefined} 
+              <Avatar
+                className='point'
+                radius='xl'
+                size='35px'
+                src={comment.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-35,w-35,c-maintain_ratio/'+comment.userId+'/'+comment.picture : undefined}
               />
               <Box>
                 <Text size='sm'>

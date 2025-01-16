@@ -1,4 +1,4 @@
-import { useMantineColorScheme, Flex, Box, Group, Badge, Image, Text, Anchor } from '@mantine/core'
+import { Flex, Box, Group, Badge, Image, Text, Anchor } from '@mantine/core'
 import { Link } from 'react-router-dom'
 import { IconClock } from '@tabler/icons-react'
 
@@ -6,7 +6,6 @@ export function ProjectCard({
   mb, picture, isPictureFullUrl, name, username, type, city, region, confirmed, size, genre
 }) {
 
-  const { colorScheme } = useMantineColorScheme();
   const imgPath = 'https://ik.imagekit.io/mublin/projects/tr:h-165,w-165,c-maintain_ratio/'
 
   const imageSrc = isPictureFullUrl ? (picture ? picture : undefined) : (picture ? imgPath+picture : undefined);
@@ -30,17 +29,17 @@ export function ProjectCard({
           href={`/${username}`}
         >
           <Group gap={0}>
-            <Text size={size === 'lg' ? '0.90rem' : '0.88rem'} fw='600'>
+            <Text size='0.97rem' fw={570} className='lhNormal'>
               {name}
             </Text>
           </Group>
         </Anchor>
         <Box w={170}>
-          <Text size='11px' className='op80' fw='300' mt={3} mb={4} truncate='end'>
+          <Text size='xs' fw={400} className='lhNormal' truncate='end'>
             {type} {genre && `• ${genre}`}
           </Text>
           {city && 
-            <Text size='11px' fw='300' c='dimmed' truncate='end'>
+            <Text size='xs' fw={400} c='dimmed' className='lhNormal' truncate='end'>
               {city && city} {region && `• ${region}`}
             </Text>
           }
