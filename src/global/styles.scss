@@ -36,6 +36,12 @@ a.displayBlockLink {
   display: none;
 }
 
+.transparentBgInMobile {
+  @media only screen and (max-width: 600px) {
+    background-color: transparent!important;
+  }
+}
+
 .iconVerified {
   color: #7950f2;
   width: calc(1.15rem);

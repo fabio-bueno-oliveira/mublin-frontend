@@ -39,10 +39,10 @@ function Header (props) {
   const token = localStorage.getItem('token');
   const decoded = jwtDecode(token);
   const loggedUserId = decoded.result.id;
-  const plan = decoded.result.plan;
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
+  const user = useSelector(state => state.user)
   const projects = useSelector(state => state.userProjects)
 
   const projectsActive = projects?.list
@@ -380,7 +380,7 @@ function Header (props) {
                   <Menu.Dropdown>
                     <Menu.Label>
                       {userInfo.name} {userInfo.lastname} 
-                      {plan === 'Pro' && 
+                      {user.plan === 'Pro' && 
                         <Badge size='sm' variant='light' color='violet' ml={6}>PRO</Badge>
                       }
                     </Menu.Label>

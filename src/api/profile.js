@@ -31,6 +31,7 @@ export const profileService = {
     getProfileStrengths,
     getProfileStrengthsTotalVotes,
     getProfileStrengthsRaw,
+    getProfileStrengthsVotesHistory,
     getProfileTestimonials,
     logout
 };
@@ -161,6 +162,14 @@ async function getProfileStrengthsRaw(username) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/profile/${username}/strengthsRaw`, requestOptions).then(handleResponse);
+}
+
+async function getProfileStrengthsVotesHistory(username) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/profile/${username}/strengthsRecentVotes`, requestOptions).then(handleResponse);
 }
 
 async function getProfileTestimonials(username) {

@@ -13,8 +13,7 @@ function ProfileGearExpandedLoading () {
         <Card
           radius='md'
           withBorder={isLargeScreen ? true : false}
-          style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-          className='mublinModule'
+          className='mublinModule transparentBgInMobile'
         >
           <Center mb={14}>
             <Skeleton w={80} h={80} radius='lg'/>
@@ -28,8 +27,7 @@ function ProfileGearExpandedLoading () {
         <Card
           radius='md'
           withBorder={isLargeScreen ? true : false}
-          style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-          className='mublinModule'
+          className='mublinModule transparentBgInMobile'
         >
           <Center mb={14}>
             <Skeleton w={80} h={80} radius='lg'/>
@@ -43,8 +41,7 @@ function ProfileGearExpandedLoading () {
         <Card
           radius='md'
           withBorder={isLargeScreen ? true : false}
-          style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-          className='mublinModule'
+          className='mublinModule transparentBgInMobile'
         >
           <Center mb={14}>
             <Skeleton w={80} h={80} radius='lg'/>

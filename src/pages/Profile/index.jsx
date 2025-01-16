@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPlus, IconMapPin, IconPencil } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPlus, IconMapPin, IconEye } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -37,6 +37,7 @@ function ProfilePage () {
   const loggedUserId = decoded.result.id
   const loggedUsername = decoded.result.username
 
+  const user = useSelector(state => state.user)
   const profile = useSelector(state => state.profile)
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
@@ -94,10 +95,9 @@ function ProfilePage () {
   // const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
   // const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
-  // Badges
+  // Modal Badges
   const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false)
   const [modalLegendOpen, setModalLegendOpen] = useState(false)
-
   // Modal User Picture
   const [modalAvatarOpen, setModalAvatarOpen] = useState(false)
   // Modal Follow
@@ -176,8 +176,16 @@ function ProfilePage () {
     navigate('/'+username);
   }
 
-  // Strentgth points
+  // Strentgth
   const [modalStrengthsOpen, setModalStrengthsOpen] = useState(false)
+  const [modalStrengthVotesOpen, setModalStrengthVotesOpen] = useState(false)
+  const openVotesHistoryModal = () => {
+    if (user.plan === 'Pro') {
+      dispatch(profileInfos.getProfileStrengthsVotesHistory(username))
+    }
+    setModalStrengthVotesOpen(true)
+  }
+
   const [strengthsLoaded, setStrengthsLoaded] = useState(false)
   const [strengths, setStrengths] = useState([])
   const [strengthVoted, setStrengthVoted] = useState(null)
@@ -247,6 +255,7 @@ function ProfilePage () {
       }
       <Header
         page='profile'
+        reloadUserInfo
         username={username}
         profileId={profile.id}
         showBackIcon={true}
@@ -339,7 +348,7 @@ function ProfilePage () {
                               <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
                             }
                             <Text size='13px' fw='400' mr={7}>
-                              {role.name}
+                              {role.description}
                             </Text>
                           </Flex>
                         </SplideSlide>
@@ -543,8 +552,7 @@ function ProfilePage () {
                 pb={isMobile ? 3 : 12}
                 mt='12'
                 mb='14'
-                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                className="mublinModule"
+                className="mublinModule transparentBgInMobile"
               >
                 <Group justify='space-between' align='center' gap={8} mb={profile.strengths.total ? 15 : 8}>
                   <Title fz='1.03rem' fw='640'>
@@ -559,6 +567,20 @@ function ProfilePage () {
                     >
                       Votar
                     </Button>
+                  }
+                  {(profile.id === loggedUserId && !profile.requesting) &&
+                    <ActionIcon
+                      variant='transparent'
+                      size='md'
+                      aria-label='Ver votos'
+                      title='Ver votos'
+                      onClick={() => openVotesHistoryModal()}
+                    >
+                      <IconEye
+                        color={colorScheme === 'light' ? 'black' : 'white'}
+                        style={{ width: '91%', height: '91%' }} stroke={1.5}
+                      />
+                    </ActionIcon>
                   }
                 </Group>
                 {profile.requesting ? ( 
@@ -618,11 +640,9 @@ function ProfilePage () {
                     <Paper
                       withBorder={isLargeScreen ? true : false}
                       px={isMobile ? 0 : 16}
-                      pt={isMobile ? 0 : 12}
-                      pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 12}
+                      py={isMobile ? 0 : 12}
                       mb={8}
-                      style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                      className='mublinModule'
+                      className='mublinModule transparentBgInMobile'
                     >
                       <Divider mb={18} className='showOnlyInMobile' />
                       <Group gap={3} mb={8}>
@@ -655,8 +675,7 @@ function ProfilePage () {
                 px={isMobile ? 0 : 16}
                 py={isMobile ? 0 : 12}
                 mb={20}
-                style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-                className='mublinModule'
+                className='mublinModule transparentBgInMobile'
               >
                 <Group justify='space-between' align='center' gap={8} mb={13}>
                   <Title fz='1.03rem' fw='640'>Postagens</Title>
@@ -866,7 +885,7 @@ function ProfilePage () {
         fullScreen={isMobile ? true : false}
       >
         <Alert variant='light' mb={10} p='xs' color='gray'>
-          <Text size='xs'>Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter o Mublin uma comunidade com credibilidade :)</Text>
+          <Text size='xs'>Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter a credibilidade na comunidade do Mublin :)</Text>
         </Alert>
         {strengths.map((strength,key) =>
           <div key={key}>
@@ -874,6 +893,7 @@ function ProfilePage () {
               my={5}
               id={'strengthsGroup_'+strength.id}
               color='violet'
+              size='xs'
               value={strength.id}
               checked={(strength.id === strengthVoted || myVotes.filter((x) => { return x.strengthId === strength.id}).length) ? true : false}
               onChange={() => {
@@ -884,9 +904,13 @@ function ProfilePage () {
               label={
                 <>
                   <Group gap={3}>
-                    <i className={strength.icon+' fa-fw ml-1'}></i> {strength.title}
+                    <i className={strength.icon+' fa-fw ml-1'}></i> <Text size='xs'>{strength.title}</Text>
                     {!!myVotes.filter((x) => { return x.strengthId === strength.id}).length && 
-                      <Button
+                      <>
+                      <Text c='violet' size='xs' className='point' onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}>
+                        (retirar voto)
+                      </Text>
+                      {/* <Button
                         size='compact-xs'
                         variant='filled'
                         color='red'
@@ -895,7 +919,8 @@ function ProfilePage () {
                         leftSection={<IconX size={14} />}
                       >
                         Retirar voto
-                      </Button>
+                      </Button> */}
+                      </>
                     }
                   </Group>
                 </>
@@ -904,9 +929,80 @@ function ProfilePage () {
           </div>
         )}
         <Group mt='xs' justify='flex-end' gap={8}>
-          <Button variant='outline' color='violet' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
+          <Button variant='outline' color='gray' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
           <Button loading={!strengthsLoaded} color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
         </Group>
+      </Modal>
+      <Modal 
+        opened={modalStrengthVotesOpen}
+        onClose={() => setModalStrengthVotesOpen(false)}
+        title={user.plan === 'Pro' ? `${profile.strengthsVotesHistory.total} votos recebidos` : 'Histórico de votos'}
+        centered
+        size='sm'
+        scrollAreaComponent={ScrollArea.Autosize}
+      >
+        {user.plan === 'Pro' ? (
+          <>
+            {profile.requestingStrengthHistory ? (
+              <>
+                <Skeleton height={15} width={244} mb={8} radius='xl' />
+                <Skeleton height={15} width={244} mb={8} radius='xl' />
+                <Skeleton height={15} width={244} mb={8} radius='xl' />
+              </>
+            ) : (
+              <Table>
+                <Table.Thead>
+                  <Table.Tr fz='xs'>
+                    <Table.Th>Nome</Table.Th>
+                    <Table.Th>Modalidade</Table.Th>
+                    <Table.Th>Data</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {profile.strengthsVotesHistory.result.map(vote =>
+                    <Table.Tr fz='xs'>
+                      <Table.Td>
+                        <Anchor 
+                          href={'/'+vote.username} 
+                        >
+                          <Group gap={5}>
+                            <Avatar src={vote.picture ? 'https://ik.imagekit.io/mublin/tr:h-40,w-40,c-maintain_ratio/users/avatars/'+vote.userId+'/'+vote.picture : null} size='20px' />
+                            <Text fz='xs'>{vote.username}</Text>
+                          </Group>
+                        </Anchor>
+                      </Table.Td>
+                      <Table.Td>{vote.strength}</Table.Td>
+                      <Table.Td>{vote.created}</Table.Td>
+                    </Table.Tr>
+                  )}
+                </Table.Tbody>
+              </Table>
+            )}
+          </>
+        ) : (
+          <>
+            <Group gap={3} mb={8}>
+              <Title fz='0.9rem' fw='620'>
+                Não disponível no seu plano
+              </Title>
+              <IconLockSquareRoundedFilled size={22} color="gray" /> 
+            </Group>
+            <Text size='sm'>
+              Torne-se PRO para habilitar esta funcionalidade em seu perfil e ver quem votou nos seus pontos fortes!
+            </Text>
+            <Anchor
+              variant='gradient'
+              gradient={{ from: 'violet', to: 'blue' }}
+              fw='440'
+              fz='sm'
+              underline='hover'
+              href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
+              target='_blank'
+            >
+              Assinar Mublin PRO - R$ 29,90 por 3 meses
+            </Anchor>
+          </>
+        )}
       </Modal>
       <Modal 
         opened={modalVerifiedOpen}

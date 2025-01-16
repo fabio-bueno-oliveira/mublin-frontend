@@ -4,6 +4,7 @@ const initialState = {
   requesting: false,
   requested: false,
   requestingFollowingActions: false,
+  requestingStrengthHistory: false,
   success: false,
   activeModal: null,
   id: '',
@@ -171,15 +172,37 @@ const initialState = {
       created: ''
     }
   ],
+  strengthsVotesHistory: {
+    total: 0,
+    success: false,
+    result: [
+      { 
+        strengthId: '',
+        strength: '',
+        icon: '',
+        userId: '',
+        name: '',
+        lastname: '',
+        verified: 0,
+        legend: 0,
+        username: '',
+        picture: '',
+        created: '',
+      }
+    ]
+  },
   gear: {
     total: 0,
     list: [
       {
+        user_gear_id: '',
         brandId: '',
         brandName: '',
         brandLogo: '',
         productId: '',
         productName: '',
+        is_subproduct: '',
+        parent_product_id: '',
         category: '',
         picture: '',
         pictureFilename: '',
@@ -599,6 +622,25 @@ export function profile(state = initialState, action) {
         ...state,
         strengthsRaw: initialState.strengthsRaw,
         requesting: false,
+        error: "A solicitação falhou"
+      };
+    // STRENGTHS VOTES HISTORY
+    case profileTypes.GET_PROFILE_STRENGTHS_VOTES_INFO_REQUEST:
+      return {
+        ...state,
+        requestingStrengthHistory: true
+      };
+    case profileTypes.GET_PROFILE_STRENGTHS_VOTES_INFO_SUCCESS:
+      return {
+        ...state,
+        requestingStrengthHistory: false,
+        strengthsVotesHistory: action.list
+      };
+    case profileTypes.GET_PROFILE_STRENGTHS_VOTES_INFO_FAILURE:
+      return {
+        ...state,
+        strengthsVotesHistory: initialState.strengthsVotesHistory,
+        requestingStrengthHistory: false,
         error: "A solicitação falhou"
       };
     // TESTIMONIALS

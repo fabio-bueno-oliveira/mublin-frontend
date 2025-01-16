@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
-import { useMantineColorScheme, ActionIcon, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Button, Divider, em  } from '@mantine/core'
+import { useMantineColorScheme, ActionIcon, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Anchor, Divider, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconArrowsMaximize, IconSettings } from '@tabler/icons-react'
 import { truncateString } from '../../../utils/formatter'
+import ReadMoreReact from 'read-more-react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 
@@ -21,7 +22,11 @@ function GearSection ({ loggedUserId, username }) {
   // Gear
   const [gearCategorySelected, setGearCategorySelected] = useState('');
 
-  const gear = useSelector(state => state.profile.gear.list).filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
+  const mainProducts = useSelector(state => state.profile.gear.list).filter((product) => { return product.is_subproduct === 0 });
+
+  const gear = mainProducts.filter((product) => { return (gearCategorySelected) ? product.category === gearCategorySelected : product.productId > 0 });
+
+  const subGear = useSelector(state => state.profile.gear.list).filter((product) => { return product.is_subproduct === 1 });
 
   // Modal Gear Item Detail
   const [modalGearItemOpen, setModalGearItemOpen] = useState(false)
@@ -41,8 +46,7 @@ function GearSection ({ loggedUserId, username }) {
         pt={isMobile ? 0 : 12}
         pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 9}
         mb={14}
-        style={isMobile ? { backgroundColor: 'transparent' } : undefined}
-        className='mublinModule'
+        className='mublinModule transparentBgInMobile'
       >
         <Group justify='space-between' align='center' gap={8} mb={13}>
           <Title fz='1.03rem' fw='640'>
@@ -151,7 +155,7 @@ function GearSection ({ loggedUserId, username }) {
                           </Text>
                         </Box>
                         {product.tuning && 
-                          <Group gap={2} mt={4} mb='2'>
+                          <Group gap={2} my={3}>
                             <Text
                               size='9px'
                               fw='450'
@@ -171,6 +175,23 @@ function GearSection ({ loggedUserId, username }) {
                             }
                           </Flex>
                         }
+                        <Flex gap={4}>
+                          {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).slice(0, 3).map(subGear =>
+                            <Image
+                              key={subGear.productId}
+                              src={'https://ik.imagekit.io/mublin/products/tr:w-60,h-60,cm-pad_resize,bg-FFFFFF,fo-x/'+subGear.pictureFilename}
+                              h={30}
+                              mah={30}
+                              w='auto'
+                              fit='contain'
+                              mb={10}
+                              radius='md'
+                              onClick={() => openModalGearDetail(product)}
+                              className='point'
+                              title={`${subGear.brandName} ${subGear.productName}`}
+                            />
+                          )}
+                        </Flex>
                       </Flex>
                     </SplideSlide>
                   )}
@@ -201,24 +222,20 @@ function GearSection ({ loggedUserId, username }) {
         }
         withCloseButton
         size='md'
+        scrollAreaComponent={ScrollArea.Autosize}
       >
         <Center>
-          {/* <Image 
-            src={'https://ik.imagekit.io/mublin/products/tr:h-500,w-500,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
-            h={250}
-            mah={250}
-            w='auto'
-            fit='contain'
-            mb='10'
-            radius='md'
-          /> */}
-          <Image 
-            src={'https://ik.imagekit.io/mublin/products/tr:w-400,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
-            w={200}
-            fit='contain'
-            mb='10'
-            radius='md'
-          />
+          <Anchor
+            href={`/gear/product/${gearItemDetail.productId}`} 
+          >
+            <Image
+              src={'https://ik.imagekit.io/mublin/products/tr:w-400,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
+              w={200}
+              fit='contain'
+              mb='10'
+              radius='md'
+            />
+          </Anchor>
         </Center>
         {gearItemDetail.tuning && 
           <Box>
@@ -236,23 +253,64 @@ function GearSection ({ loggedUserId, username }) {
             }
           </Flex>
         }
-        {gearItemDetail.ownerComments && 
-          <Card className='mublinModule' px='10' py='10' mt='xs'>
-            <ScrollArea h='72' type='auto'>
-              <Text size='sm'>{gearItemDetail.ownerComments}</Text>
-            </ScrollArea>
-          </Card>
+        {subGear.filter((p) => { return p.parent_product_id === gearItemDetail.user_gear_id }) && 
+          <>
+            <Divider my={10} />
+            <Text size='xs' ta='center' fw='450' mb={4}>Itens que fazem parte:</Text>
+            <Splide 
+              options={{
+                drag: 'free',
+                snap: false,
+                perPage: isMobile ? 2 : 5,
+                autoWidth: true,
+                arrows: false,
+                gap: '22px',
+                dots: false,
+                pagination: false,
+              }}
+            >
+              {subGear.filter((p) => { return p.parent_product_id === gearItemDetail.user_gear_id }).map(s =>
+                <SplideSlide key={s.productId}>
+                  <Flex direction='column' align='center'>
+                    <Anchor
+                      href={`/gear/product/${s.productId}`}
+                      mb={4}
+                    >
+                      <Image
+                        key={s.productId}
+                        src={'https://ik.imagekit.io/mublin/products/tr:w-120,h-120,cm-pad_resize,bg-FFFFFF,fo-x/'+s.pictureFilename}
+                        h={60}
+                        mah={60}
+                        w='auto'
+                        fit='contain'
+                        radius='md'
+                      />
+                    </Anchor>
+                    <Text ta='center' size='10px' c='dimmed'>{s.brandName}</Text>
+                    <Text ta='center' size='10px'>{s.productName}</Text>
+                  </Flex>
+                </SplideSlide>
+              )}
+            </Splide>
+          </>
         }
-        <Button
-          size='sm'
-          color='violet'
-          fullWidth
-          fw='600'
-          component='a'
-          href={`/gear/product/${gearItemDetail.productId}`}
-        >
-          Ver detalhes do produto
-        </Button>
+        {gearItemDetail.ownerComments && 
+          <>
+            <Divider my={10} />
+            <Text size='xs' fw={350} c='dimmed' mb={3}>
+              Comentários de {profile.name} {profile.lastname}
+            </Text>
+            <Text size='xs'>
+              <ReadMoreReact
+                text={gearItemDetail.ownerComments}
+                min={90}
+                ideal={110}
+                max={2000}
+                readMoreText='...mais'
+              />
+            </Text>
+          </>
+        }
       </Modal>
     </>
   )

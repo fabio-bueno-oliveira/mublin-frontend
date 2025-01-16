@@ -34,7 +34,6 @@ function Home () {
 
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
-  const plan = decoded.result.plan
 
   const user = useSelector(state => state.user)
   const projects = useSelector(state => state.userProjects)
@@ -97,7 +96,7 @@ function Home () {
                     <Title fw='580' fz='1.04rem' mb={1} mt={10} ta='center' className='op80'>
                       Olá, {userInfo?.name}
                     </Title>
-                    {plan === 'Pro' ? ( 
+                    {user.plan === 'Pro' ? ( 
                       <Center>
                         <Badge 
                           color='violet' 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/authentication'
 import { LoadingOverlay, useMantineColorScheme, Container, Flex, Center, Image, Button, Text, Anchor, Avatar, Badge, ActionIcon, Modal } from '@mantine/core'
 import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera,  IconHeartHandshake, IconPackages, IconCalendarMonth,
@@ -20,9 +20,10 @@ function MenuMobile () {
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const token = localStorage.getItem('token')
 
+  const user = useSelector(state => state.user)
+
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
-  const plan = decoded.result.plan
 
   const { colorScheme, setColorScheme,  } = useMantineColorScheme()
 
@@ -127,7 +128,7 @@ function MenuMobile () {
           Olá, <span style={{fontWeight:'500'}}>{userInfo.name}</span>!
         </Text>
         <Center>
-          {plan === 'Pro' ? (
+          {user.plan === 'Pro' ? (
             <Badge 
               color='violet' 
               size='sm' 

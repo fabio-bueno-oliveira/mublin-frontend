@@ -17,6 +17,7 @@ export const profileInfos = {
     getProfileStrengths: getProfileStrengths,
     getProfileStrengthsTotalVotes: getProfileStrengthsTotalVotes,
     getProfileStrengthsRaw: getProfileStrengthsRaw,
+    getProfileStrengthsVotesHistory: getProfileStrengthsVotesHistory,
     getProfileAvailabilityItems: getProfileAvailabilityItems,
     getProfileTestimonials: getProfileTestimonials,
     setActiveModal: setActiveModal
@@ -276,6 +277,22 @@ function getProfileStrengthsRaw(username) {
     function request(username) { return { type: profileTypes.GET_PROFILE_STRENGTHS_RAW_REQUEST, username } }
     function success(list) { return { type: profileTypes.GET_PROFILE_STRENGTHS_RAW_SUCCESS, list } }
     function failure(username, error) { return { type: profileTypes.GET_PROFILE_STRENGTHS_RAW_FAILURE, username, error } }
+}
+
+function getProfileStrengthsVotesHistory(username) {
+    return dispatch => {
+        dispatch(request(username));
+
+        profileService.getProfileStrengthsVotesHistory(username)
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(username, error.toString()))
+            );
+    };
+  
+    function request(username) { return { type: profileTypes.GET_PROFILE_STRENGTHS_VOTES_INFO_REQUEST, username } }
+    function success(list) { return { type: profileTypes.GET_PROFILE_STRENGTHS_VOTES_INFO_SUCCESS, list } }
+    function failure(username, error) { return { type: profileTypes.GET_PROFILE_STRENGTHS_VOTES_INFO_FAILURE, username, error } }
 }
 
 function getProfileTestimonials(username) {

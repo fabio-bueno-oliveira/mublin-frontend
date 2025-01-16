@@ -22,7 +22,8 @@ function SettingsMyGearPage () {
 
   const decoded = jwtDecode(token);
   const loggedUserId = decoded.result.id;
-  const plan = decoded.result.plan;
+
+  const user = useSelector(state => state.user)
 
   const requesting = useSelector(state => state.user.gearRequesting)
   const gear = useSelector(state => state.user.gear)
@@ -287,7 +288,7 @@ function SettingsMyGearPage () {
                   Gerenciar meu equipamento
                 </Title>
                 <Group justify='flex-start' mt={12}>
-                  {plan === 'Pro' ? (
+                  {user.plan === 'Pro' ? (
                     <Button
                       leftSection={<IconPlus size={14} />}
                       color='violet'
