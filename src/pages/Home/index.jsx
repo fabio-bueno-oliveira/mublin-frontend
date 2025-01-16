@@ -6,7 +6,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { searchInfos } from '../../store/actions/search'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, Modal, em } from '@mantine/core'
+import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
@@ -176,7 +176,13 @@ function Home () {
                     </Text>
                   </Flex>
                   {projects.requesting &&
-                    <Loader color='violet' size='63px' />
+                    <>
+                      <Skeleton height={65} circle />
+                      <Skeleton height={65} circle />
+                      <Skeleton height={65} circle />
+                      <Skeleton height={65} circle />
+                      <Skeleton height={65} circle />
+                    </>
                   }
                   {!projects.requesting && projects.list.map(project =>
                     <Flex
