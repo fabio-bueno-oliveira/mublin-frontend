@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
@@ -6,7 +6,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { searchInfos } from '../../store/actions/search'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, em } from '@mantine/core'
+import { Container, Loader, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
@@ -15,8 +15,9 @@ import FeedCardLoading from './feedCardLoading'
 import Header from '../../components/header'
 import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
-import { truncateString } from '../../utils/formatter'
 import UserCardLoading from '../../components/userCard/loading'
+import NewPost from '../../pages/New/postStandalone'
+import { truncateString } from '../../utils/formatter'
 
 function Home () {
 
@@ -39,6 +40,9 @@ function Home () {
   const projects = useSelector(state => state.userProjects)
   const search = useSelector(state => state.search)
   const feed = useSelector(state => state.feed)
+
+  // Modal New Post
+  const [showModalNewPost, setShowModalNewPost] = useState(false)
 
   useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
@@ -211,11 +215,10 @@ function Home () {
                   fullWidth variant="light"
                   color="gray"
                   radius="xl"
-                  component='a'
-                  href='/new/post'
                   size='md'
                   fw={480}
                   fz='sm'
+                  onClick={() => setShowModalNewPost(true)}
                 >
                   Escrever uma publicação
                 </Button>
@@ -292,6 +295,13 @@ function Home () {
           }
         </Grid>
       </Container>
+      <Modal 
+        opened={showModalNewPost} 
+        onClose={() => setShowModalNewPost(false)} 
+        title='Escrever uma publicação'
+      >
+        <NewPost />
+      </Modal>
       <FooterMenuMobile page='home' />
     </>
   )

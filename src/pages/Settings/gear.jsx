@@ -24,7 +24,7 @@ function SettingsMyGearPage () {
   const loggedUserId = decoded.result.id;
   const plan = decoded.result.plan;
 
-  const requesting = useSelector(state => state.user.requesting)
+  const requesting = useSelector(state => state.user.gearRequesting)
   const gear = useSelector(state => state.user.gear)
 
   useEffect(() => { 
