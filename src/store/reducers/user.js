@@ -40,6 +40,8 @@ const initialState = {
       brandLogo: '',
       productId: '',
       productName: '',
+      is_subproduct: '',
+      parent_product_id: '',
       category: '',
       macroCategory: '',
       picture: '',

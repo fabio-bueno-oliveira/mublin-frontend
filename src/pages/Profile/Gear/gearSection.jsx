@@ -185,10 +185,10 @@ function GearSection ({ loggedUserId, username }) {
                               w='auto'
                               fit='contain'
                               mb={10}
-                              radius='md'
+                              radius='sm'
                               onClick={() => openModalGearDetail(product)}
                               className='point'
-                              title={`${subGear.brandName} ${subGear.productName}`}
+                              title={`${subGear.category} ${subGear.brandName} ${subGear.productName}`}
                             />
                           )}
                         </Flex>
@@ -283,7 +283,7 @@ function GearSection ({ loggedUserId, username }) {
                         mah={60}
                         w='auto'
                         fit='contain'
-                        radius='md'
+                        radius='sm'
                       />
                     </Anchor>
                     <Text ta='center' size='10px' c='dimmed'>{s.brandName}</Text>

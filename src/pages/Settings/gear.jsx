@@ -3,13 +3,14 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
 import { CurrencyInput } from 'react-currency-mask'
+import { truncateString } from '../../utils/formatter'
 
 function SettingsMyGearPage () {
 
@@ -26,7 +27,8 @@ function SettingsMyGearPage () {
   const user = useSelector(state => state.user)
 
   const requesting = useSelector(state => state.user.gearRequesting)
-  const gear = useSelector(state => state.user.gear)
+  const gear = useSelector(state => state.user.gear).filter((p) => { return p.is_subproduct === 0 })
+  const subGear = useSelector(state => state.user.gear).filter((p) => { return p.is_subproduct === 1 })
 
   useEffect(() => { 
     dispatch(userInfos.getUserGearInfoById(loggedUserId))
@@ -332,7 +334,7 @@ function SettingsMyGearPage () {
                         </Center>
                         <Box>
                           <Text size='xs' c='dimmed' ta='center' truncate="end">
-                            {item.brandName}
+                            {item.category} • {item.brandName}
                           </Text>
                           <Text size='sm' mb='1' ta='center' truncate="end">
                             {item.productName}
@@ -528,18 +530,23 @@ function SettingsMyGearPage () {
                   src={item.picture ? item.picture : undefined} 
                 />
               </Center>
-              <Text ta='center' size='xs' c='dimmed' mt={8}>{item.brandName}</Text>
-              <Text ta='center' size='sm' fw='500'>{item.productName}</Text>
+              <Text ta='center' size='xs' c='dimmed' mt={8}>
+                {item.category} • {item.brandName}
+              </Text>
+              <Text ta='center' size='sm' fw='500'>
+                {item.productName}
+              </Text>
               <Radio.Group
                 mt={8}
                 value={String(featured)}
                 onChange={setFeatured}
                 name='editItemFeatured'
-                label='Em destaque (exibir entre os primeiros)'
+                label='Em destaque'
+                description='Exibir entre os primeiros'
               >
-                <Group>
-                <Radio color='violet' value='1' label='Sim' />
-                <Radio color='violet' value='0' label='Não' />
+                <Group mt={4}>
+                  <Radio size='xs' color='violet' value='1' label='Sim' />
+                  <Radio size='xs' color='violet' value='0' label='Não' />
                 </Group>
               </Radio.Group>
               <Radio.Group
@@ -550,8 +557,8 @@ function SettingsMyGearPage () {
                 label='Em uso atualmente'
               >
                 <Group>
-                <Radio color='violet' value='1' label='Sim' />
-                <Radio color='violet' value='0' label='Não' />
+                <Radio size='xs' color='violet' value='1' label='Sim' />
+                <Radio size='xs' color='violet' value='0' label='Não' />
                 </Group>
               </Radio.Group>
               <NativeSelect
@@ -569,7 +576,7 @@ function SettingsMyGearPage () {
                 )}
               </NativeSelect>
               <Radio.Group
-                mt={8}
+                mt={6}
                 mb={8}
                 value={String(for_sale)}
                 onChange={setForSale}
@@ -577,40 +584,53 @@ function SettingsMyGearPage () {
                 label='À venda'
               >
                 <Group>
-                  <Radio color='violet' value='1' label='Sim' />
-                  <Radio color='violet' value='0' label='Não' />
-                  {(for_sale === '1' || for_sale === 1) && 
+                  <Radio size='xs' color='violet' value='1' label='Sim' />
+                  <Radio size='xs' color='violet' value='0' label='Não' />
                   <CurrencyInput
                     value={price}
                     locale='pt-BR'
                     disabled={(for_sale === '1' || for_sale === 1) ? false : true}
                     onChangeValue={(event, originalValue, maskedValue) => {
-                      // console.log(event, originalValue, maskedValue);
                       setPrice(originalValue);
                     }}
-                    InputElement={<TextInput w='155px' placeholder='Preço de venda' />} 
+                    InputElement={<TextInput w='155px' placeholder='Preço de venda' />}
                   />
-                }
                 </Group>
               </Radio.Group>
-              {/* {(for_sale === '1' || for_sale === 1) && 
-                <CurrencyInput
-                  value={price}
-                  locale='pt-BR'
-                  disabled={(for_sale === '1' || for_sale === 1) ? false : true}
-                  onChangeValue={(event, originalValue, maskedValue) => {
-                    // console.log(event, originalValue, maskedValue);
-                    setPrice(originalValue);
-                  }}
-                  InputElement={<TextInput label='Preço de venda:' />} 
-                />
-              } */}
               <Textarea
                 mt={8}
                 label='Meus comentários pessoais'
                 value={productDetail.ownerComments}
                 onChange={(event) => setProductDetail({...productDetail, ownerComments: event.currentTarget.value})}
               />
+              <Divider mt="xs" label="Sub itens relacionados" labelPosition="left" />
+              <Flex gap={8}>
+                <Avatar
+                  size={50}
+                  mt={6}
+                  color='violet' radius='md'
+                  className='point'
+                  // onClick={() => navigate('/new/')}
+                  >
+                  <IconPlus size="1.5rem" />
+                </Avatar>
+                {subGear.filter((p) => { return p.parent_product_id === item.id }).map(s =>
+                  <Flex gap={4} mt={6} align='center' direction='column' key={s.id}>
+                    <Image
+                      src={s.picture ? s.picture : undefined}
+                      h={50}
+                      mah={50}
+                      w='auto'
+                      fit='contain'
+                      radius='md'
+                    />
+                    <Text size='10px'>
+                      {truncateString(s.productName, 9)}
+                    </Text>
+                    <Text size='9px' c='red' className='point'>Remover</Text>
+                  </Flex>
+                )}
+              </Flex>
               <Group justify='flex-end' gap={7} mt={20}>
                 <Button variant='outline' color='violet' size='sm' onClick={() => setModalEditItemOpen(false)}>
                   Cancelar
