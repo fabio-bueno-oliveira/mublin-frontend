@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { gearInfos } from '../../store/actions/gear';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton } from '@mantine/core';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+import { gearInfos } from '../../store/actions/gear'
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton } from '@mantine/core'
 import { IconZoom, IconArrowRight } from '@tabler/icons-react'
-import { useMediaQuery } from '@mantine/hooks';
-import Header from '../../components/header';
-import FooterMenuMobile from '../../components/footerMenuMobile';
+import { useMediaQuery } from '@mantine/hooks'
+import Header from '../../components/header'
+import FooterMenuMobile from '../../components/footerMenuMobile'
 
 function GearProductPage () {
 
-  const params = useParams();
-  const productId = params?.productId;
-  const product = useSelector(state => state.gear);
-  const largeScreen = useMediaQuery('(min-width: 60em)');
+  const params = useParams()
+  const productId = params?.productId
+  const product = useSelector(state => state.gear)
+  const largeScreen = useMediaQuery('(min-width: 60em)')
 
-  let dispatch = useDispatch();
+  let dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(gearInfos.getProductInfo(productId));
-    dispatch(gearInfos.getProductOwners(productId));
-  }, []);
+    dispatch(gearInfos.getProductInfo(productId))
+    dispatch(gearInfos.getProductOwners(productId))
+  }, [])
 
-  const [modalZoomOpen, setModalZoomOpen] = useState(false);
-  const [extraColors, setExtraColors] = useState([{}]);
+  const [modalZoomOpen, setModalZoomOpen] = useState(false)
+  const [extraColors, setExtraColors] = useState([{}])
   
-  const [modalZoomExtraOpen, setModalZoomExtraOpen] = useState(false);
-  const [extra, setExtra] = useState(null);
+  const [modalZoomExtraOpen, setModalZoomExtraOpen] = useState(false)
+  const [extra, setExtra] = useState(null)
   const openExtraModal = (data) => {
-    setExtra(data);
-    setModalZoomExtraOpen(true);
+    setExtra(data)
+    setModalZoomExtraOpen(true)
   }
 
   const baseUrlExtraThumb = 'https://ik.imagekit.io/mublin/products/tr:h-160,w-160,cm-pad_resize,bg-FFFFFF/'
@@ -61,7 +61,7 @@ function GearProductPage () {
       <Container size='lg' mt={largeScreen ? 20 : 0}>
         <Flex gap={12}>
           {product.requesting ? (
-            <Skeleton height={75} width={75} radius="lg" />
+            <Skeleton height={75} width={75} radius='lg' />
           ) : (
             <Anchor
               href={`/gear/brand/${product.brandSlug}`}
@@ -104,7 +104,7 @@ function GearProductPage () {
                 </Center>
               ) : (
                 <>
-                  <Center className="gearProductImage">
+                  <Center className='gearProductImage'>
                     <Image 
                       src={product.picture ? product.picture : undefined}
                       radius='md'
@@ -216,16 +216,12 @@ function GearProductPage () {
         // title={product.name}
         onClose={() => setModalZoomOpen(false)} 
         scrollAreaComponent={ScrollArea.Autosize}
-        size='md'
-        withCloseButton={false}
+        size='lg'
+        withCloseButton
       >
-        <Box w='400px' h='300px'>
-          <ScrollArea h='100%'>
-            <Center>
-              <Image w='auto' fit='cover' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
-            </Center>
-          </ScrollArea>
-        </Box>
+        <Center>
+          <Image w='auto' fit='cover' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
+        </Center>
       </Modal>
       <Modal 
         centered
@@ -243,7 +239,7 @@ function GearProductPage () {
         <FooterMenuMobile />
       }
     </>
-  );
-};
+  )
+}
 
-export default GearProductPage;
+export default GearProductPage
