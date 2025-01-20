@@ -15,7 +15,7 @@ function CarouselProjects (props) {
 
   // const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
-  const projects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
+  const projects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
 
   const goToProject = (username) => {
     navigate('/project/'+username)

@@ -60,28 +60,32 @@ const initialState = {
       }
     ]
   },
-  projects: [
-    {
-      confirmed: '',
-      joined_in: '',
-      left_in: '',
-      show_on_profile: '',
-      portfolio: '',
-      created: '',
-      id: '',
-      name: '',
-      username: '',
-      picture: '',
-      endYear: '',
-      featured: '',
-      type: '',
-      workTitle: '',
-      workIcon: '',
-      role1: '',
-      role2: '',
-      role3: ''
-    }
-  ],
+  projects: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        confirmed: '',
+        joined_in: '',
+        left_in: '',
+        show_on_profile: '',
+        portfolio: '',
+        created: '',
+        name: '',
+        username: '',
+        picture: '',
+        endYear: '',
+        featured: '',
+        type: '',
+        workTitle: '',
+        workIcon: '',
+        role1: '',
+        role2: '',
+        role3: '',
+      },
+    ],
+  },
   followers: {
     total: 0,
     success: false,

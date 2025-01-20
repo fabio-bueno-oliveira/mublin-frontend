@@ -93,12 +93,12 @@ function AppRoutes () {
           <Route path="/new/project" element={<NewProject />} />
           <Route path="/new" element={<New />} />
           <Route path="/admin" element={<AdminPage />} />
-          <Route exact path="/:username" element={<ProfilePage />} />
+          {/* <Route exact path="/:username" element={<ProfilePage />} /> */}
           <Route exact path="/:username/gear" element={<ProfileGear />} />
           <Route exact path="/menu" element={<MenuMobilePage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
-        {/* <Route path="/:username" element={loggedIn ? <ProfilePage /> : <PublicProfilePage />} /> */}
+        <Route path="/:username" element={loggedIn ? <ProfilePage /> : <PublicProfilePage />} />
       </Routes>
     </BrowserRouter>
   )

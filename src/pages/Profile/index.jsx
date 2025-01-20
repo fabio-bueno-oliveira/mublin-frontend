@@ -7,7 +7,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconX, IconPlus, IconMapPin, IconEye } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconStar, IconStarFilled, IconBrandInstagram, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconPlus, IconMapPin, IconEye } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -91,9 +91,9 @@ function ProfilePage () {
   const [loadingFollow, setLoadingFollow] = useState(false);
 
   // Projects
-  const allProjects = profile.projects.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
-  // const mainProjects = profile.projects.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
-  // const portfolioProjects = profile.projects.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
+  const allProjects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
+  // const mainProjects = profile.projects.result.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
+  // const portfolioProjects = profile.projects.result.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
 
   // Modal Badges
   const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false)

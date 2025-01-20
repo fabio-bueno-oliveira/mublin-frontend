@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { profileInfos } from '../../../store/actions/profile';
 import Header from '../../../components/header/public';
 import Footer from '../../../components/footer/public';
-import { 
+import {
   Container, Box, Button, Center, 
   Flex, Group, Image, 
   Title, Text, Badge, 
-  Skeleton, Space, 
-  Pill, Indicator 
+  Skeleton, Indicator 
 } from '@mantine/core';
+import { IconMapPin } from '@tabler/icons-react'
 
 function PublicProfilePage () {
 
@@ -38,7 +38,7 @@ function PublicProfilePage () {
     return (
       <>
         <Header />
-        <Container size={'lg'}>
+        <Container size='lg' mb='lg'>
           {profile.requesting &&
             <>
               <Skeleton height={100} circle mb="xl" />
@@ -47,14 +47,13 @@ function PublicProfilePage () {
               <Skeleton height={24} mt={6} width="70%" radius="xl" />
             </>
           }
-
           {(!profile.requesting && profile.id) && 
             <>
               <Flex
                 mih={50}
                 gap="md"
                 justify="flex-start"
-                align="flex-start"
+                align="center"
                 direction="row"
                 pt="md"
                 pb="sm"
@@ -69,66 +68,80 @@ function PublicProfilePage () {
                   />
                 ) : (
                   <Image
-                    h={140}
-                    w="auto"
-                    fit="contain"
-                    radius="lg"
-                    src={profile.pictureLarge}
+                    h={100}
+                    w='auto'
+                    fit='contain'
+                    radius='lg'
+                    src={profile.picture}
                     alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
-                    fallbackSrc="https://placehold.co/140x140?text=Placeholder"
+                    fallbackSrc='https://placehold.co/100x100?text=Placeholder'
                   />
                 )}
-                <div>
-                  <Text size="xl">{username}</Text>
+                <Box>
+                  <Text size='md' fw={500} className='lhNormal'>
+                    {username}
+                  </Text>
+                  <Group gap='xs'>
+                    {profile.roles.map(role =>
+                      <Box key={role.id}>
+                        <Badge size='xs' color='#d0d4d7' autoContrast>
+                          <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
+                          {/* <nobr >{role.name}</nobr> */}
+                        </Badge>
+                      </Box>
+                    )}
+                  </Group>
                   <Group gap="xs">
-                    <Text size="sm">{`${profile?.followers?.length} seguidores`}</Text>
-                    <Text size="sm">{`${profile?.following?.length} seguindo`}</Text>
+                    <Text size="xs">{`${profile?.followers?.total} seguidores`}</Text>
+                    <Text size="xs">{`${profile?.following?.total} seguindo`}</Text>
+                    <Text size="xs">{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
                   </Group>
                   {profile.city && 
-                    <Group gap="xs" mb="xs">
-                      <Text c="dimmed" size="sm">
+                    <Flex gap={2} align='center'>
+                      <IconMapPin size={13} style={{color:'#8d8d8d'}} />
+                      <Text c='dimmed' size='10px'>
                         {profile.city}, {profile.region}, {profile.country}
                       </Text>
-                    </Group>
+                    </Flex>
                   }
-                  <Title order={3}>
-                    {`${profile.name} ${profile.lastname}`}
-                  </Title>
-                  <Indicator 
-                    inline 
-                    color={profile.availabilityColor} 
-                    size={8} 
-                    processing 
-                    style={{position: 'absolute'}}
-                    position='left'
+                  <Flex
+                    align='center'
+                    justify='flex-start'
+                    gap={3}
+                    mt={4}
                   >
-                    <Pill>
-                        {profile.availabilityTitle}
-                    </Pill>
-                  </Indicator>
-                </div>
+                    <Indicator
+                      inline
+                      processing={profile.availabilityId === 1}
+                      color={profile.availabilityColor}
+                      size={8}
+                      ml={4}
+                      mr={7}
+                    />
+                    <Text
+                      fz='xs'
+                      fw='490'
+                      className='lhNormal'
+                      pt='1px'
+                    >
+                      {profile.availabilityTitle}
+                    </Text>
+                  </Flex>
+                </Box>
               </Flex>
               {(profile.bio && profile.bio !== "null") && 
-                <>
-                  <Space h="sm" />
-                  <Text mb='sm'>{profile.bio}</Text>
-                </>
+                <Text size='sm' style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}>
+                  {profile.bio}
+                </Text>
               }
-              <Text size="sm" c="dimmed">Instrumentos e habilidades:</Text>
-              <Group gap="xs" mb='xl' mt='xs'>
-                {profile.roles.map((role, key) =>
-                  <>
-                    <Badge color="#d0d4d7" autoContrast key={key}>
-                      <span key={key}>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
-                      {/* <nobr key={key}>{role.name}</nobr> */}
-                    </Badge>
-                  </>
-                )}
-              </Group>
               <Center h={100}>
                 <Box>
-                  <Text align="center" fw={500} size="xl">{profile.name+' está no Mublin!'}</Text>
-                  <Text align="center">Faça login para visualizar o perfil completo ou entrar em contato</Text>
+                  <Text align="center" fw={500} size="xl">
+                    {`${profile.name} ${profile.lastname} está no Mublin!`}
+                  </Text>
+                  <Text align="center">
+                    Faça login para visualizar o perfil completo ou entrar em contato
+                  </Text>
                 </Box>
               </Center>
               <Group justify="center">
@@ -145,7 +158,6 @@ function PublicProfilePage () {
               </Group>
             </>
           }
-
           {(!profile.requesting && !profile.id && profile.requested) && 
             <Center h={100} mt='xl'>
               <Box>
@@ -154,7 +166,6 @@ function PublicProfilePage () {
               </Box>
             </Center>
           }
-
         </Container>
         <Footer />
       </>
