@@ -1,175 +1,241 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { profileInfos } from '../../../store/actions/profile';
-import Header from '../../../components/header/public';
-import Footer from '../../../components/footer/public';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router'
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { profileInfos } from '../../../store/actions/profile'
+import Header from '../../../components/header/public'
+import Footer from '../../../components/footer/public'
 import {
   Container, Box, Button, Center, 
-  Flex, Group, Image, 
-  Title, Text, Badge, 
-  Skeleton, Indicator 
-} from '@mantine/core';
+  Flex, Group, Avatar, Image, 
+  Title, Text, Badge,
+  Skeleton, Indicator, Modal 
+} from '@mantine/core'
 import { IconMapPin } from '@tabler/icons-react'
+import { Helmet } from 'react-helmet'
 
 function PublicProfilePage () {
 
-    const params = useParams();
-    const username = params.username;
-    // const loggedIn = useSelector(state => state.authentication.loggedIn);
-    const cdnBaseURL = 'https://ik.imagekit.io/mublin';
+  const params = useParams()
+  const username = params.username
+  const cdnBaseURL = 'https://ik.imagekit.io/mublin'
 
-    let dispatch = useDispatch();
+  const profile = useSelector(state => state.profile)
+  const gearTotal = useSelector(state => state.profile.gear.total)
+  const gear = useSelector(state => state.profile.gear.list).filter((product) => { return product.is_subproduct === 0 });
 
-    useEffect(() => {
-      dispatch(profileInfos.getProfileInfo(username));
-      dispatch(profileInfos.getProfileProjects(username));
-      dispatch(profileInfos.getProfileRoles(username));
-      dispatch(profileInfos.getProfileFollowers(username));
-      dispatch(profileInfos.getProfileFollowing(username));
-      dispatch(profileInfos.getProfileAvailabilityItems(username));
-    }, [dispatch, username]);
+  let dispatch = useDispatch()
 
-    const profile = useSelector(state => state.profile);
+  useEffect(() => {
+    dispatch(profileInfos.getProfileInfo(username))
+    dispatch(profileInfos.getProfileProjects(username))
+    dispatch(profileInfos.getProfileRoles(username))
+    dispatch(profileInfos.getProfileFollowers(username))
+    dispatch(profileInfos.getProfileFollowing(username))
+    dispatch(profileInfos.getProfileAvailabilityItems(username))
+    dispatch(profileInfos.getProfileGear(username))
+  }, [dispatch, username])
 
-    document.title = profile.id ? `${profile.name} ${profile.lastname} - Mublin` : 'Mublin';
+  const [showModalProfileInfo, setShowModalProfileInfo] = useState(false)
 
-    return (
-      <>
-        <Header />
-        <Container size='lg' mb='lg'>
-          {profile.requesting &&
-            <>
-              <Skeleton height={100} circle mb="xl" />
-              <Skeleton height={24} radius="xl" />
-              <Skeleton height={24} mt={6} radius="xl" />
-              <Skeleton height={24} mt={6} width="70%" radius="xl" />
-            </>
-          }
-          {(!profile.requesting && profile.id) && 
-            <>
-              <Flex
-                mih={50}
-                gap="md"
-                justify="flex-start"
-                align="center"
-                direction="row"
-                pt="md"
-                pb="sm"
-              >
-                {!profile.pictureLarge ? (
-                  <Image
-                    h={140}
-                    w={140}
-                    fit="contain"
-                    radius="lg"
-                    src={`https://placehold.co/140x140?text=${username}`}
-                  />
-                ) : (
-                  <Image
-                    h={100}
-                    w='auto'
-                    fit='contain'
-                    radius='lg'
-                    src={profile.picture}
-                    alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
-                    fallbackSrc='https://placehold.co/100x100?text=Placeholder'
-                  />
-                )}
-                <Box>
-                  <Text size='md' fw={500} className='lhNormal'>
-                    {username}
-                  </Text>
-                  <Group gap='xs'>
-                    {profile.roles.map(role =>
-                      <Box key={role.id}>
-                        <Badge size='xs' color='#d0d4d7' autoContrast>
-                          <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
-                          {/* <nobr >{role.name}</nobr> */}
-                        </Badge>
-                      </Box>
-                    )}
-                  </Group>
-                  <Group gap="xs">
-                    <Text size="xs">{`${profile?.followers?.total} seguidores`}</Text>
-                    <Text size="xs">{`${profile?.following?.total} seguindo`}</Text>
-                    <Text size="xs">{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
-                  </Group>
-                  {profile.city && 
-                    <Flex gap={2} align='center'>
-                      <IconMapPin size={13} style={{color:'#8d8d8d'}} />
-                      <Text c='dimmed' size='10px'>
-                        {profile.city}, {profile.region}, {profile.country}
-                      </Text>
-                    </Flex>
-                  }
-                  <Flex
-                    align='center'
-                    justify='flex-start'
-                    gap={3}
-                    mt={4}
-                  >
-                    <Indicator
-                      inline
-                      processing={profile.availabilityId === 1}
-                      color={profile.availabilityColor}
-                      size={8}
-                      ml={4}
-                      mr={7}
-                    />
-                    <Text
-                      fz='xs'
-                      fw='490'
-                      className='lhNormal'
-                      pt='1px'
-                    >
-                      {profile.availabilityTitle}
+  useEffect(() => {
+    if (profile.success) {
+      setShowModalProfileInfo(true)
+    }
+  }, [profile.success])
+
+  return (
+    <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>{username} | Mublin</title>
+        <link rel='canonical' href={`https://mublin.com/${username}`} />
+        <meta name='description' content={`${username} está no Mublin! A rede para músicos`} />
+      </Helmet>
+      <Header />
+      <Container size='lg' mb={70}>
+        {profile.requesting &&
+          <Flex
+            gap='md'
+            justify='flex-start'
+            align='center'
+          >
+            <Skeleton height={100} width={100} radius='xl' />
+            <Box>
+              <Skeleton height={18} width={260} radius='xl' />
+              <Skeleton height={18} width={270} mt={6} radius='xl' />
+              <Skeleton height={18} width={280} mt={6} radius='xl' />
+            </Box>
+          </Flex>
+        }
+        {(!profile.requesting && profile.id) && 
+          <>
+            <Flex
+              mih={50}
+              gap='md'
+              justify='flex-start'
+              align='center'
+              direction='row'
+              pt='md'
+              pb='sm'
+            >
+              <Avatar
+                h={100}
+                w={100}
+                fit='contain'
+                radius='lg'
+                src={profile.picture ? profile.picture : undefined}
+                alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
+              />
+              <Box>
+                <Text size='md' fw={500} className='lhNormal'>
+                  {profile.name} {profile.lastname}
+                </Text>
+                <Group gap='xs'>
+                  {profile.roles.map(role =>
+                    <Box key={role.id}>
+                      <Badge size='xs' color='#d0d4d7' autoContrast>
+                        <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
+                        {/* <nobr >{role.name}</nobr> */}
+                      </Badge>
+                    </Box>
+                  )}
+                </Group>
+                <Group gap='xs'>
+                  <Text size='sm' fw='480'>{`${profile?.followers?.total} seguidores`}</Text>
+                  <Text size='sm' fw='480'>{`${profile?.following?.total} seguindo`}</Text>
+                  <Text size='sm' fw='480'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
+                </Group>
+                {profile.city && 
+                  <Flex gap={2} align='center'>
+                    <IconMapPin size={13} style={{color:'#8d8d8d'}} />
+                    <Text c='dimmed' size='10px'>
+                      {profile.city}, {profile.region}, {profile.country}
                     </Text>
                   </Flex>
+                }
+                <Flex
+                  align='center'
+                  justify='flex-start'
+                  gap={3}
+                  mt={4}
+                >
+                  <Indicator
+                    inline
+                    processing={profile.availabilityId === 1}
+                    color={profile.availabilityColor}
+                    size={8}
+                    ml={4}
+                    mr={7}
+                  />
+                  <Text
+                    fz='xs'
+                    fw='490'
+                    className='lhNormal'
+                    pt='1px'
+                  >
+                    {profile.availabilityTitle}
+                  </Text>
+                </Flex>
+              </Box>
+            </Flex>
+            {(profile.bio && profile.bio !== 'null') && 
+              <Text size='sm' style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}>
+                {profile.bio}
+              </Text>
+            }
+            {gearTotal > 3 &&
+              <Flex gap={8} justify='flex-start' align='center' mt={14}>
+                {gear.slice(0, 2).map(item =>
+                  <Image
+                    key={item.productId}
+                    src={`https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/${item.pictureFilename}`}
+                    h={60}
+                    mah={60}
+                    w='auto'
+                    fit='contain'
+                    mb={10}
+                    radius='md'
+                    title={`${item.brandName} ${item.productName}`}
+                  />
+                )}
+                <Box color='gray' fz={12}>
+                  e + {gearTotal - 3} itens
                 </Box>
               </Flex>
-              {(profile.bio && profile.bio !== "null") && 
-                <Text size='sm' style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}>
-                  {profile.bio}
-                </Text>
-              }
-              <Center h={100}>
-                <Box>
-                  <Text align="center" fw={500} size="xl">
-                    {`${profile.name} ${profile.lastname} está no Mublin!`}
-                  </Text>
-                  <Text align="center">
-                    Faça login para visualizar o perfil completo ou entrar em contato
-                  </Text>
-                </Box>
-              </Center>
-              <Group justify="center">
-                <Link to={{ pathname: '/login' }}>
-                  <Button color="violet">Fazer login</Button>
-                </Link>
-                ou
-                <Link to={{ pathname: '/signup' }}>
-                <Button 
-                  color="violet" 
-                  variant="outline"
-                >Cadastrar</Button>
-                </Link>
-              </Group>
-            </>
-          }
-          {(!profile.requesting && !profile.id && profile.requested) && 
-            <Center h={100} mt='xl'>
+            }
+            <Center mt={30}>
               <Box>
-                <Title mt='xl'>Ops!</Title>
-                <Text mt='xs'>A página ou o perfil não foram encontrados!</Text>
+                <Text align='center'>
+                  Faça login para visualizar o perfil completo de {profile.name} {profile.lastname}
+                </Text>
               </Box>
             </Center>
-          }
-        </Container>
-        <Footer />
-      </>
-    );
-};
+            <Group justify='center'>
+              <Link to={{ pathname: '/login' }}>
+                <Button color='violet'>Fazer login</Button>
+              </Link>
+              ou
+              <Link to={{ pathname: '/signup' }}>
+              <Button 
+                color='violet' 
+                variant='outline'
+              >Cadastrar</Button>
+              </Link>
+            </Group>
+          </>
+        }
+        {(!profile.requesting && !profile.id && profile.requested) && 
+          <Center h={100} mt='xl'>
+            <Box>
+              <Title mt='xl'>Ops!</Title>
+              <Text mt='xs'>A página ou o perfil não foram encontrados!</Text>
+            </Box>
+          </Center>
+        }
+      </Container>
+      <Footer />
+      <Modal
+        opened={showModalProfileInfo}
+        onClose={() => setShowModalProfileInfo(false)}
+        centered
+        size='sm'
+      >
+        <Center>
+          <Avatar
+            h={100}
+            w={100}
+            fit='contain'
+            radius='xl'
+            src={profile.picture ? profile.picture : undefined}
+            alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
+          />
+        </Center>
+        <Center my={20}>
+          <Box>
+            <Text align='center' fw={600} size='lg'>
+              {`${username} está no Mublin!`}
+            </Text>
+            <Text align='center' size='sm'>
+              Faça login para visualizar o perfil completo
+            </Text>
+          </Box>
+        </Center>
+        <Group justify='center' gap={8}>
+          <Link to={{ pathname: '/login' }}>
+            <Button color='violet'>Fazer login</Button>
+          </Link>
+          ou
+          <Link to={{ pathname: '/signup' }}>
+          <Button 
+            color='violet' 
+            variant='outline'
+          >Cadastre-se</Button>
+          </Link>
+        </Group>
+      </Modal>
+    </>
+  )
+}
 
-export default PublicProfilePage;
+export default PublicProfilePage

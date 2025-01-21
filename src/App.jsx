@@ -13,17 +13,17 @@ const theme = createTheme({
   luminanceThreshold: 0.3,
   colorScheme: 'light',
   colors: {
-    deepBlue: [
-      '#eef3ff',
-      '#dce4f5',
-      '#b9c7e2',
-      '#94a8d0',
-      '#748dc1',
-      '#5f7cb8',
-      '#5474b4',
-      '#44639f',
-      '#39588f',
-      '#2d4b81',
+    violet: [
+      "#f4ecfd",
+      "#e4d5f6",
+      "#c7a6f0",
+      "#aa75ea",
+      "#904ce5",
+      "#8132e2",
+      "#7926e2",
+      "#671bc9",
+      "#5c16b3",
+      "#4f109e"
     ],
   },
   breakpoints: {
