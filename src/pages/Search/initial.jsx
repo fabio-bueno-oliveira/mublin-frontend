@@ -188,11 +188,11 @@ function Search () {
                       <Text size='xs' fw={400} c='dimmed'>
                         {user.city && user.city+' - '+user.region}
                       </Text>
-                      {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
+                      {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
                         <Text size='10px' mt='3px' c='dimmed'>
-                          Projeto relacionado: {user.projectRelated} ({user.projectType})
+                          Relacionado: {user.projectRelated} ({user.projectType})
                         </Text>
-                      } */}
+                      }
                     </Flex>
                   </Flex>
                 ) : (<Text size='sm' c='dimmed'>Nenhum resultado encontrado</Text>)
