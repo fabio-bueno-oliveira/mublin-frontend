@@ -300,14 +300,25 @@ function SettingsMyGearPage () {
                       Adicionar novo item
                     </Button>
                   ) : (
-                    <>
+                    <Flex gap={14} direction='column' align='flex-start'>
                       <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
                         Adicionar novo item
                       </Button>
-                      <Alert variant="light" color="yellow" title="Funcionalidade exclusiva">
-                        Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento
+                      <Alert variant="light" color="gray" title="Funcionalidade exclusiva">
+                        Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento. 
+                        <Anchor
+                          variant='gradient'
+                          gradient={{ from: 'violet', to: 'blue' }}
+                          fw='420'
+                          fz='sm'
+                          href='/pro'
+                          underline='hover'
+                          ml={4}
+                        >
+                          Assine o Mublin PRO!
+                        </Anchor>
                       </Alert>
-                    </>
+                    </Flex>
                   )}
                 </Group>
                 <Grid mt='lg'>

@@ -227,6 +227,14 @@ function SettingsPage () {
                 <TextInput
                   size={isLargeScreen ? "sm" : "md"}
                   mt="xs"
+                  type="url"
+                  label="Website"
+                  key={form.key('website')}
+                  {...form.getInputProps('website')}
+                />
+                <TextInput
+                  size={isLargeScreen ? "sm" : "md"}
+                  mt="xs"
                   type="email"
                   label="Email"
                   key={form.key('email')}
@@ -248,14 +256,6 @@ function SettingsPage () {
                   key={form.key('phoneIsPublic')}
                   {...form.getInputProps('phoneIsPublic', { type: 'checkbox' })}
                 /> */}
-                <TextInput
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  type="url"
-                  label="Website"
-                  key={form.key('website')}
-                  {...form.getInputProps('website')}
-                />
                 <TextInput
                   size={isLargeScreen ? "sm" : "md"}
                   mt="xs"

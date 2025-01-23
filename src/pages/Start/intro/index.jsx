@@ -44,7 +44,7 @@ function StartFirstStep () {
         </Center>
       </Container>
       <Modal opened={showPreviouslyRegisteredAlert} onClose={() => setShowPreviouslyRegisteredAlert(false)} title="Oba!" centered>
-        <Text>Alguns dos seus dados já foram previamente cadastrados por você ou outro usuário para facilitar sua jornada :)</Text>
+        <Text>Alguns dos seus dados já foram previamente cadastrados por você ou pela nossa equipe para facilitar sua jornada :)</Text>
         <Group justify='flex-end' mt='14'>
           <Button color='violet' onClick={() => setShowPreviouslyRegisteredAlert(false)}>
             Entendi!

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Container, Stepper, Grid, Modal, Box, Center, ScrollArea, Group, Text, Title, Textarea, Input, TextInput, Button, Anchor, Loader, Divider } from '@mantine/core';
 import { NativeSelect } from '@mantine/core';
-import { IconArrowLeft, IconArrowRight, IconCheck, IconSearch } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconCheck, IconSearch, IconAt } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import HeaderWelcome from '../../../components/header/welcome';
 
@@ -24,30 +24,36 @@ function StartSecondStep () {
   const [error, setError] = useState('');
 
   const [initialValues, setInitialValues] = useState({
-    gender: user.gender, bio: user.bio, region: user.region, city: user.city, cityName: user.cityName
+    gender: user.gender, bio: user.bio, website: user.website, instagram: user.instagram, region: user.region, city: user.city, cityName: user.cityName
   })
 
   const [formValues, setFormValues] = useState({
-    gender: user.gender, 
-    bio: user.bio, 
-    region: user.region, 
-    city: user.city, 
+    gender: user.gender,
+    bio: user.bio,
+    website: user.website,
+    instagram: user.instagram,
+    region: user.region,
+    city: user.city,
     cityName: user.cityName
   })
 
   useEffect(() => { 
     setInitialValues({
-      gender: user.gender, 
-      bio: user.bio, 
-      region: user.region, 
-      city: user.city, 
+      gender: user.gender,
+      bio: user.bio,
+      website: user.website,
+      instagram: user.instagram,
+      region: user.region,
+      city: user.city,
       cityName: user.cityName
     })
     setFormValues({
-      gender: user.gender, 
-      bio: user.bio, 
-      region: user.region, 
-      city: user.city, 
+      gender: user.gender,
+      bio: user.bio,
+      website: user.website,
+      instagram: user.instagram,
+      region: user.region,
+      city: user.city,
       cityName: user.cityName
     })
     if (!user.region) {
@@ -102,6 +108,8 @@ function StartSecondStep () {
           userId: user.id, 
           gender: formValues.gender, 
           bio: formValues.bio, 
+          website: formValues.website, 
+          instagram: formValues.instagram, 
           id_country_fk: 27, 
           id_region_fk: formValues.region, 
           id_city_fk: formValues.city
@@ -186,10 +194,10 @@ function StartSecondStep () {
         <Container px={largeScreen ? undefined : 0} size={largeScreen ? 'xs' : 'lg'} mt={10} mb={130}>
           <Textarea
             mt={18}
-            size='md'
+            size='sm'
             label={<Group gap={2}>Bio (opcional): {formValues.bio && <IconCheck size={16} color='green' />}</Group>}
             description={formValues.bio?.length ? "("+formValues.bio?.length+"/220)" : undefined}
-            placeholder="Escreva pouco sobre você..."
+            placeholder="Escreva sua bio"
             value={formValues.bio ? formValues.bio : undefined}
             onChange={(e) => setFormValues({...formValues, bio: e.target.value})}
             disabled={user.requesting}
@@ -198,10 +206,33 @@ function StartSecondStep () {
             minRows={2}
             maxRows={4}
           />
-          <Grid mt={18}>
+          <Grid mt={12}>
+            <Grid.Col span={6}>
+              <TextInput
+                size='sm'
+                label={<Group gap={2}>Website (opcional): {formValues.website && <IconCheck size={16} color='green' />}</Group>}
+                placeholder="Seu website pessoal"
+                value={formValues.website ? formValues.website : undefined}
+                onChange={(e) => setFormValues({...formValues, website: e.target.value})}
+                disabled={user.requesting}
+              />
+            </Grid.Col>
+            <Grid.Col span={6}>
+              <TextInput
+                size='sm'
+                label={<Group gap={2}>Usuário no Instagram (opcional): {formValues.instagram && <IconCheck size={16} color='green' />}</Group>}
+                leftSection={<IconAt size={16} />}
+                placeholder="john"
+                value={formValues.instagram ? formValues.instagram : undefined}
+                onChange={(e) => setFormValues({...formValues, instagram: e.target.value})}
+                disabled={user.requesting}
+              />
+            </Grid.Col>
+          </Grid>
+          <Grid mt={4}>
             <Grid.Col span={6}>
               <NativeSelect
-                size='md'
+                size='sm'
                 label={<Group gap={2}>Gênero: {formValues.gender && <IconCheck size={16} color='green' />}</Group>}
                 placeholder="Gênero"
                 value={formValues.gender ? formValues.gender : ""}
@@ -217,17 +248,18 @@ function StartSecondStep () {
             </Grid.Col>
             <Grid.Col span={6}>
               <NativeSelect 
-                size='md'
+                size='sm'
                 label={<Group gap={2}>País: <IconCheck size={16} color='green' /></Group>} 
                 data={['Brasil']} 
               />
             </Grid.Col>
           </Grid>
-          <Text c='dimmed' size='xs' mt={12}>Por enquanto aceitamos apenas cadastros no Brasil. Iremos expandir para outros países em breve!</Text>
-          <Grid mt={18}>
+          <Text c='dimmed' size='xs' mt={12}>Por enquanto aceitamos apenas cadastros no Brasil.</Text>
+          <Text c='dimmed' size='xs'>Iremos expandir para outros países em breve!</Text>
+          <Grid mt={12}>
             <Grid.Col span={6}>
               <NativeSelect
-                size='md'
+                size='sm'
                 label={<Group gap={2}>Estado: {formValues.region && <IconCheck size={16} color='green' />}</Group>}
                 value={formValues.region ? formValues.region : ""}
                 disabled={user.requesting}
@@ -276,7 +308,7 @@ function StartSecondStep () {
                 >
                   <Input 
                     component="button" 
-                    size="md" 
+                    size="sm" 
                     pointer
                     onClick={() => setModalCityOpen(true)}
                   >
@@ -293,7 +325,7 @@ function StartSecondStep () {
                 >
                   <Input 
                     component="button" 
-                    size="md" 
+                    size="sm" 
                     pointer
                     rightSection={formValues.region ? <IconSearch size={16} /> : undefined}
                     onClick={() => setModalCityOpen(true)}

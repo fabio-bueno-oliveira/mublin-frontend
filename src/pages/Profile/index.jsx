@@ -20,6 +20,7 @@ import '@splidejs/react-splide/css/skyblue'
 import AvailabilityInfo from './availabilityInfo'
 import FeedCard from '../Home/feedCard'
 import RelatedProfiles from './relatedProfiles'
+import NewPost from '../../pages/New/postStandalone'
 import { truncateString } from '../../utils/formatter'
 import './styles.scss'
 
@@ -245,6 +246,9 @@ function ProfilePage () {
         alert("Ocorreu um erro ao remover o voto. Tente novamente em instantes")
     })
   }
+
+  // Modal New Post
+  const [showModalNewPost, setShowModalNewPost] = useState(false)
 
   const [scroll] = useWindowScroll();
 
@@ -680,15 +684,27 @@ function ProfilePage () {
                 <Group justify='space-between' align='center' gap={8} mb={13}>
                   <Title fz='1.03rem' fw='640'>Postagens</Title>
                   {(profile.id === loggedUserId && !profile.requesting) && 
-                    <Button 
-                      size='xs'
-                      variant='light'
-                      color={colorScheme === 'light' ? 'dark' : 'gray'}
-                      leftSection={<IconPlus size={14} />}
-                      onClick={() => setModalStrengthsOpen(true)}
+                    // <Button 
+                    //   size='xs'
+                    //   variant='light'
+                    //   color={colorScheme === 'light' ? 'dark' : 'gray'}
+                    //   leftSection={<IconPlus size={14} />}
+                    //   onClick={() => setModalStrengthsOpen(true)}
+                    // >
+                    //   Nova postagem
+                    // </Button>
+                    <ActionIcon
+                      variant='transparent'
+                      size='md'
+                      aria-label='Escrever uma publicação'
+                      onClick={() => setShowModalNewPost(true)}
+                      title='Escrever uma publicação'
                     >
-                      Nova postagem
-                    </Button>
+                      <IconPlus 
+                        color={colorScheme === 'light' ? 'black' : 'white'}
+                        style={{ width: '91%', height: '91%' }} stroke={1.5}
+                      />
+                    </ActionIcon>
                   }
                 </Group>
                 {profile.requesting ? ( 
@@ -1061,6 +1077,14 @@ function ProfilePage () {
         <Center onClick={() => setModalAvatarOpen(false)}>
           <Avatar w={200} h={200} src={profile.picture ? profile.picture : undefined} />
         </Center>
+      </Modal>
+      <Modal 
+        opened={showModalNewPost} 
+        onClose={() => setShowModalNewPost(false)} 
+        title='Escrever uma publicação'
+        centered
+      >
+        <NewPost />
       </Modal>
       {(!profile.requesting && profile.requested && !profile.success && !profile.id) && 
         <>

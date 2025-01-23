@@ -145,7 +145,7 @@ function SettingsPicturePage () {
                     size='sm'
                     disabled={uploading}
                   >
-                    {uploading ? 'Enviando...' : 'Inserir imagem'}
+                    {uploading ? 'Enviando...' : 'Escolher nova foto'}
                   </Button>
                 </div>
               </Center>

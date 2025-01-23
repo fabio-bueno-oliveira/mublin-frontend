@@ -134,9 +134,9 @@ function Home () {
                         <span className='comma' key={role.id}>{role.description}</span>
                       )}
                     </Text>
-                    <Text ta="center"  size="xs" mt={9} c="dimmed">
+                    {/* <Text ta="center"  size="xs" mt={9} c="dimmed">
                       {user.bio}
-                    </Text>
+                    </Text> */}
                   </Card>
                   {/* <Text fw='400' size='lg'>Compromissos próximos:</Text> */}
                   {/* {projects.list.map(project =>

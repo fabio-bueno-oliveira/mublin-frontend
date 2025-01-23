@@ -25,7 +25,7 @@ function New () {
       )}
       <Container size={'xs'} mt={18}>
         <Flex mb={24} mt={18} direction="column" gap={18}>
-        <Box>
+          {/* <Box>
             <Button
               variant='outline'
               color={colorScheme === "light" ? 'violet' : 'violet'}
@@ -41,7 +41,7 @@ function New () {
             <Text ta="center" size="xs" c="dimmed" mt={5} px={20}>
               Crie uma postagem para o feed
             </Text>
-          </Box>
+          </Box> */}
           <Box>
             <Button
               variant='outline'

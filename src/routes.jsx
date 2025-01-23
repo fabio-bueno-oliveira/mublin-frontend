@@ -34,7 +34,7 @@ import ProfileGear from './pages/Profile/Gear/gearExpanded';
 import ProfileGearItem from './pages/Profile/Gear/item';
 import GearProductPage from './pages/Gear/product';
 import GearBrandPage from './pages/Gear/brand';
-import SettingsProfileEdit from './pages/Settings/profileEdit';
+import SettingsProfileEdit from './pages/Settings/profile';
 import SettingsMyPicture from './pages/Settings/picture';
 import SettingsMyGear from './pages/Settings/gear';
 import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
