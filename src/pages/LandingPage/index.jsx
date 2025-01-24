@@ -57,7 +57,7 @@ function LandingPage () {
         <Navigate to="/home" />
       }
       <Box bg='black' c='white' py='14'>
-        <Text ta='center' size={isMobile ? '12px' : '15px'} fw='200' c='dimmed'>
+        <Text ta='center' size={isMobile ? '12px' : '15px'} fw='300' c='dimmed'>
           🚀 40% off no lançamento: Mublin PRO por 3 meses
         </Text>
       </Box>

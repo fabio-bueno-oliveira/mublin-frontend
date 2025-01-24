@@ -92,7 +92,7 @@ function ProfileGearExpanded () {
                 }
               </Flex>
               <Text size='sm'>
-                {gear.total} itens no equipamento de {profile.name} {profile.lastname}
+                {gear.total} itens no equipamento de {username}
               </Text>
               <Anchor 
                 href={`/${username}`}
@@ -114,7 +114,7 @@ function ProfileGearExpanded () {
             <GearExpandedLoading />
           ) : (
             <ResponsiveMasonry
-              columnsCountBreakPoints={{350: 1, 750: 3, 900: 3}}
+              columnsCountBreakPoints={{350: 2, 750: 3, 900: 4}}
             >
               <Masonry gutter='8px'>
                 {gear.list.map(product =>
@@ -205,8 +205,17 @@ function ProfileGearExpanded () {
               {gearItemDetail.brandName} {gearItemDetail.productName}
             </Text>
             <Text size='xs' c='dimmed'>
-              {gearItemDetail.category} • Parte do equipamento de {profile.name}
+              {gearItemDetail.category} • Item do equipamento de {profile.name}
             </Text>
+            <Anchor
+              mt={6}
+              size='xs'
+              c='violet'
+              fw='500'
+              href={`/gear/product/${gearItemDetail.productId}`}
+            >
+              Ver detalhes deste produto
+            </Anchor>
           </Flex>
         }
         withCloseButton
@@ -237,17 +246,6 @@ function ProfileGearExpanded () {
             }
           </Flex>
         }
-        <Button
-          size='sm'
-          color='violet'
-          fullWidth
-          fw='600'
-          mt={14}
-          component='a'
-          href={`/gear/product/${gearItemDetail.productId}`}
-        >
-          Mais detalhes do item
-        </Button>
       </Modal>
       {profile.plan === 'Free' && 
         <Container size='lg' mt={80}>

@@ -207,6 +207,7 @@ export function user(state = initialState, action) {
         ...state,
         gearLoaded: false,
         gearRequesting: false,
+        gear: initialState.gear,
         error: "A solicitação da lista dos equipamentos falhou"
       };
     // get user´s availability items

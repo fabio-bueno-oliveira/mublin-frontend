@@ -153,23 +153,23 @@ function ProfilePage () {
     }
   }
 
-  const changeInspirationStatus = (id, followedId, option) => {
-    fetch('https://mublin.herokuapp.com/profile/'+profile.username+'/updateInspiration', {
-      method: 'PUT',
-      headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-      },
-      body: JSON.stringify({id: id, followedId: followedId, option: option})
-        }).then((response) => {
-          response.json().then((response) => {
-            dispatch(followInfos.checkProfileFollowing(username));
-          })
-        }).catch(err => {
-          console.error(err)
-        })
-  }
+  // const changeInspirationStatus = (id, followedId, option) => {
+  //   fetch('https://mublin.herokuapp.com/profile/'+profile.username+'/updateInspiration', {
+  //     method: 'PUT',
+  //     headers: {
+  //         'Accept': 'application/json, text/plain, */*',
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'Bearer ' + token
+  //     },
+  //     body: JSON.stringify({id: id, followedId: followedId, option: option})
+  //       }).then((response) => {
+  //         response.json().then((response) => {
+  //           dispatch(followInfos.checkProfileFollowing(username));
+  //         })
+  //       }).catch(err => {
+  //         console.error(err)
+  //       })
+  // }
 
   const goToProfile = (username) => {
     setModalFollowersOpen(false);
@@ -783,7 +783,7 @@ function ProfilePage () {
           justify="center"
           gap="xs"
         >
-          {followedByMe.inspiration ? (
+          {/* {followedByMe.inspiration ? (
             <Button
               size='sm' 
               color={colorScheme === 'light' ? 'dark' : 'gray'}
@@ -803,7 +803,7 @@ function ProfilePage () {
             >
               Adicionar como inspiração
             </Button>
-          )}
+          )} */}
           <Button 
             size="sm" 
             color={colorScheme === "light" ? "dark" : "gray"}

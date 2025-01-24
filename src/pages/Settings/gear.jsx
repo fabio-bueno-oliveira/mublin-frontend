@@ -287,7 +287,7 @@ function SettingsMyGearPage () {
             ) : (
               <>
                 <Title fz='1.03rem' fw='640'>
-                  Gerenciar meu equipamento
+                  Gerenciar itens do meu equipamento
                 </Title>
                 <Group justify='flex-start' mt={12}>
                   {user.plan === 'Pro' ? (

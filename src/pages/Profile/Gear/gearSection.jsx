@@ -104,24 +104,22 @@ function GearSection ({ loggedUserId, username }) {
           <Text size='sm'>Carregando...</Text>
         ) : (
           <>
-            {!!profile.gear.total && 
-              <Group gap={10} mb={14}>
-                <NativeSelect
-                  // description='Tipo de equipamento'
-                  size='sm'
-                  w={145}
-                  onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
-                >
-                  <option value="">
-                    Exibir tudo
+            {(profile.gear.total > 1 && profile.gearCategories.total > 1) && 
+              <NativeSelect
+                // description='Tipo de equipamento'
+                size='sm'
+                w={145}
+                onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
+              >
+                <option value="">
+                  Exibir tudo
+                </option>
+                {profile.gearCategories.list.map((gearCategory, key) =>
+                  <option key={key} value={gearCategory.category}>
+                    {truncateString(`(${gearCategory.total}) ${gearCategory.category}`,28)}
                   </option>
-                  {profile.gearCategories.list.map((gearCategory, key) =>
-                    <option key={key} value={gearCategory.category}>
-                      {truncateString(`(${gearCategory.total}) ${gearCategory.category}`,28)}
-                    </option>
-                  )}
-                </NativeSelect>
-              </Group>
+                )}
+              </NativeSelect>
             }
             {profile.gear.total ? ( 
               <>
