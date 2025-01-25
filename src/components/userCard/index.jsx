@@ -21,7 +21,7 @@ export function UserCard({
           href={`/${username}`}
         >
           <Group gap={0}>
-            <Text size='0.97rem' fw={570} className='lhNormal'>
+            <Text size='0.95rem' fw={570} className='lhNormal'>
               {name} {lastname}
             </Text>
             {verified &&

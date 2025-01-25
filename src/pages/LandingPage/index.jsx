@@ -62,36 +62,38 @@ function LandingPage () {
         </Text>
       </Box>
       <Header />
-        <Container size='sm' pt={45}>
+        <Container size='sm' my={50}>
           <Title 
             size='2rem'
-            fw='800'
+            fw='700'
             ta='center'
+            className='secondaryFont'
           >
-            Gerencie seus projetos de música 🎵
+            Gerencie seus projetos de música
           </Title>
-          <Title 
-            size='19px'
+          <Text 
+            size='md'
+            className='lhNormal'
             ta='center' 
-            fw='500'
+            fw='330'
           >
             Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.
-          </Title>
+          </Text>
           <Center>
             <Link to={{ pathname: '/signup' }}>
               <Button
-                size="md"
+                size="xl"
                 mt="lg"
                 color="violet"
+                // variant='outline'
+                variant='gradient'
+              gradient={{ from: 'violet', to: 'orange', deg: 90 }}
                 rightSection={<IconArrowRight size={14}/>}
               >
                 Comece grátis
               </Button>
             </Link>
           </Center>
-          <Text size="17px" lh="sm" ta="center" mt={47} mb={56}>
-            O Mublin é a comunidade onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
-          </Text>
         </Container>
         <Marquee>
           {featuredUsers?.map((user, key) =>
@@ -119,6 +121,9 @@ function LandingPage () {
           <Title order={2} ta='center'>
             Aumente suas chances de tocar em <nobr>gigs interessantes</nobr>
           </Title>
+          <Text size="md" lh="sm" ta="center">
+            O Mublin é a comunidade onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
+          </Text>
           <Grid mt={56}>
             <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align="center">

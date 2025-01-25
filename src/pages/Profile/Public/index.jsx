@@ -7,12 +7,13 @@ import Header from '../../../components/header/public'
 import Footer from '../../../components/footer/public'
 import {
   Container, Box, Button, Center, 
-  Flex, Group, Avatar, Image, 
+  Flex, Group, Anchor, Avatar, Image, 
   Title, Text, Badge,
   Skeleton, Indicator, Modal 
 } from '@mantine/core'
-import { IconMapPin } from '@tabler/icons-react'
+import { IconMapPin, IconLink } from '@tabler/icons-react'
 import { Helmet } from 'react-helmet'
+import { truncateString } from '../../../utils/formatter'
 
 function PublicProfilePage () {
 
@@ -48,12 +49,12 @@ function PublicProfilePage () {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>{username} | Mublin</title>
+        <title>{profile.name} {profile.lastname} ({username})  | Mublin</title>
         <link rel='canonical' href={`https://mublin.com/${username}`} />
         <meta name='description' content={`${username} está no Mublin! A rede para músicos`} />
       </Helmet>
       <Header />
-      <Container size='lg' mb={70}>
+      <Container size='lg' mb={50}>
         {profile.requesting &&
           <Flex
             gap='md'
@@ -88,23 +89,20 @@ function PublicProfilePage () {
                 alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
               />
               <Box>
-                <Text size='md' fw={500} className='lhNormal'>
+                <Text size='md' mb={3} fw={600} className='lhNormal'>
                   {profile.name} {profile.lastname}
                 </Text>
-                <Group gap='xs'>
+                <Group gap='2' mb={4}>
                   {profile.roles.map(role =>
-                    <Box key={role.id}>
-                      <Badge size='xs' color='#d0d4d7' autoContrast>
-                        <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
-                        {/* <nobr >{role.name}</nobr> */}
-                      </Badge>
-                    </Box>
+                    <Badge variant='light' py={7} color='gray' size='xs' key={role.id}>
+                      <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
+                    </Badge>
                   )}
                 </Group>
                 <Group gap='xs'>
-                  <Text size='sm' fw='480'>{`${profile?.followers?.total} seguidores`}</Text>
-                  <Text size='sm' fw='480'>{`${profile?.following?.total} seguindo`}</Text>
-                  <Text size='sm' fw='480'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
+                  <Text size='xs' fw='480'>{`${profile?.followers?.total} seguidores`}</Text>
+                  <Text size='xs' fw='480'>{`${profile?.following?.total} seguindo`}</Text>
+                  <Text size='xs' fw='480'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
                 </Group>
                 {profile.city && 
                   <Flex gap={2} align='center'>
@@ -144,6 +142,21 @@ function PublicProfilePage () {
                 {profile.bio}
               </Text>
             }
+            {profile.website && 
+              <Anchor 
+                href={profile.website} 
+                target='_blank'
+                underline='hover'
+                className='websiteLink'
+              >
+                <Flex gap={2} align='center'>
+                  <IconLink size={13} />
+                  <Text size='sm' className='lhNormal'>
+                    {truncateString(profile.website, 100)}
+                  </Text>
+                </Flex>
+              </Anchor>
+            }
             {gearTotal > 3 &&
               <Flex gap={8} justify='flex-start' align='center' mt={14}>
                 {gear.slice(0, 2).map(item =>
@@ -164,16 +177,17 @@ function PublicProfilePage () {
                 </Box>
               </Flex>
             }
-            <Center mt={30}>
+            <Center mt={60} mb={4}>
               <Box>
                 <Text align='center'>
                   Faça login para visualizar o perfil completo de {profile.name} {profile.lastname}
                 </Text>
               </Box>
             </Center>
-            <Group justify='center'>
+            <Group justify='center' gap={8}>
               <Link to={{ pathname: '/login' }}>
-                <Button color='violet'>Fazer login</Button>
+                <Button variant='gradient'
+              gradient={{ from: 'violet', to: 'indigo', deg: 90 }}>Fazer login</Button>
               </Link>
               ou
               <Link to={{ pathname: '/signup' }}>
@@ -213,7 +227,7 @@ function PublicProfilePage () {
         </Center>
         <Center my={20}>
           <Box>
-            <Text align='center' fw={600} size='lg'>
+            <Text align='center' fw={700} size='md'>
               {`${username} está no Mublin!`}
             </Text>
             <Text align='center' size='sm'>
@@ -223,7 +237,12 @@ function PublicProfilePage () {
         </Center>
         <Group justify='center' gap={8}>
           <Link to={{ pathname: '/login' }}>
-            <Button color='violet'>Fazer login</Button>
+            <Button
+              variant='gradient'
+              gradient={{ from: 'violet', to: 'indigo', deg: 90 }}
+            >
+              Fazer login
+            </Button>
           </Link>
           ou
           <Link to={{ pathname: '/signup' }}>

@@ -23,9 +23,9 @@ function Header (props) {
     >
       <Flex
         mih={50}
-        justify="space-between"
-        align="center"
-        direction="row"
+        justify='space-between'
+        align='center'
+        direction='row'
       >
         <Link to={{ pathname: '/' }} className={s.mublinLogo}>
           <Flex gap={3} align='center'>
@@ -48,8 +48,8 @@ function Header (props) {
             {page !== 'signup' && 
               <Link to={{ pathname: '/signup' }}>
                 <Button 
-                  size="md" 
-                  color="violet"
+                  size='md' 
+                  color='violet'
                 >
                   Cadastro
                 </Button>

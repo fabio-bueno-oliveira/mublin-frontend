@@ -543,12 +543,16 @@ function ProfilePage () {
               </Box>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-              <CarouselProjects 
-                profile={profile}
-                projects={allProjects}
-                profilePlan={profile.plan}
-              />
-              <Divider mt={12} mb={15} className='showOnlyInMobile' />
+              {profile.projects.total > 0 && 
+                <>
+                  <CarouselProjects 
+                    profile={profile}
+                    projects={allProjects}
+                    profilePlan={profile.plan}
+                  />
+                  <Divider mt={12} mb={15} className='showOnlyInMobile' />
+                </>
+              }
               <Paper
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
@@ -626,7 +630,7 @@ function ProfilePage () {
                         )}
                       </Splide>
                     ) : (
-                      <Text size='sm'>
+                      <Text size='sm' c='dimmed'>
                         Nenhum ponto forte votado para {profile.name} até o momento
                       </Text>
                     )}

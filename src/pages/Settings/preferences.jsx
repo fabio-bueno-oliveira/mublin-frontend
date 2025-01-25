@@ -288,7 +288,7 @@ function SettingsMusicalPreferences () {
                           key={key}
                           color="violet"
                           variant='filled'
-                          size='sm'
+                          size='md'
                           rightSection={
                             <IconX 
                               style={xIconStyle} 
@@ -365,7 +365,7 @@ function SettingsMusicalPreferences () {
                           key={role.id}
                           color="violet"
                           variant='filled'
-                          size='sm'
+                          size='md'
                           rightSection={
                             <IconX
                               style={xIconStyle}

@@ -47,7 +47,7 @@ function SignupPage () {
         //   return null;
         // }
         email: isEmail('Email inválido'),
-        newUsername: hasLength({ min: 2, max: 14 }, 'Informe o username desejado com no mínimo 2 caracteres e no máximo 14'),
+        newUsername: hasLength({ min: 2, max: 16 }, 'Informe o username desejado com no mínimo 2 caracteres e no máximo 16'),
         password: (value) => (value.length < 4 ? 'Senha muito curta' : null),
         confirmPassword: (value, values) =>
           value !== values.password ? 'As senhas informadas estão diferentes' : null
@@ -89,7 +89,7 @@ function SignupPage () {
     return (
       <>
         <Header page='signup' />
-        <Container size={'xs'} my={40}>
+        <Container size='xs' my={40}>
           <Title ta="center" order={1}>
             Crie sua conta grátis
           </Title>
@@ -104,7 +104,7 @@ function SignupPage () {
             <Grid mb='sm'>
               <Grid.Col span={6}>
                 <TextInput
-                  size="lg"
+                  size="md"
                   label="Nome"
                   key={form.key('name')}
                   {...form.getInputProps('name')}
@@ -112,7 +112,7 @@ function SignupPage () {
               </Grid.Col>
               <Grid.Col span={6}>
                 <TextInput
-                  size="lg"
+                  size="md"
                   label="Sobrenome"
                   key={form.key('lastname')}
                   {...form.getInputProps('lastname')}
@@ -120,7 +120,7 @@ function SignupPage () {
               </Grid.Col>
             </Grid>
             <TextInput
-              size="lg"
+              size="md"
               label="Email"
               placeholder="seu@email.com"
               disabled={emailAvailability.requesting}
@@ -140,7 +140,7 @@ function SignupPage () {
               >Email já cadastrado!</Badge>
             }
             <TextInput
-              size="lg"
+              size="md"
               mt="md"
               label="Username"
               description={`mublin.com/${usernameChoosen}`}
@@ -173,7 +173,7 @@ function SignupPage () {
             <Grid mt='sm' mb='md'>
               <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
                 <PasswordInput
-                  size="lg"
+                  size="md"
                   label="Senha"
                   key={form.key('password')}
                   {...form.getInputProps('password')}
@@ -181,7 +181,7 @@ function SignupPage () {
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
                 <PasswordInput
-                  size="lg"
+                  size="md"
                   label="Confirme a senha"
                   key={form.key('confirmPassword')}
                   {...form.getInputProps('confirmPassword')}
@@ -191,8 +191,7 @@ function SignupPage () {
             {(usernameChoosen && usernameAvailability.available === false) && 
               <Alert 
                 variant="light" 
-                color="red" 
-                title="Username já existente!" 
+                color="red"
                 icon={<IconInfoCircle />}
               >
                 O username que você informou já está em uso. Por gentileza escolha outro nome de usuário.
@@ -219,11 +218,11 @@ function SignupPage () {
                 Continuar
               </Button>
             </Group>
-            {/* {process.env.NODE_ENV === "production" &&  */}
+            {process.env.NODE_ENV === "production" &&
               <Alert variant="light" color="red" mt={14}>
                 Novos cadastros serão liberados em breve!
               </Alert>
-            {/* } */}
+            }
           </form>
         </Container>
         <Footer />
