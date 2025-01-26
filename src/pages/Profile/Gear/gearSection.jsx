@@ -109,6 +109,7 @@ function GearSection ({ loggedUserId, username }) {
                 // description='Tipo de equipamento'
                 size='sm'
                 w={145}
+                mb={14}
                 onChange={(e) => setGearCategorySelected(e.target.options[e.target.selectedIndex].value)}
               >
                 <option value="">
@@ -122,94 +123,92 @@ function GearSection ({ loggedUserId, username }) {
               </NativeSelect>
             }
             {profile.gear.total ? ( 
-              <>
-                <Splide 
-                  options={{
-                    drag: 'free',
-                    snap: false,
-                    perPage: isMobile ? 2 : 5,
-                    autoWidth: true,
-                    arrows: false,
-                    gap: '22px',
-                    dots: true,
-                    pagination: true,
-                  }}
-                >
-                  {gear.map(product =>
-                    <SplideSlide key={product.productId}>
-                      <Flex
-                        direction='column'
-                        justify='flex-start'
-                        align='center'
-                        className='carousel-gear'
-                      >
-                        <Image
-                          src={'https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.pictureFilename}
-                          h={120}
-                          mah={120}
-                          w='auto'
-                          fit='contain'
-                          mb={10}
-                          radius='md'
-                          onClick={() => openModalGearDetail(product)}
-                          className='point'
-                        />
-                        {/* <Image 
-                          src={'https://ik.imagekit.io/mublin/tr:h-300,cm-pad_resize,bg-FFFFFF/products/'+picture}
-                          height='205' 
-                          ml='10' 
-                        /> */}
-                        <Box w={110}>
-                          <Text size='11px' fw={550} mb={3} truncate='end' title={product.brandName}>
-                            {product.brandName}
+              <Splide 
+                options={{
+                  drag: 'free',
+                  snap: false,
+                  perPage: isMobile ? 2 : 5,
+                  autoWidth: true,
+                  arrows: false,
+                  gap: '22px',
+                  dots: true,
+                  pagination: true,
+                }}
+              >
+                {gear.map(product =>
+                  <SplideSlide key={product.productId}>
+                    <Flex
+                      direction='column'
+                      justify='flex-start'
+                      align='center'
+                      className='carousel-gear'
+                    >
+                      <Image
+                        src={'https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.pictureFilename}
+                        h={120}
+                        mah={120}
+                        w='auto'
+                        fit='contain'
+                        mb={10}
+                        radius='md'
+                        onClick={() => openModalGearDetail(product)}
+                        className='point'
+                      />
+                      {/* <Image 
+                        src={'https://ik.imagekit.io/mublin/tr:h-300,cm-pad_resize,bg-FFFFFF/products/'+picture}
+                        height='205' 
+                        ml='10' 
+                      /> */}
+                      <Box w={110}>
+                        <Text size='11px' fw={550} mb={3} truncate='end' title={product.brandName}>
+                          {product.brandName}
+                        </Text>
+                        <Text size='sm' truncate='end' title={product.productName}>
+                          {product.productName}
+                        </Text>
+                      </Box>
+                      {product.tuning && 
+                        <Group gap={2} my={3}>
+                          <Text
+                            size='9px'
+                            fw='450'
+                            c='dimmed'
+                          >
+                            Afinação: {product.tuning}
                           </Text>
-                          <Text size='sm' truncate='end' title={product.productName}>
-                            {product.productName}
-                          </Text>
-                        </Box>
-                        {product.tuning && 
-                          <Group gap={2} my={3}>
-                            <Text
-                              size='9px'
-                              fw='450'
-                              c='dimmed'
-                            >
-                              Afinação: {product.tuning}
+                        </Group>
+                      }
+                      {!!product.forSale && 
+                        <Flex direction='column' align='center' gap={4} mt={4}>
+                          <Badge size='xs' color='dark'>À venda</Badge>
+                          {!!product.price && 
+                            <Text size='10px' fw={500}>
+                              {product.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
                             </Text>
-                          </Group>
-                        }
-                        {!!product.forSale && 
-                          <Flex direction='column' align='center' gap={4} mt={4}>
-                            <Badge size='xs' color='dark'>À venda</Badge>
-                            {!!product.price && 
-                              <Text size='10px' fw={500}>
-                                {product.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
-                              </Text>
-                            }
-                          </Flex>
-                        }
-                        <Flex gap={4}>
-                          {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).slice(0, 3).map(subGear =>
-                            <Image
-                              key={subGear.productId}
-                              src={'https://ik.imagekit.io/mublin/products/tr:w-60,h-60,cm-pad_resize,bg-FFFFFF,fo-x/'+subGear.pictureFilename}
-                              h={30}
-                              mah={30}
-                              w='auto'
-                              fit='contain'
-                              mb={10}
-                              radius='sm'
-                              onClick={() => openModalGearDetail(product)}
-                              className='point'
-                              title={`${subGear.category} ${subGear.brandName} ${subGear.productName}`}
-                            />
-                          )}
+                          }
                         </Flex>
+                      }
+                      <Flex gap={4}>
+                        {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).slice(0, 3).map(subGear =>
+                          <Image
+                            key={subGear.productId}
+                            src={'https://ik.imagekit.io/mublin/products/tr:w-60,h-60,cm-pad_resize,bg-FFFFFF,fo-x/'+subGear.pictureFilename}
+                            h={30}
+                            mah={30}
+                            w='auto'
+                            fit='contain'
+                            mb={10}
+                            radius='sm'
+                            onClick={() => openModalGearDetail(product)}
+                            className='point'
+                            title={`${subGear.category} ${subGear.brandName} ${subGear.productName}`}
+                          />
+                        )}
                       </Flex>
-                    </SplideSlide>
-                  )}
-                </Splide>
-              </>
+                    </Flex>
+                  </SplideSlide>
+                )}
+              </Splide>
             ) : (
               <Text size='sm' c='dimmed'>Nenhum equipamento cadastrado</Text>
             )}
@@ -266,7 +265,7 @@ function GearSection ({ loggedUserId, username }) {
             }
           </Flex>
         }
-        {subGear.filter((p) => { return p.parent_product_id === gearItemDetail.user_gear_id }) && 
+        {!!subGear.filter((p) => { return p.parent_product_id === gearItemDetail.user_gear_id }).length && 
           <>
             <Divider my={10} />
             <Text size='xs' ta='center' fw='450' mb={4}>Itens que fazem parte:</Text>

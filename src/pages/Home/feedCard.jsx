@@ -274,22 +274,19 @@ function FeedCard ({ item, compact }) {
         }
         {(item.categoryId === 8) && 
           <>
-            <Box>
-              <Text
-                lineClamp={compact ? 2 : undefined}
-                px='15'
-                size={isMobile ? '0.9em' : '0.86em'}
-                mt='12px'
-                style={{lineHeight:'1.25em',opacity:'0.8'}}
-              >
-                <ReadMoreReact
-                  text={item.extraText}
-                  min={220}
-                  ideal={270}
-                  max={2000}
-                  readMoreText='...mais'
-                />
-              </Text>
+            <Box
+              px='15'
+              fz={isMobile ? '0.9em' : '0.86em'}
+              mt='12px'
+              className='lhNormal op80'
+            >
+              <ReadMoreReact
+                text={item.extraText}
+                min={150}
+                ideal={200}
+                max={2000}
+                readMoreText='...mais'
+              />
             </Box>
             {(item.image && !compact) && 
               <Image

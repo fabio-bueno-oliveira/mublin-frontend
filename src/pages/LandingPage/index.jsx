@@ -16,8 +16,8 @@ import {
   IconShieldCheckFilled
 } from '@tabler/icons-react';
 import { IconArrowRight } from '@tabler/icons-react'
-import Marquee from "react-fast-marquee";
-import './styles.scss';
+import Marquee from 'react-fast-marquee'
+import './styles.scss'
 
 function LandingPage () {
 
@@ -25,15 +25,15 @@ function LandingPage () {
 
   const loggedIn = useSelector(state => state.authentication.loggedIn)
   const { setColorScheme } = useMantineColorScheme()
-  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   const imageCdnUrl = 'https://ik.imagekit.io/mublin'
   const AstronautImage1 = imageCdnUrl + '/misc/astronaut-musician-1.png?updatedAt=1731768213783'
 
-  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' };
-  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '1px' };
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '5px' }
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '1px' }
 
-  const [featuredUsers, setFeaturedUsers] = useState([]);
+  const [featuredUsers, setFeaturedUsers] = useState([])
 
   useEffect(() => {
     setColorScheme('light');
@@ -49,15 +49,15 @@ function LandingPage () {
             console.error(error)
         }
       )
-  }, []);
+  }, [])
 
   return (
     <>
       {loggedIn &&
-        <Navigate to="/home" />
+        <Navigate to='/home' />
       }
       <Box bg='black' c='white' py='14'>
-        <Text ta='center' size={isMobile ? '12px' : '15px'} fw='300' c='dimmed'>
+        <Text ta='center' size={isMobile ? '12px' : '15px'} fw='330' c='dimmed'>
           🚀 40% off no lançamento: Mublin PRO por 3 meses
         </Text>
       </Box>
@@ -82,12 +82,11 @@ function LandingPage () {
           <Center>
             <Link to={{ pathname: '/signup' }}>
               <Button
-                size="xl"
-                mt="lg"
-                color="violet"
-                // variant='outline'
+                size='xl'
+                mt='lg'
+                color='violet'
                 variant='gradient'
-              gradient={{ from: 'violet', to: 'orange', deg: 90 }}
+                gradient={{ from: 'blue', to: 'violet', deg: 90 }}
                 rightSection={<IconArrowRight size={14}/>}
               >
                 Comece grátis
@@ -97,12 +96,12 @@ function LandingPage () {
         </Container>
         <Marquee>
           {featuredUsers?.map((user, key) =>
-            <Flex w="170px" h="110px" direction="column" key={key}>
+            <Flex w='170px' h='110px' direction='column' key={key}>
               <Center mb={5}>
-                <Avatar src={user.picture ? user.picture : undefined} size="lg" />
+                <Avatar src={user.picture ? user.picture : undefined} size='lg' />
               </Center>
-              <Flex gap={0} align="center" justify="center" mb={0}>
-                <Text size="13px" fw="500" ta="center">{user.name} {user.lastname}</Text>
+              <Flex gap={0} align='center' justify='center' mb={0}>
+                <Text size='13px' fw='500' ta='center'>{user.name} {user.lastname}</Text>
                 {!!user.verified && 
                   <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
                 }
@@ -110,18 +109,18 @@ function LandingPage () {
                   <IconShieldCheckFilled style={iconLegendStyle} />
                 }
               </Flex>
-              <Text size="xs" ta="center">{user.role} {user.genre && ' • ' + user.genre}</Text>
+              <Text size='xs' ta='center'>{user.role} {user.genre && ' • ' + user.genre}</Text>
               {user.city && 
-                <Text size="11px" ta="center" c="dimmed">{user.city}, {user.uf}</Text>
+                <Text size='11px' ta='center' c='dimmed'>{user.city}, {user.uf}</Text>
               }
             </Flex>
           )}
         </Marquee>
-        <Container size="sm"mt={50}>
+        <Container size='sm'mt={50}>
           <Title order={2} ta='center'>
             Aumente suas chances de tocar em <nobr>gigs interessantes</nobr>
           </Title>
-          <Text size="md" lh="sm" ta="center">
+          <Text size='md' lh='sm' ta='center'>
             O Mublin é a comunidade onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
           </Text>
           <Grid mt={56}>
@@ -173,7 +172,7 @@ function LandingPage () {
         </Container>
       <Footer />
     </>
-  );
-};
+  )
+}
 
 export default LandingPage

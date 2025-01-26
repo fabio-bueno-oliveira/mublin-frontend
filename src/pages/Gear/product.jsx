@@ -81,12 +81,14 @@ function GearProductPage () {
             <Title fz='1.20rem' fw='560'>
               {product.requesting ? 'Carregando produto...' : product.name}
             </Title>
-            <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
-              <Group gap='2'>
-                <IconArrowRight size={13} />
-                Ver todos os produtos de {product.brandName}
-              </Group>
-            </Link>
+            {!product.requesting &&
+              <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
+                <Group gap='2'>
+                  <IconArrowRight size={13} />
+                  Ver todos os produtos {product.brandName}
+                </Group>
+              </Link>
+            }
           </Flex>
         </Flex>
         <Grid mt='20' mb='70'>

@@ -979,8 +979,8 @@ function ProfilePage () {
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
-                  {profile.strengthsVotesHistory.result.map(vote =>
-                    <Table.Tr fz='xs'>
+                  {profile.strengthsVotesHistory.result.map((vote, key) =>
+                    <Table.Tr fz='xs' key={key}>
                       <Table.Td>
                         <Anchor 
                           href={'/'+vote.username} 

@@ -4,7 +4,7 @@ import { IconBrandInstagram } from '@tabler/icons-react'
 function Footer () {
 
   return (
-    <Flex gap={10} justify='center' align='center'>
+    <Flex gap={10} mt={20} mb={30} justify='center' align='center'>
       <Text ta='center' c='dimmed' size='xs'>
         © 2025 Mublin
       </Text>
