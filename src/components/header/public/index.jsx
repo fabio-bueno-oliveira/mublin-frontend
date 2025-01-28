@@ -50,7 +50,7 @@ function Header (props) {
                 <Button 
                   size='md' 
                   color='violet'
-                  variant='filled'
+                  variant='outline'
                 >
                   Cadastro
                 </Button>

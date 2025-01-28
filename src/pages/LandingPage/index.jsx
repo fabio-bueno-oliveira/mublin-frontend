@@ -62,114 +62,119 @@ function LandingPage () {
         </Text>
       </Box>
       <Header />
-        <Container size='sm' my={50}>
-          <Title 
-            size='2rem'
-            fw='700'
-            ta='center'
-            className='secondaryFont'
-          >
-            Gerencie seus projetos de música
-          </Title>
-          <Text 
-            size='md'
-            className='lhNormal'
-            ta='center' 
-            fw='330'
-          >
-            Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.
-          </Text>
-          <Center>
-            <Link to={{ pathname: '/signup' }}>
-              <Button
-                size='xl'
-                mt='lg'
-                color='violet'
-                variant='gradient'
-                gradient={{ from: 'blue', to: 'violet', deg: 90 }}
-                rightSection={<IconArrowRight size={14}/>}
-              >
-                Comece grátis
-              </Button>
-            </Link>
-          </Center>
-        </Container>
-        <Marquee>
-          {featuredUsers?.map((user, key) =>
-            <Flex w='170px' h='110px' direction='column' key={key}>
-              <Center mb={5}>
-                <Avatar src={user.picture ? user.picture : undefined} size='lg' />
-              </Center>
-              <Flex gap={0} align='center' justify='center' mb={0}>
-                <Text size='13px' fw='500' ta='center'>{user.name} {user.lastname}</Text>
-                {!!user.verified && 
-                  <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
-                }
-                {!!user.legend && 
-                  <IconShieldCheckFilled style={iconLegendStyle} />
-                }
-              </Flex>
-              <Text size='xs' ta='center'>{user.role} {user.genre && ' • ' + user.genre}</Text>
-              {user.city && 
-                <Text size='11px' ta='center' c='dimmed'>{user.city}, {user.uf}</Text>
+      <Container size='sm' my={50}>
+        <Title 
+          size='2rem'
+          fw='700'
+          ta='center'
+          mb={8}
+        >
+          Gerencie seus projetos de música
+        </Title>
+        <Text 
+          size='md'
+          className='lhNormal'
+          ta='center' 
+          fw='330'
+        >
+          Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.
+        </Text>
+        <Center>
+          <Link to={{ pathname: '/signup' }}>
+            <Button
+              size='xl'
+              mt='lg'
+              color='violet'
+              variant='gradient'
+              gradient={{ from: 'blue', to: 'violet', deg: 90 }}
+              rightSection={<IconArrowRight size={14}/>}
+            >
+              Comece grátis
+            </Button>
+          </Link>
+        </Center>
+      </Container>
+      <Marquee>
+        {featuredUsers?.map((user, key) =>
+          <Flex w='170px' h='110px' direction='column' key={key}>
+            <Center mb={5}>
+              <Avatar src={user.picture ? user.picture : undefined} size='lg' />
+            </Center>
+            <Flex gap={0} align='center' justify='center' mb={0}>
+              <Text size='13px' fw='500' ta='center'>{user.name} {user.lastname}</Text>
+              {!!user.verified && 
+                <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
+              }
+              {!!user.legend && 
+                <IconShieldCheckFilled style={iconLegendStyle} />
               }
             </Flex>
-          )}
-        </Marquee>
-        <Container size='sm'mt={50}>
-          <Title order={2} ta='center'>
-            Aumente suas chances de tocar em <nobr>gigs interessantes</nobr>
-          </Title>
-          <Text size='md' lh='sm' ta='center'>
-            O Mublin é a comunidade onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
-          </Text>
-          <Grid mt={56}>
-            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
-              <Flex align="center">
-                <IconCalendarSmile size={isMobile ? 50 : 80} color="#252525" />
-                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Compartilhe informações e datas</Text>
-              </Flex>
-            </Grid.Col>
-            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
-              <Flex align="center">
-                <IconAutomaticGearbox size={isMobile ? 42 : 60} color="#252525" />
-                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Gerencie projetos</Text>
-              </Flex>
-            </Grid.Col>
-            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
-              <Flex align="center">
-                <IconPlaylist size={isMobile ? 50 : 66} color="#252525" />
-                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Confira a playlist dos eventos</Text>
-              </Flex>
-            </Grid.Col>
-            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
-              <Flex align="center">
-                <IconUserSearch size={isMobile ? 50 : 66} color="#252525" />
-                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre músicos disponíveis</Text>
-              </Flex>
-            </Grid.Col>
-            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
-              <Flex align="center">
-                <IconLayoutDashboard size={isMobile ? 50 : 66} color="#252525" />
-                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Cadastre seus equipamentos</Text>
-              </Flex>
-            </Grid.Col>
-            <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
-              <Flex align="center">
-                <IconUsersGroup size={isMobile ? 50 : 66} color="#252525" />
-                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre projetos em busca de músicos</Text>
-              </Flex>
-            </Grid.Col>
-          </Grid>
-          <Center>
-            <Image
-              h={280}
-              src={AstronautImage1}
-              fit='contain'
-              className='featuredImage'
-            />
-          </Center>
-        </Container>
+            <Text size='xs' ta='center'>{user.role} {user.genre && ' • ' + user.genre}</Text>
+            {user.city && 
+              <Text size='11px' ta='center' c='dimmed'>{user.city}, {user.uf}</Text>
+            }
+          </Flex>
+        )}
+      </Marquee>
+      <Container size='sm'mt={50}>
+        <Title 
+          size='1.7rem'
+          fw='700'
+          ta='center'
+          mb={8}
+        >
+          Aumente suas chances de tocar em <nobr>gigs interessantes</nobr>
+        </Title>
+        <Text size='md' lh='sm' ta='center'>
+          O Mublin é a comunidade onde músicos, produtores e profissionais da música podem conectar com outros artistas e gerenciar seus projetos de música
+        </Text>
+        <Grid mt={56}>
+          <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
+            <Flex align='center' gap={4}>
+              <IconCalendarSmile size={50} color="#252525" />
+              <Text c="#252525" size={isMobile ? "13px" : "16px"}>Compartilhe informações e datas</Text>
+            </Flex>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
+            <Flex align='center' gap={4}>
+              <IconAutomaticGearbox size={40} color="#252525" />
+              <Text c="#252525" size={isMobile ? "13px" : "16px"}>Gerencie projetos</Text>
+            </Flex>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
+            <Flex align='center' gap={4}>
+              <IconPlaylist size={40} color="#252525" />
+              <Text c="#252525" size={isMobile ? "13px" : "16px"}>Confira a playlist dos eventos</Text>
+            </Flex>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
+            <Flex align='center' gap={4}>
+              <IconUserSearch size={40} color="#252525" />
+              <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre músicos disponíveis</Text>
+            </Flex>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
+            <Flex align='center' gap={4}>
+              <IconLayoutDashboard size={40} color="#252525" />
+              <Text c="#252525" size={isMobile ? "13px" : "16px"}>Cadastre seus equipamentos</Text>
+            </Flex>
+          </Grid.Col>
+          <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
+            <Flex align='center' gap={4}>
+              <IconUsersGroup size={40} color="#252525" />
+              <Text c="#252525" size={isMobile ? "13px" : "16px"}>Encontre projetos em busca de músicos</Text>
+            </Flex>
+          </Grid.Col>
+        </Grid>
+        <Center>
+          <Image
+            h={280}
+            src={AstronautImage1}
+            fit='contain'
+            className='featuredImage'
+          />
+        </Center>
+      </Container>
       <Footer />
     </>
   )
