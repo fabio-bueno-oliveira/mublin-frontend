@@ -22,7 +22,7 @@ import StartStep2Page from './pages/Start/step2';
 import StartStep3Page from './pages/Start/step3';
 import StartStep4Page from './pages/Start/step4';
 import MyProjectsPage from './pages/MyProjects';
-import SearchPage from './pages/Search/initial';
+import SearchPage from './pages/Search/index';
 import NewPost from './pages/New/post';
 import NewProject from './pages/New/project';
 import New from './pages/New';

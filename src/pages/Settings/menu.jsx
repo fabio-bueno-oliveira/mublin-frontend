@@ -43,7 +43,7 @@ function SettingsMenu (props) {
       <NavLink
         color='violet'
         href='/settings/my-gear'
-        label='Meus equipamentos'
+        label='Meu equipamento'
         leftSection={<IconPackages size='1rem' stroke={1.5} />}
         active={props.page === 'myGear'}
       />

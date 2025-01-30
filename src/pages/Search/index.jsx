@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Group, Flex, Tabs, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Button, Skeleton, SimpleGrid, rem, em } from '@mantine/core';
-import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch } from '@tabler/icons-react';
+import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, rem, em } from '@mantine/core';
+import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -62,6 +62,16 @@ function Search () {
     });
   }
 
+  const skeletonLoadingResult = <Flex gap={6} align='center'>
+    <Skeleton height={56} circle />
+    <Flex direction='column'>
+      <Box w={170}>
+        <Skeleton height={10} width={160} radius='xl' mb={7} />
+        <Skeleton height={10} width={110} radius='xl' />
+      </Box>
+    </Flex>
+  </Flex>
+
   return (
     <>
       {isLargeScreen && 
@@ -99,6 +109,7 @@ function Search () {
           </form>
         }
         {(!searchedKeywords && !searchResults.requesting) && 
+          <>
           <Grid>
             <Grid.Col span={{ base: 12, md: 9, lg: 9 }}>
               <Title fz='1.03rem' fw='640' mb={14}>
@@ -144,55 +155,20 @@ function Search () {
               ))}
             </Grid.Col>
           </Grid>
-        }
-        {searchResults.requesting && 
-          <>
-            <Group gap={7} mt={24} justify='flex-start'>
-              <Skeleton height={55} circle />
-              <SimpleGrid cols={1} verticalSpacing='0.4rem'>
-                <Skeleton height={15} width={188} radius='xl' />
-                <Skeleton height={10} width={188} radius='xl' />
-                <Skeleton height={10} width={188} radius='xl' />
-              </SimpleGrid>
-            </Group>
-            <Group gap={7} mt={18} justify='flex-start'>
-              <Skeleton height={55} circle />
-              <SimpleGrid cols={1} verticalSpacing='0.4rem'>
-                <Skeleton height={15} width={188} radius='xl' />
-                <Skeleton height={10} width={188} radius='xl' />
-                <Skeleton height={10} width={188} radius='xl' />
-              </SimpleGrid>
-            </Group>
           </>
         }
-        {(searchedKeywords && !searchResults.requesting) && 
-          <Tabs 
-            defaultValue={'all'}
-            orientation="vertical"
-            variant='pills' 
-            color='violet'
-            mb={140}
-          >
-            {/* <Tabs.List className=''>
-              <Tabs.Tab value={'all'} mb={15}>
-                {searchResults.users[0].id
-                  ?  'Pessoas ('+searchResults.users.length+')' 
-                  : 'Pessoas (0)'
-                }
-              </Tabs.Tab>
-              <Tabs.Tab value={'all'} mb={15}>
-                {`Projetos (${searchResults.projects.total})`}
-              </Tabs.Tab>
-              <Tabs.Tab value={'all'} mb={15}>
-                {`Equipamento (${searchResults.gear.total})`}
-              </Tabs.Tab>
-            </Tabs.List> */}
-            <Tabs.Panel value={'all'} pl={8} pt={6}>
-              <Text mb={14} className=''>Pessoas</Text>
-              {searchResults.users[0].id && 
-                <Box>
-                  {searchResults.users.map(user =>
-                    <Flex key={user.id} align={'center'} mb={13} gap={6} justify="space-between">
+        {searchedKeywords && 
+          <Grid>
+            <Grid.Col span={{ base: 12, md: 4, lg: 4 }} pr={10}>
+              <Title order={5} fw={650} mb={14}>
+                {`Pessoas (${searchResults.users.total})`}
+              </Title>
+              {searchResults.requesting ? ( 
+                skeletonLoadingResult
+              ) : (
+                searchResults.users.total ? (
+                  searchResults.users.result.map(user =>
+                    <Flex key={user.id} align='flex-start' mb={13} gap={6} justify='space-between'>
                       <Link to={{ pathname: `/${user.username}` }}>
                         <Avatar 
                           src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
@@ -200,60 +176,55 @@ function Search () {
                         />
                       </Link>
                       <Flex
-                        justify="flex-start"
-                        align="flex-start"
-                        direction="column"
-                        wrap="wrap"
+                        justify='flex-start'
+                        align='flex-start'
+                        direction='column'
+                        wrap='wrap'
                         style={{flexGrow:'2'}}
                       >
                         <Anchor href={`/${user.username}`}>
                           <Flex gap={3} align={'center'}>
-                            <Text size='sm' fw={550} className='lhNormal'>
+                            <Text size='0.97rem' fw={570} className='lhNormal'>
                               {user.name+' '+user.lastname}
                             </Text>
                             {!!user.verified && 
-                              <IconRosetteDiscountCheckFilled color='#7950f2' 
+                              <IconRosetteDiscountCheckFilled color='#7950f2' title='Usuário verificado' 
                               style={iconVerifiedStyle} />
                             }
                             {!!user.legend && 
-                              <IconShieldCheckFilled color='#DAA520' 
+                              <IconShieldCheckFilled color='#DAA520' title='Lenda da música' 
                               style={iconVerifiedStyle} />
                             }
                           </Flex>
                         </Anchor>
-                        <Text size='sm'>
-                          {user.mainRole ? user.mainRole : user.bio}
+                        <Text size='xs' fw={400}>
+                          {user.mainRole && user.mainRole} {!!user.totalProjects && ` • ${user.totalProjects} projetos ativos`}
                         </Text>
-                        <Text size='11px' c='dimmed'>
+                        <Text size='xs' fw={400} c='dimmed'>
                           {user.city && user.city+' - '+user.region}
                         </Text>
-                        {/* {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
+                        {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
                           <Text size='10px' mt='3px' c='dimmed'>
-                            Projeto relacionado: {user.projectRelated} ({user.projectType})
+                            Relacionado: {user.projectRelated} ({user.projectType})
                           </Text>
-                        } */}
+                        }
                       </Flex>
-                      <Box>
-                        <Button 
-                          size='xs' 
-                          color='violet' 
-                          variant='light'
-                          component="a"
-                          href={`/${user.username}`}
-                        >
-                          Ver perfil
-                        </Button>
-                      </Box>
                     </Flex>
-                  )}
-                </Box>
-              }
-            </Tabs.Panel>
-            <Tabs.Panel value={'all'} pl={8} pt={6}>
-              <Text mb={14} className=''>Projetos</Text>
-              <Box>
-                {searchResults.projects.total ? searchResults.projects.result.map(project => 
-                  <>
+                  )
+                ) : (
+                  <Text size='sm' c='dimmed'>Nenhum resultado encontrado</Text>
+                )
+              )}
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
+              <Title order={5} fw={650} mb={14}>
+                {`Projetos (${searchResults.projects.total})`}
+              </Title>
+              {searchResults.requesting ? ( 
+                skeletonLoadingResult
+              ) : (
+                searchResults.projects.total ? (
+                  searchResults.projects.result.map(project => 
                     <Flex key={project.id} align='flex-start' mb={13} gap={6} justify='space-between'>
                       <Link to={{ pathname: `/${project.username}` }}>
                         <Avatar 
@@ -262,57 +233,65 @@ function Search () {
                         />
                       </Link>
                       <Flex
-                        justify="flex-start"
-                        align="flex-start"
-                        direction="column"
-                        wrap="wrap"
+                        justify='flex-start'
+                        align='flex-start'
+                        direction='column'
+                        wrap='wrap'
                         style={{flexGrow:'2'}}
                       >
                         <Anchor href={`/${project.username}`}>
                           <Flex gap={3} align={'center'}>
-                            <Text size='sm' fw={550} className='lhNormal'>
+                            <Text size='0.97rem' fw={570} className='lhNormal'>
                               {project.name}
                             </Text>
                           </Flex>
                         </Anchor>
-                        <Text size='sm'>
+                        <Text size='xs' fw={300}>
                           {project.type}{project.mainGenre && ` · ${project.mainGenre}`}
                         </Text>
-                        <Text size='11px' c='dimmed'>
+                        {/* <Text size='xs' fw={300} c='dimmed'>
                           {project.city && project.city+' - '+project.region}
-                        </Text>
+                        </Text> */}
+                        {(project.relatedUserName.toLowerCase() === searchedKeywords.toLowerCase() || project.relatedUserLastname.toLowerCase() === searchedKeywords.toLowerCase() || project.relatedUserUsername.toLowerCase() === searchedKeywords.toLowerCase() || `${project.relatedUserName.toLowerCase()} ${project.relatedUserLastname.toLowerCase()}` === searchedKeywords.toLowerCase()) && 
+                          <Group gap={3} mt={2}>
+                            <Link to={{ pathname: `/${project.relatedUserUsername}` }}>
+                              <Avatar 
+                                src={project.relatedUserPicture ? `https://ik.imagekit.io/mublin/users/avatars/tr:h-30,w-30,c-maintain_ratio/${project.relatedUserId}/${project.relatedUserPicture}` : undefined} 
+                                size='15px'
+                              />
+                            </Link>
+                            <Text size='0.7rem' fw={400} c='dimmed' className='lhNormal'>
+                              {project.relatedUserName} {project.relatedUserLastname}
+                            </Text>
+                          </Group>
+                        }
                       </Flex>
-                      <Box>
-                        <Button 
-                          size='xs'
-                          color='violet' 
-                          variant='light'
-                          component="a"
-                          href={`/projects/${project.username}`}
-                        >
-                          Ver página
-                        </Button>
-                      </Box>
                     </Flex>
-                  </>
-                ): (
-                  <Text size='sm' c='dimmed' mb='10'>
-                    Nenhum projeto encontrado
-                  </Text>
-                )}
-              </Box>
-            </Tabs.Panel>
-            <Tabs.Panel value={'all'} pl={8} pt={6}>
-            <Text mb={14} className=''>Equipamento</Text>
-              <Box>
-                {searchResults.gear.total ? searchResults.gear.result.map(product => 
-                  <>
+                  )
+                ) : (
+                  <Text size='sm' c='dimmed'>Nenhum projeto encontrado</Text>
+                )
+              )}
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
+              <Title order={5} fw={650} mb={14}>
+                {`Equipamento (${searchResults.gear.total})`}
+              </Title>
+              {searchResults.requesting ? ( 
+                skeletonLoadingResult
+              ) : (
+                searchResults.gear.total ? (
+                  searchResults.gear.result.map(product => 
                     <Flex key={product.productId} align='flex-start' mb={13} gap={8} justify='space-between'>
                       <Link to={{ pathname: `/gear/product/${product.productId}` }}>
                         <Image
-                          src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:h-112,w-112,cm-pad_resize,bg-FFFFFF/${product.productPicture}` : undefined}
-                          w='56px'
-                          h='56px'
+                          src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${product.productPicture}` : undefined}
+                          h={56}
+                          mah={56}
+                          w='auto'
+                          fit='contain'
+                          mb={10}
+                          radius='md'
                         />
                       </Link>
                       <Flex
@@ -324,39 +303,29 @@ function Search () {
                       >
                         <Anchor href={`/gear/product/${product.productId}`}>
                           <Flex gap={3} align={'center'}>
-                            <Text size='sm' fw={550} className='lhNormal'>
+                            <Text size='0.97rem' fw={570} className='lhNormal'>
                               {product.productName}
                             </Text>
                           </Flex>
                         </Anchor>
-                        <Text size='sm'>
-                          {product.name_ptbr} • {product.brand}
+                        <Text size='xs' fw={300}>
+                          {product.name_ptbr} • <a className='textLink' href={`/gear/brand/${product.brandSlug}`}>{product.brand}</a>
                         </Text>
-                        <Text size='11px' c='dimmed'>
-                          {product.totalOwners} possuem
-                        </Text>
+                        <Flex gap={3} mt={4} align='center' justify='space-between'>
+                          <IconUsers style={{width:'12px',height:'12px'}} color='gray' />
+                          <Text size='xs' fw={300} c='dimmed'>
+                            {product.totalOwners} possuem
+                          </Text>
+                        </Flex>
                       </Flex>
-                      <Box>
-                        <Button 
-                          size='xs'
-                          color='violet' 
-                          variant='light'
-                          component="a"
-                          href={`/gear/product/${product.productId}`}
-                        >
-                          Ver detalhes
-                        </Button>
-                      </Box>
                     </Flex>
-                  </>
-                ): (
-                  <Text size='sm' c='dimmed' mb='10'>
-                    Nenhum item encontrado
-                  </Text>
-                )}
-              </Box>
-            </Tabs.Panel>
-          </Tabs>
+                  )
+                ) : (
+                  <Text size='sm' c='dimmed'>Nenhum item encontrado</Text>
+                )
+              )}
+            </Grid.Col>
+          </Grid>
         }
       </Container>
       {showMobileMenu && 

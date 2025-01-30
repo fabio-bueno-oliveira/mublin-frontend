@@ -85,7 +85,7 @@ function GearProductPage () {
               <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
                 <Group gap='2'>
                   <IconArrowRight size={13} />
-                  Ver todos os produtos {product.brandName}
+                  Ver produtos {product.brandName}
                 </Group>
               </Link>
             }

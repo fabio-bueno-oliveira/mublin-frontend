@@ -48,14 +48,14 @@ const FooterMenuMobile = (props) => {
           >
             <IconHome />
           </div>
-          <div className={(currentPath === '/projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/projects")}>
-            <IconMusic />
+          <div className={currentPath === '/search' ? 'active' : undefined} onClick={() => navigate("/search")}>
+            <IconSearch />
           </div>
           <div className={currentPath === '/new' ? 'active plus' : 'plus'} onClick={() => setDrawerNewIsOpen(prevCheck => !prevCheck)}>
             <IconHexagonPlusFilled />
           </div>
-          <div className={currentPath === '/search' ? 'active' : undefined} onClick={() => navigate("/search")}>
-            <IconSearch />
+          <div className={(currentPath === '/projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/projects")}>
+            <IconMusic />
           </div>
           <div className={currentPath === '/menu' ? 'active' : undefined} onClick={() => navigate("/menu")}>
             <IconUser />

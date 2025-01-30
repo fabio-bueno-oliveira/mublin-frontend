@@ -277,7 +277,7 @@ function SettingsMyGearPage () {
                 size='1.10rem'
                 fw='600'
               >
-                Meus equipamentos
+                Meu equipamento
               </Text>
             </Flex>
             {requesting ? (
