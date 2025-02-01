@@ -142,7 +142,7 @@ function SettingsPage () {
       <div className='showOnlyInLargeScreen'>
         <Header reloadUserInfo />
       </div>
-      <Container size='lg' mb={100}>
+      <Container size='lg' mb={60}>
         <Grid mt='15'>
           {isLargeScreen && 
             <Grid.Col span={4} pt='20'>
@@ -190,8 +190,8 @@ function SettingsPage () {
                 <Grid>
                   <Grid.Col span={6}>
                     <TextInput
-                      size={isLargeScreen ? "sm" : "md"}
-                      label="Nome"
+                      size='md'
+                      label='Nome'
                       disabled={user.requesting}
                       key={form.key('name')}
                       {...form.getInputProps('name')}
@@ -199,8 +199,8 @@ function SettingsPage () {
                   </Grid.Col>
                   <Grid.Col span={6}>
                     <TextInput
-                      size={isLargeScreen ? "sm" : "md"}
-                      label="Sobrenome"
+                      size='md'
+                      label='Sobrenome'
                       disabled={user.requesting}
                       key={form.key('lastname')}
                       {...form.getInputProps('lastname')}
@@ -208,47 +208,53 @@ function SettingsPage () {
                   </Grid.Col>
                 </Grid>
                 <TextInput
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  label="Username"
-                  description="O username não pode ser alterado no momento"
+                  mt='xs'
+                  size='md'
+                  label='Username'
+                  description='O username não pode ser alterado no momento'
                   defaultValue={loggedUsername}
                   disabled
                 />
                 <Textarea
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  label="Bio"
-                  rows="4"
-                  maxLength="220"
+                  mt='xs'
+                  size='md'
+                  label='Bio'
+                  rows='4'
+                  maxLength='220'
                   key={form.key('bio')}
                   {...form.getInputProps('bio')}
                 />
                 <TextInput
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  type="url"
-                  label="Website"
+                  mt='xs'
+                  size='md'
+                  type='url'
+                  label='Website'
                   key={form.key('website')}
                   {...form.getInputProps('website')}
                 />
-                <TextInput
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  type="email"
-                  label="Email"
-                  key={form.key('email')}
-                  {...form.getInputProps('email')}
-                />
-                <TextInput
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  type="tel"
-                  label="Telefone Celular"
-                  maxLength={14}
-                  key={form.key('phone')}
-                  {...form.getInputProps('phone')}
-                />
+                <Grid>
+                  <Grid.Col span={6}>
+                    <TextInput
+                      mt='xs'
+                      size='md'
+                      type='email'
+                      label='Email'
+                      key={form.key('email')}
+                      {...form.getInputProps('email')}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <TextInput
+                      mt='xs'
+                      size='md'
+                      type='tel'
+                      label='Telefone Celular'
+                      maxLength={14}
+                      key={form.key('phone')}
+                      {...form.getInputProps('phone')}
+                    />
+                  </Grid.Col>
+                </Grid>
                 {/* <Checkbox
                   size={isLargeScreen ? "sm" : "md"}
                   color="violet"
@@ -257,46 +263,46 @@ function SettingsPage () {
                   {...form.getInputProps('phoneIsPublic', { type: 'checkbox' })}
                 /> */}
                 <TextInput
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  label="Usuário no Instagram"
+                  mt='xs'
+                  size='md'
+                  label='Usuário no Instagram'
                   key={form.key('instagram')}
                   {...form.getInputProps('instagram')}
                 />
                 <NativeSelect
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  label="Gênero"
+                  mt='xs'
+                  size='md'
+                  label='Gênero'
                   key={form.key('gender')}
                   {...form.getInputProps('gender')}
                 >
-                  <option value="">Selecione</option>
-                  <option value="m">Masculino</option>
-                  <option value="f">Feminino</option>
-                  <option value="n">Não informar</option>
+                  <option value=''>Selecione</option>
+                  <option value='m'>Masculino</option>
+                  <option value='f'>Feminino</option>
+                  <option value='n'>Não informar</option>
                 </NativeSelect>
                 <NativeSelect
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  label="País"
+                  mt='xs'
+                  size='md'
+                  label='País'
                   key={form.key('country')}
                   {...form.getInputProps('country')}
                 >
-                  <option value="">Selecione</option>
-                  <option value="27">Brasil</option>
+                  <option value=''>Selecione</option>
+                  <option value='27'>Brasil</option>
                 </NativeSelect>
                 <NativeSelect
-                  size={isLargeScreen ? "sm" : "md"}
-                  mt="xs"
-                  label="Estado"
+                  mt='xs'
+                  size='md'
+                  label='Estado'
                   key={form.key('region')}
                   {...form.getInputProps('region')}
                   onChange={(e) => {
                     setSearchValue('');
                     setNoCitySearchResults(false);
                     setQueryCities([]);
-                    form.setFieldValue("city","");
-                    form.setFieldValue("cityName","");
+                    form.setFieldValue('city','');
+                    form.setFieldValue('cityName','');
                   }}
                 >
                   <option value=''>Selecione</option>
@@ -330,9 +336,10 @@ function SettingsPage () {
                 </NativeSelect>
                 {form?.getValues()?.cityName ? ( 
                   <Input.Wrapper label='Cidade' mt='xs'>
-                    <Input 
+                    <Input
                       component='button'
-                      size={isLargeScreen ? 'sm' : 'md'}
+                      type='button'
+                      size='md'
                       pointer
                       onClick={() => setModalCityOpen(true)}
                     >
@@ -340,28 +347,28 @@ function SettingsPage () {
                     </Input>
                   </Input.Wrapper>
                 ) : (
-                  <Input.Wrapper label="Cidade" mt="xs">
-                    <Input 
-                      component="button"
-                      size={isLargeScreen ? "sm" : "md"}
+                  <Input.Wrapper label='Cidade' mt='xs'>
+                    <Input
+                      component='button'
+                      size='md'
                       pointer
                       rightSection={form?.getValues()?.region ? <IconSearch size={16} /> : undefined}
                       onClick={() => setModalCityOpen(true)}
                       disabled={!form?.getValues()?.region}
                     >
-                      {form?.getValues()?.region ? "Selecione..." : undefined}
+                      {form?.getValues()?.region ? 'Selecione...' : undefined}
                     </Input>
                   </Input.Wrapper>
                 )}
-                <Group justify="end" mt="lg">
+                <Group justify='end' mt='lg'>
                   <Button
-                    type="submit"
-                    color="violet"
-                    size="md"
+                    size='lg'
+                    type='submit'
+                    color='violet'
                     loading={isLoading}
                     loaderProps={{ type: 'dots' }}
                   >
-                    Enviar
+                    Salvar
                   </Button>
                 </Group>
               </Box>

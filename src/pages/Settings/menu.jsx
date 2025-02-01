@@ -1,65 +1,84 @@
 import React from 'react'
-import { NavLink, Flex, Badge, Text } from '@mantine/core'
-import { IconUser, IconLock, IconAdjustmentsHorizontal, IconCamera, IconHeartHandshake, IconPackages, IconTargetArrow } from '@tabler/icons-react'
+import { NavLink, Text, Divider } from '@mantine/core'
+import { IconUser, IconLock, IconAdjustmentsHorizontal, IconCamera, IconHeartHandshake, IconPackages, IconCalendarCheck, IconArrowLeft } from '@tabler/icons-react'
 
 function SettingsMenu (props) {
+
+  const user = JSON.parse(localStorage.getItem('userInfo'))
+
   return (
     <>
       <NavLink
         color='violet'
+        href={`/${user.username}`}
+        label={<Text fw={500}>Voltar ao meu perfil</Text>}
+        leftSection={<IconArrowLeft size='1.4rem' stroke={1.5} />}
+        variant='subtle'
+      />
+      <Divider my={10} />
+      <NavLink
+        color='violet'
         href='/settings'
-        label='Minha conta'
-        leftSection={<IconUser size='1rem' stroke={1.5} />}
+        label={<Text fw={500}>Minha conta</Text>}
+        leftSection={<IconUser size='1.4rem' stroke={1.5} />}
         active={props.page === 'profileEdit'}
+        variant='subtle'
       />
       <NavLink
         color='violet'
         href='/settings/picture'
-        label='Foto de perfil'
-        leftSection={<IconCamera size='1rem' stroke={1.5} />}
+        label={<Text fw={500}>Foto de perfil</Text>}
+        leftSection={<IconCamera size='1.4rem' stroke={1.5} />}
         active={props.page === 'profilePicture'}
+        variant='subtle'
       />
       <NavLink
         color='violet'
         href='/settings/preferences'
-        label='Preferências musicais'
-        leftSection={<IconAdjustmentsHorizontal size='1rem' stroke={1.5} />}
-        active={props.page === 'preferences'}
+        label={<Text fw={500}>Preferências musicais</Text>}
+        leftSection={<IconAdjustmentsHorizontal size='1.4rem' stroke={1.5} />}
+        active={props.page === 'preferences' ? true : false}
+        variant='subtle'
       />
       <NavLink
         color='violet'
         href='/settings/availability'
-        label='Disponibilidade'
-        leftSection={<IconTargetArrow size='1rem' stroke={1.5} />}
+        label={<Text fw={500}>Disponibilidade</Text>}
+        leftSection={<IconCalendarCheck size='1.4rem' stroke={1.5} />}
         active={props.page === 'availability'}
+        variant='subtle'
       />
       <NavLink
         color='violet'
-        href='#required-for-focus'
-        label='Parceiros e Endorsements'
-        leftSection={<IconHeartHandshake size='1rem' stroke={1.5} />}
+        href='/settings/endorsements'
+        label={<Text fw={500}>Parceiros e Endorsements</Text>}
+        leftSection={<IconHeartHandshake size='1.4rem' stroke={1.5} />}
         active={props.page === 'endorsements'}
+        variant='subtle'
       />
       <NavLink
         color='violet'
         href='/settings/my-gear'
-        label='Meu equipamento'
-        leftSection={<IconPackages size='1rem' stroke={1.5} />}
+        label={<Text fw={500}>Meu equipamento</Text>}
+        leftSection={<IconPackages size='1.4rem' stroke={1.5} />}
         active={props.page === 'myGear'}
+        variant='subtle'
       />
       <NavLink
         color='violet'
         href='/settings/password'
-        label='Senha'
-        leftSection={<IconLock size='1rem' stroke={1.5} />}
+        label={<Text fw={500}>Senha</Text>}
+        leftSection={<IconLock size='1.4rem' stroke={1.5} />}
         active={props.page === 'password'}
+        variant='subtle'
       />
       {/* <NavLink
         color='violet'
         href='#required-for-focus'
-        label='Privacidade'
-        leftSection={<IconEye size='1rem' stroke={1.5} />}
+        label={<Text fw={500}>Privacidade</Text>}
+        leftSection={<IconEye size='1.4rem' stroke={1.5} />}
         active={props.page === 'privacy'}
+        variant='subtle'
       /> */}
     </>
   );

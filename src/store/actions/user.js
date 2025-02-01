@@ -9,6 +9,7 @@ export const userInfos = {
     getUserGenresInfoById: getUserGenresInfoById,
     getUserRolesInfoById: getUserRolesInfoById,
     getUserGearInfoById: getUserGearInfoById,
+    getUserPartners: getUserPartners,
     getUserAvailabilityItemsById: getUserAvailabilityItemsById,
     getUserLastConnectedFriends: getUserLastConnectedFriends
     // delete: _delete
@@ -76,6 +77,22 @@ function getUserGearInfoById(id) {
     function request(id) { return { type: userTypes.GET_USER_GEAR_REQUEST, id } }
     function success(list) { return { type: userTypes.GET_USER_GEAR_SUCCESS, list } }
     function failure(id, error) { return { type: userTypes.GET_USER_GEAR_FAILURE, id, error } }
+}
+
+function getUserPartners() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getUserPartners()
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(id, error.toString()))
+            );
+    };
+
+    function request() { return { type: userTypes.GET_USER_PARTNERS_REQUEST } }
+    function success(list) { return { type: userTypes.GET_USER_PARTNERS_SUCCESS, list } }
+    function failure(error) { return { type: userTypes.GET_USER_PARTNERS_FAILURE, error } }
 }
 
 function getUserAvailabilityItemsById(id) {

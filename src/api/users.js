@@ -19,6 +19,7 @@ export const userService = {
     getUserGenresInfoById,
     getUserRolesInfoById,
     getUserGearInfoById,
+    getUserPartners,
     getUserAvailabilityItemsById,
     getUserProjects,
     getUserProjectsBasicInfo,
@@ -62,6 +63,15 @@ async function getUserGearInfoById(id) {
     };
 
     return fetch(`${BASE_URL}/user/${id}/gear`, requestOptions).then(handleResponse);
+}
+
+async function getUserPartners() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${BASE_URL}/userInfo/partners`, requestOptions).then(handleResponse);
 }
 
 async function getUserAvailabilityItemsById(id) {

@@ -56,6 +56,25 @@ const initialState = {
   ],
   gearLoaded: false,
   gearRequesting: false,
+  partners: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        keyId: '',
+        id: '',
+        name: '',
+        slug: '',
+        logo: '',
+        cover: '',
+        featured: '',
+        type: '',
+        sinceYear: '',
+        active: '',
+        created: '',
+      },
+    ],
+  },
   availabilityStatus: '',
   availabilityItems: [
     { id: '', idItem: '', name: '' }
@@ -209,6 +228,25 @@ export function user(state = initialState, action) {
         gearRequesting: false,
         gear: initialState.gear,
         error: "A solicitação da lista dos equipamentos falhou"
+      };
+    // get user´s partners
+    case userTypes.GET_USER_PARTNERS_REQUEST:
+      return {
+        ...state,
+        partners: initialState.partners,
+        requesting: true
+      };
+    case userTypes.GET_USER_PARTNERS_SUCCESS:
+      return {
+        ...state,
+        partners: action.list,
+        requesting: false
+      };
+    case userTypes.GET_USER_PARTNERS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        partners: initialState.partners
       };
     // get user´s availability items
     case userTypes.GET_USER_AVAILABILITY_ITEMS_REQUEST:
