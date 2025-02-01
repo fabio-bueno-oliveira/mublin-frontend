@@ -8,6 +8,7 @@ export const searchInfos = {
   getSearchResults: getSearchResults,
   getSearchProjectResults: getSearchProjectResults,
   getSearchGearResults: getSearchGearResults,
+  getSearchBrandsResults: getSearchBrandsResults,
   getSuggestedUsersResults: getSuggestedUsersResults,
   getSuggestedFeaturedUsers: getSuggestedFeaturedUsers,
   getSuggestedNewUsers: getSuggestedNewUsers,
@@ -108,6 +109,22 @@ function getSearchGearResults(query) {
   function request(query) { return { type: searchTypes.SEARCH_GEAR_REQUEST, query } }
   function success(results) { return { type: searchTypes.SEARCH_GEAR_SUCCESS, results } }
   function failure(error) { return { type: searchTypes.SEARCH_GEAR_FAILURE, error } }
+}
+
+function getSearchBrandsResults(query) {
+  return dispatch => {
+    dispatch(request(query));
+
+    searchService.getSearchBrandsResults(query)
+      .then(
+        results => dispatch(success(results)),
+        error => dispatch(failure(query, error.toString()))
+      );
+    };
+
+  function request(query) { return { type: searchTypes.SEARCH_BRANDS_REQUEST, query } }
+  function success(results) { return { type: searchTypes.SEARCH_BRANDS_SUCCESS, results } }
+  function failure(error) { return { type: searchTypes.SEARCH_BRANDS_FAILURE, error } }
 }
 
 function getSuggestedUsersResults() {

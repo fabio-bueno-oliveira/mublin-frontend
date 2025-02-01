@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, rem, em } from '@mantine/core';
+import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -42,6 +42,7 @@ function Search () {
       dispatch(searchInfos.getSearchUsersResults(searchedKeywords));
       dispatch(searchInfos.getSearchProjectsResults(searchedKeywords));
       dispatch(searchInfos.getSearchGearResults(searchedKeywords));
+      dispatch(searchInfos.getSearchBrandsResults(searchedKeywords));
     }
     dispatch(searchInfos.getSuggestedFeaturedUsers());
     dispatch(searchInfos.getFeaturedProjects());
@@ -277,49 +278,104 @@ function Search () {
               <Title order={5} fw={650} mb={14}>
                 {`Equipamento (${searchResults.gear.total})`}
               </Title>
+              {searchResults.brands.total > 0 && (
+                <>
+                  <Divider
+                    mb='xs'
+                    variant='dashed'
+                    labelPosition='left'
+                    label={
+                      <>
+                        <IconSearch size={12} />
+                        <Box ml={5}>Marcas relacionadas:</Box>
+                      </>
+                    }
+                  />
+                  {searchResults.brands.result.map(brand => 
+                    <Flex key={brand.id} align='center' mb={13} gap={8}>
+                      <Link to={{ pathname: `/gear/brand/${brand.slug}` }}>
+                        <Image
+                          src={brand.logo ? `https://ik.imagekit.io/mublin/products/brands/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${brand.logo}` : undefined}
+                          h={56}
+                          w='auto'
+                          fit='contain'
+                          radius='xl'
+                        />
+                      </Link>
+                      <Flex
+                        justify='flex-start'
+                        align='flex-start'
+                        direction='column'
+                        wrap='wrap'
+                      >
+                        <Anchor href={`/gear/brand/${brand.slug}`}>
+                          <Flex gap={3} align={'center'}>
+                            <Text size='0.97rem' fw={570} className='lhNormal'>
+                              {brand.name}
+                            </Text>
+                          </Flex>
+                        </Anchor>
+                      </Flex>
+                    </Flex>
+                  )}
+                </>
+              )}
               {searchResults.requesting ? ( 
                 skeletonLoadingResult
               ) : (
                 searchResults.gear.total ? (
-                  searchResults.gear.result.map(product => 
-                    <Flex key={product.productId} align='flex-start' mb={13} gap={8} justify='space-between'>
-                      <Link to={{ pathname: `/gear/product/${product.productId}` }}>
-                        <Image
-                          src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${product.productPicture}` : undefined}
-                          h={56}
-                          mah={56}
-                          w='auto'
-                          fit='contain'
-                          mb={10}
-                          radius='md'
-                        />
-                      </Link>
-                      <Flex
-                        justify="flex-start"
-                        align="flex-start"
-                        direction="column"
-                        wrap="wrap"
-                        style={{flexGrow:'2'}}
-                      >
-                        <Anchor href={`/gear/product/${product.productId}`}>
-                          <Flex gap={3} align={'center'}>
-                            <Text size='0.97rem' fw={570} className='lhNormal'>
-                              {product.productName}
+                  <>
+                    <Divider
+                      mb='xs'
+                      variant='dashed'
+                      labelPosition='left'
+                      label={
+                        <>
+                          <IconSearch size={12} />
+                          <Box ml={5}>Itens encontrados:</Box>
+                        </>
+                      }
+                    />
+                    {searchResults.gear.result.map(product => 
+                      <Flex key={product.productId} align='flex-start' mb={13} gap={8} justify='space-between'>
+                        <Link to={{ pathname: `/gear/product/${product.productId}` }}>
+                          <Image
+                            src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${product.productPicture}` : undefined}
+                            h={56}
+                            mah={56}
+                            w='auto'
+                            fit='contain'
+                            mb={10}
+                            radius='md'
+                          />
+                        </Link>
+                        <Flex
+                          justify="flex-start"
+                          align="flex-start"
+                          direction="column"
+                          wrap="wrap"
+                          style={{flexGrow:'2'}}
+                        >
+                          <Anchor href={`/gear/product/${product.productId}`}>
+                            <Flex gap={3} align={'center'}>
+                              <Text size='0.97rem' fw={570} className='lhNormal'>
+                                {product.productName}
+                              </Text>
+                            </Flex>
+                          </Anchor>
+                          <Text size='xs' fw={300}>
+                            {product.name_ptbr} • <a className='textLink' href={`/gear/brand/${product.brandSlug}`}>{product.brand}</a>
+                          </Text>
+                          <Flex gap={3} mt={4} align='center' justify='space-between'>
+                            <IconUsers style={{width:'12px',height:'12px'}} color='gray' />
+                            <Text size='xs' fw={300} c='dimmed'>
+                              {product.totalOwners} possuem
                             </Text>
                           </Flex>
-                        </Anchor>
-                        <Text size='xs' fw={300}>
-                          {product.name_ptbr} • <a className='textLink' href={`/gear/brand/${product.brandSlug}`}>{product.brand}</a>
-                        </Text>
-                        <Flex gap={3} mt={4} align='center' justify='space-between'>
-                          <IconUsers style={{width:'12px',height:'12px'}} color='gray' />
-                          <Text size='xs' fw={300} c='dimmed'>
-                            {product.totalOwners} possuem
-                          </Text>
                         </Flex>
                       </Flex>
-                    </Flex>
-                  )
+                    )}
+                  </>
                 ) : (
                   <Text size='sm' c='dimmed'>Nenhum item encontrado</Text>
                 )

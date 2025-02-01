@@ -21,6 +21,7 @@ export const searchService = {
     getSearchResults,
     getSearchProjectResults,
     getSearchGearResults,
+    getSearchBrandsResults,
     getSuggestedUsersResults,
     getSuggestedFeaturedUsers,
     getSuggestedNewUsers,
@@ -74,6 +75,14 @@ async function getSearchGearResults(query) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/search/gear/${query}`, requestOptions).then(handleResponse);
+}
+
+async function getSearchBrandsResults(query) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/brands/${query}`, requestOptions).then(handleResponse);
 }
 
 async function getSuggestedUsersResults() {

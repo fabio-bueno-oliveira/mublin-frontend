@@ -23,10 +23,6 @@ a {
   text-decoration: none;
 }
 
-a.textLink {
-  color: #000000;
-}
-
 a.displayBlockLink {
   width: max-content;
   display: block;
@@ -186,6 +182,9 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
     display: block;
     width: fit-content;
   }
+  a.textLink {
+    color: #FFFFFF;
+  }
   .mublinModule.feedCard {
     @media only screen and (max-width: 600px) {
       background-color: transparent!important;
@@ -199,6 +198,9 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
     color: #0a66c2!important;
     display: block;
     width: fit-content;
+  }
+  a.textLink {
+    color: #000000;
   }
   .mublinModule.feedCard {
     @media only screen and (max-width: 600px) {

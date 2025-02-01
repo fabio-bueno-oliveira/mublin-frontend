@@ -87,6 +87,20 @@ const initialState = {
       }
     ]
   },
+  brands: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        name: '',
+        slug: '',
+        logo: '',
+        cover: '',
+        website: '',
+      }
+    ]
+  },
   suggestedUsers: [
     {
       id: '',
@@ -224,6 +238,28 @@ export function search(state = initialState, action) {
         gear: initialState.gear,
         requesting: false,
         error: 'Nenhum equipamento encontrado'
+      };
+    // BRANDS
+    case searchTypes.SEARCH_BRANDS_REQUEST:
+      return {
+        ...state,
+        brands: initialState.brands,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.SEARCH_BRANDS_SUCCESS:
+      return {
+        ...state,
+        brands: action.results,
+        requesting: false,
+        error: ''
+      };
+    case searchTypes.SEARCH_BRANDS_FAILURE:
+      return {
+        ...state,
+        brands: initialState.brands,
+        requesting: false,
+        error: 'Nenhuma marca encontrada'
       };
     // SUGGESTED USERS
     case searchTypes.GET_SUGGESTEDUSERS_REQUEST:

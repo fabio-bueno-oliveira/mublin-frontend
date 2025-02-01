@@ -23,26 +23,24 @@ function FloaterHeader ({ profile, scrollY }) {
             <Container size={isLargeScreen ? 'lg' : undefined} p={isMobile ? 0 : undefined}>
               <Group gap={3}>
                 <Avatar
-                  size='sm'
+                  size='34px'
                   src={profile.picture ? profile.picture : undefined}
                   mr={4}
                 />
                 <Flex direction='column'>
-                  <Box w={isLargeScreen ? 400 : 200}>
-                    <Text fw='550' size='13px'>
-                      {profile.name} {profile.lastname}
-                    </Text>
-                    <Text size='0.65rem' truncate='end' mt={1}>
-                      {profile.roles.map((role, key) =>
-                      <span key={key} className='comma'>
-                        {role.description}
-                      </span>
-                      )}
-                    </Text>
-                    <Text c='dimmed' size='0.65rem'>
-                      {!!profile.city && profile.city}{profile.region && `, ${profile.region}`}
-                    </Text>
-                  </Box>
+                  <Text fw='650' size='12px'>
+                    {profile.name} {profile.lastname}
+                  </Text>
+                  <Text size='0.64rem' mt={2}>
+                    {profile.roles.map((role, key) =>
+                    <span key={key} className='comma'>
+                      {role.description}
+                    </span>
+                    )}
+                  </Text>
+                  <Text c='dimmed' size='0.64rem'>
+                    {!!profile.city && profile.city}{profile.region && `, ${profile.region}`}
+                  </Text>
                 </Flex>
               </Group>
             </Container>

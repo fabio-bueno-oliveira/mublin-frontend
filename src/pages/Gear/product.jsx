@@ -59,7 +59,7 @@ function GearProductPage () {
         showBackIcon={true}
       />
       <Container size='lg' mt={largeScreen ? 20 : 0}>
-        <Flex gap={12}>
+        <Flex gap={12} align='center'>
           {product.requesting ? (
             <Skeleton height={75} width={75} radius='lg' />
           ) : (
@@ -70,7 +70,7 @@ function GearProductPage () {
                 src={product.brandLogo ? `https://ik.imagekit.io/mublin/products/brands/tr:h-150,w-150,cm-pad_resize,bg-FFFFFF/${product.brandLogo}` : undefined}
                 h={75}
                 w={75}
-                radius='lg'
+                radius='md'
               />
             </Anchor>
           )}
@@ -82,7 +82,11 @@ function GearProductPage () {
               {product.requesting ? 'Carregando produto...' : product.name}
             </Title>
             {!product.requesting &&
-              <Link style={{fontSize:'13.8px'}} to={{ pathname: `/gear/brand/${product.brandSlug}` }} className='websiteLink'>
+              <Link 
+                style={{fontSize:'13.8px'}} 
+                to={{ pathname: `/gear/brand/${product.brandSlug}` }} 
+                className='websiteLink'
+              >
                 <Group gap='2'>
                   <IconArrowRight size={13} />
                   Ver produtos {product.brandName}
@@ -117,8 +121,8 @@ function GearProductPage () {
                     />
                     <Center>
                       <Group gap='4'>
-                        <IconZoom size='14' style={{color:'gray'}} />
-                        <Text ta='center' size='xs' c='gray'>
+                        <IconZoom size='14' style={{color:'#595959'}} />
+                        <Text ta='center' size='xs' c='#595959'>
                           Toque na imagem para ampliar
                         </Text>
                       </Group>

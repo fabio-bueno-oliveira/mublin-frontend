@@ -5,7 +5,7 @@ import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, NativeSelect, Grid, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group } from '@mantine/core';
-import { IconUsers } from '@tabler/icons-react';
+import { IconUsers, IconLink } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -63,13 +63,13 @@ function BrandPage () {
             />
           </Flex>
         </BackgroundImage>
-        <Grid mt={70}>
+        <Grid mt={78}>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
             <NativeSelect
               onChange={(e) => navigate('/gear/brand/'+e.target.options[e.target.selectedIndex].value)}
               value={brandUrlName}
               variant="filled"
-              size='lg'
+              size='md'
               fw={500}
             >
               {(!isLoaded) &&
@@ -87,17 +87,27 @@ function BrandPage () {
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
             {brand.website &&
-              <Text ta={largeScreen ? 'right' : 'left'} size='sm' mt={largeScreen ? 14 : 0}>
-                <Anchor href={brand.website} underline='hover' target='_blank'>
-                  {brand.website}
+              <Group mt={largeScreen ? 14 : 0} justify='flex-end'>
+                <Anchor
+                  href={brand.website}
+                  underline='hover'
+                  target='_blank'
+                  // className='websiteLink'
+                >
+                  <Flex gap={2} align='center'>
+                    <IconLink size={13} />
+                    <Text size='sm'>
+                      {brand.website}
+                    </Text>
+                  </Flex>
                 </Anchor>
-              </Text>
+              </Group>
             }
-            {brand.description &&
+            {/* {brand.description &&
               <Text size='xs'>
                 {brand.description}
               </Text>
-            }
+            } */}
           </Grid.Col>
         </Grid>
         <ResponsiveMasonry
