@@ -177,7 +177,7 @@ function SettingsBusinessPartners () {
                   Marcas que apoiam meu trabalho como parceiros e endorsers
                 </Text>
                 <Button 
-                  size='xs' 
+                  size='sm' 
                   color='violet' 
                   leftSection={<IconPlus size={14} />}
                   onClick={() => setModalNew(true)}
@@ -268,8 +268,8 @@ function SettingsBusinessPartners () {
               <option value=''>Selecione</option>
             )}
             {gear.brands.map((brand,key) =>
-              <option 
-                key={key} 
+              <option
+                key={key}
                 value={brand.id}
                 disabled={!!user.partners.result.filter((x) => { return x.id === Number(brand.id)}).length}
               >
@@ -331,7 +331,9 @@ function SettingsBusinessPartners () {
           </Button>
         </Group>
       </Modal>
-      <FooterMenuMobile />
+      {(!modalConfirm && !modalNew) &&
+        <FooterMenuMobile />
+      }
     </>
   )
 }

@@ -196,7 +196,7 @@ function MenuMobile () {
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconCalendarMonth style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>
             Disponibilidade para gigs
           </Button>
-          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconHeartHandshake style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>
+          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconHeartHandshake style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550' component='a' href='/settings/endorsements'>
             Parceiros e Endorsements
           </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconPackages style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550' onClick={() => navigate('/settings/my-gear')}>
