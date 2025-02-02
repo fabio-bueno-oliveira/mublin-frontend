@@ -190,7 +190,7 @@ function FeedCard ({ item, compact }) {
         style={compact ? {height:'100%'} : undefined}
       >
         {!!item.suggested && 
-          <Text ml='15' fz='0.8rem' c='dimmed' mb='8'>Publicação sugerida</Text>
+          <Text ml='15' fz='0.8rem' c='dimmed' mb={10}>Publicação sugerida</Text>
         }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
@@ -203,11 +203,11 @@ function FeedCard ({ item, compact }) {
           </Link>
           <Box style={{flexGrow:'1'}}>
             <Anchor
-              style={{lineHeight:'normal'}}
+              style={{lineHeight:'normal',width:'fit-content',display:'block'}}
               href={`/${item.relatedUserUsername}`}
             >
               <Flex gap={2} align='center' mb={2}>
-                <Text size='0.97rem' fw={570}>
+                <Text size='0.96rem' fw={570}>
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Text>
                 {!!item.relatedUserVerified &&
@@ -218,22 +218,22 @@ function FeedCard ({ item, compact }) {
                 }
                 {/* {item.relatedUserPlan === 'Pro' && <Badge size='xs' variant='light' color='gray'>PRO</Badge>} */}
               </Flex>
-              <Text size='0.76rem' c='dimmed' fw='420'>
-                {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
-              </Text>
-              <Flex gap={2} align='flex-end'>
-                <Text
-                  c='dimmed'
-                  size='0.74rem'
-                  fw='420'
-                  mt='4'
-                  className='fitContent'
-                >
-                  há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-                </Text>
-                <IconClock color='gray' style={{width:'11px',height:'11px'}} title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')} />
-              </Flex>
             </Anchor>
+            <Text size='0.75rem' c='dimmed' fw='420'>
+              {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
+            </Text>
+            <Flex gap={2} align='flex-end'>
+              <Text
+                c='dimmed'
+                size='0.74rem'
+                fw='420'
+                mt='4'
+                className='fitContent'
+              >
+                há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
+              </Text>
+              <IconClock color='gray' style={{width:'12px',height:'12px'}} title={format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')} />
+            </Flex>
           </Box>
           {!compact &&
             <Menu shadow='md' position='bottom-end' width={200}>

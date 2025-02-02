@@ -4,12 +4,14 @@ import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, NativeSelect, Grid, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group } from '@mantine/core';
-import { IconUsers, IconLink } from '@tabler/icons-react';
+import { Container, NativeSelect, Grid, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, em } from '@mantine/core';
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconUsers, IconLink, IconTagStarred } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
-import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry'
+import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css/skyblue';
 
 function BrandPage () {
 
@@ -18,6 +20,7 @@ function BrandPage () {
   const brandUrlName = params?.brandUrlName;
   const brand = useSelector(state => state.brand);
   const largeScreen = useMediaQuery('(min-width: 60em)');
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [brands, setBrands] = useState([]);
@@ -27,6 +30,7 @@ function BrandPage () {
   useEffect(() => {
     dispatch(gearInfos.getBrandInfo(brandUrlName));
     dispatch(gearInfos.gerBrandProducts(brandUrlName));
+    dispatch(gearInfos.gerBrandPartners(brandUrlName));
   }, [brandUrlName]);
 
   useEffect(() => {
@@ -110,9 +114,59 @@ function BrandPage () {
             } */}
           </Grid.Col>
         </Grid>
+        {brand.partners.total && 
+          <>
+            <Flex align='center' gap={5} mt={14}>
+              <IconTagStarred style={{width:'15px',height:'15px'}} />
+              <Text size='xs'>
+                Parceiros e Endorsees
+              </Text>
+            </Flex>
+            <Splide 
+              options={{
+                drag: 'free',
+                snap: false,
+                perPage: isMobile ? 3 : 3,
+                autoWidth: true,
+                arrows: false,
+                gap: '3px',
+                dots: false,
+                pagination: false,
+              }}
+            >
+              {brand.partners.result.map(user =>
+                <SplideSlide>
+                  <Card className='mublinModule' withBorder py={5} px={7} radius='xl' mt={6}>
+                    <Flex gap={5} align='center'>
+                      <Link to={{ pathname: `/${user.username}` }}>
+                        <Avatar src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-40,w-40,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} />
+                      </Link>
+                      <Flex direction='column'>
+                        <Group gap={0}>
+                          <Text size='xs' fw={500}>{user.name} {user.lastname}</Text>
+                          {!!user.verified && 
+                            <IconRosetteDiscountCheckFilled 
+                              className='iconVerified small'
+                            />
+                          }
+                          {!!user.legend && 
+                            <IconShieldCheckFilled
+                              className='iconLegend small'
+                            />
+                          }
+                        </Group>
+                        <Text size='xs'>{user.username}</Text>
+                      </Flex>
+                    </Flex>
+                  </Card>
+                </SplideSlide>
+              )}
+            </Splide>
+          </>
+        }
         <ResponsiveMasonry
           columnsCountBreakPoints={{350: 2, 750: 3, 900: 4}}
-          style={{marginTop:'20px'}}
+          style={{marginTop:'18px'}}
         >
           <Masonry gutter='8px'>
             {brand.products.map(product =>

@@ -40,7 +40,7 @@ import SettingsMyGear from './pages/Settings/gear';
 import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
 import SettingsMusicalPreferences from './pages/Settings/preferences';
 import SettingsAvailability from './pages/Settings/availability';
-import SettingsBusinessPartners from './pages/Settings/businessPartners';
+import SettingsBusinessPartners from './pages/Settings/endorsements';
 import SettingsPassword from './pages/Settings/password';
 import MenuMobilePage from './pages/MenuMobile';
 import CheckoutSuccess from './pages/Checkout/success';

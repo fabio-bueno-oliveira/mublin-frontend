@@ -142,7 +142,7 @@ function Header (props) {
       handleSearch(e, query, tab);
     };
     navigateToSearchPage(query, tab);
-  },430)
+  },470)
 
   const handleSearch = (e, query, tab) => {
     e.preventDefault();
@@ -216,7 +216,7 @@ function Header (props) {
                   variant={colorScheme === 'light' ? 'filled' : 'unstyled'}
                   size='md'
                   w={320}
-                  placeholder='Pessoa, instrumento ou cidade...'
+                  placeholder='Pessoa, instrumento, cidade...'
                   value={searchQuery}
                   leftSection={<IconSearch size={16} />}
                   onChange={(event) => handleChangeSearch(

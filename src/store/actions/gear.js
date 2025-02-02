@@ -4,6 +4,7 @@ import { gearService } from '../../api/gear';
 export const gearInfos = {
   getBrandInfo: getBrandInfo,
   gerBrandProducts: gerBrandProducts,
+  gerBrandPartners: gerBrandPartners,
   getProductInfo: getProductInfo,
   getProductOwners: getProductOwners,
 };
@@ -38,6 +39,22 @@ function gerBrandProducts(brandUrlName) {
   function request(brandUrlName) { return { type: gearTypes.GET_BRAND_PRODUCTS_REQUEST, brandUrlName } }
   function success(list) { return { type: gearTypes.GET_BRAND_PRODUCTS_SUCCESS, list } }
   function failure(brandUrlName, error) { return { type: gearTypes.GET_BRAND_PRODUCTS_FAILURE, brandUrlName, error } }
+}
+
+function gerBrandPartners(brandUrlName) {
+  return dispatch => {
+    dispatch(request(brandUrlName));
+  
+    gearService.gerBrandPartners(brandUrlName)
+      .then(
+        list => dispatch(success(list)),
+        error => dispatch(failure(brandUrlName, error.toString()))
+      );
+  };
+  
+  function request(brandUrlName) { return { type: gearTypes.GET_BRAND_PARTNERS_REQUEST, brandUrlName } }
+  function success(list) { return { type: gearTypes.GET_BRAND_PARTNERS_SUCCESS, list } }
+  function failure(brandUrlName, error) { return { type: gearTypes.GET_BRAND_PARTNERS_FAILURE, brandUrlName, error } }
 }
 
 function getProductInfo(productId) {

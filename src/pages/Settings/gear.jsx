@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
 import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
-import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft } from '@tabler/icons-react'
+import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft, IconLockSquareRoundedFilled } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -40,7 +40,6 @@ function SettingsMyGearPage () {
   const [categories, setCategories] = useState([])
 
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
-  const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   // Modal Add New Gear
   const [modalAddNewProductOpen, setModalAddNewProductOpen] = useState(false)
@@ -258,14 +257,12 @@ function SettingsMyGearPage () {
         <Header reloadUserInfo />
       </div>
       <Container size='lg' mb={100}>
-        <Grid mt='15'>
-          {isLargeScreen && 
-            <Grid.Col span={3}>
-              <SettingsMenu page='myGear' />
-            </Grid.Col>
-          }
-          <Grid.Col span={{ base: 12, md: 12, lg: 9 }}>
-            <Flex align='normal' gap='8' mb={14} className='showOnlyInMobile'>
+        <Grid mt={15}>
+          <Grid.Col span={4} pt={20} className='showOnlyInLargeScreen'>
+            <SettingsMenu page='myGear' />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
+            <Flex align='normal' gap={8} mb={14} className='showOnlyInMobile'>
               <IconChevronLeft 
                 style={{width:'21px',height:'21px'}} 
                 onClick={() => navigate(-1)}
@@ -285,16 +282,26 @@ function SettingsMyGearPage () {
                 <Loader />
               </Center>
             ) : (
-              <>
-                <Title fz='1.03rem' fw='640'>
-                  Gerenciar itens do meu equipamento
+              <Card 
+                shadow='sm' 
+                p={14} 
+                withBorder 
+                mb={20} 
+                display='block' 
+                className='mublinModule'
+              >
+                <Title order={4} className='showOnlyInLargeScreen'>
+                  Gerenciar meu equipamento
                 </Title>
+                <Text size='sm' c='dimmed' mb={14}>
+                  Adicionar, remover ou editar itens
+                </Text>
                 <Group justify='flex-start' mt={12}>
                   {user.plan === 'Pro' ? (
                     <Button
                       leftSection={<IconPlus size={14} />}
                       color='violet'
-                      size='sm'
+                      size='md' 
                       onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
                     >
                       Adicionar novo item
@@ -304,8 +311,8 @@ function SettingsMyGearPage () {
                       <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
                         Adicionar novo item
                       </Button>
-                      <Alert variant="light" color="gray" title="Funcionalidade exclusiva">
-                        Apenas usuários com plano Pro podem adicionar novos produtos ao equipamento. 
+                      <Alert variant="light" icon={<IconLockSquareRoundedFilled color="#000000" />} color="violet">
+                        Apenas usuários com plano PRO podem adicionar novos produtos ao equipamento. 
                         <Anchor
                           variant='gradient'
                           gradient={{ from: 'violet', to: 'blue' }}
@@ -406,7 +413,7 @@ function SettingsMyGearPage () {
                     </Grid.Col>
                   ))}
                 </Grid>
-              </>
+              </Card>
             )}
           </Grid.Col>
         </Grid>

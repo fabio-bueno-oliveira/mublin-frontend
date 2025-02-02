@@ -229,7 +229,7 @@ export function user(state = initialState, action) {
         gear: initialState.gear,
         error: "A solicitação da lista dos equipamentos falhou"
       };
-    // get user´s partners
+    // get user´s brand partners
     case userTypes.GET_USER_PARTNERS_REQUEST:
       return {
         ...state,

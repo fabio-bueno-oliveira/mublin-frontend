@@ -17,6 +17,7 @@ export function authHeader() {
 export const gearService = {
     getBrandInfo,
     gerBrandProducts,
+    gerBrandPartners,
     getProductInfo,
     getProductOwners,
     logout
@@ -36,6 +37,14 @@ async function gerBrandProducts(brandUrlName) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/gear/${brandUrlName}/products`, requestOptions).then(handleResponse);
+}
+
+async function gerBrandPartners(brandUrlName) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/gear/brand/${brandUrlName}/partners`, requestOptions).then(handleResponse);
 }
 
 async function getProductInfo(productId) {

@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
-import { Grid, Container, Card, Box, Flex, Group, Image, Divider, Title, Text, Button, CloseButton, Skeleton, Badge, Modal, Alert, NativeSelect, Checkbox, NumberInput } from '@mantine/core'
+import { Grid, Container, Card, Box, Flex, Group, Image, Divider, Title, Text, Button, CloseButton, Skeleton, Badge, Anchor, Modal, Alert, NativeSelect, Checkbox, NumberInput } from '@mantine/core'
 import { useForm, isNotEmpty } from '@mantine/form'
-import { IconChevronLeft, IconPlus, IconXboxX, IconInfoCircle } from '@tabler/icons-react'
+import { IconChevronLeft, IconPlus, IconXboxX, IconInfoCircle, IconLockSquareRoundedFilled } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
@@ -174,16 +174,38 @@ function SettingsBusinessPartners () {
                   Parceiros e Endorsements
                 </Title>
                 <Text size='sm' c='dimmed' mb={14}>
-                  Marcas que apoiam meu trabalho como parceiros e endorsers
+                  Marcas que apoiam meu trabalho
                 </Text>
-                <Button 
-                  size='sm' 
-                  color='violet' 
-                  leftSection={<IconPlus size={14} />}
-                  onClick={() => setModalNew(true)}
-                >
-                  Vincular nova marca
-                </Button>
+                {user.plan === 'Pro' ? ( 
+                  <Button 
+                    size='md' 
+                    color='violet' 
+                    leftSection={<IconPlus size={14} />}
+                    onClick={() => setModalNew(true)}
+                  >
+                    Vincular nova marca
+                  </Button>
+                ) : (
+                  <Flex gap={14} direction='column' align='flex-start'>
+                    <Button size='md' disabled leftSection={<IconPlus size={14} />}>
+                      Vincular nova marca
+                    </Button>
+                    <Alert variant="light" icon={<IconLockSquareRoundedFilled color="#000000" />} color="violet">
+                      Apenas usuários com plano PRO podem adicionar marcas parceiras. 
+                      <Anchor
+                        variant='gradient'
+                        gradient={{ from: 'violet', to: 'blue' }}
+                        fw='420'
+                        fz='sm'
+                        href='/pro'
+                        underline='hover'
+                        ml={4}
+                      >
+                        Assine o Mublin PRO!
+                      </Anchor>
+                    </Alert>
+                  </Flex>
+                )}
                 <Divider my={14} />
                 {user.requesting ? (
                   <>
@@ -202,7 +224,7 @@ function SettingsBusinessPartners () {
                       <Text size='sm' c='dimmed'>Nenhuma marca vinculada no momento</Text>
                     ) : (
                       <>
-                        <Text size='sm' mb={6}>
+                        <Text size='sm' mb={10}>
                           {user.partners.total === 1 ? user.partners.total + ' marca vinculada' : user.partners.total + ' marcas vinculadas'}
                         </Text>
                         {user.partners.result.map((brand =>
@@ -216,11 +238,11 @@ function SettingsBusinessPartners () {
                               />
                             </Link>
                             <Flex direction='column'>
-                              <Group gap={2}>
-                                <Text size='sm' fw={600}>{brand.name}</Text>
+                              <Group gap={1}>
+                                <Text size='md' fw={600}>{brand.name}</Text>
                                 <CloseButton 
                                   title='Desvincular' 
-                                  icon={<IconXboxX color='red' size={16} stroke={1.5} />} 
+                                  icon={<IconXboxX color='red' size={15} stroke={1.5} />} 
                                   onClick={() => openModalConfirmation(brand.keyId, brand.name)}
                                 />
                               </Group>
@@ -254,10 +276,11 @@ function SettingsBusinessPartners () {
         size='xs'
       >
         <Alert variant='light' color='orange' icon={<IconInfoCircle />} mb={10}>
-          <Text size='xs'>O Mublin não verifica a parceria junto às marcas mencionadas</Text>
+          <Text size='xs'>O Mublin não verifica a parceria junto às marcas mencionadas, porém o vínculo pode ser removido a partir de eventual solicitação</Text>
         </Alert>
         <form onSubmit={form.onSubmit(handleSubmitNewPartnership)}>
           <NativeSelect
+            size='md'
             label='Selecione a marca parceira'
             key={form.key('brandId')}
             {...form.getInputProps('brandId')}
@@ -279,6 +302,7 @@ function SettingsBusinessPartners () {
           </NativeSelect>
           <NumberInput
             mt={6}
+            size='md'
             label='Ano de início da parceria'
             min={1900} 
             max={currentYear}
@@ -287,6 +311,7 @@ function SettingsBusinessPartners () {
           />
           <NativeSelect
             mt={6}
+            size='md'
             label='Tipo de parceria'
             key={form.key('type')}
             {...form.getInputProps('type')}
@@ -303,10 +328,10 @@ function SettingsBusinessPartners () {
             {...form.getInputProps('featured', { type: 'checkbox' })}
           />
           <Group justify='flex-end' gap={7} mt={20}>
-            <Button variant='outline' color='gray' size='sm' onClick={() => setModalNew(false)}>
+            <Button variant='outline' color='gray' size='md' onClick={() => setModalNew(false)}>
               Cancelar
             </Button>
-            <Button color='violet' size='sm' type="submit" loading={isLoading}>
+            <Button color='violet' size='md' type="submit" loading={isLoading}>
               Salvar
             </Button>
           </Group>

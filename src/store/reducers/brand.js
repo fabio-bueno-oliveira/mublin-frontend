@@ -29,7 +29,22 @@ const initialState = {
       colorName: '',
       colorNamePTBR: ''
     }
-  ]
+  ],
+  partners: {
+    total: '',
+    success: '',
+    result: [
+      {
+        id: '',
+        name: '',
+        lastname: '',
+        username: '',
+        picture: '',
+        legend: '',
+        verified: '',
+      }
+    ]
+  }
 }
 
 export function brand(state = initialState, action) {
@@ -111,6 +126,29 @@ export function brand(state = initialState, action) {
         success: false,
         error: "A solicitação falhou",
         products: initialState.products
+      };
+    case gearTypes.GET_BRAND_PARTNERS_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        success: false,
+        partners: initialState.partners
+      };
+    case gearTypes.GET_BRAND_PARTNERS_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        success: true,
+        error: "",
+        partners: action.list,
+      };
+    case gearTypes.GET_BRAND_PARTNERS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        success: false,
+        error: "A solicitação falhou",
+        partners: initialState.partners
       };
     default:
       return state

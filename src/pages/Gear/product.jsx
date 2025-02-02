@@ -75,20 +75,20 @@ function GearProductPage () {
             </Anchor>
           )}
           <Flex direction='column'>
-            <Text fw='480' size='xs' c='dimmed'>
+            <Text fw='420' size='xs' c='dimmed'>
               {product.requesting ? 'Carregando...' : product.categoryName + ' • ' + product.brandName}
             </Text>
-            <Title fz='1.20rem' fw='560'>
+            <Title fz='1.18rem' fw='560'>
               {product.requesting ? 'Carregando produto...' : product.name}
             </Title>
             {!product.requesting &&
               <Link 
-                style={{fontSize:'13.8px'}} 
+                style={{fontSize:'13px'}} 
                 to={{ pathname: `/gear/brand/${product.brandSlug}` }} 
                 className='websiteLink'
               >
                 <Group gap='2'>
-                  <IconArrowRight size={13} />
+                  <IconArrowRight size={12} />
                   Ver produtos {product.brandName}
                 </Group>
               </Link>
@@ -219,7 +219,7 @@ function GearProductPage () {
         centered
         opened={modalZoomOpen}
         // title={`${product.brandName} | ${product.name} ${product.colorNamePTBR ? ' | Cor: ' + product.colorNamePTBR : ''}`}
-        // title={product.name}
+        title={product.name}
         onClose={() => setModalZoomOpen(false)} 
         scrollAreaComponent={ScrollArea.Autosize}
         size='lg'
