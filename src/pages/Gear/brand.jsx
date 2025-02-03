@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, NativeSelect, Grid, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, em } from '@mantine/core';
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconUsers, IconLink, IconTagStarred } from '@tabler/icons-react'
@@ -31,6 +30,7 @@ function BrandPage () {
     dispatch(gearInfos.getBrandInfo(brandUrlName));
     dispatch(gearInfos.gerBrandProducts(brandUrlName));
     dispatch(gearInfos.gerBrandPartners(brandUrlName));
+    dispatch(gearInfos.gerBrandOwners(brandUrlName));
   }, [brandUrlName]);
 
   useEffect(() => {
@@ -204,6 +204,15 @@ function BrandPage () {
                       {product.totalOwners}
                     </Text>
                   </Flex>
+                </Flex>
+                <Flex justify='flex-end' mt={6}>
+                  <Avatar.Group>
+                    {brand.owners.result.filter(x => x.productId === product.id).map(user =>
+                      <Link to={{ pathname: `/${user.username}` }}>
+                        <Avatar size={35} src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-70,w-70,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} title={user.name + ' ' + user.lastname} />
+                      </Link>
+                    )}
+                  </Avatar.Group>
                 </Flex>
               </Card>
             )}

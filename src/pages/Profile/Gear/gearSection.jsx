@@ -188,7 +188,10 @@ function GearSection ({ loggedUserId, username }) {
                           }
                         </Flex>
                       }
-                      <Flex gap={4}>
+                      {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).length > 0 &&
+                        <Text size='10px' c='dimmed'>+ {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).length} produtos vinculados</Text>
+                      }
+                      {/* <Flex gap={4}>
                         {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).slice(0, 3).map(subGear =>
                           <Image
                             key={subGear.productId}
@@ -204,7 +207,7 @@ function GearSection ({ loggedUserId, username }) {
                             title={`${subGear.category} ${subGear.brandName} ${subGear.productName}`}
                           />
                         )}
-                      </Flex>
+                      </Flex> */}
                     </Flex>
                   </SplideSlide>
                 )}
@@ -299,7 +302,7 @@ function GearSection ({ loggedUserId, username }) {
                       />
                     </Anchor>
                     <Text ta='center' size='10px' c='dimmed'>{s.brandName}</Text>
-                    <Text ta='center' size='10px'>{s.productName}</Text>
+                    <Text ta='center' size='10px'>{truncateString(s.productName, 18)}</Text>
                   </Flex>
                 </SplideSlide>
               )}
@@ -309,10 +312,10 @@ function GearSection ({ loggedUserId, username }) {
         {gearItemDetail.ownerComments && 
           <>
             <Divider my={10} />
-            <Text size='xs' fw={350} c='dimmed' mb={3}>
+            <Text size='sm' fw={350} c='dimmed' mb={3}>
               Comentários de {profile.name} {profile.lastname}
             </Text>
-            <Text size='xs'>
+            <Text size='sm'>
               <ReadMoreReact
                 text={gearItemDetail.ownerComments}
                 min={90}

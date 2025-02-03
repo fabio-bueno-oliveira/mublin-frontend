@@ -142,7 +142,7 @@ function SettingsPage () {
       <div className='showOnlyInLargeScreen'>
         <Header reloadUserInfo />
       </div>
-      <Container size='lg' mb={60}>
+      <Container size='lg' mb={110}>
         <Grid mt='15'>
           {isLargeScreen && 
             <Grid.Col span={4} pt='20'>

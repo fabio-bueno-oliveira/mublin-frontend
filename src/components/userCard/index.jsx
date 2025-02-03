@@ -26,9 +26,9 @@ export function UserCard({
             </Text>
             {verified &&
               <IconRosetteDiscountCheckFilled
-                color='#7950f2'
+                color='#0977ff'
                 style={iconVerifiedStyle}
-                title='Perfil verificado'
+                title='Verificado'
               />
             }
             {legend &&

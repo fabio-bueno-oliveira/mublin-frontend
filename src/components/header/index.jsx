@@ -7,10 +7,11 @@ import { miscInfos } from '../../store/actions/misc';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { userActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, Select, rem, em } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, rem, em } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon,
+  IconCircleFilled,
   IconBrightnessUp,
   IconSearch,
   IconDotsVertical,
@@ -285,13 +286,18 @@ function Header (props) {
                   <Menu.Label>Carregando meus projetos...</Menu.Label>
                 ) : (
                   <>
-                    <Menu.Label>Projetos em atividade que faço parte</Menu.Label>
+                    <Menu.Label>
+                      Projetos em atividade e que faço parte
+                    </Menu.Label>
                     {projectsActive.length ? ( projectsActive.map(project =>
                       <Menu.Item key={project.id}>
                         <Group gap={5}>
                           <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
                           <Flex direction='column'>
-                            <Text size='0.85rem' fw='500'>{project.name}</Text>
+                            <Group gap={2} align='flex-start'>
+                              <Text size='0.85rem' fw='500'>{project.name}</Text>
+                              <IconCircleFilled color="limegreen" size={7} />
+                            </Group>
                             <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
                           </Flex>
                         </Group>
@@ -372,9 +378,11 @@ function Header (props) {
                 <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
                   <Menu.Target>
                     <Avatar
-                      size="md"
+                      // size="md"
+                      w={38}
+                      h={38}
                       className="point"
-                      src={userInfo.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                      src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
                       alt={userInfo.username}
                       ml={8}
                     />

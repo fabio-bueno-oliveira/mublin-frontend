@@ -14,16 +14,16 @@ const theme = createTheme({
   colorScheme: 'light',
   colors: {
     violet: [
-      "#f4ecfd",
-      "#e4d5f6",
-      "#c7a6f0",
-      "#aa75ea",
-      "#904ce5",
-      "#8132e2",
-      "#7926e2",
-      "#671bc9",
-      "#5c16b3",
-      "#4f109e"
+      "#f4ecfe",
+      "#e4d3f9",
+      "#c7a2f4",
+      "#aa6ef1",
+      "#9143ee",
+      "#812aed",
+      "#791ded",
+      "#6813d3",
+      "#5c0fbd",
+      "#4f08a6"
     ],
   },
   breakpoints: {

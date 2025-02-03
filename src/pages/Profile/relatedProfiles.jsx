@@ -56,7 +56,7 @@ function RelatedProfiles ({
                     {truncateString(user.username, (user.verified || user.legendBadge) ? 9 : 12)}
                   </Text>
                   {!!user.verified && 
-                    <IconRosetteDiscountCheckFilled title='Usuário verificado' color='#7950f2' style={{ width: rem(13), height: rem(13) }} />
+                    <IconRosetteDiscountCheckFilled title='Usuário verificado' color='#0977ff' style={{ width: rem(13), height: rem(13) }} />
                   }
                   {!!user.legendBadge && 
                     <IconShieldCheckFilled title='Lenda da Música' style={{ color: '#DAA520', width: rem(13), height: rem(13) }} />

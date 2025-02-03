@@ -430,11 +430,12 @@ function ProfilePage () {
                   {loggedUserId !== profile.id ? (
                     <>
                       <Button 
-                        size='xs'
-                        fz='14px'
-                        fw='500'
+                        size='sm'
+                        fz='0.85rem'
+                        fw='570'
+                        h={30}
                         color={colorScheme === "light" ? "dark" : "gray"}
-                        variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
+                        variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
                         loading={loadingFollow}
                         rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
                         fullWidth={isMobile}
@@ -447,10 +448,11 @@ function ProfilePage () {
                         {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
                       </Button>
                       <Button 
-                        size='xs'
-                        fz='0.84rem'
-                        fw='470'
-                        variant='light'
+                        size='sm'
+                        fz='0.85rem'
+                        fw='570'
+                        h={30}
+                        variant='outline'
                         color={colorScheme === "light" ? "dark" : "gray"}
                         fullWidth={isMobile}
                         onClick={() => setModalContactOpen(true)}
@@ -473,12 +475,13 @@ function ProfilePage () {
                       }
                     </>
                   ) : (
-                    <Button 
-                      size='xs'
-                      fz='0.84rem'
+                    <Button
+                      size='sm'
+                      fz='0.85rem'
                       fw='570'
-                      variant='light'
-                      color={colorScheme === "light" ? "dark" : "gray"}
+                      h={30}
+                      variant='outline'
+                      color={colorScheme === 'light' ? 'dark' : 'gray'}
                       fullWidth={isMobile}
                       onClick={() => navigate('/settings')}
                     >
@@ -847,7 +850,7 @@ function ProfilePage () {
                     {follower.name} {follower.lastname}
                   </Text>
                   {follower.verified && 
-                    <IconRosetteDiscountCheckFilled className='iconVerified' title='Perfil verificado' />
+                    <IconRosetteDiscountCheckFilled className='iconVerified' title='Verificado' />
                   }
                   {follower.legend_badge && 
                     <IconShieldCheckFilled className='iconLegend' title='Lenda da música' />
@@ -881,7 +884,7 @@ function ProfilePage () {
                     {following.name} {following.lastname}
                   </Text>
                   {following.verified && 
-                    <IconRosetteDiscountCheckFilled className='iconVerified' title='Perfil verificado' />
+                    <IconRosetteDiscountCheckFilled className='iconVerified' title='Verificado' />
                   }
                   {following.legend_badge && 
                     <IconShieldCheckFilled className='iconLegend' title='Lenda da música' />
@@ -1034,7 +1037,7 @@ function ProfilePage () {
         <Center>
           <IconRosetteDiscountCheckFilled 
             style={
-              { color: '#7950f2', width: rem(45), height: rem(45), marginLeft: '5px' }
+              { color: '#0977ff', width: rem(45), height: rem(45), marginLeft: '5px' }
             }
           />
         </Center>

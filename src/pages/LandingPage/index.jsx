@@ -103,7 +103,7 @@ function LandingPage () {
             <Flex gap={0} align='center' justify='center' mb={0}>
               <Text size='13px' fw='500' ta='center'>{user.name} {user.lastname}</Text>
               {!!user.verified && 
-                <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
+                <IconRosetteDiscountCheckFilled color='#0977ff' style={iconVerifiedStyle} />
               }
               {!!user.legend && 
                 <IconShieldCheckFilled style={iconLegendStyle} />

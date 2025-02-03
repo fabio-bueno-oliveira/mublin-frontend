@@ -279,7 +279,7 @@ function SettingsMyGearPage () {
             </Flex>
             {requesting ? (
               <Center mt='60'>
-                <Loader />
+                <Loader color='violet' />
               </Center>
             ) : (
               <Card 
@@ -360,7 +360,7 @@ function SettingsMyGearPage () {
                           <Divider my={10} />
                           <Group gap='3'>
                             {item.featured ? (
-                              <IconToggleRightFilled color='#7950f2' />
+                              <IconToggleRightFilled color='#0977ff' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
@@ -368,7 +368,7 @@ function SettingsMyGearPage () {
                           </Group>
                           <Group gap='3'>
                             {item.currentlyUsing ? (
-                              <IconToggleRightFilled color='#7950f2' />
+                              <IconToggleRightFilled color='#0977ff' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
@@ -376,7 +376,7 @@ function SettingsMyGearPage () {
                           </Group>
                           <Group gap='3'>
                             {item.forSale ? (
-                              <IconToggleRightFilled color='#7950f2' />
+                              <IconToggleRightFilled color='#0977ff' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}

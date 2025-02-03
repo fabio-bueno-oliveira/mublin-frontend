@@ -18,6 +18,7 @@ export const gearService = {
     getBrandInfo,
     gerBrandProducts,
     gerBrandPartners,
+    gerBrandOwners,
     getProductInfo,
     getProductOwners,
     logout
@@ -45,6 +46,14 @@ async function gerBrandPartners(brandUrlName) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/gear/brand/${brandUrlName}/partners`, requestOptions).then(handleResponse);
+}
+
+async function gerBrandOwners(brandUrlName) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/gear/brand/${brandUrlName}/owners`, requestOptions).then(handleResponse);
 }
 
 async function getProductInfo(productId) {

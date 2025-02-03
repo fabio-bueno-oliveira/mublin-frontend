@@ -211,7 +211,7 @@ function FeedCard ({ item, compact }) {
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Text>
                 {!!item.relatedUserVerified &&
-                  <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} title='Perfil verificado' />
+                  <IconRosetteDiscountCheckFilled color='#0977ff' style={iconVerifiedStyle} title='Verificado' />
                 }
                 {!!item.relatedUserLegend &&
                   <IconShieldCheckFilled style={iconLegendStyle} title='Lenda da música' />
@@ -480,7 +480,7 @@ function FeedCard ({ item, compact }) {
                     {user.name} {user.lastname}
                   </Text>
                   {user.verified &&
-                    <IconRosetteDiscountCheckFilled color='#7950f2' style={iconVerifiedStyle} />
+                    <IconRosetteDiscountCheckFilled color='#0977ff' style={iconVerifiedStyle} />
                   }
                   {user.legend_badge &&
                     <IconShieldCheckFilled style={iconLegendStyle} />
@@ -545,7 +545,7 @@ function FeedCard ({ item, compact }) {
               <Box>
                 <Text size='sm'>
                   <span className='point' style={{fontWeight:'550'}}>{comment.username}</span> {!!comment.verified &&
-                    <IconRosetteDiscountCheckFilled color='#7950f2' style={{ width: rem(13), height: rem(13) }} />
+                    <IconRosetteDiscountCheckFilled color='#0977ff' style={{ width: rem(13), height: rem(13) }} />
                   } {!!comment.legend_badge &&
                     <IconShieldCheckFilled style={{ color: '#DAA520', width: rem(13), height: rem(13) }} />
                   } {comment.text}

@@ -44,6 +44,23 @@ const initialState = {
         verified: '',
       }
     ]
+  },
+  owners: {
+    total: '',
+    success: '',
+    result: [
+      {
+        id: '',
+        name: '',
+        lastname: '',
+        username: '',
+        picture: '',
+        verified: '',
+        legend: '',
+        productId: '',
+        productName: ''
+      }
+    ]
   }
 }
 
@@ -149,6 +166,29 @@ export function brand(state = initialState, action) {
         success: false,
         error: "A solicitação falhou",
         partners: initialState.partners
+      };
+    case gearTypes.GET_BRAND_OWNERS_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        success: false,
+        owners: initialState.owners
+      };
+    case gearTypes.GET_BRAND_OWNERS_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        success: true,
+        error: "",
+        owners: action.list,
+      };
+    case gearTypes.GET_BRAND_OWNERS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        success: false,
+        error: "A solicitação falhou",
+        partners: initialState.owners
       };
     default:
       return state

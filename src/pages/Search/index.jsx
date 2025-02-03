@@ -189,7 +189,7 @@ function Search () {
                               {user.name+' '+user.lastname}
                             </Text>
                             {!!user.verified && 
-                              <IconRosetteDiscountCheckFilled color='#7950f2' title='Usuário verificado' 
+                              <IconRosetteDiscountCheckFilled color='#0977ff' title='Usuário verificado' 
                               style={iconVerifiedStyle} />
                             }
                             {!!user.legend && 
@@ -204,7 +204,7 @@ function Search () {
                         <Text size='xs' fw={400} c='dimmed'>
                           {user.city && user.city+' - '+user.region}
                         </Text>
-                        {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name) && !searchedKeywords.includes(user.lastname)) && 
+                        {(user.projectRelated && !user?.projectRelated?.includes(user.name) && !searchedKeywords.includes(user.name.toLowerCase()) && !searchedKeywords.includes(user.lastname.toLowerCase())) && 
                           <Text size='10px' mt='3px' c='dimmed'>
                             Relacionado: {user.projectRelated} ({user.projectType})
                           </Text>
