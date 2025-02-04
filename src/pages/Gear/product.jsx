@@ -185,7 +185,7 @@ function GearProductPage () {
                           </Text>
                           <Group gap={3}>
                             {!!owner.currentlyUsing && 
-                              <Badge size='xs' color='green'>Em uso</Badge>
+                              <Badge size='xs' color='green' variant='light'>Em uso</Badge>
                             } 
                             {!!owner.forSale && 
                               <Badge size='xs' color='black'>À venda</Badge>

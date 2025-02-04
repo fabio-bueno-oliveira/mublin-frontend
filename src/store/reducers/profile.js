@@ -29,6 +29,8 @@ const initialState = {
   instagram: '',
   website: '',
   public: '',
+  openToWork: '',
+  openToWorkText: '',
   roles: [
     { 
       id: '', 
@@ -98,7 +100,11 @@ const initialState = {
         name: '',
         lastname: '',
         username: '',
-        picture: ''
+        picture: '',
+        verified: '',
+        legend_badge: '',
+        openToWork: '',
+        openToWorkText: ''
       }
     ]
   },
@@ -114,7 +120,11 @@ const initialState = {
         name: '',
         lastname: '',
         username: '',
-        picture: ''
+        picture: '',
+        verified: '',
+        legend_badge: '',
+        openToWork: '',
+        openToWorkText: ''
       }
     ]
   },
@@ -308,6 +318,8 @@ export function profile(state = initialState, action) {
         instagram: '',
         website: '',
         public: '',
+        openToWork: '',
+        openToWorkText: '',
         roles: initialState.roles,
         genres: initialState.genres,
         requesting: true,
@@ -342,7 +354,9 @@ export function profile(state = initialState, action) {
         verified: action.info.verified,
         instagram: action.info.instagram,
         website: action.info.website,
-        public: action.info.public
+        public: action.info.public,
+        openToWork: action.info.openToWork,
+        openToWorkText: action.info.openToWorkText
       };
     case profileTypes.GET_PROFILE_INFO_FAILURE:
       return {

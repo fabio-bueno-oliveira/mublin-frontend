@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, rem, em } from '@mantine/core';
+import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, Indicator, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -169,12 +169,14 @@ function Search () {
               ) : (
                 searchResults.users.total ? (
                   searchResults.users.result.map(user =>
-                    <Flex key={user.id} align='flex-start' mb={13} gap={6} justify='space-between'>
+                    <Flex key={user.id} align='flex-start' mb={13} gap={6}justify='space-between'>
                       <Link to={{ pathname: `/${user.username}` }}>
-                        <Avatar 
-                          src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'} 
-                          size='lg'
-                        />
+                        <Indicator position='bottom-center' inline label={<Text size='0.6rem' >Bora Play!!</Text>} color='lime' size={18} withBorder disabled={!user.openToWork}>
+                          <Avatar
+                            src={user.picture ? user.picture : 'https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'}
+                            size='lg'
+                          />
+                        </Indicator>
                       </Link>
                       <Flex
                         justify='flex-start'

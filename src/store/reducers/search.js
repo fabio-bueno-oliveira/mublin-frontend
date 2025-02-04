@@ -33,6 +33,8 @@ const initialState = {
         availability_color: '',
         projectType: '',
         totalProjects: 0,
+        openToWork: '',
+        openToWorkText: ''
       }
     ]
   },

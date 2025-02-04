@@ -4,13 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userInfos } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
-import { Grid, Container, Modal, Card, NativeSelect, Group, Radio, Box, Flex, Badge, Button, Title, Text } from '@mantine/core'
+import { Grid, Container, Modal, Card, NativeSelect, Group, Radio, Box, Flex, Badge, Button, Title, Text, TextInput, Indicator, Avatar, Checkbox } from '@mantine/core'
 import { IconChevronLeft, IconPlus, IconX } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
-import { notifications } from '@mantine/notifications'
 
 function SettingsAvailability () {
 
@@ -22,10 +21,11 @@ function SettingsAvailability () {
   const user = useSelector(state => state.user)
   const availabilityOptions = useSelector(state => state.availabilityOptions)
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  // const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const token = localStorage.getItem('token')
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
+  const cdnBaseURL = 'https://ik.imagekit.io/mublin'
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -135,6 +135,14 @@ function SettingsAvailability () {
     }, 400);
   }
 
+  const [showOpenToWork, setShowOpenToWork] = useState(user.openToWork)
+  const [openToWorkText, setOpenToWorkText] = useState(user.openToWorkText)
+
+  useEffect(() => { 
+    setShowOpenToWork(user.openToWork)
+    setOpenToWorkText(user.openToWorkText)
+  }, [user.success])
+
   return (
     <>
       <div className='showOnlyInLargeScreen'>
@@ -164,6 +172,34 @@ function SettingsAvailability () {
               </Text>
             </Flex>
             <Box>
+              <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule' display='block'>
+                <Title order={4}>
+                  Selo Open to Work
+                </Title>
+                <Text mb={8}  size='xs' c='dimmed'>
+                  Selo de disponibilidade abaixo da minha foto
+                </Text>
+                <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!showOpenToWork}>
+                  <Avatar src={user.picture ? cdnBaseURL+'/tr:h-60,w-60,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} size='60px' />
+                </Indicator>
+                <TextInput
+                  mt={6} 
+                  label='Texto do selo'
+                  description='Até 10 caracteres'
+                  value={openToWorkText}
+                  size='sm'
+                  maxLength={10}
+                  w={200}
+                  onChange={(event) => setOpenToWorkText(event.currentTarget.value)}
+                  disabled={!showOpenToWork}
+                />
+                <Checkbox
+                  mt={8}
+                  checked={showOpenToWork}
+                  label="Exibir selo de disponibilidade abaixo da minha foto"
+                  onChange={(event) => setShowOpenToWork(event.currentTarget.checked)}
+                />
+              </Card>
               <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule'>
                 <Title order={4}>
                   Disponibilidade

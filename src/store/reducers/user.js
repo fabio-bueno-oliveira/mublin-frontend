@@ -26,6 +26,8 @@ const initialState = {
   status: '',
   legend: '',
   website: '',
+  openToWork: '',
+  openToWorkText: '',
   roles: [
     { id: '', idRole: '', name: '', description: '', mainActivity: '', icon: '' }
   ],
@@ -134,6 +136,8 @@ export function user(state = initialState, action) {
         status: action.info.status,
         legend: action.info.legend_badge,
         website: action.info.website,
+        openToWork: action.info.openToWork,
+        openToWorkText: action.info.openToWorkText,
         availabilityStatus: action.info.availability_status,
         availabilityFocus: action.info.availability_focus,
         level: action.info.level
@@ -166,7 +170,9 @@ export function user(state = initialState, action) {
         phoneIsPublic: '',
         status: '',
         legend: '',
-        website: ''
+        website: '',
+        openToWork: '',
+        openToWorkText: '',
       };
     // get user´s preferred music genres
     case userTypes.GET_USER_GENRES_INFO_REQUEST:

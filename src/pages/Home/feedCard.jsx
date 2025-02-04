@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
-import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, TextInput, Button, rem, em } from '@mantine/core'
+import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, TextInput, Button, Indicator, rem, em } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle } from '@tabler/icons-react'
@@ -194,12 +194,14 @@ function FeedCard ({ item, compact }) {
         }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
-            <Avatar 
-              size='45px'
-              radius='xl'
-              src={item.relatedUserPicture ? item.relatedUserPicture : undefined}
-              alt={'Foto de '+item.relatedUserName}
-            />
+            <Indicator position='bottom-center' inline label={<Text size='0.55rem' >{item.relatedUserOpenToWorkText}</Text>} color='lime' size={18} withBorder disabled={!item.relatedUserOpenToWork}>
+              <Avatar 
+                size='45px'
+                radius='xl'
+                src={item.relatedUserPicture ? item.relatedUserPicture : undefined}
+                alt={'Foto de '+item.relatedUserName}
+              />
+            </Indicator>
           </Link>
           <Box style={{flexGrow:'1'}}>
             <Anchor

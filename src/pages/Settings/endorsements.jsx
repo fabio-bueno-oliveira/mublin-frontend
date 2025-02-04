@@ -276,7 +276,7 @@ function SettingsBusinessPartners () {
         size='xs'
       >
         <Alert variant='light' color='orange' icon={<IconInfoCircle />} mb={10}>
-          <Text size='xs'>O Mublin não verifica a parceria junto às marcas mencionadas, porém o vínculo pode ser removido a partir de eventual solicitação</Text>
+          <Text size='xs'>O Mublin não verifica a parceria junto às marcas mencionadas, porém o vínculo pode ser removido imediatamente no caso de solicitação da marca ou parceria não existente</Text>
         </Alert>
         <form onSubmit={form.onSubmit(handleSubmitNewPartnership)}>
           <NativeSelect

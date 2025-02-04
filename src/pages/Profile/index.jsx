@@ -305,11 +305,13 @@ function ProfilePage () {
                   wrap='nowrap'
                   columnGap='xs'
                 >
-                  <Avatar
-                    size='xl'
-                    src={profile.picture}
-                    onClick={() => setModalAvatarOpen(true)}
-                  />
+                  <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{profile.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!profile.openToWork}>
+                    <Avatar
+                      size='xl'
+                      src={profile.picture}
+                      onClick={() => setModalAvatarOpen(true)}
+                    />
+                  </Indicator>
                   <Box style={{overflow:'hidden'}}>
                     <Flex align='baseline' mb={1}>
                       <Title fz='1.30rem' fw='600'>
@@ -492,9 +494,6 @@ function ProfilePage () {
                     </Button>
                   )}
                 </Flex>
-                {(profile.plan === 'Pro') && 
-                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={true} mt={20} mb={18} />
-                }
                 {profile.availabilityId && 
                   <>
                     {/* <Divider mt='md' mb='xs' label='Disponibilidade:' labelPosition='left' /> */}
@@ -846,7 +845,9 @@ function ProfilePage () {
         {profile.followers.total ?  (
           profile.followers.result.map(follower => 
             <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(follower.username)} key={follower.id}>
-              <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
+              <Indicator position='bottom-center' inline label={<Text size='0.55rem' >{follower.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!follower.openToWork}>
+                <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
+              </Indicator>
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
                   <Text size='sm' fw={550} className='lhNormal'>
@@ -880,7 +881,9 @@ function ProfilePage () {
         {profile.following.total ?  (
           profile.following.result.map(following => 
             <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(following.username)} key={following.id}>
-              <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
+              <Indicator position='bottom-center' inline label={<Text size='0.55rem' >{following.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!following.openToWork}>
+                <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
+              </Indicator>
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
                   <Text size='sm' fw={550} className='lhNormal'>
@@ -893,7 +896,7 @@ function ProfilePage () {
                     <IconShieldCheckFilled className='iconLegend' title='Lenda da música' />
                   }
                 </Group>
-                <Text size='xs' color='dimmed'>
+                <Text size='xs' c='dimmed'>
                   {'@'+following.username}
                 </Text>
               </Flex>

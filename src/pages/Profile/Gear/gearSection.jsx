@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
-import { useMantineColorScheme, ActionIcon, Modal, Center, Card, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Anchor, Divider, em  } from '@mantine/core'
+import { useMantineColorScheme, ActionIcon, Modal, Center, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Anchor, Divider, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconArrowsMaximize, IconSettings, IconPlus } from '@tabler/icons-react'
+import { IconArrowsMaximize, IconSettings, IconCirclePlus } from '@tabler/icons-react'
 import { truncateString } from '../../../utils/formatter'
 import ReadMoreReact from 'read-more-react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
@@ -70,32 +70,32 @@ function GearSection ({ loggedUserId, username }) {
             }
             {(profile.id === loggedUserId && !profile.requesting) && 
               <>
-              <ActionIcon
-                variant='transparent'
-                size='md'
-                aria-label='Gerenciar'
-                component='a'
-                href='/settings/my-gear'
-                title='Adicionar item'
-              >
-                <IconPlus 
-                  color={colorScheme === 'light' ? 'black' : 'white'}
-                  style={{ width: '91%', height: '91%' }} stroke={1.5}
-                />
-              </ActionIcon>
-              <ActionIcon
-                variant='transparent'
-                size='md'
-                aria-label='Gerenciar'
-                component='a'
-                href='/settings/my-gear'
-                title='Gerenciar'
-              >
-                <IconSettings 
-                  color={colorScheme === 'light' ? 'black' : 'white'}
-                  style={{ width: '91%', height: '91%' }} stroke={1.5}
-                />
-              </ActionIcon>
+                <ActionIcon
+                  variant='transparent'
+                  size='md'
+                  aria-label='Gerenciar'
+                  component='a'
+                  href='/settings/my-gear'
+                  title='Adicionar item'
+                >
+                  <IconCirclePlus 
+                    color={colorScheme === 'light' ? 'black' : 'white'}
+                    style={{ width: '91%', height: '91%' }} stroke={1.5}
+                  />
+                </ActionIcon>
+                <ActionIcon
+                  variant='transparent'
+                  size='md'
+                  aria-label='Gerenciar'
+                  component='a'
+                  href='/settings/my-gear'
+                  title='Gerenciar'
+                >
+                  <IconSettings 
+                    color={colorScheme === 'light' ? 'black' : 'white'}
+                    style={{ width: '91%', height: '91%' }} stroke={1.5}
+                  />
+                </ActionIcon>
               </>
             }
           </Group>
