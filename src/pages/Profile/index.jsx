@@ -493,7 +493,7 @@ function ProfilePage () {
                   )}
                 </Flex>
                 {(profile.plan === 'Pro') && 
-                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={true} mt={5} mb={18} />
+                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={true} mt={20} mb={18} />
                 }
                 {profile.availabilityId && 
                   <>

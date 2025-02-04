@@ -18,6 +18,7 @@ function PartnersModule ({
       radius="md" 
       mt={mt}
       mb={mb}
+      pt={4}
       style={{ backgroundColor: 'transparent' }}
     >
       {showTitle &&
@@ -35,28 +36,31 @@ function PartnersModule ({
                 perPage: 3,
                 autoWidth: true,
                 arrows: false,
-                gap: '3px',
+                gap: '6px',
                 dots: false,
                 pagination: false,
               }}
               className='carousel-roles'
             >
               {partners.result.map(partner =>
-                <SplideSlide key={partner.brandId}>
-                  <Flex direction='column' align='center'>
+                <SplideSlide 
+                  key={partner.brandId} 
+                  // style={{backgroundColor:'white',padding:'3px',borderRadius:'10px'}}
+                >
+                  <Flex gap={3} direction='column' align='center'>
                     <Link to={{ pathname: `/gear/brand/${partner.brandSlug}` }}>
                       <Image 
-                        src={partner.brandLogoRectangular} 
-                        radius="md"
+                        src={partner.brandLogo} 
+                        radius="xl"
                         h={32}
-                        w="auto"
+                        w={32}
                         fit="contain"
                         title={partner.brandName}
                         alt={partner.brandName}
                       />
                     </Link>
-                    <Text size='10px' fw={600}>{truncateString(partner.brandName, 11)}</Text>
-                    <Text size='9px'>{partner.type}</Text>
+                    <Text size='10px' fw={450}>{truncateString(partner.brandName, 11)}</Text>
+                    <Text size='9px' fw={200}>{partner.type}</Text>
                   </Flex>
                 </SplideSlide>
               )}
