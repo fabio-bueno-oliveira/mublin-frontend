@@ -100,7 +100,7 @@ function Header (props) {
   const [fetchProjects, setFetchProjects] = useState(0)
 
   useEffect(() => {
-    if (fetchProjects === 1 && props.page !== 'home') {
+    if (fetchProjects === 1) {
       dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
     }
   }, [fetchProjects])
@@ -244,7 +244,8 @@ function Header (props) {
                 size='sm'
                 fw='400'
                 variant='transparent'
-                color={currentPath === '/home' ? 'violet' : menuTextColor}
+                color={menuTextColor}
+                className={currentPath === '/home' ? 'headerMenuActive' : undefined}
                 leftSection={<><IconHome size={14} /></>}
                 p='xs'
                 visibleFrom='md'

@@ -254,6 +254,7 @@ const initialState = {
         featured: '',
         type: '',
         brandName: '',
+        brandSlug: '',
         brandLogo: ''
       }
     ]

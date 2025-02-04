@@ -1,40 +1,66 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Paper, Title, Text, Image } from '@mantine/core';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { Paper, Title, Text, Flex, Image } from '@mantine/core'
+import { truncateString } from '../../utils/formatter'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css/skyblue'
 
 function PartnersModule ({ 
-    partners, 
+    partners,
+    showTitle,
+    mt,
+    mb,
     loading
 }) {
 
   return (
     <Paper 
       radius="md" 
-      mb={25}
+      mt={mt}
+      mb={mb}
       style={{ backgroundColor: 'transparent' }}
     >
-      <Title order={5} mb={8}>Parceiros</Title>
+      {showTitle &&
+        <Title order={6} mb={8}>Parceiros</Title>
+      }
       {loading ? ( 
         <Text size='sm'>Carregando...</Text>
       ) : (
         <>
           {partners.total ? ( 
-            <>
-              {partners.result.map((partner, key) =>
-                <div key={key}>
-                  <Link to={{ pathname: `/brand/${partner.brandId}` }}>
-                    <Image 
-                      src={partner.brandLogoRectangular} 
-                      h={'42px'}
-                      mb={3}
-                      title={partner.brandName}
-                      alt={partner.brandName}
-                    />
-                  </Link>
-                  <Text size='10px'>{partner.type}</Text>
-                </div>
+            <Splide 
+              options={{
+                drag   : 'free',
+                snap: false,
+                perPage: 3,
+                autoWidth: true,
+                arrows: false,
+                gap: '3px',
+                dots: false,
+                pagination: false,
+              }}
+              className='carousel-roles'
+            >
+              {partners.result.map(partner =>
+                <SplideSlide key={partner.brandId}>
+                  <Flex direction='column' align='center'>
+                    <Link to={{ pathname: `/gear/brand/${partner.brandSlug}` }}>
+                      <Image 
+                        src={partner.brandLogoRectangular} 
+                        radius="md"
+                        h={32}
+                        w="auto"
+                        fit="contain"
+                        title={partner.brandName}
+                        alt={partner.brandName}
+                      />
+                    </Link>
+                    <Text size='10px' fw={600}>{truncateString(partner.brandName, 11)}</Text>
+                    <Text size='9px'>{partner.type}</Text>
+                  </Flex>
+                </SplideSlide>
               )}
-            </>
+            </Splide>
           ) : (
             <Text size='xs'>Nenhum parceiro no momento</Text>
           )}

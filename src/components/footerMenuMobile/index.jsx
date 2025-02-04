@@ -26,7 +26,7 @@ const FooterMenuMobile = (props) => {
 
   const handleHomeClick = () => {
     navigate("/home")
-    setRefreshCounter(refreshCounter + 1)
+    // setRefreshCounter(refreshCounter + 1)
     setDrawerNewIsOpen(false)
   }
 

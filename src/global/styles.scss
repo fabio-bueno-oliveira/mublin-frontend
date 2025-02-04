@@ -32,6 +32,13 @@ a.displayBlockLink {
   display: none;
 }
 
+.headerMenuActive {
+
+  span {
+    font-weight: 600;
+  }
+}
+
 .transparentBgInMobile {
   @media only screen and (max-width: 600px) {
     background-color: transparent!important;

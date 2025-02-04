@@ -401,6 +401,9 @@ function ProfilePage () {
                     {profile.bio}
                   </Text>
                 }
+                {(profile.plan === 'Pro') && 
+                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={false} mt={4} mb={10} />
+                }
                 {profile.city && 
                   <Flex gap={2} align='center' mt={9}>
                     <IconMapPin size={13} style={{color:'#8d8d8d'}} />
@@ -489,6 +492,9 @@ function ProfilePage () {
                     </Button>
                   )}
                 </Flex>
+                {(profile.plan === 'Pro') && 
+                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={true} mt={5} mb={18} />
+                }
                 {profile.availabilityId && 
                   <>
                     {/* <Divider mt='md' mb='xs' label='Disponibilidade:' labelPosition='left' /> */}
@@ -534,9 +540,6 @@ function ProfilePage () {
               </Paper>
               {profile.availabilityId && 
                 <Divider mb={2} mt={6} className='showOnlyInMobile' />
-              }
-              {(profile.plan === 'Pro' && profile.total) && 
-                <PartnersModule loading={profile.requesting} partners={profile.partners} />
               }
               {!profile.availabilityId && 
                 <Space h='xs' className='showOnlyInMobile' />
