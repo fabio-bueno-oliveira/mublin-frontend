@@ -161,7 +161,7 @@ function Search () {
         {searchedKeywords && 
           <Grid>
             <Grid.Col span={{ base: 12, md: 4, lg: 4 }} pr={10}>
-              <Title order={5} fw={650} mb={14}>
+              <Title order={5} fw={650} mb={11}>
                 {`Pessoas (${searchResults.users.total})`}
               </Title>
               {searchResults.requesting ? ( 
@@ -220,7 +220,7 @@ function Search () {
               )}
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
-              <Title order={5} fw={650} mb={14}>
+              <Title order={5} fw={650} mb={11}>
                 {`Projetos (${searchResults.projects.total})`}
               </Title>
               {searchResults.requesting ? ( 
@@ -277,7 +277,7 @@ function Search () {
               )}
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
-              <Title order={5} fw={650} mb={14}>
+              <Title order={5} fw={650} mb={11}>
                 {`Equipamento (${searchResults.gear.total})`}
               </Title>
               {searchResults.brands.total > 0 && (
@@ -294,7 +294,7 @@ function Search () {
                     }
                   />
                   {searchResults.brands.result.map(brand => 
-                    <Flex key={brand.id} align='center' mb={13} gap={8}>
+                    <Flex key={brand.id} align='center' mb={8} gap={8}>
                       <Link to={{ pathname: `/gear/brand/${brand.slug}` }}>
                         <Image
                           src={brand.logo ? `https://ik.imagekit.io/mublin/products/brands/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${brand.logo}` : undefined}
@@ -339,7 +339,7 @@ function Search () {
                       }
                     />
                     {searchResults.gear.result.map(product => 
-                      <Flex key={product.productId} align='flex-start' mb={13} gap={8} justify='space-between'>
+                      <Flex key={product.productId} align='flex-start' mb={10} gap={7} justify='space-between'>
                         <Link to={{ pathname: `/gear/product/${product.productId}` }}>
                           <Image
                             src={product.productPicture ? `https://ik.imagekit.io/mublin/products/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${product.productPicture}` : undefined}
@@ -368,10 +368,10 @@ function Search () {
                           <Text size='xs' fw={300}>
                             {product.name_ptbr} • <a className='textLink' href={`/gear/brand/${product.brandSlug}`}>{product.brand}</a>
                           </Text>
-                          <Flex gap={3} mt={4} align='center' justify='space-between'>
+                          <Flex gap={3} mt={4} align='center' justify='space-between' title={product.totalOwners + ' possuem este item'}>
                             <IconUsers style={{width:'12px',height:'12px'}} color='gray' />
-                            <Text size='xs' fw={300} c='dimmed'>
-                              {product.totalOwners} possuem
+                            <Text size='11px' fw={300} c='dimmed' className='lhNormal'>
+                              {product.totalOwners}
                             </Text>
                           </Flex>
                         </Flex>

@@ -61,6 +61,19 @@ const initialState = {
         productName: ''
       }
     ]
+  },
+  colors: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        productId: '',
+        name: '',
+        rgb: '',
+        sample: '',
+        mainColor: '',
+      }
+    ]
   }
 }
 
@@ -189,6 +202,29 @@ export function brand(state = initialState, action) {
         success: false,
         error: "A solicitação falhou",
         partners: initialState.owners
+      };
+    case gearTypes.GET_BRAND_COLORS_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        success: false,
+        colors: initialState.colors
+      };
+    case gearTypes.GET_BRAND_COLORS_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        success: true,
+        error: "",
+        colors: action.list,
+      };
+    case gearTypes.GET_BRAND_COLORS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        success: false,
+        error: "A solicitação falhou",
+        colors: initialState.colors
       };
     default:
       return state

@@ -364,7 +364,7 @@ function SettingsPage () {
                   <Button
                     size='lg'
                     type='submit'
-                    color='violet'
+                    color='primary'
                     loading={isLoading}
                     loaderProps={{ type: 'dots' }}
                   >

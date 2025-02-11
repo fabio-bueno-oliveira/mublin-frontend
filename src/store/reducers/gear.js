@@ -16,6 +16,8 @@ const initialState = {
   colorId: '',
   colorName: '',
   colorNamePTBR: '',
+  colorRgb: '',
+  colorSample: '',
   owners: [
     { 
       id: '',
@@ -38,6 +40,26 @@ const initialState = {
       tuningDescription: '',
     }
   ],
+  availableColors: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        productId: '',
+        pictureFilename: '',
+        picture: '',
+        largePicture: '',
+        colorId: '',
+        colorName: '',
+        colorNamePTBR: '',
+        colorRgb: '',
+        colorSample: '',
+        colorType: '',
+        mainColor: '',
+      }
+    ]
+  },
   brands: [
     { id: '', name: '', logo: '' }
   ]
@@ -72,7 +94,9 @@ export function gear(state = initialState, action) {
         categoryName: action.info.categoryName,
         colorId: action.info.colorId,
         colorName: action.info.colorName,
-        colorNamePTBR: action.info.colorNamePTBR
+        colorNamePTBR: action.info.colorNamePTBR,
+        colorRgb: action.info.colorRgb,
+        colorSample: action.info.colorSample
       };
     case gearTypes.GET_PRODUCT_INFO_FAILURE:
       return {
@@ -100,6 +124,27 @@ export function gear(state = initialState, action) {
         requesting: false,
         owners: initialState.owners,
         error: 'A solicitação falhou'
+      };
+    case gearTypes.GET_PRODUCT_COLORS_REQUEST:
+      return {
+        ...state,
+        requesting: true,
+        availableColors: initialState.availableColors,
+        error: ''
+      };
+    case gearTypes.GET_PRODUCT_COLORS_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        availableColors: action.list,
+        error: '',
+      };
+    case gearTypes.GET_PRODUCT_COLORS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        availableColors: initialState.availableColors,
+        error: 'A solicitação de cores disponíveis falhou'
       };
     case gearTypes.GET_GEAR_BRANDS_REQUEST:
       return {

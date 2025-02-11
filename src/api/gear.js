@@ -19,8 +19,10 @@ export const gearService = {
     gerBrandProducts,
     gerBrandPartners,
     gerBrandOwners,
+    getBrandColors,
     getProductInfo,
     getProductOwners,
+    getProductColors,
     logout
 };
 
@@ -56,6 +58,14 @@ async function gerBrandOwners(brandUrlName) {
     return fetch(`${BASE_URL}/gear/brand/${brandUrlName}/owners`, requestOptions).then(handleResponse);
 }
 
+async function getBrandColors(brandUrlName) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/gear/brand/${brandUrlName}/colors`, requestOptions).then(handleResponse);
+}
+
 async function getProductInfo(productId) {
     const requestOptions = {
         method: 'GET',
@@ -70,6 +80,14 @@ async function getProductOwners(productId) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/gear/product/${productId}/productOwners`, requestOptions).then(handleResponse);
+}
+
+async function getProductColors(productId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/gear/product/${productId}/productAvailableColors`, requestOptions).then(handleResponse);
 }
 
 function logout() {

@@ -3,11 +3,12 @@ import { useParams } from 'react-router'
 import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton } from '@mantine/core'
-import { IconZoom, IconArrowRight } from '@tabler/icons-react'
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
+import { IconZoom, IconChevronUp } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
+import { Helmet } from 'react-helmet'
 
 function GearProductPage () {
 
@@ -21,37 +22,29 @@ function GearProductPage () {
   useEffect(() => {
     dispatch(gearInfos.getProductInfo(productId))
     dispatch(gearInfos.getProductOwners(productId))
+    dispatch(gearInfos.getProductColors(productId))
   }, [])
 
   const [modalZoomOpen, setModalZoomOpen] = useState(false)
-  const [extraColors, setExtraColors] = useState([{}])
-  
-  const [modalZoomExtraOpen, setModalZoomExtraOpen] = useState(false)
-  const [extra, setExtra] = useState(null)
-  const openExtraModal = (data) => {
-    setExtra(data)
-    setModalZoomExtraOpen(true)
-  }
 
-  const baseUrlExtraThumb = 'https://ik.imagekit.io/mublin/products/tr:h-160,w-160,cm-pad_resize,bg-FFFFFF/'
-  const baseUrlExtraExpanded = 'https://ik.imagekit.io/mublin/products/tr:w-600,cm-pad_resize,bg-FFFFFF/'
+  const [selectedColor, setSelectedColor] = useState(null)
 
   useEffect(() => {
-    fetch(`https://mublin.herokuapp.com/gear/product/${productId}/productExtraColors`)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          result && setExtraColors(result)
-        },
-        (error) => {
-          console.error(error)
-          setExtraColors([{}])
-        }
+    if (product.availableColors.total > 0) {
+      setSelectedColor(
+        product.availableColors.result.filter((x) => { return x.mainColor === 1 })[0]
       )
-  }, [])
+    }
+  }, [product.availableColors.success])
 
   return (
     <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>{`${product.brandName} ${product.name} | Mublin`}</title>
+        <link rel='canonical' href={`https://mublin.com/gear/product/${product.id}`} />
+        <meta name='description' content='A rede para quem trabalha com música' />
+      </Helmet>
       <Header
         page='profile'
         username='Detalhes do produto'
@@ -76,22 +69,15 @@ function GearProductPage () {
           )}
           <Flex direction='column'>
             <Text fw='420' size='xs' c='dimmed'>
-              {product.requesting ? 'Carregando...' : product.categoryName + ' • ' + product.brandName}
+              {product.requesting ? <Skeleton width={100} height={10} mb={4} radius="md" /> : product.categoryName + ' • ' + product.brandName}
             </Text>
-            <Title fz='1.18rem' fw='560'>
-              {product.requesting ? 'Carregando produto...' : product.name}
+            <Title fz='1.12rem' fw='560'>
+              {product.requesting ? <Skeleton width={220} height={18} radius="md" /> : product.name}
             </Title>
             {!product.requesting &&
-              <Link 
-                style={{fontSize:'13px'}} 
-                to={{ pathname: `/gear/brand/${product.brandSlug}` }} 
-                className='websiteLink'
-              >
-                <Group gap='2'>
-                  <IconArrowRight size={12} />
-                  Ver produtos {product.brandName}
-                </Group>
-              </Link>
+              <Anchor className='websiteLink' fz={12} href={`/gear/brand/${product.brandSlug}`}>
+                Ver produtos {product.brandName}
+              </Anchor>
             }
           </Flex>
         </Flex>
@@ -110,35 +96,83 @@ function GearProductPage () {
                 </Center>
               ) : (
                 <>
-                  <Center className='gearProductImage'>
-                    <Image 
-                      src={product.picture ? product.picture : undefined}
-                      radius='md'
-                      w={300}
-                      h={300}
-                      onClick={() => setModalZoomOpen(true)}
-                      style={{cursor:'pointer'}}
-                    />
-                    <Center>
-                      <Group gap='4'>
-                        <IconZoom size='14' style={{color:'#595959'}} />
-                        <Text ta='center' size='xs' c='#595959'>
-                          Toque na imagem para ampliar
-                        </Text>
-                      </Group>
-                    </Center>
-                  </Center>
-                  <Flex mt='12' w='340px' px='10px' wrap='wrap' justify='center' align='center'>
-                    {extraColors.length && extraColors?.map((product, key) =>
-                      <Image
-                        key={key}
-                        w='80px'
-                        h='80px'
-                        src={product.image ? baseUrlExtraThumb+product.image : undefined}
-                        onClick={() => openExtraModal(product)}
+                  {product.availableColors.total === 0 && 
+                    <>
+                      <Center className='gearProductImage'>
+                        <Image 
+                          src={product.picture ? product.picture : undefined}
+                          radius='md'
+                          w={300}
+                          h={300}
+                          onClick={() => setModalZoomOpen(true)}
+                          style={{cursor:'pointer'}}
+                        />
+                        <Center>
+                          <Group gap='4'>
+                            <IconZoom size='14' style={{color:'#595959'}} />
+                            <Text ta='center' size='xs' c='#595959'>
+                              Toque na imagem para ampliar
+                            </Text>
+                          </Group>
+                        </Center>
+                      </Center>
+                      <Text size='xs' c='dimmed' my={5} ta='center'>
+                        {product.colorName}
+                      </Text>
+                      <Center>
+                        <ColorSwatch
+                          color={product.colorSample ? undefined : product.colorRgb}
+                          title={product.colorName}
+                          className={product.colorSample ? 'removeAlpha' : undefined}
+                          style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+product.colorSample + ")"}}
+                        />
+                      </Center>
+                    </>
+                  }
+                  {selectedColor?.colorId && 
+                    <Center className='gearProductImage'>
+                      <Image 
+                        src={selectedColor.picture ? selectedColor.picture : undefined}
+                        radius='md'
+                        w={300}
+                        h={300}
+                        onClick={() => setModalZoomOpen(true)}
+                        style={{cursor:'pointer'}}
                       />
-                    )}
-                  </Flex>
+                      <Center>
+                        <Group gap='4'>
+                          <IconZoom size='14' style={{color:'#595959'}} />
+                          <Text ta='center' size='xs' c='#595959'>
+                            Toque na imagem para ampliar
+                          </Text>
+                        </Group>
+                      </Center>
+                    </Center>
+                  }
+                  {product.availableColors.total > 0 && 
+                    <>
+                      <Text size='xs' c='dimmed' my={5} ta='center'>
+                        {selectedColor?.colorName}
+                      </Text>
+                      <Flex justify='center' align='flex-start' gap={8}>
+                        {product?.availableColors.result?.map(item =>
+                          <Flex key={item.colorId} direction='column' align='center'>
+                            <ColorSwatch
+                              color={item.colorSample ? undefined : item.colorRgb}
+                              title={item.colorName}
+                              onClick={() => setSelectedColor(product.availableColors.result.filter((x) => { return x.colorId === item.colorId })[0])}
+                              // withShadow={item.colorId === selectedColor?.colorId}
+                              className={item.colorSample ? 'point removeAlpha' : 'point'}
+                              style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+item.colorSample + ")"}}
+                            />
+                            {item.colorId === selectedColor?.colorId &&
+                              <IconChevronUp style={{width:'1rem',height:'1rem'}} />
+                            }
+                          </Flex>
+                        )}
+                      </Flex>
+                    </>
+                  }
                 </>
               )}
             </Box>
@@ -229,19 +263,7 @@ function GearProductPage () {
           <Image w='auto' fit='cover' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
         </Center>
       </Modal>
-      <Modal 
-        centered
-        opened={modalZoomExtraOpen} 
-        title={product.brandName + ' | ' + product.name + ' | ' + extra?.colorNamePTBR}
-        onClose={() => setModalZoomExtraOpen(false)} 
-        scrollAreaComponent={ScrollArea.Autosize}
-        size='xl'
-      >
-        <Center>
-          <Image w='300' src={baseUrlExtraExpanded+extra?.image ? baseUrlExtraExpanded+extra?.image : undefined} onClick={() => setModalZoomExtraOpen(false)} />
-        </Center> 
-      </Modal>
-      {(!modalZoomExtraOpen && !modalZoomOpen) &&
+      {(!modalZoomOpen) &&
         <FooterMenuMobile />
       }
     </>

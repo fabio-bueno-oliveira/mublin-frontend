@@ -289,3 +289,7 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
     margin-right: 4px;
   }
 }
+
+.removeAlpha {
+  --alpha-overlay-color: none!important;
+}

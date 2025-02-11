@@ -1,6 +1,6 @@
 import React from 'react'
 import AppRoutes from './routes'
-import { MantineProvider, ColorSchemeScript, Anchor, createTheme, Button, Card, Checkbox, Paper } from '@mantine/core'
+import { MantineProvider, ColorSchemeScript, virtualColor, Anchor, createTheme, Button, Card, Checkbox, Paper } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
 import '@mantine/core/styles.css'
@@ -13,6 +13,11 @@ const theme = createTheme({
   luminanceThreshold: 0.3,
   colorScheme: 'light',
   colors: {
+    primary: virtualColor({
+      name: 'primary',
+      dark: 'white',
+      light: 'dark',
+    }),
     violet: [
       "#f4ecfe",
       "#e4d3f9",

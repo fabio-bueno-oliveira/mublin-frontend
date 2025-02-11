@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, NativeSelect, Grid, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, em } from '@mantine/core';
+import { Container, NativeSelect, Grid, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, ColorSwatch, em } from '@mantine/core';
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconUsers, IconLink, IconTagStarred } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -31,6 +31,7 @@ function BrandPage () {
     dispatch(gearInfos.gerBrandProducts(brandUrlName));
     dispatch(gearInfos.gerBrandPartners(brandUrlName));
     dispatch(gearInfos.gerBrandOwners(brandUrlName));
+    dispatch(gearInfos.getBrandColors(brandUrlName));
   }, [brandUrlName]);
 
   useEffect(() => {
@@ -191,7 +192,21 @@ function BrandPage () {
                     </Link>
                   </Center>
                 </Card.Section>
-                <Group justify='space-between' mt='md'>
+                {brand.colors.total > 0 &&
+                  <Link to={{ pathname: `/gear/product/${product.id}` }}>
+                    <Group gap={5} mt={14}>
+                      {brand.colors.result.filter((x) => { return x.productId === product.id }).map(color => 
+                        <ColorSwatch
+                          color={color.sample ? undefined : color.rgb}
+                          title={color.name}
+                          className={color.sample ? 'removeAlpha' : undefined}
+                          style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+color.sample + ")",width:'14px',minWidth:'14px',height:'14px',minHeight:'14px'}}
+                        />
+                      )}
+                    </Group>
+                  </Link>
+                }
+                <Group justify='space-between' mt='xs'>
                   <Text size='sm' fw={500}>{product.name}</Text>
                 </Group>
                 <Flex gap={3} mt={4} align='center' justify='space-between'>
