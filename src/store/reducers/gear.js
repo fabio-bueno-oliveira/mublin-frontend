@@ -18,6 +18,7 @@ const initialState = {
   colorNamePTBR: '',
   colorRgb: '',
   colorSample: '',
+  rare: '',
   owners: [
     { 
       id: '',
@@ -96,11 +97,16 @@ export function gear(state = initialState, action) {
         colorName: action.info.colorName,
         colorNamePTBR: action.info.colorNamePTBR,
         colorRgb: action.info.colorRgb,
-        colorSample: action.info.colorSample
+        colorSample: action.info.colorSample,
+        rare: action.info.rare,
       };
     case gearTypes.GET_PRODUCT_INFO_FAILURE:
       return {
         ...state,
+        name: '',
+        picture: '',
+        largePicture: '',
+        brandName: '',
         requesting: false,
         error: 'A solicitação falhou'
       };

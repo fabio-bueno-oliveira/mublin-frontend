@@ -3,8 +3,8 @@ import { useParams } from 'react-router'
 import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
-import { IconZoom, IconChevronUp } from '@tabler/icons-react'
+import { Container, Grid, Card, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
+import { IconZoom, IconChevronUp, IconDiamond, IconUserCircle } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -23,7 +23,7 @@ function GearProductPage () {
     dispatch(gearInfos.getProductInfo(productId))
     dispatch(gearInfos.getProductOwners(productId))
     dispatch(gearInfos.getProductColors(productId))
-  }, [])
+  }, [productId])
 
   const [modalZoomOpen, setModalZoomOpen] = useState(false)
 
@@ -74,6 +74,14 @@ function GearProductPage () {
             <Title fz='1.12rem' fw='560'>
               {product.requesting ? <Skeleton width={220} height={18} radius="md" /> : product.name}
             </Title>
+            {/* {!!product.rare &&
+              <Group gap={2} align='center'>
+                <IconDiamond style={{width:'0.9rem',height:'0.9rem'}} />
+                <Text size='xs'>
+                  Item considerado raro ou muito limitado
+                </Text>
+              </Group>
+            } */}
             {!product.requesting &&
               <Anchor className='websiteLink' fz={12} href={`/gear/brand/${product.brandSlug}`}>
                 Ver produtos {product.brandName}
@@ -124,12 +132,12 @@ function GearProductPage () {
                           color={product.colorSample ? undefined : product.colorRgb}
                           title={product.colorName}
                           className={product.colorSample ? 'removeAlpha' : undefined}
-                          style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+product.colorSample + ")"}}
+                          style={{backgroundSize:'28px 28px', backgroundImage: product.colorSample ? "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+product.colorSample + ")" : undefined}}
                         />
                       </Center>
                     </>
                   }
-                  {selectedColor?.colorId && 
+                  {(product.availableColors.total > 0 && selectedColor?.colorId) && 
                     <Center className='gearProductImage'>
                       <Image 
                         src={selectedColor.picture ? selectedColor.picture : undefined}
@@ -163,7 +171,7 @@ function GearProductPage () {
                               onClick={() => setSelectedColor(product.availableColors.result.filter((x) => { return x.colorId === item.colorId })[0])}
                               // withShadow={item.colorId === selectedColor?.colorId}
                               className={item.colorSample ? 'point removeAlpha' : 'point'}
-                              style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+item.colorSample + ")"}}
+                              style={{backgroundSize:'28px 28px', backgroundImage: item.colorSample ? "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+item.colorSample + ")" : undefined}}
                             />
                             {item.colorId === selectedColor?.colorId &&
                               <IconChevronUp style={{width:'1rem',height:'1rem'}} />
@@ -178,74 +186,89 @@ function GearProductPage () {
             </Box>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
-            <Title fz='1.0rem' fw='640' mb={14}>
-              Quem possui {product.owners[0].id ? '('+product?.owners?.length+')' : '(0)'}
-            </Title>
-            {product.requesting ? (
-              <Text>
-                Carregando...
-              </Text>
-            ) : (
-              <Box mb={30}>
-                {product.owners[0].id && 
-                  product?.owners?.map(owner => 
-                    <Paper 
-                      key={owner.id}
-                      radius='md'
-                      withBorder
-                      px='12'
-                      py='12'
-                      mb='12'
-                      style={{ backgroundColor: 'transparent' }}
-                    >
-                      <Flex gap={7} mb='xs'>
-                        <Link to={{ pathname: `/${owner.username}` }}>
-                          <Avatar.Group>
-                            <Avatar size='lg' src={owner.picture} />
-                            <Avatar src={product.picture} />
-                          </Avatar.Group>
-                        </Link>
-                        <Flex
-                          justify='flex-start'
-                          align='flex-start'
-                          direction='column'
-                          wrap='wrap'
-                        >
-                          <Text size='sm' fw='550'>
-                            {owner.name+' '+owner.lastname}
-                          </Text>
-                          <Text size='xs' fw='500' c='dimmed'>
-                            {owner.city && <span>{owner.city}/{owner.region}</span>}
-                          </Text>
-                          <Group gap={3}>
-                            {!!owner.currentlyUsing && 
-                              <Badge size='xs' color='green' variant='light'>Em uso</Badge>
-                            } 
-                            {!!owner.forSale && 
-                              <Badge size='xs' color='black'>À venda</Badge>
-                            } 
-                            {!!owner.price && 
-                              <Text size='xs'>
-                                {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
-                              </Text>
-                            }
-                          </Group>
+            {!!product.rare &&
+              <Card className="mublinModule" mb={10}>
+                <Group gap={4} align='center'>
+                  <IconDiamond style={{width:'1rem',height:'1rem'}} />
+                  <Text fz='1.0rem' fw='640' className='lhNormal'>
+                    Item considerado raro ou muito limitado
+                  </Text>
+                </Group>
+              </Card>
+            }
+            <Card className="mublinModule">
+              <Group gap={4} align='center'>
+                <IconUserCircle style={{width:'1rem',height:'1rem'}} />
+                <Text fz='1.0rem' fw='640' className='lhNormal'>
+                  Quem possui {product.owners[0].id ? '('+product?.owners?.length+')' : '(0)'}
+                </Text>
+              </Group>
+              {product.requesting ? (
+                <Text>
+                  Carregando...
+                </Text>
+              ) : (
+                <Box mb={30}>
+                  {product.owners[0].id && 
+                    product?.owners?.map(owner => 
+                      <Paper 
+                        key={owner.id}
+                        radius='md'
+                        withBorder
+                        px='12'
+                        py='12'
+                        mb='12'
+                        style={{ backgroundColor: 'transparent' }}
+                      >
+                        <Flex gap={7} mb='xs'>
+                          <Link to={{ pathname: `/${owner.username}` }}>
+                            <Avatar.Group>
+                              <Avatar size='lg' src={owner.picture} />
+                              <Avatar src={product.picture} />
+                            </Avatar.Group>
+                          </Link>
+                          <Flex
+                            justify='flex-start'
+                            align='flex-start'
+                            direction='column'
+                            wrap='wrap'
+                          >
+                            <Text size='sm' fw='550'>
+                              {owner.name+' '+owner.lastname}
+                            </Text>
+                            <Text size='xs' fw='500' c='dimmed'>
+                              {owner.city && <span>{owner.city}/{owner.region}</span>}
+                            </Text>
+                            <Group gap={3}>
+                              {!!owner.currentlyUsing && 
+                                <Badge size='xs' color='green' variant='light'>Em uso</Badge>
+                              } 
+                              {!!owner.forSale && 
+                                <Badge size='xs' color='black'>À venda</Badge>
+                              } 
+                              {!!owner.price && 
+                                <Text size='xs'>
+                                  {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                                </Text>
+                              }
+                            </Group>
+                          </Flex>
                         </Flex>
-                      </Flex>
-                      {owner.ownerComments ? (
-                        <Text size='xs'>
-                          {owner.ownerComments}
-                        </Text>
-                      ) : (
-                        <Text size='xs' c='dimmed'>
-                          Nenhum comentário até o momento
-                        </Text>
-                      )}
-                    </Paper>
-                  )
-                }
-              </Box>
-            )}
+                        {owner.ownerComments ? (
+                          <Text size='xs'>
+                            {owner.ownerComments}
+                          </Text>
+                        ) : (
+                          <Text size='xs' c='dimmed'>
+                            Nenhum comentário até o momento
+                          </Text>
+                        )}
+                      </Paper>
+                    )
+                  }
+                </Box>
+              )}
+            </Card>
           </Grid.Col>
         </Grid>
       </Container>
