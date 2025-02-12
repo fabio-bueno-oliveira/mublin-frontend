@@ -18,6 +18,11 @@ const theme = createTheme({
       dark: 'white',
       light: 'dark',
     }),
+    secondary: virtualColor({
+      name: 'secondary',
+      dark: 'white',
+      light: 'gray',
+    }),
     violet: [
       "#f4ecfe",
       "#e4d3f9",

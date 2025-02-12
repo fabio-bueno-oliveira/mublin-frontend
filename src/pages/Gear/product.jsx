@@ -4,7 +4,7 @@ import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Card, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
-import { IconZoom, IconChevronUp, IconDiamond, IconUserCircle } from '@tabler/icons-react'
+import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -47,9 +47,10 @@ function GearProductPage () {
       </Helmet>
       <Header
         page='profile'
-        username='Detalhes do produto'
+        username='Detalhes do item'
         profileId={product.id}
         showBackIcon={true}
+        showDotsMenu={false}
       />
       <Container size='lg' mt={largeScreen ? 20 : 0}>
         <Flex gap={12} align='center'>
@@ -91,6 +92,14 @@ function GearProductPage () {
         </Flex>
         <Grid mt='20' mb='70'>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
+            {!!product.rare &&
+              <Group gap={4} align='center' justify='center' mb={10}>
+                <IconDiamond style={{width:'1rem',height:'1rem'}} />
+                <Text fz='0.75rem' ta='center' fw='450' className='lhNormal'>
+                  Item considerado raro ou limitado
+                </Text>
+              </Group>
+            }
             <Box mb={8}>
               {product.requesting ? (
                 <Center className='gearProductImage'>
@@ -186,89 +195,80 @@ function GearProductPage () {
             </Box>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
-            {!!product.rare &&
-              <Card className="mublinModule" mb={10}>
-                <Group gap={4} align='center'>
-                  <IconDiamond style={{width:'1rem',height:'1rem'}} />
-                  <Text fz='1.0rem' fw='640' className='lhNormal'>
-                    Item considerado raro ou muito limitado
-                  </Text>
-                </Group>
-              </Card>
-            }
-            <Card className="mublinModule">
-              <Group gap={4} align='center'>
-                <IconUserCircle style={{width:'1rem',height:'1rem'}} />
-                <Text fz='1.0rem' fw='640' className='lhNormal'>
-                  Quem possui {product.owners[0].id ? '('+product?.owners?.length+')' : '(0)'}
-                </Text>
-              </Group>
-              {product.requesting ? (
-                <Text>
-                  Carregando...
-                </Text>
-              ) : (
-                <Box mb={30}>
-                  {product.owners[0].id && 
-                    product?.owners?.map(owner => 
-                      <Paper 
-                        key={owner.id}
-                        radius='md'
-                        withBorder
-                        px='12'
-                        py='12'
-                        mb='12'
-                        style={{ backgroundColor: 'transparent' }}
-                      >
-                        <Flex gap={7} mb='xs'>
-                          <Link to={{ pathname: `/${owner.username}` }}>
-                            <Avatar.Group>
-                              <Avatar size='lg' src={owner.picture} />
-                              <Avatar src={product.picture} />
-                            </Avatar.Group>
-                          </Link>
-                          <Flex
-                            justify='flex-start'
-                            align='flex-start'
-                            direction='column'
-                            wrap='wrap'
-                          >
-                            <Text size='sm' fw='550'>
-                              {owner.name+' '+owner.lastname}
-                            </Text>
-                            <Text size='xs' fw='500' c='dimmed'>
-                              {owner.city && <span>{owner.city}/{owner.region}</span>}
-                            </Text>
-                            <Group gap={3}>
-                              {!!owner.currentlyUsing && 
-                                <Badge size='xs' color='green' variant='light'>Em uso</Badge>
-                              } 
-                              {!!owner.forSale && 
-                                <Badge size='xs' color='black'>À venda</Badge>
-                              } 
-                              {!!owner.price && 
-                                <Text size='xs'>
-                                  {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
-                                </Text>
-                              }
-                            </Group>
-                          </Flex>
+            <Group gap={4} align='center' mb={10}>
+              <IconUserHeart style={{width:'1rem',height:'1rem'}} />
+              <Text fz='0.9rem' fw='640' className='lhNormal'>
+                Quem possui
+              </Text>
+              <Badge variant='light' color='gray' circle>
+                {product.owners[0].id ? product?.owners?.length : '0'}
+              </Badge>
+            </Group>
+            {product.requesting ? (
+              <Text>
+                Carregando...
+              </Text>
+            ) : (
+              <Box mb={30}>
+                {product.owners[0].id && 
+                  product?.owners?.map(owner => 
+                    <Paper 
+                      key={owner.id}
+                      radius='md'
+                      withBorder
+                      px='12'
+                      py='12'
+                      mb='12'
+                      style={{ backgroundColor: 'transparent' }}
+                    >
+                      <Flex gap={7} mb='xs'>
+                        <Link to={{ pathname: `/${owner.username}` }}>
+                          <Avatar.Group>
+                            <Avatar size='lg' src={owner.picture} />
+                            <Avatar src={product.picture} />
+                          </Avatar.Group>
+                        </Link>
+                        <Flex
+                          justify='flex-start'
+                          align='flex-start'
+                          direction='column'
+                          wrap='wrap'
+                        >
+                          <Text size='sm' fw='550'>
+                            {owner.name+' '+owner.lastname}
+                          </Text>
+                          <Text size='xs' fw='500' c='dimmed'>
+                            {owner.city && <span>{owner.city}/{owner.region}</span>}
+                          </Text>
+                          <Group gap={3}>
+                            {!!owner.currentlyUsing && 
+                              <Badge size='xs' color='green' variant='light'>Em uso</Badge>
+                            } 
+                            {!!owner.forSale && 
+                              <Badge size='xs' color='black'>À venda</Badge>
+                            } 
+                            {!!owner.price && 
+                              <Text size='xs'>
+                                {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                              </Text>
+                            }
+                          </Group>
                         </Flex>
-                        {owner.ownerComments ? (
-                          <Text size='xs'>
-                            {owner.ownerComments}
-                          </Text>
-                        ) : (
-                          <Text size='xs' c='dimmed'>
-                            Nenhum comentário até o momento
-                          </Text>
-                        )}
-                      </Paper>
-                    )
-                  }
-                </Box>
-              )}
-            </Card>
+                      </Flex>
+                      {owner.ownerComments ? (
+                        <Text size='xs'>
+                          {owner.ownerComments}
+                        </Text>
+                      ) : (
+                        <Text size='xs' c='dimmed'>
+                          Nenhum comentário até o momento
+                        </Text>
+                      )}
+                    </Paper>
+                  )
+                }
+              </Box>
+            )}
           </Grid.Col>
         </Grid>
       </Container>

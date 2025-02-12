@@ -445,7 +445,7 @@ function Header (props) {
                 </Menu>
               </>
             }
-            {(!isLargeScreen && props.page === 'profile') && 
+            {(!isLargeScreen && props.showDotsMenu) && 
               <ActionIcon 
                 onClick={() => setOpenMenuDrawer(true)} 
                 variant="transparent" 

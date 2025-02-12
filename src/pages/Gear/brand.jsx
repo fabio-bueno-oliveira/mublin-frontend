@@ -68,12 +68,11 @@ function BrandPage () {
             />
           </Flex>
         </BackgroundImage>
-        <Grid mt={78}>
+        <Grid mt={isMobile ? 78 : 20} mb={isMobile ? 0 : 24}>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
             <NativeSelect
               onChange={(e) => navigate('/gear/brand/'+e.target.options[e.target.selectedIndex].value)}
               value={brandUrlName}
-              variant="filled"
               size='md'
               fw={500}
             >
@@ -92,7 +91,7 @@ function BrandPage () {
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
             {brand.website &&
-              <Group mt={largeScreen ? 14 : 0} justify='flex-end'>
+              <Group mt={largeScreen ? 14 : 0} justify={isMobile ? 'flex-start' : 'flex-end'}>
                 <Anchor
                   href={brand.website}
                   underline='hover'
@@ -117,10 +116,10 @@ function BrandPage () {
         </Grid>
         {brand.partners.total && 
           <>
-            <Flex align='center' gap={5} mt={14}>
+            <Flex align='center' gap={5} mt={isMobile ? 24 : 14}>
               <IconTagStarred style={{width:'15px',height:'15px'}} />
               <Text size='xs'>
-                Parceiros e Endorsees
+                Parceiros e Endorsees ({brand.partners.total})
               </Text>
             </Flex>
             <Splide 
