@@ -60,21 +60,21 @@ function PricingPublicPage () {
                   <Card.Section px={18}>
                     <Group justify='space-between' mt='md' mb='xs'>
                       <Text fw={500}>Plano Free</Text>
-                      <Badge color='gray'>Gratuito</Badge>
+                      <Badge color='green' variant='light'>Gratuito</Badge>
                     </Group>
                     <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'gray', to: 'rgba(126, 134, 194, 1)', deg: 107 }}>
                       R$ 0,00 <Text span fz='xs'>pra sempre</Text>
                     </Text>
-                    <Text size='xs' mb={10}>
-                      Acesso gratuito para sempre para você se conectar com  profissionais da música
+                    <Text size='sm' mb={10}>
+                      Acesso gratuito para sempre para você se conectar com  profissionais da música.
                     </Text>
                     <Divider my={12} />
-                    <Text size='xs' mb={10} fw={500}>
+                    {/* <Text size='xs' mb={10} fw={500}>
                       Conta gratuita para conectar com artistas, produtores e projetos
-                    </Text>
+                    </Text> */}
                     <Flex gap={10} align='center'>
                       <IconCheck color='green' stroke='4' size='14px' />
-                      <Text size='sm'>Encontre gigs e projetos para tocar</Text>
+                      <Text size='sm'>Busque gigs e projetos</Text>
                     </Flex>
                     <Flex gap={10} align='center'>
                       <IconCheck color='#8dcf98' stroke='4' size='14px' />
@@ -130,16 +130,16 @@ function PricingPublicPage () {
                     <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'violet', to: 'yellow', deg: 107 }}>
                       R$ 29,90 <Text span fz='xs'>por 3 meses</Text>
                     </Text>
-                    <Text size='xs' mb={10}>
-                      Pagamento único (não recorrente) válido por 3 meses. Após isso, se desejar, poderá renovar.
+                    <Text size='sm' mb={10}>
+                      Pagamento único (não recorrente) para <nobr>3 meses</nobr> de PRO. Renovação opcional.
                     </Text>
                     <Divider my={12} />
-                    <Text size='xs' mb={10} fw={500}>
+                    {/* <Text size='xs' mb={10} fw={500}>
                       Todos os recursos, incluindo cadastro de equipamento e projetos ilimitados.
-                    </Text>
+                    </Text> */}
                     <Flex gap={10} align='center'>
                       <IconCheck color='green' stroke='4' size='14px' />
-                      <Text size='sm'>Encontre gigs e projetos para tocar</Text>
+                      <Text size='sm'>Busque gigs e projetos</Text>
                     </Flex>
                     <Flex gap={10} align='center'>
                       <IconCheck color='green' stroke='4' size='14px' />
