@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { gearInfos } from '../../store/actions/gear'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Card, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
 import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart } from '@tabler/icons-react'
@@ -16,6 +16,7 @@ function GearProductPage () {
   const productId = params?.productId
   const product = useSelector(state => state.gear)
   const largeScreen = useMediaQuery('(min-width: 60em)')
+  let navigate = useNavigate();
 
   let dispatch = useDispatch()
 
@@ -69,22 +70,22 @@ function GearProductPage () {
             </Anchor>
           )}
           <Flex direction='column'>
-            <Text fw='420' size='xs' c='dimmed'>
+            <Text classNames='lhNormal' fw='420' size='xs' c='dimmed'>
               {product.requesting ? <Skeleton width={100} height={10} mb={4} radius="md" /> : product.categoryName + ' • ' + product.brandName}
             </Text>
             <Title fz='1.12rem' fw='560'>
               {product.requesting ? <Skeleton width={220} height={18} radius="md" /> : product.name}
             </Title>
-            {/* {!!product.rare &&
+            {!!product.rare &&
               <Group gap={2} align='center'>
-                <IconDiamond style={{width:'0.9rem',height:'0.9rem'}} />
-                <Text size='xs'>
-                  Item considerado raro ou muito limitado
+                <IconDiamond color='#4c6ef5' style={{width:'0.9rem',height:'0.9rem'}} />
+                <Text size='xs' classNames='lhNormal' variant='gradient' gradient={{ from: 'indigo', to: 'pink', deg: 90 }}>
+                  Item considerado raro ou limitado
                 </Text>
               </Group>
-            } */}
+            }
             {!product.requesting &&
-              <Anchor className='websiteLink' fz={12} href={`/gear/brand/${product.brandSlug}`}>
+              <Anchor className='textLink' fz='xs' href={`/gear/brand/${product.brandSlug}`}>
                 Ver produtos {product.brandName}
               </Anchor>
             }
@@ -92,14 +93,19 @@ function GearProductPage () {
         </Flex>
         <Grid mt='20' mb='70'>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
-            {!!product.rare &&
+            {/* {!!product.rare &&
               <Group gap={4} align='center' justify='center' mb={10}>
                 <IconDiamond style={{width:'1rem',height:'1rem'}} />
-                <Text fz='0.75rem' ta='center' fw='450' className='lhNormal'>
+                <Text
+                  fz='0.75rem'
+                  ta='center'
+                  fw='450'
+                  className='lhNormal'
+                >
                   Item considerado raro ou limitado
                 </Text>
               </Group>
-            }
+            } */}
             <Box mb={8}>
               {product.requesting ? (
                 <Center className='gearProductImage'>
@@ -121,7 +127,8 @@ function GearProductPage () {
                           radius='md'
                           w={300}
                           h={300}
-                          onClick={() => setModalZoomOpen(true)}
+                          // onClick={() => setModalZoomOpen(true)}
+                          onClick={() => navigate("/gear/product/zoom/"+productId)}
                           style={{cursor:'pointer'}}
                         />
                         <Center>

@@ -34,6 +34,7 @@ import PublicProfilePage from './pages/Profile/Public';
 import ProfileGear from './pages/Profile/Gear/gearExpanded';
 import ProfileGearItem from './pages/Profile/Gear/item';
 import GearProductPage from './pages/Gear/product';
+import GearZoomPage from './pages/Gear/zoom';
 import GearBrandPage from './pages/Gear/brand';
 import SettingsProfileEdit from './pages/Settings/profile';
 import SettingsMyPicture from './pages/Settings/picture';
@@ -84,6 +85,7 @@ function AppRoutes () {
           <Route path="/project/:username" element={<ProjectPage />} />
           <Route path="/project/:username/dashboard" element={<ProjectDashboardPage />} />
           <Route path="/gear/product/:productId" element={<GearProductPage />} />
+          <Route path="/gear/product/zoom/:productId" element={<GearZoomPage />} />
           <Route path="/gear/brand/:brandUrlName" element={<GearBrandPage />} />
           <Route path="/settings/picture" element={<SettingsMyPicture />} />
           <Route path="/settings/preferences" element={<SettingsMusicalPreferences />} />
