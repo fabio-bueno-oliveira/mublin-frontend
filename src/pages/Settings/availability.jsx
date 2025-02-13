@@ -179,25 +179,23 @@ function SettingsAvailability () {
                 <Text mb={8}  size='xs' c='dimmed'>
                   Selo de disponibilidade abaixo da minha foto
                 </Text>
+                <Checkbox
+                  my={8}
+                  checked={showOpenToWork}
+                  label="Exibir selo de disponibilidade abaixo da minha foto"
+                  onChange={(event) => setShowOpenToWork(event.currentTarget.checked)}
+                />
                 <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!showOpenToWork}>
                   <Avatar src={user.picture ? cdnBaseURL+'/tr:h-60,w-60,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} size='60px' />
                 </Indicator>
                 <TextInput
-                  mt={6} 
-                  label='Texto do selo'
-                  description='Até 10 caracteres'
+                  label='Texto do selo (até 12 caracteres)'
                   value={openToWorkText}
                   size='sm'
-                  maxLength={10}
-                  w={200}
+                  maxLength={12}
+                  w={230}
                   onChange={(event) => setOpenToWorkText(event.currentTarget.value)}
                   disabled={!showOpenToWork}
-                />
-                <Checkbox
-                  mt={8}
-                  checked={showOpenToWork}
-                  label="Exibir selo de disponibilidade abaixo da minha foto"
-                  onChange={(event) => setShowOpenToWork(event.currentTarget.checked)}
                 />
               </Card>
               <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule'>
@@ -221,32 +219,35 @@ function SettingsAvailability () {
                 <Title order={5}>
                   Tipos de trabalho:
                 </Title>
-                {/* {alert(JSON.stringify(availabilityItemsSelected, null, 2))} */}
                 <Group gap={3} my={8}>
-                  {user.availabilityItems.map(item =>
-                    <Badge 
-                      key={item.idItem}
-                      color="violet"
-                      variant='filled'
-                      size='sm'
-                      rightSection={
-                        <IconX 
-                          style={xIconStyle} 
-                          stroke={3} 
-                          onClick={() => deleteAvailabilityItem(item.idItem)} 
-                          title='Remover'
-                        />
-                      }
-                    >
-                      {item.name}
-                    </Badge>
+                  {user.availabilityItems[0].idItem ? ( 
+                    user.availabilityItems.map(item =>
+                      <Badge 
+                        key={item.idItem}
+                        color="violet"
+                        variant='filled'
+                        size='sm'
+                        rightSection={
+                          <IconX 
+                            style={xIconStyle} 
+                            stroke={3} 
+                            onClick={() => deleteAvailabilityItem(item.idItem)} 
+                            title='Remover'
+                          />
+                        }
+                      >
+                        {item.name}
+                      </Badge>
+                    )
+                  ) : (
+                    <Text size='sm' c='dimmed'>Não informado</Text>
                   )}
                 </Group>
                 <Button
                   size='sm'
                   variant='light'
                   color='violet'
-                  mt={14}
+                  mt={10}
                   leftSection={<IconPlus size={14} />}
                   onClick={() => setModalWorkIsOpen(true)}
                   fullWidth

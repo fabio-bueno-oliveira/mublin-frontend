@@ -1,12 +1,12 @@
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet'
 import Header from '../../../components/header/public'
 import Footer from '../../../components/footer/public'
-import { Container, Flex, Card, Group, Badge, Divider, Box, Text, Title, Button, Accordion, em } from '@mantine/core'
+import { Container, Flex, Card, Group, Badge, Divider, Box, Text, Title, Button, Accordion, Grid, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconCheck, IconPhoto } from '@tabler/icons-react'
+import { IconCheck, IconCreditCard, IconPhoto } from '@tabler/icons-react'
 import './styles.scss'
 
 function PricingPublicPage () {
@@ -48,155 +48,166 @@ function PricingPublicPage () {
           ta='center' 
           fw='330'
         >
-          Conecte-se com outros artistas e produtores. Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.
+          Conecte-se com outros artistas e produtores. Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques
         </Text>
       </Container>
       <Container size='sm'>
-        <Flex align='flex-start' justify='center' direction='row' gap={14}>
-          <Card h={isMobile ? 550 : 400} shadow='sm' padding='lg' radius='md' withBorder style={{flex:1}}>
-            <Flex direction='column' justify='space-between' h='100%'>
-              <div>
-                <Card.Section px={18}>
-                  <Group justify='space-between' mt='md' mb='xs'>
-                    <Text fw={500}>Plano Free</Text>
-                    <Badge color='gray'>Gratuito</Badge>
-                  </Group>
-                  <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'gray', to: 'rgba(126, 134, 194, 1)', deg: 107 }}>
-                    R$ 0,00 <Text span fz='xs'>pra sempre</Text>
-                  </Text>
-                  <Text size='xs' mb={10}>
-                    Acesso gratuito para sempre para você se conectar com  profissionais da música
-                  </Text>
-                  <Divider my={12} />
-                  <Text size='xs' mb={10} fw={500}>
-                    Conta gratuita para conectar com artistas, produtores e projetos
-                  </Text>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Encontre gigs e projetos para tocar</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='#8dcf98' stroke='4' size='14px' />
-                    <Text size='sm'>Até 2 projetos</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='#CDCDCD' stroke='4' size='14px' />
-                    <Text size='sm'>Equipamentos e setups no perfil</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='#CDCDCD' stroke='4' size='14px' />
-                    <Text size='sm'>Parceiros e endorsers no perfil</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Veja quem votou seus pontos fortes</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='#CDCDCD' stroke='4' size='14px' />
-                    <Text size='sm'>Selo azul verificado</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='#8dcf98' stroke='4' size='14px' />
-                    <Text size='sm'>Suporte via FAQ</Text>
-                  </Flex>
-                </Card.Section>
-              </div>
-              <Button color='dark' variant='outline' fullWidth mt='md' radius='md'>
-                Grátis para sempre
-              </Button>
-            </Flex>
-          </Card>
-          <Card h={isMobile ? 550 : 400} shadow='sm' padding='lg' radius='md' withBorder style={{flex:1}}>
-            <Flex direction='column' justify='space-between' h='100%'>
-              <div>
-                <Card.Section px={18}>
-                  <Group justify='space-between' mt='md' mb='xs'>
-                    <Text fw={500}>Plano PRO</Text>
-                    <Badge color='violet' variant='light'>
-                      40% off
-                    </Badge>
-                  </Group>
-                  <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'violet', to: 'yellow', deg: 107 }}>
-                    R$ 29,90 <Text span fz='xs'>por 3 meses</Text>
-                  </Text>
-                  <Text size='xs' mb={10}>
-                    Pagamento único (não recorrente) válido por 3 meses. Após isso, se desejar, poderá renovar.
-                  </Text>
-                  <Divider my={12} />
-                  <Text size='xs' mb={10} fw={500}>
-                    Todos os recursos, incluindo cadastro de equipamento e projetos ilimitados.
-                  </Text>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Encontre gigs e projetos para tocar</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Projetos ilimitados</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Equipamentos e setups no perfil</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Parceiros e endorsers no perfil</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Veja quem votou seus pontos fortes</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Selo azul verificado</Text>
-                  </Flex>
-                  <Flex gap={10} align='center'>
-                    <IconCheck color='green' stroke='4' size='14px' />
-                    <Text size='sm'>Suporte personalizado</Text>
-                  </Flex>
-                </Card.Section>
-              </div>
-              <Button 
-                variant='gradient'
-                gradient={{ from: 'violet', to: 'indigo', deg: 90 }} 
-                fullWidth 
-                mt='md' 
-                radius='md'
-              >
-                Book classic tour now
-              </Button>
-            </Flex>
-          </Card>
-        </Flex>
+        <Grid>
+          <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+            <Card shadow='sm' padding='lg' radius='md' withBorder>
+              <Flex direction='column' justify='space-between' h='100%'>
+                <Box mb={6}>
+                  <Card.Section px={18}>
+                    <Group justify='space-between' mt='md' mb='xs'>
+                      <Text fw={500}>Plano Free</Text>
+                      <Badge color='gray'>Gratuito</Badge>
+                    </Group>
+                    <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'gray', to: 'rgba(126, 134, 194, 1)', deg: 107 }}>
+                      R$ 0,00 <Text span fz='xs'>pra sempre</Text>
+                    </Text>
+                    <Text size='xs' mb={10}>
+                      Acesso gratuito para sempre para você se conectar com  profissionais da música
+                    </Text>
+                    <Divider my={12} />
+                    <Text size='xs' mb={10} fw={500}>
+                      Conta gratuita para conectar com artistas, produtores e projetos
+                    </Text>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Encontre gigs e projetos para tocar</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='#8dcf98' stroke='4' size='14px' />
+                      <Text size='sm'>Até 2 projetos</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='#CDCDCD' stroke='4' size='14px' />
+                      <Text size='sm'>Equipamentos e setups no perfil</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='#CDCDCD' stroke='4' size='14px' />
+                      <Text size='sm'>Parceiros e endorsers no perfil</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Veja quem votou seus pontos fortes</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='#CDCDCD' stroke='4' size='14px' />
+                      <Text size='sm'>Selo azul verificado</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='#8dcf98' stroke='4' size='14px' />
+                      <Text size='sm'>Suporte via FAQ</Text>
+                    </Flex>
+                  </Card.Section>
+                </Box>
+                <Button 
+                  color='primary' 
+                  variant='outline' 
+                  fullWidth 
+                  mt='xl' 
+                  radius='md'
+                  component='a'
+                  href='/signup'
+                >
+                  Grátis para sempre
+                </Button>
+              </Flex>
+            </Card>
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+            <Card shadow='sm' padding='lg' radius='md' withBorder>
+              <Flex direction='column' justify='space-between' h='100%'>
+                <Box mb={6}>
+                  <Card.Section px={18}>
+                    <Group justify='space-between' mt='md' mb='xs'>
+                      <Text fw={500}>Plano PRO</Text>
+                      <Badge color='violet' variant='light'>
+                        40% off
+                      </Badge>
+                    </Group>
+                    <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'violet', to: 'yellow', deg: 107 }}>
+                      R$ 29,90 <Text span fz='xs'>por 3 meses</Text>
+                    </Text>
+                    <Text size='xs' mb={10}>
+                      Pagamento único (não recorrente) válido por 3 meses. Após isso, se desejar, poderá renovar.
+                    </Text>
+                    <Divider my={12} />
+                    <Text size='xs' mb={10} fw={500}>
+                      Todos os recursos, incluindo cadastro de equipamento e projetos ilimitados.
+                    </Text>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Encontre gigs e projetos para tocar</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Projetos ilimitados</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Equipamentos e setups no perfil</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Parceiros e endorsers no perfil</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Veja quem votou seus pontos fortes</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Selo azul verificado</Text>
+                    </Flex>
+                    <Flex gap={10} align='center'>
+                      <IconCheck color='green' stroke='4' size='14px' />
+                      <Text size='sm'>Suporte personalizado</Text>
+                    </Flex>
+                  </Card.Section>
+                </Box>
+                <Button 
+                  color='violet'
+                  fullWidth 
+                  mt='xl' 
+                  radius='md'
+                  component='a'
+                  href='/signup'
+                >
+                  Quero ser Mublin PRO
+                </Button>
+              </Flex>
+            </Card>
+          </Grid.Col>
+        </Grid>
       </Container>
-
       <Container size='sm' my={30}>
         <Accordion variant="contained">
           <Accordion.Item value="photos">
-            <Accordion.Control icon={<IconPhoto size={20} color="var(--mantine-color-red-6)" />}>
-              Recent photos
+            <Accordion.Control icon={<IconCreditCard size={20} color="gray" />}>
+              O pagamento é recorrente?
             </Accordion.Control>
-            <Accordion.Panel>Content</Accordion.Panel>
+            <Accordion.Panel>Não. O pagamento é realizado uma única vez e corresponde a três meses de Mublin PRO. Após os três meses, você não será cobrado automaticamente e caso queira adquirir a conta PRO novamente, terá que realizar uma nova compra.</Accordion.Panel>
           </Accordion.Item>
 
           <Accordion.Item value="print">
-            <Accordion.Control icon={<IconPhoto size={20} color="var(--mantine-color-blue-6)" />}>
-              Print photos
+            <Accordion.Control icon={<IconPhoto size={20} color="gray" />}>
+              Como posso ter o selo de perfil verificado? 
             </Accordion.Control>
-            <Accordion.Panel>Content</Accordion.Panel>
+            <Accordion.Panel>O selo de perfil verificado é atribuído em caso de compra de conta Mublin PRO.</Accordion.Panel>
           </Accordion.Item>
 
           <Accordion.Item value="camera">
             <Accordion.Control
-              icon={<IconPhoto size={20} color="var(--mantine-color-teal-6)" />}
+              icon={<IconPhoto size={20} color="gray" />}
             >
-              Camera settings
+              Como funciona o suporte do Mublin?
             </Accordion.Control>
-            <Accordion.Panel>Content</Accordion.Panel>
+            <Accordion.Panel>Dúvidas e solicitações devem ser enviadas para help@mublin.com</Accordion.Panel>
           </Accordion.Item>
         </Accordion>
       </Container>
-
       <Footer />
     </>
   )
