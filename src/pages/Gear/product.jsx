@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { gearInfos } from '../../store/actions/gear'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Card, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
 import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -16,7 +16,7 @@ function GearProductPage () {
   const productId = params?.productId
   const product = useSelector(state => state.gear)
   const largeScreen = useMediaQuery('(min-width: 60em)')
-  let navigate = useNavigate();
+  // let navigate = useNavigate();
 
   let dispatch = useDispatch()
 
@@ -127,8 +127,8 @@ function GearProductPage () {
                           radius='md'
                           w={300}
                           h={300}
-                          // onClick={() => setModalZoomOpen(true)}
-                          onClick={() => navigate("/gear/product/zoom/"+productId)}
+                          onClick={() => setModalZoomOpen(true)}
+                          // onClick={() => navigate("/gear/product/zoom/"+productId)}
                           style={{cursor:'pointer'}}
                         />
                         <Center>
@@ -207,18 +207,16 @@ function GearProductPage () {
               <Text fz='0.9rem' fw='640' className='lhNormal'>
                 Quem possui
               </Text>
-              <Badge variant='light' color='gray' circle>
-                {product.owners[0].id ? product?.owners?.length : '0'}
+              <Badge variant='light' color='gray' radius='sm'>
+                {product.owners.total}
               </Badge>
             </Group>
             {product.requesting ? (
-              <Text>
-                Carregando...
-              </Text>
+              <Text my={14} size='sm' c='dimmed'>Carregando...</Text>
             ) : (
               <Box mb={30}>
-                {product.owners[0].id && 
-                  product?.owners?.map(owner => 
+                {product.owners.total ? ( 
+                  product.owners.result.map(owner => 
                     <Paper 
                       key={owner.id}
                       radius='md'
@@ -273,7 +271,9 @@ function GearProductPage () {
                       )}
                     </Paper>
                   )
-                }
+                ) : (
+                  <Text my={14} size='sm' c='dimmed'>Ninguém por aqui</Text>
+                )}
               </Box>
             )}
           </Grid.Col>
@@ -281,17 +281,23 @@ function GearProductPage () {
       </Container>
       <Modal 
         centered
+        fullScreen
         opened={modalZoomOpen}
-        // title={`${product.brandName} | ${product.name} ${product.colorNamePTBR ? ' | Cor: ' + product.colorNamePTBR : ''}`}
-        title={product.name}
+        title={<>
+          <Text>{`${product.brandName} • ${product.name}`}</Text>
+          {product.colorNamePTBR && 
+            <Text size='xs' c='dimmed'>Cor: {product.colorNamePTBR}</Text>
+          }
+        </>
+        }
         onClose={() => setModalZoomOpen(false)} 
-        scrollAreaComponent={ScrollArea.Autosize}
+        // scrollAreaComponent={ScrollArea.Autosize}
         size='lg'
         withCloseButton
       >
-        <Center>
-          <Image w='auto' fit='cover' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
-        </Center>
+        <ScrollArea w='auto'>
+          <Image w='auto' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
+        </ScrollArea>
       </Modal>
       {(!modalZoomOpen) &&
         <FooterMenuMobile />
