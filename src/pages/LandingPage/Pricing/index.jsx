@@ -6,7 +6,7 @@ import Header from '../../../components/header/public'
 import Footer from '../../../components/footer/public'
 import { Container, Flex, Card, Group, Badge, Divider, Box, Text, Title, Button, Accordion, Grid, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconCheck, IconCreditCard, IconPhoto } from '@tabler/icons-react'
+import { IconCheck, IconCreditCard, IconMessage, IconPhoto, IconQuestionMark, IconRosetteDiscountCheck } from '@tabler/icons-react'
 import './styles.scss'
 
 function PricingPublicPage () {
@@ -40,7 +40,7 @@ function PricingPublicPage () {
           ta='center'
           mb={8}
         >
-          Assine e seja PRO
+          Seja PRO
         </Title>
         <Text 
           size='md'
@@ -192,7 +192,7 @@ function PricingPublicPage () {
           </Accordion.Item>
 
           <Accordion.Item value="print">
-            <Accordion.Control icon={<IconPhoto size={20} color="gray" />}>
+            <Accordion.Control icon={<IconRosetteDiscountCheck size={20} color="gray" />}>
               Como posso ter o selo de perfil verificado? 
             </Accordion.Control>
             <Accordion.Panel>O selo de perfil verificado é atribuído em caso de compra de conta Mublin PRO.</Accordion.Panel>
@@ -200,7 +200,7 @@ function PricingPublicPage () {
 
           <Accordion.Item value="camera">
             <Accordion.Control
-              icon={<IconPhoto size={20} color="gray" />}
+              icon={<IconMessage size={20} color="gray" />}
             >
               Como funciona o suporte do Mublin?
             </Accordion.Control>
