@@ -20,7 +20,7 @@ function PricingPublicPage () {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>Preços  | Mublin</title>
+        <title>Preços | Mublin</title>
         <link rel='canonical' href={`https://mublin.com/pricing`} />
         <meta name='description' content='A rede para quem trabalha com música' />
       </Helmet>
@@ -64,17 +64,40 @@ function PricingPublicPage () {
                   <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'gray', to: 'rgba(126, 134, 194, 1)', deg: 107 }}>
                     R$ 0,00 <Text span fz='xs'>pra sempre</Text>
                   </Text>
+                  <Text size='xs' mb={10}>
+                    Acesso gratuito para sempre para você se conectar com  profissionais da música
+                  </Text>
                   <Divider my={12} />
                   <Text size='xs' mb={10} fw={500}>
                     Conta gratuita para conectar com artistas, produtores e projetos
                   </Text>
                   <Flex gap={10} align='center'>
-                    <IconCheck color='green' style={{width:'14px',height:'14px'}} />
-                    <Text size='sm'>Encontre projetos para tocar</Text>
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Encontre gigs e projetos para tocar</Text>
                   </Flex>
                   <Flex gap={10} align='center'>
-                    <IconCheck color='green' style={{width:'14px',height:'14px'}} />
-                    <Text size='sm'>Participe de até 2 projetos</Text>
+                    <IconCheck color='#8dcf98' stroke='4' size='14px' />
+                    <Text size='sm'>Até 2 projetos</Text>
+                  </Flex>
+                  <Flex gap={10} align='center'>
+                    <IconCheck color='#CDCDCD' stroke='4' size='14px' />
+                    <Text size='sm'>Equipamentos e setups no perfil</Text>
+                  </Flex>
+                  <Flex gap={10} align='center'>
+                    <IconCheck color='#CDCDCD' stroke='4' size='14px' />
+                    <Text size='sm'>Parceiros e endorsers no perfil</Text>
+                  </Flex>
+                  <Flex gap={10} align='center'>
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Veja quem votou seus pontos fortes</Text>
+                  </Flex>
+                  <Flex gap={10} align='center'>
+                    <IconCheck color='#CDCDCD' stroke='4' size='14px' />
+                    <Text size='sm'>Selo azul verificado</Text>
+                  </Flex>
+                  <Flex gap={10} align='center'>
+                    <IconCheck color='#8dcf98' stroke='4' size='14px' />
+                    <Text size='sm'>Suporte via FAQ</Text>
                   </Flex>
                 </Card.Section>
               </div>
@@ -104,24 +127,32 @@ function PricingPublicPage () {
                     Todos os recursos, incluindo cadastro de equipamento e projetos ilimitados.
                   </Text>
                   <Flex gap={10} align='center'>
-                    <IconCheck color='green' style={{width:'14px',height:'14px'}} />
-                    <Text size='sm'>Encontre projetos para tocar</Text>
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Encontre gigs e projetos para tocar</Text>
                   </Flex>
                   <Flex gap={10} align='center'>
-                    <IconCheck color='green' style={{width:'14px',height:'14px'}} />
-                    <Text size='sm'>Participe de projetos ilimitados</Text>
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Projetos ilimitados</Text>
                   </Flex>
                   <Flex gap={10} align='center'>
-                    <IconCheck color='green' style={{width:'14px',height:'14px'}} />
-                    <Text size='sm'>Cadastre equipamentos</Text>
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Equipamentos e setups no perfil</Text>
                   </Flex>
                   <Flex gap={10} align='center'>
-                    <IconCheck color='green' style={{width:'14px',height:'14px'}} />
-                    <Text size='sm'>Veja quem votou nos seus pontos fortes</Text>
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Parceiros e endorsers no perfil</Text>
                   </Flex>
                   <Flex gap={10} align='center'>
-                    <IconCheck color='green' style={{width:'14px',height:'14px'}} />
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Veja quem votou seus pontos fortes</Text>
+                  </Flex>
+                  <Flex gap={10} align='center'>
+                    <IconCheck color='green' stroke='4' size='14px' />
                     <Text size='sm'>Selo azul verificado</Text>
+                  </Flex>
+                  <Flex gap={10} align='center'>
+                    <IconCheck color='green' stroke='4' size='14px' />
+                    <Text size='sm'>Suporte personalizado</Text>
                   </Flex>
                 </Card.Section>
               </div>
