@@ -82,7 +82,7 @@ function PricingPublicPage () {
                     </Flex>
                     <Flex gap={10} align='center'>
                       <IconCheck color='#CDCDCD' stroke='4' size='14px' />
-                      <Text size='sm'>Equipamentos e setups no perfil</Text>
+                      <Text size='sm'>Cadastre seus equipamentos</Text>
                     </Flex>
                     <Flex gap={10} align='center'>
                       <IconCheck color='#CDCDCD' stroke='4' size='14px' />
@@ -147,7 +147,7 @@ function PricingPublicPage () {
                     </Flex>
                     <Flex gap={10} align='center'>
                       <IconCheck color='green' stroke='4' size='14px' />
-                      <Text size='sm'>Equipamentos e setups no perfil</Text>
+                      <Text size='sm'>Cadastre seus equipamentos</Text>
                     </Flex>
                     <Flex gap={10} align='center'>
                       <IconCheck color='green' stroke='4' size='14px' />
@@ -195,7 +195,7 @@ function PricingPublicPage () {
             <Accordion.Control icon={<IconRosetteDiscountCheck size={20} color="gray" />}>
               Como posso ter o selo de perfil verificado? 
             </Accordion.Control>
-            <Accordion.Panel>O selo de perfil verificado é atribuído em caso de compra de conta Mublin PRO.</Accordion.Panel>
+            <Accordion.Panel>O selo de perfil verificado é atribuído para usuários que adquirem uma conta Mublin PRO.</Accordion.Panel>
           </Accordion.Item>
 
           <Accordion.Item value="camera">

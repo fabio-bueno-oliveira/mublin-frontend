@@ -6,7 +6,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { searchInfos } from '../../store/actions/search'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Anchor, Divider, Modal, em } from '@mantine/core'
+import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
@@ -17,7 +17,7 @@ import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import UserCardLoading from '../../components/userCard/loading'
 import NewPost from '../../pages/New/postStandalone'
-import { truncateString } from '../../utils/formatter'
+import { truncateString, nFormatter } from '../../utils/formatter'
 
 function Home () {
 
@@ -74,7 +74,7 @@ function Home () {
               {user.requesting ? (
                 <>
                   <Skeleton height={56} circle />
-                  <Skeleton height={16} width={125} mt={10} radius="md" />
+                  <Skeleton height={16} width={125} mt={10} radius='md' />
                 </>
               ) : (
                 <>
@@ -85,23 +85,43 @@ function Home () {
                     className='mublinModule'
                     mb='10'
                   >
-                    <Center>
+                    <Card.Section>
+                      <Image
+                        src={userInfo.picture_cover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${userInfo.id}/${userInfo.picture_cover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
+                        height={50}
+                        alt={`Imagem de capa de ${userInfo.name}`}
+                      />
+                    </Card.Section>
+                    <Center style={{marginTop:'-20px'}}>
                       <Link to={{ pathname: `/${userInfo.username}` }}>
                         <Avatar
-                          size='lg'
-                          src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                          size='70px'
+                          radius='md'
+                          src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                          style={{border:'2px solid white'}}
                         />
                       </Link>
                     </Center>
-                    <Title fw='580' fz='1.04rem' mb={1} mt={10} ta='center' className='op80'>
-                      Olá, {userInfo?.name}
-                    </Title>
+                    <Text size='lg' fw={600} mt={14} ta='center' className='lhNormal'>
+                      {userInfo.name} {userInfo.lastname}
+                    </Text>
+                    <Text
+                      ta='center'
+                      c='dimmed'
+                      fw='400'
+                      fz='xs'
+                      mb={10}
+                      className='lhNormal'
+                    >
+                      {user.roles.map(role => 
+                        <span className='comma' key={role.id}>{role.description}</span>
+                      )}
+                    </Text>
                     {user.plan === 'Pro' ? ( 
                       <Center>
                         <Badge 
                           color='violet' 
                           size='sm'
-                          my={5}
                           variant='gradient'
                           gradient={{ from: 'violet', to: 'blue' }}
                         >
@@ -122,21 +142,22 @@ function Home () {
                         </Anchor>
                       </Center>
                     )}
-                    <Text
-                      ta='center'
-                      c='dimmed'
-                      fw='400'
-                      fz='0.77rem'
-                      mt='3'
-                      className='lhNormal'
-                    >
-                      {user.roles.map(role => 
-                        <span className='comma' key={role.id}>{role.description}</span>
-                      )}
-                    </Text>
-                    {/* <Text ta="center"  size="xs" mt={9} c="dimmed">
-                      {user.bio}
-                    </Text> */}
+                    <Flex mt={14} justify='center' gap={6}>
+                      <Flex direction='column' align='center'>
+                        <Text size='13px' fw={600}>{nFormatter(projects.totalProjects)}</Text>
+                        <Text size='xs' fw={250} c='dimmed'>Projetos</Text>
+                      </Flex>
+                      <Divider orientation="vertical" />
+                      <Flex direction='column' align='center'>
+                        <Text size='13px' fw={600}>{nFormatter(4312)}</Text>
+                        <Text size='xs' fw={250} c='dimmed'>Seguidores</Text>
+                      </Flex>
+                      <Divider orientation="vertical" />
+                      <Flex direction='column' align='center'>
+                        <Text size='13px' fw={600}>{nFormatter(322)}</Text>
+                        <Text size='xs' fw={250} c='dimmed'>Seguindo</Text>
+                      </Flex>
+                    </Flex>
                   </Card>
                   {/* <Text fw='400' size='lg'>Compromissos próximos:</Text> */}
                   {/* {projects.list.map(project =>
