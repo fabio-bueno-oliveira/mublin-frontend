@@ -426,35 +426,39 @@ function ProfilePage () {
                       </Flex>
                     </Anchor>
                   }
-                  {profile.instagram &&
-                    <Anchor 
-                      href={`https://instagram.com/${profile.instagram}`}
-                      target='_blank'
-                      underline='hover'
-                      className='websiteLink'
-                    >
-                      <Flex gap={2} align='center'>
-                        <IconBrandInstagram size={13} />
-                        <Text size='0.83em' className='lhNormal'>
-                          Instagram
-                        </Text>
-                      </Flex>
-                    </Anchor>
-                  }
-                  {profile.tiktok &&
-                    <Anchor 
-                      href={`https://tiktok.com/@${profile.tiktok}`}
-                      target='_blank'
-                      underline='hover'
-                      className='websiteLink'
-                    >
-                      <Flex gap={2} align='center'>
-                        <IconBrandTiktok size={13} />
-                        <Text size='0.83em' className='lhNormal'>
-                          TikTok
-                        </Text>
-                      </Flex>
-                    </Anchor>
+                  {(profile.instagram || profile.tiktok) &&
+                    <Group gap={6} mt={6}>
+                      {profile.instagram &&
+                        <Anchor 
+                          href={`https://instagram.com/${profile.instagram}`}
+                          target='_blank'
+                          underline='hover'
+                          className='websiteLink'
+                        >
+                          <Flex gap={2} align='center'>
+                            <IconBrandInstagram size={13} />
+                            <Text size='0.83em' className='lhNormal'>
+                              Instagram
+                            </Text>
+                          </Flex>
+                        </Anchor>
+                      }
+                      {profile.tiktok &&
+                        <Anchor 
+                          href={`https://tiktok.com/@${profile.tiktok}`}
+                          target='_blank'
+                          underline='hover'
+                          className='websiteLink'
+                        >
+                          <Flex gap={2} align='center'>
+                            <IconBrandTiktok size={13} />
+                            <Text size='0.83em' className='lhNormal'>
+                              TikTok
+                            </Text>
+                          </Flex>
+                        </Anchor>
+                      }
+                    </Group>
                   }
                 </Box>
                 {profile.plan === 'Pro' && 
@@ -704,6 +708,12 @@ function ProfilePage () {
                   </Button>
                 )}
               </Flex>
+              {(profile.plan === 'Pro') && 
+                <>
+                  <Title fz='1.03rem' fw='640'>Parceiros e Endorsements</Title>
+                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={false} mt={4} mb={10} />
+                </>
+              }
               {profile.availabilityId && 
                 <>
                   <Divider mt='md' mb='xs' label='Disponibilidade' labelPosition='left' />
@@ -714,7 +724,7 @@ function ProfilePage () {
                     align='center'
                     justify='flex-start'
                     gap={6}
-                    mb={isMobile ? 0 : 12}
+                    mb={isMobile ? 0 : 6}
                   >
                     <Indicator
                       inline
@@ -725,15 +735,15 @@ function ProfilePage () {
                       mr={7}
                     />
                     <Text
-                      fz='14.2px'
-                      fw='490'
+                      fz='1.03rem'
+                      fw='640'
                       className='lhNormal'
                       pt='1px'
                     >
                       {profile.availabilityTitle}
                     </Text>
                   </Flex>
-                  <AvailabilityInfo mt={18} screen='largeScreen' />
+                  <AvailabilityInfo mt={18} mb={18} screen='largeScreen' />
                   {isMobile &&
                     <Accordion chevronPosition='left'>
                       <Accordion.Item value='Exibir preferências musicais e de trabalho' style={{border:'0px'}}>
@@ -746,12 +756,6 @@ function ProfilePage () {
                       </Accordion.Item>
                     </Accordion>
                   }
-                </>
-              }
-              {(profile.plan === 'Pro') && 
-                <>
-                  <Title fz='1.03rem' fw='640'>Parceiros e Endorsements</Title>
-                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={false} mt={4} mb={10} />
                 </>
               }
               {profile.availabilityId && 
