@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
-import { useMantineColorScheme, ActionIcon, Modal, Center, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Anchor, Divider, em  } from '@mantine/core'
+import { useMantineColorScheme, ActionIcon, Modal, Center, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Anchor, Divider, Spoiler, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconArrowsMaximize, IconSettings, IconCirclePlus } from '@tabler/icons-react'
+import { IconArrowsMaximize, IconSettings, IconPlus } from '@tabler/icons-react'
 import { truncateString } from '../../../utils/formatter'
-import ReadMoreReact from 'read-more-react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 
@@ -78,7 +77,7 @@ function GearSection ({ loggedUserId, username }) {
                   href='/settings/my-gear'
                   title='Adicionar item'
                 >
-                  <IconCirclePlus 
+                  <IconPlus 
                     color={colorScheme === 'light' ? 'black' : 'white'}
                     style={{ width: '91%', height: '91%' }} stroke={1.5}
                   />
@@ -312,18 +311,24 @@ function GearSection ({ loggedUserId, username }) {
         {gearItemDetail.ownerComments && 
           <>
             <Divider my={10} />
-            <Text size='sm' fw={350} c='dimmed' mb={3}>
+            <Text size='sm' fw={450} mb={3}>
               Comentários de {profile.name} {profile.lastname}
             </Text>
-            <Text size='sm'>
-              <ReadMoreReact
-                text={gearItemDetail.ownerComments}
-                min={90}
-                ideal={110}
-                max={2000}
-                readMoreText='...mais'
-              />
-            </Text>
+            <Spoiler
+              maxHeight={36}
+              showLabel={
+                <Text size='sm'>...mais</Text>
+              }
+              hideLabel={false}
+              transitionDuration={0}
+            >
+              <Text
+                size='sm'
+                className='lhNormal op80'
+              >
+                {gearItemDetail.ownerComments}
+              </Text>
+            </Spoiler>
           </>
         }
       </Modal>

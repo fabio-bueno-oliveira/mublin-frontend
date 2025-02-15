@@ -4,14 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
-import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, TextInput, Button, Indicator, rem, em } from '@mantine/core'
+import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, TextInput, Button, Spoiler, Indicator, rem, em } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 // import ReactPlayer from 'react-player/youtube'
-import ReadMoreReact from 'read-more-react'
 
 function FeedCard ({ item, compact }) {
 
@@ -276,20 +275,23 @@ function FeedCard ({ item, compact }) {
         }
         {(item.categoryId === 8) && 
           <>
-            <Box
-              px='15'
-              fz={isMobile ? '0.9em' : '0.86em'}
-              mt='12px'
-              className='lhNormal op80'
+            <Spoiler
+              maxHeight={45}
+              px={15}
+              showLabel={
+                <Text px={15} fz={isMobile ? '0.9em' : '0.86em'}>...mais</Text>
+              }
+              hideLabel={false}
+              transitionDuration={0}
             >
-              <ReadMoreReact
-                text={item.extraText}
-                min={150}
-                ideal={200}
-                max={2000}
-                readMoreText='...mais'
-              />
-            </Box>
+              <Text
+                fz={isMobile ? '0.9em' : '0.86em'}
+                mt='12px'
+                className='lhNormal op80'
+              >
+                {item.extraText}
+              </Text>
+            </Spoiler>
             {(item.image && !compact) && 
               <Image
                 mt='10'
