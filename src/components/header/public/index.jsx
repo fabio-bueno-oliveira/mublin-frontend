@@ -38,7 +38,7 @@ function Header (props) {
               <Link to={{ pathname: '/login' }}>
                 <Button
                   size="compact-md"
-                  color="violet"
+                  color="mublinColor"
                   variant="transparent"
                 >
                   Entrar
@@ -49,7 +49,7 @@ function Header (props) {
               <Link to={{ pathname: '/signup' }}>
                 <Button 
                   size='md' 
-                  color='violet'
+                  color='mublinColor'
                   variant='outline'
                 >
                   Cadastro

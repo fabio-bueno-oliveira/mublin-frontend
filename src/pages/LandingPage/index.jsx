@@ -86,9 +86,9 @@ function LandingPage () {
             <Button
               size='xl'
               mt='lg'
-              color='violet'
+              color='mublinColor'
               variant='gradient'
-              gradient={{ from: 'blue', to: 'violet', deg: 90 }}
+              gradient={{ from: 'mublinColor', to: 'violet', deg: 90 }}
               rightSection={<IconArrowRight size={14}/>}
             >
               Comece grátis

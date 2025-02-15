@@ -434,48 +434,63 @@ function ProfilePage () {
                 <Flex gap={5} mt={17} mb={isMobile ? 14 : 20}>
                   {loggedUserId !== profile.id ? (
                     <>
-                      <Button 
-                        size='sm'
-                        fz='0.85rem'
-                        fw='570'
-                        h={30}
-                        color={colorScheme === "light" ? "dark" : "gray"}
-                        variant={followedByMe?.following === 'true' ? 'outline' : 'filled'}
-                        loading={loadingFollow}
-                        rightSection={followedByMe?.following === 'true' ? <IconChevronDown size={14} /> : undefined}
-                        fullWidth={isMobile}
-                        onClick={
-                          followedByMe?.following === 'true' 
-                            ? () => setModalFollowInfoOpen(true)
-                            : () => followUnfollow() 
-                        }
-                      >
-                        {followedByMe?.following === 'true' ? 'Seguindo' : 'Seguir'}
-                      </Button>
+                      {followedByMe?.following === 'true' ? (
+                        <Button 
+                          size='sm'
+                          fz='0.85rem'
+                          fw='570'
+                          h={30}
+                          color='white'
+                          variant='outline'
+                          loading={loadingFollow}
+                          rightSection={<IconChevronDown size={14} />}
+                          fullWidth={isMobile}
+                          onClick={() => setModalFollowInfoOpen(true)}
+                        >
+                          Seguindo
+                        </Button>
+                      ) : (
+                        <Button 
+                          size='sm'
+                          fz='0.85rem'
+                          fw='570'
+                          h={30}
+                          color='mublinColor'
+                          variant='filled'
+                          loading={loadingFollow}
+                          fullWidth={isMobile}
+                          onClick={() => followUnfollow()}
+                        >
+                          Seguir
+                        </Button>
+                      )}
                       <Button 
                         size='sm'
                         fz='0.85rem'
                         fw='570'
                         h={30}
                         variant='outline'
-                        color={colorScheme === "light" ? "dark" : "gray"}
+                        color='primary'
                         fullWidth={isMobile}
                         onClick={() => setModalContactOpen(true)}
                       >
                         Contato
                       </Button>
-                      {profile.instagram && 
-                        <ActionIcon 
-                          size={isLargeScreen ? "30px" : "30"}
-                          w={isLargeScreen ? "30px" : "30"}
-                          variant='light'
-                          color={colorScheme === "light" ? "dark" : "gray"}
-                          component="a"
+                      {profile.instagram &&
+                        <ActionIcon
+                          size={30}
+                          w={30}
+                          variant='outline'
+                          color='primary'
+                          component='a'
                           href={`https://instagram.com/${profile.instagram}`}
                           target='_blank'
                           title='Instagram'
                         >
-                          <IconBrandInstagram style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                          <IconBrandInstagram
+                            style={{ width: '70%', height: '70%' }}
+                            stroke={1.5}
+                          />
                         </ActionIcon>
                       }
                     </>
@@ -486,7 +501,7 @@ function ProfilePage () {
                       fw='570'
                       h={30}
                       variant='outline'
-                      color={colorScheme === 'light' ? 'dark' : 'gray'}
+                      color='primary'
                       fullWidth={isMobile}
                       onClick={() => navigate('/settings')}
                     >
@@ -523,8 +538,8 @@ function ProfilePage () {
                     </Flex>
                     <AvailabilityInfo mt={18} screen='largeScreen' />
                     {isMobile &&
-                      <Accordion chevronPosition="left">
-                        <Accordion.Item value="Exibir preferências musicais e de trabalho" style={{border:'0px'}}>
+                      <Accordion chevronPosition='left'>
+                        <Accordion.Item value='Exibir preferências musicais e de trabalho' style={{border:'0px'}}>
                           <Accordion.Control p={0} fz='sm'>
                             Exibir preferências musicais e de trabalho
                           </Accordion.Control>
@@ -805,7 +820,7 @@ function ProfilePage () {
           ) : (
             <Button 
               size="sm" 
-              color={colorScheme === "light" ? "dark" : "gray"}
+              color='primary'
               variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
               rightSection={<IconStar size={14} />}
               onClick={() => changeInspirationStatus(followedByMe.id, profile.id, "1")}
@@ -814,9 +829,9 @@ function ProfilePage () {
             </Button>
           )} */}
           <Button 
-            size="sm" 
-            color={colorScheme === "light" ? "dark" : "gray"}
-            variant={followedByMe?.following === 'true' ? 'light' : 'filled'}
+            size='sm' 
+            color='primary'
+            variant='outline'
             onClick={() => followUnfollow()}
           >
             {followedByMe?.following === 'true' ? 'Deixar de seguir' : 'Seguir'}
@@ -846,7 +861,7 @@ function ProfilePage () {
           profile.followers.result.map(follower => 
             <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(follower.username)} key={follower.id}>
               <Indicator position='bottom-center' inline label={<Text size='0.55rem' >{follower.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!follower.openToWork}>
-                <Avatar className='point' radius="xl" size="md" src={follower.picture ? follower.picture : undefined} />
+                <Avatar className='point' radius='xl' size='md' src={follower.picture ? follower.picture : undefined} />
               </Indicator>
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>
@@ -882,7 +897,7 @@ function ProfilePage () {
           profile.following.result.map(following => 
             <Flex align={'center'} gap={7} mb={17} onClick={() => goToProfile(following.username)} key={following.id}>
               <Indicator position='bottom-center' inline label={<Text size='0.55rem' >{following.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!following.openToWork}>
-                <Avatar className='point' radius="xl" size="md" src={following.picture ? following.picture : undefined} />
+                <Avatar className='point' radius='xl' size='md' src={following.picture ? following.picture : undefined} />
               </Indicator>
               <Flex direction={'column'} className='point'>
                 <Group gap={0}>

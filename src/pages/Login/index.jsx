@@ -31,7 +31,7 @@ function LoginPage () {
   document.title = 'Login | Mublin';
 
   const search = useLocation().search;
-  const urlInfo = new URLSearchParams(search).get("info");
+  const urlInfo = new URLSearchParams(search).get('info');
 
   const loggedIn = useSelector(state => state.authentication.loggedIn);
 
@@ -63,7 +63,7 @@ function LoginPage () {
   return (
       <>
       {loggedIn &&
-        <Navigate to="/home" />
+        <Navigate to='/home' />
       }
       <Center mt={80} mb={34}>
         <Link to={{ pathname: '/' }} className={s.mublinLogo}>
@@ -76,63 +76,63 @@ function LoginPage () {
         </Link>
       </Center>
       <Container size={420} mb={40}>
-        {urlInfo === "firstAccess" &&
+        {urlInfo === 'firstAccess' &&
           <Alert 
-            variant="light" 
-            color="green" 
-            title="Cadastro efetuado com sucesso!" 
+            variant='light' 
+            color='green' 
+            title='Cadastro efetuado com sucesso!' 
             icon={<IconCheck />}
             mb='md'
           />
         }
         {error &&
           <Alert 
-            variant="light" 
-            color="red" 
+            variant='light' 
+            color='red' 
             icon={<IconX />}
             mb='md'
-            title="Login inválido"
+            title='Login inválido'
           />
         }
-        <Space h="lg" />
+        <Space h='lg' />
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <TextInput 
-            label="Email ou username" 
-            placeholder="seu@email.com ou usuário" 
-            size="md"
+            label='Email ou username' 
+            placeholder='seu@email.com ou usuário' 
+            size='md'
             autoFocus
             key={form.key('email')}
             {...form.getInputProps('email')}
           />
           <PasswordInput 
-            label="Senha" 
-            placeholder="Digite sua senha" 
-            size="md" 
-            mt="md"
+            label='Senha' 
+            placeholder='Digite sua senha' 
+            size='md' 
+            mt='md'
             key={form.key('password')}
             {...form.getInputProps('password')}
           />
-          <Group justify="space-between" mt="lg">
-            <Checkbox defaultChecked label="Lembrar meus dados" color="violet" />
-            <Anchor size="sm" href='/login/forgot'>
+          <Group justify='space-between' mt='lg'>
+            <Checkbox defaultChecked label='Lembrar meus dados' color='mublinColor' />
+            <Anchor size='sm' href='/login/forgot'>
               Esqueci a senha
             </Anchor>
           </Group>
           <Button 
-            type="submit"
+            type='submit'
             loading={loggingIn}
             fullWidth
             size='md'
-            color='violet'
+            color='mublinColor'
             mt='xl'
           >
             Login
           </Button>
         </form>
-        <Text c="dimmed" size="sm" ta="center" mt={15} mb={7}>
+        <Text c='dimmed' size='sm' ta='center' mt={15} mb={7}>
           Ainda não possui cadastro?{' '}
           <Link to={{ pathname: '/signup' }}>
-            <Anchor fw="550" component="button">
+            <Anchor fw='550' component='button'>
               Crie sua conta grátis
             </Anchor>
           </Link>
