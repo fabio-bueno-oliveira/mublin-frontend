@@ -13,10 +13,11 @@ function RelatedProfiles ({
 
   return (
     <Box mb='18'>
-      <Divider mt={20} />
+      {/* <Divider mt={20} />
       <Title fz='1.03rem' fw='640' mt='md' mb='xs'>
         Mais perfis pra você
-      </Title>
+      </Title> */}
+      <Divider mt='md' mb='xs' label='Mais perfis pra você' labelPosition='left' />
       <Splide 
         options={{
           drag: 'free',

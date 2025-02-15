@@ -6,11 +6,11 @@ import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 
 function PartnersModule ({ 
-    partners,
-    showTitle,
-    mt,
-    mb,
-    loading
+  partners,
+  showTitle,
+  mt,
+  mb,
+  loading
 }) {
 
   return (
@@ -36,7 +36,7 @@ function PartnersModule ({
                 perPage: 3,
                 autoWidth: true,
                 arrows: false,
-                gap: '6px',
+                gap: '9px',
                 dots: false,
                 pagination: false,
               }}
@@ -47,13 +47,13 @@ function PartnersModule ({
                   key={partner.brandId} 
                   // style={{backgroundColor:'white',padding:'3px',borderRadius:'10px'}}
                 >
-                  <Flex gap={3} direction='column' align='center'>
+                  <Flex gap={2} direction='column' align='center'>
                     <Link to={{ pathname: `/gear/brand/${partner.brandSlug}` }}>
                       <Image 
                         src={partner.brandLogo} 
                         radius="xl"
-                        h={32}
-                        w={32}
+                        h={40}
+                        w={40}
                         fit="contain"
                         title={partner.brandName}
                         alt={partner.brandName}

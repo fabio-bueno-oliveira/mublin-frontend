@@ -75,6 +75,20 @@ a.displayBlockLink {
   }
 }
 
+.iconMublinPiano {
+  color: #969168;
+  width: calc(1.17rem);
+  height: calc(1.17rem);
+  margin-left: 1px;
+
+  &.small {
+    width: calc(1rem);
+    height: calc(1rem);
+    margin-left: 1px;
+    cursor: default;
+  }
+}
+
 .read-more-button {
   cursor: pointer;
   display: table-cell;
@@ -200,7 +214,7 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 
 :root[data-mantine-color-scheme='dark'] {
   .websiteLink {
-    color: #FFFFFF!important;
+    color: #a8bdc9!important;
     display: block;
     width: fit-content;
   }

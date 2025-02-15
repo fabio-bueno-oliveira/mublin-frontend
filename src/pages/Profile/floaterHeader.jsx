@@ -28,18 +28,15 @@ function FloaterHeader ({ profile, scrollY }) {
                   mr={4}
                 />
                 <Flex direction='column'>
-                  <Text fw='650' size='12px'>
+                  <Text fw='650' size='sm' className='lhNormal'>
                     {profile.name} {profile.lastname}
                   </Text>
-                  <Text size='0.64rem' mt={2}>
+                  <Text size='xs'>
                     {profile.roles.map((role, key) =>
                     <span key={key} className='comma'>
                       {role.description}
                     </span>
                     )}
-                  </Text>
-                  <Text c='dimmed' size='0.64rem'>
-                    {!!profile.city && profile.city}{profile.region && `, ${profile.region}`}
                   </Text>
                 </Flex>
               </Group>
