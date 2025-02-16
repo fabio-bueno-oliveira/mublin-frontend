@@ -142,22 +142,6 @@ function Home () {
                         </Anchor>
                       </Center>
                     )}
-                    <Flex mt={14} justify='center' gap={6}>
-                      <Flex direction='column' align='center'>
-                        <Text size='13px' fw={600}>{nFormatter(projects.totalProjects)}</Text>
-                        <Text size='xs' fw={250} c='dimmed'>Projetos</Text>
-                      </Flex>
-                      <Divider orientation="vertical" />
-                      <Flex direction='column' align='center'>
-                        <Text size='13px' fw={600}>{nFormatter(4312)}</Text>
-                        <Text size='xs' fw={250} c='dimmed'>Seguidores</Text>
-                      </Flex>
-                      <Divider orientation="vertical" />
-                      <Flex direction='column' align='center'>
-                        <Text size='13px' fw={600}>{nFormatter(322)}</Text>
-                        <Text size='xs' fw={250} c='dimmed'>Seguindo</Text>
-                      </Flex>
-                    </Flex>
                   </Card>
                   {/* <Text fw='400' size='lg'>Compromissos próximos:</Text> */}
                   {/* {projects.list.map(project =>

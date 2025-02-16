@@ -278,7 +278,7 @@ function Search () {
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
               <Title order={5} fw={650} mb={11}>
-                {`Equipamento (${searchResults.gear.total})`}
+                Equipamento
               </Title>
               {searchResults.brands.total > 0 && (
                 <>
@@ -289,7 +289,7 @@ function Search () {
                     label={
                       <>
                         <IconSearch size={12} />
-                        <Box ml={5}>Marcas relacionadas:</Box>
+                        <Box ml={5}>{searchResults.brands.total} marcas relacionadas:</Box>
                       </>
                     }
                   />
@@ -334,7 +334,7 @@ function Search () {
                       label={
                         <>
                           <IconSearch size={12} />
-                          <Box ml={5}>Itens encontrados:</Box>
+                          <Box ml={5}>{searchResults.gear.total} itens encontrados:</Box>
                         </>
                       }
                     />

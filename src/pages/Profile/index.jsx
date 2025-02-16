@@ -294,7 +294,8 @@ function ProfilePage () {
             <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
               <Card
                 radius='lg'
-                mb='10'
+                mt={12}
+                mb={10}
                 withBorder={isLargeScreen ? true : false}
                 px={16}
                 pt={12}
@@ -354,9 +355,9 @@ function ProfilePage () {
                     </Tooltip>
                   }
                 </Flex>
-                <Flex gap={0} mt={4} opacity={0.8}>
+                <Flex gap={0} mt={4} opacity={0.8} wrap='wrap'>
                   {profile.roles.map((role, key) => 
-                    <Flex key={key} gap={2} align='center' className='comma'>
+                    <Flex key={key} gap={2} align='center'>
                       {role.icon && 
                         <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} style={key > 0 ? {marginLeft:'4px'} : undefined} />
                       }
