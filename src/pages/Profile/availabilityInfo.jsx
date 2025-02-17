@@ -71,6 +71,8 @@ function AvailabilityInfo (props) {
             <Badge 
               key={job.id}
               size='md'
+              pl='4px'
+              pr='7px'
               leftSection={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? <IconCheck size={12} /> : undefined} 
               variant={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'filled' : 'light'} 
               color={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'lime' : 'gray'} 

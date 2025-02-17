@@ -3,7 +3,7 @@ import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-ro
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
 import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, Indicator, rem, em } from '@mantine/core';
-import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers } from '@tabler/icons-react';
+import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers, IconDiamond } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -360,7 +360,7 @@ function Search () {
                         >
                           <Anchor href={`/gear/product/${product.productId}`}>
                             <Flex gap={3} align={'center'}>
-                              <Text size='0.97rem' fw={570} className='lhNormal'>
+                              <Text size='0.97rem' fw={570}>
                                 {product.productName}
                               </Text>
                             </Flex>
@@ -368,11 +368,20 @@ function Search () {
                           <Text size='xs' fw={300}>
                             {product.name_ptbr} • <a className='textLink' href={`/gear/brand/${product.brandSlug}`}>{product.brand}</a>
                           </Text>
-                          <Flex gap={3} mt={4} align='center' justify='space-between' title={product.totalOwners + ' possuem este item'}>
-                            <IconUsers style={{width:'12px',height:'12px'}} color='gray' />
-                            <Text size='11px' fw={300} c='dimmed' className='lhNormal'>
-                              {product.totalOwners}
-                            </Text>
+                          <Flex gap={6} mt={4} align='center' justify='space-between'>
+                            <Flex title={product.totalOwners + ' possuem este item'}>
+                              <IconUsers style={{width:'12px',height:'12px'}} color='gray' />
+                              <Text size='11px' fw={300} c='dimmed' className='lhNormal'>
+                                {product.totalOwners}
+                              </Text>
+                            </Flex>
+                            {!!product.rare &&
+                              <IconDiamond
+                                color='#9370DB'
+                                size='13px'
+                                title='Item consideraro raro'
+                              />
+                            }
                           </Flex>
                         </Flex>
                       </Flex>

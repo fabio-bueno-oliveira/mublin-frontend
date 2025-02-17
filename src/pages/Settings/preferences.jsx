@@ -346,7 +346,7 @@ function SettingsMusicalPreferences () {
               </Card>
               <Card shadow='sm' p={14} withBorder className='mublinModule'>
                 <Title order={4}>
-                  Atuação na música
+                  Atividades na música
                 </Title>
                 <Text size='xs' c='dimmed'>
                   Minhas principais atividades e atuações na música

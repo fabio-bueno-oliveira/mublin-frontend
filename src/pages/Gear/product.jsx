@@ -4,7 +4,7 @@ import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
-import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart } from '@tabler/icons-react'
+import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart, IconX } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -283,20 +283,43 @@ function GearProductPage () {
         centered
         fullScreen
         opened={modalZoomOpen}
-        title={<>
-          <Text>{`${product.brandName} • ${product.name}`}</Text>
-          {product.colorNamePTBR && 
-            <Text size='xs' c='dimmed'>Cor: {product.colorNamePTBR}</Text>
-          }
-        </>
+        title={!product.requesting ? (
+            <>
+              <Text>{`${product.brandName} • ${product.name}`}</Text>
+              {selectedColor ? (
+                <Text size='xs' c='dimmed'>{selectedColor.colorNamePTBR}</Text>
+              ) : (
+                product.colorNamePTBR && <Text size='xs' c='dimmed'>{product.colorNamePTBR}</Text>
+              )}
+            </>
+          ) : (
+            <Text size='xs' c='dimmed'>Carregando...</Text>
+          )
         }
         onClose={() => setModalZoomOpen(false)} 
-        // scrollAreaComponent={ScrollArea.Autosize}
         size='lg'
         withCloseButton
+        closeButtonProps={{
+          icon: <IconX size={25} stroke={2} />,
+        }}
+        // scrollAreaComponent={ScrollArea.Autosize}
       >
         <ScrollArea w='auto'>
-          <Image w='auto' src={product.largePicture ? product.largePicture : undefined} onClick={() => setModalZoomOpen(false)} />
+          <Flex justify='center'>
+            {selectedColor ? (
+              <Image 
+                w='auto' 
+                src={selectedColor.largePicture ? selectedColor.largePicture : undefined} 
+                onClick={() => setModalZoomOpen(false)} 
+              />
+            ) : (
+              <Image 
+                w='auto' 
+                src={product.largePicture ? product.largePicture : undefined} 
+                onClick={() => setModalZoomOpen(false)} 
+              />
+            )}
+          </Flex>
         </ScrollArea>
       </Modal>
       {(!modalZoomOpen) &&

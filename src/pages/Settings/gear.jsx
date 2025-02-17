@@ -279,7 +279,7 @@ function SettingsMyGearPage () {
             </Flex>
             {requesting ? (
               <Center mt='60'>
-                <Loader color='violet' />
+                <Loader color='mublinColor' />
               </Center>
             ) : (
               <Card 
@@ -300,7 +300,7 @@ function SettingsMyGearPage () {
                   {user.plan === 'Pro' ? (
                     <Button
                       leftSection={<IconPlus size={14} />}
-                      color='violet'
+                      color='mublinColor'
                       size='md' 
                       onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
                     >
@@ -311,11 +311,11 @@ function SettingsMyGearPage () {
                       <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
                         Adicionar novo item
                       </Button>
-                      <Alert variant="light" icon={<IconLockSquareRoundedFilled color="#000000" />} color="violet">
+                      <Alert variant="light" icon={<IconLockSquareRoundedFilled color="#000000" />} color="mublinColor">
                         Apenas usuários com plano PRO podem adicionar novos produtos ao equipamento. 
                         <Anchor
                           variant='gradient'
-                          gradient={{ from: 'violet', to: 'blue' }}
+                          gradient={{ from: 'mublinColor', to: 'blue' }}
                           fw='420'
                           fz='sm'
                           href='/pro'
@@ -360,7 +360,7 @@ function SettingsMyGearPage () {
                           <Divider my={10} />
                           <Group gap='3'>
                             {item.featured ? (
-                              <IconToggleRightFilled color='#0977ff' />
+                              <IconToggleRightFilled color='#2c40dc' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
@@ -368,7 +368,7 @@ function SettingsMyGearPage () {
                           </Group>
                           <Group gap='3'>
                             {item.currentlyUsing ? (
-                              <IconToggleRightFilled color='#0977ff' />
+                              <IconToggleRightFilled color='#2c40dc' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
@@ -376,7 +376,7 @@ function SettingsMyGearPage () {
                           </Group>
                           <Group gap='3'>
                             {item.forSale ? (
-                              <IconToggleRightFilled color='#0977ff' />
+                              <IconToggleRightFilled color='#2c40dc' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
@@ -390,7 +390,7 @@ function SettingsMyGearPage () {
                         <Flex mt='10' gap='4' justify='space-between'>
                           <Button 
                             size='compact-md'
-                            color='violet'
+                            color='mublinColor'
                             variant='subtle'
                             fullWidth
                             fw='440'
@@ -521,10 +521,10 @@ function SettingsMyGearPage () {
           />
         </Flex>
         <Group justify='flex-end' gap={7} mt={16}>
-          <Button variant='outline' color='violet' size='sm' onClick={() => setModalAddNewProductOpen(false)}>
+          <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalAddNewProductOpen(false)}>
             Cancelar
           </Button>
-          <Button color='violet' size='sm' onClick={() => addProductToMyGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={loadingAddNewProduct}>
+          <Button color='mublinColor' size='sm' onClick={() => addProductToMyGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={loadingAddNewProduct}>
             Salvar
           </Button>
         </Group>
@@ -563,8 +563,8 @@ function SettingsMyGearPage () {
                 description='Exibir entre os primeiros'
               >
                 <Group mt={4}>
-                  <Radio size='xs' color='violet' value='1' label='Sim' />
-                  <Radio size='xs' color='violet' value='0' label='Não' />
+                  <Radio size='xs' color='mublinColor' value='1' label='Sim' />
+                  <Radio size='xs' color='mublinColor' value='0' label='Não' />
                 </Group>
               </Radio.Group>
               <Radio.Group
@@ -575,8 +575,8 @@ function SettingsMyGearPage () {
                 label='Em uso atualmente'
               >
                 <Group>
-                <Radio size='xs' color='violet' value='1' label='Sim' />
-                <Radio size='xs' color='violet' value='0' label='Não' />
+                <Radio size='xs' color='mublinColor' value='1' label='Sim' />
+                <Radio size='xs' color='mublinColor' value='0' label='Não' />
                 </Group>
               </Radio.Group>
               <NativeSelect
@@ -602,8 +602,8 @@ function SettingsMyGearPage () {
                 label='À venda'
               >
                 <Group>
-                  <Radio size='xs' color='violet' value='1' label='Sim' />
-                  <Radio size='xs' color='violet' value='0' label='Não' />
+                  <Radio size='xs' color='mublinColor' value='1' label='Sim' />
+                  <Radio size='xs' color='mublinColor' value='0' label='Não' />
                   <CurrencyInput
                     value={price}
                     locale='pt-BR'
@@ -626,7 +626,7 @@ function SettingsMyGearPage () {
                 <Avatar
                   size={50}
                   mt={6}
-                  color='violet' radius='md'
+                  color='mublinColor' radius='md'
                   className='point'
                   // onClick={() => navigate('/new/')}
                   >
@@ -650,10 +650,10 @@ function SettingsMyGearPage () {
                 )}
               </Flex>
               <Group justify='flex-end' gap={7} mt={20}>
-                <Button variant='outline' color='violet' size='sm' onClick={() => setModalEditItemOpen(false)}>
+                <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditItemOpen(false)}>
                   Cancelar
                 </Button>
-                <Button color='violet' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={!isLoaded}>
+                <Button color='mublinColor' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={!isLoaded}>
                   Salvar
                 </Button>
               </Group>

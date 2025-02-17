@@ -294,7 +294,7 @@ function ProfilePage () {
             <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
               <Card
                 radius='lg'
-                mt={12}
+                // mt={12}
                 mb={10}
                 withBorder={isLargeScreen ? true : false}
                 px={16}
