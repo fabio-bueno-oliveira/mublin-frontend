@@ -9,6 +9,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry';
+import { Helmet } from 'react-helmet';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css/skyblue';
 
@@ -51,6 +52,12 @@ function BrandPage () {
 
   return (
     <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>{`${brand.name} | Mublin`}</title>
+        <link rel='canonical' href={`https://mublin.com/gear/brand/${brand.slug}`} />
+        <meta name='description' content={`Produtos e artistas da ${brand.name} | Mublin`} />
+      </Helmet>
       <Header />
       <Container size='lg' mt={largeScreen ? 20 : 0} mb={110}>
         <BackgroundImage

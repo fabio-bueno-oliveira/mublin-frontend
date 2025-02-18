@@ -33,6 +33,11 @@ a.displayBlockLink {
 }
 
 .headerMenuActive {
+  border-bottom: 1px solid #383b3e;
+
+  :root[data-mantine-color-scheme='dark'] {
+    border-bottom: 1px solid #f1f1f1;
+  }
 
   span {
     font-weight: 600;

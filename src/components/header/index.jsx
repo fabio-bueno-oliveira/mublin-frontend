@@ -241,8 +241,9 @@ function Header (props) {
           <Flex align='center' className='menuHeader'>
             <Link to={{ pathname: '/home' }}>
               <Button 
-                size='sm'
+                size='md'
                 fw='400'
+                radius={0}
                 variant='transparent'
                 color={menuTextColor}
                 className={currentPath === '/home' ? 'headerMenuActive' : undefined}
@@ -253,26 +254,13 @@ function Header (props) {
                 Início
               </Button>
             </Link>
-            <Link to={{ pathname: '/new' }}>
-              <Button 
-                size='sm'
-                fw='400'
-                variant='transparent'
-                color={currentPath === '/new' ? 'violet' : menuTextColor}
-                leftSection={<><IconPlus size={14} /></>}
-                p='xs'
-                visibleFrom='md'
-              >
-                Novo
-              </Button>
-            </Link>
             <Menu shadow='md' width={200} position='bottom'>
               <Menu.Target>
                 <Button
-                  size='sm'
+                  size='md'
                   fw={400}
                   variant='transparent'
-                  color={currentPath === '/projects' ? 'violet' : menuTextColor}
+                  color={currentPath === '/projects' ? 'mublinColor' : menuTextColor}
                   leftSection={<IconMusic size={14} />}
                   rightSection={<IconChevronDown size={14} />}
                   p='xs'
@@ -287,6 +275,13 @@ function Header (props) {
                   <Menu.Label>Carregando meus projetos...</Menu.Label>
                 ) : (
                   <>
+                    <Menu.Item>
+                      <Group gap={5}>
+                        <IconPlus size='13px' />
+                        <Text size='0.85rem' fw='500'>Novo projeto</Text>
+                      </Group>
+                    </Menu.Item>
+                    <Menu.Divider />
                     <Menu.Label>
                       Projetos em atividade e que faço parte
                     </Menu.Label>
@@ -372,78 +367,73 @@ function Header (props) {
               </Button>
             </Link>
             {isLargeScreen && 
-              <>
-                {/* {plan === 'Pro' && 
-                  <Badge size='sm' variant='light' color="violet" ml={9}>PRO</Badge>
-                } */}
-                <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
-                  <Menu.Target>
-                    <Avatar
-                      // size="md"
-                      w={38}
-                      h={38}
-                      className="point"
-                      src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
-                      alt={userInfo.username}
-                      ml={8}
-                    />
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Label>
-                      {userInfo.name} {userInfo.lastname} 
-                      {user.plan === 'Pro' && 
-                        <Badge size='sm' variant='light' color='violet' ml={6}>PRO</Badge>
+              <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
+                <Menu.Target>
+                  <Avatar
+                    // size="md"
+                    w={38}
+                    h={38}
+                    className="point"
+                    src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                    alt={userInfo.username}
+                    ml={8}
+                  />
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Label>
+                    {userInfo.name} {userInfo.lastname} 
+                    {user.plan === 'Pro' && 
+                      <Badge size='sm' variant='light' color='mublinColor' ml={6}>PRO</Badge>
+                    }
+                  </Menu.Label>
+                  <Anchor 
+                    underline='never'
+                    style={{lineHeight:'normal'}} 
+                    href={`/${userInfo.username}`}
+                  >
+                    <Menu.Item 
+                      leftSection={
+                        <IconUserCircle style={{ width: rem(14), height: rem(14) }} />
                       }
-                    </Menu.Label>
-                    <Anchor 
-                      underline='never'
-                      style={{lineHeight:'normal'}} 
-                      href={`/${userInfo.username}`}
                     >
-                      <Menu.Item 
-                        leftSection={
-                          <IconUserCircle style={{ width: rem(14), height: rem(14) }} />
-                        }
-                      >
-                        Ver perfil
-                      </Menu.Item>
-                    </Anchor>
-                    {/* <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
-                      Mensagens
-                    </Menu.Item> */}
-                    <Menu.Divider />
-                    <Menu.Item 
-                      leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
-                      onClick={() => navigate('/settings')}
-                    >
-                      Configurações
+                      Ver perfil
                     </Menu.Item>
-                    {colorScheme === 'dark' && 
-                      <Menu.Item 
-                        leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
-                        onClick={() => {setColorScheme('light')}}
-                      >
-                        Modo claro
-                      </Menu.Item>
-                    }
-                    {colorScheme === 'light' && 
-                      <Menu.Item 
-                        leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
-                        onClick={() => {setColorScheme('dark')}}
-                      >
-                        Modo escuro
-                      </Menu.Item>
-                    }
-                    <Menu.Divider />
+                  </Anchor>
+                  {/* <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
+                    Mensagens
+                  </Menu.Item> */}
+                  <Menu.Divider />
+                  <Menu.Item 
+                    leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
+                    onClick={() => navigate('/settings')}
+                  >
+                    Configurações
+                  </Menu.Item>
+                  {colorScheme === 'dark' && 
                     <Menu.Item 
-                      leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-                      onClick={() => logout()}
+                      leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => {setColorScheme('light')}}
                     >
-                      Sair
+                      Modo claro
                     </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </>
+                  }
+                  {colorScheme === 'light' && 
+                    <Menu.Item 
+                      leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => {setColorScheme('dark')}}
+                    >
+                      Modo escuro
+                    </Menu.Item>
+                  }
+                  <Menu.Divider />
+                  <Menu.Item 
+                    leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                    onClick={() => logout()}
+                  >
+                    Sair
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
             }
             {(!isLargeScreen && props.showDotsMenu) && 
               <ActionIcon 

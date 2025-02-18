@@ -509,20 +509,18 @@ function ProfilePage () {
                         {profile.name} {profile.lastname}
                       </Title>
                       {!!profile.verified && 
-                        <Tooltip label='Usuário verificado'>
-                          <IconRosetteDiscountCheckFilled 
-                            className='iconVerified'
-                            onClick={() => setModalVerifiedOpen(true)}
-                          />
-                        </Tooltip>
+                        <IconRosetteDiscountCheckFilled 
+                          className='iconVerified'
+                          title='Usuário verificado'
+                          onClick={() => setModalVerifiedOpen(true)}
+                        />
                       }
                       {!!profile.legend && 
-                        <Tooltip label='Lenda da Música'>
-                          <IconShieldCheckFilled
-                            className='iconLegend'
-                            onClick={() => setModalLegendOpen(true)}
-                          />
-                        </Tooltip>
+                        <IconShieldCheckFilled
+                          className='iconLegend'
+                          title='Lenda da Música'
+                          onClick={() => setModalLegendOpen(true)}
+                        />
                       }
                     </Flex>
                     <Splide 
@@ -557,9 +555,8 @@ function ProfilePage () {
                         title='Usuário PRO'
                         radius='sm'
                         size='sm'
-                        color='secondary'
                         variant="gradient"
-                        gradient={{ from: 'rgba(94, 94, 94, 1)', to: 'gray', deg: 90 }}
+                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
                       >
                         PRO
                       </Badge>
@@ -602,9 +599,6 @@ function ProfilePage () {
                     {profile.bio}
                   </Text>
                 }
-                {(profile.plan === 'Pro') && 
-                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={false} mt={4} mb={10} />
-                }
                 {profile.city && 
                   <Flex gap={2} align='center' mt={9}>
                     <IconMapPin size={13} style={{color:'#8d8d8d'}} />
@@ -630,22 +624,39 @@ function ProfilePage () {
                     </Flex>
                   </Anchor>
                 }
-                {profile.instagram &&
-                  <Anchor 
-                    href={`https://instagram.com/${profile.instagram}`}
-                    target='_blank'
-                    underline='hover'
-                    className='websiteLink'
-                    mt={4}
-                    mb={6}
-                  >
-                    <Flex gap={2} align='center'>
-                      <IconBrandInstagram size={13} />
-                      <Text size='0.83em' className='lhNormal'>
-                        {profile.instagram}
-                      </Text>
-                    </Flex>
-                  </Anchor>
+                {(profile.instagram || profile.tiktok) &&
+                  <Group gap={10} mt={6}>
+                    {profile.instagram &&
+                      <Anchor 
+                        href={`https://instagram.com/${profile.instagram}`}
+                        target='_blank'
+                        underline='hover'
+                        className='websiteLink'
+                      >
+                        <Flex gap={2} align='center'>
+                          <IconBrandInstagram size={13} />
+                          <Text size='0.83em' className='lhNormal'>
+                            Instagram
+                          </Text>
+                        </Flex>
+                      </Anchor>
+                    }
+                    {profile.tiktok &&
+                      <Anchor 
+                        href={`https://tiktok.com/@${profile.tiktok}`}
+                        target='_blank'
+                        underline='hover'
+                        className='websiteLink'
+                      >
+                        <Flex gap={2} align='center'>
+                          <IconBrandTiktok size={13} />
+                          <Text size='0.83em' className='lhNormal'>
+                            TikTok
+                          </Text>
+                        </Flex>
+                      </Anchor>
+                    }
+                  </Group>
                 }
               </Paper>
               <Flex gap={5} mt={17} mb={isMobile ? 14 : 20}>
@@ -1115,7 +1126,7 @@ function ProfilePage () {
                     <IconRosetteDiscountCheckFilled className='iconVerified' title='Verificado' />
                   }
                   {following.legend_badge && 
-                    <IconShieldCheckFilled iconMublinPiano title='Lenda da música' />
+                    <IconShieldCheckFilled className='iconLegend' title='Lenda da música' />
                   }
                 </Group>
                 <Text size='xs' c='dimmed'>
