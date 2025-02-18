@@ -3,7 +3,7 @@ import { feedTypes } from '../types/feed';
 const initialState = {
   requesting: false,
   requestingLikes: false,
-  newPostSubmitted: false,
+  newPostIsWriting: false,
   list: [
     { 
       id: '',
@@ -178,10 +178,10 @@ export function feed(state = initialState, action) {
           })
         }
       };
-    case feedTypes.NEW_POST_SUBMITTED:
+    case feedTypes.NEW_POST_IS_WRITING:
       return {
         ...state,
-        newPostSubmitted: true
+        newPostIsWriting: action.option
       };
     default:
       return state

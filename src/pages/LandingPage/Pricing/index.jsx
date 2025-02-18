@@ -6,8 +6,7 @@ import Header from '../../../components/header/public'
 import Footer from '../../../components/footer/public'
 import { Container, Flex, Card, Group, Badge, Divider, Box, Text, Title, Button, Accordion, Grid, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconCheck, IconCreditCard, IconMessage, IconPhoto, IconQuestionMark, IconRosetteDiscountCheck } from '@tabler/icons-react'
-import './styles.scss'
+import { IconCheck, IconCreditCard, IconMessage, IconRosetteDiscountCheck } from '@tabler/icons-react'
 
 function PricingPublicPage () {
 
@@ -168,7 +167,7 @@ function PricingPublicPage () {
                   </Card.Section>
                 </Box>
                 <Button 
-                  color='violet'
+                  color='mublinColor'
                   fullWidth 
                   mt='xl' 
                   radius='md'

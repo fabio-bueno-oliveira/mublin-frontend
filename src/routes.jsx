@@ -26,6 +26,7 @@ import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search/index';
 import NewPost from './pages/New/post';
 import NewProject from './pages/New/project';
+import JoinProject from './pages/New/join';
 import New from './pages/New';
 import ProjectPage from './pages/ProjectPage';
 import ProjectDashboardPage from './pages/ProjectDashboard';
@@ -98,6 +99,7 @@ function AppRoutes () {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/new/post" element={<NewPost />} />
           <Route path="/new/project" element={<NewProject />} />
+          <Route path="/new/join" element={<JoinProject />} />
           <Route path="/new" element={<New />} />
           <Route path="/admin" element={<AdminPage />} />
           {/* <Route exact path="/:username" element={<ProfilePage />} /> */}

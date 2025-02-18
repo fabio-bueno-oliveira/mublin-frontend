@@ -276,8 +276,18 @@ function New () {
   return (
     <>
       <Header />
-      <Container size="xs" mt={32} mb={40}>
-        <Title order={2} mb={14} ta="center">
+      <Container size='xs' mt={20} mb={130}>
+        <Center mb={10}>
+          <Button.Group>
+            <Button size='sm' variant="filled" color='mublinColor'>
+              Cadastrar novo
+            </Button>
+            <Button size='sm' variant="default" component='a' href='/new/join'>
+              Ingressar
+            </Button>
+          </Button.Group>
+        </Center>
+        <Title order={3} mb={14} ta='center'>
           Cadastrar novo projeto
         </Title>
         <form 
@@ -285,38 +295,38 @@ function New () {
         >
           <TextInput
             withAsterisk
-            label="Nome do projeto"
-            placeholder="Ex: Viajantes do Espaço"
+            label='Nome do projeto'
+            placeholder='Ex: Viajantes do Espaço'
             key={form.key('projectName')}
             {...form.getInputProps('projectName')}
           />
           <Checkbox
             mt={8}
-            color="violet"
-            label="Definir como um dos meus projetos principais"
+            color='mublinColor'
+            label='Definir como um dos meus projetos principais'
             key={form.key('featured')}
             {...form.getInputProps('featured', { type: 'checkbox' })}
           />
           {!!searchProjects.projects.total && 
-            <Paper shadow="xs" withBorder p="sm" mt={8} mb={14}>
-              <Text size="xs" fw={500}>Encontramos projetos com nomes parecidos</Text>
-              <Text size="xs" c="dimmed">Será que seu projeto já está cadastrado?</Text>
+            <Paper shadow='xs' withBorder p='sm' mt={8} mb={14}>
+              <Text size='xs' fw={500}>Encontramos projetos com nomes parecidos</Text>
+              <Text size='xs' c='dimmed'>Será que seu projeto já está cadastrado?</Text>
               <ScrollArea 
-                w="100%" 
+                w='100%' 
                 h={60} 
-                type="always" 
+                type='always' 
                 scrollbarSize={10} 
                 scrollHideDelay={500}
               >
-                <Flex direction="row" gap={14} w="max-content">
+                <Flex direction='row' gap={14} w='max-content'>
                   {searchProjects.projects.result.map((project, key) => 
                     <Group key={key} gap={3} mt={6}>
                       <Anchor href={`/project/${project?.username}`}>
-                        <Avatar size="md" src={project.picture ? project.picture : undefined} />
+                        <Avatar size='md' src={project.picture ? project.picture : undefined} />
                       </Anchor>
-                      <Flex direction="column">
-                        <Text size="xs" fw={500}>{project.name} ({project.type}{project.mainGenre ? " • " + project.mainGenre : null})</Text>
-                        <Text size="11px" c="dimmed">{project.city ? project.city : null}{project.region ? ", " + project.region : null}{project.country ? ", " + project.country : null}</Text>
+                      <Flex direction='column'>
+                        <Text size='xs' fw={500}>{project.name} ({project.type}{project.mainGenre ? ' • ' + project.mainGenre : null})</Text>
+                        <Text size='11px' c='dimmed'>{project.city ? project.city : null}{project.region ? ', ' + project.region : null}{project.country ? ', ' + project.country : null}</Text>
                       </Flex>
                     </Group>
                   )}
@@ -327,10 +337,10 @@ function New () {
           <TextInput
             mt={8}
             withAsterisk
-            label="Username do projeto"
-            placeholder="Ex: viajantesdoexpaco"
+            label='Username do projeto'
+            placeholder='Ex: viajantesdoexpaco'
             description={
-              "mublin.com/project/"+projectUsernameFinal
+              'mublin.com/project/'+projectUsernameFinal
             }
             leftSection={
               (
@@ -347,37 +357,37 @@ function New () {
             {...form.getInputProps('projectUserName')}
           />
           {(projectUsernameFinal && projectUsernameAvailability.requested && projectUsernameAvailability.available === false) && 
-            <Badge size="xs" color="red">Nome de usuário do projeto não disponível</Badge>
+            <Badge size='xs' color='red'>Nome de usuário do projeto não disponível</Badge>
           }
-          <Divider mt="xs" mb="sm" label="Imagem" labelPosition="center" />
-          <Flex direction="column">
+          <Divider mt='xs' mb='sm' label='Imagem' labelPosition='center' />
+          <Flex direction='column'>
             {/* <Input.Label>Foto</Input.Label> */}
-            <div style={projectImage ? {display: "none"} : undefined}>
+            <div style={projectImage ? {display: 'none'} : undefined}>
               <IKUpload 
                 id='projectImage'
-                fileName={projectUsernameFinal+"_.jpg"}
+                fileName={projectUsernameFinal+'_.jpg'}
                 folder={projectImagePath}
-                tags={["project", "avatar"]}
+                tags={['project', 'avatar']}
                 useUniqueFileName={true}
                 isPrivateFile= {false}
                 onError={onUploadError}
                 onSuccess={onUploadSuccess}
-                accept="image/x-png,image/gif,image/jpeg" 
+                accept='image/x-png,image/gif,image/jpeg' 
               />
             </div>
           </Flex>
           {projectImage && 
             <Flex gap={10}>
               <Image 
-                radius="md"
-                h="auto"
+                radius='md'
+                h='auto'
                 w={130}
-                // fit="fill"
+                // fit='fill'
                 src={'https://ik.imagekit.io/mublin/tr:w-130/projects/'+projectImage} 
               /> 
               <Button 
-                size="xs" 
-                color="red" 
+                size='xs' 
+                color='red' 
                 onClick={() => removeImage()}
                 leftSection={<IconTrash size={14} />}
               >
@@ -385,12 +395,12 @@ function New () {
               </Button>
             </Flex>
           }
-          <Divider mb="xs" mt="sm" label="Informações adicionais" labelPosition="center" />
+          <Divider mb='xs' mt='sm' label='Informações adicionais' labelPosition='center' />
           <Grid mt={8}>
             <Grid.Col span={6}>
               <NativeSelect
                 withAsterisk
-                label="Tipo de projeto"
+                label='Tipo de projeto'
                 key={form.key('type')}
                 {...form.getInputProps('type')}
               >
@@ -566,15 +576,15 @@ function New () {
             {...form.getInputProps('publicProject')}
           >
             <Group mt="xs">
-              <Radio color="violet" value="1" label="Público" />
-              <Radio color="violet" value="0" label="Privado" />
+              <Radio color="mublinColor" value="1" label="Público" />
+              <Radio color="mublinColor" value="0" label="Privado" />
             </Group>
           </Radio.Group>
           <Group justify="flex-end" mt="md">
             <Button 
               size="md"
               type="submit"
-              color="violet"
+              color="mublinColor"
               loading={isSubmitting}
               disabled={(projectUsernameFinal && projectUsernameAvailability.requested && projectUsernameAvailability.available === false)}
             >
@@ -602,14 +612,14 @@ function New () {
             </form>
           </Grid.Col>
           <Grid.Col span={5}>
-            <Button color="violet" onClick={() => searchCity(searchValue)}>
+            <Button color="mublinColor" onClick={() => searchCity(searchValue)}>
               Pesquisar
             </Button>
           </Grid.Col>
         </Grid>
         {citySearchIsLoading && 
           <Center my={20}>
-            <Loader color="violet" size="sm" type="bars" />
+            <Loader color="mublinColor" size="sm" type="bars" />
           </Center>
         }
         {!!(queryCities.length && !citySearchIsLoading) && 

@@ -5,6 +5,7 @@ const initialState = {
   error: "",
   id: '',
   name: '',
+  subtitle: '',
   picture: '',
   largePicture: '',
   brandId: '',
@@ -89,6 +90,7 @@ export function gear(state = initialState, action) {
         error: '',
         id: action.info.id,
         name: action.info.name,
+        subtitle: action.info.subtitle,
         picture: action.info.picture,
         largePicture: action.info.largePicture,
         brandId: action.info.brandId,
@@ -108,6 +110,7 @@ export function gear(state = initialState, action) {
       return {
         ...state,
         name: '',
+        subtitle: '',
         picture: '',
         largePicture: '',
         brandName: '',

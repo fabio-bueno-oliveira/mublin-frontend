@@ -21,10 +21,12 @@ import {
   IconChevronLeft,
   IconMicrophone2,
   IconMusic,
+  IconPiano,
   IconPlus,
   IconLogout,
   IconChevronDown,
-  IconChevronRight
+  IconChevronRight,
+  IconHomeFilled
 } from '@tabler/icons-react';
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
@@ -154,6 +156,17 @@ function Header (props) {
 
   const menuTextColor = (colorScheme === 'light') ? '#383b3e' : '#f1f1f1'
 
+  const isProjectsPage = () => {
+    switch(currentPath) {
+      case '/projects':
+        return true;
+      case '/new/project':
+        return true;
+      default:
+        return false;
+    }
+  }
+
   return (
     <>
       <Container 
@@ -241,14 +254,15 @@ function Header (props) {
           <Flex align='center' className='menuHeader'>
             <Link to={{ pathname: '/home' }}>
               <Button 
-                size='md'
-                fw='400'
+                size='sm'
+                fw={440}
                 radius={0}
                 variant='transparent'
                 color={menuTextColor}
-                className={currentPath === '/home' ? 'headerMenuActive' : undefined}
-                leftSection={<><IconHome size={14} /></>}
+                className={currentPath === '/home' ? 'headerMenuActive underlined' : undefined}
+                leftSection={<><IconHome size={16} /></>}
                 p='xs'
+                mr={10}
                 visibleFrom='md'
               >
                 Início
@@ -257,13 +271,17 @@ function Header (props) {
             <Menu shadow='md' width={200} position='bottom'>
               <Menu.Target>
                 <Button
-                  size='md'
-                  fw={400}
+                  size='sm'
+                  fw={440}
+                  radius={0}
                   variant='transparent'
-                  color={currentPath === '/projects' ? 'mublinColor' : menuTextColor}
-                  leftSection={<IconMusic size={14} />}
+                  color={menuTextColor}
+                  className={isProjectsPage() ? 'headerMenuActive' : undefined}
+                  leftSection={<IconMusic size={16} />}
                   rightSection={<IconChevronDown size={14} />}
-                  p='xs'
+                  py='xs'
+                  px={0}
+                  mr={10}
                   visibleFrom='md'
                   onClick={() => setFetchProjects(fetchProjects + 1)}
                 >
@@ -275,7 +293,7 @@ function Header (props) {
                   <Menu.Label>Carregando meus projetos...</Menu.Label>
                 ) : (
                   <>
-                    <Menu.Item>
+                    <Menu.Item component='a' href='/new/project'>
                       <Group gap={5}>
                         <IconPlus size='13px' />
                         <Text size='0.85rem' fw='500'>Novo projeto</Text>
@@ -355,25 +373,27 @@ function Header (props) {
               <Button 
                 size='sm'
                 fw={400}
-                variant='outline'
-                radius="xl"
-                color={menuTextColor}
+                radius='xl'
+                // variant='outline'
+                // color={menuTextColor}
+                variant='gradient'
+                gradient={{ from: 'mublinColor', to: 'violet', deg: 107 }}
                 leftSection={<IconMicrophone2 size={14} />}
-                p={'xs'}
+                p='xs'
                 visibleFrom='md'
-                mx='xs'
+                mr='xs'
               >
                 Quero tocar
               </Button>
             </Link>
             {isLargeScreen && 
-              <Menu shadow="md" width={200} position="bottom-end" offset={10} withArrow>
+              <Menu shadow='md' width={200} position='bottom-end' offset={10} withArrow>
                 <Menu.Target>
                   <Avatar
-                    // size="md"
+                    // size='md'
                     w={38}
                     h={38}
-                    className="point"
+                    className='point'
                     src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
                     alt={userInfo.username}
                     ml={8}

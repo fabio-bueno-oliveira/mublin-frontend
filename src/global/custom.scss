@@ -143,3 +143,9 @@ form.writeNewPost {
 .mantine-AngleSlider-root {
   background-color: #e1e1e1;
 }
+
+.mantine-Spoiler-root {
+  &[data-has-spoiler='true'] {
+    margin-bottom: 14px!important;
+  }
+}

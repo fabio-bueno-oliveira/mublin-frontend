@@ -20,6 +20,7 @@ const initialState = {
       id: '',
       totalOwners: 0,
       name: '',
+      subtitle: '',
       picture: '',
       brandId: '',
       brandName: '',

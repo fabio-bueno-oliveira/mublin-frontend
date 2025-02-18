@@ -6,7 +6,7 @@ export const feedActions = {
   addLikedNow: addLikedNow,
   removeLikedNow: removeLikedNow,
   removeComment: removeComment,
-  newPostSubmitted: newPostSubmitted
+  newPostIsWriting: newPostIsWriting
 };
 
 function getItemComments(feedId) {
@@ -37,6 +37,6 @@ function removeComment(commentId) {
   return { type: feedTypes.REMOVE_COMMENT, commentId }
 }
 
-function newPostSubmitted() {
-  return { type: feedTypes.NEW_POST_SUBMITTED }
+function newPostIsWriting(option) {
+  return { type: feedTypes.NEW_POST_IS_WRITING, option }
 }

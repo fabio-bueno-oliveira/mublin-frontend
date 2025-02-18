@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { userInfos } from '../../store/actions/user'
 import { searchInfos } from '../../store/actions/search'
+import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
@@ -42,6 +43,12 @@ function Home () {
 
   // Modal New Post
   const [showModalNewPost, setShowModalNewPost] = useState(false)
+  const openModalNewPost = () => {
+    dispatch(feedActions.newPostIsWriting(true))
+  }
+  const closeModalNewPost = () => {
+    dispatch(feedActions.newPostIsWriting(false))
+  }
 
   useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
@@ -117,15 +124,17 @@ function Home () {
                         <span className='comma' key={role.id}>{role.description}</span>
                       )}
                     </Text>
+                    
                     {user.plan === 'Pro' ? ( 
                       <Center>
-                        <Badge 
-                          color='violet' 
+                        <Badge
+                          title='Usuário PRO'
+                          radius='sm'
                           size='sm'
-                          variant='gradient'
-                          gradient={{ from: 'violet', to: 'blue' }}
+                          variant="gradient"
+                          gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
                         >
-                          conta pro
+                          PRO
                         </Badge>
                       </Center>
                     ) : (
@@ -228,7 +237,7 @@ function Home () {
                   size='md'
                   fw={480}
                   fz='sm'
-                  onClick={() => setShowModalNewPost(true)}
+                  onClick={() => openModalNewPost()}
                 >
                   Escrever uma publicação
                 </Button>
@@ -305,9 +314,9 @@ function Home () {
           }
         </Grid>
       </Container>
-      <Modal 
-        opened={showModalNewPost} 
-        onClose={() => setShowModalNewPost(false)} 
+      <Modal
+        opened={feed.newPostIsWriting}
+        onClose={() => closeModalNewPost()} 
         title='Escrever uma publicação'
         centered
       >

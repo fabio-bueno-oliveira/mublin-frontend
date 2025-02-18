@@ -278,6 +278,7 @@ function FeedCard ({ item, compact }) {
             <Spoiler
               maxHeight={45}
               px={15}
+              mb={0}
               showLabel={
                 <Text px={15} fz={isMobile ? '0.9em' : '0.86em'}>...mais</Text>
               }

@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userInfos } from '../../store/actions/user'
+import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Flex, Box, Text, Avatar, Image, Textarea, NativeSelect, Button, Divider, Group } from '@mantine/core'
@@ -94,11 +95,12 @@ function NewPostStandalone () {
       return response.json()
     }).then(jsonResponse => {
       setIsSubmitting(true)
-      dispatch(feedActions.newPostSubmitted())
+      dispatch(feedActions.newPostIsWriting(false))
+      dispatch(miscInfos.getFeed())
     }).catch (error => {
       setIsSubmitting(false)
       console.error(error)
-      alert("Ocorreu um erro ao ingressar no projeto. Tente novamente em alguns minutos.");
+      alert("Ocorreu um erro ao postar. Tente novamente em alguns minutos.");
     })
   }
 
