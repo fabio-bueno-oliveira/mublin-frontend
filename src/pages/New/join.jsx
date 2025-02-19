@@ -5,7 +5,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { projectInfos } from '../../store/actions/project'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
-import { Container, Flex, Grid, Modal, Alert, Center, NumberInput, ScrollArea, Avatar, Text, Anchor, Checkbox, Group, ActionIcon, Image, Input, NativeSelect, Radio, Title, Button, Loader, Divider, ThemeIcon, rem } from '@mantine/core'
+import { Container, Flex, Grid, Modal, Alert, Center, NumberInput, ScrollArea, Avatar, Text, Anchor, Checkbox, Badge, Group, ActionIcon, Image, Input, NativeSelect, Radio, Title, Button, Loader, Divider, ThemeIcon, rem } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
@@ -198,16 +198,16 @@ function New () {
                       style={!userProjects.list.some(y => y.projectid === project.id) ? {cursor: 'pointer'} : undefined}
                     >
                       <Avatar src={project.image} />
-                      <Flex direction={'column'}>
+                      <Flex direction='column'>
+                        {userProjects.list.some(y => y.projectid === project.id) && 
+                          <Badge size='xs' color="lime" leftSection={<IconCheck style={{ width: '13px', height: '13px' }} stroke={3} />}>
+                            Vinculado
+                          </Badge>
+                        }
                         <Text size='sm' fw={500}>
-                          {project.title} {project.type && '(' + project.type + ')'} 
-                          {userProjects.list.some(y => y.projectid === project.id) && 
-                            <ThemeIcon size='xs' radius="xl" color="mublinColor" ml={6}>
-                              <IconCheck style={{ width: '70%', height: '70%' }} stroke={3} />
-                            </ThemeIcon>
-                          }
+                          {project.title} {project.type && '(' + project.type + ')'}
                         </Text>
-                        <Text size='xs'>{project.description}</Text>
+                        <Text size='11px'>{project.description}</Text>
                         <Text size='10px' c='dimmed'>Fundado em {project.foundation_year} {project.end_year && ' | Encerrado em ' + project.end_year}</Text>
                       </Flex>
                     </Group>
@@ -247,7 +247,7 @@ function New () {
         </Center>
         <Text size='xs' ta='center'>{modalProjectInfo}</Text>
         <Text size='10px' ta='center' c='dimmed' mb={8} mt={4}>
-          {modalProjectType && modalProjectType + ' · '} {'Formada em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
+          {modalProjectType && modalProjectType + ' · '} {'Projeto formado em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
         </Text>
         <Divider label='Integrantes cadastrados:' mb={4} labelPosition='left' />
         {!project.requesting && 
@@ -468,7 +468,9 @@ function New () {
           </Container>
         }
       </footer>
-      <FooterMenuMobile />
+      {(!modalDeleteConfirmationOpen && !modalOpen) &&
+        <FooterMenuMobile />
+      }
     </>
   );
 };
