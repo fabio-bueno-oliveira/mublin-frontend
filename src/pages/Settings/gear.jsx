@@ -374,23 +374,23 @@ function SettingsMyGearPage () {
                           </Text>
                           <Group mt={6} gap={5}>
                             {item.featured ? (
-                              <IconToggleRightFilled color='green' />
+                              <IconToggleRightFilled color='lime' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
                             <Text size='md'>Em destaque</Text>
                           </Group>
-                          <Group gap='3'>
+                          <Group gap={5}>
                             {item.currentlyUsing ? (
-                              <IconToggleRightFilled color='green' />
+                              <IconToggleRightFilled color='lime' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
                             <Text size='md'>Em uso</Text>
                           </Group>
-                          <Group gap='3'>
+                          <Group gap={5}>
                             {item.forSale ? (
-                              <IconToggleRightFilled color='green' />
+                              <IconToggleRightFilled color='lime' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
@@ -402,18 +402,17 @@ function SettingsMyGearPage () {
                         </Box> 
                         <Flex mt='10' gap={8} justify='space-between'>
                           <Button 
-                            size='xs'
+                            size='sm'
                             color='mublinColor'
                             fullWidth
                             fw='440'
-                            leftSection={<IconPencil size={15} />}
                             onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
                           >
                             Editar
                           </Button>
                           <Button 
-                            size='xs'
-                            color='red'
+                            size='sm'
+                            color='primary'
                             variant='outline'
                             fullWidth
                             fw='440'
@@ -564,10 +563,10 @@ function SettingsMyGearPage () {
                   src={item.picture ? item.picture : undefined} 
                 />
               </Center>
-              <Text ta='center' size='xs' c='dimmed' mt={8}>
+              <Text ta='center' size='sm' c='dimmed' mt={8}>
                 {item.category} • {item.brandName}
               </Text>
-              <Text ta='center' size='sm' fw='500'>
+              <Text ta='center' size='md' fw='500'>
                 {item.productName}
               </Text>
               <Radio.Group
@@ -575,24 +574,26 @@ function SettingsMyGearPage () {
                 value={String(featured)}
                 onChange={setFeatured}
                 name='editItemFeatured'
+                size='md'
                 label='Em destaque'
                 description='Exibir entre os primeiros'
               >
                 <Group mt={4}>
-                  <Radio size='xs' color='mublinColor' value='1' label='Sim' />
-                  <Radio size='xs' color='mublinColor' value='0' label='Não' />
+                  <Radio size='sm' color='mublinColor' value='1' label='Sim' />
+                  <Radio size='sm' color='mublinColor' value='0' label='Não' />
                 </Group>
               </Radio.Group>
               <Radio.Group
                 mt={8}
+                size='md'
                 value={String(currently_using)}
                 onChange={setCurrentlyUsing}
                 name='editItemUsing'
                 label='Em uso atualmente'
               >
                 <Group>
-                <Radio size='xs' color='mublinColor' value='1' label='Sim' />
-                <Radio size='xs' color='mublinColor' value='0' label='Não' />
+                <Radio size='sm' color='mublinColor' value='1' label='Sim' />
+                <Radio size='sm' color='mublinColor' value='0' label='Não' />
                 </Group>
               </Radio.Group>
               <NativeSelect
@@ -614,12 +615,13 @@ function SettingsMyGearPage () {
                 mb={8}
                 value={String(for_sale)}
                 onChange={setForSale}
+                size='md'
                 name='editItemForSale'
                 label='À venda'
               >
                 <Group>
-                  <Radio size='xs' color='mublinColor' value='1' label='Sim' />
-                  <Radio size='xs' color='mublinColor' value='0' label='Não' />
+                  <Radio size='sm' color='mublinColor' value='1' label='Sim' />
+                  <Radio size='sm' color='mublinColor' value='0' label='Não' />
                   <CurrencyInput
                     value={price}
                     locale='pt-BR'
@@ -633,6 +635,7 @@ function SettingsMyGearPage () {
               </Radio.Group>
               <Textarea
                 mt={8}
+                size='md'
                 label='Meus comentários pessoais'
                 value={productDetail.ownerComments}
                 onChange={(event) => setProductDetail({...productDetail, ownerComments: event.currentTarget.value})}
