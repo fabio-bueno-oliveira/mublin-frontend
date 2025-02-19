@@ -193,7 +193,7 @@ function FeedCard ({ item, compact }) {
         }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
-            <Indicator position='bottom-center' inline label={<Text size='0.55rem' >{item.relatedUserOpenToWorkText}</Text>} color='lime' size={18} withBorder disabled={!item.relatedUserOpenToWork}>
+            <Indicator position='bottom-center' inline label={<Text size='0.48rem' >{item.relatedUserOpenToWorkText}</Text>} color='lime' size={18} withBorder disabled={!item.relatedUserOpenToWork}>
               <Avatar 
                 size='45px'
                 radius='xl'

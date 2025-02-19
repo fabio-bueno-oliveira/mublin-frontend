@@ -79,10 +79,18 @@ function Home () {
           <Grid.Col span={{ base: 12, md: 12, lg: 2.5 }} pt='8'>
             <Box className='showOnlyInLargeScreen'>
               {user.requesting ? (
-                <>
-                  <Skeleton height={56} circle />
-                  <Skeleton height={16} width={125} mt={10} radius='md' />
-                </>
+                <Card
+                  padding={12}
+                  radius='lg'
+                  withBorder
+                  className='mublinModule'
+                  pb='20'
+                >
+                  <Flex direction='column' align='center'>
+                    <Skeleton height={66} circle mt={10} mb={14} />
+                    <Skeleton height={16} width={125} radius='md' />
+                  </Flex>
+                </Card>
               ) : (
                 <>
                   <Card
@@ -103,7 +111,6 @@ function Home () {
                       <Link to={{ pathname: `/${userInfo.username}` }}>
                         <Avatar
                           size='70px'
-                          radius='md'
                           src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
                           style={{border:'2px solid white'}}
                         />
@@ -124,7 +131,6 @@ function Home () {
                         <span className='comma' key={role.id}>{role.description}</span>
                       )}
                     </Text>
-                    
                     {user.plan === 'Pro' ? ( 
                       <Center>
                         <Badge
@@ -233,7 +239,7 @@ function Home () {
                 <Button
                   fullWidth variant="light"
                   color="gray"
-                  radius="xl"
+                  radius="md"
                   size='md'
                   fw={480}
                   fz='sm'

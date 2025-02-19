@@ -152,7 +152,7 @@ function New () {
             </Button>
           </Button.Group>
         </Center>
-        <Title order={3} mb={14} ta='center'>
+        <Title order={4} mb={14} ta='center'>
           Ingressar em um projeto
         </Title>
         <Center>

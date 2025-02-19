@@ -162,6 +162,8 @@ function Header (props) {
         return true;
       case '/new/project':
         return true;
+      case '/new/join':
+        return true;
       default:
         return false;
     }
