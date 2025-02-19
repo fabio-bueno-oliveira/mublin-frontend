@@ -70,7 +70,7 @@ function GearProductPage () {
             </Anchor>
           )}
           <Flex direction='column'>
-            <Text classNames='lhNormal' fw='420' size='xs' c='dimmed'>
+            <Text classNames='lhNormal' fw='420' size='sm' c='dimmed'>
               {product.requesting ? <Skeleton width={100} height={10} mb={4} radius="md" /> : product.categoryName + ' • ' + product.brandName}
             </Text>
             <Title fz='1.12rem' fw='560'>
@@ -85,7 +85,7 @@ function GearProductPage () {
               </Group>
             }
             {!product.requesting &&
-              <Anchor className='textLink' fz='xs' href={`/gear/brand/${product.brandSlug}`}>
+              <Anchor fz='xs' href={`/gear/brand/${product.brandSlug}`}>
                 Ver produtos {product.brandName}
               </Anchor>
             }
@@ -261,11 +261,11 @@ function GearProductPage () {
                         </Flex>
                       </Flex>
                       {owner.ownerComments ? (
-                        <Text size='xs'>
+                        <Text size='sm'>
                           {owner.ownerComments}
                         </Text>
                       ) : (
-                        <Text size='xs' c='dimmed'>
+                        <Text size='sm' c='dimmed'>
                           Nenhum comentário até o momento
                         </Text>
                       )}
