@@ -34,8 +34,8 @@ function SettingsAvailability () {
   const xIconStyle = { width: '10px', height: '10px', cursor:'pointer' }
 
   useEffect(() => { 
-    dispatch(userInfos.getInfo())
-    dispatch(userInfos.getUserAvailabilityItemsById(loggedUserId))
+    dispatch(userActions.getInfo())
+    dispatch(userActions.getUserAvailabilityItemsById(loggedUserId))
     dispatch(miscInfos.getAvailabilityStatuses())
     dispatch(miscInfos.getAvailabilityItems())
     dispatch(miscInfos.getAvailabilityFocuses())
@@ -51,11 +51,11 @@ function SettingsAvailability () {
     value: status.id
   }));
 
-  const userSelectedAvailabilityItems = user.availabilityItems.map(item => ({ 
-    id: item.idItem
-  })).map(function (obj) {
-      return obj.id;
-  });
+  // const userSelectedAvailabilityItems = user.availabilityItems.map(item => ({ 
+  //   id: item.idItem
+  // })).map(function (obj) {
+  //     return obj.id;
+  // });
 
   const [modalWorkIsOpen, setModalWorkIsOpen] = useState(false)
 
@@ -69,10 +69,10 @@ function SettingsAvailability () {
       },
       body: JSON.stringify({userId: loggedUserId, availabilityItemId: availabilityItemId})
     }).then((response) => {
-      dispatch(userInfos.getUserAvailabilityItemsById(loggedUserId));
+      dispatch(userActions.getUserAvailabilityItemsById(loggedUserId));
     }).catch(err => {
       console.error(err)
-      alert("Ocorreu um erro ao adicionar o item")
+      alert('Ocorreu um erro ao adicionar o item')
     })
   }
 
@@ -86,10 +86,10 @@ function SettingsAvailability () {
       },
       body: JSON.stringify({userId: loggedUserId, userItemId: userItemId})
     }).then((response) => {
-      dispatch(userInfos.getUserAvailabilityItemsById(loggedUserId));
+      dispatch(userActions.getUserAvailabilityItemsById(loggedUserId));
     }).catch(err => {
       console.error(err)
-      alert("Ocorreu um erro ao remover o item")
+      alert('Ocorreu um erro ao remover o item')
     })
   }
 
@@ -105,11 +105,11 @@ function SettingsAvailability () {
         },
         body: JSON.stringify({userId: loggedUserId, availabilityStatusId: availabilityStatusId})
       }).then((response) => {
-        dispatch(userInfos.getInfo())
+        dispatch(userActions.getInfo())
         setIsLoading(false)
       }).catch(err => {
         console.error(err)
-        alert("Ocorreu um erro ao atualizar o status de disponibilidade")
+        alert('Ocorreu um erro ao atualizar o status de disponibilidade')
       })
     }, 400);
   }
@@ -126,11 +126,11 @@ function SettingsAvailability () {
         },
         body: JSON.stringify({userId: loggedUserId, availabilityFocus: focusId})
       }).then((response) => {
-        dispatch(userInfos.getInfo())
+        dispatch(userActions.getInfo())
         setIsLoading(false)
       }).catch(err => {
         console.error(err)
-        alert("Ocorreu um erro ao atualizar a disponibilidade de foco de carreira")
+        alert('Ocorreu um erro ao atualizar a disponibilidade de foco de carreira')
       })
     }, 400);
   }
@@ -182,7 +182,7 @@ function SettingsAvailability () {
                 <Checkbox
                   my={8}
                   checked={showOpenToWork}
-                  label="Exibir selo de disponibilidade abaixo da minha foto"
+                  label='Exibir selo de disponibilidade abaixo da minha foto'
                   onChange={(event) => setShowOpenToWork(event.currentTarget.checked)}
                 />
                 <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!showOpenToWork}>
@@ -224,9 +224,9 @@ function SettingsAvailability () {
                     user.availabilityItems.map(item =>
                       <Badge 
                         key={item.idItem}
-                        color="violet"
+                        color='mublinColor'
                         variant='filled'
-                        size='sm'
+                        size='md'
                         rightSection={
                           <IconX 
                             style={xIconStyle} 
@@ -246,7 +246,7 @@ function SettingsAvailability () {
                 <Button
                   size='sm'
                   variant='light'
-                  color='violet'
+                  color='mublinColor'
                   mt={10}
                   leftSection={<IconPlus size={14} />}
                   onClick={() => setModalWorkIsOpen(true)}
@@ -274,6 +274,7 @@ function SettingsAvailability () {
                 <Title order={5} >Vínculo de preferência:</Title>
                 <Radio
                   my={2}
+                  color='mublinColor'
                   value='1'
                   label='Projetos próprios e autorais'
                   onClick={() => updateAvailabilityFocus(1)}
@@ -282,6 +283,7 @@ function SettingsAvailability () {
                 />
                 <Radio
                   my={2}
+                  color='mublinColor'
                   value='2'
                   label='Contrato (convidado/sideman/sidewoman)'
                   onClick={() => updateAvailabilityFocus(2)}
@@ -289,7 +291,8 @@ function SettingsAvailability () {
                   disabled={isLoading || user.requesting}
                 />
                 <Radio 
-                  my={3}
+                  my={2}
+                  color='mublinColor'
                   value='3'
                   label='Todos (próprios e contratado)'
                   onClick={() => updateAvailabilityFocus(3)}

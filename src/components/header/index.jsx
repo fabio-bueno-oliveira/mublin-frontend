@@ -434,7 +434,7 @@ function Header (props) {
                       leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
                       onClick={() => {setColorScheme('light')}}
                     >
-                      Modo claro
+                      Tema claro
                     </Menu.Item>
                   }
                   {colorScheme === 'light' && 
@@ -442,7 +442,7 @@ function Header (props) {
                       leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
                       onClick={() => {setColorScheme('dark')}}
                     >
-                      Modo escuro
+                      Tema escuro
                     </Menu.Item>
                   }
                   <Menu.Divider />

@@ -13,7 +13,7 @@ import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { useMediaQuery } from '@mantine/hooks'
 import PartnersModule from './partners'
-import CarouselProjects from './carouselProjects'
+import Projects from './Projects'
 import GearSection from './Gear/gearSection'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
@@ -783,7 +783,7 @@ function ProfilePage () {
             <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
               {profile.projects.total > 0 && 
                 <>
-                  <CarouselProjects 
+                  <Projects 
                     profile={profile}
                     projects={allProjects}
                     profilePlan={profile.plan}

@@ -9,7 +9,7 @@ function SettingsMenu (props) {
   return (
     <>
       <NavLink
-        color='violet'
+        color='mublinColor'
         href={`/${user.username}`}
         label={<Text fw={500}>Voltar ao meu perfil</Text>}
         leftSection={<IconArrowLeft size='1.4rem' stroke={1.5} />}
@@ -17,7 +17,7 @@ function SettingsMenu (props) {
       />
       <Divider my={10} />
       <NavLink
-        color='violet'
+        color='mublinColor'
         href='/settings'
         label={<Text fw={500}>Minha conta</Text>}
         leftSection={<IconUser size='1.4rem' stroke={1.5} />}
@@ -25,7 +25,7 @@ function SettingsMenu (props) {
         variant='subtle'
       />
       <NavLink
-        color='violet'
+        color='mublinColor'
         href='/settings/picture'
         label={<Text fw={500}>Foto de perfil</Text>}
         leftSection={<IconCamera size='1.4rem' stroke={1.5} />}
@@ -33,7 +33,7 @@ function SettingsMenu (props) {
         variant='subtle'
       />
       <NavLink
-        color='violet'
+        color='mublinColor'
         href='/settings/preferences'
         label={<Text fw={500}>Preferências musicais</Text>}
         leftSection={<IconAdjustmentsHorizontal size='1.4rem' stroke={1.5} />}
@@ -41,7 +41,7 @@ function SettingsMenu (props) {
         variant='subtle'
       />
       <NavLink
-        color='violet'
+        color='mublinColor'
         href='/settings/availability'
         label={<Text fw={500}>Disponibilidade</Text>}
         leftSection={<IconCalendarCheck size='1.4rem' stroke={1.5} />}
@@ -49,7 +49,7 @@ function SettingsMenu (props) {
         variant='subtle'
       />
       <NavLink
-        color='violet'
+        color='mublinColor'
         href='/settings/endorsements'
         label={<Text fw={500}>Parceiros e Endorsements</Text>}
         leftSection={<IconHeartHandshake size='1.4rem' stroke={1.5} />}
@@ -57,7 +57,7 @@ function SettingsMenu (props) {
         variant='subtle'
       />
       <NavLink
-        color='violet'
+        color='mublinColor'
         href='/settings/my-gear'
         label={<Text fw={500}>Meu equipamento</Text>}
         leftSection={<IconPackages size='1.4rem' stroke={1.5} />}
@@ -65,7 +65,7 @@ function SettingsMenu (props) {
         variant='subtle'
       />
       <NavLink
-        color='violet'
+        color='mublinColor'
         href='/settings/password'
         label={<Text fw={500}>Senha</Text>}
         leftSection={<IconLock size='1.4rem' stroke={1.5} />}
@@ -73,7 +73,7 @@ function SettingsMenu (props) {
         variant='subtle'
       />
       {/* <NavLink
-        color='violet'
+        color='mublinColor'
         href='#required-for-focus'
         label={<Text fw={500}>Privacidade</Text>}
         leftSection={<IconEye size='1.4rem' stroke={1.5} />}

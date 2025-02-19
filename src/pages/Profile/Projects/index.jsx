@@ -2,18 +2,14 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Flex, Box, Text, Avatar  } from '@mantine/core'
 import { IconStarFilled } from '@tabler/icons-react'
-// import { useMediaQuery } from '@mantine/hooks'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
 
-function CarouselProjects (props) {
+function Projects (props) {
 
   let navigate = useNavigate()
-  // const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
   const profile = props.profile
   const profilePlan = props.profilePlan
-
-  // const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
   const projects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
 
@@ -38,16 +34,18 @@ function CarouselProjects (props) {
         {projects.splice(0 , profilePlan === 'Free' ? 2 : 300).map(project =>
           <SplideSlide key={project.id}>
             <Flex align='center' gap={6} mb={5} className='carousel-project'>
-              <Avatar 
-                variant='filled' 
-                radius='md' 
-                size='64px' 
+              <Avatar
+                variant='filled'
+                radius='md'
+                size='64px'
                 color='violet'
                 name={'🎵'}
-                src={project.picture ? project.picture : undefined} 
-                onClick={() => goToProject(project.username)}
+                src={project.picture ? project.picture : undefined}
+                // onClick={() => goToProject(project.username)}
+                component='a'
+                href={`/project/${project.username}`}
               />
-              <Flex 
+              <Flex
                 direction='column'
                 justify='flex-start'
                 align='flex-start'
@@ -119,4 +117,4 @@ function CarouselProjects (props) {
   );
 };
 
-export default CarouselProjects;
+export default Projects;

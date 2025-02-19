@@ -40,11 +40,11 @@ function SettingsMusicalPreferences () {
   const xIconStyle = { width: '10px', height: '10px', cursor:'pointer' }
 
   useEffect(() => { 
-    dispatch(userInfos.getInfo());
+    dispatch(userActions.getInfo());
     dispatch(miscInfos.getMusicGenresCategories());
-    dispatch(userInfos.getUserGenresInfoById(loggedUserId));
-    dispatch(userInfos.getUserRolesInfoById(loggedUserId));
-    dispatch(userInfos.getUserAvailabilityItemsById(loggedUserId));
+    dispatch(userActions.getUserGenresInfoById(loggedUserId));
+    dispatch(userActions.getUserRolesInfoById(loggedUserId));
+    dispatch(userActions.getUserAvailabilityItemsById(loggedUserId));
     dispatch(miscInfos.getMusicGenres());
     dispatch(miscInfos.getRoles());
     dispatch(miscInfos.getAvailabilityStatuses());
@@ -116,8 +116,7 @@ function SettingsMusicalPreferences () {
           userId: loggedUserId, musicGenreId: value, musicGenreMain: setMainGenre
         })
       }).then((response) => {
-        console.log(response)
-        dispatch(userInfos.getUserGenresInfoById(loggedUserId))
+        dispatch(userActions.getUserGenresInfoById(loggedUserId))
         setIsAddingGenre(false)
         setModalGenresIsOpen(false)
         notifications.show({
@@ -153,7 +152,7 @@ function SettingsMusicalPreferences () {
       body: JSON.stringify({userId: loggedUserId, userGenreId: value})
     }).then((response) => {
       //console.log(response);
-      dispatch(userInfos.getUserGenresInfoById(loggedUserId))
+      dispatch(userActions.getUserGenresInfoById(loggedUserId))
       setIsDeletingGenre(false)
       notifications.show({
         autoClose: 1000,
@@ -186,7 +185,7 @@ function SettingsMusicalPreferences () {
         })
       }).then((response) => {
         //console.log(response)
-        dispatch(userInfos.getUserRolesInfoById(loggedUserId))
+        dispatch(userActions.getUserRolesInfoById(loggedUserId))
         setIsAddingRole(false)
         setModalRolesIsOpen(false)
         notifications.show({
@@ -222,7 +221,7 @@ function SettingsMusicalPreferences () {
       body: JSON.stringify({userId: loggedUserId, userRoleId: value})
     }).then((response) => {
       //console.log(response)
-      dispatch(userInfos.getUserRolesInfoById(loggedUserId))
+      dispatch(userActions.getUserRolesInfoById(loggedUserId))
       setIsDeletingRole(false)
       notifications.show({
         autoClose: 1000,
@@ -286,7 +285,7 @@ function SettingsMusicalPreferences () {
                       {user.genres[0].id ? user.genres.map((genre, key) =>
                         <Badge 
                           key={key}
-                          color="violet"
+                          color="mublinColor"
                           variant='filled'
                           size='md'
                           rightSection={
@@ -305,7 +304,7 @@ function SettingsMusicalPreferences () {
                     <Button 
                       size='sm' 
                       variant='light' 
-                      color='violet'
+                      color='mublinColor'
                       my={4}
                       leftSection={<IconPlus size={14} />}
                       onClick={() => setModalGenresIsOpen(true)}
@@ -363,7 +362,7 @@ function SettingsMusicalPreferences () {
                       {user.roles[0].id ? user.roles.map(role =>
                         <Badge 
                           key={role.id}
-                          color="violet"
+                          color="mublinColor"
                           variant='filled'
                           size='md'
                           rightSection={
@@ -382,7 +381,7 @@ function SettingsMusicalPreferences () {
                     <Button
                       size='sm'
                       variant='light'
-                      color='violet'
+                      color='mublinColor'
                       my={4}
                       leftSection={<IconPlus size={14} />}
                       onClick={() => setModalRolesIsOpen(true)}

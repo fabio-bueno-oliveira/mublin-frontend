@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
-import { Grid, Container, Card, Box, Flex, Group, Image, Divider, Title, Text, Button, CloseButton, Skeleton, Badge, Anchor, Modal, Alert, NativeSelect, Checkbox, NumberInput } from '@mantine/core'
+import { Grid, Container, Card, Box, Flex, Group, Image, Divider, Title, Text, Button, CloseButton, Skeleton, Badge, Anchor, Modal, Alert, NativeSelect, Checkbox, NumberInput, em } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { useForm, isNotEmpty } from '@mantine/form'
 import { IconChevronLeft, IconPlus, IconXboxX, IconInfoCircle, IconLockSquareRoundedFilled } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -23,12 +24,14 @@ function SettingsBusinessPartners () {
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
 
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
+
   const user = useSelector(state => state.user)
-  const gear = useSelector(state => state.gear);
+  const gear = useSelector(state => state.gear)
 
   useEffect(() => { 
-    dispatch(userInfos.getInfo())
-    dispatch(userInfos.getUserPartners())
+    dispatch(userActions.getInfo())
+    dispatch(userActions.getUserPartners())
     dispatch(miscInfos.getGearBrands())
   }, [dispatch, loggedUserId])
 
@@ -71,7 +74,7 @@ function SettingsBusinessPartners () {
     .then((result) => {
       setIsLoading(false)
       setModalNew(false)
-      dispatch(userInfos.getUserPartners())
+      dispatch(userActions.getUserPartners())
       notifications.show({
         position: 'top-center',
         color: 'green',
@@ -120,7 +123,7 @@ function SettingsBusinessPartners () {
         color: 'lime',
         position: 'top-center'
       })
-      dispatch(userInfos.getUserPartners())
+      dispatch(userActions.getUserPartners())
     }).catch(err => {
       console.error(err)
       setIsLoading(false)
@@ -170,54 +173,59 @@ function SettingsBusinessPartners () {
                 display='block' 
                 className='mublinModule'
               >
-                <Title order={4} className='showOnlyInLargeScreen'>
-                  Parceiros e Endorsements
-                </Title>
-                <Text size='sm' c='dimmed' mb={14}>
-                  Marcas que apoiam meu trabalho
-                </Text>
-                {user.plan === 'Pro' ? ( 
-                  <Button 
-                    size='md' 
-                    color='violet' 
-                    leftSection={<IconPlus size={14} />}
-                    onClick={() => setModalNew(true)}
-                  >
-                    Vincular nova marca
-                  </Button>
-                ) : (
-                  <Flex gap={14} direction='column' align='flex-start'>
-                    <Button size='md' disabled leftSection={<IconPlus size={14} />}>
-                      Vincular nova marca
-                    </Button>
-                    <Alert variant="light" icon={<IconLockSquareRoundedFilled color="#000000" />} color="violet">
-                      Apenas usuários com plano PRO podem adicionar marcas parceiras. 
-                      <Anchor
-                        variant='gradient'
-                        gradient={{ from: 'violet', to: 'blue' }}
-                        fw='420'
-                        fz='sm'
-                        href='/pro'
-                        underline='hover'
-                        ml={4}
+                <Grid>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                    <Title order={4} className='showOnlyInLargeScreen'>
+                      Parceiros e Endorsements
+                    </Title>
+                    <Text size='sm' c='dimmed' mb={14}>
+                      Marcas que apoiam meu trabalho
+                    </Text>
+                  </Grid.Col>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
+                    {user.plan === 'Pro' ? ( 
+                      <Button 
+                        size='sm' 
+                        color='mublinColor' 
+                        leftSection={<IconPlus size={14} />}
+                        onClick={() => setModalNew(true)}
                       >
-                        Assine o Mublin PRO!
-                      </Anchor>
-                    </Alert>
+                        Vincular nova marca
+                      </Button>
+                    ) : (
+                      <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
+                        Vincular nova marca
+                      </Button>
+                    )}
+                  </Grid.Col>
+                </Grid>
+                <Group gap={6}>
+                  <IconLockSquareRoundedFilled size={28} />
+                  <Flex direction='column' gap={3}>
+                    <Text size='xs'>
+                      Apenas usuários com plano PRO podem adicionar e exibir marcas parceiras.
+                    </Text>
+                    <Anchor
+                      fw='420'
+                      fz='xs'
+                      href='/pro'
+                      underline='hover'
+                      variant="gradient"
+                      gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                    >
+                      Assine o Mublin PRO!
+                    </Anchor>
                   </Flex>
-                )}
+                </Group>
                 <Divider my={14} />
                 {user.requesting ? (
-                  <>
-                    <Text size='sm' mb={6}>Carregando...</Text>
-                    <Flex gap={8} align='center'>
-                      <Skeleton height={60} width={60} radius='lg' />
-                      <Flex direction='column'>
-                        <Skeleton height={14} width={100} mb={8} radius="lg" />
-                        <Skeleton height={10} width={100} radius="lg" />
-                      </Flex>
+                  <Flex gap={8} align='center'>
+                    <Skeleton height={60} width={60} radius='lg' />
+                    <Flex direction='column'>
+                      <Skeleton height={14} width={100} mb={8} radius="lg" />
+                      <Skeleton height={10} width={100} radius="lg" />
                     </Flex>
-                  </>
+                  </Flex>
                 ) : (
                   <>
                     {user.partners.total === 0 ? (
@@ -322,7 +330,7 @@ function SettingsBusinessPartners () {
           </NativeSelect>
           <Checkbox
             mt='sm'
-            color='violet'
+            color='mublinColor'
             label='Em destaque (exibir entre as primeiras)'
             key={form.key('featured')}
             {...form.getInputProps('featured', { type: 'checkbox' })}
@@ -331,7 +339,7 @@ function SettingsBusinessPartners () {
             <Button variant='outline' color='gray' size='md' onClick={() => setModalNew(false)}>
               Cancelar
             </Button>
-            <Button color='violet' size='md' type="submit" loading={isLoading}>
+            <Button color='mublinColor' size='md' type="submit" loading={isLoading}>
               Salvar
             </Button>
           </Group>

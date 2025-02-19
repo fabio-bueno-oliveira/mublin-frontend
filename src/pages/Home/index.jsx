@@ -163,6 +163,10 @@ function Home () {
                       </Center>
                     )}
                   </Card>
+                  <Group gap={4} mb={8}>
+                    <IconCalendarEventFilled size={14} />
+                    <Text size='sm' fw={500}>Próximos eventos:</Text>
+                  </Group>
                   <Card
                     padding={12}
                     radius='lg'
@@ -170,10 +174,6 @@ function Home () {
                     className='mublinModule'
                     mb='10'
                   >
-                    <Group gap={4} mb={8}>
-                      <IconCalendarEventFilled size={14} />
-                      <Text size='sm' fw={500}>Próximo evento:</Text>
-                    </Group>
                     {events.requesting ? (
                       <> 
                         <Skeleton height={12} radius='lg' mb={6} mt={8} />
@@ -192,22 +192,13 @@ function Home () {
                                 labelPosition='left'
                                 label={
                                   <Group gap={4}>
-                                    <Avatar size={15} src={event.authorPicture ? event.authorPicture : undefined} alt={event.authorName} />
-                                    <Text size='xs' c='dimmed'>Criado por {event.authorName}</Text>
+                                    <Avatar size={15} src={event.authorPicture ? event.authorPicture : undefined} alt={event.authorName} component='a' href={`/${event.authorUsername}`} />
+                                    <Text size='xs' c='dimmed'>
+                                      Criado por {event.authorName}
+                                    </Text>
                                   </Group>
                                 }
                               />
-                              <Group gap={3}>
-                                <Avatar src={event.projectPicture} size={30} />
-                                <Flex direction='column' gap={0}>
-                                  <Text fw={500} size='xs' className='lhNormal'>
-                                    {event.projectName}
-                                  </Text>
-                                  <Text size='xs' c='dimmed' className='lhNormal'>
-                                    {event.projectType}
-                                  </Text>
-                                </Flex>
-                              </Group>
                               <Text size='sm' fw={550}>
                                 {event.title}
                               </Text>
@@ -220,6 +211,18 @@ function Home () {
                                 <Text size='xs' c='dimmed' fw={500}>
                                   {event.city && ' em '+event.city+'/'+event.region}
                                 </Text>
+                              </Group>
+                              <Divider my={4} />
+                              <Group gap={3}>
+                                <Avatar src={event.projectPicture} size={30} />
+                                <Flex direction='column' gap={0}>
+                                  <Text fw={500} size='xs' className='lhNormal'>
+                                    {event.projectName}
+                                  </Text>
+                                  <Text size='xs' c='dimmed' className='lhNormal'>
+                                    {event.projectType}
+                                  </Text>
+                                </Flex>
                               </Group>
                               {event.response === 1 ? <Badge size='xs' color='green'>Presença confirmada</Badge> : null}
                               {event.response === 2 ? <Badge size='xs' color='gray'>Aguardando sua confirmação</Badge> : null}
