@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { useLocation  } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../../store/actions/authentication';
+import { authActions } from '../../store/actions/authentication';
 import {
   useMantineColorScheme,
   Center,
@@ -57,7 +57,7 @@ function LoginPage () {
   const error = useSelector(state => state.authentication.error);
 
   const handleSubmit = (values) => {
-    dispatch(userActions.login(values.email, values.password));
+    dispatch(authActions.login(values.email, values.password));
   }
 
   return (

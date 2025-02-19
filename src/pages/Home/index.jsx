@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
-import { userInfos } from '../../store/actions/user'
+import { userActions } from '../../store/actions/user'
+import { eventsActions } from '../../store/actions/events'
 import { searchInfos } from '../../store/actions/search'
 import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
+import { Container, ScrollArea, Group, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconPlus } from '@tabler/icons-react'
+import { IconPlus, IconCalendarEventFilled, IconPin, IconMap, IconMapPin, IconMapPinFilled } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
 import FeedCard from './feedCard'
 import FeedCardLoading from './feedCardLoading'
@@ -39,9 +40,9 @@ function Home () {
   const projects = useSelector(state => state.userProjects)
   const search = useSelector(state => state.search)
   const feed = useSelector(state => state.feed)
+  const events = useSelector(state => state.events)
 
   // Modal New Post
-  const [showModalNewPost, setShowModalNewPost] = useState(false)
   const openModalNewPost = () => {
     dispatch(feedActions.newPostIsWriting(true))
   }
@@ -52,7 +53,8 @@ function Home () {
   useEffect(() => {
     dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     dispatch(miscInfos.getFeed())
-    dispatch(userInfos.getUserRolesInfoById(loggedUserId))
+    dispatch(userActions.getUserRolesInfoById(loggedUserId))
+    dispatch(eventsActions.getUserEvents(loggedUserId))
     dispatch(searchInfos.getSuggestedFeaturedUsers())
     dispatch(searchInfos.getSuggestedNewUsers())
     if (user.success && user.first_access !== 0) {
@@ -91,7 +93,7 @@ function Home () {
                 >
                   <Flex direction='column' align='center'>
                     <Skeleton height={66} circle mt={10} mb={14} />
-                    <Skeleton height={16} width={125} radius='md' />
+                    <Skeleton height={16} width={125} radius='lg' />
                   </Flex>
                 </Card>
               ) : (
@@ -159,6 +161,73 @@ function Home () {
                           Assine o Mublin PRO!
                         </Anchor>
                       </Center>
+                    )}
+                  </Card>
+                  <Card
+                    padding={12}
+                    radius='lg'
+                    withBorder
+                    className='mublinModule'
+                    mb='10'
+                  >
+                    <Group gap={4} mb={8}>
+                      <IconCalendarEventFilled size={14} />
+                      <Text size='sm' fw={500}>Próximo evento:</Text>
+                    </Group>
+                    {events.requesting ? (
+                      <> 
+                        <Skeleton height={12} radius='lg' mb={6} mt={8} />
+                        <Skeleton height={12} radius='lg' mb={6} />
+                        <Skeleton height={12} radius='lg' mb={6} />
+                      </>
+                    ) : (
+                      <>
+                        {events.total === 0 ? (
+                          <Text size='sm' c='dimmed'>Nenhum evento próximo</Text>
+                        ) : (
+                          events.result.map(event =>
+                            <Box key={event.eventId}>
+                              <Divider 
+                                mb={4}
+                                labelPosition='left'
+                                label={
+                                  <Group gap={4}>
+                                    <Avatar size={15} src={event.authorPicture ? event.authorPicture : undefined} alt={event.authorName} />
+                                    <Text size='xs' c='dimmed'>Criado por {event.authorName}</Text>
+                                  </Group>
+                                }
+                              />
+                              <Group gap={3}>
+                                <Avatar src={event.projectPicture} size={30} />
+                                <Flex direction='column' gap={0}>
+                                  <Text fw={500} size='xs' className='lhNormal'>
+                                    {event.projectName}
+                                  </Text>
+                                  <Text size='xs' c='dimmed' className='lhNormal'>
+                                    {event.projectType}
+                                  </Text>
+                                </Flex>
+                              </Group>
+                              <Text size='sm' fw={550}>
+                                {event.title}
+                              </Text>
+                              <Text size='xs'>{event.description}</Text>
+                              <Text size='xs' c='dimmed' fw={500}>
+                                {event.eventDateStart+' às '+event.eventHourStart}
+                              </Text>
+                              <Group gap={3}>
+                                <IconMapPinFilled size={12} color='gray' />
+                                <Text size='xs' c='dimmed' fw={500}>
+                                  {event.city && ' em '+event.city+'/'+event.region}
+                                </Text>
+                              </Group>
+                              {event.response === 1 ? <Badge size='xs' color='green'>Presença confirmada</Badge> : null}
+                              {event.response === 2 ? <Badge size='xs' color='gray'>Aguardando sua confirmação</Badge> : null}
+                              {event.response === 0 ? <Badge size='xs' color='red'>Convite recusado</Badge> : null}
+                            </Box>
+                          )
+                        )}
+                      </>
                     )}
                   </Card>
                   {/* <Text fw='400' size='lg'>Compromissos próximos:</Text> */}

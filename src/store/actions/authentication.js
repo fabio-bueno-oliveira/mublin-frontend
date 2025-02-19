@@ -4,7 +4,7 @@ import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory();
 
-export const userActions = {
+export const authActions = {
     login,
     logout,
     register,

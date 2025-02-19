@@ -276,7 +276,7 @@ function FeedCard ({ item, compact }) {
         {(item.categoryId === 8) && 
           <>
             <Spoiler
-              maxHeight={45}
+              maxHeight={48}
               px={15}
               mb={0}
               showLabel={

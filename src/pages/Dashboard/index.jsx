@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 // import { eventsInfos } from '../../store/actions/events';
-import { userInfos } from '../../store/actions/user';
+import { userActions } from '../../store/actions/user';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { Container, Flex, Center, Box, Card, Title, Badge, Text, Grid, Skeleton, Switch, Button, Avatar, Image, em } from '@mantine/core';

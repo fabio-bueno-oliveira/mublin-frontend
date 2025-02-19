@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { searchInfos } from '../../../store/actions/search';
-import { userInfos } from '../../../store/actions/user';
+import { userActions } from '../../../store/actions/user';
 import { userProjectsInfos } from '../../../store/actions/userProjects';
 import { miscInfos } from '../../../store/actions/misc';
 import { projectInfos } from '../../../store/actions/project';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { userInfos } from '../../store/actions/user'
+import { userActions } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { useMantineColorScheme, Drawer, Box, Flex, Button, Text } from '@mantine/core'
@@ -32,7 +32,7 @@ const FooterMenuMobile = (props) => {
 
   useEffect(() => {
     if (props.page === 'home' && refreshCounter > 0) {
-      dispatch(userInfos.getInfo())
+      dispatch(userActions.getInfo())
       dispatch(miscInfos.getFeed())
       dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     }

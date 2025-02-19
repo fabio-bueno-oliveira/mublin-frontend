@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { userInfos } from '../../store/actions/user'
+import { userActions } from '../../store/actions/user'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { useMantineColorScheme, Container, Flex, Image } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
@@ -25,14 +25,14 @@ function Header (props) {
 
   useEffect(() => { 
     if (props.reloadUserInfo) {
-      dispatch(userInfos.getInfo())
+      dispatch(userActions.getInfo())
     }
   }, []);
 
   useEffect(() => { 
     if (props.page === 'home' && refreshCounter > 0) {
-      dispatch(userInfos.getInfo());
-      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
+      dispatch(userActions.getInfo())
+      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     }
   }, [refreshCounter])
 

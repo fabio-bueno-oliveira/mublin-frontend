@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userInfos } from '../../../store/actions/user';
-import { userActions } from '../../../store/actions/authentication';
+import { userActions } from '../../../store/actions/user';
+import { authActions } from '../../../store/actions/authentication';
 import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, rem } from '@mantine/core';
 import { IconMoon, IconBrightnessUp } from '@tabler/icons-react';
 import s from '../header.module.css';
@@ -15,12 +15,12 @@ function HeaderWelcome () {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
 
   useEffect(() => { 
-    dispatch(userInfos.getInfo());
+    dispatch(userActions.getInfo());
   }, []);
 
   const logout = () => {
     setColorScheme('light');
-    dispatch(userActions.logout());
+    dispatch(authActions.logout());
   }
 
   const cdnBaseURL = 'https://ik.imagekit.io/mublin';

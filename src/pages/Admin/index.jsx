@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Container, Tabs, PasswordInput, Title, Text, TextInput, Button, Alert, rem } from '@mantine/core';
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
-import { userInfos } from '../../store/actions/user'
+import { userActions } from '../../store/actions/user'
 import { IconPhoto, IconLock, IconUsersGroup, IconPackages } from '@tabler/icons-react'
 
 function AdminPage () {

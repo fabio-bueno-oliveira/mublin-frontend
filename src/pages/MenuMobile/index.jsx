@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { userActions } from '../../store/actions/authentication'
+import { authActions } from '../../store/actions/authentication'
 import { LoadingOverlay, useMantineColorScheme, Container, Flex, Center, Image, Button, Text, Anchor, Avatar, Badge, ActionIcon, Modal } from '@mantine/core'
 import { IconUser, IconLock, IconEye, IconAdjustmentsHorizontal, IconCamera,  IconHeartHandshake, IconPackages, IconCalendarMonth,
   IconChevronRight, IconLogout, IconBrightnessUp, IconMoon, IconEdit, IconStar, IconUpload } from '@tabler/icons-react'
@@ -36,7 +36,7 @@ function MenuMobile () {
 
   const logout = () => {
     setColorScheme('light')
-    dispatch(userActions.logout())
+    dispatch(authActions.logout())
   }
 
   // Picture upload

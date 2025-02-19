@@ -4,7 +4,7 @@ import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory();
 
-export const userInfos = {
+export const userActions = {
     getInfo: getInfo,
     getUserGenresInfoById: getUserGenresInfoById,
     getUserRolesInfoById: getUserRolesInfoById,

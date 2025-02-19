@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { userInfos } from '../../store/actions/user'
+import { userActions } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
 import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
@@ -123,7 +123,7 @@ function NewPostStandalone () {
   }
 
   const handleSelectCard = (itemType) => {
-    dispatch(userInfos.getUserGearInfoById(loggedUserId))
+    dispatch(userActions.getUserGearInfoById(loggedUserId))
     dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUserId))
     setFormValues({...formValues, id_item_fk: '', related_item_type: itemType})
   }

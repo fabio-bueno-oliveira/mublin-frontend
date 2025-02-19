@@ -2,18 +2,17 @@ import { createBrowserHistory } from 'history';
 
 export const history = createBrowserHistory();
 
-const BASE_URL = "https://mublin.herokuapp.com";
+const BASE_URL = 'https://mublin.herokuapp.com';
 
 export function authHeader() {
-    // return authorization header with jwt token
-    let user = JSON.parse(localStorage.getItem('user'));
+    let token = localStorage.getItem('token');
 
-    if (user && user.token) {
-        return { 'Authorization': 'Bearer ' + user.token };
+    if (token) {
+        return { 'Authorization': 'Bearer ' + token };
     } else {
         return {};
     }
-}
+};
 
 export const eventService = {
     getEventInfo,
@@ -21,7 +20,7 @@ export const eventService = {
     logout
 };
 
-function getEventInfo(id) {
+async function getEventInfo(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -29,7 +28,7 @@ function getEventInfo(id) {
     return fetch(`${BASE_URL}/event/${id}`, requestOptions).then(handleResponse);
 }
 
-function getUserEvents(id) {
+async function getUserEvents(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -39,8 +38,9 @@ function getUserEvents(id) {
 
 function logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
     localStorage.removeItem('token');
+    localStorage.removeItem('loginInfo');
+    localStorage.removeItem('userInfo');
 }
 
 function handleResponse(response) {
@@ -50,12 +50,17 @@ function handleResponse(response) {
             if (response.status === 401) {
                 // auto logout if 401 response returned from api
                 logout();
+                // location.reload(true);
+                // window.reload(true)
+                // window.location.href = window.location.href;
                 history.push('/');
                 window.location.href = window.location.href;
             }
+
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
         }
+
         return data;
     });
 }

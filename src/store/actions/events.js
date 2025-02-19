@@ -1,7 +1,7 @@
 import { eventsTypes } from '../types/events';
 import { eventService } from '../../api/events';
 
-export const eventsInfos = {
+export const eventsActions = {
     getUserEvents: getUserEvents
 };
 

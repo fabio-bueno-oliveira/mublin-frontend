@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { userInfos } from '../../store/actions/user';
+import { userActions } from '../../store/actions/user';
 import { miscInfos } from '../../store/actions/misc';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
-import { userActions } from '../../store/actions/authentication';
+import { authActions } from '../../store/actions/authentication';
 import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, rem, em } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
@@ -21,12 +21,10 @@ import {
   IconChevronLeft,
   IconMicrophone2,
   IconMusic,
-  IconPiano,
   IconPlus,
   IconLogout,
   IconChevronDown,
-  IconChevronRight,
-  IconHomeFilled
+  IconChevronRight
 } from '@tabler/icons-react';
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
@@ -95,7 +93,7 @@ function Header (props) {
 
   useEffect(() => {
     if (props.reloadUserInfo) {
-      dispatch(userInfos.getInfo())
+      dispatch(userActions.getInfo())
     }
   }, [])
 
@@ -109,7 +107,7 @@ function Header (props) {
 
   useEffect(() => {
     if (props.page === 'home' && refreshCounter > 0) {
-      dispatch(userInfos.getInfo());
+      dispatch(userActions.getInfo());
       dispatch(miscInfos.getFeed());
       dispatch(searchInfos.getSuggestedFeaturedUsers());
       dispatch(searchInfos.getSuggestedNewUsers());
@@ -118,7 +116,7 @@ function Header (props) {
 
   const logout = () => {
     setColorScheme('light');
-    dispatch(userActions.logout());
+    dispatch(authActions.logout());
   }
 
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
