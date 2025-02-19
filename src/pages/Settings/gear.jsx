@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
 import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
-import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft, IconLockSquareRoundedFilled } from '@tabler/icons-react'
+import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconPencil, IconTrash } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -31,7 +31,7 @@ function SettingsMyGearPage () {
   const subGear = useSelector(state => state.user.gear).filter((p) => { return p.is_subproduct === 1 })
 
   useEffect(() => { 
-    dispatch(userInfos.getUserGearInfoById(loggedUserId))
+    dispatch(userActions.getUserGearInfoById(loggedUserId))
   }, [dispatch, loggedUserId])
 
   const [isLoaded, setIsLoaded] = useState(false)
@@ -91,7 +91,7 @@ function SettingsMyGearPage () {
         },
         body: JSON.stringify({productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
       }).then((response) => {
-        dispatch(userInfos.getUserGearInfoById(loggedUserId))
+        dispatch(userActions.getUserGearInfoById(loggedUserId))
         setLoadingAddNewProduct(false)
         setModalAddNewProductOpen(false)
         setBrandSelected('')
@@ -211,7 +211,7 @@ function SettingsMyGearPage () {
         },
         body: JSON.stringify({id: itemId, productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using, tuning: tuning, owner_comments: owner_comments})
       }).then((response) => {
-        dispatch(userInfos.getUserGearInfoById(loggedUserId));
+        dispatch(userActions.getUserGearInfoById(loggedUserId));
         setIsLoaded(true)
         setModalEditItemOpen(false)
       }).catch(err => {
@@ -240,7 +240,7 @@ function SettingsMyGearPage () {
         'Authorization': 'Bearer ' + token
       }
     }).then((response) => {
-      dispatch(userInfos.getUserGearInfoById(loggedUserId))
+      dispatch(userActions.getUserGearInfoById(loggedUserId))
       setLoadingRemove(false)
       setModalConfirmDelete(false)
     }).catch(err => {
@@ -290,45 +290,60 @@ function SettingsMyGearPage () {
                 display='block' 
                 className='mublinModule'
               >
-                <Title order={4} className='showOnlyInLargeScreen'>
-                  Gerenciar meu equipamento
-                </Title>
-                <Text size='sm' c='dimmed' mb={14}>
-                  Adicionar, remover ou editar itens
-                </Text>
-                <Group justify='flex-start' mt={12}>
-                  {user.plan === 'Pro' ? (
-                    <Button
-                      leftSection={<IconPlus size={14} />}
-                      color='mublinColor'
-                      size='md' 
-                      onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
-                    >
-                      Adicionar novo item
-                    </Button>
-                  ) : (
-                    <Flex gap={14} direction='column' align='flex-start'>
-                      <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
+                <Grid>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }} className='showOnlyInLargeScreen'>
+                    <Title order={4} className='showOnlyInLargeScreen'>
+                      Gerenciar meu equipamento
+                    </Title>
+                    <Text size='sm' c='dimmed' mb={14}>
+                      Adicionar, remover ou editar itens
+                    </Text>
+                  </Grid.Col>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
+                    {user.plan === 'Pro' ? (
+                      <Button
+                        leftSection={<IconPlus size={14} />}
+                        color='mublinColor'
+                        size='md'
+                        fullWidth={isMobile ? true : false}
+                        onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
+                      >
                         Adicionar novo item
                       </Button>
-                      <Alert variant="light" icon={<IconLockSquareRoundedFilled color="#000000" />} color="mublinColor">
-                        Apenas usuários com plano PRO podem adicionar novos produtos ao equipamento. 
-                        <Anchor
-                          variant='gradient'
-                          gradient={{ from: 'mublinColor', to: 'blue' }}
-                          fw='420'
-                          fz='sm'
-                          href='/pro'
-                          underline='hover'
-                          ml={4}
-                        >
-                          Assine o Mublin PRO!
-                        </Anchor>
-                      </Alert>
+                    ) : (
+                      <Button
+                        size='md'
+                        disabled
+                        leftSection={<IconPlus size={14} />}
+                        fullWidth={isMobile ? true : false}
+                      >
+                        Adicionar novo item
+                      </Button>
+                    )}
+                  </Grid.Col>
+                </Grid>
+                {(user.success && user.plan !== 'Pro') && 
+                  <Group gap={6}>
+                    <IconLockSquareRoundedFilled size={28} />
+                    <Flex direction='column' gap={3}>
+                      <Text size='sm'>
+                        Apenas usuários com plano PRO podem adicionar e exibir marcas parceiras.
+                      </Text>
+                      <Anchor
+                        fw='420'
+                        fz='sm'
+                        href='/pro'
+                        underline='hover'
+                        variant="gradient"
+                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                      >
+                        Assine o Mublin PRO!
+                      </Anchor>
                     </Flex>
-                  )}
-                </Group>
-                <Grid mt='lg'>
+                  </Group>
+                }
+                <Divider my={12} />
+                <Grid mt={6}>
                   {gear.map((item, key) => (
                     <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>
                       <Paper
@@ -357,51 +372,49 @@ function SettingsMyGearPage () {
                           <Text size='sm' mb='1' ta='center' truncate="end">
                             {item.productName}
                           </Text>
-                          <Divider my={10} />
-                          <Group gap='3'>
+                          <Group mt={6} gap={5}>
                             {item.featured ? (
-                              <IconToggleRightFilled color='#2c40dc' />
+                              <IconToggleRightFilled color='green' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='sm'>Em destaque</Text>
+                            <Text size='md'>Em destaque</Text>
                           </Group>
                           <Group gap='3'>
                             {item.currentlyUsing ? (
-                              <IconToggleRightFilled color='#2c40dc' />
+                              <IconToggleRightFilled color='green' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='sm'>Em uso</Text>
+                            <Text size='md'>Em uso</Text>
                           </Group>
                           <Group gap='3'>
                             {item.forSale ? (
-                              <IconToggleRightFilled color='#2c40dc' />
+                              <IconToggleRightFilled color='green' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='sm'>À venda</Text>
+                            <Text size='md'>À venda</Text>
                             <Text size='xs' c='dimmed'>
                               {!!item.forSale && '('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')'}
                             </Text>
                           </Group>
-                          <Divider my={10} />
                         </Box> 
-                        <Flex mt='10' gap='4' justify='space-between'>
+                        <Flex mt='10' gap={8} justify='space-between'>
                           <Button 
-                            size='compact-md'
+                            size='xs'
                             color='mublinColor'
-                            variant='subtle'
                             fullWidth
                             fw='440'
+                            leftSection={<IconPencil size={15} />}
                             onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
                           >
                             Editar
                           </Button>
                           <Button 
-                            size='compact-md'
-                            color='gray'
-                            variant='subtle'
+                            size='xs'
+                            color='red'
+                            variant='outline'
                             fullWidth
                             fw='440'
                             onClick={() => openModalConfirmation(item.id, item.brandName ,item.productName)}
@@ -410,6 +423,7 @@ function SettingsMyGearPage () {
                           </Button>
                         </Flex>
                       </Paper>
+                      <Divider my={10} />
                     </Grid.Col>
                   ))}
                 </Grid>
@@ -491,8 +505,10 @@ function SettingsMyGearPage () {
           )}
         </NativeSelect>
         {loggedUserId === 1 &&
-          <Anchor mt='xs' href='/settings/submit-product' underline='hover' className='websiteLink'>
-            <Text ta='right' size='sm'>Não encontrei meu produto na lista</Text>
+          <Anchor href='/settings/submit-product' underline='hover'>
+            <Text mt='xs' c='primary' ta='right' size='xs'>
+              Não encontrei meu produto na lista
+            </Text>
           </Anchor>
         }
         {(productSelected && productInfo) ? (
@@ -661,7 +677,9 @@ function SettingsMyGearPage () {
           )}
         </>
       </Modal>
-      <FooterMenuMobile />
+      {!modalEditItemOpen && 
+        <FooterMenuMobile />
+      }
     </>
   );
 };

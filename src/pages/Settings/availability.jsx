@@ -150,26 +150,29 @@ function SettingsAvailability () {
       </div>
       <Container size='lg' mb={100}>
         <Grid mt={15}>
-          {isLargeScreen && 
-            <Grid.Col span={4} pt={20}>
-              <SettingsMenu page='availability' />
-            </Grid.Col>
-          }
+          <Grid.Col span={4} pt={20} className='showOnlyInLargeScreen'>
+            <SettingsMenu page='availability' />
+          </Grid.Col>
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-            <Flex align='normal' gap={8} mb={14} className='showOnlyInMobile'>
+            <Flex align='normal' gap={8} mb={6} className='showOnlyInMobile'>
               <IconChevronLeft 
                 style={{width:'21px',height:'21px'}} 
                 onClick={() => navigate(-1)}
               />
-              <Text 
-                mr='10' 
-                className='lhNormal'
-                truncate='end'
-                size='1.10rem'
-                fw='600'
-              >
-                Disponibilidade
-              </Text>
+              <Flex gap={2} direction='column'>
+                <Text 
+                  mr='10' 
+                  className='lhNormal'
+                  truncate='end'
+                  size='1.10rem'
+                  fw='600'
+                >
+                  Disponibilidade
+                </Text>
+                <Text size='sm' c='dimmed' mb={14}>
+                  Minha disponibilidade atual para trabalhos e projetos
+                </Text>
+              </Flex>
             </Flex>
             <Box>
               <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule' display='block'>
@@ -200,10 +203,10 @@ function SettingsAvailability () {
               </Card>
               <Card shadow='sm' p={14} withBorder mb={20} className='mublinModule'>
                 <Title order={4}>
-                  Disponibilidade
+                  Status
                 </Title>
                 <Text size='xs' c='dimmed'>
-                  Minha disponibilidade atual para trabalhos e projetos
+                  Descrição que representa meu momento atual
                 </Text>
                 <NativeSelect
                   size='md'

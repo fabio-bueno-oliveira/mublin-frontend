@@ -154,7 +154,7 @@ function SettingsBusinessPartners () {
                 style={{width:'21px',height:'21px'}} 
                 onClick={() => navigate(-1)}
               />
-              <Flex direction='column'>
+              <Flex gap={2} direction='column'>
                 <Text 
                   mr='10' 
                   className='lhNormal'
@@ -190,15 +190,22 @@ function SettingsBusinessPartners () {
                   <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
                     {user.plan === 'Pro' ? ( 
                       <Button 
-                        size='sm' 
+                        size='md' 
                         color='mublinColor' 
                         leftSection={<IconPlus size={14} />}
                         onClick={() => setModalNew(true)}
+                        fullWidth={isMobile ? true : false}
                       >
                         Vincular nova marca
                       </Button>
                     ) : (
-                      <Button mb={10} size='sm' disabled leftSection={<IconPlus size={14} />}>
+                      <Button 
+                        mb={10} 
+                        size='sm' 
+                        disabled 
+                        leftSection={<IconPlus size={14} />}
+                        fullWidth={isMobile ? true : false}
+                      >
                         Vincular nova marca
                       </Button>
                     )}
@@ -208,12 +215,12 @@ function SettingsBusinessPartners () {
                   <Group gap={6}>
                     <IconLockSquareRoundedFilled size={28} />
                     <Flex direction='column' gap={3}>
-                      <Text size='xs'>
+                      <Text size='sm'>
                         Apenas usuários com plano PRO podem adicionar e exibir marcas parceiras.
                       </Text>
                       <Anchor
                         fw='420'
-                        fz='xs'
+                        fz='sm'
                         href='/pro'
                         underline='hover'
                         variant="gradient"
@@ -239,7 +246,7 @@ function SettingsBusinessPartners () {
                       <Text size='sm' c='dimmed'>Nenhuma marca vinculada no momento</Text>
                     ) : (
                       <>
-                        <Text size='sm' mb={10}>
+                        <Text size='md' mb={10}>
                           {user.partners.total === 1 ? user.partners.total + ' marca vinculada' : user.partners.total + ' marcas vinculadas'}
                         </Text>
                         {user.partners.result.map((brand =>
@@ -270,7 +277,7 @@ function SettingsBusinessPartners () {
                                 Ano do início da parceria: {brand.sinceYear}
                               </Text>
                               <Text size='11px' c='dimmed'>
-                                Vínculo cadastrado em {brand.created}
+                                Cadastrado em {brand.created}
                               </Text>
                             </Flex>
                           </Flex>
