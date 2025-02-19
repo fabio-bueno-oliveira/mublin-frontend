@@ -220,6 +220,13 @@ export function search(state = initialState, action) {
         requesting: false,
         error: 'Nenhum projeto encontrado'
       };
+    case searchTypes.RESET_SEARCH_PROJECTS:
+      return {
+        ...state,
+        projects: initialState.projects,
+        requesting: false,
+        error: 'Nenhum projeto encontrado'
+      };
     // GEAR
     case searchTypes.SEARCH_GEAR_REQUEST:
       return {

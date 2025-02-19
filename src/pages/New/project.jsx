@@ -34,6 +34,7 @@ function New () {
   let navigate = useNavigate();
 
   useEffect(() => { 
+    dispatch(searchInfos.resetSearchProjectResults());
     dispatch(miscInfos.getRoles());
   }, [userInfo.id]);
 

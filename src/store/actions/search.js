@@ -5,6 +5,7 @@ export const searchInfos = {
   getUserLastSearches: getUserLastSearches,
   getSearchUsersResults: getSearchUsersResults,
   getSearchProjectsResults: getSearchProjectsResults,
+  resetSearchProjectResults: resetSearchProjectResults,
   getSearchResults: getSearchResults,
   getSearchProjectResults: getSearchProjectResults,
   getSearchGearResults: getSearchGearResults,
@@ -61,6 +62,10 @@ function getSearchProjectsResults(query) {
   function request(query) { return { type: searchTypes.SEARCH_PROJECTS_REQUEST, query } }
   function success(results) { return { type: searchTypes.SEARCH_PROJECTS_SUCCESS, results } }
   function failure(error) { return { type: searchTypes.SEARCH_PROJECTS_FAILURE, error } }
+}
+
+function resetSearchProjectResults() {
+  return { type: searchTypes.RESET_SEARCH_PROJECTS }
 }
 
 function getSearchResults(query) {

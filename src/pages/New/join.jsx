@@ -5,7 +5,7 @@ import { miscInfos } from '../../store/actions/misc'
 import { projectInfos } from '../../store/actions/project'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { searchInfos } from '../../store/actions/search'
-import { Container, Flex, Grid, Modal, Alert, Center, NumberInput, ScrollArea, Avatar, Text, Anchor, Checkbox, Group, ActionIcon, Image, Input, NativeSelect, Radio, Title, Button, Loader, Badge, Divider, rem } from '@mantine/core'
+import { Container, Flex, Grid, Modal, Alert, Center, NumberInput, ScrollArea, Avatar, Text, Anchor, Checkbox, Group, ActionIcon, Image, Input, NativeSelect, Radio, Title, Button, Loader, Divider, ThemeIcon, rem } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
@@ -37,7 +37,7 @@ function New () {
   const avatarCDNPath = 'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'
   const cdnPath = 'https://ik.imagekit.io/mublin/projects/tr:h-200,w-200,c-maintain_ratio/'
 
-  const largeScreen = useMediaQuery('(min-width: 60em)')
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   useEffect(() => { 
     dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
@@ -156,19 +156,6 @@ function New () {
           Ingressar em um projeto
         </Title>
         <Center>
-          <Group align="baseline" gap={10}>
-            <Text size="sm">Pesquise abaixo ou</Text>
-            <Button 
-              variant='light' 
-              color='mublinColor' 
-              size="xs"
-              mt={10}
-              component='a'
-              href='/new/project'
-            >
-              cadastre um projeto
-            </Button>
-          </Group>
         </Center>
         <form onSubmit={formSearch.onSubmit(handleSearchChange)}>
           <Center mt={12} mb={6}>
@@ -198,7 +185,7 @@ function New () {
         ) : (
           searchProject?.results[0]?.title ? (
             <Container size={'xs'}>
-              <ScrollArea h={largeScreen ? 130 : 180} type="always" scrollbarSize={8} offsetScrollbars p={4}>
+              <ScrollArea h={isLargeScreen ? 130 : 180} type="always" scrollbarSize={8} offsetScrollbars p={4}>
                 {searchProject.results.map((project, key) => 
                   <Container key={key} p={0}>
                     <Group 
@@ -241,7 +228,7 @@ function New () {
         )}
       </Container>
       <Modal 
-        fullScreen={largeScreen ? false : true}
+        fullScreen={isLargeScreen ? false : true}
         opened={modalOpen} 
         onClose={() => closeModalParticipation()} 
         title={`Ingressar em ${modalProjectTitle}?`}
@@ -262,14 +249,16 @@ function New () {
         <Text size='10px' ta='center' c='dimmed' mb={8} mt={4}>
           {modalProjectType && modalProjectType + ' · '} {'Formada em '+modalProjectFoundationYear}{modalProjectEndYear && ' ・ Encerrada em '+modalProjectEndYear}
         </Text>
-        <Divider label="Integrantes cadastrados:" labelPosition="left" />
+        <Divider label='Integrantes cadastrados:' mb={4} labelPosition='left' />
         {!project.requesting && 
-          <Group justify="flex-start" gap={7} mb={7}>
+          <Group justify='flex-start' gap={7} mb={7}>
             {members.map((member, key) => 
               <Flex key={key} direction='column' align='center'>
                 <Avatar 
                   size='sm' 
                   src={avatarCDNPath+member.id+'/'+member.picture}
+                  component='a'
+                  href={`/${member.username}`}
                 />
                 <Text size='10px' mt={5} c='dimmed'>{member.name}</Text>
               </Flex>
@@ -278,8 +267,8 @@ function New () {
         }
         <Divider mb={7} />
         <Radio.Group
-          name="favoriteFramework"
-          label="Qual é (ou foi) sua ligação com este projeto?"
+          name='favoriteFramework'
+          label='Qual é (ou foi) sua ligação com este projeto?'
           value={status}
           mb={10}
         >
@@ -377,8 +366,8 @@ function New () {
           checked={featured}
           onChange={() => setFeatured(value => !value)}
         />
-        <Alert variant="light" color="yellow" mt={16} p={'xs'}>
-          <Text size="xs">Sua participação ficará pendente até que um dos administradores do projeto aprove sua solicitação</Text>
+        <Alert variant='light' color='orange' mt={16} p='xs'>
+          <Text size="xs">Sua participação ficará pendente até que um dos administradores do projeto aprove a solicitação</Text>
         </Alert>
         <Group justify="flex-end" mt="md">
           <Button 
@@ -432,12 +421,12 @@ function New () {
               options={{
                 drag: 'free',
                 snap: false,
-                perPage: 1,
+                perPage: 3,
                 autoWidth: true,
                 arrows: false,
                 gap: '16px',
-                dots: false,
-                pagination: false,
+                dots: isLargeScreen ? true : false,
+                pagination: isLargeScreen ? true : false,
               }}
             >
               {userProjects.list.map((project, key) =>
@@ -453,9 +442,9 @@ function New () {
                     align="flex-start"
                     wrap="wrap"
                   >
+                    <Text size='10px' c="dimmed">{project.workTitle} em</Text>
                     <Text size='13px' fw={500}>{project.name}</Text>
                     <Text size='11px' c="dimmed">{project.ptname}</Text>
-                    <Text size='10px' c="dimmed">{project.workTitle}</Text>
                     {project.confirmed === 2 && 
                       <Group gap={1} mt={3} mb={1}>
                         <IconClock style={{ width: '9px', height: '9px' }} stroke={3} /> <Text size='10px'>Aguardando aprovação</Text>
