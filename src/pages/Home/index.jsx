@@ -18,11 +18,10 @@ import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import UserCardLoading from '../../components/userCard/loading'
 import NewPost from '../../pages/New/postStandalone'
-import { truncateString, nFormatter } from '../../utils/formatter'
+import { Helmet } from 'react-helmet'
+import { truncateString } from '../../utils/formatter'
 
 function Home () {
-
-  document.title = 'Home | Mublin'
 
   let dispatch = useDispatch()
   let navigate = useNavigate()
@@ -69,6 +68,10 @@ function Home () {
 
   return (
     <>
+      <Helmet>
+        <title>Home | Mublin</title>
+        <link rel='canonical' href='https://mublin.com/home' />
+      </Helmet>
       {isMobile ? (
         <HeaderMobile page='home' reloadUserInfo />
       ) : (
@@ -116,7 +119,7 @@ function Home () {
                         />
                       </Link>
                     </Center>
-                    <Text size='lg' fw={600} mt={14} ta='center' className='lhNormal'>
+                    <Text size='lg' fw={600} mt={10} ta='center' className='lhNormal'>
                       {userInfo.name} {userInfo.lastname}
                     </Text>
                     <Text
@@ -124,7 +127,7 @@ function Home () {
                       c='dimmed'
                       fw='400'
                       fz='xs'
-                      mb={10}
+                      mb={8}
                       className='lhNormal'
                     >
                       {user.roles.map(role => 

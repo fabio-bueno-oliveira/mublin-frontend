@@ -31,11 +31,6 @@ function NewPostStandalone () {
   const [uploading, setUploading] = useState(false)
   const [fileId, setFileId] = useState('')
 
-  useEffect(() => {
-    dispatch(userInfos.getUserGearInfoById(loggedUserId))
-    dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUserId))
-  }, [])
-
   const [formValues, setFormValues] = useState({
     id_item_fk: '',
     related_item_type: '',
@@ -125,6 +120,12 @@ function NewPostStandalone () {
     handleRemoveImageFromServer(fileId)
     setPostImage('')
     document.querySelector('#postImage').value = null
+  }
+
+  const handleSelectCard = (itemType) => {
+    dispatch(userInfos.getUserGearInfoById(loggedUserId))
+    dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUserId))
+    setFormValues({...formValues, id_item_fk: '', related_item_type: itemType})
   }
 
   return (
@@ -237,7 +238,7 @@ function NewPostStandalone () {
           mt='xs'
           size='sm'
           value={formValues.related_item_type}
-          onChange={(e) => setFormValues({...formValues, id_item_fk: '', related_item_type: e.target.options[e.target.selectedIndex].value})}
+          onChange={(e) => handleSelectCard(e.target.options[e.target.selectedIndex].value)}
         >
           <option value=''>Não adicionar card</option>
           <option value='project'>Adicionar card de um projeto</option>

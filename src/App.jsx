@@ -83,9 +83,9 @@ const theme = createTheme({
       },
     }),
   },
-  fontFamily: 'Inter, Helvetica, Arial, sans-serif',
-  fontFamilyMonospace: 'Inter, Helvetica, Arial, monospace',
-  headings: { fontFamily: 'Inter, Helvetica, Arial, sans-serif' }
+  fontFamily: 'Geist, Helvetica, Arial, sans-serif',
+  fontFamilyMonospace: 'Geist, Helvetica, Arial, monospace',
+  headings: { fontFamily: 'Geist, Helvetica, Arial, sans-serif' }
 });
 
 function App() {
