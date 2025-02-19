@@ -149,20 +149,25 @@ function SettingsBusinessPartners () {
             <SettingsMenu page='endorsements' />
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-            <Flex align='normal' gap={8} mb={14} className='showOnlyInMobile'>
+            <Flex align='normal' gap={8} mb={6} className='showOnlyInMobile'>
               <IconChevronLeft 
                 style={{width:'21px',height:'21px'}} 
                 onClick={() => navigate(-1)}
               />
-              <Text 
-                mr='10' 
-                className='lhNormal'
-                truncate='end'
-                size='1.10rem'
-                fw='600'
-              >
-                Parceiros e Endorsements
-              </Text>
+              <Flex direction='column'>
+                <Text 
+                  mr='10' 
+                  className='lhNormal'
+                  truncate='end'
+                  size='1.10rem'
+                  fw='600'
+                >
+                  Parceiros e Endorsements
+                </Text>
+                <Text size='sm' c='dimmed' mb={14}>
+                  Marcas que apoiam meu trabalho
+                </Text>
+              </Flex>
             </Flex>
             <Box>
               <Card 
@@ -174,8 +179,8 @@ function SettingsBusinessPartners () {
                 className='mublinModule'
               >
                 <Grid>
-                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                    <Title order={4} className='showOnlyInLargeScreen'>
+                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }} className='showOnlyInLargeScreen'>
+                    <Title order={4}>
                       Parceiros e Endorsements
                     </Title>
                     <Text size='sm' c='dimmed' mb={14}>
@@ -193,31 +198,33 @@ function SettingsBusinessPartners () {
                         Vincular nova marca
                       </Button>
                     ) : (
-                      <Button size='sm' disabled leftSection={<IconPlus size={14} />}>
+                      <Button mb={10} size='sm' disabled leftSection={<IconPlus size={14} />}>
                         Vincular nova marca
                       </Button>
                     )}
                   </Grid.Col>
                 </Grid>
-                <Group gap={6}>
-                  <IconLockSquareRoundedFilled size={28} />
-                  <Flex direction='column' gap={3}>
-                    <Text size='xs'>
-                      Apenas usuários com plano PRO podem adicionar e exibir marcas parceiras.
-                    </Text>
-                    <Anchor
-                      fw='420'
-                      fz='xs'
-                      href='/pro'
-                      underline='hover'
-                      variant="gradient"
-                      gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
-                    >
-                      Assine o Mublin PRO!
-                    </Anchor>
-                  </Flex>
-                </Group>
-                <Divider my={14} />
+                {(user.success && user.plan !== 'Pro') && 
+                  <Group gap={6}>
+                    <IconLockSquareRoundedFilled size={28} />
+                    <Flex direction='column' gap={3}>
+                      <Text size='xs'>
+                        Apenas usuários com plano PRO podem adicionar e exibir marcas parceiras.
+                      </Text>
+                      <Anchor
+                        fw='420'
+                        fz='xs'
+                        href='/pro'
+                        underline='hover'
+                        variant="gradient"
+                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                      >
+                        Assine o Mublin PRO!
+                      </Anchor>
+                    </Flex>
+                  </Group>
+                }
+                <Divider my={12} />
                 {user.requesting ? (
                   <Flex gap={8} align='center'>
                     <Skeleton height={60} width={60} radius='lg' />
