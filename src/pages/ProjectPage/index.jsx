@@ -74,7 +74,8 @@ function ProjectPage () {
           <>
             <Paper
               withBorder={isMobile ? false : true}
-              p={14}
+              px={isMobile ? 0 : 16}
+              py={isMobile ? 0 : 12}
               className='mublinModule transparentBgInMobile'
             >
               <Flex
@@ -83,7 +84,7 @@ function ProjectPage () {
                 direction='row'
                 wrap='nowrap'
               >
-                <Group>
+                <Group style={{flexGrow:'1'}}>
                   <Image
                     radius='md'
                     h={80}
@@ -105,23 +106,49 @@ function ProjectPage () {
                         </Flex>
                       }
                     </Group>
-                    <Title order={2} fw={550} className='lhNormal'>
+                    <Title order={2} fw={650} className='lhNormal'>
                       {project.name}
                     </Title>
                     <Group gap={4} mt={3}>
-                      {project.genre1 && <Badge variant='filled' color='mublinColor' radius='sm' size='xs'>{project.genre1 && project.genre1}</Badge>}
-                      {project.genre2 && <Badge variant='filled' color='mublinColor' radius='sm' size='xs'>{project.genre2}</Badge>}
-                      {project.genre3 && <Badge variant='filled' color='mublinColor' radius='sm' size='xs'>{project.genre3}</Badge>}
+                      {project.genre1 && <Badge variant='filled' color='mublinColor' radius='sm' size='sm'>{project.genre1 && project.genre1}</Badge>}
+                      {project.genre2 && <Badge variant='filled' color='mublinColor' radius='sm' size='sm'>{project.genre2}</Badge>}
+                      {project.genre3 && <Badge variant='filled' color='mublinColor' radius='sm' size='sm'>{project.genre3}</Badge>}
                     </Group>
                   </Box>
                 </Group>
+                {/* {project.spotifyId && 
+                  <iframe 
+                    style={{borderRadius:'12px'}} 
+                    src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator&theme=0`} 
+                    width='600' 
+                    height='152' 
+                    frameBorder='0' 
+                    allowfullscreen='' 
+                    allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' 
+                    loading='lazy'
+                  />
+                } */}
               </Flex>
             </Paper>
             <Grid mt={14}>
               <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
+                {project.spotifyId && 
+                  <iframe 
+                    style={{borderRadius:'12px'}} 
+                    src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator&theme=0`} 
+                    width='100%' 
+                    height='152' 
+                    frameBorder='0' 
+                    allowfullscreen='' 
+                    allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' 
+                    loading='lazy'
+                  />
+                }
                 <Paper
                   withBorder={isMobile ? false : true}
-                  p={14}
+                  mt={project.spotifyId ? 14 : 0}
+                  px={isMobile ? 0 : 16}
+                  py={isMobile ? 0 : 12}
                   className='mublinModule transparentBgInMobile'
                 >
                   <Title fz='1.0rem' fw='640' mb={6}>Sobre</Title>
@@ -131,8 +158,9 @@ function ProjectPage () {
                 </Paper>
                 <Paper
                   withBorder={isMobile ? false : true}
-                  p={14}
                   mt={14}
+                  px={isMobile ? 0 : 16}
+                  py={isMobile ? 0 : 12}
                   className='mublinModule transparentBgInMobile'
                 >
                   <Title fz='1.0rem' fw='640' mb={6}>Eventos</Title>
@@ -144,45 +172,52 @@ function ProjectPage () {
               <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
                 <Paper
                   withBorder={isMobile ? false : true}
-                  p={14}
+                  px={isMobile ? 0 : 16}
+                  py={isMobile ? 0 : 12}
+                  mb={80}
                   className='mublinModule transparentBgInMobile'
                 >
                   <Title fz='1.0rem' fw='640' mb={6}>Integrantes e Equipe</Title>
-                  <Table striped highlightOnHover withRowBorders={true}>
-                    <Table.Thead>
-                      <Table.Tr>
-                        <Table.Th fw={500}>Nome</Table.Th>
-                        <Table.Th fw={500}>Atividade</Table.Th>
-                        <Table.Th fw={500}>Vínculo</Table.Th>
-                        <Table.Th fw={500}>Desde</Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                      {members.map(member => 
-                        <Table.Tr key={member.id}>
-                          <Table.Td>
-                            <Group gap={4}>
-                              <Avatar size="md" name={member.name} src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture} />
-                              <Flex direction='column' gap={2}>
-                                <Text fz={13}>{member.name}</Text>
-                                <Group gap={2}>
-                                  {member.role1 && 
-                                    <Badge color='mublinColor' radius='sm' size='xs'>{member.role1}</Badge>
-                                  }
-                                  {member.role2 && 
-                                    <Badge color='purple' radius='sm' size='xs'>{member.role2}</Badge>
-                                  }
-                                </Group>
-                              </Flex>
-                            </Group>
-                          </Table.Td>
-                          <Table.Td fz={13}>{member.role1}</Table.Td>
-                          <Table.Td fz={13}>{member.statusName}</Table.Td>
-                          <Table.Td fz={13}>{member.joinedIn}</Table.Td>
+                  <Table.ScrollContainer minWidth={500}>
+                    <Table highlightOnHover withRowBorders={true} variant="vertical">
+                      <Table.Thead>
+                        <Table.Tr>
+                          <Table.Th fw={500}>Nome</Table.Th>
+                          <Table.Th fw={500}>Atividade</Table.Th>
+                          <Table.Th fw={500}>Vínculo</Table.Th>
+                          <Table.Th fw={500}>Desde</Table.Th>
                         </Table.Tr>
-                      )}
-                    </Table.Tbody>
-                  </Table>
+                      </Table.Thead>
+                      <Table.Tbody>
+                        {members.map(member => 
+                          <Table.Tr key={member.id}>
+                            <Table.Td>
+                              <Group gap={4} wrap='nowrap' maw={150}>
+                                <Avatar size="md" name={member.name} src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture} />
+                                <Flex direction='column' gap={2}>
+                                  <Text fz={13}>{member.name} {member.lastname}</Text>
+                                  {/* <Group gap={2}>
+                                    {member.role1 && 
+                                      <Badge variant='light' color='mublinColor' radius='sm' size='xs'>{member.role1}</Badge>
+                                    }
+                                    {member.role2 && 
+                                      <Badge variant='light' color='mublinColor' radius='sm' size='xs'>{member.role2}</Badge>
+                                    }
+                                    {member.role3 && 
+                                      <Badge variant='light' color='mublinColor' radius='sm' size='xs'>{member.role3}</Badge>
+                                    }
+                                  </Group> */}
+                                </Flex>
+                              </Group>
+                            </Table.Td>
+                            <Table.Td fz={13}>{member.role1}</Table.Td>
+                            <Table.Td fz={13}>{member.statusName}</Table.Td>
+                            <Table.Td fz={13}>{member.joinedIn}</Table.Td>
+                          </Table.Tr>
+                        )}
+                      </Table.Tbody>
+                    </Table>
+                  </Table.ScrollContainer>
                 </Paper>
               </Grid.Col>
             </Grid>

@@ -229,12 +229,12 @@ function Search () {
                 searchResults.projects.total ? (
                   searchResults.projects.result.map(project => 
                     <Flex key={project.id} align='flex-start' mb={13} gap={6} justify='space-between'>
-                      <Link to={{ pathname: `/${project.username}` }}>
-                        <Avatar 
-                          src={project.picture ? project.picture : undefined} 
-                          size='lg'
-                        />
-                      </Link>
+                      <Avatar 
+                        src={project.picture ? project.picture : undefined} 
+                        size='lg'
+                        component='a'
+                        href={`/project/${project.username}`}
+                      />
                       <Flex
                         justify='flex-start'
                         align='flex-start'
@@ -242,12 +242,10 @@ function Search () {
                         wrap='wrap'
                         style={{flexGrow:'2'}}
                       >
-                        <Anchor href={`/${project.username}`}>
-                          <Flex gap={3} align={'center'}>
-                            <Text size='0.97rem' fw={570} className='lhNormal'>
-                              {project.name}
-                            </Text>
-                          </Flex>
+                        <Anchor href={`/project/${project.username}`}>
+                          <Text size='0.97rem' fw={570} className='lhNormal'>
+                            {project.name}
+                          </Text>
                         </Anchor>
                         <Text size='xs' fw={300}>
                           {project.type}{project.mainGenre && ` · ${project.mainGenre}`}
