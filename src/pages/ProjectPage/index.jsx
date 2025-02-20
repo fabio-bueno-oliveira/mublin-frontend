@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Box, Flex, Group, Badge, Title, Table, Button, Text, Image, Skeleton, Avatar, Paper, em } from '@mantine/core'
+import { Container, Grid, Box, Flex, Group, Badge, Title, Table, Spoiler, Text, Image, Skeleton, Avatar, Paper, em, Divider } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconMapPin, IconMusic, IconSettings } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -31,7 +31,9 @@ function ProjectPage () {
 
   return (
     <>
-      <Header />
+      {!isMobile && 
+        <Header />
+      }
       <Container size={'lg'}>
         <Group mt={14} mb={10}>
           <Flex gap={4} align='center'>
@@ -47,6 +49,7 @@ function ProjectPage () {
             </Title>
           </Flex>
         </Group>
+        <Divider mb={14} className='showOnlyInMobile' />
         {project.requesting && 
           <Paper
             withBorder={isMobile ? false : true}
@@ -80,7 +83,7 @@ function ProjectPage () {
             >
               <Flex
                 justify='space-between'
-                align='top'
+                align='center'
                 direction='row'
                 wrap='nowrap'
               >
@@ -116,18 +119,9 @@ function ProjectPage () {
                     </Group>
                   </Box>
                 </Group>
-                {/* {project.spotifyId && 
-                  <iframe 
-                    style={{borderRadius:'12px'}} 
-                    src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator&theme=0`} 
-                    width='600' 
-                    height='152' 
-                    frameBorder='0' 
-                    allowfullscreen='' 
-                    allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' 
-                    loading='lazy'
-                  />
-                } */}
+                {/* <Box>
+                  <Text>Texto</Text>
+                </Box> */}
               </Flex>
             </Paper>
             <Grid mt={14}>
@@ -144,18 +138,28 @@ function ProjectPage () {
                     loading='lazy'
                   />
                 }
-                <Paper
-                  withBorder={isMobile ? false : true}
-                  mt={project.spotifyId ? 14 : 0}
-                  px={isMobile ? 0 : 16}
-                  py={isMobile ? 0 : 12}
-                  className='mublinModule transparentBgInMobile'
-                >
-                  <Title fz='1.0rem' fw='640' mb={6}>Sobre</Title>
-                  <Text size='sm' c={!project.bio ? 'dimmed' : undefined}>
-                    {project.bio ? project.bio : 'Nenhuma bio informada para este projeto'}
-                  </Text>
-                </Paper>
+                {project.bio &&
+                  <Paper
+                    withBorder={isMobile ? false : true}
+                    mt={project.spotifyId ? 14 : 0}
+                    px={isMobile ? 0 : 16}
+                    pt={isMobile ? 0 : 12}
+                    pb={10}
+                    className='mublinModule transparentBgInMobile'
+                  >
+                    <Title fz='1.0rem' fw='640' mb={6}>Sobre</Title>
+                    {/* {project.foundationYear &&
+                      <Text size='xs' c='dimmed' mb={3}>
+                        {project.foundationYear} ➜ {project.endDate ? project.endDate : 'Atualmente'}
+                      </Text>
+                    } */}
+                    <Spoiler maxHeight={120} showLabel={<Text size='sm' fw={600}>...mais</Text>} hideLabel={<Text size='sm' fw={600}>mostrar menos</Text>}>
+                      <Text size='sm' c={!project.bio ? 'dimmed' : undefined}>
+                        {project.bio}
+                      </Text>
+                    </Spoiler>
+                  </Paper>
+                }
                 <Paper
                   withBorder={isMobile ? false : true}
                   mt={14}
@@ -164,8 +168,8 @@ function ProjectPage () {
                   className='mublinModule transparentBgInMobile'
                 >
                   <Title fz='1.0rem' fw='640' mb={6}>Eventos</Title>
-                  <Text size='sm' c={!project.bio ? 'dimmed' : undefined}>
-                    {project.bio ? project.bio : 'Nenhuma bio informada para este projeto'}
+                  <Text size='sm' c='dimmed'>
+                    Nenhum evento próximo
                   </Text>
                 </Paper>
               </Grid.Col>
@@ -173,13 +177,13 @@ function ProjectPage () {
                 <Paper
                   withBorder={isMobile ? false : true}
                   px={isMobile ? 0 : 16}
-                  py={isMobile ? 0 : 12}
+                  pt={isMobile ? 0 : 12}
                   mb={80}
                   className='mublinModule transparentBgInMobile'
                 >
-                  <Title fz='1.0rem' fw='640' mb={6}>Integrantes e Equipe</Title>
+                  <Title fz='1.0rem' fw='640' mb={10}>Integrantes e Equipe</Title>
                   <Table.ScrollContainer minWidth={500}>
-                    <Table highlightOnHover withRowBorders={true} variant="vertical">
+                    <Table highlightOnHover withRowBorders={false} variant="vertical">
                       <Table.Thead>
                         <Table.Tr>
                           <Table.Th fw={500}>Nome</Table.Th>
@@ -191,8 +195,8 @@ function ProjectPage () {
                       <Table.Tbody>
                         {members.map(member => 
                           <Table.Tr key={member.id}>
-                            <Table.Td>
-                              <Group gap={4} wrap='nowrap' maw={150}>
+                            <Table.Td width='35%'>
+                              <Group gap={4} wrap='nowrap'>
                                 <Avatar size="md" name={member.name} src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-56,w-56,c-maintain_ratio/'+member.id+'/'+member.picture} />
                                 <Flex direction='column' gap={2}>
                                   <Text fz={13}>{member.name} {member.lastname}</Text>
@@ -210,9 +214,20 @@ function ProjectPage () {
                                 </Flex>
                               </Group>
                             </Table.Td>
-                            <Table.Td fz={13}>{member.role1}</Table.Td>
-                            <Table.Td fz={13}>{member.statusName}</Table.Td>
-                            <Table.Td fz={13}>{member.joinedIn}</Table.Td>
+                            <Table.Td width='25%' fz={13}>
+                              {/* {member.role1} */}
+                              {member.role1 && 
+                                <Badge color='mublinColor' radius='sm' size='sm'>{member.role1}</Badge>
+                              }
+                              {member.role2 && 
+                                <Badge color='mublinColor' radius='sm' size='sm'>{member.role2}</Badge>
+                              }
+                              {member.role3 && 
+                                <Badge color='mublinColor' radius='sm' size='sm'>{member.role3}</Badge>
+                              }
+                            </Table.Td>
+                            <Table.Td width='20%' fz={13}>{member.statusName}</Table.Td>
+                            <Table.Td width='20%' fz={13}>{member.joinedIn}</Table.Td>
                           </Table.Tr>
                         )}
                       </Table.Tbody>

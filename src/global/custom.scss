@@ -96,6 +96,16 @@
       background-color: #1f262c;
       color: #FFFFFF;
     }
+    .mantine-Table-th {
+      background-color: #1f262c;
+    }
+    .mantine-Table-tr {
+      border-bottom-color: #060708;
+
+      &:hover {
+        background-color: #1f262c;
+      }
+    }
   }
 }
 

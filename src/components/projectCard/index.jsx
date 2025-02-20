@@ -12,7 +12,7 @@ export function ProjectCard({
 
   return (
     <Flex mb={mb} gap={6} align='center'>
-      <Link to={{ pathname: `/${username}` }}>
+      <Link to={{ pathname: `/project/${username}` }}>
         <Image
           radius='md'
           h={55}
@@ -26,7 +26,7 @@ export function ProjectCard({
         <Anchor 
           underline='never'
           style={{lineHeight:'normal'}} 
-          href={`/${username}`}
+          href={`/project/${username}`}
         >
           <Group gap={0}>
             <Text size='0.95rem' fw={570} className='lhNormal'>
