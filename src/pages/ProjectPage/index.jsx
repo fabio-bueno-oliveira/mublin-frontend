@@ -189,7 +189,7 @@ function ProjectPage () {
                           <Table.Th fw={500}>Nome</Table.Th>
                           <Table.Th fw={500}>Atividade</Table.Th>
                           <Table.Th fw={500}>Vínculo</Table.Th>
-                          <Table.Th fw={500}>Desde</Table.Th>
+                          <Table.Th fw={500} ta='center'>Desde</Table.Th>
                         </Table.Tr>
                       </Table.Thead>
                       <Table.Tbody>
@@ -226,8 +226,14 @@ function ProjectPage () {
                                 <Badge color='mublinColor' radius='sm' size='sm'>{member.role3}</Badge>
                               }
                             </Table.Td>
-                            <Table.Td width='20%' fz={13}>{member.statusName}</Table.Td>
-                            <Table.Td width='20%' fz={13}>{member.joinedIn}</Table.Td>
+                            <Table.Td width='20%' fz={13}>
+                              <Badge radius='sm' size='sm' variant='light' color={member.statusId === 1 ? 'green' : 'blue'}>
+                                {member.statusName}
+                              </Badge>
+                            </Table.Td>
+                            <Table.Td width='20%' fz={13} ta='center'>
+                              {member.joinedIn}
+                            </Table.Td>
                           </Table.Tr>
                         )}
                       </Table.Tbody>
