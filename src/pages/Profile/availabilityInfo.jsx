@@ -61,7 +61,7 @@ function AvailabilityInfo (props) {
         )}
       </Group>
       <Text size='0.83em' fw='500' mb={8} mt={14}>
-        Trabalhos:
+        Tipos de trabalhos:
       </Text>
       {jobs.requesting ? (
         <Text size='0.83em' fw='390' mt='5' c='dimmed'>Carregando...</Text>

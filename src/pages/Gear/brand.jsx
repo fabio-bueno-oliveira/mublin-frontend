@@ -173,9 +173,10 @@ function BrandPage () {
         }
         <ResponsiveMasonry
           columnsCountBreakPoints={{350: 2, 750: 3, 900: 4}}
+          gutterBreakpoints={{350: "8px", 750: "8px", 900: "8px"}}
           style={{marginTop:'18px'}}
         >
-          <Masonry gutter='8px'>
+          <Masonry>
             {brand.products.map(product =>
               <Card
                 withBorder
@@ -184,6 +185,7 @@ function BrandPage () {
                 pb={10}
                 pt={0}
                 key={product.id}
+                w='100%'
               >
                 <Card.Section>
                   <Center pt={20}>

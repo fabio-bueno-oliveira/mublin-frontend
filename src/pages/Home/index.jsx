@@ -199,11 +199,11 @@ function Home () {
                                   </Group>
                                 }
                               />
-                              <Text size='sm' fw={550}>
+                              <Text size='xs' fw={550}>
                                 {event.title}
                               </Text>
                               <Text size='xs'>{event.description}</Text>
-                              <Text size='xs' c='dimmed' fw={500}>
+                              <Text size='xs' fw={600}>
                                 {event.eventDateStart+' às '+event.eventHourStart}
                               </Text>
                               <Group gap={3}>

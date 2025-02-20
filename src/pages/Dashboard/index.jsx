@@ -161,8 +161,9 @@ function Home () {
                 {totalProjects > 0 ? (
                   <ResponsiveMasonry
                     columnsCountBreakPoints={{350: 1, 750: 2, 900: 2}}
+                    gutterBreakpoints={{350: "10px", 750: "10px", 900: "10px"}}
                   >
-                    <Masonry gutter="10px">
+                    <Masonry>
                       {projectsToShow.map((p, key) => (
                         <ProjectCard 
                           keyIndex={key}

@@ -318,7 +318,8 @@ function ProfilePage () {
                     color='lime' 
                     size={18} 
                     withBorder 
-                    disabled={!profile.openToWork}
+                    // disabled={!profile.openToWork}
+                    disabled={true}
                   >
                     <Avatar
                       size='xl'

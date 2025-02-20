@@ -374,27 +374,27 @@ function SettingsMyGearPage () {
                           </Text>
                           <Group mt={6} gap={5}>
                             {item.featured ? (
-                              <IconToggleRightFilled color='lime' />
+                              <IconToggleRightFilled color='green' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='md'>Em destaque</Text>
+                            <Text size='sm'>Em destaque</Text>
                           </Group>
                           <Group gap={5}>
                             {item.currentlyUsing ? (
-                              <IconToggleRightFilled color='lime' />
+                              <IconToggleRightFilled color='green' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='md'>Em uso</Text>
+                            <Text size='sm'>Em uso</Text>
                           </Group>
                           <Group gap={5}>
                             {item.forSale ? (
-                              <IconToggleRightFilled color='lime' />
+                              <IconToggleRightFilled color='green' />
                             ) : (
                               <IconToggleLeft color='gray' />
                             )}
-                            <Text size='md'>À venda</Text>
+                            <Text size='sm'>À venda</Text>
                             <Text size='xs' c='dimmed'>
                               {!!item.forSale && '('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')'}
                             </Text>

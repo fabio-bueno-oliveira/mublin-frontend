@@ -7,7 +7,7 @@ import { feedActions } from '../../store/actions/feed'
 import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, TextInput, Button, Spoiler, Indicator, rem, em } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle } from '@tabler/icons-react'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle, IconPiano } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 // import ReactPlayer from 'react-player/youtube'
@@ -177,7 +177,7 @@ function FeedCard ({ item, compact }) {
 
   return (
     <>
-      <Card 
+      <Card
         key={item.id}
         radius='lg'
         withBorder
@@ -193,17 +193,17 @@ function FeedCard ({ item, compact }) {
         }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
-            <Indicator 
-              position='bottom-center' 
-              inline 
+            <Indicator
+              position='bottom-center'
+              inline
               label={<Text size='0.48rem' >{item.relatedUserOpenToWorkText}</Text>}
-              color='lime' 
-              size={18} 
-              withBorder 
+              color='lime'
+              size={18}
+              withBorder
               // disabled={!item.relatedUserOpenToWork}
               disabled
             >
-              <Avatar 
+              <Avatar
                 size='45px'
                 radius='xl'
                 src={item.relatedUserPicture ? item.relatedUserPicture : undefined}
@@ -216,7 +216,7 @@ function FeedCard ({ item, compact }) {
               style={{lineHeight:'normal',width:'fit-content',display:'block'}}
               href={`/${item.relatedUserUsername}`}
             >
-              <Flex gap={2} align='center' mb={2}>
+              <Flex gap={2} align='baseline' mb={2}>
                 <Text size='0.96rem' fw={570}>
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Text>
@@ -226,7 +226,9 @@ function FeedCard ({ item, compact }) {
                 {!!item.relatedUserLegend &&
                   <IconShieldCheckFilled style={iconLegendStyle} title='Lenda da música' />
                 }
-                {/* {item.relatedUserPlan === 'Pro' && <Badge size='xs' variant='light' color='gray'>PRO</Badge>} */}
+                {item.relatedUserPlan === 'Pro' && 
+                  <IconPiano className='iconMublinPiano small point' title='Mublin PRO' />
+                }
               </Flex>
             </Anchor>
             <Text size='0.75rem' c='dimmed' fw='420'>

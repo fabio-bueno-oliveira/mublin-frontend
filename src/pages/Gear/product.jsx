@@ -140,17 +140,21 @@ function GearProductPage () {
                           </Group>
                         </Center>
                       </Center>
-                      <Text size='xs' c='dimmed' my={5} ta='center'>
-                        {product.colorName}
-                      </Text>
-                      <Center>
-                        <ColorSwatch
-                          color={product.colorSample ? undefined : product.colorRgb}
-                          title={product.colorName}
-                          className={product.colorSample ? 'removeAlpha' : undefined}
-                          style={{backgroundSize:'28px 28px', backgroundImage: product.colorSample ? "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+product.colorSample + ")" : undefined}}
-                        />
-                      </Center>
+                      {product.colorId && 
+                        <>
+                          <Text size='xs' my={5} ta='center'>
+                            {product.colorName}
+                          </Text>
+                          <Center>
+                            <ColorSwatch
+                              color={product.colorSample ? undefined : product.colorRgb}
+                              title={product.colorName}
+                              className={product.colorSample ? 'removeAlpha' : undefined}
+                              style={{backgroundSize:'28px 28px', backgroundImage: product.colorSample ? "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+product.colorSample + ")" : undefined}}
+                            />
+                          </Center>
+                        </>
+                      }
                     </>
                   }
                   {(product.availableColors.total > 0 && selectedColor?.colorId) && 

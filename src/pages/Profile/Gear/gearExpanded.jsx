@@ -3,14 +3,14 @@ import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../../store/actions/profile'
-import { Modal, Skeleton, Group, Button, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, Anchor } from '@mantine/core'
+import { Modal, Skeleton, Group, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, Anchor, Spoiler } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconArrowLeft } from '@tabler/icons-react'
 import Header from '../../../components/header'
 import FloaterHeader from '../floaterHeader'
 import FooterMenuMobile from '../../../components/footerMenuMobile'
 import GearExpandedLoading from './gearExpandedLoading'
-import Masonry, {ResponsiveMasonry} from 'react-responsive-masonry'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import '../styles.scss'
 
 function ProfileGearExpanded () {
@@ -115,8 +115,9 @@ function ProfileGearExpanded () {
           ) : (
             <ResponsiveMasonry
               columnsCountBreakPoints={{350: 2, 750: 3, 900: 4}}
+              gutterBreakpoints={{350: "8px", 750: "8px", 900: "8px"}}
             >
-              <Masonry gutter='8px'>
+              <Masonry>
                 {gear.list.map(product =>
                   <Card
                     withBorder
@@ -125,6 +126,7 @@ function ProfileGearExpanded () {
                     pb={10}
                     pt={0}
                     key={product.productId}
+                    w='100%'
                   >
                     <Center>
                       <Anchor
@@ -184,9 +186,11 @@ function ProfileGearExpanded () {
                       </Flex>
                     }
                     {product.ownerComments && 
-                      <Text size='xs' lineClamp={3} mt={10}>
-                        <strong>Comentários de {profile.name}:</strong> {product.ownerComments} Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam tortor leo, posuere non finibus id, aliquam id tortor. Nunc sed nisi metus. Integer id porttitor metus. Sed sed tristique sapien. Cras et metus quis nulla tempus rhoncus in a nisl. Integer a odio consectetur leo luctus pellentesque.
-                      </Text>
+                      <Spoiler maxHeight={120} showLabel={<Text size='xs' fw={600}>...mais</Text>} hideLabel={<Text size='xs' fw={600}>mostrar menos</Text>}>
+                        <Text size='xs' mt={10}>
+                          <strong>Comentários de {profile.name}:</strong> {product.ownerComments}
+                        </Text>
+                      </Spoiler>
                     }
                   </Card>
                 )}
@@ -208,8 +212,10 @@ function ProfileGearExpanded () {
               {gearItemDetail.category} • Item do equipamento de {profile.name}
             </Text>
             <Anchor
-              mt={6}
+              mt={3}
               size='xs'
+              className='websiteLink'
+              underline='hover'
               c='violet'
               fw='500'
               href={`/gear/product/${gearItemDetail.productId}`}
