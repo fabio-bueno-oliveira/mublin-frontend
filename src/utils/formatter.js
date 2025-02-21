@@ -14,3 +14,11 @@ export const  nFormatter = (num) => {
    }
    return num;
 };
+
+export const years = (yearSmallest, yearBiggest) => {
+   let yearText = (yearSum) => {
+      return yearSum === 1 ? " ano" : " anos";
+   }
+   let subtraction = (yearBiggest - yearSmallest);
+   return subtraction === 0 ? "(menos de 1 ano)" : "("+subtraction + yearText(subtraction)+")";
+}

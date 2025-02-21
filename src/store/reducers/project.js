@@ -16,8 +16,9 @@ const initialState = {
   endDate: '',
   bio: '',
   purpose: '',
-  spotifyUri: '',
+  instagram: '',
   spotifyId: '',
+  soundcloud: '',
   typeId: '',
   typeName: '',
   adminNote: null,
@@ -33,6 +34,9 @@ const initialState = {
   labelText: '',
   labelColor: '',
   public: '',
+  activityStatus: '',
+  activityStatusId: '',
+  activityStatusColor: '',
   members: [
     {
       id: '',
@@ -59,15 +63,20 @@ const initialState = {
       confirmed: ''
     }
   ],
-  opportunities: [
-    {
-      created: '',
-      rolename: '',
-      info: '',
-      experienceLevel: '',
-      experienceName: ''
-    }
-  ],
+  opportunities: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        created: '',
+        rolename: '',
+        info: '',
+        experienceLevel: '',
+        experienceName: ''
+      }
+    ]
+  },
   notes: [
     {
       id: '',
@@ -133,8 +142,9 @@ export function project(state = initialState, action) {
         endDate: '',
         bio: '',
         purpose: '',
-        spotifyUri: '',
+        instagram: '',
         spotifyId: '',
+        soundcloud: '',
         typeId: '',
         typeName: '',
         adminNote: null,
@@ -150,6 +160,9 @@ export function project(state = initialState, action) {
         labelText: '',
         labelColor: '',
         public: '',
+        activityStatus: '',
+        activityStatusId: '',
+        activityStatusColor: ''
       };
     case projectTypes.GET_PROJECT_INFO_SUCCESS:
       return {
@@ -165,8 +178,9 @@ export function project(state = initialState, action) {
         endDate: action.info.endDate,
         bio: action.info.bio,
         purpose: action.info.purpose,
-        spotifyUri: action.info.spotifyUri,
+        instagram: action.info.instagram,
         spotifyId: action.info.spotifyId,
+        soundcloud: action.info.soundcloud,
         typeId: action.info.typeId,
         typeName: action.info.typeName,
         adminNote: action.info.adminNote,
@@ -181,7 +195,10 @@ export function project(state = initialState, action) {
         labelShow: action.info.labelShow,
         labelText: action.info.labelText,
         labelColor: action.info.labelColor,
-        public: action.info.public
+        public: action.info.public,
+        activityStatus: action.info.activityStatus,
+        activityStatusId: action.info.activityStatusId,
+        activityStatusColor: action.info.activityStatusColor
       };
     case projectTypes.GET_PROJECT_INFO_FAILURE:
       return {
@@ -201,8 +218,9 @@ export function project(state = initialState, action) {
         endDate: '',
         bio: '',
         purpose: '',
-        spotifyUri: '',
+        instagram: '',
         spotifyId: '',
+        soundcloud: '',
         typeId: '',
         typeName: '',
         adminNote: '',
@@ -217,7 +235,10 @@ export function project(state = initialState, action) {
         labelShow: '',
         labelText: '',
         labelColor: '',
-        public: ''
+        public: '',
+        activityStatus: '',
+        activityStatusId: '',
+        activityStatusColor: ''
       };
     case projectTypes.GET_PROJECT_ADMINACCESS_REQUEST:
       return {
@@ -270,7 +291,8 @@ export function project(state = initialState, action) {
     case projectTypes.GET_PROJECT_OPPORTUNITIES_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        opportunities: initialState.opportunities,
       };
     case projectTypes.GET_PROJECT_OPPORTUNITIES_SUCCESS:
       return {
@@ -282,15 +304,7 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        opportunities: [
-          {
-            created: '',
-            rolename: '',
-            info: '',
-            experienceLevel: '',
-            experienceName: ''
-          }
-        ],
+        opportunities: initialState.opportunities,
         //error: "A solicitação falhou"
       };
     case projectTypes.GET_PROJECT_NOTES_REQUEST:
