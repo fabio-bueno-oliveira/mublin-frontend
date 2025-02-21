@@ -18,7 +18,7 @@ import GearSection from './Gear/gearSection'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 import AvailabilityInfo from './availabilityInfo'
-import FeedCard from '../Home/feedCard'
+import FeedCard from '../Home/FeedCard'
 import RelatedProfiles from './relatedProfiles'
 import NewPost from '../../pages/New/postStandalone'
 import { truncateString, nFormatter } from '../../utils/formatter'
@@ -660,7 +660,7 @@ function ProfilePage () {
                   </Group>
                 }
               </Paper>
-              <Flex gap={5} mt={17} mb={isMobile ? 14 : 20}>
+              <Flex gap={5} mt={17} mb={isMobile ? 14 : 18}>
                 {loggedUserId !== profile.id ? (
                   <>
                     {followedByMe?.following === 'true' ? (
@@ -673,7 +673,7 @@ function ProfilePage () {
                         variant='outline'
                         loading={loadingFollow}
                         rightSection={<IconChevronDown size={14} />}
-                        fullWidth={isMobile}
+                        fullWidth
                         onClick={() => setModalFollowInfoOpen(true)}
                       >
                         Seguindo
@@ -700,7 +700,7 @@ function ProfilePage () {
                       h={30}
                       variant='outline'
                       color='primary'
-                      fullWidth={isMobile}
+                      fullWidth
                       onClick={() => setModalContactOpen(true)}
                     >
                       Contato
@@ -712,9 +712,9 @@ function ProfilePage () {
                     fz='0.85rem'
                     fw='570'
                     h={30}
-                    variant='outline'
+                    variant={'filled'}
                     color='primary'
-                    fullWidth={isMobile}
+                    fullWidth
                     onClick={() => navigate('/settings')}
                   >
                     Editar meu perfil
@@ -785,7 +785,7 @@ function ProfilePage () {
               <Paper
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
-                pt={isMobile ? 0 : 12}
+                pt={isMobile ? 0 : 10}
                 pb={isMobile ? 3 : 12}
                 mb='14'
                 className="mublinModule transparentBgInMobile"
@@ -794,7 +794,7 @@ function ProfilePage () {
                   <Title fz='1.03rem' fw='640'>
                     Projetos
                   </Title>
-                  {(!profile.requesting && profile.projects.total > 1) &&
+                  {(!profile.requesting && profile.projects.total > 0) &&
                     <ActionIcon
                       variant='transparent'
                       size='md'
@@ -809,14 +809,17 @@ function ProfilePage () {
                     </ActionIcon>
                   }
                 </Group>
-                {profile.projects.total > 0 && 
+                {profile.projects.total > 0 ? ( 
                   <Projects 
                     profile={profile}
                     projects={allProjects}
                     profilePlan={profile.plan}
                   />
-                }
+                ) : (
+                  <Text size='sm' c='dimmed'>Nenhum projeto no momento</Text>
+                )}
               </Paper>
+              <Divider mb={18} className='showOnlyInMobile' />
               <Paper
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}

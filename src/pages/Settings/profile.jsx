@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../store/actions/user';
 import { Grid, Container, Modal, Center, Alert, Loader, Box, ScrollArea, Group, Flex, Button, TextInput, Input, Text, Textarea, NativeSelect, Anchor, Divider } from '@mantine/core';
-import { IconSearch, IconChevronLeft } from '@tabler/icons-react';
+import { IconSearch, IconChevronLeft, IconBrandInstagram, IconBrandTiktok } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { hasLength, isEmail, useForm } from '@mantine/form';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import SettingsMenu from './menu';
+import { notifications } from '@mantine/notifications';
 
 function SettingsPage () {
 
@@ -28,7 +29,6 @@ function SettingsPage () {
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)');
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const [modalCityOpen, setModalCityOpen] = useState(false);
 
@@ -42,6 +42,7 @@ function SettingsPage () {
       phoneIsPublic: '',
       website: '',
       instagram: '',
+      tiktok: '',
       gender: '',
       bio: '',
       country: '',
@@ -57,12 +58,11 @@ function SettingsPage () {
   });
 
   useEffect(() => {
-    form.setInitialValues({ name: user.name, lastname: user.lastname, email: user.email, phone: user.phone, phoneIsPublic: user.phoneIsPublic ? true : false, website: user.website, instagram: user.instagram, gender: user.gender, bio: user.bio, country: user.country, region: user.region, city: user.city, cityName: user.cityName, public: user.public ? true : false });
-    form.setValues({ name: user.name, lastname: user.lastname, email: user.email, phone: user.phone, phoneIsPublic: user.phoneIsPublic ? true : false, website: user.website, instagram: user.instagram, gender: user.gender, bio: user.bio, country: user.country, region: user.region, city: user.city, cityName: user.cityName, public: user.public ? true : false });
+    form.setInitialValues({ name: user.name, lastname: user.lastname, email: user.email, phone: user.phone, phoneIsPublic: user.phoneIsPublic ? true : false, website: user.website, instagram: user.instagram, tiktok: user.tiktok, gender: user.gender, bio: user.bio, country: user.country, region: user.region, city: user.city, cityName: user.cityName, public: user.public ? true : false });
+    form.setValues({ name: user.name, lastname: user.lastname, email: user.email, phone: user.phone, phoneIsPublic: user.phoneIsPublic ? true : false, website: user.website, instagram: user.instagram, tiktok: user.tiktok, gender: user.gender, bio: user.bio, country: user.country, region: user.region, city: user.city, cityName: user.cityName, public: user.public ? true : false });
   }, [user.success]);
 
   const handleSubmit = (values) => {
-    setSuccess(false);
     setError(false);
     setIsLoading(true)
     fetch('https://mublin.herokuapp.com/user/updateProfile', {
@@ -72,18 +72,22 @@ function SettingsPage () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({userId: loggedUserId, name: values.name, lastname: values.lastname, email: values.email, phone_mobile: values.phone, phone_mobile_public: values.phoneIsPublic ? 1 : 0, website: values.website, instagram: values.instagram, gender: values.gender, bio: values.bio, id_country_fk: Number(values.country), id_region_fk: Number(values.region), id_city_fk: Number(values.city), public: values.public ? 1 : 0})
+      body: JSON.stringify({userId: loggedUserId, name: values.name, lastname: values.lastname ? values.lastname : '', email: values.email, phone_mobile: values.phone ? values.phone : '', phone_mobile_public: values.phoneIsPublic ? 1 : 0, website: values.website ? values.website : '', instagram: values.instagram ? values.instagram : '', tiktok: values.tiktok ? values.tiktok : '', gender: values.gender, bio: values.bio ? values.bio : '', id_country_fk: Number(values.country), id_region_fk: Number(values.region), id_city_fk: Number(values.city), public: values.public ? 1 : 0})
     }).then((response) => {
       response.json().then((response) => {
         window.scrollTo(0, 0);
-        setSuccess(response.success ? true : false);
         setError(false);
         setIsLoading(false);
-        dispatch(userInfos.getInfo());
+        dispatch(userActions.getInfo());
+        notifications.show({
+          position: 'top-center',
+          color: 'green',
+          title: 'Pronto!',
+          message: 'Dados atualizados com sucesso',
+        });
       })
     }).catch(err => {
       window.scrollTo(0, 0);
-      setSuccess(false);
       setError(true);
       setIsLoading(false);
       console.error(err);
@@ -167,11 +171,6 @@ function SettingsPage () {
             </Flex>
             <form onSubmit={form.onSubmit(handleSubmit)}>
               <Box pos='relative' p={10}>
-                {success && 
-                  <Alert color='green' mb={8}>
-                    Dados atualizados com sucesso
-                  </Alert>
-                }
                 {error && 
                   <Alert color="red">Erro ao atualizar os dados. Tente novamente em instantes</Alert>
                 }
@@ -262,13 +261,28 @@ function SettingsPage () {
                   key={form.key('phoneIsPublic')}
                   {...form.getInputProps('phoneIsPublic', { type: 'checkbox' })}
                 /> */}
-                <TextInput
-                  mt='xs'
-                  size='md'
-                  label='Usuário no Instagram'
-                  key={form.key('instagram')}
-                  {...form.getInputProps('instagram')}
-                />
+                <Grid>
+                  <Grid.Col span={6}>
+                    <TextInput
+                      mt='xs'
+                      size='md'
+                      label='Username do Instagram'
+                      leftSection={<IconBrandInstagram size={16} />}
+                      key={form.key('instagram')}
+                      {...form.getInputProps('instagram')}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={6}>
+                    <TextInput
+                      mt='xs'
+                      size='md'
+                      label='Username do TikTok'
+                      leftSection={<IconBrandTiktok size={16} />}
+                      key={form.key('tiktok')}
+                      {...form.getInputProps('tiktok')}
+                    />
+                  </Grid.Col>
+                </Grid>
                 <NativeSelect
                   mt='xs'
                   size='md'

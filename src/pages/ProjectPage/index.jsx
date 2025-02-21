@@ -20,8 +20,6 @@ function ProjectPage () {
   const project = useSelector(state => state.project)
 
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
-
-  const currentYear = new Date().getFullYear()
   
   let dispatch = useDispatch()
 
@@ -29,23 +27,15 @@ function ProjectPage () {
     dispatch(projectInfos.getProjectInfo(username))
     dispatch(projectInfos.getProjectMembers(username))
     dispatch(projectInfos.getProjectOpportunities(username))
-  }, []);
+  }, [])
 
-  const members = project.members.filter((member) => { return member.confirmed === 1 });
-
-  const isActiveOnProject = (active, yearLeftTheProject, yearEnd) => {
-    if (active && !yearLeftTheProject && !yearEnd) {
-      return true
-    } else {
-      return false
-    }
-  }
+  const members = project.members.filter((member) => { return member.confirmed === 1 })
 
   return (
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>{`${project.name} | Mublin`}</title>
+        <title>{project.requesting ? `Mublin` : `${project.name} | Mublin`}</title>
         <link rel='canonical' href={`https://mublin.com/project/${project.name}`} />
       </Helmet>
       {!isMobile && 
@@ -62,7 +52,7 @@ function ProjectPage () {
           <Flex gap={4} align='center' opacity='0.3'>
             <IconSettings size={16} />
             <Title fw={450} order={6} style={{cursor:'not-allowed'}}>
-              Painel de Controle
+              Painel de Controle do Projeto
             </Title>
           </Flex>
         </Group>
@@ -137,13 +127,11 @@ function ProjectPage () {
                     </Group>
                   </Box>
                 </Group>
-                <Box>
-                  {project.activityStatusId &&
-                    <Badge size='md' variant='dot' color={project.activityStatusColor}>
-                      {project.activityStatus}
-                    </Badge>
-                  }
-                </Box>
+                {project.activityStatusId &&
+                  <Badge size='md' variant='dot' color={project.activityStatusColor}>
+                    {project.activityStatus}
+                  </Badge>
+                }
               </Flex>
             </Paper>
             {project.endDate && 
@@ -292,7 +280,7 @@ function ProjectPage () {
                 >
                   <Title fz='1.0rem' fw='640' mb={10}>Oportunidades</Title>
                   {project.opportunities.total === 0 ? (
-                    <Text size='sm' c='dimmed'>
+                    <Text size='sm' c='dimmed' pb={14}>
                       Nenhuma oportunidade no momento
                     </Text>
                   ) : (

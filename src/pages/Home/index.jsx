@@ -10,10 +10,10 @@ import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Container, ScrollArea, Group, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconPlus, IconCalendarEventFilled, IconPin, IconMap, IconMapPin, IconMapPinFilled } from '@tabler/icons-react'
+import { IconPlus, IconCalendarEventFilled, IconMapPinFilled } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
-import FeedCard from './feedCard'
-import FeedCardLoading from './feedCardLoading'
+import FeedCard from './FeedCard'
+import FeedCardLoading from './FeedCard/loading'
 import Header from '../../components/header'
 import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -108,15 +108,15 @@ function Home () {
                     <Card.Section>
                       <Image
                         src={userInfo.picture_cover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${userInfo.id}/${userInfo.picture_cover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
-                        height={50}
+                        height={70}
                         alt={`Imagem de capa de ${userInfo.name}`}
                       />
                     </Card.Section>
                     <Center style={{marginTop:'-20px'}}>
                       <Link to={{ pathname: `/${userInfo.username}` }}>
                         <Avatar
-                          size='70px'
-                          src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                          size='80px'
+                          src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-152,w-152,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
                           style={{border:'2px solid white'}}
                         />
                       </Link>

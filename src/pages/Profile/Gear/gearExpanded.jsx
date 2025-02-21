@@ -98,6 +98,7 @@ function ProfileGearExpanded () {
                 href={`/${username}`}
                 underline='never'
                 className='websiteLink'
+                visibleFrom='md'
               >
                 <Group gap={3}>
                   <IconArrowLeft size={13}  />

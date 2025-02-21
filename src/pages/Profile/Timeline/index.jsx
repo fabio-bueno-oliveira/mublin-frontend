@@ -3,7 +3,7 @@ import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
 import { Timeline, Container, Group, Flex, Box, Center, Title, Text, Avatar, Indicator, Tooltip, Anchor, Loader, Skeleton, em } from '@mantine/core'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconArrowLeft } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconArrowLeft, IconSparkles } from '@tabler/icons-react'
 import Header from '../../../components/header'
 import FloaterHeader from '../floaterHeader'
 
@@ -82,13 +82,14 @@ function ProjectsTimeline () {
                   </Tooltip>
                 }
               </Flex>
-              <Text size='sm'>
+              <Text size='xs'>
                 {profile.projects.total} projetos na timeline de {username}
               </Text>
               <Anchor 
                 href={`/${username}`}
                 underline='never'
                 className='websiteLink'
+                visibleFrom='md'
               >
                 <Group gap={3}>
                   <IconArrowLeft size={13}  />
@@ -99,14 +100,14 @@ function ProjectsTimeline () {
           </Flex>
         )}
       </Container>
-      <Container size='lg' mt={14} mb={60}>
+      <Container size='lg' mt={30} mb={60}>
         {profile.requesting ? (
           <Center>
             <Loader color='mublinColor' />
           </Center>
         ) : (
           <Center>
-            <Timeline bulletSize={24} lineWidth={2}>
+            <Timeline bulletSize={24} lineWidth={3}>
               {projects.map(project =>
                 <Timeline.Item 
                   key={project.id} 
@@ -119,9 +120,14 @@ function ProjectsTimeline () {
                       href={`/project/${project.username}`}
                     />
                   }
-                  title={`Ingressou em ${project.name} (${project.type})`}
+                  title={<Text size='14px' fw={550}>Ingressou em {project.name} ({project.type})</Text>}
                 >
-                  <Text c='dimmed' size='xs'>{project.role1} {project.role2 && `, ${project.role2}`} • Tipo de vínculo: {project.workTitle}</Text>
+                  <Text size='xs'>
+                    {project.role1} {project.role2 && `, ${project.role2}`}
+                  </Text>
+                  <Text c='dimmed' size='xs'>
+                    Tipo de vínculo: {project.workTitle}
+                  </Text>
                   {!project.endYear ? ( 
                     <Flex gap={8} align='center'>
                       <Indicator color={project.left_in ? 'red' : 'green'} size={8} />
@@ -139,6 +145,13 @@ function ProjectsTimeline () {
                   )}
                 </Timeline.Item>
               )}
+              <Timeline.Item  title={<Text size='14px' fw={550}>Início</Text>} bullet={<IconSparkles size={12} />}>
+                <Text c='dimmed' size='xs'>
+                  Início da timeline musical de {username}
+                </Text>
+                {/* <Text c="dimmed" size="sm">Início da timeline musical</Text>
+                <Text size="xs" mt={4}>Data Hora</Text> */}
+              </Timeline.Item>
             </Timeline>
           </Center>
         )}

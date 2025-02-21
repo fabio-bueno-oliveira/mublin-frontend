@@ -7,7 +7,7 @@ import { miscInfos } from '../../store/actions/misc';
 import { searchInfos } from '../../store/actions/search';
 import { userProjectsInfos } from '../../store/actions/userProjects';
 import { authActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, rem, em } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, Indicator, rem, em } from '@mantine/core';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon,
@@ -117,6 +117,7 @@ function Header (props) {
   const logout = () => {
     setColorScheme('light');
     dispatch(authActions.logout());
+    navigate('/')
   }
 
   const cdnBaseURL = 'https://ik.imagekit.io/mublin'
@@ -205,19 +206,17 @@ function Header (props) {
                 }
               </Flex>
               {(props.page === 'profile' && props.profileId) &&
-                <>
-                  <Box w={isMobile ? 225 : 130} className='showOnlyInMobile'>
-                    <Text 
-                      mr='10' 
-                      className='lhNormal'
-                      truncate='end'
-                      size={isMobile ? '1.10rem' : 'md'}
-                      fw='600'
-                    >
-                      {props.username}
-                    </Text>
-                  </Box>
-                </>
+                <Box w={225} className='showOnlyInMobile'>
+                  <Text 
+                    mr='10' 
+                    className='lhNormal'
+                    truncate='end'
+                    size={'1.17rem'}
+                    fw='600'
+                  >
+                    {props.username}
+                  </Text>
+                </Box>
               }
             </>
             {isLargeScreen && 
@@ -306,11 +305,14 @@ function Header (props) {
                     {projectsActive.length ? ( projectsActive.map(project =>
                       <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
                         <Group gap={5}>
-                          <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                          <Indicator color="lime" size={7} position="bottom-center" processing>
+                            <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                          </Indicator>
                           <Flex direction='column'>
-                            <Group gap={2} align='flex-start'>
-                              <Text size='0.85rem' fw='500'>{project.name}</Text>
-                              <IconCircleFilled color="limegreen" size={7} />
+                            <Group gap={2} align='flex-start' w={102}>
+                              <Text size='0.85rem' fw='500' truncate="end" title={project.name}>
+                                {project.name}
+                              </Text>
                             </Group>
                             <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
                           </Flex>
@@ -403,7 +405,16 @@ function Header (props) {
                   <Menu.Label>
                     {userInfo.name} {userInfo.lastname} 
                     {user.plan === 'Pro' && 
-                      <Badge size='sm' variant='light' color='mublinColor' ml={6}>PRO</Badge>
+                      <Badge 
+                        radius='sm' 
+                        size='xs' 
+                        color='secondary' 
+                        variant="gradient"
+                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                        ml={4}
+                      >
+                        PRO
+                      </Badge>
                     }
                   </Menu.Label>
                   <Anchor 
