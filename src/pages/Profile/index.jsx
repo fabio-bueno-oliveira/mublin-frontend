@@ -254,7 +254,7 @@ function ProfilePage () {
 
   return (
     <>
-      {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalProfileFeedOpen) && 
+      {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalProfileFeedOpen && !modalStrengthsOpen) && 
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
       <Header
@@ -839,7 +839,6 @@ function ProfilePage () {
                       variant='light'
                       color={colorScheme === 'light' ? 'dark' : 'gray'}
                       onClick={() => setModalStrengthsOpen(true)}
-                      leftSection={<IconCheckbox size={12} />}
                     >
                       Votar
                     </Button>
@@ -1177,15 +1176,15 @@ function ProfilePage () {
         fullScreen={isMobile ? true : false}
       >
         <Alert variant='light' mb={10} p='xs' color='gray'>
-          <Text size='xs'>Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter a credibilidade na comunidade do Mublin :)</Text>
+          <Text size='sm'>Vote apenas nas áreas que você realmente conhece de {profile.name}. Ajude a manter a credibilidade na comunidade do Mublin :)</Text>
         </Alert>
         {strengths.map((strength,key) =>
           <div key={key}>
             <Radio
               my={5}
               id={'strengthsGroup_'+strength.id}
-              color='violet'
-              size='xs'
+              color='mublinColor'
+              size='sm'
               value={strength.id}
               checked={(strength.id === strengthVoted || myVotes.filter((x) => { return x.strengthId === strength.id}).length) ? true : false}
               onChange={() => {
@@ -1196,22 +1195,23 @@ function ProfilePage () {
               label={
                 <>
                   <Group gap={3}>
-                    <i className={strength.icon+' fa-fw ml-1'}></i> <Text size='xs'>{strength.title}</Text>
+                    <i className={strength.icon+' fa-fw ml-1'}></i> 
+                    <Text size='sm'>{strength.title}</Text>
                     {!!myVotes.filter((x) => { return x.strengthId === strength.id}).length && 
                       <>
-                      <Text c='violet' size='xs' className='point' onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}>
-                        (retirar voto)
-                      </Text>
-                      {/* <Button
-                        size='compact-xs'
-                        variant='filled'
-                        color='red'
-                        fw='400'
-                        onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}
-                        leftSection={<IconX size={14} />}
-                      >
-                        Retirar voto
-                      </Button> */}
+                        <Text c='violet' size='sm' className='point' onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}>
+                          (retirar voto)
+                        </Text>
+                        {/* <Button
+                          size='compact-xs'
+                          variant='filled'
+                          color='red'
+                          fw='400'
+                          onClick={() => unVoteProfileStrength(myVotes.filter((x) => { return x.strengthId === strength.id})[0].id)}
+                          leftSection={<IconX size={14} />}
+                        >
+                          Retirar voto
+                        </Button> */}
                       </>
                     }
                   </Group>
@@ -1221,8 +1221,8 @@ function ProfilePage () {
           </div>
         )}
         <Group mt='xs' justify='flex-end' gap={8}>
-          <Button variant='outline' color='gray' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
-          <Button loading={!strengthsLoaded} color='violet' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
+          <Button variant='outline' color='primary' onClick={() => setModalStrengthsOpen(false)}>Fechar</Button>
+          <Button loading={!strengthsLoaded} color='mublinColor' onClick={() => voteProfileStrength(strengthVoted,strengthVotedName)} disabled={strengthVoted ? false : true}>Votar</Button>
         </Group>
       </Modal>
       <Modal 
