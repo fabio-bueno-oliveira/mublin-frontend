@@ -12,7 +12,7 @@ function getUserEvents(id) {
         eventService.getUserEvents(id)
             .then(
                 list => dispatch(success(list)),
-                error => dispatch(failure(id, error.toString()))
+                error => dispatch(failure(error.toString()))
             );
         };
   

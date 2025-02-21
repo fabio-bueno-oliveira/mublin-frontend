@@ -61,7 +61,7 @@ export function events(state = initialState, action) {
         result: initialState.result,
         success: false,
         requesting: false,
-        error: "A solicitação falhou"
+        error: action.error
       };
     default:
       return state

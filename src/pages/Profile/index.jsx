@@ -7,7 +7,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconPlus, IconMapPin, IconEye, IconPiano } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconPlus, IconMapPin, IconEye, IconPiano, IconTimeline, IconListCheck, IconMenu2, IconDotsVertical, IconPencilCheck, IconCheckbox } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -782,16 +782,41 @@ function ProfilePage () {
               </Box>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-              {profile.projects.total > 0 && 
-                <>
+              <Paper
+                withBorder={isLargeScreen ? true : false}
+                px={isMobile ? 0 : 16}
+                pt={isMobile ? 0 : 12}
+                pb={isMobile ? 3 : 12}
+                mb='14'
+                className="mublinModule transparentBgInMobile"
+              >
+                <Group justify='space-between' align='center' gap={8} mb={8}>
+                  <Title fz='1.03rem' fw='640'>
+                    Projetos
+                  </Title>
+                  {(!profile.requesting && profile.projects.total > 1) &&
+                    <ActionIcon
+                      variant='transparent'
+                      size='md'
+                      aria-label='Ver timeline de projetos'
+                      title='Ver timeline de projetos'
+                      onClick={() => navigate(`/${username}/timeline`)}
+                    >
+                      <IconTimeline
+                        color={colorScheme === 'light' ? 'black' : 'white'}
+                        style={{ width: '91%', height: '91%' }} stroke={1.5}
+                      />
+                    </ActionIcon>
+                  }
+                </Group>
+                {profile.projects.total > 0 && 
                   <Projects 
                     profile={profile}
                     projects={allProjects}
                     profilePlan={profile.plan}
                   />
-                  <Divider mt={12} mb={15} className='showOnlyInMobile' />
-                </>
-              }
+                }
+              </Paper>
               <Paper
                 withBorder={isLargeScreen ? true : false}
                 px={isMobile ? 0 : 16}
@@ -811,6 +836,7 @@ function ProfilePage () {
                       variant='light'
                       color={colorScheme === 'light' ? 'dark' : 'gray'}
                       onClick={() => setModalStrengthsOpen(true)}
+                      leftSection={<IconCheckbox size={12} />}
                     >
                       Votar
                     </Button>
@@ -823,7 +849,7 @@ function ProfilePage () {
                       title='Ver votos'
                       onClick={() => openVotesHistoryModal()}
                     >
-                      <IconEye
+                      <IconDotsVertical
                         color={colorScheme === 'light' ? 'black' : 'white'}
                         style={{ width: '91%', height: '91%' }} stroke={1.5}
                       />
