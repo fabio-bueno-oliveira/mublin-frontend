@@ -159,6 +159,13 @@ export function gear(state = initialState, action) {
         availableColors: initialState.availableColors,
         error: 'A solicitação de cores disponíveis falhou'
       };
+    case gearTypes.RESET_PRODUCT_COLORS:
+      return {
+        ...state,
+        requesting: false,
+        availableColors: initialState.availableColors,
+        error: ''
+      };
     case gearTypes.GET_GEAR_BRANDS_REQUEST:
       return {
         ...state,

@@ -7,6 +7,7 @@ export const gearInfos = {
   gerBrandPartners: gerBrandPartners,
   gerBrandOwners: gerBrandOwners,
   getBrandColors: getBrandColors,
+  resetProductColors: resetProductColors,
   getProductInfo: getProductInfo,
   getProductOwners: getProductOwners,
   getProductColors: getProductColors
@@ -138,4 +139,8 @@ function getProductColors(productId) {
   function request(productId) { return { type: gearTypes.GET_PRODUCT_COLORS_REQUEST, productId } }
   function success(list) { return { type: gearTypes.GET_PRODUCT_COLORS_SUCCESS, list } }
   function failure(productId, error) { return { type: gearTypes.GET_PRODUCT_COLORS_FAILURE, productId, error } }
+}
+
+function resetProductColors() {
+    return { type: gearTypes.RESET_PRODUCT_COLORS }
 }

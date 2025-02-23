@@ -3,8 +3,8 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Alert, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
-import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconPencil, IconTrash } from '@tabler/icons-react'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
+import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft, IconLockSquareRoundedFilled } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -17,12 +17,10 @@ function SettingsMyGearPage () {
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
-  document.title = 'Meu equipamento | Mublin'
-
   const token = localStorage.getItem('token')
 
-  const decoded = jwtDecode(token);
-  const loggedUserId = decoded.result.id;
+  const decoded = jwtDecode(token)
+  const loggedUserId = decoded.result.id
 
   const user = useSelector(state => state.user)
 
