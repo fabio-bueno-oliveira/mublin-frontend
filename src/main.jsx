@@ -10,15 +10,15 @@ import './global/custom.scss'
 const sessionToken = localStorage.getItem('token')
 
 // Imagekit Image Upload Authenticator
-const publicKey = "public_vFOVSJ4ZRbnv5fT4XZFbo82R2DE="
-const urlEndpoint = "https://ik.imagekit.io/mublin"
+const publicKey = 'public_vFOVSJ4ZRbnv5fT4XZFbo82R2DE='
+const urlEndpoint = 'https://ik.imagekit.io/mublin'
 const authenticator = async () => {
   try {
     const headers = {
       'Authorization': `Bearer ${sessionToken}`,
       'CustomHeader': 'CustomValue'
     }
-    const response = await fetch("https://mublin.herokuapp.com/imagekit", {
+    const response = await fetch('https://mublin.herokuapp.com/imagekit', {
         headers
     })
     if (!response.ok) {
@@ -39,7 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <IKContext
         publicKey={publicKey}
         urlEndpoint={urlEndpoint}
-        transformationPosition="path"
+        transformationPosition='path'
         authenticator={authenticator}
       >
         <App />
