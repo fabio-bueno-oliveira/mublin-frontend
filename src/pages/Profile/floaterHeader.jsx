@@ -16,7 +16,7 @@ function FloaterHeader ({ profile, scrollY }) {
         transition='slide-down'
         duration='400'
         timingFunction='ease'
-        mounted={scrollY > 100}
+        mounted={scrollY > 200}
       >
         {(transitionStyles) => (
           <Container className='floatingMenu' style={transitionStyles} fluid h={50} py={9}>

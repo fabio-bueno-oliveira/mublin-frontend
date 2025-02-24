@@ -284,141 +284,348 @@ function ProfilePage () {
         </Container>
       }
       {profile.id && 
-        <Container 
-          size='lg' 
-          mb={isMobile ? 82 : 30} 
-          pt={isMobile ? 0 : 10} 
-          className='profilePage'
-        >
-          <Grid>
-            <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
-              <Card
-                radius='lg'
-                // mt={12}
-                mb={10}
-                withBorder={isLargeScreen ? true : false}
-                px={16}
-                pt={12}
-                pb={12}
-                className="mublinModule transparentBgInMobile"
-                visibleFrom="md"
-              >
-                <Card.Section>
-                  <Image
-                    src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
-                    height={100}
-                    alt={`Imagem de capa de ${profile.name}`}
-                  />
-                </Card.Section>
-                <Group justify={isMobile ? 'center' : 'flex-start'} style={{marginTop:'-50px'}}>
-                  <Indicator 
-                    position='bottom-center' 
-                    inline 
-                    label={<Text size='0.6rem' >{profile.openToWorkText}</Text>} 
-                    color='lime' 
-                    size={18} 
-                    withBorder 
-                    // disabled={!profile.openToWork}
-                    disabled={true}
-                  >
-                    <Avatar
-                      size='xl'
-                      // radius='md'
-                      src={profile.picture ? profile.picture : undefined}
-                      style={{border:'3px solid white'}}
-                      onClick={() => setModalAvatarOpen(true)}
+        <>
+          <Card shadow={false} padding={0} radius={0} mb={14} hiddenFrom='sm'>
+            <Card.Section>
+              <Image
+                src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
+                height={130}
+                alt={`Imagem de capa de ${profile.name}`}
+              />
+            </Card.Section>
+          </Card>
+          <Container 
+            size='lg' 
+            mb={isMobile ? 82 : 30} 
+            pt={isMobile ? 0 : 10} 
+            className='profilePage'
+          >
+            <Grid>
+              <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
+                <Card
+                  radius='lg'
+                  // mt={12}
+                  mb={10}
+                  withBorder={isLargeScreen ? true : false}
+                  px={16}
+                  pt={12}
+                  pb={12}
+                  className='mublinModule transparentBgInMobile'
+                  visibleFrom='md'
+                >
+                  <Card.Section>
+                    <Image
+                      src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
+                      height={100}
+                      alt={`Imagem de capa de ${profile.name}`}
                     />
-                  </Indicator>
-                </Group>
-                <Flex justify='flex-start' align='baseline' mt={16}>
-                  <Title fz='1.34rem' fw='600' style={{lineHeight:'0.6'}}>
-                    {profile.name} {profile.lastname}
-                  </Title>
-                  {!!profile.verified && 
-                    <Tooltip label='Usuário verificado'>
-                      <IconRosetteDiscountCheckFilled 
-                        className='iconVerified'
-                        onClick={() => setModalVerifiedOpen(true)}
+                  </Card.Section>
+                  <Group justify={isMobile ? 'center' : 'flex-start'} style={{marginTop:'-50px'}}>
+                    <Indicator 
+                      position='bottom-center' 
+                      inline 
+                      label={<Text size='0.6rem' >{profile.openToWorkText}</Text>} 
+                      color='lime' 
+                      size={18} 
+                      withBorder 
+                      // disabled={!profile.openToWork}
+                      disabled={true}
+                    >
+                      <Avatar
+                        size='xl'
+                        // radius='md'
+                        src={profile.picture ? profile.picture : undefined}
+                        style={{border:'3px solid white'}}
+                        onClick={() => setModalAvatarOpen(true)}
                       />
-                    </Tooltip>
-                  }
-                  {!!profile.legend && 
-                    <Tooltip label='Lenda da Música'>
-                      <IconShieldCheckFilled
-                        className='iconLegend'
-                        onClick={() => setModalLegendOpen(true)}
-                      />
-                    </Tooltip>
-                  }
-                  {profile.plan === 'Pro' && 
-                    <Tooltip label='Mublin PRO'>
-                      <IconPiano className='iconMublinPiano' />
-                    </Tooltip>
-                  }
-                </Flex>
-                <Flex gap={0} mt={4} opacity={0.8} wrap='wrap'>
-                  {profile.roles.map((role, key) => 
-                    <Flex key={key} gap={2} align='center'>
-                      {role.icon && 
-                        <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} style={key > 0 ? {marginLeft:'4px'} : undefined} />
-                      }
-                      <Text fw={400} size='xs' mr={1}>
-                        {role.description}
+                    </Indicator>
+                  </Group>
+                  <Flex justify='flex-start' align='baseline' mt={16}>
+                    <Title fz='1.34rem' fw='600' style={{lineHeight:'0.6'}}>
+                      {profile.name} {profile.lastname}
+                    </Title>
+                    {!!profile.verified && 
+                      <Tooltip label='Usuário verificado'>
+                        <IconRosetteDiscountCheckFilled 
+                          className='iconVerified'
+                          onClick={() => setModalVerifiedOpen(true)}
+                        />
+                      </Tooltip>
+                    }
+                    {!!profile.legend && 
+                      <Tooltip label='Lenda da Música'>
+                        <IconShieldCheckFilled
+                          className='iconLegend'
+                          onClick={() => setModalLegendOpen(true)}
+                        />
+                      </Tooltip>
+                    }
+                    {profile.plan === 'Pro' && 
+                      <Tooltip label='Mublin PRO'>
+                        <IconPiano className='iconMublinPiano' />
+                      </Tooltip>
+                    }
+                  </Flex>
+                  <Flex gap={0} mt={4} opacity={0.8} wrap='wrap'>
+                    {profile.roles.map((role, key) => 
+                      <Flex key={key} gap={2} align='center'>
+                        {role.icon && 
+                          <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === 'dark' ? 'invertPngColor' : undefined} style={key > 0 ? {marginLeft:'4px'} : undefined} />
+                        }
+                        <Text fw={400} size='xs' mr={1}>
+                          {role.description}
+                        </Text>
+                      </Flex>
+                    )}
+                  </Flex>
+                  <Group
+                    gap={12}
+                    mt={5}
+                    mb={8}
+                  >
+                    <Text 
+                      className='point'
+                      size='0.85rem'
+                      fw='500'
+                      onClick={() => setModalFollowersOpen(true)}
+                      style={{lineHeight: 'normal'}}
+                    >
+                      {nFormatter(profile.followers.total)} seguidores
+                    </Text>
+                    <Text 
+                      className='point'
+                      size='0.85rem'
+                      fw='500'
+                      onClick={() => setModalFollowingOpen(true)}
+                      style={{lineHeight: 'normal'}}
+                    >
+                      {nFormatter(profile.following.total)} seguindo
+                    </Text>
+                  </Group>
+                  {profile.city && 
+                    <Flex gap={2} align='center' mb={6}>
+                      <IconMapPin size={13} style={{color:'#8d8d8d'}} />
+                      <Text size={isMobile ? '0.91em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
+                        {profile.city}{profile.region && `, ${profile.region}`}{profile.country && `, ${profile.country}`}
                       </Text>
                     </Flex>
-                  )}
-                </Flex>
-                <Group
-                  gap={12}
-                  mt={5}
-                  mb={8}
-                >
-                  <Text 
-                    className='point'
-                    size='0.85rem'
-                    fw='500'
-                    onClick={() => setModalFollowersOpen(true)}
-                    style={{lineHeight: 'normal'}}
-                  >
-                    {nFormatter(profile.followers.total)} seguidores
-                  </Text>
-                  <Text 
-                    className='point'
-                    size='0.85rem'
-                    fw='500'
-                    onClick={() => setModalFollowingOpen(true)}
-                    style={{lineHeight: 'normal'}}
-                  >
-                    {nFormatter(profile.following.total)} seguindo
-                  </Text>
-                </Group>
-                {profile.city && 
-                  <Flex gap={2} align='center' mb={6}>
-                    <IconMapPin size={13} style={{color:'#8d8d8d'}} />
-                    <Text size={isMobile ? '0.91em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
-                      {profile.city}{profile.region && `, ${profile.region}`}{profile.country && `, ${profile.country}`}
+                  }
+                  {(profile.bio && profile.bio !== 'null') && 
+                    <Text
+                      size='0.83em'
+                      fw='400'
+                      mb={8}
+                      lineClamp={6}
+                      pr={26}
+                      style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}
+                    >
+                      {profile.bio}
                     </Text>
-                  </Flex>
-                }
-                {(profile.bio && profile.bio !== 'null') && 
-                  <Text
-                    size='0.83em'
-                    fw='400'
-                    mb={8}
-                    lineClamp={6}
-                    pr={26}
-                    style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}
+                  }
+                  <Box id='social'>
+                    {profile.website && 
+                      <Anchor 
+                        href={profile.website} 
+                        target='_blank'
+                        underline='hover'
+                        className='websiteLink'
+                      >
+                        <Flex gap={2} align='center'>
+                          <IconLink size={13} />
+                          <Text size={isMobile ? '0.91em' : '0.83em'} className='lhNormal'>
+                            {truncateString(profile.website, 37)}
+                          </Text>
+                        </Flex>
+                      </Anchor>
+                    }
+                    {(profile.instagram || profile.tiktok) &&
+                      <Group gap={6} mt={6}>
+                        {profile.instagram &&
+                          <Anchor 
+                            href={`https://instagram.com/${profile.instagram}`}
+                            target='_blank'
+                            underline='hover'
+                            className='websiteLink'
+                          >
+                            <Flex gap={2} align='center'>
+                              <IconBrandInstagram size={13} />
+                              <Text size='0.83em' className='lhNormal'>
+                                Instagram
+                              </Text>
+                            </Flex>
+                          </Anchor>
+                        }
+                        {profile.tiktok &&
+                          <Anchor 
+                            href={`https://tiktok.com/@${profile.tiktok}`}
+                            target='_blank'
+                            underline='hover'
+                            className='websiteLink'
+                          >
+                            <Flex gap={2} align='center'>
+                              <IconBrandTiktok size={13} />
+                              <Text size='0.83em' className='lhNormal'>
+                                TikTok
+                              </Text>
+                            </Flex>
+                          </Anchor>
+                        }
+                      </Group>
+                    }
+                  </Box>
+                  {profile.plan === 'Pro' && 
+                    <Card.Section mt={12}>
+                      <Divider />
+                      <Group align='center' gap={4} pt={8} pb={14} px={15}>
+                        <Badge 
+                          radius='sm' 
+                          size='sm' 
+                          color='secondary' 
+                          variant='gradient'
+                          gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                        >
+                          PRO
+                        </Badge>
+                        <Text c='#969168' className='lhNormal' size='xs'>
+                          Perfil otimizado com Mublin PRO
+                        </Text>
+                      </Group>
+                    </Card.Section>
+                  }
+                </Card>
+                <Paper 
+                  withBorder={false}
+                  px='0'
+                  py='0'
+                  style={{ backgroundColor: 'transparent' }}
+                  hiddenFrom='sm'
+                >
+                  <Flex
+                    justify='flex-start'
+                    align='center'
+                    direction='row'
+                    wrap='nowrap'
+                    columnGap='xs'
                   >
-                    {profile.bio}
-                  </Text>
-                }
-                <Box id='social'>
+                    <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{profile.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!profile.openToWork}>
+                      <Avatar
+                        size='xl'
+                        src={profile.picture}
+                        onClick={() => setModalAvatarOpen(true)}
+                      />
+                    </Indicator>
+                    <Box style={{overflow:'hidden'}}>
+                      <Flex align='baseline' mb={1}>
+                        <Title fz='1.30rem' fw='600'>
+                          {profile.name} {profile.lastname}
+                        </Title>
+                        {!!profile.verified && 
+                          <IconRosetteDiscountCheckFilled 
+                            className='iconVerified'
+                            title='Usuário verificado'
+                            onClick={() => setModalVerifiedOpen(true)}
+                          />
+                        }
+                        {!!profile.legend && 
+                          <IconShieldCheckFilled
+                            className='iconLegend'
+                            title='Lenda da Música'
+                            onClick={() => setModalLegendOpen(true)}
+                          />
+                        }
+                      </Flex>
+                      <Splide 
+                        options={{
+                          drag   : 'free',
+                          snap: false,
+                          perPage: isMobile ? 3 : 3,
+                          autoWidth: true,
+                          arrows: false,
+                          gap: '3px',
+                          dots: false,
+                          pagination: false,
+                        }}
+                        className='carousel-roles'
+                      >
+                        {profile.roles.map((role, key) =>
+                          <SplideSlide className='carousel-item' key={key}>
+                            <Flex gap={2}>
+                              {role.icon && 
+                                <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === 'dark' ? 'invertPngColor' : undefined} />
+                              }
+                              <Text size='13px' fw='400' mr={7}>
+                                {role.description}
+                              </Text>
+                            </Flex>
+                          </SplideSlide>
+                        )}
+                      </Splide>
+                      {profile.plan === 'Pro' && 
+                        <Badge
+                          mt='4'
+                          title='Usuário PRO'
+                          radius='sm'
+                          size='sm'
+                          variant="gradient"
+                          gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                        >
+                          PRO
+                        </Badge>
+                      }
+                    </Box>
+                  </Flex>
+                  <Group 
+                    gap={12} 
+                    mt={isMobile ? 10 : 15} 
+                    mb={isMobile ? 9 : 10}
+                  >
+                    <Text 
+                      className='point'
+                      size={isMobile ? '1.04rem' : '0.87rem'}
+                      fw='600'
+                      onClick={() => setModalFollowersOpen(true)}
+                      style={{lineHeight: 'normal'}}
+                    >
+                      {profile.followers.total} seguidores
+                    </Text>
+                    <Text 
+                      className='point'
+                      size={isMobile ? '1.04rem' : '0.87rem'}
+                      fw='600'
+                      onClick={() => setModalFollowingOpen(true)}
+                      style={{lineHeight: 'normal'}}
+                    >
+                      {profile.following.total} seguindo
+                    </Text>
+                  </Group>
+                  {(profile.bio && profile.bio !== 'null') && 
+                    <Text 
+                      size={isMobile ? '0.92em' : '0.83em'}
+                      fw='400'
+                      mt={5}
+                      lineClamp={6}
+                      pr={isMobile ? 0 : 26}
+                      style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}
+                    >
+                      {profile.bio}
+                    </Text>
+                  }
+                  {profile.city && 
+                    <Flex gap={2} align='center' mt={9}>
+                      <IconMapPin size={13} style={{color:'#8d8d8d'}} />
+                      <Text size={isMobile ? '0.91em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
+                        {profile.city}{profile.region && `, ${profile.region}`}{profile.country && `, ${profile.country}`}
+                      </Text>
+                    </Flex>
+                  }
                   {profile.website && 
                     <Anchor 
                       href={profile.website} 
                       target='_blank'
                       underline='hover'
                       className='websiteLink'
+                      mt={isMobile ? 4 : 4}
+                      mb={isMobile ? 8 : 6}
                     >
                       <Flex gap={2} align='center'>
                         <IconLink size={13} />
@@ -429,7 +636,7 @@ function ProfilePage () {
                     </Anchor>
                   }
                   {(profile.instagram || profile.tiktok) &&
-                    <Group gap={6} mt={6}>
+                    <Group gap={10} mt={6}>
                       {profile.instagram &&
                         <Anchor 
                           href={`https://instagram.com/${profile.instagram}`}
@@ -462,554 +669,358 @@ function ProfilePage () {
                       }
                     </Group>
                   }
-                </Box>
-                {profile.plan === 'Pro' && 
-                  <Card.Section mt={12}>
-                    <Divider />
-                    <Group align='center' gap={4} pt={8} pb={14} px={15}>
-                      <Badge 
-                        radius='sm' 
-                        size='sm' 
-                        color='secondary' 
-                        variant="gradient"
-                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
-                      >
-                        PRO
-                      </Badge>
-                      <Text c='#969168' className='lhNormal' size='xs'>
-                        Perfil otimizado com Mublin PRO
-                      </Text>
-                    </Group>
-                  </Card.Section>
-                }
-              </Card>
-              <Paper 
-                withBorder={false}
-                px='0'
-                py='0'
-                style={{ backgroundColor: 'transparent' }}
-                hiddenFrom="sm"
-              >
-                <Flex
-                  justify='flex-start'
-                  align='center'
-                  direction='row'
-                  wrap='nowrap'
-                  columnGap='xs'
-                >
-                  <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{profile.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!profile.openToWork}>
-                    <Avatar
-                      size='xl'
-                      src={profile.picture}
-                      onClick={() => setModalAvatarOpen(true)}
-                    />
-                  </Indicator>
-                  <Box style={{overflow:'hidden'}}>
-                    <Flex align='baseline' mb={1}>
-                      <Title fz='1.30rem' fw='600'>
-                        {profile.name} {profile.lastname}
-                      </Title>
-                      {!!profile.verified && 
-                        <IconRosetteDiscountCheckFilled 
-                          className='iconVerified'
-                          title='Usuário verificado'
-                          onClick={() => setModalVerifiedOpen(true)}
-                        />
-                      }
-                      {!!profile.legend && 
-                        <IconShieldCheckFilled
-                          className='iconLegend'
-                          title='Lenda da Música'
-                          onClick={() => setModalLegendOpen(true)}
-                        />
-                      }
-                    </Flex>
-                    <Splide 
-                      options={{
-                        drag   : 'free',
-                        snap: false,
-                        perPage: isMobile ? 3 : 3,
-                        autoWidth: true,
-                        arrows: false,
-                        gap: '3px',
-                        dots: false,
-                        pagination: false,
-                      }}
-                      className='carousel-roles'
-                    >
-                      {profile.roles.map((role, key) =>
-                        <SplideSlide className='carousel-item' key={key}>
-                          <Flex gap={2}>
-                            {role.icon && 
-                              <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' className={colorScheme === "dark" ? "invertPngColor" : undefined} />
-                            }
-                            <Text size='13px' fw='400' mr={7}>
-                              {role.description}
-                            </Text>
-                          </Flex>
-                        </SplideSlide>
+                </Paper>
+                <Flex gap={5} mt={17} mb={isMobile ? 14 : 18}>
+                  {loggedUserId !== profile.id ? (
+                    <>
+                      {followedByMe?.following === 'true' ? (
+                        <Button 
+                          size='sm'
+                          fz='0.85rem'
+                          fw='570'
+                          h={30}
+                          color='primary'
+                          variant='outline'
+                          loading={loadingFollow}
+                          rightSection={<IconChevronDown size={14} />}
+                          fullWidth
+                          onClick={() => setModalFollowInfoOpen(true)}
+                        >
+                          Seguindo
+                        </Button>
+                      ) : (
+                        <Button 
+                          size='sm'
+                          fz='0.85rem'
+                          fw='570'
+                          h={30}
+                          color='mublinColor'
+                          variant='filled'
+                          loading={loadingFollow}
+                          fullWidth={isMobile}
+                          onClick={() => followUnfollow()}
+                        >
+                          Seguir
+                        </Button>
                       )}
-                    </Splide>
-                    {profile.plan === 'Pro' && 
-                      <Badge
-                        mt='4'
-                        title='Usuário PRO'
-                        radius='sm'
-                        size='sm'
-                        variant="gradient"
-                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
-                      >
-                        PRO
-                      </Badge>
-                    }
-                  </Box>
-                </Flex>
-                <Group 
-                  gap={12} 
-                  mt={isMobile ? 10 : 15} 
-                  mb={isMobile ? 9 : 10}
-                >
-                  <Text 
-                    className='point'
-                    size={isMobile ? '1.04rem' : '0.87rem'}
-                    fw='600'
-                    onClick={() => setModalFollowersOpen(true)}
-                    style={{lineHeight: 'normal'}}
-                  >
-                    {profile.followers.total} seguidores
-                  </Text>
-                  <Text 
-                    className='point'
-                    size={isMobile ? '1.04rem' : '0.87rem'}
-                    fw='600'
-                    onClick={() => setModalFollowingOpen(true)}
-                    style={{lineHeight: 'normal'}}
-                  >
-                    {profile.following.total} seguindo
-                  </Text>
-                </Group>
-                {(profile.bio && profile.bio !== 'null') && 
-                  <Text 
-                    size={isMobile ? '0.92em' : '0.83em'}
-                    fw='400'
-                    mt={5}
-                    lineClamp={6}
-                    pr={isMobile ? 0 : 26}
-                    style={{lineHeight:'1.24em',whiteSpace:'pre-wrap'}}
-                  >
-                    {profile.bio}
-                  </Text>
-                }
-                {profile.city && 
-                  <Flex gap={2} align='center' mt={9}>
-                    <IconMapPin size={13} style={{color:'#8d8d8d'}} />
-                    <Text size={isMobile ? '0.91em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
-                      {profile.city}{profile.region && `, ${profile.region}`}{profile.country && `, ${profile.country}`}
-                    </Text>
-                  </Flex>
-                }
-                {profile.website && 
-                  <Anchor 
-                    href={profile.website} 
-                    target='_blank'
-                    underline='hover'
-                    className='websiteLink'
-                    mt={isMobile ? 4 : 4}
-                    mb={isMobile ? 8 : 6}
-                  >
-                    <Flex gap={2} align='center'>
-                      <IconLink size={13} />
-                      <Text size={isMobile ? '0.91em' : '0.83em'} className='lhNormal'>
-                        {truncateString(profile.website, 37)}
-                      </Text>
-                    </Flex>
-                  </Anchor>
-                }
-                {(profile.instagram || profile.tiktok) &&
-                  <Group gap={10} mt={6}>
-                    {profile.instagram &&
-                      <Anchor 
-                        href={`https://instagram.com/${profile.instagram}`}
-                        target='_blank'
-                        underline='hover'
-                        className='websiteLink'
-                      >
-                        <Flex gap={2} align='center'>
-                          <IconBrandInstagram size={13} />
-                          <Text size='0.83em' className='lhNormal'>
-                            Instagram
-                          </Text>
-                        </Flex>
-                      </Anchor>
-                    }
-                    {profile.tiktok &&
-                      <Anchor 
-                        href={`https://tiktok.com/@${profile.tiktok}`}
-                        target='_blank'
-                        underline='hover'
-                        className='websiteLink'
-                      >
-                        <Flex gap={2} align='center'>
-                          <IconBrandTiktok size={13} />
-                          <Text size='0.83em' className='lhNormal'>
-                            TikTok
-                          </Text>
-                        </Flex>
-                      </Anchor>
-                    }
-                  </Group>
-                }
-              </Paper>
-              <Flex gap={5} mt={17} mb={isMobile ? 14 : 18}>
-                {loggedUserId !== profile.id ? (
-                  <>
-                    {followedByMe?.following === 'true' ? (
                       <Button 
                         size='sm'
                         fz='0.85rem'
                         fw='570'
                         h={30}
-                        color='primary'
                         variant='outline'
-                        loading={loadingFollow}
-                        rightSection={<IconChevronDown size={14} />}
+                        color='primary'
                         fullWidth
-                        onClick={() => setModalFollowInfoOpen(true)}
+                        onClick={() => setModalContactOpen(true)}
                       >
-                        Seguindo
+                        Contato
                       </Button>
-                    ) : (
-                      <Button 
-                        size='sm'
-                        fz='0.85rem'
-                        fw='570'
-                        h={30}
-                        color='mublinColor'
-                        variant='filled'
-                        loading={loadingFollow}
-                        fullWidth={isMobile}
-                        onClick={() => followUnfollow()}
-                      >
-                        Seguir
-                      </Button>
-                    )}
-                    <Button 
+                    </>
+                  ) : (
+                    <Button
                       size='sm'
                       fz='0.85rem'
                       fw='570'
                       h={30}
-                      variant='outline'
+                      variant={'filled'}
                       color='primary'
                       fullWidth
-                      onClick={() => setModalContactOpen(true)}
+                      onClick={() => navigate('/settings')}
                     >
-                      Contato
+                      Editar meu perfil
                     </Button>
+                  )}
+                </Flex>
+                {(profile.plan === 'Pro') && 
+                  <>
+                    <Title fz='1.03rem' fw='640'>Parceiros e Endorsements</Title>
+                    <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={false} mt={4} mb={10} />
                   </>
-                ) : (
-                  <Button
-                    size='sm'
-                    fz='0.85rem'
-                    fw='570'
-                    h={30}
-                    variant={'filled'}
-                    color='primary'
-                    fullWidth
-                    onClick={() => navigate('/settings')}
-                  >
-                    Editar meu perfil
-                  </Button>
-                )}
-              </Flex>
-              {(profile.plan === 'Pro') && 
-                <>
-                  <Title fz='1.03rem' fw='640'>Parceiros e Endorsements</Title>
-                  <PartnersModule loading={profile.requesting} partners={profile.partners} showTitle={false} mt={4} mb={10} />
-                </>
-              }
-              {profile.availabilityId && 
-                <>
-                  <Divider mt='md' mb='xs' label='Disponibilidade' labelPosition='left' />
-                  {/* <Title fz='1.03rem' fw='640' mt='md' mb='xs'>
-                    Disponibilidade e Preferências
-                  </Title> */}
-                  <Flex
-                    align='center'
-                    justify='flex-start'
-                    gap={6}
-                    mb={isMobile ? 0 : 6}
-                  >
-                    <Indicator
-                      inline
-                      processing={profile.availabilityId === 1}
-                      color={profile.availabilityColor}
-                      size={11}
-                      ml={5}
-                      mr={7}
-                    />
-                    <Text
-                      fz='1.03rem'
-                      fw='640'
-                      className='lhNormal'
-                      pt='1px'
+                }
+                {profile.availabilityId && 
+                  <>
+                    <Divider mt='md' mb='xs' label='Disponibilidade' labelPosition='left' />
+                    {/* <Title fz='1.03rem' fw='640' mt='md' mb='xs'>
+                      Disponibilidade e Preferências
+                    </Title> */}
+                    <Flex
+                      align='center'
+                      justify='flex-start'
+                      gap={6}
+                      mb={isMobile ? 0 : 6}
                     >
-                      {profile.availabilityTitle}
-                    </Text>
-                  </Flex>
-                  <AvailabilityInfo mt={18} mb={18} screen='largeScreen' />
-                  {isMobile &&
-                    <Accordion chevronPosition='left'>
-                      <Accordion.Item value='Exibir preferências musicais e de trabalho' style={{border:'0px'}}>
-                        <Accordion.Control p={0} fz='sm'>
-                          Exibir preferências musicais e de trabalho
-                        </Accordion.Control>
-                        <Accordion.Panel pb={12}>
-                          <AvailabilityInfo screen='mobile' mt={4} />
-                        </Accordion.Panel>
-                      </Accordion.Item>
-                    </Accordion>
-                  }
-                </>
-              }
-              {profile.availabilityId && 
-                <Divider mb={2} mt={6} className='showOnlyInMobile' />
-              }
-              {!profile.availabilityId && 
-                <Space h='xs' className='showOnlyInMobile' />
-              }
-              <Box className='showOnlyInLargeScreen' pr='lg'>
-                <RelatedProfiles relatedUsers={profile.relatedUsers?.result} />
-              </Box>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
-              <Paper
-                withBorder={isLargeScreen ? true : false}
-                px={isMobile ? 0 : 16}
-                pt={isMobile ? 0 : 10}
-                pb={isMobile ? 3 : 12}
-                mb='14'
-                className="mublinModule transparentBgInMobile"
-              >
-                <Group justify='space-between' align='center' gap={8} mb={8}>
-                  <Title fz='1.03rem' fw='640'>
-                    Projetos
-                  </Title>
-                  {(!profile.requesting && profile.projects.total > 0) &&
-                    <ActionIcon
-                      variant='transparent'
-                      size='md'
-                      aria-label='Ver timeline de projetos'
-                      title='Ver timeline de projetos'
-                      onClick={() => navigate(`/${username}/timeline`)}
-                    >
-                      <IconTimeline
-                        color={colorScheme === 'light' ? 'black' : 'white'}
-                        style={{ width: '91%', height: '91%' }} stroke={1.5}
+                      <Indicator
+                        inline
+                        processing={profile.availabilityId === 1}
+                        color={profile.availabilityColor}
+                        size={11}
+                        ml={5}
+                        mr={7}
                       />
-                    </ActionIcon>
-                  }
-                </Group>
-                {profile.projects.total > 0 ? ( 
-                  <Projects 
-                    profile={profile}
-                    projects={allProjects}
-                    profilePlan={profile.plan}
+                      <Text
+                        fz='1.03rem'
+                        fw='640'
+                        className='lhNormal'
+                        pt='1px'
+                      >
+                        {profile.availabilityTitle}
+                      </Text>
+                    </Flex>
+                    <AvailabilityInfo mt={18} mb={18} screen='largeScreen' />
+                    {isMobile &&
+                      <Accordion chevronPosition='left'>
+                        <Accordion.Item value='Exibir preferências musicais e de trabalho' style={{border:'0px'}}>
+                          <Accordion.Control p={0} fz='sm'>
+                            Exibir preferências musicais e de trabalho
+                          </Accordion.Control>
+                          <Accordion.Panel pb={12}>
+                            <AvailabilityInfo screen='mobile' mt={4} />
+                          </Accordion.Panel>
+                        </Accordion.Item>
+                      </Accordion>
+                    }
+                  </>
+                }
+                {profile.availabilityId && 
+                  <Divider mb={2} mt={6} className='showOnlyInMobile' />
+                }
+                {!profile.availabilityId && 
+                  <Space h='xs' className='showOnlyInMobile' />
+                }
+                <Box className='showOnlyInLargeScreen' pr='lg'>
+                  <RelatedProfiles relatedUsers={profile.relatedUsers?.result} />
+                </Box>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, md: 12, lg: 8 }}>
+                <Paper
+                  withBorder={isLargeScreen ? true : false}
+                  px={isMobile ? 0 : 16}
+                  pt={isMobile ? 0 : 10}
+                  pb={isMobile ? 3 : 12}
+                  mb='14'
+                  className="mublinModule transparentBgInMobile"
+                >
+                  <Group justify='space-between' align='center' gap={8} mb={8}>
+                    <Title fz='1.03rem' fw='640'>
+                      Projetos
+                    </Title>
+                    {(!profile.requesting && profile.projects.total > 0) &&
+                      <ActionIcon
+                        variant='transparent'
+                        size='md'
+                        aria-label='Ver timeline de projetos'
+                        title='Ver timeline de projetos'
+                        onClick={() => navigate(`/${username}/timeline`)}
+                      >
+                        <IconTimeline
+                          color={colorScheme === 'light' ? 'black' : 'white'}
+                          style={{ width: '91%', height: '91%' }} stroke={1.5}
+                        />
+                      </ActionIcon>
+                    }
+                  </Group>
+                  {profile.projects.total > 0 ? ( 
+                    <Projects 
+                      profile={profile}
+                      projects={allProjects}
+                      profilePlan={profile.plan}
+                    />
+                  ) : (
+                    <Text size='sm' c='dimmed'>Nenhum projeto no momento</Text>
+                  )}
+                </Paper>
+                <Divider mb={18} className='showOnlyInMobile' />
+                <Paper
+                  withBorder={isLargeScreen ? true : false}
+                  px={isMobile ? 0 : 16}
+                  pt={isMobile ? 0 : 12}
+                  pb={isMobile ? 3 : 12}
+                  mt='12'
+                  mb='14'
+                  className="mublinModule transparentBgInMobile"
+                >
+                  <Group justify='space-between' align='center' gap={8} mb={profile.strengths.total ? 15 : 8}>
+                    <Title fz='1.03rem' fw='640'>
+                      Pontos Fortes
+                    </Title>
+                    {(profile.id !== loggedUserId && !profile.requesting) && 
+                      <Button 
+                        size='xs'
+                        variant='light'
+                        color={colorScheme === 'light' ? 'dark' : 'gray'}
+                        onClick={() => setModalStrengthsOpen(true)}
+                      >
+                        Votar
+                      </Button>
+                    }
+                    {(profile.id === loggedUserId && !profile.requesting) &&
+                      <ActionIcon
+                        variant='transparent'
+                        size='md'
+                        aria-label='Ver votos'
+                        title='Ver votos'
+                        onClick={() => openVotesHistoryModal()}
+                      >
+                        <IconDotsVertical
+                          color={colorScheme === 'light' ? 'black' : 'white'}
+                          style={{ width: '91%', height: '91%' }} stroke={1.5}
+                        />
+                      </ActionIcon>
+                    }
+                  </Group>
+                  {profile.requesting ? ( 
+                    <Text size='sm'>Carregando...</Text>
+                  ) : (
+                    <Box mb={5}>
+                      {(profile.strengths.total && profile.strengths.result[0].idUserTo === profile.id) ? ( 
+                        <Splide 
+                          options={{
+                            drag   : 'free',
+                            snap: false,
+                            perPage: isMobile ? 3 : 6,
+                            autoWidth: true,
+                            arrows: false,
+                            gap: '22px',
+                            dots: false,
+                            pagination: false,
+                          }}
+                        >
+                          {profile.strengths.result.map((strength, key) =>
+                            <SplideSlide key={key}>
+                              <Flex 
+                                justify="flex-start"
+                                align="center"
+                                direction="column"
+                                wrap="wrap"
+                                gap={4}
+                                className="carousel-strengths"
+                              >
+                                <i className={strength.icon}></i>
+                                <Text fw='430' size='0.84rem' align='center'>
+                                  {strength.strengthTitle}
+                                </Text>
+                                <Text size='11px' fw='390' c='dimmed'>
+                                  {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
+                                </Text>
+                              </Flex>
+                            </SplideSlide>
+                          )}
+                        </Splide>
+                      ) : (
+                        <Text size='sm' c='dimmed'>
+                          Nenhum ponto forte votado para {profile.name} até o momento
+                        </Text>
+                      )}
+                    </Box>
+                  )}
+                </Paper>
+                {profile.plan === 'Pro' ? ( 
+                  <GearSection
+                    loggedUserId={loggedUserId}
+                    username={username}
                   />
                 ) : (
-                  <Text size='sm' c='dimmed'>Nenhum projeto no momento</Text>
-                )}
-              </Paper>
-              <Divider mb={18} className='showOnlyInMobile' />
-              <Paper
-                withBorder={isLargeScreen ? true : false}
-                px={isMobile ? 0 : 16}
-                pt={isMobile ? 0 : 12}
-                pb={isMobile ? 3 : 12}
-                mt='12'
-                mb='14'
-                className="mublinModule transparentBgInMobile"
-              >
-                <Group justify='space-between' align='center' gap={8} mb={profile.strengths.total ? 15 : 8}>
-                  <Title fz='1.03rem' fw='640'>
-                    Pontos Fortes
-                  </Title>
-                  {(profile.id !== loggedUserId && !profile.requesting) && 
-                    <Button 
-                      size='xs'
-                      variant='light'
-                      color={colorScheme === 'light' ? 'dark' : 'gray'}
-                      onClick={() => setModalStrengthsOpen(true)}
-                    >
-                      Votar
-                    </Button>
-                  }
-                  {(profile.id === loggedUserId && !profile.requesting) &&
-                    <ActionIcon
-                      variant='transparent'
-                      size='md'
-                      aria-label='Ver votos'
-                      title='Ver votos'
-                      onClick={() => openVotesHistoryModal()}
-                    >
-                      <IconDotsVertical
-                        color={colorScheme === 'light' ? 'black' : 'white'}
-                        style={{ width: '91%', height: '91%' }} stroke={1.5}
-                      />
-                    </ActionIcon>
-                  }
-                </Group>
-                {profile.requesting ? ( 
-                  <Text size='sm'>Carregando...</Text>
-                ) : (
-                  <Box mb={5}>
-                    {(profile.strengths.total && profile.strengths.result[0].idUserTo === profile.id) ? ( 
-                      <Splide 
-                        options={{
-                          drag   : 'free',
-                          snap: false,
-                          perPage: isMobile ? 3 : 6,
-                          autoWidth: true,
-                          arrows: false,
-                          gap: '22px',
-                          dots: false,
-                          pagination: false,
-                        }}
+                  <>
+                    {loggedUserId === profile.id && 
+                      <Paper
+                        withBorder={isLargeScreen ? true : false}
+                        px={isMobile ? 0 : 16}
+                        py={isMobile ? 0 : 12}
+                        mb={8}
+                        className='mublinModule transparentBgInMobile'
                       >
-                        {profile.strengths.result.map((strength, key) =>
-                          <SplideSlide key={key}>
-                            <Flex 
-                              justify="flex-start"
-                              align="center"
-                              direction="column"
-                              wrap="wrap"
-                              gap={4}
-                              className="carousel-strengths"
-                            >
-                              <i className={strength.icon}></i>
-                              <Text fw='430' size='0.84rem' align='center'>
-                                {strength.strengthTitle}
-                              </Text>
-                              <Text size='11px' fw='390' c='dimmed'>
-                                {strength.totalVotes + (strength.totalVotes > 1 ? ' votos' : ' voto')}
-                              </Text>
-                            </Flex>
-                          </SplideSlide>
-                        )}
-                      </Splide>
-                    ) : (
-                      <Text size='sm' c='dimmed'>
-                        Nenhum ponto forte votado para {profile.name} até o momento
-                      </Text>
-                    )}
-                  </Box>
+                        <Divider mb={18} className='showOnlyInMobile' />
+                        <Group gap={3} mb={8}>
+                          <Title fz='1.03rem' fw='640'>
+                            Equipamento
+                          </Title>
+                          <IconLockSquareRoundedFilled size={22} color="gray" /> 
+                        </Group>
+                        <Text size='sm'>
+                          Torne-se PRO para habilitar esta funcionalidade em seu perfil!
+                        </Text>
+                        <Anchor
+                          variant='gradient'
+                          gradient={{ from: 'violet', to: 'blue' }}
+                          fw='440'
+                          fz='sm'
+                          underline='hover'
+                          href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
+                          target='_blank'
+                        >
+                          Assinar Mublin PRO - R$ 29,90 por 3 meses
+                        </Anchor>
+                      </Paper>
+                    }
+                  </>
                 )}
-              </Paper>
-              {profile.plan === 'Pro' ? ( 
-                <GearSection
-                  loggedUserId={loggedUserId}
-                  username={username}
-                />
-              ) : (
-                <>
-                  {loggedUserId === profile.id && 
-                    <Paper
-                      withBorder={isLargeScreen ? true : false}
-                      px={isMobile ? 0 : 16}
-                      py={isMobile ? 0 : 12}
-                      mb={8}
-                      className='mublinModule transparentBgInMobile'
-                    >
-                      <Divider mb={18} className='showOnlyInMobile' />
-                      <Group gap={3} mb={8}>
-                        <Title fz='1.03rem' fw='640'>
-                          Equipamento
-                        </Title>
-                        <IconLockSquareRoundedFilled size={22} color="gray" /> 
-                      </Group>
-                      <Text size='sm'>
-                        Torne-se PRO para habilitar esta funcionalidade em seu perfil!
-                      </Text>
-                      <Anchor
-                        variant='gradient'
-                        gradient={{ from: 'violet', to: 'blue' }}
-                        fw='440'
-                        fz='sm'
-                        underline='hover'
-                        href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
-                        target='_blank'
+                <Divider mb={16} className='showOnlyInMobile' />
+                <Paper
+                  withBorder={isLargeScreen ? true : false}
+                  px={isMobile ? 0 : 16}
+                  py={isMobile ? 0 : 12}
+                  mb={20}
+                  className='mublinModule transparentBgInMobile'
+                >
+                  <Group justify='space-between' align='center' gap={8} mb={13}>
+                    <Title fz='1.03rem' fw='640'>Postagens</Title>
+                    {(profile.id === loggedUserId && !profile.requesting) && 
+                      // <Button 
+                      //   size='xs'
+                      //   variant='light'
+                      //   color={colorScheme === 'light' ? 'dark' : 'gray'}
+                      //   leftSection={<IconPlus size={14} />}
+                      //   onClick={() => setModalStrengthsOpen(true)}
+                      // >
+                      //   Nova postagem
+                      // </Button>
+                      <ActionIcon
+                        variant='transparent'
+                        size='md'
+                        aria-label='Escrever uma publicação'
+                        onClick={() => setShowModalNewPost(true)}
+                        title='Escrever uma publicação'
                       >
-                        Assinar Mublin PRO - R$ 29,90 por 3 meses
-                      </Anchor>
-                    </Paper>
-                  }
-                </>
-              )}
-              <Divider mb={16} className='showOnlyInMobile' />
-              <Paper
-                withBorder={isLargeScreen ? true : false}
-                px={isMobile ? 0 : 16}
-                py={isMobile ? 0 : 12}
-                mb={20}
-                className='mublinModule transparentBgInMobile'
-              >
-                <Group justify='space-between' align='center' gap={8} mb={13}>
-                  <Title fz='1.03rem' fw='640'>Postagens</Title>
-                  {(profile.id === loggedUserId && !profile.requesting) && 
-                    // <Button 
-                    //   size='xs'
-                    //   variant='light'
-                    //   color={colorScheme === 'light' ? 'dark' : 'gray'}
-                    //   leftSection={<IconPlus size={14} />}
-                    //   onClick={() => setModalStrengthsOpen(true)}
-                    // >
-                    //   Nova postagem
-                    // </Button>
-                    <ActionIcon
-                      variant='transparent'
-                      size='md'
-                      aria-label='Escrever uma publicação'
-                      onClick={() => setShowModalNewPost(true)}
-                      title='Escrever uma publicação'
-                    >
-                      <IconPlus 
-                        color={colorScheme === 'light' ? 'black' : 'white'}
-                        style={{ width: '91%', height: '91%' }} stroke={1.5}
-                      />
-                    </ActionIcon>
-                  }
-                </Group>
-                {profile.requesting ? ( 
-                  <Text size='sm'>Carregando...</Text>
-                ) : (
-                  profile.recentActivity.total ? (
-                    <Grid>
-                      {profile.recentActivity.result.slice(0, 2).map(activity =>
-                        <Grid.Col span={{ base: 12, md: 6, lg: 6 }} key={activity.id}>
-                          <Box style={{height:'auto'}}>
-                            <FeedCard
-                              item={activity}
-                              compact
-                            />
-                          </Box>
-                        </Grid.Col>
-                      )}
-                    </Grid>
+                        <IconPlus 
+                          color={colorScheme === 'light' ? 'black' : 'white'}
+                          style={{ width: '91%', height: '91%' }} stroke={1.5}
+                        />
+                      </ActionIcon>
+                    }
+                  </Group>
+                  {profile.requesting ? ( 
+                    <Text size='sm'>Carregando...</Text>
                   ) : (
-                    <Text size='sm' c='dimmed'>Nenhuma postagem até o momento</Text>
-                  )
-                )}
-                {profile.recentActivity.total && 
-                  <Text size='sm' className='op80 point' ta='center' mt='14' fw='460' onClick={() => setModalProfileFeedOpen(true)}>
-                    Ver postagens
-                  </Text>
-                }
-              </Paper>
-              <Box className='showOnlyInMobile' pr='lg'>
-                <RelatedProfiles relatedUsers={profile.relatedUsers?.result} />
-              </Box>
-            </Grid.Col>
-          </Grid>
-        </Container>
+                    profile.recentActivity.total ? (
+                      <Grid>
+                        {profile.recentActivity.result.slice(0, 2).map(activity =>
+                          <Grid.Col span={{ base: 12, md: 6, lg: 6 }} key={activity.id}>
+                            <Box style={{height:'auto'}}>
+                              <FeedCard
+                                item={activity}
+                                compact
+                              />
+                            </Box>
+                          </Grid.Col>
+                        )}
+                      </Grid>
+                    ) : (
+                      <Text size='sm' c='dimmed'>Nenhuma postagem até o momento</Text>
+                    )
+                  )}
+                  {profile.recentActivity.total && 
+                    <Text size='sm' className='op80 point' ta='center' mt='14' fw='460' onClick={() => setModalProfileFeedOpen(true)}>
+                      Ver postagens
+                    </Text>
+                  }
+                </Paper>
+                <Box className='showOnlyInMobile' pr='lg'>
+                  <RelatedProfiles relatedUsers={profile.relatedUsers?.result} />
+                </Box>
+              </Grid.Col>
+            </Grid>
+          </Container>
+        </>
       }
       <Modal
         centered
