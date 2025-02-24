@@ -39,7 +39,7 @@ function NewPost () {
   const [fileId, setFileId] = useState('')
 
   useEffect(() => {
-    dispatch(userInfos.getUserGearInfoById(loggedUserId))
+    dispatch(userActions.getUserGearInfoById(loggedUserId))
     dispatch(userProjectsInfos.getUserProjectsBasicInfo(loggedUserId))
   }, []);
 

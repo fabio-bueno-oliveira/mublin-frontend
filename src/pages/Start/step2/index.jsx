@@ -184,7 +184,7 @@ function StartSecondStep () {
     <>
       <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
-        <Stepper color='violet' active={1} size={largeScreen ? "sm" : "xs"} >
+        <Stepper color='mublinColor' active={1} size={largeScreen ? "sm" : "xs"} >
           <Stepper.Step />
           <Stepper.Step />
           <Stepper.Step />
@@ -363,14 +363,14 @@ function StartSecondStep () {
             </form>
           </Grid.Col>
           <Grid.Col span={5}>
-            <Button color="violet" onClick={() => searchCity(searchValue)}>
+            <Button color="mublinColor" onClick={() => searchCity(searchValue)}>
               Pesquisar
             </Button>
           </Grid.Col>
         </Grid>
         {citySearchIsLoading && 
           <Center my={20}>
-            <Loader color="violet" size="sm" type="bars" />
+            <Loader color="mublinColor" size="sm" type="bars" />
           </Center>
         }
         {!!(queryCities.length && !citySearchIsLoading) && 
@@ -411,7 +411,7 @@ function StartSecondStep () {
             Voltar
           </Button>
           <Button 
-            color='violet' 
+            color='mublinColor' 
             size='lg'
             onClick={submitForm}
             rightSection={<IconArrowRight size={14} />}

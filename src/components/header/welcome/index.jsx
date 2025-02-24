@@ -2,8 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from '../../../store/actions/user';
 import { authActions } from '../../../store/actions/authentication';
-import { useMantineColorScheme, Container, Flex, Title, Button, Avatar, ActionIcon, rem } from '@mantine/core';
+import { useMantineColorScheme, Container, Box, Flex, Image, Button, Avatar, ActionIcon, rem } from '@mantine/core';
 import { IconMoon, IconBrightnessUp } from '@tabler/icons-react';
+import MublinLogoBlack from '../../../assets/svg/mublin-logo.svg';
+import MublinLogoWhite from '../../../assets/svg/mublin-logo-w.svg';
 import s from '../header.module.css';
 
 function HeaderWelcome () {
@@ -39,8 +41,13 @@ function HeaderWelcome () {
         align="center"
         direction="row"
       >
-        <Title order={2} style={{flex:'1', cursor:'default'}}>Mublin</Title>
-        <Flex align={"center"} justify="flex-end" style={{flex:'1'}}>   
+        <Box className={'mublinLogo'}>
+          <Image 
+            src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} 
+            h={27}
+          />
+        </Box>
+        <Flex align="center" justify="flex-end" style={{flex:'1'}}>   
           <Avatar
             size="md"
             src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined}

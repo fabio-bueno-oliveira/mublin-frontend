@@ -36,9 +36,9 @@ function StartThirdStep () {
   useEffect(() => { 
     dispatch(miscInfos.getMusicGenres());
     dispatch(miscInfos.getMusicGenresCategories());
-    dispatch(userInfos.getUserGenresInfoById(userInfo.id));
+    dispatch(userActions.getUserGenresInfoById(userInfo.id));
     dispatch(miscInfos.getRoles());
-    dispatch(userInfos.getUserRolesInfoById(loggedUserId));
+    dispatch(userActions.getUserRolesInfoById(loggedUserId));
   }, []);
 
   const userGenres = user.genres;
@@ -58,7 +58,7 @@ function StartThirdStep () {
   const rolesListMusicians = roles?.list
     .filter(e => e.instrumentalist)
     .map(role => ({ 
-      label: role.name,
+      label: role.description,
       value: String(role.id),
       disabled: userSelectedRoles.includes(role.id)
     }));
@@ -87,7 +87,7 @@ function StartThirdStep () {
         })
       }).then((response) => {
         //console.log(response);
-        dispatch(userInfos.getUserGenresInfoById(loggedUserId));
+        dispatch(userActions.getUserGenresInfoById(loggedUserId));
         setIsAddingGenre(false);
       }).catch(err => {
         console.error(err);
@@ -109,7 +109,7 @@ function StartThirdStep () {
       body: JSON.stringify({userId: loggedUserId, userGenreId: value})
     }).then((response) => {
       //console.log(response);
-      dispatch(userInfos.getUserGenresInfoById(loggedUserId));
+      dispatch(userActions.getUserGenresInfoById(loggedUserId));
       setIsDeletingGenre(false);
     }).catch(err => {
       console.error(err);
@@ -135,7 +135,7 @@ function StartThirdStep () {
         })
       }).then((response) => {
         //console.log(response);
-        dispatch(userInfos.getUserRolesInfoById(loggedUserId));
+        dispatch(userActions.getUserRolesInfoById(loggedUserId));
         setIsAddingRole(false);
       }).catch(err => {
         console.error(err);
@@ -157,7 +157,7 @@ function StartThirdStep () {
       body: JSON.stringify({userId: loggedUserId, userRoleId: value})
     }).then((response) => {
       //console.log(response);
-      dispatch(userInfos.getUserRolesInfoById(loggedUserId));
+      dispatch(userActions.getUserRolesInfoById(loggedUserId));
       setIsDeletingRole(false);
     }).catch(err => {
       console.error(err);
@@ -180,7 +180,7 @@ function StartThirdStep () {
     <>
       <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
-        <Stepper color='violet' active={2} size={largeScreen ? "sm" : "xs"} >
+        <Stepper color='mublinColor' active={2} size={largeScreen ? "sm" : "xs"} >
           <Stepper.Step />
           <Stepper.Step />
           <Stepper.Step />
@@ -228,9 +228,9 @@ function StartThirdStep () {
                       {genre.name}
                     </Pill> */}
                     <Badge 
-                      color="violet"
+                      color="mublinColor"
                       variant='filled'
-                      size='sm'
+                      size='md'
                       rightSection={
                         <IconX 
                           style={xIconStyle} 
@@ -244,7 +244,7 @@ function StartThirdStep () {
                   </Box>
                 )}
                 {isAddingGenre &&
-                  <Badge variant="light" color="violet" size="sm">
+                  <Badge variant="light" color="mublinColor" size="md">
                     Salvando...
                   </Badge>
                 }
@@ -281,9 +281,9 @@ function StartThirdStep () {
                       {role.name}
                     </Pill> */}
                     <Badge 
-                      color="violet"
+                      color="mublinColor"
                       variant='filled'
-                      size='sm'
+                      size='md'
                       rightSection={
                         <IconX 
                           style={xIconStyle} 
@@ -297,7 +297,7 @@ function StartThirdStep () {
                   </Box>
                 )}
                 {isAddingRole &&
-                  <Badge variant="light" color="violet" size="sm">
+                  <Badge variant="light" color="mublinColor" size="md">
                     Salvando...
                   </Badge>
                 }
@@ -317,7 +317,7 @@ function StartThirdStep () {
             Voltar
           </Button>
           <Button 
-            color='violet'
+            color='mublinColor'
             size='lg'
             rightSection={<IconArrowRight size={14} />}
             onClick={() => goToStep4()}

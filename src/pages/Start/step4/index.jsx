@@ -9,7 +9,7 @@ import { miscInfos } from '../../../store/actions/misc';
 import { projectInfos } from '../../../store/actions/project';
 import { usernameCheckInfos } from '../../../store/actions/usernameCheck';
 import {IKUpload} from "imagekitio-react";
-import { Container, Box, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Textarea, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, rem } from '@mantine/core';
+import { Container, Box, Paper, Modal, Flex, Grid, Center, Alert, ScrollArea, Title, Divider, Textarea, Text, Input, Stepper, Button, Group, TextInput, NumberInput, Checkbox, Image, NativeSelect, Radio, ThemeIcon, Avatar,  ActionIcon, Loader, Anchor, Badge, rem } from '@mantine/core';
 import { useForm, isNotEmpty, isInRange } from '@mantine/form';
 import { IconArrowLeft, IconSearch, IconX, IconIdBadge2, IconCheck, IconClock, IconTrash, IconCamera } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback  } from '@mantine/hooks';
@@ -117,6 +117,18 @@ function StartFourthStep () {
       dispatch(usernameCheckInfos.checkProjectUsernameByString(string))
     }
   }, 800);
+
+  const checkProjectName = useDebouncedCallback(async (string) => {
+    if (string.length) {
+      dispatch(searchInfos.getSearchProjectsResults(string));
+    }
+  }, 800);
+
+  useEffect(() => {
+    if (formValues.projectName.length > 3) {
+      checkProjectName(formValues.projectName);
+    }
+  }, [formValues.projectName]);
 
   const [projectUsernameFinal, setProjectUsernameFinal] = useState('');
 
@@ -416,7 +428,7 @@ function StartFourthStep () {
       body: JSON.stringify({step: 0})
     }).then((response) => {
         response.json().then((response) => {
-          dispatch(userInfos.getInfo());
+          dispatch(userActions.getInfo());
           setTimeout(() => {
             navigate('/home');
           }, 400);
@@ -435,7 +447,7 @@ function StartFourthStep () {
     <>
       <HeaderWelcome />
       <Container size={'lg'} mt={largeScreen ? 20 : 8}>
-        <Stepper color='violet' active={3} size={largeScreen ? "sm" : "xs"} >
+        <Stepper color='mublinColor' active={3} size={largeScreen ? "sm" : "xs"} >
           <Stepper.Step />
           <Stepper.Step />
           <Stepper.Step />
@@ -450,7 +462,7 @@ function StartFourthStep () {
             <Text size="sm">Pesquise abaixo ou</Text>
             <Button 
               variant='light' 
-              color='violet' 
+              color='mublinColor' 
               size="xs"
               mt={10}
               onClick={() => setModalNewProjectOpen(true)}
@@ -471,7 +483,7 @@ function StartFourthStep () {
             />
             <ActionIcon 
               variant="transparent" 
-              color="violet" 
+              color="mublinColor" 
               size="42px" 
               ml={10}
               onClick={() => handleSearchChange()}
@@ -504,7 +516,7 @@ function StartFourthStep () {
                         <Text size='sm' fw={500}>
                           {project.title} {project.type && '(' + project.type + ')'} 
                           {userProjects.list.some(y => y.projectid === project.id) && 
-                            <ThemeIcon size='xs' radius="xl" color="violet" ml={6}>
+                            <ThemeIcon size='xs' radius="xl" color="mublinColor" ml={6}>
                               <IconCheck style={{ width: '70%', height: '70%' }} stroke={3} />
                             </ThemeIcon>
                           }
@@ -549,7 +561,7 @@ function StartFourthStep () {
           />
           <Checkbox
             mt={8}
-            color="violet"
+            color="mublinColor"
             label="Definir como um dos meus projetos principais"
             key={form.key('featured')}
             {...form.getInputProps('featured', { type: 'checkbox' })}
@@ -568,9 +580,7 @@ function StartFourthStep () {
                 <Flex direction="row" gap={14} w="max-content">
                   {searchProjects.projects.result.map((project, key) => 
                     <Group key={key} gap={3} mt={6}>
-                      <Anchor href={`/project/${project?.username}`}>
-                        <Avatar size="md" src={project.picture ? project.picture : undefined} />
-                      </Anchor>
+                      <Avatar size="md" src={project.picture ? project.picture : undefined} />
                       <Flex direction="column">
                         <Text size="xs" fw={500}>{project.name} ({project.type}{project.mainGenre ? " • " + project.mainGenre : null})</Text>
                         <Text size="11px" c="dimmed">{project.city ? project.city : null}{project.region ? ", " + project.region : null}{project.country ? ", " + project.country : null}</Text>
@@ -628,7 +638,7 @@ function StartFourthStep () {
                 component='label'
                 htmlFor='projectImage'
                 leftSection={<IconCamera size={14} />}
-                color='violet'
+                color='mublinColor'
                 size='sm'
               >
                 {uploading ? 'Enviando...' : 'Inserir imagem'}
@@ -835,15 +845,15 @@ function StartFourthStep () {
             {...form.getInputProps('publicProject')}
           >
             <Group mt="xs">
-              <Radio color="violet" value="1" label="Público" />
-              <Radio color="violet" value="0" label="Privado" />
+              <Radio color="mublinColor" value="1" label="Público" />
+              <Radio color="mublinColor" value="0" label="Privado" />
             </Group>
           </Radio.Group>
           <Group justify="flex-end" mt="md">
             <Button 
               size="md"
               type="submit"
-              color="violet"
+              color="mublinColor"
               loading={isSubmitting}
               disabled={(projectUsernameFinal && projectUsernameAvailability.requested && projectUsernameAvailability.available === false)}
             >
@@ -897,13 +907,13 @@ function StartFourthStep () {
         >
           <Group mt="xs">
             <Radio 
-              color='violet' 
+              color='mublinColor' 
               value="1" 
               label="Integrante oficial"
               onChange={(event) => setStatus(event.currentTarget.value)} 
             />
             <Radio 
-              color='violet' 
+              color='mublinColor' 
               value="2"
               label={<Group gap={2}><IconIdBadge2 style={{ width: rem(18), height: rem(18) }} /> Contratado</Group>}
               onChange={(event) => setStatus(event.currentTarget.value)}  
@@ -973,7 +983,7 @@ function StartFourthStep () {
         </Grid>
         <Checkbox
           mt={10}
-          color='violet'
+          color='mublinColor'
           label={
             modalProjectEndYear 
             ? 'Estive ativo até o final do projeto' 
@@ -984,7 +994,7 @@ function StartFourthStep () {
         />
         <Checkbox
           mt={8}
-          color='violet'
+          color='mublinColor'
           label={'Definir como um dos meus projetos principais'} 
           checked={featured}
           onChange={() => setFeatured(value => !value)}
@@ -1001,7 +1011,7 @@ function StartFourthStep () {
           </Button>
           <Button 
             type="submit" 
-            color='violet'
+            color='mublinColor'
             onClick={() => handleSubmitParticipation()}
             loading={isSubmitting}
             disabled={!joinedIn || !mainRole || !status}
@@ -1086,7 +1096,7 @@ function StartFourthStep () {
           >
             Voltar
           </Button>
-          <Button color='violet' size='lg' onClick={handleFormSubmit} loading={isSubmitting}>
+          <Button color='mublinColor' size='lg' onClick={handleFormSubmit} loading={isSubmitting}>
             Concluir
           </Button>
         </Group>
@@ -1110,14 +1120,14 @@ function StartFourthStep () {
               </form>
             </Grid.Col>
             <Grid.Col span={5}>
-              <Button color="violet" onClick={() => searchCity(searchValue)}>
+              <Button color="mublinColor" onClick={() => searchCity(searchValue)}>
                 Pesquisar
               </Button>
             </Grid.Col>
           </Grid>
           {citySearchIsLoading && 
             <Center my={20}>
-              <Loader color="violet" size="sm" type="bars" />
+              <Loader color="mublinColor" size="sm" type="bars" />
             </Center>
           }
           {!!(queryCities.length && !citySearchIsLoading) && 

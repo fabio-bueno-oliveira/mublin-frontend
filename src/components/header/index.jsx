@@ -11,7 +11,6 @@ import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, Acti
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import { 
   IconMoon,
-  IconCircleFilled,
   IconBrightnessUp,
   IconSearch,
   IconDotsVertical,

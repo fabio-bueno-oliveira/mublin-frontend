@@ -12,12 +12,11 @@ import {
 import { useForm, isEmail, isNotEmpty, hasLength } from '@mantine/form';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { IconInfoCircle, IconCheck, IconX } from '@tabler/icons-react';
+import { Helmet } from 'react-helmet';
 
 function SignupPage () {
 
     // const loggedIn = useSelector(state => state.authentication.loggedIn);
-
-    document.title = 'Mublin - Cadastrar';
 
     let dispatch = useDispatch();
     let navigate = useNavigate();
@@ -88,6 +87,15 @@ function SignupPage () {
 
     return (
       <>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>Cadastre-se</title>
+          <link rel='canonical' href='https://mublin.com/signup' />
+          <meta 
+            name='description' 
+            content='Cadastre-se já no Mublin — a rede para quem trabalha com música' 
+          />
+        </Helmet>
         <Header page='signup' />
         <Container size='xs' my={40}>
           <Title ta="center" order={1}>
@@ -210,7 +218,7 @@ function SignupPage () {
             <Group justify="flex-end" mt="lg">
               <Button 
                 size="lg"
-                color='violet'
+                color='mublinColor'
                 type="submit"
                 // disabled={(usernameChoosen && usernameAvailability.available && emailAvailability.available) ? false : true}
                 disabled={usernameAvailability.requesting || emailAvailability.requesting || process.env.NODE_ENV === "production"}

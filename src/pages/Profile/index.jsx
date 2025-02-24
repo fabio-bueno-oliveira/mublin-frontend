@@ -434,7 +434,7 @@ function ProfilePage () {
                       >
                         <Flex gap={2} align='center'>
                           <IconLink size={13} />
-                          <Text size={isMobile ? '0.91em' : '0.83em'} className='lhNormal'>
+                          <Text size='0.87em' className='lhNormal'>
                             {truncateString(profile.website, 37)}
                           </Text>
                         </Flex>
@@ -451,7 +451,7 @@ function ProfilePage () {
                           >
                             <Flex gap={2} align='center'>
                               <IconBrandInstagram size={13} />
-                              <Text size='0.83em' className='lhNormal'>
+                              <Text size='0.87em' className='lhNormal'>
                                 Instagram
                               </Text>
                             </Flex>
@@ -466,7 +466,7 @@ function ProfilePage () {
                           >
                             <Flex gap={2} align='center'>
                               <IconBrandTiktok size={13} />
-                              <Text size='0.83em' className='lhNormal'>
+                              <Text size='0.87em' className='lhNormal'>
                                 TikTok
                               </Text>
                             </Flex>
@@ -509,7 +509,15 @@ function ProfilePage () {
                     wrap='nowrap'
                     columnGap='xs'
                   >
-                    <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{profile.openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!profile.openToWork}>
+                    <Indicator 
+                      position='bottom-center' 
+                      inline 
+                      label={<Text size='0.6rem' >{profile.openToWorkText}</Text>} 
+                      color='lime' 
+                      size={18} 
+                      withBorder 
+                      disabled={!profile.openToWork}
+                    >
                       <Avatar
                         size='xl'
                         src={profile.picture}
@@ -540,7 +548,7 @@ function ProfilePage () {
                         options={{
                           drag   : 'free',
                           snap: false,
-                          perPage: isMobile ? 3 : 3,
+                          perPage: 2,
                           autoWidth: true,
                           arrows: false,
                           gap: '3px',
@@ -578,8 +586,8 @@ function ProfilePage () {
                   </Flex>
                   <Group 
                     gap={12} 
-                    mt={isMobile ? 10 : 15} 
-                    mb={isMobile ? 9 : 10}
+                    mt={10} 
+                    mb={9}
                   >
                     <Text 
                       className='point'
@@ -602,7 +610,7 @@ function ProfilePage () {
                   </Group>
                   {(profile.bio && profile.bio !== 'null') && 
                     <Text 
-                      size={isMobile ? '0.92em' : '0.83em'}
+                      size='0.92em'
                       fw='400'
                       mt={5}
                       lineClamp={6}
@@ -615,7 +623,7 @@ function ProfilePage () {
                   {profile.city && 
                     <Flex gap={2} align='center' mt={9}>
                       <IconMapPin size={13} style={{color:'#8d8d8d'}} />
-                      <Text size={isMobile ? '0.91em' : '0.83em'} c='#8d8d8d' className='lhNormal'>
+                      <Text size='0.91em' c='#8d8d8d' className='lhNormal'>
                         {profile.city}{profile.region && `, ${profile.region}`}{profile.country && `, ${profile.country}`}
                       </Text>
                     </Flex>
@@ -631,7 +639,7 @@ function ProfilePage () {
                     >
                       <Flex gap={2} align='center'>
                         <IconLink size={13} />
-                        <Text size={isMobile ? '0.91em' : '0.83em'} className='lhNormal'>
+                        <Text size='0.91em' className='lhNormal'>
                           {truncateString(profile.website, 37)}
                         </Text>
                       </Flex>
@@ -648,7 +656,7 @@ function ProfilePage () {
                         >
                           <Flex gap={2} align='center'>
                             <IconBrandInstagram size={13} />
-                            <Text size='0.83em' className='lhNormal'>
+                            <Text size='0.91em' className='lhNormal'>
                               Instagram
                             </Text>
                           </Flex>
@@ -663,7 +671,7 @@ function ProfilePage () {
                         >
                           <Flex gap={2} align='center'>
                             <IconBrandTiktok size={13} />
-                            <Text size='0.83em' className='lhNormal'>
+                            <Text size='0.91em' className='lhNormal'>
                               TikTok
                             </Text>
                           </Flex>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userActions } from '../../../store/actions/user';
-import { Container, Stepper, Group, Center, Title, Image, Button, Loader, rem } from '@mantine/core';
+import { Container, Stepper, Group, Center, Title, Image, Button, Loader, Avatar } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconArrowLeft, IconArrowRight, IconUpload } from '@tabler/icons-react';
@@ -24,7 +24,6 @@ function StartFirstStep () {
   const userAvatarPath = "/users/avatars/"+user.id+"/"
 
   const updatePicture = (userId, value) => {
-    let user = JSON.parse(localStorage.getItem('user'));
     fetch('https://mublin.herokuapp.com/user/'+userId+'/picture', {
         method: 'PUT',
         headers: {
@@ -35,7 +34,7 @@ function StartFirstStep () {
         body: JSON.stringify({picture: value})
       }).then((response) => {
         response.json().then((response) => {
-          dispatch(userInfos.getInfo());
+          dispatch(userActions.getInfo());
         })
       }).catch(err => {
         console.error(err)
@@ -66,7 +65,7 @@ function StartFirstStep () {
       title: 'Sucesso!',
       message: 'Foto de perfil carregada com sucesso!',
       color: 'lime',
-      position: 'top-right'
+      position: 'top-center'
     })
     let n = res.filePath.lastIndexOf('/');
     let fileName = res.filePath.substring(n + 1);
@@ -74,11 +73,15 @@ function StartFirstStep () {
     setUploading(false);
   };
 
+  const onUploadProgress = progress => {
+    console.log("Progress", progress);
+  };
+
   return (
     <>
       <HeaderWelcome />
-      <Container size={'lg'} mt={largeScreen ? 20 : 8}>
-        <Stepper color='violet' active={0} size={largeScreen ? "sm" : "xs"} >
+      <Container size='lg' mt={largeScreen ? 20 : 8}>
+        <Stepper color='mublinColor' active={0} size={largeScreen ? "sm" : "xs"} >
           <Stepper.Step />
           <Stepper.Step />
           <Stepper.Step />
@@ -87,23 +90,27 @@ function StartFirstStep () {
         <Title ta="center" order={3} my={14}>Defina sua foto de perfil</Title>
         <Center mt={30}>
           {uploading || user.requesting ? (
-            <Loader size={61} />
+            <Loader color='mublinColor' size={80} />
           ) : (
             <>
               {!user.picture ? (
-                <Image 
-                  radius='md'
-                  src='https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' w={100} 
+                <Avatar 
+                  src='https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'
+                  size={100} 
                 />
               ) : (
-                <Image radius='md' src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} w={100} />
+                <Avatar 
+                  src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} 
+                  size={100} 
+                />
               )}
             </>
           )}
         </Center>
         <div className="customFileUpload">
           <IKUpload 
-            fileName="avatar.jpg"
+            fileName={`${user.username}.jpg`}
+            validateFile={file => file.size < 2000000}
             folder={userAvatarPath}
             tags={['avatar','user']}
             name='file-input'
@@ -111,6 +118,7 @@ function StartFirstStep () {
             className='file-input__input'
             useUniqueFileName={true}
             isPrivateFile= {false}
+            onUploadProgress={onUploadProgress}
             onError={onUploadError}
             onSuccess={onUploadSuccess}
             onUploadStart={onUploadStart}
@@ -135,7 +143,7 @@ function StartFirstStep () {
           </Button>
           {user.picture ? (
             <Button 
-              color='violet' 
+              color='mublinColor' 
               size='lg'
               onClick={() => goToStep2()} 
               disabled={uploading}
@@ -145,7 +153,7 @@ function StartFirstStep () {
             </Button>
           ) : (
             <Button 
-              color='violet'
+              color='mublinColor'
               size='lg'
               onClick={() => goToStep2()}
               rightSection={<IconArrowRight size={14} />}

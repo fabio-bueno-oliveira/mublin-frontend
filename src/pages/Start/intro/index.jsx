@@ -31,7 +31,7 @@ function StartFirstStep () {
         <Title ta="center" order={3}>Vamos lá, {user.name}!</Title>
         <Text ta="center" order={4}>Estamos prestes a tornar sua vida na música ainda mais produtiva e conectada.</Text>
         {/* <Center>
-          <Blockquote color="violet" cite="– Fabio Bueno, CTO do Mublin" mt="xl" p={23}>
+          <Blockquote color="mublinColor" cite="– Fabio Bueno, CTO do Mublin" mt="xl" p={23}>
             <Text size={'sm'}>Olá! Estamos felizes que tenha dado uma chance de conhecer nossa plataforma. O Mublin foi desenvolvido para ser uma comunidade focada na vida de quem trabalha com música. Estamos em fase inicial de lançamento e buscando evoluir diariamente. Esperamos que goste do Mublin!</Text>
           </Blockquote>
         </Center> */}
@@ -43,17 +43,17 @@ function StartFirstStep () {
           />
         </Center>
       </Container>
-      <Modal opened={showPreviouslyRegisteredAlert} onClose={() => setShowPreviouslyRegisteredAlert(false)} title="Oba!" centered>
+      <Modal opened={showPreviouslyRegisteredAlert} onClose={() => setShowPreviouslyRegisteredAlert(false)} title="Hey!" centered>
         <Text>Alguns dos seus dados já foram previamente cadastrados por você ou pela nossa equipe para facilitar sua jornada :)</Text>
         <Group justify='flex-end' mt='14'>
-          <Button color='violet' onClick={() => setShowPreviouslyRegisteredAlert(false)}>
+          <Button color='mublinColor' onClick={() => setShowPreviouslyRegisteredAlert(false)}>
             Entendi!
           </Button>
         </Group>
       </Modal>
       <footer className='onFooter'>
         <Button 
-          color='violet' 
+          color='mublinColor' 
           size='lg'
           onClick={() => goToStep1()}
           rightSection={<IconArrowRight size={14} />}
