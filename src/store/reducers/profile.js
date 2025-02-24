@@ -376,7 +376,8 @@ export function profile(state = initialState, action) {
     case profileTypes.GET_PROFILE_PROJECTS_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        projects: initialState.projects
       };
     case profileTypes.GET_PROFILE_PROJECTS_SUCCESS:
       return {
@@ -388,6 +389,7 @@ export function profile(state = initialState, action) {
       return {
         ...state,
         requesting: false,
+        projects: initialState.projects,
         error: "A solicitação falhou"
       };
     // ROLES

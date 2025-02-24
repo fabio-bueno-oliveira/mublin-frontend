@@ -285,15 +285,17 @@ function ProfilePage () {
       }
       {profile.id && 
         <>
-          <Card shadow={false} padding={0} radius={0} mb={14} hiddenFrom='sm'>
-            <Card.Section>
-              <Image
-                src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
-                height={130}
-                alt={`Imagem de capa de ${profile.name}`}
-              />
-            </Card.Section>
-          </Card>
+          {profile.pictureCover && 
+            <Card shadow={false} padding={0} radius={0} mb={14} hiddenFrom='sm'>
+              <Card.Section>
+                <Image
+                  src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
+                  height={100}
+                  alt={`Imagem de capa de ${profile.name}`}
+                />
+              </Card.Section>
+            </Card>
+          }
           <Container 
             size='lg' 
             mb={isMobile ? 82 : 30} 
@@ -1325,7 +1327,7 @@ function ProfilePage () {
           {`${profile.name} ${profile.lastname} possui o selo de usuário verificado pois teve a identidade reconhecida nesta plataforma`}
         </Text>
         <Text size='xs' mt='lg' c='dimmed'>
-          Este selo é atribuído pela equipe do Mublin baseado em critérios internos. A aquisição do <nobr>Mublin PRO</nobr> garante mais agilidade na atribuição do selo de verificação.
+          Este selo é atribuído pela equipe do Mublin baseado em critérios internos. Contas PRO garantem mais agilidade no processo de verificação.
         </Text>
       </Modal>
       <Modal 
@@ -1343,7 +1345,7 @@ function ProfilePage () {
           />
         </Center>
         <Text size='sm' mt='lg'>
-          {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por um grande número de pessoas como alguém relevante e que com grande contribuição no cenário musical`}
+          {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por uma contribuição relevante no mercado musical`}
         </Text>
         <Text size='xs' mt='lg' c='dimmed'>
           Este selo é atribuído pela equipe do Mublin baseado em critérios internos
