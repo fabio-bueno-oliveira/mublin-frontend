@@ -19,6 +19,7 @@ function BrandPage () {
   const params = useParams();
   const brandUrlName = params?.brandUrlName;
   const brand = useSelector(state => state.brand);
+
   const largeScreen = useMediaQuery('(min-width: 60em)');
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
 
@@ -58,12 +59,14 @@ function BrandPage () {
         <link rel='canonical' href={`https://mublin.com/gear/brand/${brand.slug}`} />
         <meta name='description' content={`Produtos e artistas da ${brand.name} | Mublin`} />
       </Helmet>
-      <Header />
-      <Container size='lg' mt={largeScreen ? 20 : 0} mb={110}>
+      {largeScreen && 
+        <Header />
+      }
+      <Container size='lg' mt={20} mb={110}>
         <BackgroundImage
-          src={brand.cover ? 'https://ik.imagekit.io/mublin/products/brands/'+brand.cover : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
+          src={brand.cover ? 'https://ik.imagekit.io/mublin/products/brands/tr:w-1108,c-maintain_ratio/'+brand.cover : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
           radius='lg'
-          h={140}
+          h={128}
           pt={62}
         >
           <Flex align='center' justify='center'>

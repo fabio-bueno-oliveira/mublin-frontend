@@ -7,7 +7,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconPlus, IconMapPin, IconEye, IconPiano, IconTimeline, IconListCheck, IconMenu2, IconDotsVertical, IconPencilCheck, IconCheckbox } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconPlus, IconMapPin, IconEye, IconPiano, IconTimeline } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -349,7 +349,7 @@ function ProfilePage () {
                     {!!profile.verified && 
                       <Tooltip label='Usuário verificado'>
                         <IconRosetteDiscountCheckFilled 
-                          className='iconVerified'
+                          className='iconVerified point'
                           onClick={() => setModalVerifiedOpen(true)}
                         />
                       </Tooltip>
@@ -357,7 +357,7 @@ function ProfilePage () {
                     {!!profile.legend && 
                       <Tooltip label='Lenda da Música'>
                         <IconShieldCheckFilled
-                          className='iconLegend'
+                          className='iconLegend point'
                           onClick={() => setModalLegendOpen(true)}
                         />
                       </Tooltip>
@@ -812,7 +812,7 @@ function ProfilePage () {
                 >
                   <Group justify='space-between' align='center' gap={8} mb={8}>
                     <Title fz='1.03rem' fw='640'>
-                      Projetos
+                      Projetos ({profile.projects.total})
                     </Title>
                     {(!profile.requesting && profile.projects.total > 0) &&
                       <ActionIcon
@@ -871,7 +871,7 @@ function ProfilePage () {
                         title='Ver votos'
                         onClick={() => openVotesHistoryModal()}
                       >
-                        <IconDotsVertical
+                        <IconEye
                           color={colorScheme === 'light' ? 'black' : 'white'}
                           style={{ width: '91%', height: '91%' }} stroke={1.5}
                         />

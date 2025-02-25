@@ -82,8 +82,8 @@ function ProjectsTimeline () {
                   </Tooltip>
                 }
               </Flex>
-              <Text size='xs'>
-                {profile.projects.total} projetos na timeline de {username}
+              <Text size='sm'>
+                Timeline de projetos {username}
               </Text>
               <Anchor 
                 href={`/${username}`}
