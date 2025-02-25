@@ -54,11 +54,11 @@ function LandingPage () {
   return (
     <>
       <Helmet>
-        <title>Mublin</title>
+        <title>Mublin - A rede dos músicos</title>
         <link rel='canonical' href='https://mublin.com' />
         <meta 
           name='description' 
-          content='Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.' 
+          content='Centralize o gerenciamento dos seus projetos de música e conecte-se com artistas e produtores do mercado musical' 
         />
       </Helmet>
       {loggedIn &&
