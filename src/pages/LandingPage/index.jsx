@@ -74,12 +74,12 @@ function LandingPage () {
       <Header />
       <Container size='sm' my={50}>
         <Title 
-          size='2rem'
-          fw='800'
+          size='1.9rem'
+          fw='750'
           ta='center'
           mb={8}
         >
-          Gerencie seus projetos de <Text span variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 90 }} size='2rem' fw='800'>música</Text>
+          Gerencie seus projetos de <Text span variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 90 }} size='2rem' fw='750'>música</Text>
         </Title>
         <Text 
           size='md'
@@ -134,7 +134,7 @@ function LandingPage () {
       </Marquee>
       <Container size='sm'mt={50}>
         <Title 
-          size='1.7rem'
+          size='1.55rem'
           fw='700'
           ta='center'
           mb={8}
