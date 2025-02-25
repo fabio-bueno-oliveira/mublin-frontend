@@ -42,7 +42,7 @@ function GearProductPage () {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>{`${product.brandName} ${product.name} | Mublin`}</title>
+        <title>{`${product.name} | ${product.brandName} | Mublin`}</title>
         <link rel='canonical' href={`https://mublin.com/gear/product/${product.id}`} />
         <meta name='description' content='A rede para quem trabalha com música' />
       </Helmet>
@@ -179,7 +179,7 @@ function GearProductPage () {
                   }
                   {product.availableColors.total > 0 && 
                     <>
-                      <Text size='xs' c='dimmed' my={5} ta='center'>
+                      <Text size='xs' my={5} ta='center'>
                         {selectedColor?.colorName}
                       </Text>
                       <Flex justify='center' align='flex-start' gap={8}>

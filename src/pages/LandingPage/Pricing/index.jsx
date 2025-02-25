@@ -35,7 +35,7 @@ function PricingPublicPage () {
       <Container size='sm' my={32}>
         <Title 
           size='2rem'
-          fw='700'
+          fw='800'
           ta='center'
           mb={8}
         >
@@ -45,9 +45,9 @@ function PricingPublicPage () {
           size='md'
           className='lhNormal'
           ta='center' 
-          fw='330'
+          fw='400'
         >
-          Conecte-se com outros artistas e produtores. Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques
+          Conecte-se com outros artistas e produtores. Gerencie dos seus projetos de música e amplie suas possibilidades no mercado musical
         </Text>
       </Container>
       <Container size='sm'>

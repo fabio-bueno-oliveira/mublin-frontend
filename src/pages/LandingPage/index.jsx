@@ -75,19 +75,19 @@ function LandingPage () {
       <Container size='sm' my={50}>
         <Title 
           size='2rem'
-          fw='700'
+          fw='800'
           ta='center'
           mb={8}
         >
-          Gerencie seus projetos de <Text span variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 90 }} size='2rem' fw='700'>música</Text>
+          Gerencie seus projetos de <Text span variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 90 }} size='2rem' fw='800'>música</Text>
         </Title>
         <Text 
           size='md'
           className='lhNormal'
           ta='center' 
-          fw='330'
+          fw='400'
         >
-          Cadastre seus projetos e equipamentos. Conecte com produtores, artistas e faça conexões com pessoas do mercado musical
+          Cadastre seus projetos e equipamentos. Consiga novas gigs e conecte com produtores, artistas e pessoas do mercado musical
         </Text>
         <Center>
           <Link to={{ pathname: '/signup' }}>
