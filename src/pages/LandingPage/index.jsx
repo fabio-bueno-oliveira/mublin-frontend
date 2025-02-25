@@ -3,8 +3,9 @@ import { Link, Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Header from '../../components/header/public'
 import Footer from '../../components/footer/public'
-import { useMantineColorScheme, Container, Center, Avatar, Flex, Box, Text, Title, Button, Grid, Image, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Center, Avatar, Flex, Box, Text, Title, Button, Grid, Image, Anchor, rem, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import { Helmet } from 'react-helmet'
 import { 
   IconAutomaticGearbox,
   IconCalendarSmile,
@@ -14,8 +15,7 @@ import {
   IconUsersGroup,
   IconRosetteDiscountCheckFilled,
   IconShieldCheckFilled
-} from '@tabler/icons-react';
-import { IconArrowRight } from '@tabler/icons-react'
+} from '@tabler/icons-react'
 import Marquee from 'react-fast-marquee'
 import './styles.scss'
 
@@ -53,6 +53,14 @@ function LandingPage () {
 
   return (
     <>
+      <Helmet>
+        <title>Mublin</title>
+        <link rel='canonical' href='https://mublin.com' />
+        <meta 
+          name='description' 
+          content='Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.' 
+        />
+      </Helmet>
       {loggedIn &&
         <Navigate to='/home' />
       }
@@ -71,7 +79,7 @@ function LandingPage () {
           ta='center'
           mb={8}
         >
-          Gerencie seus projetos de música
+          Gerencie seus projetos de <Text span variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 90 }} size='2rem' fw='700'>música</Text>
         </Title>
         <Text 
           size='md'
@@ -79,22 +87,28 @@ function LandingPage () {
           ta='center' 
           fw='330'
         >
-          Centralize o gerenciamento dos seus projetos de música em um só lugar e simplifique o seu dia a dia na música com apenas alguns cliques.
+          Cadastre seus projetos e equipamentos. Conecte com produtores, artistas e faça conexões com pessoas do mercado musical
         </Text>
         <Center>
           <Link to={{ pathname: '/signup' }}>
             <Button
               size='xl'
               mt='lg'
+              radius='xl'
               color='mublinColor'
-              variant='gradient'
-              gradient={{ from: 'mublinColor', to: 'violet', deg: 90 }}
-              rightSection={<IconArrowRight size={14}/>}
+              // variant='gradient'
+              // gradient={{ from: 'mublinColor', to: 'violet', deg: 90 }}
+              // rightSection={<IconArrowRight size={14}/>}
             >
               Comece grátis
             </Button>
           </Link>
         </Center>
+        <Anchor underline='hover' href='/pricing'>
+          <Text size='xs' ta='center' mt={6}>
+            Confira os planos
+          </Text>
+        </Anchor>
       </Container>
       <Marquee>
         {featuredUsers?.map((user, key) =>
