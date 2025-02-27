@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
-import { Grid, Container, Center, Loader, Box, Flex, Button, Image, Text } from '@mantine/core'
+import { useSelector } from 'react-redux'
+import { Grid, Container, Center, Loader, Box, Flex, Button, Avatar, Image, Text, Divider, Card } from '@mantine/core'
 import { IconChevronLeft, IconCamera } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -9,6 +10,7 @@ import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
 import { notifications } from '@mantine/notifications'
 import { IKUpload } from 'imagekitio-react'
+import { Helmet } from 'react-helmet'
 
 function SettingsPicturePage () {
 
@@ -24,6 +26,7 @@ function SettingsPicturePage () {
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   const [picture, setPicture] = useState(userInfo.picture)
+  const user = useSelector(state => state.user)
 
   // Picture upload
   const userAvatarPath = '/users/avatars/'+loggedUserId+'/'
@@ -74,6 +77,11 @@ function SettingsPicturePage () {
 
   return (
     <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>Alterar foto de perfil | Mublin</title>
+        <link rel='canonical' href='https://mublin.com/settings/picture' />
+      </Helmet>
       <div className='showOnlyInLargeScreen'>
         <Header reloadUserInfo />
       </div>
@@ -107,16 +115,14 @@ function SettingsPicturePage () {
                 ) : (
                   <>
                     {!userInfo.picture ? (
-                      <Image
-                        radius={'md'}
-                        src='https://ik.imagekit.io/mublin/tr:h-140,w-140,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'
-                        w={140}
+                      <Avatar
+                        src='https://ik.imagekit.io/mublin/tr:h-280,w-280,r-max/sample-folder/avatar-undefined_Kblh5CBKPp.jpg'
+                        size={140}
                       />
                     ) : (
-                      <Image
-                        radius={'md'}
-                        src={'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+picture}
-                        w={140}
+                      <Avatar
+                        src={'https://ik.imagekit.io/mublin/tr:h-280,w-280,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+picture}
+                        size={140}
                       />
                     )}
                   </>
@@ -145,7 +151,58 @@ function SettingsPicturePage () {
                     size='sm'
                     disabled={uploading}
                   >
-                    {uploading ? 'Enviando...' : 'Escolher nova foto'}
+                    {uploading ? 'Enviando...' : 'Escolher nova foto de perfil'}
+                  </Button>
+                </div>
+              </Center>
+              <Divider mt={14} mb={20} />
+              <Center>
+                {uploading ? ( 
+                  <Loader color='violet' />
+                ) : (
+                  <>
+                    {user.picture_cover ? (
+                      <Image
+                        src={`https://ik.imagekit.io/mublin/tr:w-380,c-maintain_ratio/users/avatars/${loggedUserId}/${user.picture_cover}`}
+                        width={380}
+                        alt={`Imagem de capa de ${user.name}`}
+                      />
+                    ) : (
+                      <Center mb={20}>
+                        <Card px={0} pt={30} withBorder radius={0} w={380} h={80}>
+                          <Text size='sm' c='gray' ta='center'>
+                            Nenhuma imagem de capa no momento
+                          </Text>
+                        </Card>
+                      </Center>
+                    )}
+                  </>
+                )}
+              </Center>
+              <Center>
+                <div className='customFileUpload'>
+                  <IKUpload 
+                    fileName='cover.jpg'
+                    folder={userAvatarPath}
+                    tags={['cover','user']}
+                    name='file-cover-input'
+                    id='userCover'
+                    className='file-input__input'
+                    useUniqueFileName={true}
+                    isPrivateFile= {false}
+                    onError={onUploadError}
+                    onSuccess={onUploadSuccess}
+                    onUploadStart={onUploadStart}
+                  />
+                  <Button
+                    component='label'
+                    htmlFor='userCover'
+                    leftSection={<IconCamera size={14} />}
+                    color='violet'
+                    size='sm'
+                    disabled={uploading}
+                  >
+                    {uploading ? 'Enviando...' : 'Escolher nova foto de capa'}
                   </Button>
                 </div>
               </Center>

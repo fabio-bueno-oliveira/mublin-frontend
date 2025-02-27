@@ -6,7 +6,7 @@ import { userActions } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { useMantineColorScheme, Drawer, Box, Flex, Button, Text } from '@mantine/core'
-import { IconMusicPlus, IconBulb, IconSend, IconUserPlus, IconChevronRight, IconBox, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic, IconPencil } from '@tabler/icons-react'
+import { IconMusicPlus, IconCubePlus, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic, IconPencilPlus } from '@tabler/icons-react'
 import './styles.scss'
 
 const FooterMenuMobile = (props) => {
@@ -70,103 +70,53 @@ const FooterMenuMobile = (props) => {
         title='O que deseja criar?'
         position='bottom'
       >
-        <Flex mb={76} mt={4} direction='column' gap={18}>
+        <Flex mb={40} mt={4} direction='column' gap={18}>
           <Box>
             <Button
-              variant='outline'
-              color={colorScheme === 'light' ? 'violet' : 'violet'}
+              variant='filled'
+              color='mublinColor'
               size='md'
-              radius='xl'
-              leftSection={<IconPencil size={19} />}
-              rightSection={<IconChevronRight size={12} />}
-              fullWidth
-              onClick={() => navigate('/new/post')}
-            >
-              Novo post
-            </Button>
-            <Text ta='center' size='xs' c='dimmed' mt={5} px={10}>
-              Cadastre projetos de música (novos ou já em atividade)
-            </Text>
-          </Box>
-          <Box>
-            <Button
-              variant='outline'
-              color={colorScheme === 'light' ? 'violet' : 'violet'}
-              size='md'
-              radius='xl'
+              radius='md'
               leftSection={<IconMusicPlus size={19} />}
-              rightSection={<IconChevronRight size={12} />}
               fullWidth
               onClick={() => navigate('/new/project')}
             >
               Novo projeto
             </Button>
             <Text ta='center' size='xs' c='dimmed' mt={5} px={10}>
-              Cadastre projetos de música (novos ou já em atividade)
+              Ingresse em projetos de música novos ou em atividade
             </Text>
           </Box>
           <Box>
             <Button
-              variant='outline'
-              color={colorScheme === "light" ? 'violet' : 'violet'}
+              variant='filled'
+              color='mublinColor'
               size='md'
-              radius='xl'
-              leftSection={<IconBulb size={19} />}
-              rightSection={<IconChevronRight size={12} />}
+              radius='md'
+              leftSection={<IconPencilPlus size={19} />}
               fullWidth
+              onClick={() => navigate('/new/post')}
             >
-              Nova ideia de projeto
+              Nova postagem
             </Button>
-            <Text ta="center" size="xs" c="dimmed" mt={5} px={10}>
-              Cadastre um projeto ainda em idealização para atrair interessados em participar
+            <Text ta='center' size='xs' c='dimmed' mt={5} px={10}>
+              Escreva um novo post
             </Text>
           </Box>
           <Box>
             <Button
-              variant='outline'
-              color={colorScheme === "light" ? 'violet' : 'violet'}
+              variant='filled'
+              color='mublinColor'
               size='md'
-              radius='xl'
-              leftSection={<IconBox size={22} />}
-              rightSection={<IconChevronRight size={12} />}
+              radius='md'
+              leftSection={<IconCubePlus size={22} />}
               fullWidth
+              onClick={() => navigate('/new/gear')}
             >
               Novo equipamento
             </Button>
             <Text ta="center" size="xs" c="dimmed" mt={5} px={10}>
-              Cadastre um projeto ainda em idealização para atrair interessados em participar
-            </Text>
-          </Box>
-          <Box>
-            <Button
-              variant='outline'
-              color={colorScheme === "light" ? 'violet' : 'violet'}
-              size='md'
-              radius='xl'
-              leftSection={<IconUserPlus size={19} />}
-              rightSection={<IconChevronRight size={12} />}
-              fullWidth
-            >
-              Ingressar em um projeto
-            </Button>
-            <Text ta="center" size="xs" c="dimmed" mt={5} px={10}>
-              Ingresse em projetos cadastrados no Mublin 
-            </Text>
-          </Box>
-          <Box>
-            <Button
-              variant='outline'
-              color={colorScheme === "light" ? 'violet' : 'violet'}
-              size='md'
-              radius='xl'
-              leftSection={<IconSend size={19} />}
-              rightSection={<IconChevronRight size={12} />}
-              fullWidth
-            >
-              Convidar para projeto
-            </Button>
-            <Text ta="center" size="xs" c="dimmed" mt={5} px={10}>
-              Convide por e-mail músicos que ainda não estão cadastrados no Mublin
+              Cadastre um novo item do seu equipamento
             </Text>
           </Box>
         </Flex>

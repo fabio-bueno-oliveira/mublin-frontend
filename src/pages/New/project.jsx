@@ -276,7 +276,9 @@ function New () {
 
   return (
     <>
-      <Header />
+      <Box className='showOnlyInLargeScreen'>
+        <Header />
+      </Box>
       <Container size='xs' mt={20} mb={130}>
         <Center mb={10}>
           <Button.Group>

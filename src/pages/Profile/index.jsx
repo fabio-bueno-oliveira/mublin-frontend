@@ -7,7 +7,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconPlus, IconMapPin, IconEye, IconPiano, IconTimeline } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconMapPin, IconEye, IconPiano, IconTimeline, IconPencilPlus } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -707,7 +707,7 @@ function ProfilePage () {
                           color='mublinColor'
                           variant='filled'
                           loading={loadingFollow}
-                          fullWidth={isMobile}
+                          fullWidth
                           onClick={() => followUnfollow()}
                         >
                           Seguir
@@ -732,8 +732,8 @@ function ProfilePage () {
                       fz='0.85rem'
                       fw='570'
                       h={30}
-                      variant={'filled'}
-                      color='primary'
+                      variant='filled'
+                      color='mublinColor'
                       fullWidth
                       onClick={() => navigate('/settings')}
                     >
@@ -812,7 +812,7 @@ function ProfilePage () {
                 >
                   <Group justify='space-between' align='center' gap={8} mb={8}>
                     <Title fz='1.03rem' fw='640'>
-                      Projetos ({profile.projects.total})
+                      Projetos  {!!profile.projects.total && `(${profile.projects.total})`}
                     </Title>
                     {(!profile.requesting && profile.projects.total > 0) &&
                       <ActionIcon
@@ -991,7 +991,7 @@ function ProfilePage () {
                         onClick={() => setShowModalNewPost(true)}
                         title='Escrever uma publicação'
                       >
-                        <IconPlus 
+                        <IconPencilPlus 
                           color={colorScheme === 'light' ? 'black' : 'white'}
                           style={{ width: '91%', height: '91%' }} stroke={1.5}
                         />

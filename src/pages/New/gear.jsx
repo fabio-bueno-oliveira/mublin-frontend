@@ -7,7 +7,7 @@ import { gearInfos } from '../../store/actions/gear'
 import { Container, Divider, Card, Center, Group, Flex, Image, NativeSelect, Button, Radio, Text, Title, Anchor, Checkbox, TextInput, Textarea, ColorSwatch } from '@mantine/core'
 import { useForm, isNotEmpty } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
-import { IconChevronUp } from '@tabler/icons-react'
+import { IconChevronUp, IconPhoto } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { CurrencyInput } from 'react-currency-mask'
@@ -154,20 +154,22 @@ function AddGearToUserSetup () {
     }
     setLoadingAddNewProduct(true)
     setTimeout(() => {
-      fetch('https://mublin.herokuapp.com/user/addGearItem', {
+      fetch('https://mublin.herokuapp.com/user/addGearItemV2', {
         method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({ productId: values.productId, featured: values.featured, forSale: forSale, price: price, currentlyUsing: values.currentlyUsing, ownerComments: values.ownerComments, colorId: selectedColor?.colorId ? selectedColor?.colorId : '' })
+        body: JSON.stringify({ 
+          productId: values.productId, featured: values.featured, forSale: forSale, price: price ? price : '', currentlyUsing: values.currentlyUsing, tuning: '', ownerComments: values.ownerComments ? values.ownerComments : '', colorId: selectedColor?.colorId ? selectedColor?.colorId : '' 
+        })
       }).then((response) => {
         setLoadingAddNewProduct(false)
         setBrandSelected('')
         setCategorySelected('')
         if (shareNewProductOnFeed) {
-          sendToFeed(productId)
+          sendToFeed(values.productId)
         }
         form.reset()
         notifications.show({
@@ -176,6 +178,7 @@ function AddGearToUserSetup () {
           title: 'Sucesso',
           message: shareNewProductOnFeed ? 'O novo item foi adicionado ao seu equipamento e compartilhado no feed' : 'O novo item foi adicionado ao seu equipamento',
         })
+        navigate(`/${user.username}`)
       }).catch(err => {
         console.error(err)
         alert("Ocorreu um erro ao adicionar o produto")
@@ -291,7 +294,7 @@ function AddGearToUserSetup () {
                 <option value=''>{!categorySelected ? 'Selecione primeiro a categoria' : 'Selecione o produto'}</option>
               }
               {products.map((product,key) =>
-                <option key={key} value={product.id} disabled={!!gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {product.colorName && product.colorName} {!!gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
+                <option key={key} value={product.id} disabled={!!gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {!!gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
               )}
             </NativeSelect>
             {loggedUserId === 1 &&
@@ -304,9 +307,12 @@ function AddGearToUserSetup () {
             {(!form.getValues().productId && product.availableColors.total === 0) &&  
               <Center mt={14} mb={20}>
                 <Card w='120' p={10} withBorder shadow={false}>
-                  <Text size='sm' fw={500} ta='center' c='dimmed'>
-                    Selecione o produto para carregar a imagem
-                  </Text>
+                  <Flex gap={6} direction='column' align='center'>
+                    <IconPhoto size={16} color='gray' />
+                    <Text size='xs' fw={500} ta='center' c='dimmed'>
+                      Selecione o produto para carregar a imagem
+                    </Text>
+                  </Flex>
                 </Card>
               </Center>
             }
@@ -410,7 +416,7 @@ function AddGearToUserSetup () {
               key={form.key('tuning')}
               {...form.getInputProps('tuning')}
             >
-              <option>Não informado</option>
+              <option>Não informar</option>
               {tuningTypes.map((type) =>
                 <option key={type.id} value={type.id}>{type.namePTBR}</option>
               )}

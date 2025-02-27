@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Switch, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
 import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft, IconLockSquareRoundedFilled } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
@@ -370,33 +370,32 @@ function SettingsMyGearPage () {
                           <Text size='sm' mb='1' ta='center' truncate="end">
                             {item.productName}
                           </Text>
-                          <Group mt={6} gap={5}>
-                            {item.featured ? (
-                              <IconToggleRightFilled color='green' />
-                            ) : (
-                              <IconToggleLeft color='gray' />
-                            )}
-                            <Text size='sm'>Em destaque</Text>
-                          </Group>
-                          <Group gap={5}>
-                            {item.currentlyUsing ? (
-                              <IconToggleRightFilled color='green' />
-                            ) : (
-                              <IconToggleLeft color='gray' />
-                            )}
-                            <Text size='sm'>Em uso</Text>
-                          </Group>
-                          <Group gap={5}>
-                            {item.forSale ? (
-                              <IconToggleRightFilled color='green' />
-                            ) : (
-                              <IconToggleLeft color='gray' />
-                            )}
-                            <Text size='sm'>À venda</Text>
-                            <Text size='xs' c='dimmed'>
-                              {!!item.forSale && '('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')'}
-                            </Text>
-                          </Group>
+                          <Divider my={8} />
+                          <Switch
+                            mt={6}
+                            checked={item.featured}
+                            color="mublinColor"
+                            label="Em destaque"
+                            readOnly
+                            size='xs'
+                          />
+                          <Switch
+                            mt={6}
+                            checked={item.currentlyUsing}
+                            color="mublinColor"
+                            label="Em uso atualmente"
+                            readOnly
+                            size='xs'
+                          />
+                          <Switch
+                            mt={6}
+                            checked={item.forSale}
+                            color="mublinColor"
+                            label={!!item.forSale ? 'À venda ('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')' : 'À venda'}
+                            readOnly
+                            size='xs'
+                          />
+                          <Divider my={8} />
                         </Box> 
                         <Flex mt='10' gap={8} justify='space-between'>
                           <Button 
@@ -420,7 +419,6 @@ function SettingsMyGearPage () {
                           </Button>
                         </Flex>
                       </Paper>
-                      <Divider my={10} />
                     </Grid.Col>
                   ))}
                 </Grid>
