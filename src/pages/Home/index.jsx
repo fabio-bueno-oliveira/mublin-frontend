@@ -249,12 +249,12 @@ function Home () {
                 </>
               )}
             </Box>
-            <Divider 
+            {/* <Divider 
               mb="xs" 
               label="Meus projetos" 
-              labelPosition="left"
+              labelPosition="center"
               className='showOnlyInMobile' 
-            />
+            /> */}
             <ScrollArea w='100%' h={130} type='never' className='showOnlyInMobile'>
               <Box className='fitContent'>
                 <Flex gap={18}>
@@ -314,12 +314,12 @@ function Home () {
             </ScrollArea>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 12, lg: 6.2 }} mb={isMobile ? 60 : 20}>
-            <Divider 
+            {/* <Divider 
               mb="xs" 
-              label="Atualizações" 
-              labelPosition="left"
+              label="Atualizações da sua rede" 
+              labelPosition="center"
               className='showOnlyInMobile' 
-            />
+            /> */}
             <Card
               radius='lg'
               withBorder
