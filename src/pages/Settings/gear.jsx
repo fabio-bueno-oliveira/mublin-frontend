@@ -304,7 +304,10 @@ function SettingsMyGearPage () {
                         color='mublinColor'
                         size='md'
                         fullWidth={isMobile ? true : false}
-                        onClick={() => setModalAddNewProductOpen(true)} disabled={!isLoaded}
+                        disabled={!isLoaded}
+                        // onClick={() => setModalAddNewProductOpen(true)}
+                        component='a'
+                        href='/new/gear'
                       >
                         Adicionar novo item
                       </Button>

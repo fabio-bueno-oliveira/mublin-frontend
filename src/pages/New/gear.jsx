@@ -4,10 +4,11 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
 import { gearInfos } from '../../store/actions/gear'
-import { Container, Divider, Card, Center, Group, Flex, Image, NativeSelect, Button, Radio, Text, Title, Anchor, Checkbox, TextInput, Textarea, ColorSwatch } from '@mantine/core'
+import { Container, Divider, Card, Paper, Center, Box, Group, Flex, Image, NativeSelect, Button, Radio, Text, Title, Anchor, Checkbox, TextInput, Textarea, ColorSwatch, ThemeIcon, em } from '@mantine/core'
 import { useForm, isNotEmpty } from '@mantine/form'
+import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
-import { IconChevronUp, IconPhoto } from '@tabler/icons-react'
+import { IconChevronUp, IconPhoto, IconCubePlus } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { CurrencyInput } from 'react-currency-mask'
@@ -21,6 +22,9 @@ function AddGearToUserSetup () {
 
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
+
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   // Initial values from URL search params (/new/gear?product=&category=&brand=)
   const [searchParams] = useSearchParams()
@@ -178,7 +182,8 @@ function AddGearToUserSetup () {
           title: 'Sucesso',
           message: shareNewProductOnFeed ? 'O novo item foi adicionado ao seu equipamento e compartilhado no feed' : 'O novo item foi adicionado ao seu equipamento',
         })
-        navigate(`/${user.username}`)
+        // navigate(`/${user.username}`)
+        navigate('/settings/my-gear')
       }).catch(err => {
         console.error(err)
         alert("Ocorreu um erro ao adicionar o produto")
@@ -233,20 +238,31 @@ function AddGearToUserSetup () {
         <Header reloadUserInfo />
       </div>
       <Container size='xs' mt={20} mb={100}>
-        <Card
-          shadow='sm'
-          p={14}
-          withBorder
-          mb={20}
-          display='block'
-          className='mublinModule'
+        <Paper
+          withBorder={isLargeScreen ? true : false}
+          px={isMobile ? 0 : 16}
+          pt={isMobile ? 0 : 12}
+          pb={isMobile ? 3 : 12}
+          mt='12'
+          mb='14'
+          className="mublinModule transparentBgInMobile"
         >
-          <Title order={5}>
-            Adicionar novo item ao meu equipamento
-          </Title>
-          <Text mb={14} size='sm' c='dimmed'>
+          <Group gap={8} mb={14} align='center'>
+            <ThemeIcon variant='light' radius="xl" size="lg" color="mublinColor">
+              <IconCubePlus style={{ width: '70%', height: '70%' }} />
+            </ThemeIcon>
+            <Box>
+            <Title order={6}>
+              Adicionar item ao meu equipamento
+            </Title>
+            <Text size='sm' c='dimmed'>
+              Selecione o produto que será adicionado
+            </Text>
+            </Box>
+          </Group>
+          {/* <Text mb={14} size='sm' c='dimmed'>
             Selecione o item que será adicionado
-          </Text>
+          </Text> */}
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <NativeSelect
               withAsterisk
@@ -482,7 +498,7 @@ function AddGearToUserSetup () {
               )}
             </Group>
           </form>
-        </Card>
+        </Paper>
       </Container>
       <FooterMenuMobile />
     </>

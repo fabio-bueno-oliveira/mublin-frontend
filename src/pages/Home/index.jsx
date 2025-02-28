@@ -10,7 +10,7 @@ import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Container, ScrollArea, Group, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconPlus, IconCalendarEventFilled, IconMapPinFilled } from '@tabler/icons-react'
+import { IconPlus, IconCalendarEventFilled, IconMapPinFilled, IconHexagonPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
 import FeedCard from './FeedCard'
 import FeedCardLoading from './FeedCard/loading'
@@ -249,8 +249,13 @@ function Home () {
                 </>
               )}
             </Box>
-            <Divider mb="xs" label="Meus projetos" labelPosition="left"  className='showOnlyInMobile' />
-            <ScrollArea w='100%' h={100} type='never' className='showOnlyInMobile'>
+            <Divider 
+              mb="xs" 
+              label="Meus projetos" 
+              labelPosition="left"
+              className='showOnlyInMobile' 
+            />
+            <ScrollArea w='100%' h={130} type='never' className='showOnlyInMobile'>
               <Box className='fitContent'>
                 <Flex gap={18}>
                   <Flex
@@ -259,11 +264,16 @@ function Home () {
                     gap='10'
                   >
                      <Avatar 
-                      size='65px' color='violet' radius='xl'
+                      // size='65px' 
+                      h={100}
+                      w={65}
+                      color='mublinColor' 
+                      radius='md'
                       className='point'
-                      onClick={() => navigate('/new/')}
+                      variant='outline'
+                      onClick={() => navigate('/new/project')}
                      >
-                      <IconPlus size="1.5rem" />
+                      <IconHexagonPlus size="1.5rem" stroke={1} />
                     </Avatar>
                     <Text size='0.75rem' fw='480'>
                       Criar novo
@@ -283,9 +293,17 @@ function Home () {
                       key={project.projectid}
                       direction='column'
                       align='center'
-                      gap='10'
+                      gap='8'
                     >
-                      <Avatar size='65px' src={'https://ik.imagekit.io/mublin/projects/tr:h-130,w-130,c-maintain_ratio/'+project.picture} />
+                      <Image
+                        radius="md"
+                        h={100}
+                        w={65}
+                        fit="contain"
+                        // component='a'
+                        // href={`/project/${project.username}`}
+                        src={'https://ik.imagekit.io/mublin/projects/tr:h-100,w-65,c-maintain_ratio/'+project.picture}
+                      />
                       <Text size='0.75rem' fw='480'>
                         {truncateString(project.name, 9)}
                       </Text>
@@ -296,6 +314,12 @@ function Home () {
             </ScrollArea>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 12, lg: 6.2 }} mb={isMobile ? 60 : 20}>
+            <Divider 
+              mb="xs" 
+              label="Atualizações" 
+              labelPosition="left"
+              className='showOnlyInMobile' 
+            />
             <Card
               radius='lg'
               withBorder
