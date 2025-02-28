@@ -265,18 +265,18 @@ function Home () {
                   >
                      <Avatar 
                       // size='65px' 
-                      h={100}
+                      h={98}
                       w={65}
-                      color='mublinColor' 
+                      color='gray' 
                       radius='md'
                       className='point'
-                      variant='outline'
+                      variant='light'
                       onClick={() => navigate('/new/project')}
                      >
                       <IconHexagonPlus size="1.5rem" stroke={1} />
                     </Avatar>
-                    <Text size='0.75rem' fw='480'>
-                      Criar novo
+                    <Text size='0.65rem' fw='480'>
+                      Novo projeto
                     </Text>
                   </Flex>
                   {projects.requesting &&
@@ -302,10 +302,11 @@ function Home () {
                         fit="contain"
                         // component='a'
                         // href={`/project/${project.username}`}
+                        onClick={() => navigate(`/project/${project.username}`)}
                         src={'https://ik.imagekit.io/mublin/projects/tr:h-100,w-65,c-maintain_ratio/'+project.picture}
                       />
-                      <Text size='0.75rem' fw='480'>
-                        {truncateString(project.name, 9)}
+                      <Text size='0.65rem' fw='480'>
+                        {truncateString(project.name, 10)}
                       </Text>
                     </Flex>
                   )}

@@ -2,10 +2,11 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Box, Flex, Group, Badge, Alert, Title, Table, Spoiler, Text, Image, Skeleton, Avatar, Paper, Anchor, Divider, em } from '@mantine/core'
+import { Container, Grid, Box, Flex, Group, Badge, Alert, Title, Table, Spoiler, Text, Image, Skeleton, Avatar, Paper, Anchor, Button, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconMapPin, IconMusic, IconSettings, IconBrandInstagram, IconCheck, IconX, IconBrandSoundcloud } from '@tabler/icons-react'
 import Header from '../../components/header'
+import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
 import { Helmet } from 'react-helmet'
@@ -38,25 +39,27 @@ function ProjectPage () {
         <title>{project.requesting ? `Mublin` : `${project.name} | Mublin`}</title>
         <link rel='canonical' href={`https://mublin.com/project/${project.name}`} />
       </Helmet>
-      {!isMobile && 
-        <Header />
-      }
-      <Container size={'lg'}>
-        <Group mt={14} mb={10}>
-          <Flex gap={4} align='center'>
-            <IconMusic size={16} />
-            <Title fw={500} order={6} style={{cursor:'default'}}>
-              Página do Projeto
-            </Title>
-          </Flex>
-          <Flex gap={4} align='center' opacity='0.3'>
-            <IconSettings size={16} />
-            <Title fw={450} order={6} style={{cursor:'not-allowed'}}>
-              Painel de Controle do Projeto
-            </Title>
-          </Flex>
+      <Box 
+        pos='fixed' 
+        px={8} 
+        pt={18} 
+        pb={10} 
+        bg={'black'} 
+        w='100%' 
+        top={-6} 
+        className='showOnlyInMobile'
+      >
+        <Group gap={6} justify='center'>
+          <IconSettings size={16} color='white' />
+          <Text c='white' size='sm'>
+            Painel de Controle
+          </Text>
         </Group>
-        <Divider mb={14} className='showOnlyInMobile' />
+      </Box>
+      <Box className='showOnlyInLargeScreen'>
+        <Header page='project' />
+      </Box>
+      <Container size={'lg'}>
         {project.requesting && 
           <Paper
             withBorder={isMobile ? false : true}
@@ -86,6 +89,7 @@ function ProjectPage () {
               withBorder={isMobile ? false : true}
               px={isMobile ? 0 : 16}
               py={isMobile ? 0 : 12}
+              mt={isMobile ? 60 : 0}
               className='mublinModule transparentBgInMobile'
             >
               <Flex
@@ -108,13 +112,10 @@ function ProjectPage () {
                       <Badge variant='light' color='gray' radius='sm' size='sm'>
                         {project.typeName}
                       </Badge>
-                      {project.country && 
-                        <Flex align='center' gap={3}>
-                          <IconMapPin color='gray' size={12} />
-                          <Text size='sm' c='gray'>
-                            {`${project.region} · ${project.country}`}
-                          </Text>
-                        </Flex>
+                      {project.activityStatusId &&
+                        <Badge radius='sm' size='sm' variant='light' color={project.activityStatusColor}>
+                          {project.activityStatus}
+                        </Badge>
                       }
                     </Group>
                     <Title order={2} fw={650} className='lhNormal'>
@@ -127,11 +128,9 @@ function ProjectPage () {
                     </Group>
                   </Box>
                 </Group>
-                {project.activityStatusId &&
-                  <Badge size='md' variant='dot' color={project.activityStatusColor}>
-                    {project.activityStatus}
-                  </Badge>
-                }
+                <Button size='xs' color='primary' leftSection={<IconSettings size={14} />}>
+                  Painel de Controle
+                </Button>
               </Flex>
             </Paper>
             {project.endDate && 
@@ -155,7 +154,7 @@ function ProjectPage () {
                     loading='lazy'
                   />
                 }
-                {(project.bio || project.instagram || project.soundcloud) &&
+                {(project.instagram || project.soundcloud) &&
                   <Paper
                     withBorder={isMobile ? false : true}
                     mt={project.spotifyId ? 14 : 0}
@@ -164,7 +163,7 @@ function ProjectPage () {
                     pb={10}
                     className='mublinModule transparentBgInMobile'
                   >
-                    <Title fz='1.0rem' fw='640' mb={3}>Sobre</Title>
+                    <Title fz='1.0rem' fw='640' mb={3}>Links</Title>
                     {(project.instagram || project.soundcloud) &&
                       <Group gap={6} mt={6}>
                         {project.instagram &&
@@ -200,6 +199,26 @@ function ProjectPage () {
                           </Anchor>
                         }
                       </Group>
+                    }
+                  </Paper>
+                }
+                {project.bio &&
+                  <Paper
+                    withBorder={isMobile ? false : true}
+                    mt={14}
+                    px={isMobile ? 0 : 16}
+                    pt={isMobile ? 0 : 12}
+                    pb={10}
+                    className='mublinModule transparentBgInMobile'
+                  >
+                    <Title fz='1.0rem' fw='640' mb={3}>Sobre</Title>
+                    {project.country && 
+                      <Flex align='center' gap={3}>
+                        <IconMapPin color='gray' size={12} />
+                        <Text size='xs' c='gray'>
+                          {`${project.region} · ${project.country}`}
+                        </Text>
+                      </Flex>
                     }
                     <Spoiler maxHeight={80} showLabel={<Text size='sm' fw={600}>...mais</Text>} hideLabel={<Text size='sm' fw={600}>mostrar menos</Text>}>
                       <Text size='sm' c={!project.bio ? 'dimmed' : undefined}>
@@ -303,10 +322,10 @@ function ProjectPage () {
                               <Table.Td width='15%' fz={13}>
                                 {item.rolename}
                               </Table.Td>
-                              <Table.Td width='25%' fz={13}>
+                              <Table.Td width='20%' fz={13}>
                                 {item.experienceName}
                               </Table.Td>
-                              <Table.Td width='40%' fz={12}>
+                              <Table.Td width='45%' fz={12}>
                                 {item.info}
                               </Table.Td>
                             </Table.Tr>
