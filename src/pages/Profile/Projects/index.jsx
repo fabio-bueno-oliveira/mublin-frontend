@@ -1,24 +1,40 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Flex, Box, Text, Avatar  } from '@mantine/core'
+import { Flex, Box, Text, Avatar, Skeleton } from '@mantine/core'
 import { IconStarFilled } from '@tabler/icons-react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
 
 function Projects (props) {
 
-  let navigate = useNavigate()
   const profile = props.profile
   const profilePlan = props.profilePlan
 
-  const projects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
+  const requesting = props.requesting
 
-  const goToProject = (username) => {
-    navigate('/project/'+username)
-  }
+  const projects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
 
   return (
     <>
+      {requesting && 
+        <Flex gap={22}>
+          <Flex gap={6}>
+            <Skeleton height={64} width={64} radius='sm'/>
+            <Flex direction='column' justify='center'>
+              <Skeleton width={90} height={10} radius="lg" mb={5} />
+              <Skeleton width={100} height={12} radius="lg" mb={5} />
+              <Skeleton width={60} height={8} radius="lg" />
+            </Flex>
+          </Flex>
+          <Flex gap={6}>
+            <Skeleton height={64} width={64} radius='sm'/>
+            <Flex direction='column' justify='center'>
+              <Skeleton width={90} height={10} radius="lg" mb={5} />
+              <Skeleton width={100} height={12} radius="lg" mb={5} />
+              <Skeleton width={60} height={8} radius="lg" />
+            </Flex>
+          </Flex>
+        </Flex>
+      }
       <Splide 
         options={{
           drag: 'free',
@@ -41,7 +57,6 @@ function Projects (props) {
                 color='violet'
                 name={'🎵'}
                 src={project.picture ? project.picture : undefined}
-                // onClick={() => goToProject(project.username)}
                 component='a'
                 href={`/project/${project.username}`}
               />

@@ -10,7 +10,7 @@ import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Container, ScrollArea, Group, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconPlus, IconCalendarEventFilled, IconMapPinFilled, IconHexagonPlus } from '@tabler/icons-react'
+import { IconCalendarEventFilled, IconMapPinFilled, IconHexagonPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
 import FeedCard from './FeedCard'
 import FeedCardLoading from './FeedCard/loading'
@@ -27,7 +27,7 @@ function Home () {
   let dispatch = useDispatch()
   let navigate = useNavigate()
 
-  const largeScreen = useMediaQuery('(min-width: 60em)')
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   const token = localStorage.getItem('token')
@@ -74,12 +74,13 @@ function Home () {
         <title>Home | Mublin</title>
         <link rel='canonical' href='https://mublin.com/home' />
       </Helmet>
-      {isMobile ? (
+      {isMobile && 
         <HeaderMobile page='home' reloadUserInfo />
-      ) : (
-        <Header page='home' reloadUserInfo />
-      )}
-      <Container size='lg' mb='lg' mt={largeScreen ? 20 : 0}>
+      }
+      {isLargeScreen && 
+        <Header page='home' reloadUserInfo hasBottomSpace />
+      }
+      <Container size='lg' mb='lg'>
         <Grid>
           <Grid.Col span={{ base: 12, md: 12, lg: 2.5 }} pt='8'>
             <Box className='showOnlyInLargeScreen'>
@@ -360,7 +361,7 @@ function Home () {
               )
             )}
           </Grid.Col>
-          {largeScreen && 
+          {isLargeScreen && 
             <Grid.Col span={3.3}>
               <Card shadow='sm' px='md' pt='sm' pb='lg' radius='lg' withBorder className='mublinModule'>
                 <Title fz='1.03rem' fw='640'>

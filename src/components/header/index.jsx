@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
-import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { userActions } from '../../store/actions/user';
-import { miscInfos } from '../../store/actions/misc';
-import { searchInfos } from '../../store/actions/search';
-import { userProjectsInfos } from '../../store/actions/userProjects';
-import { authActions } from '../../store/actions/authentication';
-import { useMantineColorScheme, Container, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, Indicator, rem, em } from '@mantine/core';
-import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
+import React, { useEffect, useState } from 'react'
+import { jwtDecode } from 'jwt-decode'
+import { Link, createSearchParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { userActions } from '../../store/actions/user'
+import { miscInfos } from '../../store/actions/misc'
+import { searchInfos } from '../../store/actions/search'
+import { userProjectsInfos } from '../../store/actions/userProjects'
+import { authActions } from '../../store/actions/authentication'
+import { useMantineColorScheme, Container, Space, Box, Flex, Menu, Button, Avatar, ActionIcon, Text, Input, Group, Badge, Drawer, Image, CloseButton, Anchor, Indicator, rem, em } from '@mantine/core';
+import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks'
 import { 
   IconMoon,
   IconBrightnessUp,
@@ -24,21 +24,21 @@ import {
   IconLogout,
   IconChevronDown,
   IconChevronRight
-} from '@tabler/icons-react';
-import MublinLogoBlack from '../../assets/svg/mublin-logo.svg';
-import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg';
-import s from './header.module.css';
+} from '@tabler/icons-react'
+import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
+import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg'
+import s from './header.module.css'
 
 function Header (props) {
 
-  const dispatch = useDispatch();
-  let navigate = useNavigate();
+  const dispatch = useDispatch()
+  let navigate = useNavigate()
 
-  const openMenuDrawerFromProfile = props.openMenuDrawerFromProfile;
+  const openMenuDrawerFromProfile = props.openMenuDrawerFromProfile
 
-  const token = localStorage.getItem('token');
-  const decoded = jwtDecode(token);
-  const loggedUserId = decoded.result.id;
+  const token = localStorage.getItem('token')
+  const decoded = jwtDecode(token)
+  const loggedUserId = decoded.result.id
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
 
@@ -53,9 +53,8 @@ function Header (props) {
       username: project.username,
       picture: project.picture,
       type: project.ptname,
-      genre: project.genre1,
-
-    }));
+      genre: project.genre1
+    }))
 
   const projectsActiveILeft = projects?.list
     .filter(p => p.activityStatusId !== 2 && p.activityStatusId !== 6 && p.yearLeftTheProject)
@@ -66,7 +65,7 @@ function Header (props) {
       picture: project.picture,
       type: project.ptname,
       genre: project.genre1,
-    }));
+    }))
 
   const projectsInactive = projects?.list
     .filter(p => p.activityStatusId === 2 || p.activityStatusId === 6)
@@ -77,7 +76,7 @@ function Header (props) {
       picture: project.picture,
       type: project.ptname,
       genre: project.genre1,
-    }));
+    }))
 
   const { colorScheme, setColorScheme } = useMantineColorScheme()
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
@@ -100,22 +99,22 @@ function Header (props) {
 
   useEffect(() => {
     if (fetchProjects === 1) {
-      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'));
+      dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     }
   }, [fetchProjects])
 
   useEffect(() => {
     if (props.page === 'home' && refreshCounter > 0) {
-      dispatch(userActions.getInfo());
-      dispatch(miscInfos.getFeed());
-      dispatch(searchInfos.getSuggestedFeaturedUsers());
-      dispatch(searchInfos.getSuggestedNewUsers());
+      dispatch(userActions.getInfo())
+      dispatch(miscInfos.getFeed())
+      dispatch(searchInfos.getSuggestedFeaturedUsers())
+      dispatch(searchInfos.getSuggestedNewUsers())
     }
   }, [refreshCounter])
 
   const logout = () => {
-    setColorScheme('light');
-    dispatch(authActions.logout());
+    setColorScheme('light')
+    dispatch(authActions.logout())
     navigate('/')
   }
 
@@ -128,26 +127,26 @@ function Header (props) {
         keywords: query ? query : '',
         tab: tab ? tab : ''
       }).toString()
-    });
+    })
   }
 
   const [searchQuery, setSearchQuery] = useState(searchedKeywords)
 
   const handleChangeSearch = (e, query, tab) => {
-    setSearchQuery(query);
-    autoSearch(e, query, tab);
+    setSearchQuery(query)
+    autoSearch(e, query, tab)
   }
 
   const autoSearch = useDebouncedCallback(async (e, query, tab) => {
     if (query?.length > 1) {
-      handleSearch(e, query, tab);
-    };
-    navigateToSearchPage(query, tab);
+      handleSearch(e, query, tab)
+    }
+    navigateToSearchPage(query, tab)
   },470)
 
   const handleSearch = (e, query, tab) => {
-    e.preventDefault();
-    navigateToSearchPage(query, tab);
+    e.preventDefault()
+    navigateToSearchPage(query, tab)
   }
 
   const [openMenuDrawer, setOpenMenuDrawer] = useState(false)
@@ -169,316 +168,327 @@ function Header (props) {
 
   return (
     <>
-      <Container 
-        size='lg'
-        mt={8} 
-        mb={8} 
-        className={s.headerContainer}
+      <Box
+        pos='fixed'
+        w='100%'
+        bg='white'
+        mb={200}
+        style={{zIndex:'15',borderBottom:'1px solid #e9e9e9'}}
       >
-        <Flex
-          mih={50}
-          gap='md'
-          justify='space-between'
-          align='center'
-          direction='row'
+        <Container
+          size='lg'
+          mt={8}
+          mb={8}
+          className={s.headerContainer}
         >
-          <Group>
-            <>
-              <Flex align='flex-end' gap={7}>
-                {(props.showBackIcon && isMobile) && 
-                  <IconChevronLeft 
-                    style={{width:'21px',height:'21px'}} 
-                    onClick={() => navigate(-1)}
-                  />
-                }
-                {!props.hideLogo && 
-                  <Link 
-                    to={{ pathname: '/home' }} 
-                    className={(isMobile && props.page === 'profile') ? 'mublinLogo showOnlyInLargeScreen' : 'mublinLogo'}
-                    onClick={() => setRefreshCounter(refreshCounter + 1)}
-                  >
-                    <Image 
-                      src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} 
-                      h={27}
-                    />
-                  </Link>
-                }
-              </Flex>
-              {(props.page === 'profile' && props.profileId) &&
-                <Box w={225} className='showOnlyInMobile'>
-                  <Text 
-                    mr='10' 
-                    className='lhNormal'
-                    truncate='end'
-                    size={'1.17rem'}
-                    fw='600'
-                  >
-                    {props.username}
-                  </Text>
-                </Box>
-              }
-            </>
-            {isLargeScreen && 
-              <form
-                onSubmit={(e) => handleSearch(e, searchQuery, null)}
-                // onFocus={() => setShowMobileMenu(false)}
-                // onBlur={() => setShowMobileMenu(true)}
-              >
-                <Input
-                  variant={colorScheme === 'light' ? 'filled' : 'unstyled'}
-                  size='md'
-                  w={320}
-                  placeholder='Pessoa, instrumento, cidade...'
-                  value={searchQuery}
-                  leftSection={<IconSearch size={16} />}
-                  onChange={(event) => handleChangeSearch(
-                    event, event.currentTarget.value, null
-                  )}
-                  // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
-                  rightSectionPointerEvents='all'
-                  rightSection={
-                    <CloseButton
-                      aria-label='Apagar'
-                      onClick={(event) => handleChangeSearch(
-                        event, '', null
-                      )}
-                      style={{ display: searchQuery ? undefined : 'none' }}
+          <Flex
+            mih={50}
+            gap='md'
+            justify='space-between'
+            align='center'
+            direction='row'
+          >
+            <Group>
+              <>
+                <Flex align='flex-end' gap={7}>
+                  {(props.showBackIcon && isMobile) && 
+                    <IconChevronLeft 
+                      style={{width:'21px',height:'21px'}} 
+                      onClick={() => navigate(-1)}
                     />
                   }
-                />
-              </form>
-            }
-          </Group>
-          <Flex align='center' className='menuHeader'>
-            <Link to={{ pathname: '/home' }}>
-              <Button 
-                size='sm'
-                fw={440}
-                radius={0}
-                variant='transparent'
-                color={menuTextColor}
-                className={currentPath === '/home' ? 'headerMenuActive underlined' : undefined}
-                leftSection={<><IconHome size={16} /></>}
-                p='xs'
-                mr={10}
-                visibleFrom='md'
-              >
-                Início
-              </Button>
-            </Link>
-            <Menu shadow='md' width={200} position='bottom'>
-              <Menu.Target>
-                <Button
+                  {!props.hideLogo && 
+                    <Link 
+                      to={{ pathname: '/home' }} 
+                      className={(isMobile && props.page === 'profile') ? 'mublinLogo showOnlyInLargeScreen' : 'mublinLogo'}
+                      onClick={() => setRefreshCounter(refreshCounter + 1)}
+                    >
+                      <Image 
+                        src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} 
+                        h={27}
+                      />
+                    </Link>
+                  }
+                </Flex>
+                {(props.page === 'profile' && props.profileId) &&
+                  <Box w={225} className='showOnlyInMobile'>
+                    <Text 
+                      mr='10' 
+                      className='lhNormal'
+                      truncate='end'
+                      size={'1.17rem'}
+                      fw='600'
+                    >
+                      {props.username}
+                    </Text>
+                  </Box>
+                }
+              </>
+              {isLargeScreen && 
+                <form
+                  onSubmit={(e) => handleSearch(e, searchQuery, null)}
+                  // onFocus={() => setShowMobileMenu(false)}
+                  // onBlur={() => setShowMobileMenu(true)}
+                >
+                  <Input
+                    variant={colorScheme === 'light' ? 'filled' : 'unstyled'}
+                    size='md'
+                    w={320}
+                    placeholder='Pessoa, instrumento, cidade...'
+                    value={searchQuery}
+                    leftSection={<IconSearch size={16} />}
+                    onChange={(event) => handleChangeSearch(
+                      event, event.currentTarget.value, null
+                    )}
+                    // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
+                    rightSectionPointerEvents='all'
+                    rightSection={
+                      <CloseButton
+                        aria-label='Apagar'
+                        onClick={(event) => handleChangeSearch(
+                          event, '', null
+                        )}
+                        style={{ display: searchQuery ? undefined : 'none' }}
+                      />
+                    }
+                  />
+                </form>
+              }
+            </Group>
+            <Flex align='center' className='menuHeader'>
+              <Link to={{ pathname: '/home' }}>
+                <Button 
                   size='sm'
                   fw={440}
                   radius={0}
                   variant='transparent'
                   color={menuTextColor}
-                  className={isProjectsPage() ? 'headerMenuActive' : undefined}
-                  leftSection={<IconMusic size={16} />}
-                  rightSection={<IconChevronDown size={14} />}
-                  py='xs'
-                  px={0}
+                  className={currentPath === '/home' ? 'headerMenuActive underlined' : undefined}
+                  leftSection={<><IconHome size={16} /></>}
+                  p='xs'
                   mr={10}
                   visibleFrom='md'
-                  onClick={() => setFetchProjects(fetchProjects + 1)}
                 >
-                  Meus Projetos
+                  Início
                 </Button>
-              </Menu.Target>
-              <Menu.Dropdown>
-                {projects.requesting ? (
-                  <Menu.Label>Carregando meus projetos...</Menu.Label>
-                ) : (
-                  <>
-                    <Menu.Item component='a' href='/new/project'>
-                      <Group gap={5}>
-                        <IconPlus size='13px' />
-                        <Text size='0.85rem' fw='500'>Novo projeto</Text>
-                      </Group>
-                    </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Label>
-                      Projetos em atividade e que faço parte
-                    </Menu.Label>
-                    {projectsActive.length ? ( projectsActive.map(project =>
-                      <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
-                        <Group gap={5}>
-                          <Indicator color="lime" size={7} position="bottom-center" processing>
-                            <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
-                          </Indicator>
-                          <Flex direction='column'>
-                            <Group gap={2} align='flex-start' w={102}>
-                              <Text size='0.85rem' fw='500' truncate="end" title={project.name}>
-                                {project.name}
-                              </Text>
-                            </Group>
-                            <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
-                          </Flex>
-                        </Group>
-                      </Menu.Item>
-                    )) : (<Text size='0.7rem' fw='500' px='sm' py='xs'>Nenhum projeto encontrado</Text>)}
-                    {!!projectsActiveILeft.length && 
-                      <>
-                        <Menu.Divider />
-                        <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
-                          <Menu.Target>
-                            <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
-                              {/* Projetos encerrados */}
-                              <Menu.Label>Projetos ativos que não faço mais parte</Menu.Label>
-                            </Menu.Item>
-                          </Menu.Target>
-                          <Menu.Dropdown>
-                            {projectsActiveILeft.map(project =>
-                              <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
-                                <Group gap={5}>
-                                  <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
-                                  <Flex direction='column'>
-                                    <Text size='0.85rem' fw='500'>{project.name}</Text>
-                                    <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
-                                  </Flex>
-                                </Group>
-                              </Menu.Item>
-                            )}
-                          </Menu.Dropdown>
-                        </Menu>
-                      </>
-                    }
-                    <Menu.Divider />
-                    <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
-                      <Menu.Target>
-                        <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
-                          {/* Projetos encerrados */}
-                          <Menu.Label>Projetos encerrados</Menu.Label>
-                        </Menu.Item>
-                      </Menu.Target>
-                      <Menu.Dropdown>
-                        {projectsInactive.length ? ( projectsInactive.map(project =>
-                          <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
-                            <Group gap={5}>
-                              <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
-                              <Flex direction='column'>
-                                <Text size='0.85rem' fw='500'>{project.name}</Text>
-                                <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
-                              </Flex>
-                            </Group>
-                          </Menu.Item>
-                        )) : (<Text size='0.7rem' fw='500' px='sm' py='xs'>Nenhum projeto encontrado</Text>)}
-                      </Menu.Dropdown>
-                    </Menu>
-                  </>
-                )}
-              </Menu.Dropdown>
-            </Menu>
-            <Link to={{ pathname: '/projects' }}>
-              <Button 
-                size='sm'
-                fw={400}
-                radius='xl'
-                // variant='outline'
-                // color={menuTextColor}
-                variant='gradient'
-                gradient={{ from: 'mublinColor', to: 'violet', deg: 107 }}
-                leftSection={<IconMicrophone2 size={14} />}
-                p='xs'
-                visibleFrom='md'
-                mr='xs'
-              >
-                Quero tocar
-              </Button>
-            </Link>
-            {isLargeScreen && 
-              <Menu shadow='md' width={200} position='bottom-end' offset={10} withArrow>
+              </Link>
+              <Menu shadow='md' width={200} position='bottom'>
                 <Menu.Target>
-                  <Avatar
-                    // size='md'
-                    w={38}
-                    h={38}
-                    className='point'
-                    src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
-                    alt={userInfo.username}
-                    ml={8}
-                  />
+                  <Button
+                    size='sm'
+                    fw={440}
+                    radius={0}
+                    variant='transparent'
+                    color={menuTextColor}
+                    className={isProjectsPage() ? 'headerMenuActive' : undefined}
+                    leftSection={<IconMusic size={16} />}
+                    rightSection={<IconChevronDown size={14} />}
+                    py='xs'
+                    px={0}
+                    mr={10}
+                    visibleFrom='md'
+                    onClick={() => setFetchProjects(fetchProjects + 1)}
+                  >
+                    Meus Projetos
+                  </Button>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Label>
-                    {userInfo.name} {userInfo.lastname} 
-                    {user.plan === 'Pro' && 
-                      <Badge 
-                        radius='sm' 
-                        size='xs' 
-                        color='secondary' 
-                        variant="gradient"
-                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
-                        ml={4}
-                      >
-                        PRO
-                      </Badge>
-                    }
-                  </Menu.Label>
-                  <Anchor 
-                    underline='never'
-                    style={{lineHeight:'normal'}} 
-                    href={`/${userInfo.username}`}
-                  >
-                    <Menu.Item 
-                      leftSection={
-                        <IconUserCircle style={{ width: rem(14), height: rem(14) }} />
+                  {projects.requesting ? (
+                    <Menu.Label>Carregando meus projetos...</Menu.Label>
+                  ) : (
+                    <>
+                      <Menu.Item component='a' href='/new/project'>
+                        <Group gap={5}>
+                          <IconPlus size='13px' />
+                          <Text size='0.85rem' fw='500'>Novo projeto</Text>
+                        </Group>
+                      </Menu.Item>
+                      <Menu.Divider />
+                      <Menu.Label>
+                        Projetos em atividade e que faço parte
+                      </Menu.Label>
+                      {projectsActive.length ? ( projectsActive.map(project =>
+                        <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
+                          <Group gap={5}>
+                            <Indicator color="lime" size={7} position="bottom-center" processing>
+                              <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                            </Indicator>
+                            <Flex direction='column'>
+                              <Group gap={2} align='flex-start' w={102}>
+                                <Text size='0.85rem' fw='500' truncate="end" title={project.name}>
+                                  {project.name}
+                                </Text>
+                              </Group>
+                              <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                            </Flex>
+                          </Group>
+                        </Menu.Item>
+                      )) : (<Text size='0.7rem' fw='500' px='sm' py='xs'>Nenhum projeto encontrado</Text>)}
+                      {!!projectsActiveILeft.length && 
+                        <>
+                          <Menu.Divider />
+                          <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
+                            <Menu.Target>
+                              <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
+                                {/* Projetos encerrados */}
+                                <Menu.Label>Projetos ativos que não faço mais parte</Menu.Label>
+                              </Menu.Item>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                              {projectsActiveILeft.map(project =>
+                                <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
+                                  <Group gap={5}>
+                                    <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                                    <Flex direction='column'>
+                                      <Text size='0.85rem' fw='500'>{project.name}</Text>
+                                      <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                                    </Flex>
+                                  </Group>
+                                </Menu.Item>
+                              )}
+                            </Menu.Dropdown>
+                          </Menu>
+                        </>
                       }
-                    >
-                      Ver perfil
-                    </Menu.Item>
-                  </Anchor>
-                  {/* <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
-                    Mensagens
-                  </Menu.Item> */}
-                  <Menu.Divider />
-                  <Menu.Item 
-                    leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
-                    onClick={() => navigate('/settings')}
-                  >
-                    Configurações
-                  </Menu.Item>
-                  {colorScheme === 'dark' && 
-                    <Menu.Item 
-                      leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
-                      onClick={() => {setColorScheme('light')}}
-                    >
-                      Tema claro
-                    </Menu.Item>
-                  }
-                  {colorScheme === 'light' && 
-                    <Menu.Item 
-                      leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
-                      onClick={() => {setColorScheme('dark')}}
-                    >
-                      Tema escuro
-                    </Menu.Item>
-                  }
-                  <Menu.Divider />
-                  <Menu.Item 
-                    leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
-                    onClick={() => logout()}
-                  >
-                    Sair
-                  </Menu.Item>
+                      <Menu.Divider />
+                      <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
+                        <Menu.Target>
+                          <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
+                            {/* Projetos encerrados */}
+                            <Menu.Label>Projetos encerrados</Menu.Label>
+                          </Menu.Item>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                          {projectsInactive.length ? ( projectsInactive.map(project =>
+                            <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
+                              <Group gap={5}>
+                                <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                                <Flex direction='column'>
+                                  <Text size='0.85rem' fw='500'>{project.name}</Text>
+                                  <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                                </Flex>
+                              </Group>
+                            </Menu.Item>
+                          )) : (<Text size='0.7rem' fw='500' px='sm' py='xs'>Nenhum projeto encontrado</Text>)}
+                        </Menu.Dropdown>
+                      </Menu>
+                    </>
+                  )}
                 </Menu.Dropdown>
               </Menu>
-            }
-            {(!isLargeScreen && props.showDotsMenu) && 
-              <ActionIcon 
-                onClick={() => setOpenMenuDrawer(true)} 
-                variant="transparent" 
-                size="lg" 
-                color='gray'
-                aria-label="Menu"
-              >
-                <IconDotsVertical style={{ width: '70%', height: '70%' }} stroke={1.5} />
-              </ActionIcon>
-            }
+              <Link to={{ pathname: '/projects' }}>
+                <Button 
+                  size='sm'
+                  fw={400}
+                  radius='xl'
+                  // variant='outline'
+                  // color={menuTextColor}
+                  variant='gradient'
+                  gradient={{ from: 'mublinColor', to: 'violet', deg: 107 }}
+                  leftSection={<IconMicrophone2 size={14} />}
+                  p='xs'
+                  visibleFrom='md'
+                  mr='xs'
+                >
+                  Quero tocar
+                </Button>
+              </Link>
+              {isLargeScreen && 
+                <Menu shadow='md' width={200} position='bottom-end' offset={10} withArrow>
+                  <Menu.Target>
+                    <Avatar
+                      // size='md'
+                      w={38}
+                      h={38}
+                      className='point'
+                      src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                      alt={userInfo.username}
+                      ml={8}
+                    />
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Label>
+                      {userInfo.name} {userInfo.lastname} 
+                      {user.plan === 'Pro' && 
+                        <Badge 
+                          radius='sm' 
+                          size='xs' 
+                          color='secondary' 
+                          variant="gradient"
+                          gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                          ml={4}
+                        >
+                          PRO
+                        </Badge>
+                      }
+                    </Menu.Label>
+                    <Anchor 
+                      underline='never'
+                      style={{lineHeight:'normal'}} 
+                      href={`/${userInfo.username}`}
+                    >
+                      <Menu.Item 
+                        leftSection={
+                          <IconUserCircle style={{ width: rem(14), height: rem(14) }} />
+                        }
+                      >
+                        Ver perfil
+                      </Menu.Item>
+                    </Anchor>
+                    {/* <Menu.Item leftSection={<IconMessageCircle style={{ width: rem(14), height: rem(14) }} />}>
+                      Mensagens
+                    </Menu.Item> */}
+                    <Menu.Divider />
+                    <Menu.Item 
+                      leftSection={<IconSettings style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => navigate('/settings')}
+                    >
+                      Configurações
+                    </Menu.Item>
+                    {colorScheme === 'dark' && 
+                      <Menu.Item 
+                        leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
+                        onClick={() => {setColorScheme('light')}}
+                      >
+                        Tema claro
+                      </Menu.Item>
+                    }
+                    {colorScheme === 'light' && 
+                      <Menu.Item 
+                        leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
+                        onClick={() => {setColorScheme('dark')}}
+                      >
+                        Tema escuro
+                      </Menu.Item>
+                    }
+                    <Menu.Divider />
+                    <Menu.Item 
+                      leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+                      onClick={() => logout()}
+                    >
+                      Sair
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              }
+              {(!isLargeScreen && props.showDotsMenu) && 
+                <ActionIcon 
+                  onClick={() => setOpenMenuDrawer(true)} 
+                  variant="transparent" 
+                  size="lg" 
+                  color='gray'
+                  aria-label="Menu"
+                >
+                  <IconDotsVertical style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                </ActionIcon>
+              }
+            </Flex>
           </Flex>
-        </Flex>
-      </Container>
+        </Container>
+      </Box>
+      {/* {props.hasBottomSpace && */}
+        <Space h={isMobile ? 60 : 86} />
+      {/*// */}
       <Drawer 
         opened={openMenuDrawer || openMenuDrawerFromProfile} 
         onClose={() => setOpenMenuDrawer(false)} 
@@ -488,7 +498,7 @@ function Header (props) {
         {/* <h1>Teste</h1> */}
       </Drawer>
     </>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

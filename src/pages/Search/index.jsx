@@ -76,9 +76,9 @@ function Search () {
   return (
     <>
       {isLargeScreen && 
-        <Header page='search' />
+        <Header page='search' hasBottomSpace />
       }
-      <Container size={'lg'} mb={isLargeScreen ? 30 : 82} mt={isMobile ? 16 : 30}>
+      <Container size={'lg'} mb={isLargeScreen ? 30 : 82} mt={isMobile ? 16 : 0}>
         {isMobile && 
           <form
             onSubmit={(e) => handleSearch(e, searchQuery, null)}

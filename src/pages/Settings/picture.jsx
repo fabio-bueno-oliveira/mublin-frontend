@@ -86,7 +86,7 @@ function SettingsPicturePage () {
         <Header reloadUserInfo />
       </div>
       <Container size='lg' mb={100}>
-        <Grid mt={15}>
+        <Grid mt={isLargeScreen ? 0 : 15}>
           {isLargeScreen && 
             <Grid.Col span={4} pt={20}>
               <SettingsMenu page='profilePicture' />

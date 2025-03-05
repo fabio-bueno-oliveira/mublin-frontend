@@ -27,7 +27,7 @@ function AvailabilityInfo (props) {
           ) : (
             <Flex gap={3} mx={0} pt={1}>
               {profile.genres[0].id && profile.genres.map((genre, key) =>
-                <Badge variant='light' color='dark' key={key} className='availability'>
+                <Badge color='mublinColor' key={key} className='availability'>
                   {genre.name}
                 </Badge>
               )}
@@ -48,14 +48,19 @@ function AvailabilityInfo (props) {
         ) : (
           <Flex gap={3} mx={0} pt={1}>
             {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-              <Badge variant='light' color='dark' size='md' className='availability'>
+              <Badge color='mublinColor' size='md' className='availability'>
                 Projetos Autorais
               </Badge>
             }
             {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-              <Badge variant='light' color='dark' size='md' className='availability'>
-                Contrato/Sideman/Sub
-              </Badge>
+              <Flex direction='column'>
+                <Badge color='mublinColor' size='md' className='availability'>
+                  Contrato
+                </Badge>
+                <Text fz='10px'>
+                  Sideman/Sidewoman/Sub
+                </Text>
+              </Flex>
             }
           </Flex>
         )}
@@ -68,14 +73,14 @@ function AvailabilityInfo (props) {
       ) : (
         <Flex gap={4} mx={0} pt={1} wrap='wrap'>
           {jobs.items.map(job =>
-            <Badge 
+            <Badge
               key={job.id}
               size='md'
               pl='4px'
               pr='7px'
-              leftSection={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? <IconCheck size={12} /> : undefined} 
-              variant={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'filled' : 'light'} 
-              color={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'lime' : 'gray'} 
+              // leftSection={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? <IconCheck size={12} /> : undefined}
+              variant={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'filled' : 'light'}
+              color={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'mublinColor' : 'gray'}
             >
               {job.name}
             </Badge>
@@ -83,7 +88,7 @@ function AvailabilityInfo (props) {
         </Flex>
       )}
     </Box>
-  );
-};
+  )
+}
 
-export default AvailabilityInfo;
+export default AvailabilityInfo

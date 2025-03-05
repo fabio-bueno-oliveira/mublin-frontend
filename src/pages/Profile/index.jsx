@@ -260,6 +260,7 @@ function ProfilePage () {
       <Header
         page='profile'
         reloadUserInfo
+        hasBottomSpace
         username={username}
         profileId={profile.id}
         showBackIcon={true}
@@ -267,8 +268,7 @@ function ProfilePage () {
       {profile.requesting && 
         <Container 
           size='lg' 
-          mb={isMobile ? 82 : 30} 
-          pt={isMobile ? 0 : 10} 
+          mb={isMobile ? 82 : 30}
           className='profilePage'
         >
           <Group justify='flex-start'>
@@ -286,7 +286,7 @@ function ProfilePage () {
       {profile.id && 
         <>
           {profile.pictureCover && 
-            <Card shadow={false} padding={0} radius={0} mb={14} hiddenFrom='sm'>
+            <Card hiddenFrom='sm' shadow={false} padding={0} radius={0} mb={14}>
               <Card.Section>
                 <Image
                   src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
@@ -296,10 +296,9 @@ function ProfilePage () {
               </Card.Section>
             </Card>
           }
-          <Container 
-            size='lg' 
-            mb={isMobile ? 82 : 30} 
-            pt={isMobile ? 0 : 10} 
+          <Container
+            size='lg'
+            mb={isMobile ? 82 : 30}
             className='profilePage'
           >
             <Grid>
@@ -829,15 +828,18 @@ function ProfilePage () {
                       </ActionIcon>
                     }
                   </Group>
-                  {profile.projects.total > 0 ? ( 
-                    <Projects 
+
+                    <Projects
+                      requesting={profile.requesting}
+                      total={profile.projects.total}
                       profile={profile}
                       projects={allProjects}
                       profilePlan={profile.plan}
                     />
-                  ) : (
+
+                  {(!profile.requesting && profile.projects.total === 0) &&
                     <Text size='sm' c='dimmed'>Nenhum projeto no momento</Text>
-                  )}
+                  }
                 </Paper>
                 <Divider mb={18} className='showOnlyInMobile' />
                 <Paper
