@@ -171,9 +171,12 @@ function Header (props) {
       <Box
         pos='fixed'
         w='100%'
-        bg='white'
+        bg={colorScheme === 'light' ? 'white' : '#0d141a'}
         mb={200}
-        style={{zIndex:'15',borderBottom:'1px solid #e9e9e9'}}
+        style={{
+          zIndex:'15',
+          borderBottom: colorScheme === 'light' ? '1px solid #e9e9e9' : '1px solid #090e12'
+        }}
       >
         <Container
           size='lg'
