@@ -3,8 +3,8 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, NativeSelect, Grid, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, ColorSwatch, em } from '@mantine/core';
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconUsers, IconLink, IconTagStarred } from '@tabler/icons-react'
+import { Container, NativeSelect, Grid, Box, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, ColorSwatch, Badge, em } from '@mantine/core';
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconUsers, IconLink, IconTagStarred, IconDiamond } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -59,10 +59,8 @@ function BrandPage () {
         <link rel='canonical' href={`https://mublin.com/gear/brand/${brand.slug}`} />
         <meta name='description' content={`Produtos e artistas da ${brand.name} | Mublin`} />
       </Helmet>
-      {largeScreen && 
-        <Header />
-      }
-      <Container size='lg' mt={20} mb={110}>
+      <Header />
+      <Container size='lg' mb={110}>
         <BackgroundImage
           src={brand.cover ? 'https://ik.imagekit.io/mublin/products/brands/tr:w-1108,c-maintain_ratio/'+brand.cover : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
           radius='lg'
@@ -221,12 +219,17 @@ function BrandPage () {
                   <Text size='sm' fw={500}>{product.name}</Text>
                 </Group>
                 <Flex gap={3} mt={4} align='center' justify='space-between'>
-                  <Text size='xs' c='dimmed'>
-                    {product.categoryName}
-                  </Text>
+                  <Group gap={2} align='center'>
+                    <Badge size='xs' color='mublinColor' variant='outline' radius='sm'>
+                      {product.categoryName}
+                    </Badge>
+                    {!!product.rare &&
+                      <Badge size='xs' variant='gradient' gradient={{ from: 'indigo', to: 'pink', deg: 90 }} radius='sm' leftSection={<IconDiamond style={{width:'0.8rem',height:'0.8rem'}} />}>Limitado</Badge>
+                    }
+                  </Group>
                   <Flex c='dimmed' gap={3} align='center' title={product.totalOwners + ' pessoas possuem'}>
-                    <IconUsers style={{width:'13px',height:'13px'}} />
-                    <Text size='xs'>
+                    <IconUsers style={{width:'11px',height:'11px'}} />
+                    <Text size='xs' className='lhNormal'>
                       {product.totalOwners}
                     </Text>
                   </Flex>

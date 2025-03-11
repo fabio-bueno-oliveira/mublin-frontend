@@ -1,16 +1,4 @@
-.embla {
-  overflow: hidden;
-}
-.embla__container {
-  display: flex;
-}
-.embla__slide {
-  flex: 0 0 130px;
-  min-width: 0;
-  margin-right: 5px;
-}
-@media (min-width: 768px) {
-  .embla__slide {
-    margin-right: 4px;
-  }
+.projectHeader {
+  background: rgb(0,0,0);
+  background: linear-gradient(0deg, rgba(0,0,0,1) 24%, rgba(19,32,42,1) 81%);
 }

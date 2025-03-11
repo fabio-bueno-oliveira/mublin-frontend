@@ -22,6 +22,7 @@ const initialState = {
       name: '',
       subtitle: '',
       picture: '',
+      rare: '',
       brandId: '',
       brandName: '',
       brandLogo: '',

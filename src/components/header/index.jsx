@@ -27,7 +27,7 @@ import {
 } from '@tabler/icons-react'
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg'
-import s from './header.module.css'
+import './styles.scss'
 
 function Header (props) {
 
@@ -169,20 +169,12 @@ function Header (props) {
   return (
     <>
       <Box
-        pos='fixed'
-        w='100%'
-        bg={colorScheme === 'light' ? 'white' : '#0d141a'}
-        mb={200}
-        style={{
-          zIndex:'15',
-          borderBottom: colorScheme === 'light' ? '1px solid #e9e9e9' : '1px solid #090e12'
-        }}
+        component='header'
+        className='wrapper'
       >
         <Container
           size='lg'
-          mt={8}
-          mb={8}
-          className={s.headerContainer}
+          className='headerContainer'
         >
           <Flex
             mih={50}

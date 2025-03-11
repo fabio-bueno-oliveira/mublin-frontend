@@ -189,7 +189,7 @@ function FeedCard ({ item, compact }) {
         style={compact ? {height:'100%'} : undefined}
       >
         {!!item.suggested && 
-          <Text ml='15' fz='0.8rem' c='dimmed' mb={10}>Publicação sugerida</Text>
+          <Text ml='15' fz='0.74rem' c='dimmed' mb={10}>Publicação sugerida</Text>
         }
         <Flex px='15' gap={5} align='center' >
           <Link to={{ pathname: `/${item.relatedUserUsername}` }}>
@@ -280,8 +280,8 @@ function FeedCard ({ item, compact }) {
           }
         </Flex>
         {(item.action && item.categoryId !== 8) && 
-          <Text px='15' size='0.85em' mt='7px' style={{lineHeight:'1.25em',opacity:'0.8'}}>
-            {item.action} {item.category === 'project' ? item.relatedProjectName : (<a href='/'>{item.relatedEventTitle}</a>)}
+          <Text px='15' fz='0.75em' className='lhNormal op80' mt='7px'>
+            {item.relatedUserName} {item.relatedUserLastname} {item.action} {item.category === 'project' ? item.relatedProjectName : (<a href='/'>{item.relatedEventTitle}</a>)}
           </Text>
         }
         {(item.categoryId === 8) && 

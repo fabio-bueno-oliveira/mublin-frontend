@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
 import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Switch, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
-import { IconToggleRightFilled, IconToggleLeft, IconPlus, IconChevronLeft, IconLockSquareRoundedFilled } from '@tabler/icons-react'
+import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -37,6 +37,7 @@ function SettingsMyGearPage () {
   const [tuningTypes, setTuningTypes] = useState([])
   const [categories, setCategories] = useState([])
 
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   // Modal Add New Gear
@@ -254,8 +255,8 @@ function SettingsMyGearPage () {
       <div className='showOnlyInLargeScreen'>
         <Header reloadUserInfo />
       </div>
-      <Container size='lg' mb={100}>
-        <Grid mt={15}>
+      <Container size='lg' mb={110}>
+        <Grid mt={isLargeScreen ? 0 : 15}>
           <Grid.Col span={4} pt={20} className='showOnlyInLargeScreen'>
             <SettingsMenu page='myGear' />
           </Grid.Col>
