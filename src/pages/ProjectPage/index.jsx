@@ -103,7 +103,7 @@ function ProjectPage () {
                     <Title order={2} fw={650} c='white' className='lhNormal'>
                       {truncateString(project.name, isMobile ? 15 : 120)}
                     </Title>
-                    <Avatar.Group spacing={8}>
+                    <Avatar.Group spacing={12}>
                       {members.filter(m => !m.leftIn).map(member =>
                         <Avatar
                           size='30'
@@ -305,7 +305,7 @@ function ProjectPage () {
                 >
                   <Title fz='1.0rem' fw='640' mb={10}>Oportunidades</Title>
                   {project.opportunities.total === 0 ? (
-                    <Text size='sm' c='dimmed' pb={14}>
+                    <Text size='sm' c='dimmed' pb={isMobile ? 4 : 14}>
                       Nenhuma oportunidade no momento
                     </Text>
                   ) : (
