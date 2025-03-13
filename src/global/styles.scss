@@ -32,21 +32,6 @@ a.displayBlockLink {
   display: none;
 }
 
-.headerMenuActive {
-
-  &.underlined {
-    border-bottom: 1px solid #383b3e;
-
-    :root[data-mantine-color-scheme='dark'] {
-      border-bottom: 1px solid #f1f1f1;
-    }
-  }
-
-  span {
-    font-weight: 600;
-  }
-}
-
 .transparentBgInMobile {
   @media only screen and (max-width: 600px) {
     background-color: transparent!important;
@@ -198,12 +183,6 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: masonry;
-}
-
-.menuHeader {
-  .mantine-Button-section {
-    margin-right: 5px;
-  }
 }
 
 .comma:not(:empty) ~ .comma:not(:empty):before {

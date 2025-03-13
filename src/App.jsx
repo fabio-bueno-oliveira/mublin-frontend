@@ -1,6 +1,7 @@
 import React from 'react'
 import AppRoutes from './routes'
 import { SpeedInsights } from '@vercel/speed-insights/react'
+import { Analytics } from '@vercel/analytics/react'
 import { MantineProvider, ColorSchemeScript, virtualColor, Anchor, createTheme, Button, Card, Checkbox, Paper } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
@@ -87,7 +88,7 @@ const theme = createTheme({
   fontFamily: 'Geist, Helvetica, Arial, sans-serif',
   fontFamilyMonospace: 'Geist, Helvetica, Arial, monospace',
   headings: { fontFamily: 'Geist, Helvetica, Arial, sans-serif' }
-});
+})
 
 function App() {
   return (
@@ -96,10 +97,11 @@ function App() {
       <MantineProvider theme={theme}>
         <Notifications />
         <AppRoutes />
+        <Analytics/>
         <SpeedInsights />
       </MantineProvider>
     </>
-  );
+  )
 }
 
 export default App

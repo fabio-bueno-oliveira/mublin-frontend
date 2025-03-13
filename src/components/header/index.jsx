@@ -260,8 +260,9 @@ function Header (props) {
                   color={menuTextColor}
                   className={currentPath === '/home' ? 'headerMenuActive underlined' : undefined}
                   leftSection={<><IconHome size={16} /></>}
-                  p='xs'
+                  px='xs'
                   mr={10}
+                  h={50}
                   visibleFrom='md'
                 >
                   Início

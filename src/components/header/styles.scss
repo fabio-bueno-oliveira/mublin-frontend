@@ -7,8 +7,30 @@ header.wrapper {
   .headerContainer {
     top: 0;
     z-index: 2;
-    margin-top: 7px;
-    margin-bottom: 7px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-top: 6px;
+
+    .menuHeader {
+      .mantine-Button-section {
+        margin-right: 5px;
+      }
+
+      .headerMenuActive {
+
+        &.underlined {
+          border-bottom: 2px solid #383b3e;
+      
+          :root[data-mantine-color-scheme='dark'] {
+            border-bottom: 2px solid #f1f1f1;
+          }
+        }
+      
+        span {
+          font-weight: 600;
+        }
+      }
+    }
   }
 }
 
