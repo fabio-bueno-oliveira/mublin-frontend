@@ -177,7 +177,7 @@ function Header (props) {
           className='headerContainer'
         >
           <Flex
-            mih={50}
+            mih={42}
             gap='md'
             justify='space-between'
             align='center'
@@ -258,7 +258,7 @@ function Header (props) {
                   radius={0}
                   variant='transparent'
                   color={menuTextColor}
-                  className={currentPath === '/home' ? 'headerMenuActive underlined' : undefined}
+                  className={currentPath === '/home' ? 'headerMenuActive' : undefined}
                   leftSection={<><IconHome size={16} /></>}
                   px='xs'
                   mr={10}

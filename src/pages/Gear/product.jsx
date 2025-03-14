@@ -53,7 +53,7 @@ function GearProductPage () {
         showBackIcon={true}
         showDotsMenu={false}
       />
-      <Container size='lg' mt={largeScreen ? 20 : 0}>
+      <Container size='lg'>
         <Flex gap={12} align='center'>
           {product.requesting ? (
             <Skeleton height={75} width={75} radius='lg' />

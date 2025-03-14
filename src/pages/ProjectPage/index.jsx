@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Box, Flex, Group, Badge, Alert, Title, Table, Spoiler, Text, Image, Skeleton, Avatar, Paper, Anchor, Button, Modal, ScrollArea, em, rem } from '@mantine/core'
+import { Container, Grid, Box, Flex, Group, Badge, Alert, Title, Table, Spoiler, Text, Image, Skeleton, Avatar, Paper, Anchor, Button, Affix, Modal, ScrollArea, em, rem } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconMapPin, IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -47,6 +47,19 @@ function ProjectPage () {
       <Box className='showOnlyInLargeScreen'>
         <Header page='project' />
       </Box>
+      <Affix position={{ bottom: 20, right: 20 }}>
+        <Button
+          color='primary'
+          leftSection={<IconSettings size={16} />}
+          rightSection={<Avatar
+            size='20'
+            fit='contain'
+            src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-40,w-40,c-maintain_ratio/'+project.picture : undefined}
+          />}
+        >
+          Painel de Controle
+        </Button>
+      </Affix>
       <Container size='lg'>
         {project.requesting && 
           <Paper
@@ -90,17 +103,17 @@ function ProjectPage () {
                 />
                 <Box>
                   <Group gap={6}>
-                    <Text size='xs' className='op80' c='white'>
+                    <Badge radius='sm' size='sm' variant='light' color='gray'>
                       {project.typeName}
-                    </Text>
+                    </Badge>
                     {project.activityStatusId &&
                       <Badge radius='sm' size='sm' variant='light' color={project.activityStatusColor}>
                         {project.activityStatus}
                       </Badge>
                     }
                   </Group>
-                  <Group gap={5}>
-                    <Title order={2} fw={650} c='white' className='lhNormal'>
+                  <Group gap={5} my={4}>
+                    <Title order={3} fw={650} c='white' className='lhNormal'>
                       {truncateString(project.name, isMobile ? 15 : 120)}
                     </Title>
                     <Avatar.Group spacing={12}>
@@ -132,17 +145,6 @@ function ProjectPage () {
                 </Text>
               </Alert>
             }
-            <Button
-              size='sm'
-              color='primary'
-              variant='outline'
-              leftSection={<IconSettings size={14} />}
-              fullWidth
-              mt={14}
-              mb={isMobile ? 14 : 0}
-            >
-              Acessar Painel de Controle
-            </Button>
             <Grid mt={16}>
               <Grid.Col span={{ base: 12, md: 3, lg: 3 }} order={{ base: 2, sm: 2, lg: 1 }}>
                 {project.bio &&
@@ -285,16 +287,17 @@ function ProjectPage () {
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 6, lg: 6 }} order={{ base: 1, sm: 1, lg: 2 }}>
                 {project.spotifyId &&
-                  <iframe
-                    style={{borderRadius:'12px'}}
-                    src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator&theme=0`}
-                    width='100%'
-                    height='152'
-                    frameBorder='0'
-                    allowFullScreen={false}
-                    allow='autoplay; clipboard-write; encrypted-media; fullscreen;picture-in-picture'
-                    loading='lazy'
-                  />
+                  // <iframe
+                  //   style={{borderRadius:'12px'}}
+                  //   src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator&theme=0`}
+                  //   width='100%'
+                  //   height='152'
+                  //   frameBorder='0'
+                  //   allowFullScreen={false}
+                  //   allow='autoplay; clipboard-write; encrypted-media; fullscreen;picture-in-picture'
+                  //   loading='lazy'
+                  // />
+                  <iframe style={{borderRadius:'15px'}} src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator`} width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 }
                 <Paper
                   withBorder={isMobile ? false : true}
@@ -344,82 +347,84 @@ function ProjectPage () {
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 3, lg: 3 }} order={{ base: 3, sm: 3, lg: 3 }}>
                 <Flex direction='column' gap={10} mb={90}>
-                  {members.map(member => 
-                    <Paper
-                      key={member.id}
-                      withBorder={true}
-                      px={16}
-                      py={11}
-                      pb={8}
-                      className='mublinModule transparentBgInMobile'
-                    >
-                      <Group gap={5} align='center' wrap='nowrap'>
-                        <Avatar
-                          size='50'
-                          name={member.name}
-                          src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-100,w-100,c-maintain_ratio/'+member.id+'/'+member.picture} 
-                          component='a'
-                          href={`/${member.username}`}
-                        />
-                        <Flex direction='column' gap={2}>
-                          <Group gap={1}>
-                            <Text size='sm' fw={500} style={{lineHeight:'1'}}>
-                              {member.name} {member.lastname}
+                  <Paper
+                    withBorder={true}
+                    px={16}
+                    py={11}
+                    pb={8}
+                    className='mublinModule transparentBgInMobile'
+                  >
+                    <Flex direction='column' gap={22}>
+                    {members.map(member => 
+                      <Box key={member.id}>
+                        <Group gap={5} align='center' wrap='nowrap'>
+                          <Avatar
+                            size='50'
+                            name={member.name}
+                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-100,w-100,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                            component='a'
+                            href={`/${member.username}`}
+                          />
+                          <Flex direction='column' gap={2}>
+                            <Group gap={1}>
+                              <Text size='15px' fw={500} style={{lineHeight:'1'}}>
+                                {member.name} {member.lastname}
+                              </Text>
+                              {member.verified &&
+                                <IconRosetteDiscountCheckFilled
+                                  color='#0977ff'
+                                  style={iconVerifiedStyle}
+                                  title='Verificado'
+                                />
+                              }
+                              {member.legend &&
+                                <IconShieldCheckFilled
+                                  style={iconLegendStyle}
+                                  title='Lenda da música'
+                                />
+                              }
+                            </Group>
+                            {/* <Text c='dimmed' fz='xs' fw={400} style={{lineHeight:'1'}}>
+                              @{member.username}
+                            </Text> */}
+                            <Badge 
+                              mt={2}
+                              size='xs'
+                              radius='sm'
+                              color={member.statusId === 1 ? 'mublinColor' : 'primary'}
+                            >
+                              {member.statusName}
+                            </Badge>
+                          </Flex>
+                        </Group>
+                        <Text className='lhNormal' mt={4}>
+                          {member.role1 &&
+                            <Text className='comma' span size='sm'>
+                              {member.role1}
                             </Text>
-                            {member.verified &&
-                              <IconRosetteDiscountCheckFilled
-                                color='#0977ff'
-                                style={iconVerifiedStyle}
-                                title='Verificado'
-                              />
-                            }
-                            {member.legend &&
-                              <IconShieldCheckFilled
-                                style={iconLegendStyle}
-                                title='Lenda da música'
-                              />
-                            }
-                          </Group>
-                          {/* <Text c='dimmed' fz='xs' fw={400} style={{lineHeight:'1'}}>
-                            @{member.username}
-                          </Text> */}
-                          <Badge 
-                            variant='outline'
-                            mt={2}
-                            size='xs'
-                            radius='sm'
-                            color={member.statusId === 1 ? 'mublinColor' : 'purple'}
-                          >
-                            {member.statusName}
-                          </Badge>
-                        </Flex>
-                      </Group>
-                      <Text className='lhNormal' mt={4}>
-                        {member.role1 &&
-                          <Text className='comma' span size='sm'>
-                            {member.role1}
-                          </Text>
-                        }
-                        {member.role2 &&
-                          <Text className='comma' span size='sm'>
-                            {member.role2}
-                          </Text>
-                        }
-                        {member.role3 &&
-                          <Text className='comma' span size='sm'>
-                            {member.role3}
-                          </Text>
-                        }
-                      </Text>
-                      <Badge size='xs' radius='xs' color={member.leftIn ? 'gray' : 'mublinColor'} variant='light'>
-                        {`${member.joinedIn} ➜ `}
-                        {project.endDate
-                          ? (!member.leftIn) ? project.endDate : member.leftIn
-                          : (member.leftIn) ? member.leftIn : 'Atualmente'
-                        }
-                      </Badge>
-                    </Paper>
-                  )}
+                          }
+                          {member.role2 &&
+                            <Text className='comma' span size='sm'>
+                              {member.role2}
+                            </Text>
+                          }
+                          {member.role3 &&
+                            <Text className='comma' span size='sm'>
+                              {member.role3}
+                            </Text>
+                          }
+                        </Text>
+                        <Text size='11px'>
+                          {`${member.joinedIn} › `}
+                          {project.endDate
+                            ? (!member.leftIn) ? project.endDate : member.leftIn
+                            : (member.leftIn) ? member.leftIn : 'Atualmente'
+                          }
+                        </Text>
+                      </Box>
+                    )}
+                    </Flex>
+                  </Paper>
                 </Flex>
               </Grid.Col>
             </Grid>
