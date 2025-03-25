@@ -164,11 +164,11 @@ function Home () {
                       </Center>
                     )}
                   </Card>
-                  <Group gap={4} mb={8}>
+                  {/* <Group gap={4} mb={8}>
                     <IconCalendarEventFilled size={14} />
                     <Text size='sm' fw={500}>Próximos eventos:</Text>
-                  </Group>
-                  <Card
+                  </Group> */}
+                  {/* <Card
                     padding={12}
                     radius='lg'
                     withBorder
@@ -233,7 +233,7 @@ function Home () {
                         )}
                       </>
                     )}
-                  </Card>
+                  </Card> */}
                   {/* <Text fw='400' size='lg'>Compromissos próximos:</Text> */}
                   {/* {projects.list.map(project =>
                     <Card 

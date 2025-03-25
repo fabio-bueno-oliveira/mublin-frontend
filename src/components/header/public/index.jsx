@@ -15,10 +15,10 @@ function Header (props) {
   const largeScreen = useMediaQuery('(min-width: 60em)');
 
   return (
-    <Container 
-      size={'lg'} 
-      mt={14} 
-      mb={16} 
+    <Container
+      size='lg'
+      mt={14}
+      mb={16}
       className={s.headerContainer}
     >
       <Flex
@@ -33,30 +33,33 @@ function Header (props) {
             <Image src={colorScheme === 'light' ? MublinLogoBlack : MublinLogoWhite} h={largeScreen ? 34 : 24} />
           </Flex>
         </Link>
-          <div>
-            {page !== 'login' && 
-              <Link to={{ pathname: '/login' }}>
-                <Button
-                  size="compact-md"
-                  color="mublinColor"
-                  variant="transparent"
-                >
-                  Entrar
-                </Button>
-              </Link>
-            }
-            {page !== 'signup' && 
-              <Link to={{ pathname: '/signup' }}>
-                <Button 
-                  size='md' 
-                  color='mublinColor'
-                  variant='outline'
-                >
-                  Cadastro
-                </Button>
-              </Link>
-            }
-          </div>
+        <div>
+          {page !== 'login' && 
+            <Link to={{ pathname: '/login' }}>
+              <Button
+                size='sm'
+                radius='sm'
+                color='mublinColor'
+                variant='subtle'
+                mr='xs'
+              >
+                Entrar
+              </Button>
+            </Link>
+          }
+          {page !== 'signup' &&
+            <Link to={{ pathname: '/signup' }}>
+              <Button
+                size='sm'
+                radius='sm'
+                color='mublinColor'
+                variant='outline'
+              >
+                Cadastro
+              </Button>
+            </Link>
+          }
+        </div>
       </Flex>
     </Container>
   );

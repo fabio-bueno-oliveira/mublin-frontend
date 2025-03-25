@@ -12,6 +12,7 @@ import {
   IconPlaylist,
   IconUserSearch,
   IconLayoutDashboard,
+  IconArrowRight,
   IconUsersGroup,
   IconRosetteDiscountCheckFilled,
   IconShieldCheckFilled
@@ -94,11 +95,11 @@ function LandingPage () {
             <Button
               size='xl'
               mt='lg'
-              radius='xl'
+              radius='md'
               color='mublinColor'
-              // variant='gradient'
-              // gradient={{ from: 'mublinColor', to: 'violet', deg: 90 }}
-              // rightSection={<IconArrowRight size={14}/>}
+              variant='gradient'
+              gradient={{ from: 'mublinColor', to: 'violet', deg: 90 }}
+              rightSection={<IconArrowRight size={14}/>}
             >
               Comece grátis
             </Button>
