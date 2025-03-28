@@ -7,7 +7,6 @@ import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, 
 import { useMediaQuery } from '@mantine/hooks'
 import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic } from '@tabler/icons-react'
 import Header from '../../components/header'
-import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
 import { Helmet } from 'react-helmet'
@@ -67,6 +66,9 @@ function ProjectPage () {
               fit='contain'
               src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-40,w-40,c-maintain_ratio/'+project.picture : undefined}
             />}
+            component='a'
+            href={`/dashboard/${project.username}`}
+            target='_blank'
           >
             Painel de Controle
           </Button>

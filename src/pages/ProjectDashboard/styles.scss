@@ -1,16 +1,17 @@
-.embla {
-  overflow: hidden;
+:root[data-mantine-color-scheme='light'] {
+  #dashboard {
+    #desktopSidebar {
+      background-color: #fff;
+      border-right: 1px rgb(216, 216, 216) solid;
+    }
+  }
 }
-.embla__container {
-  display: flex;
-}
-.embla__slide {
-  flex: 0 0 130px;
-  min-width: 0;
-  margin-right: 5px;
-}
-@media (min-width: 768px) {
-  .embla__slide {
-    margin-right: 4px;
+
+:root[data-mantine-color-scheme='dark'] {
+  #dashboard {
+    #desktopSidebar {
+      background-color: #060a0d;
+      border-right: 1px #121b23 solid;
+    }
   }
 }

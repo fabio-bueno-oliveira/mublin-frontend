@@ -86,7 +86,7 @@ function AppRoutes () {
           <Route path="/start/step4" element={<StartStep4Page />} />
           <Route path="/projects" element={<MyProjectsPage />} />
           <Route path="/project/:username" element={<ProjectPage />} />
-          <Route path="/project/:username/dashboard" element={<ProjectDashboardPage />} />
+          <Route path="/dashboard/:username" element={<ProjectDashboardPage />} />
           <Route path="/gear/product/:productId" element={<GearProductPage />} />
           <Route path="/gear/product/zoom/:productId" element={<GearZoomPage />} />
           <Route path="/gear/brand/:brandUrlName" element={<GearBrandPage />} />
