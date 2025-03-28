@@ -473,6 +473,31 @@ function ProfilePage () {
                         }
                       </Group>
                     }
+                    {profile.availabilityId && 
+                      <Flex
+                        align='center'
+                        justify='flex-start'
+                        gap={6}
+                        mt={10}
+                      >
+                        <Indicator
+                          inline
+                          processing={profile.availabilityId === 1}
+                          color={profile.availabilityColor}
+                          size={8}
+                          ml={5}
+                          mr={7}
+                        />
+                        <Text
+                          fz='0.8rem'
+                          fw='500'
+                          className='lhNormal'
+                          pt='1px'
+                        >
+                          {profile.availabilityTitle}
+                        </Text>
+                      </Flex>
+                    }
                   </Box>
                   {profile.plan === 'Pro' && 
                     <Card.Section mt={12}>
@@ -748,34 +773,10 @@ function ProfilePage () {
                 }
                 {profile.availabilityId && 
                   <>
-                    <Divider mt='md' mb='xs' label='Disponibilidade' labelPosition='left' />
-                    {/* <Title fz='1.03rem' fw='640' mt='md' mb='xs'>
-                      Disponibilidade e Preferências
-                    </Title> */}
-                    <Flex
-                      align='center'
-                      justify='flex-start'
-                      gap={6}
-                      mb={isMobile ? 0 : 6}
-                    >
-                      <Indicator
-                        inline
-                        processing={profile.availabilityId === 1}
-                        color={profile.availabilityColor}
-                        size={11}
-                        ml={5}
-                        mr={7}
-                      />
-                      <Text
-                        fz='1.03rem'
-                        fw='640'
-                        className='lhNormal'
-                        pt='1px'
-                      >
-                        {profile.availabilityTitle}
-                      </Text>
-                    </Flex>
-                    <AvailabilityInfo mt={18} mb={18} screen='largeScreen' />
+                    <Title fz='1.03rem' fw='640' mt={18}>
+                      Preferências musicais e de trabalho
+                    </Title>
+                    <AvailabilityInfo mt={12} mb={18} screen='largeScreen' />
                     {isMobile &&
                       <Accordion chevronPosition='left'>
                         <Accordion.Item value='Exibir preferências musicais e de trabalho' style={{border:'0px'}}>
@@ -859,7 +860,7 @@ function ProfilePage () {
                       <Button 
                         size='xs'
                         variant='light'
-                        color={colorScheme === 'light' ? 'dark' : 'gray'}
+                        color='primary'
                         onClick={() => setModalStrengthsOpen(true)}
                       >
                         Votar

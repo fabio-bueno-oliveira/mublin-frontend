@@ -141,7 +141,19 @@ function GearSection ({ loggedUserId, username }) {
                       justify='flex-start'
                       align='center'
                       className='carousel-gear'
+                      pos='relative'
                     >
+                      <Image
+                        // src={product.brandLogo}
+                        src={'https://ik.imagekit.io/mublin/products/brands/tr:w-70,h-70,cm-pad_resize,bg-FFFFFF,fo-x/'+product.brandLogoFilename}
+                        h={35}
+                        mah={35}
+                        w='auto'
+                        fit='contain'
+                        radius='xl'
+                        pos='absolute'
+                        left='0'
+                      />
                       <Image
                         src={'https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.pictureFilename}
                         h={120}
@@ -230,7 +242,7 @@ function GearSection ({ loggedUserId, username }) {
               {gearItemDetail.brandName} {gearItemDetail.productName}
             </Text>
             <Text size='xs' c='dimmed'>
-              Parte do equipamento de {profile.name}
+              Parte do equipamento de {profile.name} {profile.lastname}
             </Text>
           </Flex>
         }
@@ -248,6 +260,18 @@ function GearSection ({ loggedUserId, username }) {
               fit='contain'
               mb='10'
               radius='md'
+            />
+          </Anchor>
+        </Center>
+        <Center>
+          <Anchor
+            href={`/gear/brand/${gearItemDetail.brandSlug}`}
+          >
+            <Image
+              src={'https://ik.imagekit.io/mublin/products/brands/tr:w-150/'+gearItemDetail.brandLogoFilename}
+              h='auto'
+              w={75}
+              fit='contain'
             />
           </Anchor>
         </Center>

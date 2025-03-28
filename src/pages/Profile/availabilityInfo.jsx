@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { miscInfos } from '../../store/actions/misc'
 import { Flex, Group, Box, Badge, Text } from '@mantine/core'
-import { IconCheck } from '@tabler/icons-react'
+// import { IconCheck } from '@tabler/icons-react'
 
 function AvailabilityInfo (props) {
 
@@ -40,7 +40,7 @@ function AvailabilityInfo (props) {
         </Text>
       )}
       <Text size='0.83em' fw='500' mb={8} mt={14}>
-        Vínculos:
+        Vínculos de trabalho:
       </Text>
       <Group gap={4}>
         {profile.requesting ? (
@@ -57,7 +57,7 @@ function AvailabilityInfo (props) {
                 <Badge color='mublinColor' size='md' className='availability'>
                   Contrato
                 </Badge>
-                <Text fz='10px'>
+                <Text fz='9px'>
                   Sideman/Sidewoman/Sub
                 </Text>
               </Flex>

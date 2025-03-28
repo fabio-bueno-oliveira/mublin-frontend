@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Divider, Box, Flex, Title, Text, Avatar, Anchor, rem } from '@mantine/core';
+import { Box, Flex, Title, Text, Avatar, Anchor, rem } from '@mantine/core';
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
@@ -13,11 +13,9 @@ function RelatedProfiles ({
 
   return (
     <Box mb='18'>
-      {/* <Divider mt={20} />
-      <Title fz='1.03rem' fw='640' mt='md' mb='xs'>
-        Mais perfis pra você
-      </Title> */}
-      <Divider mt='md' mb='xs' label='Mais perfis pra você' labelPosition='left' />
+      <Title fz='0.8rem' fw='500' mb='xs'>
+        Mais perfis pra você conferir
+      </Title>
       <Splide 
         options={{
           drag: 'free',
