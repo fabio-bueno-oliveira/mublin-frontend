@@ -540,6 +540,7 @@ function ProjectPage () {
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
                 <Card px='md' py='md' radius='md' withBorder className='mublinModule'>
+                  <Title fz='0.95rem' fw='580' mb={16}>Pessoas neste projeto</Title>
                   <Flex direction='column' gap={18}>
                     {members.map(member => 
                       <Box key={member.id}>
@@ -557,7 +558,7 @@ function ProjectPage () {
                               <Text 
                                 component='a' 
                                 href={`/${member.username}`} 
-                                size='sm' fw={500} style={{lineHeight:'1'}}>
+                                size='0.96rem' fw={570} style={{lineHeight:'1'}}>
                                 {member.name} {member.lastname}
                               </Text>
                               {member.verified &&
@@ -582,7 +583,7 @@ function ProjectPage () {
                                 : (member.leftIn) ? member.leftIn : 'Atualmente'
                               }
                             </Text>
-                            <Text size='xs' className='lhNormal'>
+                            <Text c='dimmed'  size='xs' className='lhNormal'>
                               {member.role1 &&
                                 <Text className='comma' span>
                                   {member.role1}
@@ -610,7 +611,7 @@ function ProjectPage () {
                     )}
                     {pastMembers.length > 0 && 
                       <>
-                        <Text size='xs' c='dimmed'>Já atuaram neste projeto:</Text>
+                        <Text size='sm'>Já atuaram anteriormente:</Text>
                         {pastMembers.map(member => 
                           <Box key={member.id}>
                             <Group gap={7} align='center' wrap='nowrap'>
@@ -627,7 +628,7 @@ function ProjectPage () {
                                   <Text 
                                     component='a' 
                                     href={`/${member.username}`} 
-                                    size='sm' fw={500} style={{lineHeight:'1'}}>
+                                    size='0.96rem' fw={570} style={{lineHeight:'1'}}>
                                     {member.name} {member.lastname}
                                   </Text>
                                   {member.verified &&

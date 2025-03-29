@@ -155,7 +155,7 @@ function ProjectDashboardPage () {
             <>
               <Flex justify='space-between'>
                 <Box>
-                  <Title fz='xl'>Dashboard de {project.name}</Title>
+                  <Title fz='h2'>Painel de {project.name}</Title>
                   <Text size='sm'>Informações sobre o projeto</Text>
                 </Box>
                 <Button 
@@ -205,7 +205,7 @@ function ProjectDashboardPage () {
                         <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
                           <IconCalendar style={{ width: '70%', height: '70%' }} />
                         </ThemeIcon>
-                        <Title>3</Title>
+                        <Title fz='h3'>3</Title>
                       </Group>
                       <Text size='sm'>Eventos próximos</Text>
                       <Text size='xs' c='dimmed'>19 no total</Text>
@@ -215,7 +215,7 @@ function ProjectDashboardPage () {
                         <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
                           <IconMusic style={{ width: '70%', height: '70%' }} />
                         </ThemeIcon>
-                        <Title>1</Title>
+                        <Title fz='h3'>1</Title>
                       </Group>
                       <Text size='sm'>Músicas</Text>
                     </Grid.Col>
@@ -224,7 +224,7 @@ function ProjectDashboardPage () {
                         <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
                           <IconMusic style={{ width: '70%', height: '70%' }} />
                         </ThemeIcon>
-                        <Title>{activeMembers.length}</Title>
+                        <Title fz='h3'>{activeMembers.length}</Title>
                       </Group>
                       <Text size='sm'>Integrantes ativos no projeto</Text>
                     </Grid.Col>
@@ -233,7 +233,7 @@ function ProjectDashboardPage () {
                         <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
                           <IconCalendar style={{ width: '70%', height: '70%' }} />
                         </ThemeIcon>
-                        <Title>14</Title>
+                        <Title fz='h3'>14</Title>
                       </Group>
                       <Text size='sm'>Eventos cadastrados</Text>
                     </Grid.Col>
@@ -257,16 +257,16 @@ function ProjectDashboardPage () {
                     />
                   </Box>
                   <Text mb={6} size='sm'>
-                    Tipo: <Text span c='dimmed'>{project.typeName}</Text>
+                    <strong>Tipo:</strong> {project.typeName}
                   </Text>
                   <Text mb={6} size='sm'>
-                    Ano de fundação: <Text span c='dimmed'>{project.foundationYear}</Text> {!!project.endDate && <Text span c='dimmed'>(encerrado em {project.endDate})</Text>}
+                    <strong>Ano de fundação:</strong> {project.foundationYear} {!!project.endDate && <Text span c='dimmed'>(encerrado em {project.endDate})</Text>}
                   </Text>
                   <Text mb={6} size='sm'>
-                    Propósito: <Text span c='dimmed'>{project.purpose}</Text>
+                    <strong>Propósito do projeto:</strong> {project.purpose ? project.purpose : 'Não informado'}
                   </Text>
                   <Text size='sm' my={10}>
-                    Bio: <Text span c='dimmed'>{project.bio}</Text>
+                    {project.bio}
                   </Text>
                   <Avatar.Group spacing={10} mt={6}>
                     {activeMembers.map(member =>

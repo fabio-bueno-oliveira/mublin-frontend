@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { miscInfos } from '../../store/actions/misc'
 import { Flex, Group, Box, Badge, Text } from '@mantine/core'
-// import { IconCheck } from '@tabler/icons-react'
+import { IconCheck } from '@tabler/icons-react'
 
 function AvailabilityInfo (props) {
 
