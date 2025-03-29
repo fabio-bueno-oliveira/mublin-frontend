@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { jwtDecode } from 'jwt-decode'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, Affix, Modal, ScrollArea, Tabs, em, rem } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic } from '@tabler/icons-react'
+import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
-import { Helmet } from 'react-helmet'
 import { formatDistance } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import './styles.scss'
@@ -102,7 +102,7 @@ function ProjectPage () {
                   >
                     <Card.Section>
                       <Image
-                        src={project.cover_image ? 'https://ik.imagekit.io/mublin/projects/'+project.cover_image : 'https://ik.imagekit.io/mublin/bg/cover-gradient.jpg'}
+                        src={project.cover_image ? 'https://ik.imagekit.io/mublin/projects/'+project.cover_image : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
                         height={120}
                         alt={`Imagem de capa de ${project.picture}`}
                       />
@@ -122,24 +122,27 @@ function ProjectPage () {
                         {truncateString(project.name, isMobile ? 15 : 120)}
                       </Title>
                     </Group>
-                    <Text size='sm'>
-                      {project.genre1 &&
-                        <Text className='comma' span>
-                          {project.genre1}
-                        </Text>
-                      }
-                      {project.genre2 &&
-                        <Text className='comma' span>
-                          {project.genre2}
-                        </Text>
-                      }
-                      {project.genre3 &&
-                        <Text className='comma' span>
-                          {project.genre3}
-                        </Text>
-                      }
-                    </Text>
-                    <Text size='xs' c='dimmed' my={2}>
+                    <Group gap={3}>
+                      <IconMusic size={13} />
+                      <Text size='sm'>
+                        {project.genre1 &&
+                          <Text className='comma' span>
+                            {project.genre1}
+                          </Text>
+                        }
+                        {project.genre2 &&
+                          <Text className='comma' span>
+                            {project.genre2}
+                          </Text>
+                        }
+                        {project.genre3 &&
+                          <Text className='comma' span>
+                            {project.genre3}
+                          </Text>
+                        }
+                      </Text>
+                    </Group>
+                    <Text size='sm' c='dimmed' my={2}>
                       {project.typeName} {project.region && `· ${project.region} · ${project.country}`}
                     </Text>
                     {project.activityStatusId &&
@@ -220,7 +223,13 @@ function ProjectPage () {
                           Fotos
                         </Tabs.Tab>
                         {isActiveMember &&
-                          <Tabs.Tab value='dashboard' leftSection={<IconSettings size={12} />}>
+                          <Tabs.Tab 
+                            value='dashboard' 
+                            leftSection={<IconSettings size={12} />}
+                            component='a'
+                            href={`/dashboard/${project.username}`}
+                            target='_blank'
+                          >
                             Painel de Controle
                           </Tabs.Tab>
                         }
@@ -256,7 +265,13 @@ function ProjectPage () {
                               Fotos
                             </Tabs.Tab>
                             {isActiveMember &&
-                              <Tabs.Tab value='dashboard' leftSection={<IconSettings size={12} />}>
+                              <Tabs.Tab
+                                value='dashboard'
+                                leftSection={<IconSettings size={12} />}
+                                component='a'
+                                href={`/dashboard/${project.username}`}
+                                target='_blank'
+                              >
                                 Painel de Controle
                               </Tabs.Tab>
                             }
@@ -300,6 +315,27 @@ function ProjectPage () {
                       >
                         {project.bio ? project.bio : 'Bio não informada'}
                       </Text>
+                    </Card>
+                    <Card mt={14} padding='lg' radius='md' withBorder className='mublinModule'>
+                      <Title fz='1.0rem' fw='640' mb={3}>Contato</Title>
+                      <Group gap={3} align='center' mt={8}>
+                        <IconMail size={14} color='gray' />
+                        <Text 
+                          size='sm'
+                          c={project.email ? undefined : 'dimmed'}
+                        >
+                          {project.email ? project.email : 'Email não informado'}
+                        </Text>
+                      </Group>
+                      <Group gap={3} align='center' mt={6}>
+                        <IconPhone size={14} color='gray' />
+                        <Text 
+                          size='sm'
+                          c={project.phone ? undefined : 'dimmed'}
+                        >
+                          {project.phone ? project.phone : 'Telefone não informado'}
+                        </Text>
+                      </Group>
                     </Card>
                     {(project.instagram || project.soundcloud) && 
                       <Card mt={14} padding='lg' radius='md' withBorder className='mublinModule'>
@@ -362,7 +398,7 @@ function ProjectPage () {
                     <Title fz='1.0rem' fw='640' className='lhNormal'>
                       Oportunidades em {project.name}
                     </Title>
-                    <Text size='sm' mb={12}>
+                    <Text size='sm' mb={18}>
                       Participações em aberto neste projeto
                     </Text>
                     {project.opportunities.total === 0 ? (
@@ -372,97 +408,51 @@ function ProjectPage () {
                     ) : (
                       <Flex direction='column' gap={10}>
                         {project.opportunities.result.map(item => 
-                          <>
-                            <Card radius='md' withBorder p='xs' bg='transparent'>
-                              <Flex gap={10}>
-                                <Image
-                                  radius='md'
-                                  h={70}
-                                  w='auto'
-                                  fit='contain'
-                                  src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-140,w-140,c-maintain_ratio/'+project.picture : undefined}
-                                  style={{border:'3px solid white'}}
-                                />
-                                <Flex direction='column'>
-                                  <Title 
-                                    order={4} 
-                                    fz='1rem' 
-                                    fw={650} 
-                                    className='lhNormal'
-                                    c='primary'
-                                    component='a'
-                                    href={`/job/${item.id}?project=${project.username}`}
-                                  >
-                                    {item.rolename}
-                                  </Title>
-                                  <Group gap={4}>
-                                    <Text size='xs'>
-                                      <strong>Experiência sugerida:</strong> {item.experienceName}
-                                    </Text>
-                                    <Group gap={1}>
-                                      <IconMusic size='15' />
-                                      <IconMusic size='15' opacity={item.experienceLevel >= 2 ? 1 : 0.4} />
-                                      <IconMusic size='15' opacity={item.experienceLevel === 3 ? 1 : 0.4} />
-                                    </Group>
-                                  </Group>
+                          <Card key={item.id} radius='md' withBorder p='xs' bg='transparent'>
+                            <Flex gap={10}>
+                              <Image
+                                radius='md'
+                                h={70}
+                                w='auto'
+                                fit='contain'
+                                src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-140,w-140,c-maintain_ratio/'+project.picture : undefined}
+                                style={{border:'3px solid white'}}
+                              />
+                              <Flex direction='column'>
+                                <Title 
+                                  order={4} 
+                                  fz='1rem' 
+                                  fw={650} 
+                                  className='lhNormal'
+                                  c='primary'
+                                  component='a'
+                                  href={`/job/${item.id}?project=${project.username}`}
+                                >
+                                  {item.rolename}
+                                </Title>
+                                <Group gap={4}>
                                   <Text size='xs'>
-                                    <strong>Vínculo:</strong> Contrato
+                                    <strong>Experiência:</strong> {item.experienceName}
                                   </Text>
-                                  <Text size='xs' c='dimmed'>
-                                    publicado há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-                                  </Text>
-                                  <Text size='sm'>
-                                    {item.info}
-                                  </Text>
-                                </Flex>
+                                  <Group gap={1}>
+                                    <IconMusic size='15' />
+                                    <IconMusic size='15' opacity={item.experienceLevel >= 2 ? 1 : 0.4} />
+                                    <IconMusic size='15' opacity={item.experienceLevel === 3 ? 1 : 0.4} />
+                                  </Group>
+                                </Group>
+                                <Text size='xs'>
+                                  <strong>Vínculo:</strong> Contrato
+                                </Text>
+                                <Text size='xs' c='dimmed'>
+                                  publicado há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
+                                </Text>
+                                <Text size='sm'>
+                                  {item.info}
+                                </Text>
                               </Flex>
-                            </Card>
-                            {/* <Table.Tr key={item.id} fz={12}>
-                              <Table.Td p={0} width='20%'>
-                                há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-                              </Table.Td>
-                              <Table.Td p={0} width='15%'>
-                                {item.rolename}
-                              </Table.Td>
-                              <Table.Td p={0} width='20%'>
-                                {item.experienceName}
-                              </Table.Td>
-                              <Table.Td p={0} width='45%'>
-                                {item.info}
-                              </Table.Td>
-                            </Table.Tr> */}
-                          </>
+                            </Flex>
+                          </Card>
                         )}
-                        {/* <Table.ScrollContainer minWidth={500}>
-                          <Table withRowBorders={false} variant='vertical'>
-                            <Table.Thead>
-                              <Table.Tr fz={12}>
-                                <Table.Th p={0} fw={500}>Data Cadastro</Table.Th>
-                                <Table.Th p={0} fw={500}>Atividade</Table.Th>
-                                <Table.Th p={0} fw={500}>Experiência</Table.Th>
-                                <Table.Th p={0} fw={500}>Detalhes</Table.Th>
-                              </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>
-                              {project.opportunities.result.map(item => 
-                                <Table.Tr key={item.id} fz={12}>
-                                  <Table.Td p={0} width='20%'>
-                                    há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-                                  </Table.Td>
-                                  <Table.Td p={0} width='15%'>
-                                    {item.rolename}
-                                  </Table.Td>
-                                  <Table.Td p={0} width='20%'>
-                                    {item.experienceName}
-                                  </Table.Td>
-                                  <Table.Td p={0} width='45%'>
-                                    {item.info}
-                                  </Table.Td>
-                                </Table.Tr>
-                              )}
-                            </Table.Tbody>
-                          </Table>
-                        </Table.ScrollContainer> */}
                       </Flex>
                     )}
                   </Card>
@@ -592,7 +582,7 @@ function ProjectPage () {
                                 : (member.leftIn) ? member.leftIn : 'Atualmente'
                               }
                             </Text>
-                            <Text c='dimmed' size='xs' className='lhNormal'>
+                            <Text size='xs' className='lhNormal'>
                               {member.role1 &&
                                 <Text className='comma' span>
                                   {member.role1}
@@ -610,8 +600,8 @@ function ProjectPage () {
                               }
                             </Text>
                             {!!member.founder &&
-                              <Badge size='xs' radius='sm' variant='light' color='mublinColor'>
-                                Fundador
+                              <Badge size='xs' radius='sm' color='primary'>
+                                {member.gender === 'f' ? 'Fundadora' : 'Fundador'}
                               </Badge>
                             }
                           </Flex>

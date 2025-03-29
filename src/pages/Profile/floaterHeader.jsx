@@ -10,7 +10,7 @@ function FloaterHeader ({ profile, scrollY }) {
   return (
     <Affix
       w='100%'
-      position={{ top: 0, left: 0 }}
+      position={{ top: 66, left: 0 }}
     >
       <Transition
         transition='slide-down'

@@ -57,8 +57,8 @@ function AvailabilityInfo (props) {
                 <Badge color='mublinColor' size='md' className='availability'>
                   Contrato
                 </Badge>
-                <Text fz='9px'>
-                  Sideman/Sidewoman/Sub
+                <Text fz='10px'>
+                  {profile.gender === 'f' ? 'Sidewoman/Sub' : 'Sideman/Sub'}
                 </Text>
               </Flex>
             }
@@ -78,7 +78,7 @@ function AvailabilityInfo (props) {
               size='md'
               pl='4px'
               pr='7px'
-              // leftSection={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? <IconCheck size={12} /> : undefined}
+              leftSection={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? <IconCheck size={12} /> : undefined}
               variant={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'filled' : 'light'}
               color={profile.availabilityItems.filter((i) => { return i.itemId === job.id }).length ? 'mublinColor' : 'gray'}
             >

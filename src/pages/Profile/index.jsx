@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { jwtDecode } from 'jwt-decode'
 import { useParams } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Checkbox, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconMapPin, IconEye, IconPiano, IconTimeline, IconPencilPlus } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -86,15 +87,12 @@ function ProfilePage () {
       )
   }, [username]);
 
-  document.title = !profile.success && !profile.id ? 'Mublin' : `${profile.name} ${profile.lastname} | Mublin`;
-
   const followedByMe = useSelector(state => state.followedByMe);
   const [loadingFollow, setLoadingFollow] = useState(false);
 
   // Projects
   const allProjects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
-  // const mainProjects = profile.projects.result.filter((project) => { return project.portfolio === 0 && project.confirmed === 1 });
-  // const portfolioProjects = profile.projects.result.filter((project) => { return project.portfolio === 1 && project.confirmed === 1 });
+  const [showPastProjects, setShowPastProjects] = useState(true);
 
   // Modal Badges
   const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false)
@@ -254,6 +252,10 @@ function ProfilePage () {
 
   return (
     <>
+      <Helmet>
+        <title>{!profile.success && !profile.id ? 'Mublin' : `${profile.name} ${profile.lastname} | Mublin`}</title>
+        <link rel='canonical' href={`https://mublin.com/${profile.name}`} />
+      </Helmet>
       {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalProfileFeedOpen && !modalStrengthsOpen) && 
         <FloaterHeader profile={profile} scrollY={scroll.y} />
       }
@@ -341,7 +343,7 @@ function ProfilePage () {
                       />
                     </Indicator>
                   </Group>
-                  <Flex justify='flex-start' align='baseline' mt={16}>
+                  <Flex gap={3} justify='flex-start' align='center' mt={16}>
                     <Title fz='1.34rem' fw='600' style={{lineHeight:'0.6'}}>
                       {profile.name} {profile.lastname}
                     </Title>
@@ -805,15 +807,25 @@ function ProfilePage () {
                 <Paper
                   withBorder={isLargeScreen ? true : false}
                   px={isMobile ? 0 : 16}
-                  pt={isMobile ? 0 : 10}
+                  pt={isMobile ? 0 : 12}
                   pb={isMobile ? 3 : 12}
                   mb='14'
                   className="mublinModule transparentBgInMobile"
                 >
                   <Group justify='space-between' align='center' gap={8} mb={8}>
-                    <Title fz='1.03rem' fw='640'>
-                      Projetos  {!!profile.projects.total && `(${profile.projects.total})`}
-                    </Title>
+                    <Group gap={22}>
+                      <Title fz='1.03rem' fw='640'>
+                        Projetos  {!!profile.projects.total && `(${profile.projects.total})`}
+                      </Title>
+                      {profile.projects.total > 0 && 
+                        <Checkbox
+                          size='xs'
+                          label='Exibir projetos passados'
+                          checked={showPastProjects}
+                          onChange={(event) => setShowPastProjects(event.currentTarget.checked)}
+                        />
+                      }
+                    </Group>
                     {(!profile.requesting && profile.projects.total > 0) &&
                       <ActionIcon
                         variant='transparent'
@@ -829,15 +841,14 @@ function ProfilePage () {
                       </ActionIcon>
                     }
                   </Group>
-
-                    <Projects
-                      requesting={profile.requesting}
-                      total={profile.projects.total}
-                      profile={profile}
-                      projects={allProjects}
-                      profilePlan={profile.plan}
-                    />
-
+                  <Projects
+                    requesting={profile.requesting}
+                    total={profile.projects.total}
+                    profile={profile}
+                    projects={allProjects}
+                    profilePlan={profile.plan}
+                    showPastProjects={showPastProjects}
+                  />
                   {(!profile.requesting && profile.projects.total === 0) &&
                     <Text size='sm' c='dimmed'>Nenhum projeto no momento</Text>
                   }

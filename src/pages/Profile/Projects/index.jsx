@@ -8,6 +8,7 @@ function Projects (props) {
 
   const profile = props.profile
   const profilePlan = props.profilePlan
+  const showPastProjects = props.showPastProjects
 
   const requesting = props.requesting
 
@@ -47,56 +48,62 @@ function Projects (props) {
           pagination: false,
         }}
       >
-        {projects.splice(0 , profilePlan === 'Free' ? 2 : 300).map(project =>
-          <SplideSlide key={project.id}>
-            <Flex align='center' gap={6} mb={5} className='carousel-project'>
-              <Avatar
-                variant='filled'
-                radius='md'
-                size='64px'
-                color='violet'
-                name={'🎵'}
-                src={project.picture ? project.picture : undefined}
-                component='a'
-                href={`/project/${project.username}`}
-              />
-              <Flex
-                direction='column'
-                justify='flex-start'
-                align='flex-start'
-                wrap='wrap'
-              >
-                <Box w={107}>
-                  <Text size='11px' fw='460' mb='2' truncate='end'>
-                    {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
+        {projects
+          .filter(
+            (project) => { return showPastProjects ? project.left_in || !project.left_in || project.endYear || !project.endYear : !project.left_in && !project.endYear }
+          )
+          .splice(0 , profilePlan === 'Free' ? 2 : 300)
+          .map(project =>
+            <SplideSlide key={project.id}>
+              <Flex align='center' gap={6} mb={5} className='carousel-project'>
+                <Avatar
+                  variant='filled'
+                  radius='md'
+                  size='64px'
+                  color='violet'
+                  name={'🎵'}
+                  src={project.picture ? project.picture : undefined}
+                  component='a'
+                  href={`/project/${project.username}`}
+                />
+                <Flex
+                  direction='column'
+                  justify='flex-start'
+                  align='flex-start'
+                  wrap='wrap'
+                >
+                  <Box w={107}>
+                    <Text size='11px' fw='460' mb='2' truncate='end'>
+                      {project.left_in && 'ex '} {project.role1}{project.role2 && ', '+project.role2} em
+                    </Text>
+                  </Box>
+                  <Box w={107}>
+                    <Text
+                      size='0.86rem'
+                      fw='590'
+                      mb='3'
+                      truncate='end'
+                      title={project.name}
+                      className='lhNormal'
+                    >
+                      {project.name} {!!project.featured && <IconStarFilled style={{ width: '9px', height: '9px' }} color='gray' />}
+                    </Text>
+                  </Box>
+                  <Text size='10.5px' fw='420' truncate='end' c='dimmed'>
+                    {project.workTitle}
                   </Text>
-                </Box>
-                <Box w={107}>
-                  <Text
-                    size='0.86rem'
-                    fw='590'
-                    mb='3'
-                    truncate='end'
-                    title={project.name}
-                    className='lhNormal'
-                  >
-                    {project.name} {!!project.featured && <IconStarFilled style={{ width: '9px', height: '9px' }} color='gray' />}
-                  </Text>
-                </Box>
-                <Text size='10.5px' fw='420' truncate='end' c='dimmed'>
-                  {project.workTitle}
-                </Text>
-                {/* <Text size='12px' fw='380' c='dimmed'>{project.type}</Text> */}
-                {/* <Text size='12px'>{project.workTitle}</Text> */}
-                {project.endYear && 
-                  <Text size='9px' mt={5} fw={300}>
-                    encerrado em {project.endYear}
-                  </Text>
-                }
+                  <Text size='11px' fw='380' c='dimmed'>{project.type}</Text>
+                  {/* <Text size='12px'>{project.workTitle}</Text> */}
+                  {project.endYear && 
+                    <Text size='9px' mt={5} fw={300}>
+                      encerrado em {project.endYear}
+                    </Text>
+                  }
+                </Flex>
               </Flex>
-            </Flex>
-          </SplideSlide>
-        )}
+            </SplideSlide>
+          )
+        }
         {/* {(profile.id === userInfo.id && !profile.requesting && profilePlan === 'Free') && 
           <SplideSlide>
             <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>

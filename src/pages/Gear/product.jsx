@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
 import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart, IconX } from '@tabler/icons-react'
-import { useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { Helmet } from 'react-helmet'
@@ -15,8 +14,6 @@ function GearProductPage () {
   const params = useParams()
   const productId = params?.productId
   const product = useSelector(state => state.gear)
-  const largeScreen = useMediaQuery('(min-width: 60em)')
-  // let navigate = useNavigate();
 
   let dispatch = useDispatch()
 
@@ -73,9 +70,20 @@ function GearProductPage () {
             <Text classNames='lhNormal' fw='420' size='sm' c='dimmed'>
               {product.requesting ? <Skeleton width={100} height={10} mb={4} radius="md" /> : product.categoryName + ' • ' + product.brandName}
             </Text>
-            <Title fz='1.12rem' fw='560'>
-              {product.requesting ? <Skeleton width={220} height={18} radius="md" /> : product.name}
-            </Title>
+            {product.requesting ? (
+              <Skeleton width={220} height={18} radius={0} />
+            ) : (
+              <>
+                <Title fz='1.12rem' fw='560'>
+                  {product.name}
+                </Title>
+                {product.subtitle && 
+                  <Title fz='0.8rem' fw='400'>
+                    {product.subtitle}
+                  </Title>
+                }
+              </>
+            )}
             {!!product.rare &&
               <Group gap={2} align='center'>
                 <IconDiamond color='#4c6ef5' style={{width:'0.9rem',height:'0.9rem'}} />
@@ -84,11 +92,11 @@ function GearProductPage () {
                 </Text>
               </Group>
             }
-            {!product.requesting &&
-              <Anchor fz='xs' href={`/gear/brand/${product.brandSlug}`}>
+            {/* {!product.requesting &&
+              <Anchor mt={10} c='dimmed' fz='xs' href={`/gear/brand/${product.brandSlug}`}>
                 Ver produtos {product.brandName}
               </Anchor>
-            }
+            } */}
           </Flex>
         </Flex>
         <Grid mt='20' mb='70'>
