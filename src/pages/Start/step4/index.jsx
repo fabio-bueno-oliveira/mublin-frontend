@@ -594,7 +594,7 @@ function StartFourthStep () {
           <TextInput
             mt={8}
             withAsterisk
-            label="Username do projeto"
+            label="URL do projeto"
             placeholder="Ex: viajantesdoexpaco"
             description={
               "mublin.com/project/"+projectUsernameFinal

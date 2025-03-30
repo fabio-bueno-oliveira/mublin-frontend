@@ -83,7 +83,7 @@ function ProjectsTimeline () {
                 }
               </Flex>
               <Text size='sm'>
-                Timeline de projetos {username}
+                Timeline de projetos
               </Text>
               <Anchor 
                 href={`/${username}`}

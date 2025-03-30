@@ -8,7 +8,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Checkbox, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconMapPin, IconEye, IconPiano, IconTimeline, IconPencilPlus } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconMapPin, IconEye, IconPiano, IconTimeline, IconPencilPlus, IconPlus } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -426,7 +426,7 @@ function ProfilePage () {
                     </Text>
                   }
                   <Box id='social'>
-                    {profile.website && 
+                    {(profile.website && profile.website !== 'null') && 
                       <Anchor 
                         href={profile.website} 
                         target='_blank'
@@ -826,20 +826,37 @@ function ProfilePage () {
                         />
                       }
                     </Group>
-                    {(!profile.requesting && profile.projects.total > 0) &&
-                      <ActionIcon
-                        variant='transparent'
-                        size='md'
-                        aria-label='Ver timeline de projetos'
-                        title='Ver timeline de projetos'
-                        onClick={() => navigate(`/${username}/timeline`)}
-                      >
-                        <IconTimeline
-                          color={colorScheme === 'light' ? 'black' : 'white'}
-                          style={{ width: '91%', height: '91%' }} stroke={1.5}
-                        />
-                      </ActionIcon>
-                    }
+                    <Group gap={4}>
+                      {(profile.id === loggedUserId && !profile.requesting) && 
+                        <ActionIcon
+                          variant='transparent'
+                          size='md'
+                          aria-label='Criar novo projeto'
+                          title='Criar novo projeto'
+                          onClick={() => navigate('/new/project')}
+                        >
+                          <IconPlus
+                            color={colorScheme === 'light' ? 'black' : 'white'}
+                            style={{ width: '91%', height: '91%' }}
+                            stroke={1.5}
+                          />
+                        </ActionIcon>
+                      }
+                      {(!profile.requesting && profile.projects.total > 0) &&
+                        <ActionIcon
+                          variant='transparent'
+                          size='md'
+                          aria-label='Ver timeline de projetos'
+                          title='Ver timeline de projetos'
+                          onClick={() => navigate(`/${username}/timeline`)}
+                        >
+                          <IconTimeline
+                            color={colorScheme === 'light' ? 'black' : 'white'}
+                            style={{ width: '91%', height: '91%' }} stroke={1.5}
+                          />
+                        </ActionIcon>
+                      }
+                    </Group>
                   </Group>
                   <Projects
                     requesting={profile.requesting}
@@ -972,7 +989,7 @@ function ProfilePage () {
                           href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
                           target='_blank'
                         >
-                          Assinar Mublin PRO - R$ 29,90 por 3 meses
+                          Assinar Mublin PRO
                         </Anchor>
                       </Paper>
                     }
@@ -1263,7 +1280,7 @@ function ProfilePage () {
       <Modal 
         opened={modalStrengthVotesOpen}
         onClose={() => setModalStrengthVotesOpen(false)}
-        title={user.plan === 'Pro' ? `${profile.strengthsVotesHistory.total} votos recebidos` : 'Histórico de votos'}
+        title={user.plan === 'Pro' ? `${profile.strengthsVotesHistory.total} votos recebidos` : 'Ver meu histórico de votos'}
         centered
         size='sm'
         scrollAreaComponent={ScrollArea.Autosize}
@@ -1326,7 +1343,7 @@ function ProfilePage () {
               href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
               target='_blank'
             >
-              Assinar Mublin PRO - R$ 29,90 por 3 meses
+              Assinar Mublin PRO
             </Anchor>
           </>
         )}

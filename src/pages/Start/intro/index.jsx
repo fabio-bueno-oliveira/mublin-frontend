@@ -43,8 +43,8 @@ function StartFirstStep () {
           />
         </Center>
       </Container>
-      <Modal opened={showPreviouslyRegisteredAlert} onClose={() => setShowPreviouslyRegisteredAlert(false)} title="Hey!" centered>
-        <Text>Alguns dos seus dados já foram previamente cadastrados por você ou pela nossa equipe para facilitar sua jornada :)</Text>
+      <Modal opened={showPreviouslyRegisteredAlert} onClose={() => setShowPreviouslyRegisteredAlert(false)} title="Eba!" centered>
+        <Text>Alguns dos seus dados já foram previamente cadastrados pela nossa equipe para facilitar sua jornada :)</Text>
         <Group justify='flex-end' mt='14'>
           <Button color='mublinColor' onClick={() => setShowPreviouslyRegisteredAlert(false)}>
             Entendi!

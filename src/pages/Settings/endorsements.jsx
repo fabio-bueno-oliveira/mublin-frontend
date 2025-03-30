@@ -223,8 +223,8 @@ function SettingsBusinessPartners () {
                         fz='sm'
                         href='/pro'
                         underline='hover'
-                        variant="gradient"
-                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                        variant='gradient'
+                        gradient={{ from: 'pink', to: 'yellow' }}
                       >
                         Assine o Mublin PRO!
                       </Anchor>

@@ -296,7 +296,7 @@ function Header (props) {
                       <Menu.Item component='a' href='/new/project'>
                         <Group gap={5}>
                           <IconPlus size='13px' />
-                          <Text size='0.85rem' fw='500'>Novo projeto</Text>
+                          <Text size='0.85rem' fw='500'>Criar novo projeto</Text>
                         </Group>
                       </Menu.Item>
                       <Menu.Divider />

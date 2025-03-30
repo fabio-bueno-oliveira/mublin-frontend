@@ -2,14 +2,15 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Grid, Group, Menu, Box, Center, Flex, Title, Button, Text, Image, Skeleton, Avatar, Loader, ThemeIcon, Indicator, Divider, Drawer, Burger, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Indicator, Drawer, Button, em } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { IconPhoto, IconCalendar, IconTrash, IconArrowsLeftRight, IconSearch, IconMessageCircle, IconSettings, IconMusic, IconMoon, IconBrightnessUp, IconMenu2 } from '@tabler/icons-react'
+import { IconMenu2, IconPlus } from '@tabler/icons-react'
+import Header from './header'
 import Navbar from './navbar'
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg'
-import dayjs from 'dayjs'
-import 'dayjs/locale/pt-br'
+import { formatDistance, format } from 'date-fns'
+import pt from 'date-fns/locale/pt-BR'
 import './styles.scss'
 
 function ProjectDashboardPage () {
@@ -22,25 +23,24 @@ function ProjectDashboardPage () {
   useEffect(() => {
     dispatch(projectInfos.getProjectInfo(username));
     dispatch(projectInfos.getProjectMembers(username));
+    dispatch(projectInfos.getProjectEvents(username));
+    dispatch(projectInfos.getProjectNotes(username));
   }, []);
 
-  const { colorScheme, setColorScheme } = useMantineColorScheme()
+  const { colorScheme } = useMantineColorScheme()
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
-  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const project = useSelector(state => state.project);
 
   const activeMembers = project.members.filter(
     (member) => { return member.confirmed === 1 && !member.leftIn }
   )
-  const pendingMembers = project.members.filter(
-    (member) => { return member.confirmed === 2 }
-  )
-  const pastMembers = project.members.filter(
-    (member) => { return member.confirmed === 1 && member.leftIn }
-  )
-
-  const currentDate = dayjs().format('DD/MM/YYYY')
+  // const pendingMembers = project.members.filter(
+  //   (member) => { return member.confirmed === 2 }
+  // )
+  // const pastMembers = project.members.filter(
+  //   (member) => { return member.confirmed === 1 && member.leftIn }
+  // )
 
   const [opened, { open, close }] = useDisclosure(false)
 
@@ -67,82 +67,7 @@ function ProjectDashboardPage () {
           </Box>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 9.5, lg: 9.5 }} pl={30} pr={50} py={30}>
-          <Flex justify='space-between' mb={26}>
-            <Text size='sm' c='dimmed' mb={20}>Painel do projeto / Início</Text>
-            <Group gap={8}>
-              {colorScheme === 'dark' && 
-                  <Button
-                    size='sm'
-                    color='primary'
-                    variant='filled'
-                    leftSection={<IconBrightnessUp style={{ width: rem(14), height: rem(14) }} />}
-                    onClick={() => {setColorScheme('light')}}
-                  >
-                    Tema claro
-                  </Button>
-                }
-                {colorScheme === 'light' && 
-                  <Button
-                    size='sm'
-                    color='primary'
-                    variant='filled'
-                    leftSection={<IconMoon style={{ width: rem(14), height: rem(14) }} />}
-                    onClick={() => {setColorScheme('dark')}}
-                  >
-                    Tema escuro
-                  </Button>
-                }
-              <Menu shadow='md' width={200} position='bottom-end'>
-                <Menu.Target>
-                  <Avatar
-                    w={34}
-                    h={34}
-                    className='point'
-                    src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-68,w-68,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
-                    alt={userInfo.username}
-                    ml={8}
-                  />
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Label>Application</Menu.Label>
-                  <Menu.Item leftSection={<IconSettings size={14} />}>
-                    Settings
-                  </Menu.Item>
-                  <Menu.Item leftSection={<IconMessageCircle size={14} />}>
-                    Messages
-                  </Menu.Item>
-                  <Menu.Item leftSection={<IconPhoto size={14} />}>
-                    Gallery
-                  </Menu.Item>
-                  <Menu.Item
-                    leftSection={<IconSearch size={14} />}
-                    rightSection={
-                      <Text size="xs" c="dimmed">
-                        ⌘K
-                      </Text>
-                    }
-                  >
-                    Search
-                  </Menu.Item>
-
-                  <Menu.Divider />
-
-                  <Menu.Label>Danger zone</Menu.Label>
-                  <Menu.Item
-                    leftSection={<IconArrowsLeftRight size={14} />}
-                  >
-                    Transfer my data
-                  </Menu.Item>
-                  <Menu.Item
-                    color="red"
-                    leftSection={<IconTrash size={14} />}
-                  >
-                    Delete my account
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </Group>
-          </Flex>
+          <Header />
           {project.requesting ? (
             <>
               <Skeleton w={280} h={26} radius='xl' />
@@ -153,97 +78,75 @@ function ProjectDashboardPage () {
             </>
           ) : (
             <>
-              <Flex justify='space-between'>
-                <Box>
-                  <Title fz='h2'>Painel de {project.name}</Title>
-                  <Text size='sm'>Informações sobre o projeto</Text>
-                </Box>
-                <Button 
-                  size='sm' 
-                  color='primary' 
-                  variant='outline' 
-                  leftSection={<IconCalendar size={14} />}
-                  disabled
-                >
-                  {currentDate}
-                </Button>
-              </Flex>
+              <Box>
+                <Title fz='h2'>Painel de {project.name}</Title>
+                <Text size='sm' c='dimmed'>Informações sobre o projeto</Text>
+              </Box>
               <Grid mt={34}>
                 <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                  <Grid>
-                    <Grid.Col span={{ base: 12, md: 12, lg: 12 }}>
-                      <Text size='sm' mb={6} fw={600}>Status do projeto:</Text>
-                      {project.activityStatusId &&
-                        <>
-                          <Flex
-                            align='center'
-                            justify='flex-start'
-                            gap={6}
+                  <Card withBorder p={10} radius='md'>
+                    <Text size='md' mb={6} fw={600}>Status do projeto</Text>
+                    {project.activityStatusId &&
+                      <>
+                        <Flex
+                          align='center'
+                          justify='flex-start'
+                          gap={6}
+                        >
+                          <Indicator
+                            inline
+                            processing={project.activityStatusId === 1 || project.activityStatusId === 3}
+                            color={project.activityStatusColor}
+                            size={7}
+                            ml={5}
+                            mr={4}
+                          />
+                          <Text
+                            size='sm'
+                            className='lhNormal'
+                            pt='1px'
                           >
-                            <Indicator
-                              inline
-                              processing={project.activityStatusId === 1 || project.activityStatusId === 3}
-                              color={project.activityStatusColor}
-                              size={7}
-                              ml={5}
-                              mr={4}
-                            />
-                            <Text
-                              size='sm'
-                              className='lhNormal'
-                              pt='1px'
-                            >
-                              {project.activityStatus}
-                            </Text>
-                          </Flex>
-                          <Divider mt={16} />
-                        </>
-                      }
-                    </Grid.Col>
-                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                      <Group gap={6}>
-                        <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
-                          <IconCalendar style={{ width: '70%', height: '70%' }} />
-                        </ThemeIcon>
-                        <Title fz='h3'>3</Title>
-                      </Group>
-                      <Text size='sm'>Eventos próximos</Text>
-                      <Text size='xs' c='dimmed'>19 no total</Text>
-                    </Grid.Col>
-                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                      <Group gap={6}>
-                        <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
-                          <IconMusic style={{ width: '70%', height: '70%' }} />
-                        </ThemeIcon>
-                        <Title fz='h3'>1</Title>
-                      </Group>
-                      <Text size='sm'>Músicas</Text>
-                    </Grid.Col>
-                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                      <Group gap={6}>
-                        <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
-                          <IconMusic style={{ width: '70%', height: '70%' }} />
-                        </ThemeIcon>
-                        <Title fz='h3'>{activeMembers.length}</Title>
-                      </Group>
-                      <Text size='sm'>Integrantes ativos no projeto</Text>
-                    </Grid.Col>
-                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                      <Group gap={6}>
-                        <ThemeIcon size='lg' radius='md' variant='filled' color='mublinColor'>
-                          <IconCalendar style={{ width: '70%', height: '70%' }} />
-                        </ThemeIcon>
-                        <Title fz='h3'>14</Title>
-                      </Group>
-                      <Text size='sm'>Eventos cadastrados</Text>
-                    </Grid.Col>
-                    <Grid.Col span={{ base: 12, md: 12, lg: 12 }}>
-                      <Text size='sm' mb={6} fw={600}>Recados:</Text>
+                            {project.activityStatus}
+                          </Text>
+                        </Flex>
+                      </>
+                    }
+                  </Card>
+                  <Card withBorder p={10} mt={14} radius='md'>
+                    <Flex justify='space-between'>
+                      <Text size='md' mb={12} fw={600}>
+                        Recados do time ({project.notes.total})
+                      </Text>
+                      <Button leftSection={<IconPlus size={14} />} size='xs' variant='subtle' color='primary'>
+                        Novo recado
+                      </Button>
+                    </Flex>
+                    {project.notes.total === 0 ? (
                       <Text size='sm' c='dimmed'>
                         Nenhum recado no momento
                       </Text>
-                    </Grid.Col>
-                  </Grid>
+                    ) : (
+                      <Flex direction='column' gap={10}>
+                        {project.notes.result.map(item =>
+                          <Box key={item.id}>
+                            <Group gap={6} mb={5}>
+                              <Avatar size={25} src={item.authorPicture} />
+                              <Flex direction='column' gap={0}>
+                                <Text size='xs' fw={400} className='lhNormal'>
+                                  <strong>{item.authorName} {item.authorLastname}</strong> há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
+                                </Text>
+                                <Text size='xs' c='dimmed'>@{item.authorUsername}</Text>
+                              </Flex>
+                            </Group>
+                            <Text size='sm'>{item.note}</Text>
+                            <Text size='10px' c='dimmed' mt={6}>
+                              {format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
+                            </Text>
+                          </Box>
+                        )}
+                      </Flex>
+                    )}
+                  </Card>
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, md: 6, lg: 6 }} pr={isMobile ? 0 : 100}>
                   <Box>
@@ -264,9 +167,6 @@ function ProjectDashboardPage () {
                   </Text>
                   <Text mb={6} size='sm'>
                     <strong>Propósito do projeto:</strong> {project.purpose ? project.purpose : 'Não informado'}
-                  </Text>
-                  <Text size='sm' my={10}>
-                    {project.bio}
                   </Text>
                   <Avatar.Group spacing={10} mt={6}>
                     {activeMembers.map(member =>

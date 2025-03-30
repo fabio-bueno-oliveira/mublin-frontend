@@ -10,6 +10,7 @@ export const projectInfos = {
     getProjectOpportunities: getProjectOpportunities,
     getProjectNotes: getProjectNotes,
     getProjectEvents: getProjectEvents,
+    getProjectAllEvents: getProjectAllEvents,
     getProjectRelatedProjects: getProjectRelatedProjects
 };
 
@@ -127,6 +128,22 @@ function getProjectEvents(username) {
     function request(username) { return { type: projectTypes.GET_PROJECT_EVENTS_REQUEST, username } }
     function success(list) { return { type: projectTypes.GET_PROJECT_EVENTS_SUCCESS, list } }
     function failure(username, error) { return { type: projectTypes.GET_PROJECT_EVENTS_FAILURE, username, error } }
+}
+
+function getProjectAllEvents(username) {
+    return dispatch => {
+        dispatch(request(username));
+
+        projectService.getProjectAllEvents(username)
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(username, error.toString()))
+            );
+    };
+
+    function request(username) { return { type: projectTypes.GET_PROJECT_ALLEVENTS_REQUEST, username } }
+    function success(list) { return { type: projectTypes.GET_PROJECT_ALLEVENTS_SUCCESS, list } }
+    function failure(username, error) { return { type: projectTypes.GET_PROJECT_ALLEVENTS_FAILURE, username, error } }
 }
 
 function getProjectRelatedProjects(username) {

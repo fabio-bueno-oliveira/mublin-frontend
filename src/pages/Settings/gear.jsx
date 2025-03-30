@@ -329,7 +329,7 @@ function SettingsMyGearPage () {
                     <IconLockSquareRoundedFilled size={28} />
                     <Flex direction='column' gap={3}>
                       <Text size='sm'>
-                        Apenas usuários com plano PRO podem adicionar e exibir marcas parceiras.
+                        Apenas usuários com plano PRO podem adicionar e exibir equipamentos no perfil.
                       </Text>
                       <Anchor
                         fw='420'
@@ -337,7 +337,7 @@ function SettingsMyGearPage () {
                         href='/pro'
                         underline='hover'
                         variant="gradient"
-                        gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                        gradient={{ from: 'pink', to: 'yellow', deg: '90' }}
                       >
                         Assine o Mublin PRO!
                       </Anchor>

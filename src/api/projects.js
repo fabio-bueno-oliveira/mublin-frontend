@@ -22,6 +22,7 @@ export const projectService = {
     getProjectOpportunities,
     getProjectNotes,
     getProjectEvents,
+    getProjectAllEvents,
     getProjectRelatedProjects,
     getUserMainProjects,
     getUserPortfolioProjects,
@@ -83,6 +84,14 @@ async function getProjectEvents(username) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/project/${username}/events`, requestOptions).then(handleResponse);
+}
+
+async function getProjectAllEvents(username) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/project/${username}/allEvents`, requestOptions).then(handleResponse);
 }
 
 async function getProjectRelatedProjects(username,projectId,projectCity,projectMainGenre) {

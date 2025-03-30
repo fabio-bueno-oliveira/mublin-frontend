@@ -288,7 +288,7 @@ function SettingsAvailability () {
                   my={2}
                   color='mublinColor'
                   value='2'
-                  label='Contrato (convidado/sideman/sidewoman)'
+                  label='Contrato (convidado/sideman/sidewoman/sub)'
                   onClick={() => updateAvailabilityFocus(2)}
                   checked={user.availabilityFocus === 2 && true}
                   disabled={isLoading || user.requesting}

@@ -82,17 +82,21 @@ const initialState = {
       }
     ]
   },
-  notes: [
-    {
-      id: '',
-      note: '',
-      created: '',
-      authorUsername: '',
-      authorName: '',
-      authorLastname: '',
-      authorPicture: ''
-    }
-  ],
+  notes: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        note: '',
+        created: '',
+        authorUsername: '',
+        authorName: '',
+        authorLastname: '',
+        authorPicture: ''
+      }
+    ]
+  },
   events: [
     {
       id: '',
@@ -324,7 +328,8 @@ export function project(state = initialState, action) {
     case projectTypes.GET_PROJECT_NOTES_REQUEST:
       return {
         ...state,
-        requesting: true
+        requesting: true,
+        notes: initialState.notes
       };
     case projectTypes.GET_PROJECT_NOTES_SUCCESS:
       return {
@@ -351,6 +356,24 @@ export function project(state = initialState, action) {
         events: action.list,
       };
     case projectTypes.GET_PROJECT_EVENTS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        events: initialState.events,
+        error: "A solicitação falhou"
+      };
+    case projectTypes.GET_PROJECT_ALLEVENTS_REQUEST:
+      return {
+        ...state,
+        requesting: true
+      };
+    case projectTypes.GET_PROJECT_ALLEVENTS_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        events: action.list,
+      };
+    case projectTypes.GET_PROJECT_ALLEVENTS_FAILURE:
       return {
         ...state,
         requesting: false,
