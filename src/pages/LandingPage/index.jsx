@@ -191,6 +191,18 @@ function LandingPage () {
             className='featuredImage'
           />
         </Center>
+        <Text ta='center' size='xs' mt={20}>
+          Em breve disponível em versão app para Android e iOS
+        </Text>
+        <Center mb={40}>
+          <Image 
+            h='auto'
+            w={345}
+            fit='contain'
+            opacity={0.4}
+            src='https://ik.imagekit.io/mublin/misc/app-store-soon.jpg' 
+          />
+        </Center>
       </Container>
       <Footer />
     </>
