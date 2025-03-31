@@ -44,10 +44,11 @@ function Search () {
       dispatch(searchInfos.getSearchGearResults(searchedKeywords));
       dispatch(searchInfos.getSearchBrandsResults(searchedKeywords));
     }
-    dispatch(searchInfos.getSuggestedFeaturedUsers());
-    dispatch(searchInfos.getFeaturedProjects());
-    // dispatch(searchInfos.getSuggestedUsersResults());
-    // dispatch(miscInfos.getFeed());
+    if (!searchedKeywords) {
+      dispatch(searchInfos.getSuggestedFeaturedUsers());
+      dispatch(searchInfos.getFeaturedProjects());
+      // dispatch(searchInfos.getSuggestedUsersResults());
+    }
   }, [dispatch, searchedKeywords]);
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15) };

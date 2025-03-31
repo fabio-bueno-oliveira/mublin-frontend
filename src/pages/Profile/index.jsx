@@ -257,7 +257,9 @@ function ProfilePage () {
         <link rel='canonical' href={`https://mublin.com/${profile.name}`} />
       </Helmet>
       {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalProfileFeedOpen && !modalStrengthsOpen) && 
-        <FloaterHeader profile={profile} scrollY={scroll.y} />
+        <Box className='showOnlyInLargeScreen'>
+          <FloaterHeader profile={profile} scrollY={scroll.y} />
+        </Box>
       }
       <Header
         page='profile'
@@ -822,6 +824,7 @@ function ProfilePage () {
                           size='xs'
                           label='Exibir projetos passados'
                           checked={showPastProjects}
+                          color='mublinColor'
                           onChange={(event) => setShowPastProjects(event.currentTarget.checked)}
                         />
                       }

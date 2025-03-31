@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
-import { Timeline, Container, Group, Flex, Box, Center, Title, Text, Avatar, Indicator, Tooltip, Anchor, Loader, Skeleton, em } from '@mantine/core'
+import { Timeline, Container, Group, Flex, Box, Center, Title, Text, Avatar, Indicator, Tooltip, Anchor, Skeleton } from '@mantine/core'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconArrowLeft, IconSparkles } from '@tabler/icons-react'
 import Header from '../../../components/header'
 import FloaterHeader from '../floaterHeader'
@@ -103,7 +103,27 @@ function ProjectsTimeline () {
       <Container size='lg' mt={30} mb={60}>
         {profile.requesting ? (
           <Center>
-            <Loader color='mublinColor' />
+            <Timeline bulletSize={24} lineWidth={3}>
+              <Timeline.Item>
+                <Skeleton width={160} height={15} mb={8} radius='xl' />
+                <Skeleton width={100} height={15} radius='xl' />
+              </Timeline.Item>
+
+              <Timeline.Item>
+                <Skeleton width={160} height={15} mb={8} radius='xl' />
+                <Skeleton width={100} height={15} radius='xl' />
+              </Timeline.Item>
+
+              <Timeline.Item>
+                <Skeleton width={160} height={15} mb={8} radius='xl' />
+                <Skeleton width={100} height={15} radius='xl' />
+              </Timeline.Item>
+
+              <Timeline.Item>
+                <Skeleton width={160} height={15} mb={8} radius='xl' />
+                <Skeleton width={100} height={15} radius='xl' />
+              </Timeline.Item>
+            </Timeline>
           </Center>
         ) : (
           <Center>
@@ -120,7 +140,11 @@ function ProjectsTimeline () {
                       href={`/project/${project.username}`}
                     />
                   }
-                  title={<Text size='14px' fw={550}>Ingressou em {project.name} ({project.type})</Text>}
+                  title={
+                    <Text size='14px' fw={550}>
+                      {project.workTitle === 'Contratado' ? 'Participou de' : 'Ingressou em'} {project.name} ({project.type})
+                    </Text>
+                  }
                 >
                   <Text size='xs'>
                     {project.role1} {project.role2 && `, ${project.role2}`}
