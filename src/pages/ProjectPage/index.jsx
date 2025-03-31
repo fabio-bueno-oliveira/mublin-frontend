@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, Affix, Modal, ScrollArea, Tabs, em, rem } from '@mantine/core'
+import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, Affix, ScrollArea, Tabs, em, rem } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -24,9 +24,8 @@ function ProjectPage () {
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
 
+  const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
-
-  const [modalBioOpen, setModalBioOpen] = useState(false)
   
   let dispatch = useDispatch()
 
@@ -74,10 +73,10 @@ function ProjectPage () {
           </Button>
         </Affix>
       }
-      <Container size='lg'>
+      <Container size='lg' px={isMobile ? 0 : 18}>
         {!project.requesting && 
           <>
-            <Grid mb={100} mt={isMobile ? 18 : 0}>
+            <Grid mb={100} mt={0} p={0}>
               <Grid.Col span={{ base: 12, md: 9, lg: 9 }}>
                 {project.requesting ? (
                   <Card
@@ -88,17 +87,20 @@ function ProjectPage () {
                     className='mublinModule'
                   >
                     <Skeleton height={120} width='100%' radius='lg' />
-                    <Skeleton height={34} mt={10} width="55%" radius="lg" />
-                    <Skeleton height={16} mt={10} width="70%" radius="lg" />
+                    <Skeleton height={34} mt={10} width='55%' radius='lg' />
+                    <Skeleton height={16} mt={10} width='70%' radius='lg' />
                   </Card>
                 ) : (
                   <Card 
                     padding='lg' 
                     style={{paddingBottom:'0px'}} 
-                    radius='md' 
-                    withBorder 
+                    radius={isMobile ? false : 'md'}
                     mb={14}
-                    className="mublinModule"
+                    withBorder={isMobile ? false : true}
+                    px={isMobile ? 0 : 16}
+                    pt={isMobile ? 0 : 12}
+                    pb={isMobile ? 3 : 12}
+                    className='mublinModule transparentBgInMobile'
                   >
                     <Card.Section>
                       <Image
@@ -111,85 +113,88 @@ function ProjectPage () {
                       <Image
                         radius={false}
                         h={120}
+                        ml={isMobile ? 14 : 0}
                         w='auto'
                         fit='contain'
                         src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-240,w-240,c-maintain_ratio/'+project.picture : undefined}
                         style={{border:'3px solid white'}}
                       />
                     </Box>
-                    <Group gap={0} justify='space-between' mt='sm'>
-                      <Title order={1} fz='1.5rem' fw={600} className='lhNormal op90'>
-                        {truncateString(project.name, isMobile ? 15 : 120)}
-                      </Title>
-                    </Group>
-                    <Group gap={3}>
-                      <IconMusic size={13} />
-                      <Text size='sm'>
-                        {project.genre1 &&
-                          <Text className='comma' span>
-                            {project.genre1}
+                    <Box ml={isMobile ? 18 : 0}>
+                      <Group gap={0} justify='space-between' mt='sm'>
+                        <Title order={1} fz='1.5rem' fw={600} className='lhNormal op90'>
+                          {truncateString(project.name, isMobile ? 15 : 120)}
+                        </Title>
+                      </Group>
+                      {project.genre1 && 
+                        <Group gap={3}>
+                          <IconMusic size={13} />
+                          <Text size='md'>
+                            <Text className='comma' span>
+                              {project.genre1}
+                            </Text>
+                            {project.genre2 &&
+                              <Text className='comma' span>
+                                {project.genre2}
+                              </Text>
+                            }
+                            {project.genre3 &&
+                              <Text className='comma' span>
+                                {project.genre3}
+                              </Text>
+                            }
                           </Text>
-                        }
-                        {project.genre2 &&
-                          <Text className='comma' span>
-                            {project.genre2}
-                          </Text>
-                        }
-                        {project.genre3 &&
-                          <Text className='comma' span>
-                            {project.genre3}
-                          </Text>
-                        }
+                        </Group>
+                      }
+                      <Text size='sm' c='dimmed' mb={2}>
+                        {project.typeName} {project.region && `· ${project.region} · ${project.country}`}
                       </Text>
-                    </Group>
-                    <Text size='sm' c='dimmed' my={2}>
-                      {project.typeName} {project.region && `· ${project.region} · ${project.country}`}
-                    </Text>
-                    {project.activityStatusId &&
-                      <Flex
-                        align='center'
-                        justify='flex-start'
-                        gap={6}
-                        mb={isMobile ? 0 : 6}
-                      >
-                        <Indicator
-                          inline
-                          processing={project.activityStatusId === 1 || project.activityStatusId === 3}
-                          color={project.activityStatusColor}
-                          size={7}
-                          ml={5}
-                          mr={4}
-                        />
-                        <Text
-                          size='xs'
-                          className='lhNormal'
-                          pt='1px'
+                      {project.activityStatusId &&
+                        <Flex
+                          align='center'
+                          justify='flex-start'
+                          gap={6}
+                          mb={isMobile ? 0 : 6}
                         >
-                          {project.activityStatus}
-                        </Text>
-                      </Flex>
-                    }
-                    <Avatar.Group spacing={8} mt={6}>
-                      {members.filter(m => !m.leftIn).map(member =>
-                        <Avatar
-                          key={member.id}
-                          size='30'
-                          name={member.name}
-                          title={`${member.name} ${member.lastname} - ${member.role1}`}
-                          src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-100,w-100,c-maintain_ratio/'+member.id+'/'+member.picture} 
-                          component='a'
-                          href={`/${member.username}`}
-                        />
-                      )}
-                      {/* <Avatar size='30'>+5</Avatar> */}
-                    </Avatar.Group>
-                    {project.endDate && 
-                      <Alert mt={10} px={10} py={8} variant='light' color='red'>
-                        <Text size='xs'>
-                          {project.name} encerrou as atividades em {project.endDate}
-                        </Text>
-                      </Alert>
-                    }
+                          <Indicator
+                            inline
+                            processing={project.activityStatusId === 1 || project.activityStatusId === 3}
+                            color={project.activityStatusColor}
+                            size={7}
+                            ml={5}
+                            mr={4}
+                          />
+                          <Text
+                            size='xs'
+                            className='lhNormal'
+                            pt='1px'
+                          >
+                            {project.activityStatus}
+                          </Text>
+                        </Flex>
+                      }
+                      <Avatar.Group spacing={8} mt={8} mb={6}>
+                        {members.filter(m => !m.leftIn).map(member =>
+                          <Avatar
+                            key={member.id}
+                            size='40'
+                            name={member.name}
+                            title={`${member.name} ${member.lastname} - ${member.role1}`}
+                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-80,w-80,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                            component='a'
+                            href={`/${member.username}`}
+                          />
+                        )}
+                        {/* <Avatar size='30'>+5</Avatar> */}
+                      </Avatar.Group>
+                      {project.endDate && 
+                        <Alert mt={10} px={10} py={8} variant='light' color='red'>
+                          <Text size='xs'>
+                            {project.name} encerrou as atividades em {project.endDate}
+                          </Text>
+                        </Alert>
+                      }
+                    </Box>
                     <Tabs 
                       mt={10} 
                       value={activeTab} 
@@ -237,9 +242,9 @@ function ProjectPage () {
                     </Tabs>
                     <ScrollArea w='100%' h={38} type='never' className='showOnlyInMobile'>
                       <Box className='fitContent'>
-                        <Tabs 
-                          value={activeTab} 
-                          onChange={setActiveTab} 
+                        <Tabs
+                          value={activeTab}
+                          onChange={setActiveTab}
                           defaultValue='about'
                           color='mublinColor'
                         >
@@ -247,13 +252,16 @@ function ProjectPage () {
                             <Tabs.Tab value='about'>
                               Geral
                             </Tabs.Tab>
+                            <Tabs.Tab value='people'>
+                              Pessoas
+                            </Tabs.Tab>
                             {project.spotifyId &&
                               <Tabs.Tab value='second'>
                                 Músicas
                               </Tabs.Tab>
                             }
                             <Tabs.Tab value='opportunities'>
-                              Oportunidades
+                              Oportunidades ({project.opportunities.total})
                             </Tabs.Tab>
                             <Tabs.Tab value='events'>
                               Eventos
@@ -315,76 +323,76 @@ function ProjectPage () {
                       >
                         {project.bio ? project.bio : 'Bio não informada'}
                       </Text>
-                    </Card>
-                    <Card mt={14} padding='lg' radius='md' withBorder className='mublinModule'>
-                      <Title fz='1.0rem' fw='640' mb={3}>Contato</Title>
-                      <Group gap={3} align='center' mt={8}>
-                        <IconMail size={14} color='gray' />
-                        <Text 
-                          size='sm'
-                          c={project.email ? undefined : 'dimmed'}
-                        >
-                          {project.email ? project.email : 'Email não informado'}
-                        </Text>
-                      </Group>
-                      <Group gap={3} align='center' mt={6}>
-                        <IconPhone size={14} color='gray' />
-                        <Text 
-                          size='sm'
-                          c={project.phone ? undefined : 'dimmed'}
-                        >
-                          {project.phone ? project.phone : 'Telefone não informado'}
-                        </Text>
-                      </Group>
-                    </Card>
-                    {(project.instagram || project.soundcloud) && 
-                      <Card mt={14} padding='lg' radius='md' withBorder className='mublinModule'>
-                        <Title fz='1.0rem' fw='640' mb={3}>Links</Title>
-                        {(project.instagram || project.soundcloud) &&
-                          <Group gap={6} mt={6}>
-                            {project.instagram &&
-                              <Anchor 
-                                href={`https://instagram.com/${project.instagram}`}
-                                target='_blank'
-                                underline='hover'
-                                className='websiteLink'
-                                mb={4}
-                              >
-                                <Flex gap={2} align='center'>
-                                  <IconBrandInstagram size={13} />
-                                  <Text size='0.83em' className='lhNormal'>
-                                    Instagram
-                                  </Text>
-                                </Flex>
-                              </Anchor>
-                            }
-                            {project.soundcloud &&
-                              <Anchor 
-                                href={`https://soundcloud.com/${project.soundcloud}?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing`}
-                                target='_blank'
-                                underline='hover'
-                                className='websiteLink'
-                                mb={4}
-                              >
-                                <Flex gap={2} align='center'>
-                                  <IconBrandSoundcloud size={13} />
-                                  <Text size='0.83em' className='lhNormal'>
-                                    Soundcloud
-                                  </Text>
-                                </Flex>
-                              </Anchor>
-                            }
-                          </Group>
-                        }
-                      </Card>
-                    }
-                    <Card mt={14} padding='lg' radius='md' withBorder className='mublinModule'>
-                      <Title fz='1.0rem' fw='640' mb={3}>Propósito do projeto</Title>
-                      <Spoiler maxHeight={120} showLabel={<Text size='sm' fw={600}>...mais</Text>} hideLabel={<Text size='sm' fw={600}>mostrar menos</Text>}>
-                        <Text size='sm' c={!project.purpose ? 'dimmed' : undefined}>
-                          {project.purpose ? project.purpose : 'Não informado'}
-                        </Text>
-                      </Spoiler>
+                      <Box mt={30} mb={10}>
+                        <Title fz='0.9rem' fw='550' mb={3}>Contato</Title>
+                        <Group gap={3} align='center' mt={8}>
+                          <IconMail size={14} color='gray' />
+                          <Text 
+                            size='sm'
+                            c={project.email ? undefined : 'dimmed'}
+                          >
+                            {project.email ? project.email : 'Email não informado'}
+                          </Text>
+                        </Group>
+                        <Group gap={3} align='center' mt={6}>
+                          <IconPhone size={14} color='gray' />
+                          <Text 
+                            size='sm'
+                            c={project.phone ? undefined : 'dimmed'}
+                          >
+                            {project.phone ? project.phone : 'Telefone não informado'}
+                          </Text>
+                        </Group>
+                      </Box>
+                      {(project.instagram || project.soundcloud) && 
+                        <Box my={10}>
+                          <Title fz='0.9rem' fw='550' mb={3}>Links</Title>
+                          {(project.instagram || project.soundcloud) &&
+                            <Group gap={6} mt={6}>
+                              {project.instagram &&
+                                <Anchor 
+                                  href={`https://instagram.com/${project.instagram}`}
+                                  target='_blank'
+                                  underline='hover'
+                                  className='websiteLink'
+                                  mb={4}
+                                >
+                                  <Flex gap={2} align='center'>
+                                    <IconBrandInstagram size={13} />
+                                    <Text size='0.83em' className='lhNormal'>
+                                      Instagram
+                                    </Text>
+                                  </Flex>
+                                </Anchor>
+                              }
+                              {project.soundcloud &&
+                                <Anchor 
+                                  href={`https://soundcloud.com/${project.soundcloud}?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing`}
+                                  target='_blank'
+                                  underline='hover'
+                                  className='websiteLink'
+                                  mb={4}
+                                >
+                                  <Flex gap={2} align='center'>
+                                    <IconBrandSoundcloud size={13} />
+                                    <Text size='0.83em' className='lhNormal'>
+                                      Soundcloud
+                                    </Text>
+                                  </Flex>
+                                </Anchor>
+                              }
+                            </Group>
+                          }
+                        </Box>
+                      }
+                      <Box my={10}>
+                        <Title fz='0.9rem' fw='550' mb={3}>Propósito do projeto</Title>
+                        <Spoiler maxHeight={120} showLabel={<Text size='sm' fw={600}>...mais</Text>} hideLabel={<Text size='sm' fw={600}>mostrar menos</Text>}>
+                          <Text size='sm' c={!project.purpose ? 'dimmed' : undefined}>
+                            {project.purpose ? project.purpose : 'Não informado'}
+                          </Text>
+                        </Spoiler>
+                      </Box>
                     </Card>
                   </>
                 }
@@ -538,170 +546,159 @@ function ProjectPage () {
                   </Card>
                 }
               </Grid.Col>
-              <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-                <Card px='md' py='md' radius='md' withBorder className='mublinModule'>
-                  <Title fz='0.95rem' fw='580' mb={16}>Pessoas neste projeto</Title>
-                  <Flex direction='column' gap={18}>
-                    {members.map(member => 
-                      <Box key={member.id}>
-                        <Group gap={7} align='center' wrap='nowrap'>
-                          <Avatar
-                            size='45'
-                            name={member.name}
-                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.id+'/'+member.picture} 
-                            component='a'
-                            href={`/${member.username}`}
-                            title={member.username}
-                          />
-                          <Flex direction='column' gap={1}>
-                            <Group gap={1}>
-                              <Text 
-                                component='a' 
-                                href={`/${member.username}`} 
-                                size='0.96rem' fw={570} style={{lineHeight:'1'}}>
-                                {member.name} {member.lastname}
-                              </Text>
-                              {member.verified &&
-                                <IconRosetteDiscountCheckFilled
-                                  color='#0977ff'
-                                  style={iconVerifiedStyle}
-                                  title='Verificado'
-                                />
-                              }
-                              {member.legend &&
-                                <IconShieldCheckFilled
-                                  style={iconLegendStyle}
-                                  title='Lenda da música'
-                                />
-                              }
-                            </Group>
-                            <Text size='xs' className='lhNormal'>
-                              {member.statusName}
-                              {` · ${member.joinedIn} › `}
-                              {project.endDate
-                                ? (!member.leftIn) ? project.endDate : member.leftIn
-                                : (member.leftIn) ? member.leftIn : 'Atualmente'
-                              }
-                            </Text>
-                            <Text c='dimmed'  size='xs' className='lhNormal'>
-                              {member.role1 &&
-                                <Text className='comma' span>
-                                  {member.role1}
+              {(isLargeScreen || activeTab === 'people') &&
+                <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+                  <Card px='md' py='md' radius='md' withBorder className='mublinModule'>
+                    <Title fz='1.0rem' fw='640' mb={16}>Pessoas neste projeto</Title>
+                    <Flex direction='column' gap={18}>
+                      {members.map(member => 
+                        <Box key={member.id}>
+                          <Group gap={7} align='center' wrap='nowrap'>
+                            <Avatar
+                              size='45'
+                              name={member.name}
+                              src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                              component='a'
+                              href={`/${member.username}`}
+                              title={member.username}
+                            />
+                            <Flex direction='column' gap={1}>
+                              <Group gap={1}>
+                                <Text 
+                                  component='a' 
+                                  href={`/${member.username}`} 
+                                  size='0.96rem' fw={570} style={{lineHeight:'1'}}>
+                                  {member.name} {member.lastname}
                                 </Text>
-                              }
-                              {member.role2 &&
-                                <Text className='comma' span>
-                                  {member.role2}
-                                </Text>
-                              }
-                              {member.role3 &&
-                                <Text className='comma' span>
-                                  {member.role3}
-                                </Text>
-                              }
-                            </Text>
-                            {!!member.founder &&
-                              <Badge size='xs' radius='sm' color='primary'>
-                                {member.gender === 'f' ? 'Fundadora' : 'Fundador'}
-                              </Badge>
-                            }
-                          </Flex>
-                        </Group>
-                      </Box>
-                    )}
-                    {pastMembers.length > 0 && 
-                      <>
-                        <Text size='sm'>Já atuaram anteriormente:</Text>
-                        {pastMembers.map(member => 
-                          <Box key={member.id}>
-                            <Group gap={7} align='center' wrap='nowrap'>
-                              <Avatar
-                                size='45'
-                                name={member.name}
-                                src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.id+'/'+member.picture} 
-                                component='a'
-                                href={`/${member.username}`}
-                                title={member.username}
-                              />
-                              <Flex direction='column' gap={1}>
-                                <Group gap={1}>
-                                  <Text 
-                                    component='a' 
-                                    href={`/${member.username}`} 
-                                    size='0.96rem' fw={570} style={{lineHeight:'1'}}>
-                                    {member.name} {member.lastname}
-                                  </Text>
-                                  {member.verified &&
-                                    <IconRosetteDiscountCheckFilled
-                                      color='#0977ff'
-                                      style={iconVerifiedStyle}
-                                      title='Verificado'
-                                    />
-                                  }
-                                  {member.legend &&
-                                    <IconShieldCheckFilled
-                                      style={iconLegendStyle}
-                                      title='Lenda da música'
-                                    />
-                                  }
-                                </Group>
-                                <Text size='xs' className='lhNormal'>
-                                  {member.statusName}
-                                  {` · ${member.joinedIn} › `}
-                                  {project.endDate
-                                    ? (!member.leftIn) ? project.endDate : member.leftIn
-                                    : (member.leftIn) ? member.leftIn : 'Atualmente'
-                                  }
-                                </Text>
-                                <Text c='dimmed' size='xs' className='lhNormal'>
-                                  {member.role1 &&
-                                    <Text className='comma' span>
-                                      {member.role1}
-                                    </Text>
-                                  }
-                                  {member.role2 &&
-                                    <Text className='comma' span>
-                                      {member.role2}
-                                    </Text>
-                                  }
-                                  {member.role3 &&
-                                    <Text className='comma' span>
-                                      {member.role3}
-                                    </Text>
-                                  }
-                                </Text>
-                                {!!member.founder &&
-                                  <Badge size='xs' radius='sm' variant='light' color='mublinColor'>
-                                    Fundador
-                                  </Badge>
+                                {member.verified &&
+                                  <IconRosetteDiscountCheckFilled
+                                    color='#0977ff'
+                                    style={iconVerifiedStyle}
+                                    title='Verificado'
+                                  />
                                 }
-                              </Flex>
-                            </Group>
-                          </Box>
-                        )}
-                      </>
-                    }
-                  </Flex>
-                </Card>
-              </Grid.Col>
+                                {member.legend &&
+                                  <IconShieldCheckFilled
+                                    style={iconLegendStyle}
+                                    title='Lenda da música'
+                                  />
+                                }
+                              </Group>
+                              <Text size='xs' className='lhNormal'>
+                                {member.statusName}
+                                {` · ${member.joinedIn} › `}
+                                {project.endDate
+                                  ? (!member.leftIn) ? project.endDate : member.leftIn
+                                  : (member.leftIn) ? member.leftIn : 'Atualmente'
+                                }
+                              </Text>
+                              <Text c='dimmed'  size='xs' className='lhNormal'>
+                                {member.role1 &&
+                                  <Text className='comma' span>
+                                    {member.role1}
+                                  </Text>
+                                }
+                                {member.role2 &&
+                                  <Text className='comma' span>
+                                    {member.role2}
+                                  </Text>
+                                }
+                                {member.role3 &&
+                                  <Text className='comma' span>
+                                    {member.role3}
+                                  </Text>
+                                }
+                              </Text>
+                              {!!member.founder &&
+                                <Badge size='xs' radius='sm' color='mublinColor'>
+                                  {member.gender === 'f' ? 'Fundadora' : 'Fundador'}
+                                </Badge>
+                              }
+                            </Flex>
+                          </Group>
+                        </Box>
+                      )}
+                      {pastMembers.length > 0 && 
+                        <>
+                          <Text size='xs'>Já participaram anteriormente:</Text>
+                          {pastMembers.map(member => 
+                            <Box key={member.id}>
+                              <Group gap={7} align='center' wrap='nowrap'>
+                                <Avatar
+                                  size='45'
+                                  name={member.name}
+                                  src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                                  component='a'
+                                  href={`/${member.username}`}
+                                  title={member.username}
+                                />
+                                <Flex direction='column' gap={1}>
+                                  <Group gap={1}>
+                                    <Text 
+                                      component='a' 
+                                      href={`/${member.username}`} 
+                                      size='0.96rem' fw={570} style={{lineHeight:'1'}}>
+                                      {member.name} {member.lastname}
+                                    </Text>
+                                    {member.verified &&
+                                      <IconRosetteDiscountCheckFilled
+                                        color='#0977ff'
+                                        style={iconVerifiedStyle}
+                                        title='Verificado'
+                                      />
+                                    }
+                                    {member.legend &&
+                                      <IconShieldCheckFilled
+                                        style={iconLegendStyle}
+                                        title='Lenda da música'
+                                      />
+                                    }
+                                  </Group>
+                                  <Text size='xs' className='lhNormal'>
+                                    {member.statusName}
+                                    {` · ${member.joinedIn} › `}
+                                    {project.endDate
+                                      ? (!member.leftIn) ? project.endDate : member.leftIn
+                                      : (member.leftIn) ? member.leftIn : 'Atualmente'
+                                    }
+                                  </Text>
+                                  <Text c='dimmed' size='xs' className='lhNormal'>
+                                    {member.role1 &&
+                                      <Text className='comma' span>
+                                        {member.role1}
+                                      </Text>
+                                    }
+                                    {member.role2 &&
+                                      <Text className='comma' span>
+                                        {member.role2}
+                                      </Text>
+                                    }
+                                    {member.role3 &&
+                                      <Text className='comma' span>
+                                        {member.role3}
+                                      </Text>
+                                    }
+                                  </Text>
+                                  {!!member.founder &&
+                                    <Badge size='xs' radius='sm' variant='light' color='mublinColor'>
+                                      Fundador
+                                    </Badge>
+                                  }
+                                </Flex>
+                              </Group>
+                            </Box>
+                          )}
+                        </>
+                      }
+                    </Flex>
+                  </Card>
+                </Grid.Col>
+              }
             </Grid>
           </>
         }
       </Container>
       <FooterMenuMobile />
-      <Modal 
-        centered
-        opened={modalBioOpen}
-        title={`Sobre ${project.name}`}
-        onClose={() => setModalBioOpen(false)} 
-        size='md'
-        withCloseButton
-        scrollAreaComponent={ScrollArea.Autosize}
-      >
-        <Text size='sm'>
-          {project.bio}
-        </Text>
-      </Modal>
     </>
   )
 }
