@@ -73,10 +73,10 @@ function ProjectPage () {
           </Button>
         </Affix>
       }
-      <Container size='lg' px={isMobile ? 0 : 18}>
+      <Container size='lg' px={isMobile ? 0 : undefined}>
         {!project.requesting && 
           <>
-            <Grid mb={100} mt={0} p={0}>
+            <Grid mb={100} mt={0} gutter={isMobile ? 0 : undefined}>
               <Grid.Col span={{ base: 12, md: 9, lg: 9 }}>
                 {project.requesting ? (
                   <Card
