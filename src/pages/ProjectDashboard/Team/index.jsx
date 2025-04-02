@@ -1,36 +1,36 @@
 import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
-import { projectInfos } from '../../store/actions/project'
+import { projectInfos } from '../../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Indicator, Drawer, Button, em } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { IconMenu2, IconPlus } from '@tabler/icons-react'
-import Header from './header'
-import Navbar from './navbar'
-import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
-import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg'
+import Header from '../header'
+import Navbar from '../navbar'
+import MublinLogoBlack from '../../../assets/svg/mublin-logo.svg'
+import MublinLogoWhite from '../../../assets/svg/mublin-logo-w.svg'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
-import './styles.scss'
+import '../styles.scss'
 
-function ProjectDashboardPage () {
+function ProjectDashboardTeamPage () {
 
-  const params = useParams();
-  const username = params?.username;
+  const params = useParams()
+  const username = params?.username
 
-  let dispatch = useDispatch();
+  let dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(projectInfos.getProjectInfo(username));
-    dispatch(projectInfos.getProjectMembers(username));
-    dispatch(projectInfos.getProjectEvents(username));
-    dispatch(projectInfos.getProjectNotes(username));
+    dispatch(projectInfos.getProjectInfo(username))
+    dispatch(projectInfos.getProjectMembers(username))
+    dispatch(projectInfos.getProjectEvents(username))
+    dispatch(projectInfos.getProjectNotes(username))
   }, []);
 
   const { colorScheme } = useMantineColorScheme()
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
-  const project = useSelector(state => state.project);
+  const project = useSelector(state => state.project)
 
   const activeMembers = project.members.filter(
     (member) => { return member.confirmed === 1 && !member.leftIn }
@@ -189,7 +189,7 @@ function ProjectDashboardPage () {
         </Grid.Col>
       </Grid>
     </>
-  );
-};
+  )
+}
 
-export default ProjectDashboardPage;
+export default ProjectDashboardTeamPage

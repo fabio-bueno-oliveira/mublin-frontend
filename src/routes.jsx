@@ -31,6 +31,7 @@ import AddGearToUserSetup from './pages/New/gear';
 import New from './pages/New';
 import ProjectPage from './pages/ProjectPage';
 import ProjectDashboardPage from './pages/ProjectDashboard';
+import ProjectDashboardTeamPage from './pages/ProjectDashboard/Team';
 import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
 import ProfileGear from './pages/Profile/Gear/gearExpanded';
@@ -77,19 +78,24 @@ function AppRoutes () {
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route exact path="/:username/public" element={<PublicProfilePage />} />
         <Route element={<RequireAuth />}>
-          <Route path="/my-account" element={<MyAccountPage />} />
           <Route path="/home" element={<Home />} />
+          {/* First Steps */}
           <Route path="/start/intro" element={<StartIntroPage />} />
           <Route path="/start/step1" element={<StartStep1Page />} />
           <Route path="/start/step2" element={<StartStep2Page />} />
           <Route path="/start/step3" element={<StartStep3Page />} />
           <Route path="/start/step4" element={<StartStep4Page />} />
+          {/* Projects */}
           <Route path="/projects" element={<MyProjectsPage />} />
           <Route path="/project/:username" element={<ProjectPage />} />
           <Route path="/dashboard/:username" element={<ProjectDashboardPage />} />
+          <Route path="/dashboard/:username/team" element={<ProjectDashboardTeamPage />} />
+          {/* Gear, products and brands */}
           <Route path="/gear/product/:productId" element={<GearProductPage />} />
           <Route path="/gear/product/zoom/:productId" element={<GearZoomPage />} />
           <Route path="/gear/brand/:brandUrlName" element={<GearBrandPage />} />
+          {/* User settings */}
+          <Route path="/my-account" element={<MyAccountPage />} />
           <Route path="/settings/picture" element={<SettingsMyPicture />} />
           <Route path="/settings/preferences" element={<SettingsMusicalPreferences />} />
           <Route path="/settings/availability" element={<SettingsAvailability />} />
@@ -98,17 +104,21 @@ function AppRoutes () {
           <Route path="/settings/submit-product" element={<SettingsSubmitNewGearProduct />} />
           <Route path="/settings/password" element={<SettingsPassword />} />
           <Route path="/settings" element={<SettingsProfileEdit />} />
+          {/* Search */}
           <Route path="/search" element={<SearchPage />} />
+          {/* New item */}
           <Route path="/new/post" element={<NewPost />} />
           <Route path="/new/project" element={<NewProject />} />
           <Route path="/new/join" element={<JoinProject />} />
           <Route path="/new/gear" element={<AddGearToUserSetup />} />
           <Route path="/new" element={<New />} />
+          {/* System Admin */}
           <Route path="/admin" element={<AdminPage />} />
-          {/* <Route exact path="/:username" element={<ProfilePage />} /> */}
+          {/* User profile */}
           <Route exact path="/:username/gear" element={<ProfileGear />} />
           <Route exact path="/:username/gear/:itemId" element={<ProfileGearItem />} />
           <Route exact path="/:username/timeline" element={<ProfileTimeline/>} />
+          {/* Misc */}
           <Route exact path="/menu" element={<MenuMobilePage />} />
         </Route>
         <Route path="*" element={<NotFound />} />

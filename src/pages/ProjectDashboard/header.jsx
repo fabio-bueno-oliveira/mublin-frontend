@@ -1,9 +1,9 @@
 import React from 'react'
 import { useParams } from 'react-router'
 import { useMantineColorScheme, Flex, Menu, Text, Avatar } from '@mantine/core'
-import { IconLayoutDashboard, IconMoon, IconArrowLeft } from '@tabler/icons-react'
+import { IconLayoutDashboard, IconMoon, IconArrowLeft, IconBrightnessUp } from '@tabler/icons-react'
 
-function ProjectDashboardHeader () {
+function ProjectDashboardHeader (props) {
 
   const params = useParams()
   const username = params?.username
@@ -13,7 +13,7 @@ function ProjectDashboardHeader () {
 
   return (
     <Flex justify='space-between' mb={26}>
-      <Text size='sm' c='dimmed' mb={20}>Painel de Controle / Início</Text>
+      <Text size='sm' c='dimmed' mb={20}>Painel de Controle / {props.page}</Text>
       <Menu shadow='md' width={200} position='bottom-end'>
         <Menu.Target>
           <Avatar

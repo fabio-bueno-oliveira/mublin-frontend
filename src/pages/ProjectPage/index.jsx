@@ -4,9 +4,9 @@ import { jwtDecode } from 'jwt-decode'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, Affix, ScrollArea, Tabs, em, rem } from '@mantine/core'
+import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, Affix, ScrollArea, Tabs, Center, em, rem } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone } from '@tabler/icons-react'
+import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconExternalLink } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
@@ -543,6 +543,24 @@ function ProjectPage () {
                         />
                       </Grid.Col>
                     </Grid>
+                  </Card>
+                }
+                {activeTab === 'dashboard' &&
+                  <Card padding='lg' radius='md' withBorder className='mublinModule'>
+                    <Text ta='center' size='xs' mb='lg'>
+                      O Painel de Controle foi aberto em uma nova janelra
+                    </Text>
+                    <Center>
+                      <Button
+                        color='mublinColor'
+                        component='a'
+                        href={`/dashboard/${project.username}`}
+                        target='_blank'
+                        rightSection={<IconExternalLink size={14} />}
+                      >
+                        Abrir Painel de Controle
+                      </Button>
+                    </Center>
                   </Card>
                 }
               </Grid.Col>
