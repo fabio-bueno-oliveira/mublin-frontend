@@ -43,7 +43,11 @@ function ProjectDashboardHeader (props) {
             </Menu.Item>
           }
           <Menu.Divider />
-          <Menu.Item leftSection={<IconArrowLeft size={14} />} component='a' href='/home'>
+          <Menu.Item 
+            leftSection={<IconArrowLeft size={14} />} 
+            component='a'
+            href='/home'
+          >
             Voltar para a home do Mublin
           </Menu.Item>
         </Menu.Dropdown>

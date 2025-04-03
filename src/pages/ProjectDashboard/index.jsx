@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Indicator, Drawer, Button, em } from '@mantine/core'
+import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Indicator, Drawer, Button, Modal, Textarea, em } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { IconMenu2, IconPlus } from '@tabler/icons-react'
+import { useForm, isNotEmpty } from '@mantine/form'
+import { notifications } from '@mantine/notifications'
+import { IconMenu2, IconPlus, IconTrash } from '@tabler/icons-react'
 import Header from './header'
 import Navbar from './navbar'
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
@@ -17,6 +19,8 @@ function ProjectDashboardPage () {
 
   const params = useParams();
   const username = params?.username;
+
+  const token = localStorage.getItem('token')
 
   let dispatch = useDispatch();
 
@@ -44,10 +48,105 @@ function ProjectDashboardPage () {
 
   const [opened, { open, close }] = useDisclosure(false)
 
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Notes
+  const [modalNewNote, setModalNewNote] = useState(false)
+  const [modalConfirmDeleteNote, setModalConfirmDeleteNote] = useState(false)
+  const [noteToDelete, setNoteToDelete] = useState('')
+  const showDeleteNoteConfirmation = (noteId) => {
+    setNoteToDelete(noteId)
+    setModalConfirmDeleteNote(true)
+  }
+
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      note: ''
+    },
+
+    validate: {
+      note: isNotEmpty('Escreva algo para esta nota')
+    },
+  });
+
+  const handleSubmitNewNote = (values) => {
+    setIsLoading(true)
+    fetch(`https://mublin.herokuapp.com/project/${username}/note`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({
+        projectId: project.id, projectSlug: username, projectName: project.name, note: values.note
+      })
+    })
+    .then(res => res.json())
+    .then((result) => {
+      setIsLoading(false)
+      setModalNewNote(false)
+      dispatch(projectInfos.getProjectNotes(username))
+      notifications.show({
+        position: 'top-center',
+        color: 'green',
+        title: 'Boa!',
+        message: 'Nota inserida no Painel de Controle deste projeto',
+      });
+      form.reset();
+    }).catch(err => {
+      console.error(err)
+      setIsLoading(false)
+      setModalNewNote(false)
+      notifications.show({
+        position: 'top-center',
+        color: 'red',
+        title: 'Eita!',
+        message: 'Ocorreu um erro ao criar a nota para este projeto. Tente novamente em instantes...',
+      })
+    })
+  }
+
+  const deleteNote = (noteId) => {
+    setIsLoading(true)
+    fetch(`https://mublin.herokuapp.com/project/fabiobueno/notes/${noteId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((response) => {
+      setIsLoading(false)
+      setModalConfirmDeleteNote(false)
+      notifications.show({
+        autoClose: 2000,
+        title: 'Certo!',
+        message: 'A nota foi deletada',
+        color: 'lime',
+        position: 'top-center'
+      })
+      dispatch(projectInfos.getProjectNotes(username))
+    }).catch(err => {
+      console.error(err)
+      setIsLoading(false)
+      setModalConfirmDeleteNote(false)
+      notifications.show({
+        autoClose: 2000,
+        title: 'Ops',
+        message: 'Ocorreu um erro ao deletar a nota',
+        color: 'red',
+        position: 'top-center'
+      })
+    })
+  }
+
   return (
     <>
       <Drawer opened={opened} onClose={close} size="xs">
-        <Navbar mobile />
+        <Navbar />
       </Drawer>
       <Grid id='dashboard' gutter={0}>
         <Grid.Col span={{ base: 12, md: 2.5, lg: 2.5 }} id='desktopSidebar' p={14}>
@@ -67,7 +166,7 @@ function ProjectDashboardPage () {
           </Box>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 9.5, lg: 9.5 }} pl={30} pr={50} py={30}>
-          <Header />
+          <Header page='Resumo' />
           {project.requesting ? (
             <>
               <Skeleton w={280} h={26} radius='xl' />
@@ -117,7 +216,13 @@ function ProjectDashboardPage () {
                       <Text size='md' mb={12} fw={600}>
                         Recados do time ({project.notes.total})
                       </Text>
-                      <Button leftSection={<IconPlus size={14} />} size='xs' variant='subtle' color='primary'>
+                      <Button
+                        leftSection={<IconPlus size={14} />} 
+                        size='xs' 
+                        variant='subtle' 
+                        color='primary'
+                        onClick={() => setModalNewNote(true)}
+                      >
                         Novo recado
                       </Button>
                     </Flex>
@@ -129,15 +234,26 @@ function ProjectDashboardPage () {
                       <Flex direction='column' gap={10}>
                         {project.notes.result.map(item =>
                           <Box key={item.id}>
-                            <Group gap={6} mb={5}>
-                              <Avatar size={25} src={item.authorPicture} />
-                              <Flex direction='column' gap={0}>
-                                <Text size='xs' fw={400} className='lhNormal'>
-                                  <strong>{item.authorName} {item.authorLastname}</strong> há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-                                </Text>
-                                <Text size='xs' c='dimmed'>@{item.authorUsername}</Text>
-                              </Flex>
-                            </Group>
+                            <Flex justify='space-between'>
+                              <Group gap={6} mb={5}>
+                                <Avatar size={25} src={item.authorPicture} />
+                                <Flex direction='column' gap={0}>
+                                  <Text size='xs' fw={400} className='lhNormal'>
+                                    <strong>{item.authorName} {item.authorLastname}</strong> há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
+                                  </Text>
+                                  <Text size='xs' c='dimmed'>@{item.authorUsername}</Text>
+                                </Flex>
+                              </Group>
+                              <Button
+                                size='compact-xs'
+                                color='red'
+                                variant='light'
+                                leftSection={<IconTrash size={10} />}
+                                onClick={() => showDeleteNoteConfirmation(item.id)}
+                              >
+                                Deletar
+                              </Button>
+                            </Flex>
                             <Text size='sm'>{item.note}</Text>
                             <Text size='10px' c='dimmed' mt={6}>
                               {format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
@@ -188,6 +304,49 @@ function ProjectDashboardPage () {
           )}
         </Grid.Col>
       </Grid>
+      <Modal
+        withCloseButton={false}
+        opened={modalNewNote}
+        centered
+        onClose={() => setModalNewNote(false)}
+        size='sm'
+      >
+        <form onSubmit={form.onSubmit(handleSubmitNewNote)}>
+          <Textarea
+            maxLength={300}
+            placeholder="Escreva aqui o recado para o time do projeto..."
+            key={form.key('note')}
+            {...form.getInputProps('note')}
+          />
+          <Group justify='flex-end' gap={7} mt={20}>
+            <Button variant='outline' color='gray' size='md' onClick={() => setModalNewNote(false)}>
+              Cancelar
+            </Button>
+            <Button color='mublinColor' size='md' type="submit" loading={isLoading}>
+              Salvar
+            </Button>
+          </Group>
+        </form>
+      </Modal>
+      <Modal
+        withCloseButton={false}
+        opened={modalConfirmDeleteNote}
+        onClose={() => setModalConfirmDeleteNote(false)}
+        size='xs'
+        centered
+      >
+        <Text>
+          Tem certeza que deseja deletar esta nota?
+        </Text>
+        <Group justify='flex-end' gap={7} mt={20}>
+          <Button variant='outline' color='gray' size='sm' onClick={() => setModalConfirmDeleteNote(false)}>
+            Cancelar
+          </Button>
+          <Button color='red' size='sm' onClick={() => deleteNote(noteToDelete)} loading={isLoading}>
+            Deletar
+          </Button>
+        </Group>
+      </Modal>
     </>
   );
 };

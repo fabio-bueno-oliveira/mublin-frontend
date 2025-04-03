@@ -67,7 +67,7 @@ function ProjectDashboardTeamPage () {
           </Box>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 9.5, lg: 9.5 }} pl={30} pr={50} py={30}>
-          <Header />
+          <Header page='Time' />
           {project.requesting ? (
             <>
               <Skeleton w={280} h={26} radius='xl' />
