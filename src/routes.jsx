@@ -41,6 +41,7 @@ import GearProductPage from './pages/Gear/product';
 import GearZoomPage from './pages/Gear/zoom';
 import GearBrandPage from './pages/Gear/brand';
 import SettingsProfileEdit from './pages/Settings/profile';
+import SettingsMyPlan from './pages/Settings/plan';
 import SettingsMyPicture from './pages/Settings/picture';
 import SettingsMyGear from './pages/Settings/gear';
 import SettingsSubmitNewGearProduct from './pages/Settings/submitNew';
@@ -90,12 +91,13 @@ function AppRoutes () {
           <Route path="/project/:username" element={<ProjectPage />} />
           <Route path="/dashboard/:username" element={<ProjectDashboardPage />} />
           <Route path="/dashboard/:username/team" element={<ProjectDashboardTeamPage />} />
-          {/* Gear, products and brands */}
+          {/* Gear, products and companies */}
           <Route path="/gear/product/:productId" element={<GearProductPage />} />
           <Route path="/gear/product/zoom/:productId" element={<GearZoomPage />} />
-          <Route path="/gear/brand/:brandUrlName" element={<GearBrandPage />} />
+          <Route path="/company/:brandUrlName" element={<GearBrandPage />} />
           {/* User settings */}
           <Route path="/my-account" element={<MyAccountPage />} />
+          <Route path="/settings/plan" element={<SettingsMyPlan />} />
           <Route path="/settings/picture" element={<SettingsMyPicture />} />
           <Route path="/settings/preferences" element={<SettingsMusicalPreferences />} />
           <Route path="/settings/availability" element={<SettingsAvailability />} />

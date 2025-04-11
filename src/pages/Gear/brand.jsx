@@ -56,7 +56,7 @@ function BrandPage () {
       <Helmet>
         <meta charSet='utf-8' />
         <title>{`${brand.name} | Mublin`}</title>
-        <link rel='canonical' href={`https://mublin.com/gear/brand/${brand.slug}`} />
+        <link rel='canonical' href={`https://mublin.com/company/${brand.slug}`} />
         <meta name='description' content={`Produtos e artistas da ${brand.name} | Mublin`} />
       </Helmet>
       <Header />
@@ -65,21 +65,34 @@ function BrandPage () {
           src={brand.cover ? 'https://ik.imagekit.io/mublin/products/brands/tr:w-1108,c-maintain_ratio/'+brand.cover : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
           radius='lg'
           h={128}
-          pt={62}
+          pt={isMobile ? 38 : 62}
         >
-          <Flex align='center' justify='center'>
-            <Avatar 
+          <Flex align='center' justify='center' direction='column'>
+            {/* <Avatar 
               variant='white' 
               src={brand.logo ? brand.logo : undefined} 
               alt={brand.name} 
               size='140px'
+            /> */}
+            <Image
+              src={brand.logoFile ? `https://ik.imagekit.io/mublin/products/brands/tr:h-110,w-110,cm-pad_resize,bg-FFFFFF/${brand.logoFile}` : 'https://placehold.co/110x110?text=Carregando...'}
+              withBorder
+              radius='lg'
+              h={110}
+              w={110}
+              style={{boxShadow:'2px 2px 7px rgba(0,0,0,0.15)',}}
             />
+            {brand.category && 
+              <Box w={220} mt={12}>
+                <Text ta='center' c='dimmed' size='xs'>{brand.category}</Text>
+              </Box>
+            }
           </Flex>
         </BackgroundImage>
         <Grid mt={isMobile ? 78 : 20} mb={isMobile ? 0 : 24}>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
             <NativeSelect
-              onChange={(e) => navigate('/gear/brand/'+e.target.options[e.target.selectedIndex].value)}
+              onChange={(e) => navigate('/company/'+e.target.options[e.target.selectedIndex].value)}
               value={brandUrlName}
               size='md'
               fw={500}

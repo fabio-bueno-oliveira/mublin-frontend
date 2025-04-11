@@ -56,7 +56,7 @@ function GearProductPage () {
             <Skeleton height={75} width={75} radius='lg' />
           ) : (
             <Anchor
-              href={`/gear/brand/${product.brandSlug}`}
+              href={`/company/${product.brandSlug}`}
             >
               <Image
                 src={product.brandLogo ? `https://ik.imagekit.io/mublin/products/brands/tr:h-150,w-150,cm-pad_resize,bg-FFFFFF/${product.brandLogo}` : undefined}
@@ -93,7 +93,7 @@ function GearProductPage () {
               </Group>
             }
             {/* {!product.requesting &&
-              <Anchor mt={10} c='dimmed' fz='xs' href={`/gear/brand/${product.brandSlug}`}>
+              <Anchor mt={10} c='dimmed' fz='xs' href={`/company/${product.brandSlug}`}>
                 Ver produtos {product.brandName}
               </Anchor>
             } */}

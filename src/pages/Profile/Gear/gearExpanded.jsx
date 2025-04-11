@@ -131,7 +131,7 @@ function ProfileGearExpanded () {
                   >
                     <Center>
                       <Anchor
-                        href={`/gear/brand/${product.brandSlug}`}
+                        href={`/company/${product.brandSlug}`}
                       >
                         <Image
                           src={product.brandLogoFilename ? `https://ik.imagekit.io/mublin/products/brands/tr:h-150,w-150,cm-pad_resize,bg-FFFFFF/${product.brandLogoFilename}` : undefined}

@@ -10,11 +10,13 @@ const initialState = {
   description: '',
   website: '',
   logo: '',
+  logoFile: '',
   cover: '',
   relatedBrandId: '',
   relatedBrandName: '',
   relatedBrandUrl: '',
   relatedBrandLogo: '',
+  category: '',
   products: [
     { 
       id: '',
@@ -93,11 +95,13 @@ export function brand(state = initialState, action) {
         description: '',
         website: '',
         logo: '',
+        logoFile: '',
         cover: '',
         relatedBrandId: '',
         relatedBrandName: '',
         relatedBrandUrl: '',
         relatedBrandLogo: '',
+        category: '',
         products: initialState.products
       };
     case gearTypes.GET_BRAND_INFO_SUCCESS:
@@ -112,11 +116,13 @@ export function brand(state = initialState, action) {
         description: action.info.description,
         website: action.info.website,
         logo: action.info.logo,
+        logoFile: action.info.logoFile,
         cover: action.info.cover,
         relatedBrandId: action.info.relatedBrandId,
         relatedBrandName: action.info.relatedBrandName,
         relatedBrandUrl: action.info.relatedBrandUrl,
-        relatedBrandLogo: action.info.relatedBrandLogo
+        relatedBrandLogo: action.info.relatedBrandLogo,
+        category: action.info.category
       };
     case gearTypes.GET_BRAND_INFO_FAILURE:
       return {
@@ -130,10 +136,12 @@ export function brand(state = initialState, action) {
         description: '',
         website: '',
         logo: '',
+        logoFile: '',
         relatedBrandId: '',
         relatedBrandName: '',
         relatedBrandUrl: '',
         relatedBrandLogo: '',
+        category: '',
         products: initialState.products
       };
     case gearTypes.GET_BRAND_PRODUCTS_REQUEST:

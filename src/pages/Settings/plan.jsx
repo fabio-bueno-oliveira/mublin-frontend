@@ -13,7 +13,7 @@ import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
 import { notifications } from '@mantine/notifications'
 
-function SettingsBusinessPartners () {
+function SettingsMyPlan () {
 
   document.title = 'Parceiros e Endorsements | Mublin'
 
@@ -162,10 +162,10 @@ function SettingsBusinessPartners () {
                   size='1.10rem'
                   fw='600'
                 >
-                  Parceiros e Endorsements
+                  Minha assinatura
                 </Text>
                 <Text size='sm' c='dimmed' mb={14}>
-                  Marcas que apoiam meu trabalho
+                  Dados do meu plano no Mublin
                 </Text>
               </Flex>
             </Flex>
@@ -385,4 +385,4 @@ function SettingsBusinessPartners () {
   )
 }
 
-export default SettingsBusinessPartners
+export default SettingsMyPlan

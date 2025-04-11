@@ -294,7 +294,7 @@ function Search () {
                   />
                   {searchResults.brands.result.map(brand => 
                     <Flex key={brand.id} align='center' mb={8} gap={8}>
-                      <Link to={{ pathname: `/gear/brand/${brand.slug}` }}>
+                      <Link to={{ pathname: `/company/${brand.slug}` }}>
                         <Image
                           src={brand.logo ? `https://ik.imagekit.io/mublin/products/brands/tr:w-112,h-112,cm-pad_resize,bg-FFFFFF,fo-x/${brand.logo}` : undefined}
                           h={56}
@@ -309,7 +309,7 @@ function Search () {
                         direction='column'
                         wrap='wrap'
                       >
-                        <Anchor href={`/gear/brand/${brand.slug}`}>
+                        <Anchor href={`/company/${brand.slug}`}>
                           <Flex gap={3} align={'center'}>
                             <Text size='0.97rem' fw={570} className='lhNormal'>
                               {brand.name}
@@ -365,7 +365,7 @@ function Search () {
                             </Flex>
                           </Anchor>
                           <Text size='xs' fw={300}>
-                            {product.name_ptbr} • <a className='textLink' href={`/gear/brand/${product.brandSlug}`}>{product.brand}</a>
+                            {product.name_ptbr} • <a className='textLink' href={`/company/${product.brandSlug}`}>{product.brand}</a>
                           </Text>
                           <Flex gap={6} mt={4} align='center' justify='space-between'>
                             <Flex title={product.totalOwners + ' possuem este item'}>

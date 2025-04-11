@@ -296,13 +296,15 @@ function Header (props) {
                       <Menu.Item component='a' href='/new/project'>
                         <Group gap={5}>
                           <IconPlus size='13px' />
-                          <Text size='0.85rem' fw='500'>Criar novo projeto</Text>
+                          <Text size='0.8rem' fw='550'>Criar novo projeto</Text>
                         </Group>
                       </Menu.Item>
                       <Menu.Divider />
-                      <Menu.Label>
-                        Projetos em atividade e que faço parte
-                      </Menu.Label>
+                      {projects.totalProjects > 0 &&
+                        <Menu.Label>
+                          Projetos em atividade e que faço parte
+                        </Menu.Label>
+                      }
                       {projectsActive.length ? ( projectsActive.map(project =>
                         <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
                           <Group gap={5}>
@@ -319,7 +321,7 @@ function Header (props) {
                             </Flex>
                           </Group>
                         </Menu.Item>
-                      )) : (<Text size='0.7rem' fw='500' px='sm' py='xs'>Nenhum projeto encontrado</Text>)}
+                      )) : (<Text size='0.7rem' fw='500' px='sm' py='xs' c='dimmed'>Nenhum projeto encontrado</Text>)}
                       {!!projectsActiveILeft.length && 
                         <>
                           <Menu.Divider />
@@ -346,28 +348,32 @@ function Header (props) {
                           </Menu>
                         </>
                       }
-                      <Menu.Divider />
-                      <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
-                        <Menu.Target>
-                          <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
-                            {/* Projetos encerrados */}
-                            <Menu.Label>Projetos encerrados</Menu.Label>
-                          </Menu.Item>
-                        </Menu.Target>
-                        <Menu.Dropdown>
-                          {projectsInactive.length ? ( projectsInactive.map(project =>
-                            <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
-                              <Group gap={5}>
-                                <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
-                                <Flex direction='column'>
-                                  <Text size='0.85rem' fw='500'>{project.name}</Text>
-                                  <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
-                                </Flex>
-                              </Group>
-                            </Menu.Item>
-                          )) : (<Text size='0.7rem' fw='500' px='sm' py='xs'>Nenhum projeto encontrado</Text>)}
-                        </Menu.Dropdown>
-                      </Menu>
+                      {projects.totalProjects > 0 && 
+                        <>
+                          <Menu.Divider />
+                          <Menu width={200} shadow="md" position='right-end' closeOnItemClick={false}>
+                            <Menu.Target>
+                              <Menu.Item p={0} rightSection={<IconChevronRight size={14}/>}>
+                                {/* Projetos encerrados */}
+                                <Menu.Label>Projetos encerrados</Menu.Label>
+                              </Menu.Item>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                              {projectsInactive.length ? ( projectsInactive.map(project =>
+                                <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
+                                  <Group gap={5}>
+                                    <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
+                                    <Flex direction='column'>
+                                      <Text size='0.85rem' fw='500'>{project.name}</Text>
+                                      <Text size='0.7rem' fw='420' mt={1} c='dimmed'>{project.type} {project.genre && ' • ' + project.genre}</Text>
+                                    </Flex>
+                                  </Group>
+                                </Menu.Item>
+                              )) : (<Text size='0.7rem' fw='500' px='sm' py='xs'>Nenhum projeto encontrado</Text>)}
+                            </Menu.Dropdown>
+                          </Menu>
+                        </>
+                      }
                     </>
                   )}
                 </Menu.Dropdown>

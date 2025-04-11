@@ -48,7 +48,7 @@ function PartnersModule ({
                   // style={{backgroundColor:'white',padding:'3px',borderRadius:'10px'}}
                 >
                   <Flex gap={2} direction='column' align='center'>
-                    <Link to={{ pathname: `/gear/brand/${partner.brandSlug}` }}>
+                    <Link to={{ pathname: `/company/${partner.brandSlug}` }}>
                       <Image 
                         src={partner.brandLogo} 
                         radius="xl"

@@ -265,7 +265,7 @@ function GearSection ({ loggedUserId, username }) {
         </Center>
         <Center>
           <Anchor
-            href={`/gear/brand/${gearItemDetail.brandSlug}`}
+            href={`/company/${gearItemDetail.brandSlug}`}
           >
             <Image
               src={'https://ik.imagekit.io/mublin/products/brands/tr:w-150/'+gearItemDetail.brandLogoFilename}
