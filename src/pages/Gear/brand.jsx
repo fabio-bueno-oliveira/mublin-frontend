@@ -75,21 +75,38 @@ function BrandPage () {
               size='140px'
             /> */}
             <Image
-              src={brand.logoFile ? `https://ik.imagekit.io/mublin/products/brands/tr:h-110,w-110,cm-pad_resize,bg-FFFFFF/${brand.logoFile}` : 'https://placehold.co/110x110?text=Carregando...'}
+              src={brand.logoFile ? `https://ik.imagekit.io/mublin/products/brands/tr:h-220,w-220,cm-pad_resize,bg-FFFFFF/${brand.logoFile}` : 'https://placehold.co/110x110?text=Carregando...'}
+              style={{boxShadow:'2px 2px 7px rgba(0,0,0,0.15)',}}
               withBorder
               radius='lg'
               h={110}
               w={110}
-              style={{boxShadow:'2px 2px 7px rgba(0,0,0,0.15)',}}
+              alt={brand.name}
             />
-            {brand.category && 
-              <Box w={220} mt={12}>
+            {(!brand.website && brand.category) && 
+              <Box w={240} mt={12} mb={100}>
                 <Text ta='center' c='dimmed' size='xs'>{brand.category}</Text>
               </Box>
             }
+            {brand.website &&
+              <Anchor
+                href={brand.website}
+                underline='never'
+                target='_blank'
+                mt={12}
+                hiddenFrom='sm'
+              >
+                <Flex gap={2} align='center'>
+                  <IconLink size={13} color='gray' />
+                  <Text size='xs' c='dimmed'>
+                    {brand.website}
+                  </Text>
+                </Flex>
+              </Anchor>
+            }
           </Flex>
         </BackgroundImage>
-        <Grid mt={isMobile ? 78 : 20} mb={isMobile ? 0 : 24}>
+        <Grid mt={isMobile ? 70 : 20} mb={isMobile ? 0 : 24}>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
             <NativeSelect
               onChange={(e) => navigate('/company/'+e.target.options[e.target.selectedIndex].value)}
@@ -112,7 +129,11 @@ function BrandPage () {
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
             {brand.website &&
-              <Group mt={largeScreen ? 14 : 0} justify={isMobile ? 'flex-start' : 'flex-end'}>
+              <Group
+                mt={largeScreen ? 14 : 0} 
+                justify={isMobile ? 'flex-start' : 'flex-end'}
+                visibleFrom='md'
+              >
                 <Anchor
                   href={brand.website}
                   underline='hover'
@@ -120,8 +141,8 @@ function BrandPage () {
                   // className='websiteLink'
                 >
                   <Flex gap={2} align='center'>
-                    <IconLink size={13} />
-                    <Text size='sm'>
+                    <IconLink size={13} color='gray' />
+                    <Text size='xs' c='dimmed'>
                       {brand.website}
                     </Text>
                   </Flex>
