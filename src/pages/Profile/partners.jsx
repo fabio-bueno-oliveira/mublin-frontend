@@ -52,14 +52,14 @@ function PartnersModule ({
                       <Image 
                         src={partner.brandLogo} 
                         radius="xl"
-                        h={50}
-                        w={50}
+                        h={75}
+                        w={75}
                         fit="contain"
                         title={partner.brandName}
                         alt={partner.brandName}
                       />
                     </Link>
-                    <Text size='11px' fw={450}>{truncateString(partner.brandName, 11)}</Text>
+                    <Text size='12px' fw={450}>{truncateString(partner.brandName, 11)}</Text>
                     <Text size='10px' fw={200}>{partner.type}</Text>
                   </Flex>
                 </SplideSlide>

@@ -99,7 +99,7 @@ function ProjectPage () {
                     withBorder={isMobile ? false : true}
                     px={isMobile ? 0 : 16}
                     pt={isMobile ? 0 : 12}
-                    pb={isMobile ? 3 : 12}
+                    pb={isMobile ? 3 : 0}
                     className='mublinModule transparentBgInMobile'
                   >
                     <Card.Section>
