@@ -280,7 +280,7 @@ function FeedCard ({ item, compact }) {
           }
         </Flex>
         {(item.action && item.categoryId !== 8) && 
-          <Text px='15' fz='0.75em' className='lhNormal op80' mt='7px'>
+          <Text px='15' fz='0.85em' className='lhNormal' mt='7px'>
             {item.relatedUserName} {item.relatedUserLastname} {item.action} {item.category === 'project' ? item.relatedProjectName : (<a href='/'>{item.relatedEventTitle}</a>)}
           </Text>
         }
@@ -291,17 +291,17 @@ function FeedCard ({ item, compact }) {
               px={15}
               mb={0}
               showLabel={
-                <Text px={15} fz={isMobile ? '0.9em' : '0.86em'}>...mais</Text>
+                <Text px={15} fz={isMobile ? '0.9em' : '0.85em'}>...mais</Text>
               }
               hideLabel={false}
               transitionDuration={0}
             >
               <Text
-                fz={isMobile ? '0.9em' : '0.86em'}
+                fz={isMobile ? '0.9em' : '0.85em'}
                 mt='12px'
-                className='lhNormal op80'
+                className='lhNormal'
               >
-                {item.extraText}
+                {item.text}
               </Text>
             </Spoiler>
             {(item.image && !compact) && 

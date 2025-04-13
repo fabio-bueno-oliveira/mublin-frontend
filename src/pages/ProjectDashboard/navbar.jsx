@@ -41,13 +41,14 @@ function ProjectDashboardMenu (props) {
           <Accordion.Control icon={<IconMusic />}>Funções do Dia a dia</Accordion.Control>
           <Accordion.Panel>
             <NavLink
-              active
+              active={props.page === 'home'}
               href={`/dashboard/${username}`}
               label='Resumo'
               leftSection={<IconLayoutDashboard size={16} stroke={1.5} />}
               color='mublinColor'
             />
             <NavLink
+              active={props.page === 'team'}
               href={`/dashboard/${username}/team`}
               label='Time'
               leftSection={<IconUsersGroup size={16} stroke={1.5} />}

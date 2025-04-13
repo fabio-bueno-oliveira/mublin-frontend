@@ -146,7 +146,7 @@ function ProjectDashboardPage () {
   return (
     <>
       <Drawer opened={opened} onClose={close} size="xs">
-        <Navbar />
+        <Navbar page='home' />
       </Drawer>
       <Grid id='dashboard' gutter={0}>
         <Grid.Col span={{ base: 12, md: 2.5, lg: 2.5 }} id='desktopSidebar' p={14}>
@@ -162,7 +162,7 @@ function ProjectDashboardPage () {
             <IconMenu2 size={26} onClick={open} />
           </Group>
           <Box className='showOnlyInLargeScreen'>
-            <Navbar desktop />
+            <Navbar desktop page='home' />
           </Box>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 9.5, lg: 9.5 }} pl={30} pr={50} py={30}>

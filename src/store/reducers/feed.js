@@ -12,8 +12,7 @@ const initialState = {
       likedByMe: 0,
       totalComments: 0,
       relatedItemId: '',
-      extraText: '',
-      extraInfo: '',
+      text: '',
       image: '',
       videoUrl: '',
       suggested: '',
@@ -89,7 +88,9 @@ export function feed(state = initialState, action) {
     case feedTypes.GET_USER_FEED_REQUEST:
       return {
         ...state,
-        requesting: true
+        list: initialState.list,
+        requesting: true,
+        error: ""
       };
     case feedTypes.GET_USER_FEED_SUCCESS:
       return {

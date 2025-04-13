@@ -238,14 +238,18 @@ function BrandPage () {
                 {brand.colors.total > 0 &&
                   <Link to={{ pathname: `/gear/product/${product.id}` }}>
                     <Group gap={5} mt={14}>
-                      {brand.colors.result.filter((x) => { return x.productId === product.id }).map(color => 
-                        <ColorSwatch
-                          color={color.sample ? undefined : color.rgb}
-                          title={color.name}
-                          className={color.sample ? 'removeAlpha' : undefined}
-                          style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+color.sample + ")",width:'14px',minWidth:'14px',height:'14px',minHeight:'14px'}}
-                        />
-                      )}
+                      {brand.colors.result
+                        .filter((x) => { return x.productId === product.id })
+                        .sort((a, b) => b.mainColor - a.mainColor)
+                        .map(color => 
+                          <ColorSwatch
+                            color={color.sample ? undefined : color.rgb}
+                            title={color.name}
+                            className={color.sample ? 'removeAlpha' : undefined}
+                            style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+color.sample + ")",width:'14px',minWidth:'14px',height:'14px',minHeight:'14px'}}
+                          />
+                        )
+                      }
                     </Group>
                   </Link>
                 }

@@ -2,15 +2,13 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Indicator, Drawer, Button, em } from '@mantine/core'
+import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Drawer, Button, Badge, Table, rem, em } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
-import { IconMenu2, IconPlus } from '@tabler/icons-react'
+import { IconCheck, IconMenu2, IconX, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical } from '@tabler/icons-react'
 import Header from '../header'
 import Navbar from '../navbar'
 import MublinLogoBlack from '../../../assets/svg/mublin-logo.svg'
 import MublinLogoWhite from '../../../assets/svg/mublin-logo-w.svg'
-import { formatDistance, format } from 'date-fns'
-import pt from 'date-fns/locale/pt-BR'
 import '../styles.scss'
 
 function ProjectDashboardTeamPage () {
@@ -32,22 +30,26 @@ function ProjectDashboardTeamPage () {
 
   const project = useSelector(state => state.project)
 
-  const activeMembers = project.members.filter(
-    (member) => { return member.confirmed === 1 && !member.leftIn }
+  const members = project.members.filter(
+    (member) => { return member.confirmed !== 2 }
   )
-  // const pendingMembers = project.members.filter(
-  //   (member) => { return member.confirmed === 2 }
-  // )
+  const pendingMembers = project.members.filter(
+    (member) => { return member.confirmed === 2 }
+  )
+
   // const pastMembers = project.members.filter(
   //   (member) => { return member.confirmed === 1 && member.leftIn }
   // )
 
   const [opened, { open, close }] = useDisclosure(false)
 
+  const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '3px' }
+  const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) }
+
   return (
     <>
       <Drawer opened={opened} onClose={close} size="xs">
-        <Navbar mobile />
+        <Navbar mobile page='team' />
       </Drawer>
       <Grid id='dashboard' gutter={0}>
         <Grid.Col span={{ base: 12, md: 2.5, lg: 2.5 }} id='desktopSidebar' p={14}>
@@ -63,7 +65,7 @@ function ProjectDashboardTeamPage () {
             <IconMenu2 size={26} onClick={open} />
           </Group>
           <Box className='showOnlyInLargeScreen'>
-            <Navbar desktop />
+            <Navbar desktop page='team' />
           </Box>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 9.5, lg: 9.5 }} pl={30} pr={50} py={30}>
@@ -79,111 +81,131 @@ function ProjectDashboardTeamPage () {
           ) : (
             <>
               <Box>
-                <Title fz='h2'>Painel de {project.name}</Title>
-                <Text size='sm' c='dimmed'>Informações sobre o projeto</Text>
+                <Title fz='h2'>Time de {project.name}</Title>
+                <Text size='sm' c='dimmed'>Pessoas que participam ou já participaram do projeto</Text>
               </Box>
-              <Grid mt={34}>
-                <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-                  <Card withBorder p={10} radius='md' className='mublinModule'>
-                    <Text size='md' mb={6} fw={600}>Status do projeto</Text>
-                    {project.activityStatusId &&
-                      <>
-                        <Flex
-                          align='center'
-                          justify='flex-start'
-                          gap={6}
-                        >
-                          <Indicator
-                            inline
-                            processing={project.activityStatusId === 1 || project.activityStatusId === 3}
-                            color={project.activityStatusColor}
-                            size={7}
-                            ml={5}
-                            mr={4}
+              <Card withBorder p={10} mt={20} radius='md' className='mublinModule'>
+                <Text size='md' mb={6} fw={600}>Pessoas aguardando aprovação:</Text>
+                {pendingMembers.length ? (
+                  <Flex gap={10}>
+                    {pendingMembers.map(member =>
+                      <Card key={member.id} withBorder p={10} w='100%' className='mublinModule'>
+                        <Group gap={10}>
+                          <Avatar
+                            size='45'
+                            name={member.name}
+                            title={`${member.name} ${member.lastname} - ${member.role1}`}
+                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-82,w-82,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                            component='a'
+                            href={`/${member.username}`}
                           />
-                          <Text
-                            size='sm'
-                            className='lhNormal'
-                            pt='1px'
-                          >
-                            {project.activityStatus}
-                          </Text>
-                        </Flex>
-                      </>
-                    }
-                  </Card>
-                  <Card withBorder p={10} mt={14} radius='md' className='mublinModule'>
-                    <Flex justify='space-between'>
-                      <Text size='md' mb={12} fw={600}>
-                        Recados do time ({project.notes.total})
-                      </Text>
-                      <Button leftSection={<IconPlus size={14} />} size='xs' variant='subtle' color='primary'>
-                        Novo recado
-                      </Button>
-                    </Flex>
-                    {project.notes.total === 0 ? (
-                      <Text size='sm' c='dimmed'>
-                        Nenhum recado no momento
-                      </Text>
-                    ) : (
-                      <Flex direction='column' gap={10}>
-                        {project.notes.result.map(item =>
-                          <Box key={item.id}>
-                            <Group gap={6} mb={5}>
-                              <Avatar size={25} src={item.authorPicture} />
-                              <Flex direction='column' gap={0}>
-                                <Text size='xs' fw={400} className='lhNormal'>
-                                  <strong>{item.authorName} {item.authorLastname}</strong> há {formatDistance(new Date(item.created * 1000), new Date(), {locale:pt})}
-                                </Text>
-                                <Text size='xs' c='dimmed'>@{item.authorUsername}</Text>
-                              </Flex>
-                            </Group>
-                            <Text size='sm'>{item.note}</Text>
-                            <Text size='10px' c='dimmed' mt={6}>
-                              {format(item.created * 1000, 'dd/MM/yyyy HH:mm:ss')}
+                          <Flex direction='column' gap={5}>
+                            <Text size='sm'>
+                              <Text span fw={550}>{member.name} {member.lastname}</Text> sugere que atuou com <Text span fw={550}>{member.role1}</Text> a partir de <Text span fw={550}>{member.joinedIn}</Text>
                             </Text>
-                          </Box>
-                        )}
-                      </Flex>
+                            <Group gap={4}>
+                              <Button size='compact-xs' color='lime' leftSection={<IconCheck size={14} />}>Aprovar</Button>
+                              <Button size='compact-xs' color='red' leftSection={<IconX size={14} />}>Declinar</Button>
+                            </Group>
+                          </Flex>
+                        </Group>
+                      </Card>
                     )}
-                  </Card>
-                </Grid.Col>
-                <Grid.Col span={{ base: 12, md: 6, lg: 6 }} pr={isMobile ? 0 : 100}>
-                  <Box>
-                    <Image
-                      radius='lg'
-                      h={120}
-                      w='auto'
-                      fit='contain'
-                      src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-240,w-240,c-maintain_ratio/'+project.picture : undefined}
-                      mb={14}
-                    />
-                  </Box>
-                  <Text mb={6} size='sm'>
-                    <strong>Tipo:</strong> {project.typeName}
-                  </Text>
-                  <Text mb={6} size='sm'>
-                    <strong>Ano de fundação:</strong> {project.foundationYear} {!!project.endDate && <Text span c='dimmed'>(encerrado em {project.endDate})</Text>}
-                  </Text>
-                  <Text mb={6} size='sm'>
-                    <strong>Propósito do projeto:</strong> {project.purpose ? project.purpose : 'Não informado'}
-                  </Text>
-                  <Avatar.Group spacing={10} mt={6}>
-                    {activeMembers.map(member =>
-                      <Avatar
-                        key={member.id}
-                        size='45'
-                        name={member.name}
-                        title={`${member.name} ${member.lastname} - ${member.role1}`}
-                        src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-82,w-82,c-maintain_ratio/'+member.id+'/'+member.picture} 
-                        component='a'
-                        href={`/${member.username}`}
-                      />
+                  </Flex>
+                ) : (
+                  <Text size='sm' c='dimmed'>Ninguém aguardando aprovação no momento</Text>
+                )}
+              </Card>
+              <Card withBorder p={10} mt={20} radius='md' className='mublinModule'>
+                <Text size='md' mb={6} fw={600}>Pessoas deste projeto:</Text>
+                <Table>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Nome</Table.Th>
+                      <Table.Th>Atribuição</Table.Th>
+                      <Table.Th>Vínculo</Table.Th>
+                      <Table.Th>Período</Table.Th>
+                      <Table.Th></Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {members.map(member =>
+                      <Table.Tr key={member.id}>
+                        <Table.Td>
+                          <Group gap={3}>
+                            <Avatar
+                              size='35'
+                              name={member.name}
+                              src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-70,w-70,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                              component='a'
+                              href={`/${member.username}`}
+                              title={member.username}
+                            />
+                            <Text 
+                              component='a' 
+                              href={`/${member.username}`} 
+                              size='sm' 
+                              className='lhNormal'
+                            >
+                              {member.name} {member.lastname}
+                            </Text>
+                            {member.verified &&
+                              <IconRosetteDiscountCheckFilled
+                                color='#0977ff'
+                                style={iconVerifiedStyle}
+                                title='Verificado'
+                              />
+                            }
+                            {member.legend &&
+                              <IconShieldCheckFilled
+                                style={iconLegendStyle}
+                                title='Lenda da música'
+                              />
+                            }
+                          </Group>
+                        </Table.Td>
+                        <Table.Td>
+                          <Text size='xs' className='lhNormal'>
+                            {member.role1 &&
+                              <Text className='comma' span>
+                                {member.role1}
+                              </Text>
+                            }
+                            {member.role2 &&
+                              <Text className='comma' span>
+                                {member.role2}
+                              </Text>
+                            }
+                            {member.role3 &&
+                              <Text className='comma' span>
+                                {member.role3}
+                              </Text>
+                            }
+                          </Text>
+                          {!!member.founder &&
+                            <Badge size='xs' radius='sm' color='dark'>
+                              {member.gender === 'f' ? 'Fundadora' : 'Fundador'}
+                            </Badge>
+                          }
+                        </Table.Td>
+                        <Table.Td>
+                          {member.statusName}
+                        </Table.Td>
+                        <Table.Td>
+                          {`${member.joinedIn} › `}
+                          {project.endDate
+                            ? (!member.leftIn) ? project.endDate : member.leftIn
+                            : (member.leftIn) ? member.leftIn : 'Atualmente'
+                          }
+                        </Table.Td>
+                        <Table.Td>
+                          <IconDotsVertical size={13} />
+                        </Table.Td>
+                      </Table.Tr>
                     )}
-                    {/* <Avatar size='30'>+5</Avatar> */}
-                  </Avatar.Group>
-                </Grid.Col>
-              </Grid>
+                  </Table.Tbody>
+                </Table>
+              </Card>
             </>
           )}
         </Grid.Col>
