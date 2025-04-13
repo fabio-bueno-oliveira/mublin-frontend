@@ -138,12 +138,11 @@ function MenuMobile () {
               conta pro
             </Badge>
           ) : (
-            <Flex direction='column' align='center' mt={8}>
+            <Flex direction='column' align='center' mt={8} gap={8}>
               <Badge color='gray' size='sm'>conta grátis</Badge>
               <Anchor 
-                href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${decoded.result.id}&prefilled_email=${decoded.result.email}&utm_source=menuMobile`}
-                target='_blank'
-                underline='hover'
+                href='/settings/plan'
+                underline='never'
               >
                 <Text size='sm' c='violet'>
                   Quero me tornar Mublin PRO
