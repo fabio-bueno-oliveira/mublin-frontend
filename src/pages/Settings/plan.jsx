@@ -98,35 +98,15 @@ function SettingsMyPlan () {
                 display='block' 
                 className='mublinModule'
               >
-                <Box>
+                <Box className='showOnlyInLargeScreen'>
                   <Title order={4}>
                     Minha assinatura
                   </Title>
                   <Text size='sm' c='dimmed' mb={14}>
                     Dados do meu plano no Mublin
                   </Text>
+                  <Divider my={12} />
                 </Box>
-                {(user.success && user.plan !== 'Pro') && 
-                  <Group gap={6}>
-                    <IconLockSquareRoundedFilled size={28} />
-                    <Flex direction='column' gap={3}>
-                      <Text size='sm'>
-                        Apenas usuários com plano PRO podem adicionar e exibir marcas parceiras.
-                      </Text>
-                      <Anchor
-                        fw='420'
-                        fz='sm'
-                        href='/pro'
-                        underline='hover'
-                        variant='gradient'
-                        gradient={{ from: 'pink', to: 'yellow' }}
-                      >
-                        Assine o Mublin PRO!
-                      </Anchor>
-                    </Flex>
-                  </Group>
-                }
-                <Divider my={12} />
                 {!planInfoLoaded ? (
                   <Flex direction='column' gap={8}>
                     <Skeleton height={8} width={80} radius="lg" />
@@ -134,10 +114,10 @@ function SettingsMyPlan () {
                   </Flex>
                 ) : (
                   <Box>
-                    <Text size='xs'>
+                    <Text size='sm'>
                       <Text span fw={550}>Nome:</Text> {planInfo.name} {planInfo.lastname}
                     </Text>
-                    <Text size='xs'>
+                    <Text size='sm'>
                       <Text span fw={550}>Email:</Text> {planInfo.email}
                     </Text>
                   </Box>
