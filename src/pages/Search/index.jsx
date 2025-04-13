@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, Indicator, rem, em } from '@mantine/core';
+import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, Indicator, BackgroundImage, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers, IconDiamond } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import UserCard from '../../components/userCard';
 import ProjectCard from '../../components/projectCard';
+import { truncateString, nFormatter } from '../../utils/formatter'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css'
 
 function Search () {
 
@@ -139,22 +142,97 @@ function Search () {
               <Title fz='1.03rem' fw='640' mb={14}>
                 Projetos em destaque
               </Title>
+              <Splide 
+                options={{
+                  drag: 'free',
+                  snap: false,
+                  perPage: 1,
+                  autoWidth: true,
+                  arrows: false,
+                  gap: '10px',
+                  dots: false,
+                  pagination: false,
+                }}
+              >
               {searchResults.featuredProjects.result.map((project, index) => (
-                <ProjectCard 
-                  mb={14}
-                  key={index}
-                  size='md'
-                  picture={project.picture}
-                  isPictureFullUrl={true}
-                  name={project.name}
-                  username={project.username}
-                  type={project.type}
-                  city={project.city}
-                  region={project.region}
-                  confirmed={undefined}
-                  genre={project.genre1}
-                />
+                <SplideSlide key={index}>
+                  <Flex direction='column' gap={2}>
+                    {/* <ProjectCard 
+                      mb={14}
+                      key={index}
+                      size='md'
+                      picture={project.picture}
+                      isPictureFullUrl={true}
+                      name={project.name}
+                      username={project.username}
+                      type={project.type}
+                      city={project.city}
+                      region={project.region}
+                      confirmed={undefined}
+                      genre={project.genre1}
+                    /> */}
+                    <BackgroundImage
+                      key={index}
+                      src={project.picture}
+                      radius="lg"
+                      w={90}
+                      h={90}
+                      pos='relative'
+                      component='a'
+                      href={`/${project.username}`}
+                    >
+                      <Flex direction='column' className='featuredProjects'>
+                        <Box w={60}>
+                          <Text 
+                            c='white'
+                            fw='560'
+                            fz='0.7rem'
+                            pos='absolute'
+                            className='lhNormal projectTitle'
+                            bottom={0}
+                            px={12} pr={6} pb={6} 
+                            truncate="end"
+                          >
+                            {truncateString(project.name, 10)}
+                          </Text>
+                        </Box>
+                        
+                      </Flex>
+                    </BackgroundImage>
+                    <Text 
+                      fz='0.85rem'
+                      px={2} pr={6}
+                      mt={4}
+                      ta='center'
+                      className='lhNormal'
+                    >
+                      {truncateString(project.type, 20)}
+                    </Text>
+                    <Text 
+                      fw='450'
+                      fz='0.7rem'
+                      px={2} pr={6}
+                      ta='center'
+                      c='dimmed'
+                      className='lhNormal'
+                    >
+                      {truncateString(`${project.genre1 ? project.genre1 : ''}`, '17')}
+                    </Text>
+                    {project.city &&
+                      <Text 
+                        fw='450'
+                        fz='0.5rem'
+                        px={2} pr={6}
+                        ta='center'
+                        className='lhNormal'
+                      >
+                        {project.city}/{project.region}
+                      </Text>
+                    }
+                  </Flex>
+                </SplideSlide>
               ))}
+              </Splide>
             </Grid.Col>
           </Grid>
           </>

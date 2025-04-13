@@ -328,18 +328,16 @@ function SettingsMyGearPage () {
                   <Group gap={6}>
                     <IconLockSquareRoundedFilled size={28} />
                     <Flex direction='column' gap={3}>
-                      <Text size='sm'>
-                        Apenas usuários com plano PRO podem adicionar e exibir equipamentos no perfil.
+                      <Text size='sm' className='lhNormal'>
+                        Apenas usuários PRO podem adicionar e exibir equipamentos no perfil.
                       </Text>
                       <Anchor
-                        fw='420'
+                        fw='550'
                         fz='sm'
-                        href='/pro'
-                        underline='hover'
-                        variant="gradient"
-                        gradient={{ from: 'pink', to: 'yellow', deg: '90' }}
+                        href='/settings/plan'
+                        underline='never'
                       >
-                        Assine o Mublin PRO!
+                        Clique aqui para assinar o Mublin PRO!
                       </Anchor>
                     </Flex>
                   </Group>

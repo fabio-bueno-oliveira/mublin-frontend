@@ -118,7 +118,7 @@ function SettingsMyPlan () {
                       <Text span fw={550}>Nome:</Text> {planInfo.name} {planInfo.lastname}
                     </Text>
                     <Text size='sm'>
-                      <Text span fw={550}>Email:</Text> {planInfo.email}
+                      <Text span fw={550}>Email:</Text> {planInfo.email} <a href='/settings'>(editar)</a>
                     </Text>
                   </Box>
                 )}
@@ -191,7 +191,7 @@ function SettingsMyPlan () {
                       fz='md'
                       ta='center'
                       underline='hover'
-                      href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
+                      href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
                       target='_blank'
                     >
                       Assine o Mublin PRO!
@@ -202,7 +202,7 @@ function SettingsMyPlan () {
                       size='sm'
                       fullWidth
                       component='a'
-                      href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
+                      href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
                       target='_blank'
                     >
                       Assine o Mublin PRO!
@@ -272,10 +272,10 @@ function SettingsMyPlan () {
                                   </Badge>
                                 </Group>
                                 <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'violet', to: 'yellow', deg: 107 }}>
-                                  R$ 29,90 <Text span fz='xs'>por 3 meses</Text>
+                                  R$ 11,90 <Text span fz='xs'>/mês</Text>
                                 </Text>
                                 <Text size='xs' mb={10}>
-                                  Pagamento único (não recorrente) para <nobr>3 meses</nobr> de PRO. Renovação opcional.
+                                  Perfil otimizado com todas as funcionalidades da plataforma + selo usuário verificado. Cobrança recorrente, podendo ser cancelada a qualquer momento.
                                 </Text>
                                 <Divider my={12} />
                                 {/* <Text size='xs' mb={10} fw={500}>

@@ -327,3 +327,21 @@ iframe.fullScreen {
     -webkit-transform: translate(-50%, -50%); /* Chrome, Safari, Opera */	    
   }
 }
+
+.featuredProjects {
+  p.projectTitle {
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding-top: 4px;
+    padding-right: 8px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+    display: block;
+    text-shadow: 1px 1px 5px #000000;
+
+    // &:hover {
+    //   background-color: rgba(0, 0, 0, 0.8);
+    // }
+  }
+}

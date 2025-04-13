@@ -6,7 +6,7 @@ import { profileInfos } from '../../../store/actions/profile'
 import Header from '../../../components/header/public'
 import Footer from '../../../components/footer/public'
 import {
-  Container, Box, Button, Center, 
+  Container, Box, Button, Center, Card, 
   Flex, Group, Anchor, Avatar, Image, 
   Title, Text, Badge,
   Skeleton, Indicator, Modal 
@@ -39,11 +39,11 @@ function PublicProfilePage () {
 
   const [showModalProfileInfo, setShowModalProfileInfo] = useState(false)
 
-  useEffect(() => {
-    if (profile.success) {
-      setShowModalProfileInfo(true)
-    }
-  }, [profile.success])
+  // useEffect(() => {
+  //   if (profile.success) {
+  //     setShowModalProfileInfo(true)
+  //   }
+  // }, [profile.success])
 
   return (
     <>
@@ -157,27 +157,42 @@ function PublicProfilePage () {
                 </Flex>
               </Anchor>
             }
-            {gearTotal > 3 &&
+            {gearTotal > 0 &&
               <Flex gap={8} justify='flex-start' align='center' mt={14}>
                 {gear.slice(0, 2).map(item =>
-                  <Image
-                    key={item.productId}
-                    src={`https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/${item.pictureFilename}`}
-                    h={60}
-                    mah={60}
-                    w='auto'
-                    fit='contain'
-                    mb={10}
-                    radius='md'
-                    title={`${item.brandName} ${item.productName}`}
-                  />
+                  <Flex direction='column'>
+                    <Image
+                      key={item.productId}
+                      src={`https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/${item.pictureFilename}`}
+                      h={60}
+                      mah={60}
+                      w='auto'
+                      fit='contain'
+                      mb={10}
+                      radius='md'
+                      title={`${item.brandName} ${item.productName}`}
+                    />
+                    <Text ta='center' size='11px' fw={550}>
+                      {item.brandName}
+                    </Text>
+                    <Text ta='center' size='10px' fw={450}>
+                      {item.productName}
+                    </Text>
+                  </Flex>
                 )}
-                <Box color='gray' fz={12}>
-                  e + {gearTotal - 3} itens
-                </Box>
+                <Card 
+                  shadow='sm' 
+                  p={11}
+                  fz={10}
+                  withBorder
+                  className='mublinModule'
+                  ta='center'
+                >
+                  faça login para ver<br/>o equipamento<br/>completo<br/>de {profile.name}!
+                </Card>
               </Flex>
             }
-            <Center mt={60} mb={4}>
+            <Center mt={50} mb={4}>
               <Box>
                 <Text align='center'>
                   Faça login para visualizar o perfil completo de {profile.name} {profile.lastname}

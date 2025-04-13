@@ -127,10 +127,10 @@ function PricingPublicPage () {
                       </Badge>
                     </Group>
                     <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'violet', to: 'yellow', deg: 107 }}>
-                      R$ 29,90 <Text span fz='xs'>por 3 meses</Text>
+                      R$ 11,90 <Text span fz='xs'>/mês</Text>
                     </Text>
                     <Text size='sm' mb={10}>
-                      Pagamento único (não recorrente) para <nobr>3 meses</nobr> de PRO. Renovação opcional.
+                      Perfil otimizado com todas as funcionalidades da plataforma + selo usuário verificado. Cobrança recorrente, podendo ser cancelada a qualquer momento.
                     </Text>
                     <Divider my={12} />
                     {/* <Text size='xs' mb={10} fw={500}>

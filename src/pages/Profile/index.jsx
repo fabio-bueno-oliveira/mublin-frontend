@@ -92,7 +92,7 @@ function ProfilePage () {
 
   // Projects
   const allProjects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 });
-  const [showPastProjects, setShowPastProjects] = useState(true);
+  // const [showPastProjects, setShowPastProjects] = useState(true);
 
   // Modal Badges
   const [modalVerifiedOpen, setModalVerifiedOpen] = useState(false)
@@ -819,7 +819,7 @@ function ProfilePage () {
                       <Title fz='1.03rem' fw='640'>
                         Projetos  {!!profile.projects.total && `(${profile.projects.total})`}
                       </Title>
-                      {profile.projects.total > 0 && 
+                      {/* {profile.projects.total > 0 && 
                         <Checkbox
                           size='xs'
                           label='Exibir projetos passados'
@@ -827,7 +827,7 @@ function ProfilePage () {
                           color='mublinColor'
                           onChange={(event) => setShowPastProjects(event.currentTarget.checked)}
                         />
-                      }
+                      } */}
                     </Group>
                     <Group gap={4}>
                       {(profile.id === loggedUserId && !profile.requesting) && 
@@ -867,7 +867,8 @@ function ProfilePage () {
                     profile={profile}
                     projects={allProjects}
                     profilePlan={profile.plan}
-                    showPastProjects={showPastProjects}
+                    showPastProjects={true}
+                    loggedUserId={loggedUserId}
                   />
                   {(!profile.requesting && profile.projects.total === 0) &&
                     <Text size='sm' c='dimmed'>Nenhum projeto no momento</Text>
@@ -989,7 +990,7 @@ function ProfilePage () {
                           fw='440'
                           fz='sm'
                           underline='hover'
-                          href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
+                          href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
                           target='_blank'
                         >
                           Assinar Mublin PRO
@@ -1343,7 +1344,7 @@ function ProfilePage () {
               fw='440'
               fz='sm'
               underline='hover'
-              href={`https://buy.stripe.com/eVaeYmgTefuu8SsfYZ?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
+              href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
               target='_blank'
             >
               Assinar Mublin PRO

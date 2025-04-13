@@ -221,7 +221,7 @@ function SettingsBusinessPartners () {
                       <Anchor
                         fw='420'
                         fz='sm'
-                        href='/pro'
+                        href='/settings/plan'
                         underline='hover'
                         variant='gradient'
                         gradient={{ from: 'pink', to: 'yellow' }}

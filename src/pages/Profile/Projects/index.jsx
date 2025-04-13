@@ -8,7 +8,8 @@ function Projects (props) {
 
   const profile = props.profile
   const profilePlan = props.profilePlan
-  const showPastProjects = props.showPastProjects
+  // const showPastProjects = props.showPastProjects
+  const loggedUserId = props.loggedUserId
 
   const requesting = props.requesting
 
@@ -49,9 +50,9 @@ function Projects (props) {
         }}
       >
         {projects
-          .filter(
-            (project) => { return showPastProjects ? project.left_in || !project.left_in || project.endYear || !project.endYear : !project.left_in && !project.endYear }
-          )
+          // .filter(
+          //   (project) => { return showPastProjects ? project.left_in || !project.left_in || project.endYear || !project.endYear : !project.left_in && !project.endYear }
+          // )
           .splice(0 , profilePlan === 'Free' ? 2 : 300)
           .map(project =>
             <SplideSlide key={project.id}>
@@ -104,7 +105,7 @@ function Projects (props) {
             </SplideSlide>
           )
         }
-        {/* {(profile.id === userInfo.id && !profile.requesting && profilePlan === 'Free') && 
+        {(profile.id === loggedUserId && !profile.requesting && profilePlan === 'Free') && 
           <SplideSlide>
             <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>
               <Avatar
@@ -115,6 +116,8 @@ function Projects (props) {
                 color='white'
                 name='❯'
                 src={undefined}
+                component='a'
+                href='/settings/plan'
               />
               <Flex 
                 direction='column'
@@ -122,18 +125,18 @@ function Projects (props) {
                 align='flex-start'
                 wrap='wrap'
               >
-                <Text fz='10px' fw='390' truncate='end' c='dimmed'>
-                  Assine o Mublin PRO
+                <Text fz='11px' fw='390' truncate='end'>
+                  Você atingiu o limite de 2 projetos
                 </Text>
-                <Box w={110}>
-                  <Text size='0.77rem' fw='430' mb={3} className='lhNormal'>
-                    Gerencie quantos projetos quiser!
+                <Box w={150}>
+                  <Text size='0.7rem' c='dimmed' mb={3} className='lhNormal'>
+                    Assine o Mublin PRO e gerencie quantos projetos quiser!
                   </Text>
                 </Box>
               </Flex>
             </Flex>
           </SplideSlide>
-        } */}
+        }
       </Splide>
     </>
   );

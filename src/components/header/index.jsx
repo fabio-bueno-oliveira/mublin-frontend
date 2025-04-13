@@ -225,28 +225,41 @@ function Header (props) {
                   // onFocus={() => setShowMobileMenu(false)}
                   // onBlur={() => setShowMobileMenu(true)}
                 >
-                  <Input
-                    variant={colorScheme === 'light' ? 'filled' : 'unstyled'}
-                    size='md'
-                    w={320}
-                    placeholder='Pessoa, instrumento, cidade...'
-                    value={searchQuery}
-                    leftSection={<IconSearch size={16} />}
-                    onChange={(event) => handleChangeSearch(
-                      event, event.currentTarget.value, null
-                    )}
-                    // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
-                    rightSectionPointerEvents='all'
-                    rightSection={
-                      <CloseButton
-                        aria-label='Apagar'
-                        onClick={(event) => handleChangeSearch(
-                          event, '', null
-                        )}
-                        style={{ display: searchQuery ? undefined : 'none' }}
-                      />
-                    }
-                  />
+                  <Flex gap={6} align='center'>
+                    <Input
+                      variant={colorScheme === 'light' ? 'filled' : 'unstyled'}
+                      size='md'
+                      w={300}
+                      placeholder='Pessoa, instrumento, cidade...'
+                      value={searchQuery}
+                      // leftSection={<IconSearch size={16} />}
+                      onChange={(event) => handleChangeSearch(
+                        event, event.currentTarget.value, null
+                      )}
+                      // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
+                      rightSectionPointerEvents='all'
+                      rightSection={
+                        <CloseButton
+                          aria-label='Apagar'
+                          onClick={(event) => handleChangeSearch(
+                            event, '', null
+                          )}
+                          style={{ display: searchQuery ? undefined : 'none' }}
+                        />
+                      }
+                    />
+                    <ActionIcon
+                      variant='transparent' 
+                      size='lg'
+                      color='gray'
+                      type='submit'
+                      onClick={() => handleChangeSearch(
+                        null, searchQuery, null
+                      )}
+                    >
+                      <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                    </ActionIcon>
+                  </Flex>
                 </form>
               }
             </Group>
@@ -308,7 +321,7 @@ function Header (props) {
                       {projectsActive.length ? ( projectsActive.map(project =>
                         <Menu.Item key={project.id} component='a' href={`/project/${project.username}`}>
                           <Group gap={5}>
-                            <Indicator color="lime" size={7} position="bottom-center" processing>
+                            <Indicator color='lime' size={7} position='bottom-center' processing>
                               <Avatar src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-60,w-60,c-maintain_ratio/'+project.picture : undefined} size='30px' />
                             </Indicator>
                             <Flex direction='column'>

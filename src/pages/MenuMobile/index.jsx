@@ -190,7 +190,7 @@ function MenuMobile () {
             Editar meus dados
           </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconStar style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550' onClick={() => navigate('/settings/plan')}>
-            Assinatura Mublin PRO
+            Minha assinatura
           </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconAdjustmentsHorizontal style={iconMenuStyle} />} rightSection={<IconChevronRight />} component='a' href='/settings/preferences' fw='550'>
             Preferências musicais
