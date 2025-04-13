@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink, Text, Divider } from '@mantine/core'
-import { IconUser, IconLock, IconAdjustmentsHorizontal, IconCamera, IconHeartHandshake, IconPackages, IconCalendarCheck, IconArrowLeft, IconProgressCheck } from '@tabler/icons-react'
+import { IconUser, IconLock, IconAdjustmentsHorizontal, IconCamera, IconHeartHandshake, IconPackages, IconCalendarCheck, IconArrowLeft, IconReceiptDollar } from '@tabler/icons-react'
 
 function SettingsMenu (props) {
 
@@ -28,7 +28,7 @@ function SettingsMenu (props) {
         color='mublinColor'
         href='/settings/plan'
         label={<Text fw={500}>Minha assinatura</Text>}
-        leftSection={<IconProgressCheck size='1.4rem' stroke={1.5} />}
+        leftSection={<IconReceiptDollar size='1.4rem' stroke={1.5} />}
         active={props.page === 'plan'}
         variant='subtle'
       />
