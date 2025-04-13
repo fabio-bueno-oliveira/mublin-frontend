@@ -190,6 +190,9 @@ function MenuMobile () {
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconEdit style={iconMenuStyle} />} rightSection={<IconChevronRight/>} component='a' href='/settings' fw='550'>
             Editar meus dados
           </Button>
+          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconStar style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550' onClick={() => navigate('/settings/plan')}>
+            Assinatura Mublin PRO
+          </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconAdjustmentsHorizontal style={iconMenuStyle} />} rightSection={<IconChevronRight />} component='a' href='/settings/preferences' fw='550'>
             Preferências musicais
           </Button>
@@ -204,9 +207,6 @@ function MenuMobile () {
           </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconLock style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550' onClick={() => navigate('/settings/password')}>
             Senha
-          </Button>
-          <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconStar style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>
-            Assinatura Mublin PRO
           </Button>
           <Button variant='transparent' color={buttonColor} size='md' justify='space-between' leftSection={<IconEye style={iconMenuStyle} />} rightSection={<IconChevronRight />} fw='550'>
             Privacidade da conta
