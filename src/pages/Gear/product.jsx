@@ -5,7 +5,7 @@ import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
-import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart, IconX } from '@tabler/icons-react'
+import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart, IconX, IconAlignJustified, IconUser, IconFolder } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 
@@ -68,7 +68,10 @@ function GearProductPage () {
           )}
           <Flex direction='column'>
             <Text classNames='lhNormal' fw='420' size='sm' c='dimmed'>
-              {product.requesting ? <Skeleton width={100} height={10} mb={4} radius="md" /> : product.categoryName + ' • ' + product.brandName}
+              {product.requesting 
+                ? <Skeleton width={100} height={10} mb={4} radius="md" /> 
+                : product.categoryName + ' • ' + product.brandName + (product.seriesName ? ' • ' + product.seriesName : '')
+              }
             </Text>
             {product.requesting ? (
               <Skeleton width={220} height={18} radius='md' />
@@ -98,9 +101,9 @@ function GearProductPage () {
               </Anchor>
             } */}
             {!!product.discontinued &&
-              <Badge size='xs' color='gray' variant='light'>
+              <Text fz='11px' c='dimmed'>
                 Produto descontinuado pelo fabricante
-              </Badge>
+              </Text>
             }
           </Flex>
         </Flex>
@@ -219,17 +222,56 @@ function GearProductPage () {
             </Box>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
+            <Box mb={20}>
+              <Group gap={4} align='center' mb={10}>
+                <IconAlignJustified style={{width:'1rem',height:'1rem'}} />
+                <Text fz='0.9rem' fw='640' className='lhNormal'>
+                  Sobre o item
+                </Text>
+              </Group>
+              {product.requesting ? (
+                <>
+                  <Skeleton width={240} height={12} mb={6} radius="md" />
+                  <Skeleton width={180} height={12} mb={6} radius="md" />
+                </>
+              ) : (
+                <>
+                  {product.description ? ( 
+                    <>
+                      <Text fz='sm'>{product.description}</Text>
+                      {product.descriptionSource && 
+                        <Text fz='xs' c='dimmed' mt={6}><Text span fw={500}>Fonte:</Text> {product.descriptionSource}</Text>
+                      }
+                      {product.descriptionSourceUrl && 
+                        <Text fz='10px' c='dimmed'>
+                          {product.descriptionSourceUrl}
+                        </Text>
+                      }
+                      {!!product.discontinued &&
+                        <Text fz='10px' c='dimmed' mt={4}>
+                          *Produto descontinuado pelo fabricante
+                        </Text>
+                      }
+                    </>
+                  ) : (
+                    <Text size='sm' c='dimmed'>
+                      Descrição não disponível
+                    </Text>
+                  )}
+                </>
+              )}
+            </Box>
             <Group gap={4} align='center' mb={10}>
-              <IconUserHeart style={{width:'1rem',height:'1rem'}} />
+              <IconUser style={{width:'1rem',height:'1rem'}} />
               <Text fz='0.9rem' fw='640' className='lhNormal'>
-                Quem possui
+                Quem utiliza ({product.owners.total})
               </Text>
-              <Badge variant='light' color='gray' radius='sm'>
-                {product.owners.total}
-              </Badge>
             </Group>
             {product.requesting ? (
-              <Text my={14} size='sm' c='dimmed'>Carregando...</Text>
+              <>
+                <Skeleton width={240} height={12} mb={6} radius="md" />
+                <Skeleton width={180} height={12} mb={6} radius="md" />
+              </>
             ) : (
               <Box mb={30}>
                 {product.owners.total ? ( 
@@ -289,7 +331,9 @@ function GearProductPage () {
                     </Paper>
                   )
                 ) : (
-                  <Text my={14} size='sm' c='dimmed'>Ninguém por aqui</Text>
+                  <Text mt={10} mb={14} size='sm' c='dimmed'>
+                    Ninguém por aqui
+                  </Text>
                 )}
               </Box>
             )}

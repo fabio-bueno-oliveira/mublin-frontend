@@ -3,7 +3,7 @@ import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/i
 import { Link } from 'react-router-dom'
 
 export function UserCard({ 
-  mt, mb, name, lastname, username, mainRole, picture, verified, legend, city, region, size
+  mt, mb, name, lastname, username, mainRole, picture, verified, legend, city, region, size, boxSize
 }) {
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '3px' }
@@ -39,13 +39,13 @@ export function UserCard({
             }
           </Group>
         </Anchor>
-        <Box w={170}>
+        <Box w={boxSize}>
           <Anchor
             underline='never'
             style={{lineHeight:'normal'}}
             href={`/${username}`}
           >
-            <Text size='xs' fw={400} className='lhNormal' truncate='end'>
+            <Text size='13px' fw={400} className='lhNormal' truncate='end'>
               {username}
             </Text>
           </Anchor>

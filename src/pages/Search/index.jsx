@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
 import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, Indicator, BackgroundImage, Button, rem, em } from '@mantine/core';
-import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers, IconDiamond } from '@tabler/icons-react';
+import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers, IconDiamond, IconUser } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
@@ -81,6 +82,12 @@ function Search () {
 
   return (
     <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>{!searchedKeywords ? 'Mublin' : `Busca por ${searchedKeywords} | Mublin`}</title>
+        <link rel='canonical' href={`https://mublin.com/search`} />
+        <meta name='description' content='A rede dos músicos' />
+      </Helmet>
       {isLargeScreen && 
         <Header page='search' hasBottomSpace />
       }
@@ -128,6 +135,7 @@ function Search () {
                   mt={0}
                   mb={14}
                   size='lg'
+                  boxSize={250}
                   name={user.name}
                   lastname={user.lastname}
                   username={user.username}
@@ -139,123 +147,106 @@ function Search () {
                   region={user.region}
                 />
               ))}
-              <Grid mt={30} mb={14}>
-                {searchResults.featuredGenres.map(genre => (
-                  <Grid.Col span={{ base: 4, md: 2, lg: 2 }}>
-                    <BackgroundImage
-                      key={genre.id}
-                      src="https://ik.imagekit.io/mublin/misc/music/duotone/rehearsalb_DRyoWy2aE.png?updatedAt=1599615974997"
-                      radius="lg"
-                      w='100%'
-                      h={85}
-                      p={10}
-                    >
-                      <Box w={75}>
-                        <Text c='white' size='sm' fw={500} truncate="end">
-                          {genre.name}
-                        </Text>
-                      </Box>
-                    </BackgroundImage>
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-              <Title fz='1.03rem' fw='640' mb={14}>
-                Projetos em destaque
-              </Title>
-              <Splide 
-                options={{
-                  drag: 'free',
-                  snap: false,
-                  perPage: 1,
-                  autoWidth: true,
-                  arrows: false,
-                  gap: '10px',
-                  dots: false,
-                  pagination: false,
-                }}
-              >
-              {searchResults.featuredProjects.result.map((project, index) => (
-                <SplideSlide key={index}>
-                  <Flex direction='column' gap={2}>
-                    {/* <ProjectCard 
-                      mb={14}
-                      key={index}
-                      size='md'
-                      picture={project.picture}
-                      isPictureFullUrl={true}
-                      name={project.name}
-                      username={project.username}
-                      type={project.type}
-                      city={project.city}
-                      region={project.region}
-                      confirmed={undefined}
-                      genre={project.genre1}
-                    /> */}
-                    <BackgroundImage
-                      src={project.picture}
-                      radius="lg"
-                      w={90}
-                      h={90}
-                      pos='relative'
-                      component='a'
-                      href={`/${project.username}`}
-                    >
-                      <Flex direction='column' className='featuredProjects'>
-                        <Box w={60}>
-                          <Text 
-                            c='white'
-                            fw='560'
-                            fz='0.7rem'
-                            pos='absolute'
-                            className='lhNormal projectTitle'
-                            bottom={0}
-                            px={12} pr={6} pb={6} 
-                            truncate="end"
+
+              <Box>
+                <Title fz='1.03rem' fw='640' mb={14}>
+                  Projetos em destaque
+                </Title>
+                <Splide 
+                  options={{
+                    drag: 'free',
+                    snap: false,
+                    perPage: 1,
+                    autoWidth: true,
+                    arrows: false,
+                    gap: '10px',
+                    dots: false,
+                    pagination: false,
+                  }}
+                >
+                  {searchResults.featuredProjects.result.map((project, index) => (
+                    <SplideSlide key={index}>
+                      <Flex direction='column' gap={2} pt={6}>
+                        {/* <ProjectCard 
+                          mb={14}
+                          key={index}
+                          size='md'
+                          picture={project.picture}
+                          isPictureFullUrl={true}
+                          name={project.name}
+                          username={project.username}
+                          type={project.type}
+                          city={project.city}
+                          region={project.region}
+                          confirmed={undefined}
+                          genre={project.genre1}
+                        /> */}
+                        <Indicator 
+                          position="top-center" 
+                          inline
+                          color='dark'
+                          label={<Text fz='10px'>{truncateString(`${project.genre1 ? project.genre1 : ''}`, '17')}</Text>} 
+                          size={12}
+                          disabled={!project.genre1}
+                        >
+                          <BackgroundImage
+                            src={project.picture}
+                            radius="lg"
+                            w={90}
+                            h={90}
+                            pos='relative'
+                            component='a'
+                            href={`/${project.username}`}
                           >
-                            {truncateString(project.name, 10)}
-                          </Text>
-                        </Box>
-                        
+                            <Flex direction='column' className='featuredProjects'>
+                              <Box w={60}>
+                                <Text 
+                                  c='white'
+                                  fw='560'
+                                  fz='0.7rem'
+                                  pos='absolute'
+                                  className='lhNormal projectTitle'
+                                  bottom={0}
+                                  px={12} pr={6} pb={6} 
+                                  truncate="end"
+                                >
+                                  {truncateString(project.name, 10)}
+                                </Text>
+                              </Box>
+                            </Flex>
+                          </BackgroundImage>
+                        </Indicator>
+                        <Text 
+                          fz='0.76rem'
+                          px={2} pr={6}
+                          mt={4}
+                          ta='center'
+                          className='lhNormal'
+                        >
+                          {truncateString(project.type, 20)}
+                        </Text>
+                        {project.city &&
+                          <Box w={77}>
+                            <Text 
+                              fw='450'
+                              fz='0.6rem'
+                              px={2} pr={6}
+                              ta='center'
+                              className='lhNormal'
+                              truncate='end'
+                            >
+                              {project.city} • {project.region}
+                            </Text>
+                          </Box>
+                        }
                       </Flex>
-                    </BackgroundImage>
-                    <Text 
-                      fz='0.85rem'
-                      px={2} pr={6}
-                      mt={4}
-                      ta='center'
-                      className='lhNormal'
-                    >
-                      {truncateString(project.type, 20)}
-                    </Text>
-                    <Text 
-                      fw='450'
-                      fz='0.7rem'
-                      px={2} pr={6}
-                      ta='center'
-                      c='dimmed'
-                      className='lhNormal'
-                    >
-                      {truncateString(`${project.genre1 ? project.genre1 : ''}`, '17')}
-                    </Text>
-                    {project.city &&
-                      <Text 
-                        fw='450'
-                        fz='0.5rem'
-                        px={2} pr={6}
-                        ta='center'
-                        className='lhNormal'
-                      >
-                        {project.city}/{project.region}
-                      </Text>
-                    }
-                  </Flex>
-                </SplideSlide>
-              ))}
-              </Splide>
-              <Box mb={34}>
-                <Title fz='1.03rem' fw='640' mb={14} mt={24}>
+                    </SplideSlide>
+                  ))}
+                </Splide>
+              </Box>
+
+              <Box mt={14} mb={34}>
+                <Title fz='1.03rem' fw='640' mb={14}>
                   Equipamentos em destaque
                 </Title>
                 <Splide 
@@ -327,6 +318,38 @@ function Search () {
                   ))}
                 </Splide>
               </Box>
+
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
+              
+              <Grid mt={30} mb={14}>
+                {searchResults.featuredGenres.map(genre => (
+                  <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
+                    <BackgroundImage
+                      key={genre.id}
+                      src="https://ik.imagekit.io/mublin/misc/music/duotone/rehearsalb_DRyoWy2aE.png?updatedAt=1599615974997"
+                      radius="lg"
+                      w='100%'
+                      h={85}
+                      p={10}
+                    >
+                      <Box w={85}>
+                        <Text 
+                          c='white' 
+                          size='sm' 
+                          fw={500} 
+                          truncate="end" 
+                          style={{textWrap:'unset'}}
+                          title={genre.name}
+                        >
+                          {genre.name}
+                        </Text>
+                      </Box>
+                    </BackgroundImage>
+                  </Grid.Col>
+                ))}
+              </Grid>
+              
             </Grid.Col>
           </Grid>
           </>
@@ -537,21 +560,22 @@ function Search () {
                             </Flex>
                           </Anchor>
                           <Text size='xs' fw={300}>
-                            {product.name_ptbr} • <a className='textLink' href={`/company/${product.brandSlug}`}>{product.brand}</a>
+                            {product.name_ptbr} • <a className='textLink' href={`/company/${product.brandSlug}`}>{product.brand}</a>{!!product.seriesName && ' • ' + product.seriesName}
                           </Text>
                           <Flex gap={6} mt={4} align='center' justify='space-between'>
-                            <Flex title={product.totalOwners + ' possuem este item'}>
-                              <IconUsers style={{width:'12px',height:'12px'}} color='gray' />
-                              <Text size='11px' fw={300} c='dimmed' className='lhNormal'>
+                            <Flex>
+                              <IconUser color='gray' size='0.8rem' />
+                              <Text size='11px' fw={300} className='lhNormal'>
                                 {product.totalOwners}
                               </Text>
                             </Flex>
                             {!!product.rare &&
-                              <IconDiamond
-                                color='#9370DB'
-                                size='13px'
-                                title='Item consideraro raro'
-                              />
+                              <Flex align='center'>
+                                <IconDiamond color='#4c6ef5' size='0.8rem' />
+                                <Text size='11px' className='lhNormal' variant='gradient' gradient={{ from: 'indigo', to: 'pink', deg: 90 }}>
+                                  Raro
+                                </Text>
+                              </Flex>
                             }
                           </Flex>
                         </Flex>

@@ -377,6 +377,7 @@ function Home () {
                       mt={14}
                       key={user.id}
                       size='md'
+                      boxSize={174}
                       name={user.name}
                       lastname={user.lastname}
                       username={user.username}

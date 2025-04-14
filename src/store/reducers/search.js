@@ -79,6 +79,8 @@ const initialState = {
         productName: '',
         productPicture: '',
         rare: '',
+        seriesId: '',
+        seriesName: '',
         brand: '',
         brandSlug: '',
         brandLogo: '',

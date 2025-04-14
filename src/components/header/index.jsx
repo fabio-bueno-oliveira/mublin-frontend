@@ -391,19 +391,25 @@ function Header (props) {
                   )}
                 </Menu.Dropdown>
               </Menu>
-              <Link to={{ pathname: '/projects' }}>
+              <Link 
+                to={{
+                  pathname: "/search",
+                  search: "?keywords=&tab="
+                }}
+              >
                 <Button 
                   size='sm'
                   fw={400}
                   radius='xl'
-                  // variant='outline'
-                  // color={menuTextColor}
                   variant='gradient'
                   gradient={{ from: 'mublinColor', to: 'violet', deg: 107 }}
                   leftSection={<IconMicrophone2 size={14} />}
                   p='xs'
                   visibleFrom='md'
                   mr='xs'
+                  onClick={(event) => handleChangeSearch(
+                    event, '', null
+                  )}
                 >
                   Quero tocar
                 </Button>

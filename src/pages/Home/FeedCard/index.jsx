@@ -10,6 +10,8 @@ import { useMediaQuery } from '@mantine/hooks'
 import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle, IconPiano } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
+import linkifyStr from "linkify-string"
+import parse from 'html-react-parser'
 // import ReactPlayer from 'react-player/youtube'
 
 function FeedCard ({ item, compact }) {
@@ -175,6 +177,12 @@ function FeedCard ({ item, compact }) {
   //   return console.log(id)
   // }
 
+  function makeUrlsClickable(text) {
+    const urlRegex = /(http[s]?:\/\/[^\s<]+)/g;
+    const transformedText = text.replace(urlRegex, '<a href="$&" target="_blank" rel="noopener noreferrer">$&</a>');
+    return transformedText;
+  }
+
   return (
     <>
       <Card
@@ -287,7 +295,7 @@ function FeedCard ({ item, compact }) {
         {(item.categoryId === 8) && 
           <>
             <Spoiler
-              maxHeight={48}
+              maxHeight={68}
               px={15}
               mb={0}
               showLabel={
@@ -300,8 +308,11 @@ function FeedCard ({ item, compact }) {
                 fz={isMobile ? '0.9em' : '0.85em'}
                 mt='12px'
                 className='lhNormal'
+                style={{whiteSpace:'pre-wrap'}}
+                // dangerouslySetInnerHTML={{ __html: makeUrlsClickable(item.text) }}
               >
-                {item.text}
+                {/* {item.text} */}
+                {parse(linkifyStr(item.text, {target: '_blank'}))}
               </Text>
             </Spoiler>
             {(item.image && !compact) && 

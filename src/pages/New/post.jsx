@@ -47,7 +47,7 @@ function NewPost () {
     id_item_fk: '',
     related_item_type: '',
     id_feed_type_fk: '',
-    extra_text: '',
+    text: '',
     image: '',
     video_url: ''
   })
@@ -58,13 +58,13 @@ function NewPost () {
     initialValues: {
       id_item_fk: '',
       id_feed_type_fk: '',
-      extra_text: ''
+      text: ''
     },
 
     onValuesChange: (values) => {
       setFormValues({
         ...formValues,
-        extra_text: values.extra_text,
+        text: values.text,
         id_item_fk: values.id_item_fk
       })
     },
@@ -96,7 +96,7 @@ function NewPost () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({ id_user_1_fk: loggedUserId, id_item_fk: values.id_item_fk ? values.id_item_fk : '', related_item_type: formValues.related_item_type, id_feed_type_fk: 8, extra_text: values.extra_text, image: postImage ? postImage : '', video_url: formValues.video_url ? formValues.video_url : '' })
+      body: JSON.stringify({ id_user_1_fk: loggedUserId, id_item_fk: values.id_item_fk ? values.id_item_fk : '', related_item_type: formValues.related_item_type, id_feed_type_fk: 8, text: values.text, image: postImage ? postImage : '', video_url: formValues.video_url ? formValues.video_url : '' })
     })
     .then(response => {
       return response.json()
@@ -172,8 +172,8 @@ function NewPost () {
               minRows={3}
               maxRows={6}
               mt='14'
-              key={form.key('extra_text')}
-              {...form.getInputProps('extra_text')}
+              key={form.key('text')}
+              {...form.getInputProps('text')}
             />
             <Flex direction='column'>
               <div
@@ -299,7 +299,7 @@ function NewPost () {
               color='violet'
               loading={isSubmitting}
               disabled={
-                !formValues.extra_text || 
+                !formValues.text || 
                 (formValues.related_item_type && !formValues.id_item_fk)
               }
               rightSection={<IconSend size={14} />}
