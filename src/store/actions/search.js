@@ -15,6 +15,7 @@ export const searchInfos = {
   getSuggestedNewUsers: getSuggestedNewUsers,
   getFeaturedProjects: getFeaturedProjects,
   getFeaturedProducts: getFeaturedProducts,
+  getFeaturedGenres: getFeaturedGenres,
 };
 
 function getUserLastSearches(query) {
@@ -211,4 +212,20 @@ function getFeaturedProducts() {
   function request(query) { return { type: searchTypes.GET_FEATURED_GEAR_REQUEST, query } }
   function success(results) { return { type: searchTypes.GET_FEATURED_GEAR_SUCCESS, results } }
   function failure(error) { return { type: searchTypes.GET_FEATURED_GEAR_FAILURE, error } }
+}
+
+function getFeaturedGenres() {
+  return dispatch => {
+    dispatch(request());
+
+    searchService.getFeaturedGenres()
+      .then(
+        results => dispatch(success(results)),
+        error => dispatch(failure(error.toString()))
+      );
+    };
+
+  function request(query) { return { type: searchTypes.GET_FEATURED_GENRES_REQUEST, query } }
+  function success(results) { return { type: searchTypes.GET_FEATURED_GENRES_SUCCESS, results } }
+  function failure(error) { return { type: searchTypes.GET_FEATURED_GENRES_FAILURE, error } }
 }

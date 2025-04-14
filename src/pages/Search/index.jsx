@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, createSearchParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchInfos } from '../../store/actions/search';
-import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, Indicator, BackgroundImage, rem, em } from '@mantine/core';
+import { Container, Grid, Group, Flex, Skeleton, Box, Title, Text, Anchor, Avatar, Image, Input, CloseButton, Divider, Indicator, BackgroundImage, Button, rem, em } from '@mantine/core';
 import { IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconSearch, IconUsers, IconDiamond } from '@tabler/icons-react';
 import { useMediaQuery, useDebouncedCallback } from '@mantine/hooks';
 import Header from '../../components/header';
 import FooterMenuMobile from '../../components/footerMenuMobile';
 import UserCard from '../../components/userCard';
-import ProjectCard from '../../components/projectCard';
+// import ProjectCard from '../../components/projectCard';
 import { truncateString, nFormatter } from '../../utils/formatter'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
@@ -51,6 +51,7 @@ function Search () {
       dispatch(searchInfos.getSuggestedFeaturedUsers());
       dispatch(searchInfos.getFeaturedProjects());
       dispatch(searchInfos.getFeaturedProducts());
+      dispatch(searchInfos.getFeaturedGenres());
       // dispatch(searchInfos.getSuggestedUsersResults());
     }
   }, [dispatch, searchedKeywords]);
@@ -138,6 +139,26 @@ function Search () {
                   region={user.region}
                 />
               ))}
+              <Grid mt={30} mb={14}>
+                {searchResults.featuredGenres.map(genre => (
+                  <Grid.Col span={{ base: 4, md: 2, lg: 2 }}>
+                    <BackgroundImage
+                      key={genre.id}
+                      src="https://ik.imagekit.io/mublin/misc/music/duotone/rehearsalb_DRyoWy2aE.png?updatedAt=1599615974997"
+                      radius="lg"
+                      w='100%'
+                      h={85}
+                      p={10}
+                    >
+                      <Box w={75}>
+                        <Text c='white' size='sm' fw={500} truncate="end">
+                          {genre.name}
+                        </Text>
+                      </Box>
+                    </BackgroundImage>
+                  </Grid.Col>
+                ))}
+              </Grid>
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
               <Title fz='1.03rem' fw='640' mb={14}>
@@ -233,73 +254,79 @@ function Search () {
                 </SplideSlide>
               ))}
               </Splide>
-              <Title fz='1.03rem' fw='640' mb={14} mt={24}>
-                Equipamentos em destaque
-              </Title>
-              <Splide 
-                options={{
-                  drag: 'free',
-                  snap: false,
-                  perPage: 1,
-                  autoWidth: true,
-                  arrows: false,
-                  gap: '10px',
-                  dots: false,
-                  pagination: false,
-                }}
-              >
-                {searchResults.featuredGear.result.map((product, index) => (
-                  <SplideSlide key={index}>
-                    <Flex direction='column' gap={2}>
-                      <BackgroundImage
-                        src={`https://ik.imagekit.io/mublin/products/tr:w-90,h-90,cm-pad_resize,bg-FFFFFF,fo-x/${product.picture}`}
-                        radius="lg"
-                        w={90}
-                        h={90}
-                        pos='relative'
-                        component='a'
-                        href={`/gear/product/${product.id}`}
-                      >
-                        {/* <Flex direction='column' className='featuredProjects'>
-                          <Box w={60}>
-                            <Text 
-                              c='white'
-                              fw='560'
-                              fz='0.7rem'
-                              pos='absolute'
-                              className='lhNormal productTitle'
-                              bottom={0}
-                              px={12} pr={6} pb={6} 
-                              truncate="end"
-                            >
-                              {truncateString(product.name, 10)}
-                            </Text>
-                          </Box>
-                        </Flex> */}
-                      </BackgroundImage>
-                      <Text 
-                        fz='0.85rem'
-                        px={2} pr={6}
-                        mt={4}
-                        ta='center'
-                        className='lhNormal'
-                      >
-                        {truncateString(product.name, 10)}
-                      </Text>
-                      <Text 
-                        fw='450'
-                        fz='0.7rem'
-                        px={2} pr={6}
-                        ta='center'
-                        c='dimmed'
-                        className='lhNormal'
-                      >
-                        {truncateString(`${product.brandName ? product.brandName : ''}`, 10)}
-                      </Text>
-                    </Flex>
-                  </SplideSlide>
-                ))}
-              </Splide>
+              <Box mb={34}>
+                <Title fz='1.03rem' fw='640' mb={14} mt={24}>
+                  Equipamentos em destaque
+                </Title>
+                <Splide 
+                  options={{
+                    drag: 'free',
+                    snap: false,
+                    perPage: 1,
+                    autoWidth: true,
+                    arrows: false,
+                    gap: '10px',
+                    dots: false,
+                    pagination: false,
+                  }}
+                >
+                  {searchResults.featuredGear.result.map((product, index) => (
+                    <SplideSlide key={index}>
+                      <Flex direction='column' gap={2}>
+                        <BackgroundImage
+                          src={`https://ik.imagekit.io/mublin/products/tr:w-180,h-180,cm-pad_resize,bg-FFFFFF,fo-x/${product.picture}`}
+                          radius="lg"
+                          w={90}
+                          h={90}
+                          pos='relative'
+                          component='a'
+                          href={`/gear/product/${product.id}`}
+                        >
+                          {/* <Flex direction='column' className='featuredProjects'>
+                            <Box w={60}>
+                              <Text 
+                                c='white'
+                                fw='560'
+                                fz='0.7rem'
+                                pos='absolute'
+                                className='lhNormal productTitle'
+                                bottom={0}
+                                px={12} pr={6} pb={6} 
+                                truncate="end"
+                              >
+                                {truncateString(product.name, 10)}
+                              </Text>
+                            </Box>
+                          </Flex> */}
+                        </BackgroundImage>
+                        <Text 
+                          fz='0.85rem'
+                          px={2} pr={6}
+                          mt={4}
+                          ta='center'
+                          className='lhNormal'
+                          title={product.name}
+                        >
+                          {truncateString(product.name, 10)}
+                        </Text>
+                        <Text 
+                          fw='450'
+                          fz='0.7rem'
+                          px={2}
+                          pr={6}
+                          ta='center'
+                          c='dimmed'
+                          className='lhNormal'
+                          component='a'
+                          href={`/company/${product.brandSlug}`}
+                        >
+                          {truncateString(`${product.brandName ? product.brandName : ''}`, 10)}
+                        </Text>
+                      </Flex>
+                    </SplideSlide>
+                  ))}
+                </Splide>
+              </Box>
             </Grid.Col>
           </Grid>
           </>

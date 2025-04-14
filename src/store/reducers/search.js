@@ -191,7 +191,13 @@ const initialState = {
         brandLogo: ''
       }
     ]
-  }
+  },
+  featuredGenres: [
+    {
+      id: '',
+      name: ''
+    }
+  ]
 }
 
 export function search(state = initialState, action) {
@@ -389,6 +395,27 @@ export function search(state = initialState, action) {
         featuredGear: initialState.featuredGear,
         requesting: false,
         error: 'Nenhum produto em destaque encontrado'
+      };
+    // FEATURED GENRES
+    case searchTypes.GET_FEATURED_GENRES_REQUEST:
+      return {
+        ...state,
+        featuredGenres: initialState.featuredGenres,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.GET_FEATURED_GENRES_SUCCESS:
+      return {
+        ...state,
+        featuredGenres: action.results,
+        requesting: false
+      };
+    case searchTypes.GET_FEATURED_GENRES_FAILURE:
+      return {
+        ...state,
+        featuredGenres: initialState.featuredGenres,
+        requesting: false,
+        error: 'Nenhum gênero em destaque encontrado'
       };
     // LAST SEARCHES
     case searchTypes.GET_USERLASTSEARCHES_REQUEST:
