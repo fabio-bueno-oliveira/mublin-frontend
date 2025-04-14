@@ -158,7 +158,7 @@ const initialState = {
   ],
   featuredProjects: {
     total: 0,
-    success: '',
+    success: false,
     result: [
       {
         id: '',
@@ -172,6 +172,23 @@ const initialState = {
         region: '',
         uf: '',
         type: ''
+      }
+    ]
+  },
+  featuredGear: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        name: '',
+        short_subtitle: '',
+        picture: '',
+        rare: '',
+        featured: '',
+        brandName: '',
+        brandSlug: '',
+        brandLogo: ''
       }
     ]
   }
@@ -351,6 +368,27 @@ export function search(state = initialState, action) {
         featuredProjects: initialState.featuredProjects,
         requesting: false,
         error: 'Nenhum projeto em destaque encontrado'
+      };
+    // FEATURED GEAR PRODUCTS
+    case searchTypes.GET_FEATURED_GEAR_REQUEST:
+      return {
+        ...state,
+        featuredGear: initialState.featuredGear,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.GET_FEATURED_GEAR_SUCCESS:
+      return {
+        ...state,
+        featuredGear: action.results,
+        requesting: false
+      };
+    case searchTypes.GET_FEATURED_GEAR_FAILURE:
+      return {
+        ...state,
+        featuredGear: initialState.featuredGear,
+        requesting: false,
+        error: 'Nenhum produto em destaque encontrado'
       };
     // LAST SEARCHES
     case searchTypes.GET_USERLASTSEARCHES_REQUEST:

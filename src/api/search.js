@@ -26,6 +26,7 @@ export const searchService = {
     getSuggestedFeaturedUsers,
     getSuggestedNewUsers,
     getFeaturedProjects,
+    getFeaturedProducts,
     logout
 };
 
@@ -115,6 +116,14 @@ async function getFeaturedProjects() {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/search/explore/featuredProjects`, requestOptions).then(handleResponse);
+}
+
+async function getFeaturedProducts() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/explore/featuredProducts`, requestOptions).then(handleResponse);
 }
 
 function logout() {

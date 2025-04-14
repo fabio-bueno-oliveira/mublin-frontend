@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router'
 import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
@@ -7,7 +8,6 @@ import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, 
 import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart, IconX } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
-import { Helmet } from 'react-helmet'
 
 function GearProductPage () {
 
@@ -39,7 +39,7 @@ function GearProductPage () {
     <>
       <Helmet>
         <meta charSet='utf-8' />
-        <title>{`${product.name} | ${product.brandName} | Mublin`}</title>
+        <title>{product.requesting ? 'Mublin' : `${product.name} | ${product.brandName} | Mublin`}</title>
         <link rel='canonical' href={`https://mublin.com/gear/product/${product.id}`} />
         <meta name='description' content='A rede para quem trabalha com música' />
       </Helmet>
@@ -53,7 +53,7 @@ function GearProductPage () {
       <Container size='lg'>
         <Flex gap={12} align='center'>
           {product.requesting ? (
-            <Skeleton height={75} width={75} radius='lg' />
+            <Skeleton height={75} width={75} radius='md' />
           ) : (
             <Anchor
               href={`/company/${product.brandSlug}`}
@@ -71,7 +71,7 @@ function GearProductPage () {
               {product.requesting ? <Skeleton width={100} height={10} mb={4} radius="md" /> : product.categoryName + ' • ' + product.brandName}
             </Text>
             {product.requesting ? (
-              <Skeleton width={220} height={18} radius={0} />
+              <Skeleton width={220} height={18} radius='md' />
             ) : (
               <>
                 <Title fz='1.12rem' fw='560'>
@@ -97,6 +97,11 @@ function GearProductPage () {
                 Ver produtos {product.brandName}
               </Anchor>
             } */}
+            {!!product.discontinued &&
+              <Badge size='xs' color='gray' variant='light'>
+                Produto descontinuado pelo fabricante
+              </Badge>
+            }
           </Flex>
         </Flex>
         <Grid mt='20' mb='70'>

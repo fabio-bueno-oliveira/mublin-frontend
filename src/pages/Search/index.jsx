@@ -50,6 +50,7 @@ function Search () {
     if (!searchedKeywords) {
       dispatch(searchInfos.getSuggestedFeaturedUsers());
       dispatch(searchInfos.getFeaturedProjects());
+      dispatch(searchInfos.getFeaturedProducts());
       // dispatch(searchInfos.getSuggestedUsersResults());
     }
   }, [dispatch, searchedKeywords]);
@@ -172,7 +173,6 @@ function Search () {
                       genre={project.genre1}
                     /> */}
                     <BackgroundImage
-                      key={index}
                       src={project.picture}
                       radius="lg"
                       w={90}
@@ -232,6 +232,73 @@ function Search () {
                   </Flex>
                 </SplideSlide>
               ))}
+              </Splide>
+              <Title fz='1.03rem' fw='640' mb={14} mt={24}>
+                Equipamentos em destaque
+              </Title>
+              <Splide 
+                options={{
+                  drag: 'free',
+                  snap: false,
+                  perPage: 1,
+                  autoWidth: true,
+                  arrows: false,
+                  gap: '10px',
+                  dots: false,
+                  pagination: false,
+                }}
+              >
+                {searchResults.featuredGear.result.map((product, index) => (
+                  <SplideSlide key={index}>
+                    <Flex direction='column' gap={2}>
+                      <BackgroundImage
+                        src={`https://ik.imagekit.io/mublin/products/tr:w-90,h-90,cm-pad_resize,bg-FFFFFF,fo-x/${product.picture}`}
+                        radius="lg"
+                        w={90}
+                        h={90}
+                        pos='relative'
+                        component='a'
+                        href={`/gear/product/${product.id}`}
+                      >
+                        {/* <Flex direction='column' className='featuredProjects'>
+                          <Box w={60}>
+                            <Text 
+                              c='white'
+                              fw='560'
+                              fz='0.7rem'
+                              pos='absolute'
+                              className='lhNormal productTitle'
+                              bottom={0}
+                              px={12} pr={6} pb={6} 
+                              truncate="end"
+                            >
+                              {truncateString(product.name, 10)}
+                            </Text>
+                          </Box>
+                        </Flex> */}
+                      </BackgroundImage>
+                      <Text 
+                        fz='0.85rem'
+                        px={2} pr={6}
+                        mt={4}
+                        ta='center'
+                        className='lhNormal'
+                      >
+                        {truncateString(product.name, 10)}
+                      </Text>
+                      <Text 
+                        fw='450'
+                        fz='0.7rem'
+                        px={2} pr={6}
+                        ta='center'
+                        c='dimmed'
+                        className='lhNormal'
+                      >
+                        {truncateString(`${product.brandName ? product.brandName : ''}`, 10)}
+                      </Text>
+                    </Flex>
+                  </SplideSlide>
+                ))}
               </Splide>
             </Grid.Col>
           </Grid>

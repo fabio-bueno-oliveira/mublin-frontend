@@ -328,8 +328,8 @@ iframe.fullScreen {
   }
 }
 
-.featuredProjects {
-  p.projectTitle {
+.featuredProjects,.featuredProducts {
+  p.projectTitle,p.productTitle {
     color: #FFFFFF;
     background-color: rgba(0, 0, 0, 0.6);
     padding-top: 4px;

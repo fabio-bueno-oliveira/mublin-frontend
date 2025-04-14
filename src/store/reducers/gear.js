@@ -20,6 +20,7 @@ const initialState = {
   colorRgb: '',
   colorSample: '',
   rare: '',
+  discontinued: '',
   owners: {
     total: 0,
     success: false,
@@ -105,6 +106,7 @@ export function gear(state = initialState, action) {
         colorRgb: action.info.colorRgb,
         colorSample: action.info.colorSample,
         rare: action.info.rare,
+        discontinued: action.info.discontinued,
       };
     case gearTypes.GET_PRODUCT_INFO_FAILURE:
       return {
