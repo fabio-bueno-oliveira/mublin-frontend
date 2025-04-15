@@ -122,7 +122,7 @@ function ProjectPage () {
                     </Box>
                     <Box ml={isMobile ? 18 : 0}>
                       <Group gap={0} justify='space-between' mt='sm'>
-                        <Title order={1} fz='1.5rem' fw={600} className='lhNormal op90'>
+                        <Title order={1} fz='1.5rem' fw={650} className='lhNormal op90'>
                           {truncateString(project.name, isMobile ? 15 : 120)}
                         </Title>
                       </Group>

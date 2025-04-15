@@ -240,12 +240,14 @@ function GearProductPage () {
                     <>
                       <Text fz='sm'>{product.description}</Text>
                       {product.descriptionSource && 
-                        <Text fz='xs' c='dimmed' mt={6}><Text span fw={500}>Fonte:</Text> {product.descriptionSource}</Text>
-                      }
-                      {product.descriptionSourceUrl && 
-                        <Text fz='10px' c='dimmed'>
-                          {product.descriptionSourceUrl}
+                        <Text fz='12px' c='dimmed' mt={6} className='lhNormal'>
+                          Fonte: {product.descriptionSource}
                         </Text>
+                      }
+                      {product.descriptionSourceUrl &&
+                        <Anchor href={product.descriptionSourceUrl} target="_blank" underline="hover" fz='11px' c='dimmed'>
+                          {product.descriptionSourceUrl}
+                        </Anchor>
                       }
                       {!!product.discontinued &&
                         <Text fz='10px' c='dimmed' mt={4}>

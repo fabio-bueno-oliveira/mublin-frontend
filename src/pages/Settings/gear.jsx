@@ -343,6 +343,11 @@ function SettingsMyGearPage () {
                   </Group>
                 }
                 <Divider my={12} />
+                {gear.length === 0 &&
+                  <Text mb={14} size='xs'>
+                    Nenhum equipamento adicionado no momento
+                  </Text>
+                }
                 <Grid mt={6}>
                   {gear.map((item, key) => (
                     <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>

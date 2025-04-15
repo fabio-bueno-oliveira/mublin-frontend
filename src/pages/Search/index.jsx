@@ -196,7 +196,7 @@ function Search () {
                             h={90}
                             pos='relative'
                             component='a'
-                            href={`/${project.username}`}
+                            href={`/project/${project.username}`}
                           >
                             <Flex direction='column' className='featuredProjects'>
                               <Box w={60}>
@@ -218,6 +218,7 @@ function Search () {
                         </Indicator>
                         <Text 
                           fz='0.76rem'
+                          fw={460}
                           px={2} pr={6}
                           mt={4}
                           ta='center'
@@ -245,7 +246,7 @@ function Search () {
                 </Splide>
               </Box>
 
-              <Box mt={14} mb={34}>
+              <Box mt={14} mb={10}>
                 <Title fz='1.03rem' fw='640' mb={14}>
                   Equipamentos em destaque
                 </Title>
@@ -291,8 +292,10 @@ function Search () {
                           </Flex> */}
                         </BackgroundImage>
                         <Text 
-                          fz='0.85rem'
-                          px={2} pr={6}
+                          fz='0.76rem'
+                          fw={460}
+                          px={2}
+                          pr={6}
                           mt={4}
                           ta='center'
                           className='lhNormal'
@@ -318,11 +321,13 @@ function Search () {
                   ))}
                 </Splide>
               </Box>
-
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-              
-              <Grid mt={30} mb={14}>
+
+              <Title fz='1.03rem' fw='640' mb={14}>
+                Encontre projetos por gênero
+              </Title>
+              <Grid mb={36}>
                 {searchResults.featuredGenres.map(genre => (
                   <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
                     <BackgroundImage
