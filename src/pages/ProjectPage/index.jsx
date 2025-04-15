@@ -146,15 +146,12 @@ function ProjectPage () {
                           </Text>
                         </Group>
                       }
-                      <Text size='sm' c='dimmed' mb={2}>
-                        {project.typeName} {project.region && `· ${project.region} · ${project.country}`}
-                      </Text>
                       {project.activityStatusId &&
                         <Flex
                           align='center'
                           justify='flex-start'
                           gap={6}
-                          mb={isMobile ? 0 : 6}
+                          mb={isMobile ? 0 : 4}
                         >
                           <Indicator
                             inline
@@ -165,7 +162,7 @@ function ProjectPage () {
                             mr={4}
                           />
                           <Text
-                            size='xs'
+                            size='sm'
                             className='lhNormal'
                             pt='1px'
                           >
@@ -173,6 +170,9 @@ function ProjectPage () {
                           </Text>
                         </Flex>
                       }
+                      <Text size='sm' c='dimmed' mb={2}>
+                        {project.typeName} {project.region && `· ${project.region} · ${project.country}`}
+                      </Text>
                       <Avatar.Group spacing={8} mt={8} mb={6}>
                         {members.filter(m => !m.leftIn).map(member =>
                           <Avatar

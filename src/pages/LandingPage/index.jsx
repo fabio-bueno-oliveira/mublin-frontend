@@ -22,8 +22,6 @@ import './styles.scss'
 
 function LandingPage () {
 
-  document.title = 'Mublin'
-
   const loggedIn = useSelector(state => state.authentication.loggedIn)
   const { setColorScheme } = useMantineColorScheme()
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
@@ -59,7 +57,7 @@ function LandingPage () {
         <link rel='canonical' href='https://mublin.com' />
         <meta 
           name='description' 
-          content='Centralize o gerenciamento dos seus projetos de música e conecte-se com artistas e produtores do mercado musical' 
+          content='Gerencie seus projetos de música e conecte-se com artistas e produtores do mercado musical' 
         />
       </Helmet>
       {loggedIn &&
@@ -106,19 +104,28 @@ function LandingPage () {
           </Link>
         </Center>
         <Anchor underline='hover' href='/pricing'>
-          <Text size='xs' ta='center' mt={6}>
+          <Text size='sm' ta='center' mt={8}>
             Confira os planos
           </Text>
         </Anchor>
       </Container>
-      <Marquee>
+      <Marquee pauseOnHover={true}>
         {featuredUsers?.map((user, key) =>
-          <Flex w='170px' h='110px' direction='column' key={key}>
+          <Flex 
+            key={key} 
+            component='a' 
+            href={`/${user.username}`}
+            w='160px' 
+            h='110px' 
+            direction='column'
+          >
             <Center mb={5}>
               <Avatar src={user.picture ? user.picture : undefined} size='lg' />
             </Center>
             <Flex gap={0} align='center' justify='center' mb={0}>
-              <Text size='13px' fw='500' ta='center'>{user.name} {user.lastname}</Text>
+              <Text c='black' size='13px' fw='550' ta='center'>
+                {user.name} {user.lastname}
+              </Text>
               {!!user.verified && 
                 <IconRosetteDiscountCheckFilled color='#0977ff' style={iconVerifiedStyle} />
               }
@@ -126,7 +133,9 @@ function LandingPage () {
                 <IconShieldCheckFilled style={iconLegendStyle} />
               }
             </Flex>
-            <Text size='xs' ta='center'>{user.role} {user.genre && ' • ' + user.genre}</Text>
+            <Text size='xs' ta='center' c='dark'>
+              {user.role} {user.genre && ' • ' + user.genre}
+            </Text>
             {user.city && 
               <Text size='11px' ta='center' c='dimmed'>{user.city}, {user.uf}</Text>
             }

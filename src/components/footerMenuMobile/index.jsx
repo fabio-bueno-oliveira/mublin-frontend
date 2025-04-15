@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { userActions } from '../../store/actions/user'
 import { miscInfos } from '../../store/actions/misc'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { useMantineColorScheme, Drawer, Box, Flex, Button, Text } from '@mantine/core'
+import { Drawer, Box, Flex, Button, Text, Avatar } from '@mantine/core'
 import { IconMusicPlus, IconCubePlus, IconHome, IconSearch, IconUser, IconHexagonPlusFilled, IconMusic, IconPencilPlus } from '@tabler/icons-react'
 import './styles.scss'
 
@@ -20,7 +20,8 @@ const FooterMenuMobile = (props) => {
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
 
-  const { colorScheme } = useMantineColorScheme()
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
   const [drawerNewIsOpen, setDrawerNewIsOpen] = useState(false)
   const [refreshCounter, setRefreshCounter] = useState(0)
 
@@ -48,17 +49,41 @@ const FooterMenuMobile = (props) => {
           >
             <IconHome />
           </div>
-          <div className={currentPath === '/search' ? 'active' : undefined} onClick={() => navigate("/search")}>
+          <div 
+            className={currentPath === '/search' ? 'active' : undefined} 
+            onClick={() => navigate("/search")}
+          >
             <IconSearch />
           </div>
-          <div className={currentPath === '/new' ? 'active plus' : 'plus'} onClick={() => setDrawerNewIsOpen(prevCheck => !prevCheck)}>
+          <div
+            className={currentPath === '/new' ? 'active plus' : 'plus'} 
+            onClick={() => setDrawerNewIsOpen(prevCheck => !prevCheck)}
+          >
             <IconHexagonPlusFilled />
           </div>
-          <div className={(currentPath === '/projects' || currentPath.includes('/project')) ? 'active' : undefined} onClick={() => navigate("/projects")}>
+          <div
+            className={
+              (currentPath === '/projects' || currentPath.includes('/project')) 
+                ? 'active' 
+                : undefined
+            } 
+            onClick={() => navigate("/projects")}
+          >
             <IconMusic />
           </div>
-          <div className={currentPath === '/menu' ? 'active' : undefined} onClick={() => navigate("/menu")}>
-            <IconUser />
+          <div 
+            className={currentPath === '/menu' ? 'active' : undefined} 
+            // onClick={() => navigate("/menu")}
+          >
+            {/* <IconUser /> */}
+            <Avatar
+              onClick={() => navigate("/menu")}
+              w={35}
+              h={35}
+              className='point'
+              src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+              alt={userInfo.username}
+            />
           </div>
         </div>
       </footer>

@@ -54,7 +54,7 @@ function PublicProfilePage () {
         <meta name='description' content={`${username} está no Mublin! A rede para músicos`} />
       </Helmet>
       <Header />
-      <Container size='lg' mb={50}>
+      <Container size='lg' mb={50} mih={340}>
         {profile.requesting &&
           <Flex
             gap='md'
@@ -170,6 +170,7 @@ function PublicProfilePage () {
                       fit='contain'
                       mb={10}
                       radius='md'
+                      withBorder
                       title={`${item.brandName} ${item.productName}`}
                     />
                     <Text ta='center' size='11px' fw={550}>
@@ -185,10 +186,11 @@ function PublicProfilePage () {
                   p={11}
                   fz={10}
                   withBorder
+                  radius='md'
                   className='mublinModule'
                   ta='center'
                 >
-                  faça login para ver<br/>o equipamento<br/>completo<br/>de {profile.name}!
+                  <strong>Faça login</strong> para ver<br/>o equipamento<br/>completo<br/>de {profile.name}!
                 </Card>
               </Flex>
             }
@@ -223,7 +225,10 @@ function PublicProfilePage () {
           </Center>
         }
       </Container>
-      <Footer />
+      {/* <Footer /> */}
+      <Text ta='center' mt={10} c='dimmed' size='xs'>
+        © 2025 Mublin
+      </Text>
       <Modal
         opened={showModalProfileInfo}
         onClose={() => setShowModalProfileInfo(false)}
