@@ -1,7 +1,7 @@
 import React from 'react'
 import AppRoutes from './routes'
 import { SpeedInsights } from '@vercel/speed-insights/react'
-import { Analytics } from '@vercel/analytics/react'
+// import { Analytics } from '@vercel/analytics/react'
 import { MantineProvider, ColorSchemeScript, virtualColor, Anchor, createTheme, Button, Card, Checkbox, Paper } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import '@mantine/notifications/styles.css'
@@ -97,7 +97,7 @@ function App() {
       <MantineProvider theme={theme}>
         <Notifications />
         <AppRoutes />
-        <Analytics/>
+        {/* <Analytics/> */}
         <SpeedInsights />
       </MantineProvider>
     </>

@@ -35,6 +35,7 @@ function Header (props) {
   let navigate = useNavigate()
 
   const openMenuDrawerFromProfile = props.openMenuDrawerFromProfile
+  const page = props.page
 
   const token = localStorage.getItem('token')
   const decoded = jwtDecode(token)
@@ -104,7 +105,7 @@ function Header (props) {
   }, [fetchProjects])
 
   useEffect(() => {
-    if (props.page === 'home' && refreshCounter > 0) {
+    if (page === 'home' && refreshCounter > 0) {
       dispatch(userActions.getInfo())
       dispatch(miscInfos.getFeed())
       dispatch(searchInfos.getSuggestedFeaturedUsers())
@@ -195,7 +196,7 @@ function Header (props) {
                   {!props.hideLogo && 
                     <Link 
                       to={{ pathname: '/home' }} 
-                      className={(isMobile && props.page === 'profile') ? 'mublinLogo showOnlyInLargeScreen' : 'mublinLogo'}
+                      className={(isMobile && page === 'profile') ? 'mublinLogo showOnlyInLargeScreen' : 'mublinLogo'}
                       onClick={() => setRefreshCounter(refreshCounter + 1)}
                     >
                       <Image 
@@ -205,7 +206,7 @@ function Header (props) {
                     </Link>
                   }
                 </Flex>
-                {(props.page === 'profile' && props.profileId) &&
+                {(page === 'profile' && props.profileId) &&
                   <Box w={225} className='showOnlyInMobile'>
                     <Text 
                       mr='10' 
@@ -236,7 +237,7 @@ function Header (props) {
                       onChange={(event) => handleChangeSearch(
                         event, event.currentTarget.value, null
                       )}
-                      // onFocus={props.page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
+                      // onFocus={page !== 'search' ? (event) => navigateToSearchPage(event.currentTarget.value, '') : undefined}
                       rightSectionPointerEvents='all'
                       rightSection={
                         <CloseButton
@@ -507,9 +508,13 @@ function Header (props) {
           </Flex>
         </Container>
       </Box>
-      {/* {props.hasBottomSpace && */}
-        <Space h={isMobile ? 60 : 86} />
-      {/*// */}
+      <Space 
+        h={
+            isMobile 
+              ? page === 'profile' ? 52 : 60
+              : 86
+          } 
+      />
       <Drawer 
         opened={openMenuDrawer || openMenuDrawerFromProfile} 
         onClose={() => setOpenMenuDrawer(false)} 

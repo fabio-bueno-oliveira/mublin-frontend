@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
-import { useMantineColorScheme, ActionIcon, Modal, Center, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Image, Text, Title, Anchor, Divider, Spoiler, em  } from '@mantine/core'
+import { useMantineColorScheme, ActionIcon, Modal, Center, ScrollArea, NativeSelect, Flex, Box, Paper, Group, Badge, Button, Image, Text, Title, Anchor, Divider, Spoiler, em  } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconArrowsMaximize, IconSettings, IconPlus } from '@tabler/icons-react'
+import { IconArrowsMaximize, IconSettings, IconPlus, IconBubbleText } from '@tabler/icons-react'
 import { truncateString } from '../../../utils/formatter'
+import linkifyStr from "linkify-string"
+import parse from 'html-react-parser'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css/skyblue'
 
@@ -43,7 +45,13 @@ function GearSection ({ loggedUserId, username }) {
         withBorder={isLargeScreen ? true : false}
         px={isMobile ? 0 : 16}
         pt={isMobile ? 0 : 12}
-        pb={(isLargeScreen && profile.gear.total > 5) ? 34 : 9}
+        pb={
+          profile.gearSetups.total > 0 ? (
+            (isLargeScreen && profile.gear.total > 5) ? 16 : 9
+          ) : (
+            (isLargeScreen && profile.gear.total > 5) ? 34 : 9
+          )
+        }
         mb={14}
         className='mublinModule transparentBgInMobile'
       >
@@ -154,6 +162,19 @@ function GearSection ({ loggedUserId, username }) {
                         pos='absolute'
                         left='0'
                       />
+                      {product.ownerComments && 
+                        <Box
+                          pos='absolute'
+                          right={12}
+                          pt={8}
+                          title='Possui comentários do usuário'
+                        >
+                          <IconBubbleText 
+                            size={16}
+                            color='gray'
+                          />
+                        </Box>
+                      }
                       <Image
                         src={'https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.pictureFilename}
                         h={120}
@@ -200,7 +221,7 @@ function GearSection ({ loggedUserId, username }) {
                         </Flex>
                       }
                       {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).length > 0 &&
-                        <Text size='10px' c='dimmed'>+ {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).length} produtos vinculados</Text>
+                        <Text size='10px'>+ {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).length} sub itens</Text>
                       }
                       {/* <Flex gap={4}>
                         {subGear.filter((p) => { return p.parent_product_id === product.user_gear_id }).slice(0, 3).map(subGear =>
@@ -228,6 +249,49 @@ function GearSection ({ loggedUserId, username }) {
             )}
           </>
         )}
+        {profile.gearSetups.total && 
+          <Box mt={40}>
+            <Title fz='0.9rem' fw='640' mb={12}>
+              Setups de {profile.name} {profile.lastname} {!!profile.gear.total && `(${profile.gearSetups.total})`}
+            </Title>
+            <Splide 
+                options={{
+                  drag: 'free',
+                  snap: false,
+                  perPage: isMobile ? 2 : 6,
+                  autoWidth: false,
+                  arrows: false,
+                  gap: '22px',
+                  dots: true,
+                  pagination: true,
+                }}
+              >
+                {profile.gearSetups.setups.map(setup =>
+                  <SplideSlide key={setup.id}>
+                    <Flex direction='column' gap={2}>
+                      <Center>
+                        <Image
+                          src={'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+setup.image}
+                          h={60}
+                          mah={60}
+                          w='auto'
+                          fit='contain'
+                          radius='md'
+                          className='point'
+                        />
+                      </Center>
+                      <Text ta='center' fw={550} size='xs' className='lhNormal'>
+                        {setup.name}
+                      </Text>
+                      <Text ta='center' size='xs' className='lhNormal'>
+                        {setup.totalItems} itens
+                      </Text>
+                    </Flex>
+                  </SplideSlide>
+                )}
+              </Splide>
+          </Box>
+        }
       </Paper>
       <Modal 
         opened={modalGearItemOpen}
@@ -242,7 +306,7 @@ function GearSection ({ loggedUserId, username }) {
               {gearItemDetail.brandName} {gearItemDetail.productName}
             </Text>
             <Text size='xs' c='dimmed'>
-              Parte do equipamento de {profile.name} {profile.lastname}
+              Item do equipamento de {profile.name} {profile.lastname}
             </Text>
           </Flex>
         }
@@ -251,17 +315,13 @@ function GearSection ({ loggedUserId, username }) {
         scrollAreaComponent={ScrollArea.Autosize}
       >
         <Center>
-          <Anchor
-            href={`/gear/product/${gearItemDetail.productId}`} 
-          >
-            <Image
-              src={'https://ik.imagekit.io/mublin/products/tr:w-400,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
-              w={200}
-              fit='contain'
-              mb='10'
-              radius='md'
-            />
-          </Anchor>
+          <Image
+            src={'https://ik.imagekit.io/mublin/products/tr:w-400,cm-pad_resize,bg-FFFFFF/'+gearItemDetail.pictureFilename}
+            w={200}
+            fit='contain'
+            mb='10'
+            radius='md'
+          />
         </Center>
         <Center>
           <Anchor
@@ -275,6 +335,9 @@ function GearSection ({ loggedUserId, username }) {
             />
           </Anchor>
         </Center>
+        <Text ta='center' c='dimmed' fz='11px'>
+          *Foto genérica. Não representa necessariamente o item real
+        </Text>
         {gearItemDetail.tuning && 
           <Box>
             <Text ta='center' size='xs' fw='380'>Afinação: {gearItemDetail.tuning}</Text>
@@ -315,6 +378,7 @@ function GearSection ({ loggedUserId, username }) {
                       mb={4}
                     >
                       <Image
+                        mb={4}
                         key={s.productId}
                         src={'https://ik.imagekit.io/mublin/products/tr:w-120,h-120,cm-pad_resize,bg-FFFFFF,fo-x/'+s.pictureFilename}
                         h={60}
@@ -335,26 +399,42 @@ function GearSection ({ loggedUserId, username }) {
         {gearItemDetail.ownerComments && 
           <>
             <Divider my={10} />
-            <Text size='sm' fw={450} mb={3}>
-              Comentários de {profile.name} {profile.lastname}
-            </Text>
-            <Spoiler
-              maxHeight={36}
-              showLabel={
-                <Text size='sm'>...mais</Text>
-              }
-              hideLabel={false}
-              transitionDuration={0}
-            >
-              <Text
-                size='sm'
-                className='lhNormal op80'
-              >
-                {gearItemDetail.ownerComments}
+            <Group gap={4} align='center' justify='center' mb={8}>
+              <IconBubbleText size={16} />
+              <Text size='xs' className='lhNormal'>
+                Comentários de {profile.name} {profile.lastname}:
               </Text>
-            </Spoiler>
+            </Group>
+            <Paper withBorder className="mublinModule transparentBgInMobile" radius='md' p={10}>
+              <Spoiler
+                maxHeight={36}
+                showLabel={
+                  <Text size='sm'>...mais</Text>
+                }
+                hideLabel={false}
+                transitionDuration={0}
+              >
+                <Text
+                  size='sm'
+                  className='lhNormal'
+                  style={{whiteSpace:'pre-wrap'}}
+                >
+                  {parse(linkifyStr(gearItemDetail.ownerComments, {target: '_blank'}))}
+                </Text>
+              </Spoiler>
+            </Paper>
           </>
         }
+        <Button 
+          color='mublinColor'
+          component='a'
+          size='sm'
+          fullWidth
+          href={`/gear/product/${gearItemDetail.productId}`}
+          mt={22}
+        >
+          Ver mais informações deste item
+        </Button>
       </Modal>
     </>
   )

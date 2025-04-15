@@ -5,9 +5,11 @@ import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
-import { IconZoom, IconChevronUp, IconDiamond, IconUserHeart, IconX, IconAlignJustified, IconUser, IconFolder } from '@tabler/icons-react'
+import { IconZoom, IconChevronUp, IconDiamond, IconX, IconAlignJustified, IconUser } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
+import linkifyStr from "linkify-string"
+import parse from 'html-react-parser'
 
 function GearProductPage () {
 
@@ -238,7 +240,12 @@ function GearProductPage () {
                 <>
                   {product.description ? ( 
                     <>
-                      <Text fz='sm'>{product.description}</Text>
+                      <Text fz='sm'
+                        className='lhNormal'
+                        style={{whiteSpace:'pre-wrap'}}
+                      >
+                        {product.description}
+                      </Text>
                       {product.descriptionSource && 
                         <Text fz='12px' c='dimmed' mt={6} className='lhNormal'>
                           Fonte: {product.descriptionSource}
@@ -322,8 +329,12 @@ function GearProductPage () {
                         </Flex>
                       </Flex>
                       {owner.ownerComments ? (
-                        <Text size='sm'>
-                          {owner.ownerComments}
+                        <Text 
+                          size='sm'
+                          className='lhNormal'
+                          style={{whiteSpace:'pre-wrap'}}
+                        >
+                          {parse(linkifyStr(owner.ownerComments, {target: '_blank'}))}
                         </Text>
                       ) : (
                         <Text size='sm' c='dimmed'>

@@ -13,7 +13,7 @@ function RelatedProfiles ({
 
   return (
     <Box mb='18'>
-      <Title fz='0.8rem' fw='500' mb='xs'>
+      <Title fz='0.8rem' fw='550' mb='xs'>
         Mais perfis pra você conferir
       </Title>
       <Splide 

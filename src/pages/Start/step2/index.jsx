@@ -108,7 +108,7 @@ function StartSecondStep () {
           userId: user.id, 
           gender: formValues.gender, 
           bio: formValues.bio, 
-          website: formValues.website, 
+          website: formValues.website ? formValues.website : '', 
           instagram: formValues.instagram, 
           id_country_fk: 27, 
           id_region_fk: formValues.region, 

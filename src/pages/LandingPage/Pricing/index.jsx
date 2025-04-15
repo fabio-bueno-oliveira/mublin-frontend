@@ -185,9 +185,9 @@ function PricingPublicPage () {
         <Accordion variant="contained">
           <Accordion.Item value="photos">
             <Accordion.Control icon={<IconCreditCard size={20} color="gray" />}>
-              O pagamento é recorrente?
+              O pagamento do plano PRO é recorrente?
             </Accordion.Control>
-            <Accordion.Panel>Não. O pagamento é realizado uma única vez e corresponde a três meses de Mublin PRO. Após os três meses, você não será cobrado automaticamente e caso queira adquirir a conta PRO novamente, terá que realizar uma nova compra.</Accordion.Panel>
+            <Accordion.Panel>Sim. O pagamento é cobrado de forma recorrente. Você poderá cancelar a assinatura a qualquer momento.</Accordion.Panel>
           </Accordion.Item>
 
           <Accordion.Item value="print">

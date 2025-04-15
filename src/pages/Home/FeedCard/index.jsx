@@ -177,12 +177,6 @@ function FeedCard ({ item, compact }) {
   //   return console.log(id)
   // }
 
-  function makeUrlsClickable(text) {
-    const urlRegex = /(http[s]?:\/\/[^\s<]+)/g;
-    const transformedText = text.replace(urlRegex, '<a href="$&" target="_blank" rel="noopener noreferrer">$&</a>');
-    return transformedText;
-  }
-
   return (
     <>
       <Card
@@ -309,9 +303,7 @@ function FeedCard ({ item, compact }) {
                 mt='12px'
                 className='lhNormal'
                 style={{whiteSpace:'pre-wrap'}}
-                // dangerouslySetInnerHTML={{ __html: makeUrlsClickable(item.text) }}
               >
-                {/* {item.text} */}
                 {parse(linkifyStr(item.text, {target: '_blank'}))}
               </Text>
             </Spoiler>

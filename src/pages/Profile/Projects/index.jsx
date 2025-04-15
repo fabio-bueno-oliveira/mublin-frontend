@@ -15,6 +15,8 @@ function Projects (props) {
 
   const projects = profile.projects.result.filter((project) => { return project.show_on_profile === 1 && project.confirmed === 1 })
 
+  const totalProjects = profile.projects.total
+
   return (
     <>
       {requesting && 
@@ -105,7 +107,12 @@ function Projects (props) {
             </SplideSlide>
           )
         }
-        {(profile.id === loggedUserId && !profile.requesting && profilePlan === 'Free') && 
+        {(
+          profile.id === loggedUserId && 
+          !profile.requesting && 
+          profilePlan === 'Free' && 
+          totalProjects >= 2
+        ) && 
           <SplideSlide>
             <Flex align='flex-start' gap={7} mb={5} className='carousel-project'>
               <Avatar

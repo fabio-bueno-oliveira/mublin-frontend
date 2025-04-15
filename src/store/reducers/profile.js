@@ -251,13 +251,7 @@ const initialState = {
         id: '',
         name: ''
       }
-    ],
-    products: [
-      { 
-        id: '',
-        setupId: ''
-      }
-    ],
+    ]
   },
   partners: {
     total: 0,

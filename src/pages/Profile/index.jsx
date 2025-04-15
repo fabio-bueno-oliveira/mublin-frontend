@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { profileInfos } from '../../store/actions/profile'
 import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Checkbox, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconMapPin, IconEye, IconPiano, IconTimeline, IconPencilPlus, IconPlus } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -257,7 +257,7 @@ function ProfilePage () {
         <link rel='canonical' href={`https://mublin.com/${profile.name}`} />
       </Helmet>
       {(profile.id && !modalFollowersOpen && !modalFollowingOpen && !modalProfileFeedOpen && !modalStrengthsOpen) && 
-        <Box className='showOnlyInLargeScreen'>
+        <Box>
           <FloaterHeader profile={profile} scrollY={scroll.y} />
         </Box>
       }
@@ -309,7 +309,6 @@ function ProfilePage () {
               <Grid.Col span={{ base: 12, md: 12, lg: 4 }}>
                 <Card
                   radius='lg'
-                  // mt={12}
                   mb={10}
                   withBorder={isLargeScreen ? true : false}
                   px={16}
@@ -656,7 +655,7 @@ function ProfilePage () {
                       </Text>
                     </Flex>
                   }
-                  {profile.website && 
+                  {(profile.website && profile.website !== 'null') && 
                     <Anchor 
                       href={profile.website} 
                       target='_blank'
@@ -871,7 +870,7 @@ function ProfilePage () {
                     loggedUserId={loggedUserId}
                   />
                   {(!profile.requesting && profile.projects.total === 0) &&
-                    <Text size='sm' c='dimmed'>Nenhum projeto no momento</Text>
+                    <Text size='md' c='dimmed'>Nenhum projeto no momento</Text>
                   }
                 </Paper>
                 <Divider mb={18} className='showOnlyInMobile' />
@@ -892,7 +891,7 @@ function ProfilePage () {
                       <Button 
                         size='xs'
                         variant='light'
-                        color='primary'
+                        color='mublinColor'
                         onClick={() => setModalStrengthsOpen(true)}
                       >
                         Votar
@@ -952,7 +951,7 @@ function ProfilePage () {
                           )}
                         </Splide>
                       ) : (
-                        <Text size='sm' c='dimmed'>
+                        <Text size='md' c='dimmed'>
                           Nenhum ponto forte votado para {profile.name} até o momento
                         </Text>
                       )}
@@ -981,7 +980,7 @@ function ProfilePage () {
                           </Title>
                           <IconLockSquareRoundedFilled size={22} color="gray" /> 
                         </Group>
-                        <Text size='sm'>
+                        <Text size='md'>
                           Torne-se PRO para habilitar esta funcionalidade em seu perfil!
                         </Text>
                         <Anchor
@@ -993,7 +992,7 @@ function ProfilePage () {
                           href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
                           target='_blank'
                         >
-                          Assinar Mublin PRO
+                          Assinar Mublin PRO ➜
                         </Anchor>
                       </Paper>
                     }
@@ -1050,7 +1049,9 @@ function ProfilePage () {
                         )}
                       </Grid>
                     ) : (
-                      <Text size='sm' c='dimmed'>Nenhuma postagem até o momento</Text>
+                      <Text size='md' c='dimmed'>
+                        Nenhuma postagem até o momento
+                      </Text>
                     )
                   )}
                   {profile.recentActivity.total && 

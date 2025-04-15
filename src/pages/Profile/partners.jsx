@@ -66,7 +66,9 @@ function PartnersModule ({
               )}
             </Splide>
           ) : (
-            <Text size='xs'>Nenhum parceiro no momento</Text>
+            <Text size='sm' c='dimmed'>
+              Nenhum parceiro no momento
+            </Text>
           )}
         </>
       )}

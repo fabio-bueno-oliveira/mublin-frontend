@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { miscInfos } from '../../store/actions/misc'
-import { Flex, Group, Box, Badge, Text } from '@mantine/core'
+import { Flex, Group, Box, Badge, Table, Text } from '@mantine/core'
 import { IconCheck } from '@tabler/icons-react'
 
 function AvailabilityInfo (props) {
@@ -42,29 +42,39 @@ function AvailabilityInfo (props) {
       <Text size='0.83em' fw='500' mb={8} mt={14}>
         Vínculos de trabalho:
       </Text>
-      <Group gap={4}>
-        {profile.requesting ? (
-          <Text size='xs' mx={0}>Carregando...</Text>
-        ) : (
-          <Flex gap={3} mx={0} pt={1}>
-            {(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) && 
-              <Badge color='mublinColor' size='md' className='availability'>
-                Projetos Autorais
-              </Badge>
-            }
-            {(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) && 
-              <Flex direction='column'>
-                <Badge color='mublinColor' size='md' className='availability'>
-                  Contrato
-                </Badge>
-                <Text fz='10px'>
-                  {profile.gender === 'f' ? 'Sidewoman/Sub' : 'Sideman/Sub'}
-                </Text>
-              </Flex>
-            }
-          </Flex>
-        )}
-      </Group>
+      <Table withTableBorder horizontalSpacing={6} verticalSpacing={2}>
+        <Table.Tbody>
+          <Table.Tr>
+            <Table.Td w='5%'>
+              <IconCheck 
+                size={19} 
+                stroke={3} 
+                style={{marginTop:'5px'}} 
+                color={(profile.availabilityFocusId === 1 || profile.availabilityFocusId === 3) ? 'green' : 'lightgray'}
+              />
+            </Table.Td>
+            <Table.Td w='95%'>
+              <Text size='sm' fw={500}>Projetos Autorais</Text>
+            </Table.Td>
+          </Table.Tr>
+          <Table.Tr>
+            <Table.Td w='5%'>
+              <IconCheck 
+                size={19} 
+                stroke={3} 
+                style={{marginTop:'5px'}} 
+                color={(profile.availabilityFocusId === 2 || profile.availabilityFocusId === 3) ? 'green' : 'lightgray'}
+              />
+            </Table.Td>
+            <Table.Td w='95%'>
+              <Text size='sm' fw={500}>Contrato/Convite</Text>
+              <Text fz='10px'>
+                {profile.gender === 'f' ? 'Sidewoman ou Sub' : 'Sideman ou Sub'}
+              </Text>
+            </Table.Td>
+          </Table.Tr>
+        </Table.Tbody>
+      </Table>
       <Text size='0.83em' fw='500' mb={8} mt={14}>
         Tipos de trabalhos:
       </Text>
