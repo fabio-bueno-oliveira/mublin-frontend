@@ -4,7 +4,8 @@ import { useParams } from 'react-router'
 import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch } from '@mantine/core'
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch, em } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconZoom, IconChevronUp, IconDiamond, IconX, IconAlignJustified, IconUser } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -37,6 +38,8 @@ function GearProductPage () {
     }
   }, [product.availableColors.success])
 
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
+
   return (
     <>
       <Helmet>
@@ -52,7 +55,7 @@ function GearProductPage () {
         showBackIcon={true}
         showDotsMenu={false}
       />
-      <Container size='lg'>
+      <Container size='lg' mt={isMobile ? 14 : 0}>
         <Flex gap={12} align='center'>
           {product.requesting ? (
             <Skeleton height={75} width={75} radius='md' />

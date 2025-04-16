@@ -220,7 +220,7 @@ function StartSecondStep () {
             <Grid.Col span={6}>
               <TextInput
                 size='sm'
-                label={<Group gap={2}>Usuário no Instagram (opcional): {formValues.instagram && <IconCheck size={16} color='green' />}</Group>}
+                label={<Group gap={2}>Instagram (opcional): {formValues.instagram && <IconCheck size={16} color='green' />}</Group>}
                 leftSection={<IconAt size={16} />}
                 placeholder="john"
                 value={formValues.instagram ? formValues.instagram : undefined}

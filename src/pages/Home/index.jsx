@@ -8,9 +8,9 @@ import { eventsActions } from '../../store/actions/events'
 import { searchInfos } from '../../store/actions/search'
 import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, ScrollArea, Group, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Divider, Modal, em } from '@mantine/core'
+import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Modal, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconCalendarEventFilled, IconMapPinFilled, IconHexagonPlus } from '@tabler/icons-react'
+import { IconHexagonPlus } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
 import FeedCard from './FeedCard'
 import FeedCardLoading from './FeedCard/loading'
@@ -360,6 +360,46 @@ function Home () {
                 />
               )
             )}
+            <Card
+              radius='lg'
+              withBorder
+              px='15'
+              py='11'
+              mb={24}
+              className='mublinModule'
+            >
+              <Text ta='center' size='sm' fw={550} c='dimmed'>
+                Chegamos ao fim do seu feed :)
+              </Text>
+              <Text ta='center' size='sm' c='dimmed'>
+                Algumas sugestões para você seguir:
+              </Text>
+              <Flex mt={6} direction='column' align='center'>
+                {search.requesting ? (
+                  <UserCardLoading 
+                    mt={14}
+                  />
+                ) : (
+                  search.suggestedFeaturedUsers.filter(u => u.id !== loggedUserId).map(user => (
+                    <UserCard 
+                      mt={14}
+                      key={user.id}
+                      size='md'
+                      boxSize={174}
+                      name={user.name}
+                      lastname={user.lastname}
+                      username={user.username}
+                      mainRole={user.role}
+                      picture={user.picture}
+                      verified={user.verified}
+                      legend={user.legend}
+                      city={user.city}
+                      region={user.region}
+                    />
+                  ))
+                )}
+              </Flex>
+            </Card>
           </Grid.Col>
           {isLargeScreen && 
             <Grid.Col span={3.3}>

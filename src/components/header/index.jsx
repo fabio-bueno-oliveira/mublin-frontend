@@ -511,7 +511,7 @@ function Header (props) {
       <Space 
         h={
             isMobile 
-              ? page === 'profile' ? 52 : 60
+              ? (page === 'profile' ? 52 : 60)
               : 86
           } 
       />

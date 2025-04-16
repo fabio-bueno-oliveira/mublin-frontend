@@ -37,10 +37,10 @@ function Header (props) {
           {page !== 'login' && 
             <Link to={{ pathname: '/login' }}>
               <Button
-                size='sm'
+                size='md'
                 radius='sm'
                 color='mublinColor'
-                variant='subtle'
+                variant='filled'
                 mr='xs'
               >
                 Entrar
@@ -50,7 +50,7 @@ function Header (props) {
           {page !== 'signup' &&
             <Link to={{ pathname: '/signup' }}>
               <Button
-                size='sm'
+                size='md'
                 radius='sm'
                 color='mublinColor'
                 variant='outline'

@@ -109,7 +109,7 @@ function LandingPage () {
           </Text>
         </Anchor>
       </Container>
-      <Marquee pauseOnHover={true}>
+      <Marquee>
         {featuredUsers?.map((user, key) =>
           <Flex 
             key={key} 
