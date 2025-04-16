@@ -62,10 +62,10 @@ function Projects (props) {
                 <Avatar
                   variant='filled'
                   radius='md'
-                  size='64px'
+                  size='80px'
                   color='violet'
                   name={'🎵'}
-                  src={project.picture ? project.picture : undefined}
+                  src={project.picture ? `https://ik.imagekit.io/mublin/projects/tr:h-160,w-160,c-maintain_ratio/${project.pictureFilename}` : 'https://placehold.co/80x80?text=Carregando...'}
                   component='a'
                   href={`/project/${project.username}`}
                 />
@@ -82,9 +82,8 @@ function Projects (props) {
                   </Box>
                   <Box w={107}>
                     <Text
-                      size='0.86rem'
+                      size='1rem'
                       fw='590'
-                      mb='3'
                       truncate='end'
                       title={project.name}
                       className='lhNormal'
@@ -92,10 +91,12 @@ function Projects (props) {
                       {project.name} {!!project.featured && <IconStarFilled style={{ width: '9px', height: '9px' }} color='gray' />}
                     </Text>
                   </Box>
-                  <Text size='10.5px' fw='420' truncate='end' c='dimmed'>
+                  <Text size='12px' fw='420' truncate='end'>
                     {project.workTitle}
                   </Text>
-                  <Text size='11px' fw='380' c='dimmed'>{project.type}</Text>
+                  <Text mt={4} size='11px' fw='380' c='dimmed'>
+                    {project.type}
+                  </Text>
                   {/* <Text size='12px'>{project.workTitle}</Text> */}
                   {project.endYear && 
                     <Text size='9px' mt={5} fw={300}>

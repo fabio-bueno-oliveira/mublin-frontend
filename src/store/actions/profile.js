@@ -13,6 +13,8 @@ export const profileInfos = {
     getProfilePosts: getProfilePosts,
     getProfileGear: getProfileGear,
     getProfileGearSetups: getProfileGearSetups,
+    getProfileGearSetup: getProfileGearSetup,
+    getProfileGearSetupItems: getProfileGearSetupItems,
     getProfilePartners: getProfilePartners,
     getProfileStrengths: getProfileStrengths,
     getProfileStrengthsTotalVotes: getProfileStrengthsTotalVotes,
@@ -197,6 +199,38 @@ function getProfileGearSetups(username) {
     function request(username) { return { type: profileTypes.GET_PROFILE_GEARSETUPS_REQUEST, username } }
     function success(list) { return { type: profileTypes.GET_PROFILE_GEARSETUPS_SUCCESS, list } }
     function failure(username, error) { return { type: profileTypes.GET_PROFILE_GEARSETUPS_FAILURE, username, error } }
+}
+
+function getProfileGearSetup(username, setupId) {
+    return dispatch => {
+        dispatch(request(username));
+  
+        profileService.getProfileGearSetup(username, setupId)
+            .then(
+                info => dispatch(success(info)),
+                error => dispatch(failure(username, error.toString()))
+            );
+    };
+  
+    function request(username) { return { type: profileTypes.GET_PROFILE_GEARSETUP_REQUEST, username } }
+    function success(info) { return { type: profileTypes.GET_PROFILE_GEARSETUP_SUCCESS, info } }
+    function failure(username, error) { return { type: profileTypes.GET_PROFILE_GEARSETUP_FAILURE, username, error } }
+}
+
+function getProfileGearSetupItems(username, setupId) {
+    return dispatch => {
+        dispatch(request(username));
+
+        profileService.getProfileGearSetupItems(username, setupId)
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(username, error.toString()))
+            );
+    };
+
+    function request(username) { return { type: profileTypes.GET_PROFILE_GEARSETUPITEMS_REQUEST, username } }
+    function success(list) { return { type: profileTypes.GET_PROFILE_GEARSETUPITEMS_SUCCESS, list } }
+    function failure(username, error) { return { type: profileTypes.GET_PROFILE_GEARSETUPITEMS_FAILURE, username, error } }
 }
 
 function getProfilePartners(username) {

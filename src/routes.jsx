@@ -36,6 +36,7 @@ import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
 import ProfileGear from './pages/Profile/Gear/gearExpanded';
 import ProfileGearItem from './pages/Profile/Gear/item';
+import ProfileGearSetup from './pages/Profile/Gear/gearSetup';
 import ProfileTimeline from './pages/Profile/Timeline';
 import GearProductPage from './pages/Gear/product';
 import GearZoomPage from './pages/Gear/zoom';
@@ -119,6 +120,7 @@ function AppRoutes () {
           {/* User profile */}
           <Route exact path="/:username/gear" element={<ProfileGear />} />
           <Route exact path="/:username/gear/:itemId" element={<ProfileGearItem />} />
+          <Route exact path="/:username/setup/:setupId" element={<ProfileGearSetup />} />
           <Route exact path="/:username/timeline" element={<ProfileTimeline/>} />
           {/* Misc */}
           <Route exact path="/menu" element={<MenuMobilePage />} />

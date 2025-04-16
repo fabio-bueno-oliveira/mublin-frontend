@@ -26,6 +26,8 @@ export const profileService = {
     getProfilePosts,
     getProfileGear,
     getProfileGearSetups,
+    getProfileGearSetup,
+    getProfileGearSetupItems,
     getProfilePartners,
     getProfileAvailabilityItems,
     getProfileStrengths,
@@ -122,6 +124,22 @@ async function getProfileGearSetups(username) {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/profile/${username}/gearSetups`, requestOptions).then(handleResponse);
+}
+
+async function getProfileGearSetup(username, setupId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/profile/${username}/gearSetup/${setupId}`, requestOptions).then(handleResponse);
+}
+
+async function getProfileGearSetupItems(username, setupId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/profile/${username}/${setupId}/gearSetupProducts`, requestOptions).then(handleResponse);
 }
 
 async function getProfilePartners(username) {

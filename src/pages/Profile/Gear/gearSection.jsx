@@ -249,8 +249,8 @@ function GearSection ({ loggedUserId, username }) {
             )}
           </>
         )}
-        {profile.gearSetups.total && 
-          <Box mt={40}>
+        {profile.gearSetups.total > 0 && 
+          <Box mt={isMobile ? 14 : 40}>
             <Title fz='0.9rem' fw='640' mb={12}>
               Setups de {profile.name} {profile.lastname} {!!profile.gear.total && `(${profile.gearSetups.total})`}
             </Title>
@@ -258,7 +258,7 @@ function GearSection ({ loggedUserId, username }) {
                 options={{
                   drag: 'free',
                   snap: false,
-                  perPage: isMobile ? 2 : 6,
+                  perPage: isMobile ? 4 : 6,
                   autoWidth: false,
                   arrows: false,
                   gap: '22px',
@@ -269,7 +269,10 @@ function GearSection ({ loggedUserId, username }) {
                 {profile.gearSetups.setups.map(setup =>
                   <SplideSlide key={setup.id}>
                     <Flex direction='column' gap={2}>
-                      <Center>
+                      <Center
+                        component='a'
+                        href={`/${username}/setup/${setup.id}`}
+                      >
                         <Image
                           src={'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+setup.image}
                           h={60}

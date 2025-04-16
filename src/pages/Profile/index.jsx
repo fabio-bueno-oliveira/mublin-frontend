@@ -264,7 +264,6 @@ function ProfilePage () {
       <Header
         page='profile'
         reloadUserInfo
-        hasBottomSpace
         username={username}
         profileId={profile.id}
         showBackIcon={true}
@@ -272,6 +271,7 @@ function ProfilePage () {
       {profile.requesting && 
         <Container 
           size='lg' 
+          mt={isMobile ? 14 : 0}
           mb={isMobile ? 82 : 30}
           className='profilePage'
         >
@@ -543,7 +543,8 @@ function ProfilePage () {
                       color='lime' 
                       size={18} 
                       withBorder 
-                      disabled={!profile.openToWork}
+                      // disabled={!profile.openToWork}
+                      disabled
                     >
                       <Avatar
                         size='xl'

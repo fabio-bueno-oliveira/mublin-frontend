@@ -61,11 +61,11 @@ function PublicProfilePage () {
             justify='flex-start'
             align='center'
           >
-            <Skeleton height={100} width={100} radius='xl' />
+            <Skeleton height={100} width={100} radius='lg' />
             <Box>
-              <Skeleton height={18} width={260} radius='xl' />
-              <Skeleton height={18} width={270} mt={6} radius='xl' />
-              <Skeleton height={18} width={280} mt={6} radius='xl' />
+              <Skeleton height={18} width={180} radius='xl' />
+              <Skeleton height={14} width={155} mt={6} radius='xl' />
+              <Skeleton height={12} width={165} mt={6} radius='xl' />
             </Box>
           </Flex>
         }
@@ -160,9 +160,8 @@ function PublicProfilePage () {
             {gearTotal > 0 &&
               <Flex gap={8} justify='flex-start' align='center' mt={14}>
                 {gear.slice(0, 2).map(item =>
-                  <Flex direction='column'>
+                  <Flex direction='column' key={item.productId}>
                     <Image
-                      key={item.productId}
                       src={`https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/${item.pictureFilename}`}
                       h={60}
                       mah={60}
@@ -173,12 +172,14 @@ function PublicProfilePage () {
                       withBorder
                       title={`${item.brandName} ${item.productName}`}
                     />
-                    <Text ta='center' size='11px' fw={550}>
+                    <Text ta='center' size='11px' mb={4} fw={550}>
                       {item.brandName}
                     </Text>
-                    <Text ta='center' size='10px' fw={450}>
-                      {item.productName}
-                    </Text>
+                    <Box w={90}>
+                      <Text ta='center' size='10px' fw={450}>
+                        {item.productName}
+                      </Text>
+                    </Box>
                   </Flex>
                 )}
                 <Card 

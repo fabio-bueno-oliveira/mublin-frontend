@@ -80,6 +80,7 @@ const initialState = {
         name: '',
         username: '',
         picture: '',
+        pictureFilename: '',
         endYear: '',
         featured: '',
         type: '',
@@ -250,6 +251,40 @@ const initialState = {
       { 
         id: '',
         name: ''
+      }
+    ]
+  },
+  gearSetup: {
+    id: '',
+    name: '',
+    image: '',
+    description: '',
+    created: ''
+  },
+  gearSetupItems: {
+    total: 0,
+    success: true,
+    items: [
+      { 
+        id: '',
+        name: '',
+        picture: '',
+        selectedColorPicture: '',
+        rare: '',
+        brandId: '',
+        brandSlug: '',
+        brandLogo: '',
+        brandName: '',
+        forSale: '',
+        price: '',
+        productComments: '',
+        colorName: '',
+        colorRgb: '',
+        colorSample: '',
+        orderShow: '',
+        itemSetupComments: '',
+        tuning: '',
+        name_ptbr: ''
       }
     ]
   },
@@ -535,18 +570,62 @@ export function profile(state = initialState, action) {
       return {
         ...state,
         gearSetups: initialState.gearSetups,
-        requesting: true
+        requesting: true,
+        error: ""
       };
     case profileTypes.GET_PROFILE_GEARSETUPS_SUCCESS:
       return {
         ...state,
         gearSetups: action.list,
         requesting: false,
+        error: ""
       };
     case profileTypes.GET_PROFILE_GEARSETUPS_FAILURE:
       return {
         ...state,
         gearSetups: initialState.gearSetups,
+        requesting: false,
+        error: "A solicitação falhou"
+      };
+    // GEAR SETUP INFO
+    case profileTypes.GET_PROFILE_GEARSETUP_REQUEST:
+      return {
+        ...state,
+        gearSetup: initialState.gearSetup,
+        requesting: true,
+        error: ""
+      };
+    case profileTypes.GET_PROFILE_GEARSETUP_SUCCESS:
+      return {
+        ...state,
+        requesting: false,
+        gearSetup: action.info,
+        error: ""
+      };
+    case profileTypes.GET_PROFILE_GEARSETUP_FAILURE:
+      return {
+        ...state,
+        gearSetup: initialState.gearSetup,
+        requesting: false,
+        error: "A solicitação falhou"
+      };
+    // GEAR SETUP ITEMS
+    case profileTypes.GET_PROFILE_GEARSETUPITEMS_REQUEST:
+      return {
+        ...state,
+        gearSetupItems: initialState.gearSetupItems,
+        requesting: true
+      };
+    case profileTypes.GET_PROFILE_GEARSETUPITEMS_SUCCESS:
+      return {
+        ...state,
+        gearSetupItems: action.list,
+        requesting: false,
+      };
+    case profileTypes.GET_PROFILE_GEARSETUPITEMS_FAILURE:
+      return {
+        ...state,
+        gearSetupItems: initialState.gearSetupItems,
         requesting: false,
         error: "A solicitação falhou"
     };
