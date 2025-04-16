@@ -281,155 +281,201 @@ function SettingsMyGearPage () {
                 <Loader color='mublinColor' />
               </Center>
             ) : (
-              <Card 
-                shadow='sm' 
-                p={14} 
-                withBorder 
-                mb={20} 
-                display='block' 
-                className='mublinModule'
-              >
-                <Grid>
-                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }} className='showOnlyInLargeScreen'>
-                    <Title order={4} className='showOnlyInLargeScreen'>
-                      Gerenciar meu equipamento
-                    </Title>
-                    <Text size='sm' c='dimmed' mb={14}>
-                      Adicionar, remover ou editar itens
-                    </Text>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
-                    {user.plan === 'Pro' ? (
-                      <Button
-                        leftSection={<IconPlus size={14} />}
-                        color='mublinColor'
-                        size='md'
-                        fullWidth={isMobile ? true : false}
-                        disabled={!isLoaded}
-                        // onClick={() => setModalAddNewProductOpen(true)}
-                        component='a'
-                        href='/new/gear'
-                      >
-                        Adicionar novo item
-                      </Button>
-                    ) : (
-                      <Button
-                        size='md'
-                        disabled
-                        leftSection={<IconPlus size={14} />}
-                        fullWidth={isMobile ? true : false}
-                      >
-                        Adicionar novo item
-                      </Button>
-                    )}
-                  </Grid.Col>
-                </Grid>
-                {(user.success && user.plan !== 'Pro') && 
-                  <Group gap={6}>
-                    <IconLockSquareRoundedFilled size={28} />
-                    <Flex direction='column' gap={3}>
-                      <Text size='sm' className='lhNormal'>
-                        Apenas usuários PRO podem adicionar e exibir equipamentos no perfil.
+              <>
+                <Card 
+                  shadow={false}
+                  p={14} 
+                  withBorder 
+                  mb={10} 
+                  display='block' 
+                  className='mublinModule'
+                >
+                  <Grid>
+                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }} className='showOnlyInLargeScreen'>
+                      <Title order={4} className='showOnlyInLargeScreen'>
+                        Meus Setups
+                      </Title>
+                      <Text size='sm' c='dimmed' mb={14}>
+                        Grupos de equipamentos utilizados em apresentações
                       </Text>
-                      <Anchor
-                        fw='550'
-                        fz='sm'
-                        href='/settings/plan'
-                        underline='never'
-                      >
-                        Clique aqui para assinar o Mublin PRO!
-                      </Anchor>
-                    </Flex>
-                  </Group>
-                }
-                <Divider my={12} />
-                {gear.length === 0 &&
-                  <Text mb={14} size='xs'>
-                    Nenhum equipamento adicionado no momento
-                  </Text>
-                }
-                <Grid mt={6}>
-                  {gear.map((item, key) => (
-                    <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>
-                      <Paper
-                        radius='md'
-                        withBorder
-                        px='16'
-                        pt='14'
-                        pb='7'
-                        mb='4'
-                        className='mublinModule'
-                      >
-                        <Center mb='md'>
-                          <Image
-                            radius='md'
-                            h={100}
-                            w={100}
-                            src={item.picture ? item.picture : undefined}
-                            className='point'
-                            onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
-                          />
-                        </Center>
-                        <Box>
-                          <Text size='xs' c='dimmed' ta='center' truncate="end">
-                            {item.category} • {item.brandName}
-                          </Text>
-                          <Text size='sm' mb='1' ta='center' truncate="end">
-                            {item.productName}
-                          </Text>
-                          <Divider my={8} />
-                          <Switch
-                            mt={6}
-                            checked={item.featured}
-                            color="mublinColor"
-                            label="Em destaque"
-                            readOnly
-                            size='xs'
-                          />
-                          <Switch
-                            mt={6}
-                            checked={item.currentlyUsing}
-                            color="mublinColor"
-                            label="Em uso atualmente"
-                            readOnly
-                            size='xs'
-                          />
-                          <Switch
-                            mt={6}
-                            checked={item.forSale}
-                            color="mublinColor"
-                            label={!!item.forSale ? 'À venda ('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')' : 'À venda'}
-                            readOnly
-                            size='xs'
-                          />
-                          <Divider my={8} />
-                        </Box> 
-                        <Flex mt='10' gap={8} justify='space-between'>
-                          <Button 
-                            size='sm'
-                            color='mublinColor'
-                            fullWidth
-                            fw='440'
-                            onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
-                          >
-                            Editar
-                          </Button>
-                          <Button 
-                            size='sm'
-                            color='primary'
-                            variant='outline'
-                            fullWidth
-                            fw='440'
-                            onClick={() => openModalConfirmation(item.id, item.brandName ,item.productName)}
-                          >
-                            Remover
-                          </Button>
-                        </Flex>
-                      </Paper>
                     </Grid.Col>
-                  ))}
-                </Grid>
-              </Card>
+                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
+                      {user.plan === 'Pro' ? (
+                        <Button
+                          leftSection={<IconPlus size={14} />}
+                          color='mublinColor'
+                          size='sm'
+                          fullWidth={isMobile ? true : false}
+                          disabled={!isLoaded}
+                          // onClick={() => setModalAddNewProductOpen(true)}
+                          component='a'
+                          href='/new/gear'
+                        >
+                          Adicionar novo item
+                        </Button>
+                      ) : (
+                        <Button
+                          size='md'
+                          disabled
+                          leftSection={<IconPlus size={14} />}
+                          fullWidth={isMobile ? true : false}
+                        >
+                          Adicionar novo item
+                        </Button>
+                      )}
+                    </Grid.Col>
+                  </Grid>
+                </Card>
+                <Card 
+                  shadow='sm' 
+                  p={14} 
+                  withBorder 
+                  mb={20} 
+                  display='block' 
+                  className='mublinModule'
+                >
+                  <Grid>
+                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }} className='showOnlyInLargeScreen'>
+                      <Title order={4} className='showOnlyInLargeScreen'>
+                        Gerenciar meu equipamento
+                      </Title>
+                      <Text size='sm' c='dimmed' mb={14}>
+                        Adicionar, remover ou editar itens
+                      </Text>
+                    </Grid.Col>
+                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
+                      {user.plan === 'Pro' ? (
+                        <Button
+                          leftSection={<IconPlus size={14} />}
+                          color='mublinColor'
+                          size='sm'
+                          fullWidth={isMobile ? true : false}
+                          disabled={!isLoaded}
+                          // onClick={() => setModalAddNewProductOpen(true)}
+                          component='a'
+                          href='/new/gear'
+                        >
+                          Adicionar novo item
+                        </Button>
+                      ) : (
+                        <Button
+                          size='md'
+                          disabled
+                          leftSection={<IconPlus size={14} />}
+                          fullWidth={isMobile ? true : false}
+                        >
+                          Adicionar novo item
+                        </Button>
+                      )}
+                    </Grid.Col>
+                  </Grid>
+                  {(user.success && user.plan !== 'Pro') && 
+                    <Group gap={6}>
+                      <IconLockSquareRoundedFilled size={28} />
+                      <Flex direction='column' gap={3}>
+                        <Text size='sm' className='lhNormal'>
+                          Apenas usuários PRO podem adicionar e exibir equipamentos no perfil.
+                        </Text>
+                        <Anchor
+                          fw='550'
+                          fz='sm'
+                          href='/settings/plan'
+                          underline='never'
+                        >
+                          Clique aqui para assinar o Mublin PRO!
+                        </Anchor>
+                      </Flex>
+                    </Group>
+                  }
+                  <Divider my={12} />
+                  {gear.length === 0 &&
+                    <Text mb={14} size='xs'>
+                      Nenhum equipamento adicionado no momento
+                    </Text>
+                  }
+                  <Grid mt={6}>
+                    {gear.map((item, key) => (
+                      <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>
+                        <Paper
+                          radius='md'
+                          withBorder
+                          px='16'
+                          pt='14'
+                          pb='7'
+                          mb='4'
+                          className='mublinModule'
+                        >
+                          <Center mb='md'>
+                            <Image
+                              radius='md'
+                              h={100}
+                              w={100}
+                              src={item.picture ? item.picture : undefined}
+                              className='point'
+                              onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
+                            />
+                          </Center>
+                          <Box>
+                            <Text size='xs' c='dimmed' ta='center' truncate="end">
+                              {item.category} • {item.brandName}
+                            </Text>
+                            <Text size='sm' mb='1' ta='center' truncate="end">
+                              {item.productName}
+                            </Text>
+                            <Divider my={8} />
+                            <Switch
+                              mt={6}
+                              checked={item.featured}
+                              color="mublinColor"
+                              label="Em destaque"
+                              readOnly
+                              size='xs'
+                            />
+                            <Switch
+                              mt={6}
+                              checked={item.currentlyUsing}
+                              color="mublinColor"
+                              label="Em uso atualmente"
+                              readOnly
+                              size='xs'
+                            />
+                            <Switch
+                              mt={6}
+                              checked={item.forSale}
+                              color="mublinColor"
+                              label={!!item.forSale ? 'À venda ('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')' : 'À venda'}
+                              readOnly
+                              size='xs'
+                            />
+                            <Divider my={8} />
+                          </Box> 
+                          <Flex mt='10' gap={8} justify='space-between'>
+                            <Button 
+                              size='sm'
+                              color='mublinColor'
+                              fullWidth
+                              fw='440'
+                              onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
+                            >
+                              Editar
+                            </Button>
+                            <Button 
+                              size='sm'
+                              color='primary'
+                              variant='outline'
+                              fullWidth
+                              fw='440'
+                              onClick={() => openModalConfirmation(item.id, item.brandName ,item.productName)}
+                            >
+                              Remover
+                            </Button>
+                          </Flex>
+                        </Paper>
+                      </Grid.Col>
+                    ))}
+                  </Grid>
+                </Card>
+              </>
             )}
           </Grid.Col>
         </Grid>

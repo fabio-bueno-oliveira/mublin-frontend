@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
-import { Skeleton, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, Anchor, Spoiler } from '@mantine/core'
+import { Skeleton, Container, Flex, Box, Center, Avatar, Title, Text, Card, Image, Badge, Tooltip, Anchor } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import Header from '../../../components/header'
@@ -13,6 +13,8 @@ import GearExpandedLoading from './gearExpandedLoading'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import linkifyStr from "linkify-string"
 import parse from 'html-react-parser'
+import { formatDistance } from 'date-fns'
+import pt from 'date-fns/locale/pt-BR'
 import '../styles.scss'
 
 function GearSetup () {
@@ -94,8 +96,11 @@ function GearSetup () {
               <Text size='md' className='lhNormal'>
                 Setup <Text span fw={550}>{profile.gearSetup.name}</Text> ({profile.gearSetupItems.total} itens)
               </Text>
-              <Text size='sm' c='dimmed' className='lhNormal'>
+              <Text size='sm' className='lhNormal'>
                 {profile.gearSetup.description}
+              </Text>
+              <Text size='xs' c='dimmed'>
+                criado há {formatDistance(new Date(profile.gearSetup.created * 1000), new Date(), {locale:pt})}
               </Text>
             </Box>
           </Flex>
@@ -136,9 +141,18 @@ function GearSetup () {
                             />
                           </Anchor>
                         </Center>
-                        <Center>
+                        <Center
+                          component='a'
+                          href={`/gear/product/${product.id}`}
+                        >
                           <Image
-                            src={product.picture ? 'https://ik.imagekit.io/mublin/products/tr:h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.picture : undefined}
+                            src={
+                              product.selectedColorPicture ? (
+                                product.selectedColorPicture ? 'https://ik.imagekit.io/mublin/products/tr:h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.selectedColorPicture : undefined
+                              ) : (
+                                product.picture ? 'https://ik.imagekit.io/mublin/products/tr:h-240,cm-pad_resize,bg-FFFFFF,fo-x/'+product.picture : undefined
+                              )
+                            }
                             h={120}
                             mah={120}
                             w='auto'
@@ -157,8 +171,8 @@ function GearSetup () {
                         </Text>
                         <Text
                           ta='center'
-                          size='md'
-                          fw={550}
+                          size='sm'
+                          fw={580}
                         >
                           {product.name}
                         </Text>
@@ -171,6 +185,15 @@ function GearSetup () {
                             Afinação: {product.tuning}
                           </Text>
                         }
+                        {!!product.colorName && 
+                          <Text
+                            size='xs'
+                            c='dimmed'
+                            ta='center'
+                          >
+                            {product.colorName}
+                          </Text>
+                        }
                         {!!product.forSale && 
                           <Flex direction='column' align='center' gap={4} mt={4}>
                             <Badge size='xs' color='dark'>À venda</Badge>
@@ -180,29 +203,6 @@ function GearSetup () {
                               </Text>
                             }
                           </Flex>
-                        }
-                        {product.productComments && 
-                          <>
-                            <Flex mt={8} align='center' gap={4}>
-                              <Avatar 
-                                size='xs' 
-                                src={profile.picture ? profile.picture : undefined} 
-                                component='a'
-                                href={`/${username}`}
-                                className='point'
-                                alt={profile.name}
-                                title={username}
-                              />
-                              <Text size='xs' fw={550}>
-                                Sobre o produto:
-                              </Text>
-                            </Flex>
-                            <Card mt={6} p={6} withBorder className='mublinModule gearDetailCard'>
-                              <Text size='xs' style={{whiteSpace:'pre-wrap'}}>
-                                {parse(linkifyStr(product.productComments, {target: '_blank'}))}
-                              </Text>
-                            </Card>
-                          </>
                         }
                         {product.itemSetupComments && 
                           <>
@@ -216,13 +216,36 @@ function GearSetup () {
                                 alt={profile.name}
                                 title={username}
                               />
-                              <Text size='xs' fw={550}>
+                              <Text size='xs' fw={500}>
                                 Sobre o uso neste setup:
                               </Text>
                             </Flex>
-                            <Card mt={6} p={6} withBorder className='mublinModule gearDetailCard'>
+                            <Card radius='md' mt={6} p={6} withBorder>
                               <Text size='xs' style={{whiteSpace:'pre-wrap'}}>
                                 {parse(linkifyStr(product.itemSetupComments, {target: '_blank'}))}
+                              </Text>
+                            </Card>
+                          </>
+                        }
+                        {product.productComments && 
+                          <>
+                            <Flex mt={8} align='center' gap={4}>
+                              <Avatar 
+                                size='xs' 
+                                src={profile.picture ? profile.picture : undefined} 
+                                component='a'
+                                href={`/${username}`}
+                                className='point'
+                                alt={profile.name}
+                                title={username}
+                              />
+                              <Text size='xs' fw={500}>
+                                Sobre o produto:
+                              </Text>
+                            </Flex>
+                            <Card radius='md' mt={6} p={6} withBorder>
+                              <Text size='xs' style={{whiteSpace:'pre-wrap'}}>
+                                {parse(linkifyStr(product.productComments, {target: '_blank'}))}
                               </Text>
                             </Card>
                           </>

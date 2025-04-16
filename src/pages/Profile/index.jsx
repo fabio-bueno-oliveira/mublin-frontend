@@ -8,7 +8,7 @@ import { followInfos } from '../../store/actions/follow'
 import { useDispatch, useSelector } from 'react-redux'
 import { useMantineColorScheme, Container, Flex, Grid, Space, Paper, Card, Center, Stack, Title, Text, Anchor, Group, Avatar, Box, Skeleton, SimpleGrid, Modal, Button, Radio, Badge, ScrollArea, Alert, Image, Tooltip, Divider, ActionIcon, Accordion, Indicator, Table, rem, em } from '@mantine/core'
 import { useWindowScroll } from '@mantine/hooks'
-import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconMapPin, IconEye, IconPiano, IconTimeline, IconPencilPlus, IconPlus } from '@tabler/icons-react'
+import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled,IconBrandInstagram, IconBrandTiktok, IconChevronDown, IconLink, IconLockSquareRoundedFilled, IconMapPin, IconEye, IconPiano, IconTimeline, IconPencilPlus, IconPlus, IconCaretDownFilled, IconCaretDown } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FloaterHeader from './floaterHeader'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -777,9 +777,12 @@ function ProfilePage () {
                 }
                 {profile.availabilityId && 
                   <>
-                    <Title fz='1.03rem' fw='640' mt={18}>
-                      Preferências musicais e de trabalho
-                    </Title>
+                    <Group gap={4} align='center' mt={18}>
+                      <Title fz='1.03rem' fw='640'>
+                        Preferências musicais e de trabalho
+                      </Title>
+                      <IconCaretDown size={14} />
+                    </Group>
                     <AvailabilityInfo mt={12} mb={18} screen='largeScreen' />
                     {isMobile &&
                       <Accordion chevronPosition='left'>

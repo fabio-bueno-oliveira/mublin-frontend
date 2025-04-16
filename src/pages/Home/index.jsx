@@ -8,9 +8,9 @@ import { eventsActions } from '../../store/actions/events'
 import { searchInfos } from '../../store/actions/search'
 import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
-import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Modal, em } from '@mantine/core'
+import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Modal, rem, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconHexagonPlus } from '@tabler/icons-react'
+import { IconHexagonPlus, IconRosetteDiscountCheckFilled, IconClock } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
 import FeedCard from './FeedCard'
 import FeedCardLoading from './FeedCard/loading'
@@ -363,6 +363,55 @@ function Home () {
             <Card
               radius='lg'
               withBorder
+              px='0'
+              py='11'
+              mb='10'
+              className='mublinModule'
+            >
+              <Flex px='15' gap={5} align='center' >
+                <Avatar
+                  size='45px'
+                  radius='xl'
+                  src='https://ik.imagekit.io/mublin/logos/logo-mublin-circle-black_hQJn5eU5ChR.png?updatedAt=1599447448001'
+                  alt='Mublin'
+                />
+                <Box style={{flexGrow:'1'}}>
+                  <Flex gap={2} align='baseline' mb={2}>
+                    <Text size='0.96rem' fw={570}>
+                      Mublin
+                    </Text>
+                    <IconRosetteDiscountCheckFilled color='#000000' style={{ width: rem(15), height: rem(15), marginLeft: '1px' }} title='Verificado' />
+                  </Flex>
+                  <Text size='0.75rem' c='dimmed' fw='420'>
+                    A rede dos músicos
+                  </Text>
+                  <Flex gap={2} align='flex-end'>
+                    <Text
+                      c='dimmed'
+                      size='0.74rem'
+                      fw='420'
+                      mt='4'
+                      className='fitContent'
+                    >
+                      há 1 mês
+                    </Text>
+                    <IconClock color='gray' style={{width:'12px',height:'12px'}}/>
+                  </Flex>
+                </Box>
+              </Flex>
+              <Text
+                fz={isMobile ? '0.9em' : '0.85em'}
+                mt='12px'
+                px={15}
+                className='lhNormal'
+                style={{whiteSpace:'pre-wrap'}}
+              >
+                Hey artista! Bem-vindo ao Mublin, <nobr>a rede dos músicos</nobr>! Nascemos com o intuito de se tornar um hub de soluções para quem lida com música no dia a dia. Esperamos que você crie ótimas conexões e consiga gigs sensacionais! 
+              </Text>
+            </Card>
+            <Card
+              radius='lg'
+              withBorder
               px='15'
               py='11'
               mb={24}
@@ -371,34 +420,36 @@ function Home () {
               <Text ta='center' size='sm' fw={550} c='dimmed'>
                 Chegamos ao fim do seu feed :)
               </Text>
-              <Text ta='center' size='sm' c='dimmed'>
-                Algumas sugestões para você seguir:
-              </Text>
-              <Flex mt={6} direction='column' align='center'>
-                {search.requesting ? (
-                  <UserCardLoading 
-                    mt={14}
-                  />
-                ) : (
-                  search.suggestedFeaturedUsers.filter(u => u.id !== loggedUserId).map(user => (
-                    <UserCard 
+              <Box hiddenFrom="sm">
+                <Text ta='center' size='sm' c='dimmed'>
+                  Algumas sugestões para você seguir:
+                </Text>
+                <Flex mt={6} direction='column' align='center'>
+                  {search.requesting ? (
+                    <UserCardLoading 
                       mt={14}
-                      key={user.id}
-                      size='md'
-                      boxSize={174}
-                      name={user.name}
-                      lastname={user.lastname}
-                      username={user.username}
-                      mainRole={user.role}
-                      picture={user.picture}
-                      verified={user.verified}
-                      legend={user.legend}
-                      city={user.city}
-                      region={user.region}
                     />
-                  ))
-                )}
-              </Flex>
+                  ) : (
+                    search.suggestedFeaturedUsers.filter(u => u.id !== loggedUserId).map(user => (
+                      <UserCard 
+                        mt={14}
+                        key={user.id}
+                        size='md'
+                        boxSize={220}
+                        name={user.name}
+                        lastname={user.lastname}
+                        username={user.username}
+                        mainRole={user.role}
+                        picture={user.picture}
+                        verified={user.verified}
+                        legend={user.legend}
+                        city={user.city}
+                        region={user.region}
+                      />
+                    ))
+                  )}
+                </Flex>
+              </Box>
             </Card>
           </Grid.Col>
           {isLargeScreen && 

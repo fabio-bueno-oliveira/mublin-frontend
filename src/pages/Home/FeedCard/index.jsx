@@ -475,61 +475,6 @@ function FeedCard ({ item, compact }) {
           }
         </Flex>
       </Card>
-
-      <Card
-        radius='lg'
-        withBorder
-        px='0'
-        py='11'
-        mb='10'
-        className='mublinModule'
-      >
-        <Text ml='15' fz='0.74rem' c='dimmed' mb={10}>Publicação sugerida</Text>
-        <Flex px='15' gap={5} align='center' >
-          <Avatar
-            size='45px'
-            radius='xl'
-            src='https://ik.imagekit.io/mublin/logos/logo-mublin-circle-black_hQJn5eU5ChR.png?updatedAt=1599447448001'
-            alt='Mublin'
-          />
-          <Box style={{flexGrow:'1'}}>
-            <Flex gap={2} align='baseline' mb={2}>
-              <Text size='0.96rem' fw={570}>
-                Mublin
-              </Text>
-              <IconRosetteDiscountCheckFilled color='#000000' style={iconVerifiedStyle} title='Verificado' />
-            </Flex>
-            <Text size='0.75rem' c='dimmed' fw='420'>
-              A rede dos músicos
-            </Text>
-            <Flex gap={2} align='flex-end'>
-              <Text
-                c='dimmed'
-                size='0.74rem'
-                fw='420'
-                mt='4'
-                className='fitContent'
-              >
-                há 1 mês
-              </Text>
-              <IconClock color='gray' style={{width:'12px',height:'12px'}}/>
-            </Flex>
-          </Box>
-        </Flex>
-        {(item.categoryId === 8) && 
-          <>
-            <Text
-              fz={isMobile ? '0.9em' : '0.85em'}
-              mt='12px'
-              px={15}
-              className='lhNormal'
-              style={{whiteSpace:'pre-wrap'}}
-            >
-              Hey artista! Estamos inaugurando o Mublin - <nobr>a rede dos músicos</nobr>. Seja bem-vindo! O Mublin foi desenvolvido com o intuito de ser um hub de soluções para quem trabalha com música ou mesmo têm a música como um hobby levado a sério. Esperamos que você crie ótimas conexões e consiga gigs sensacionais! 
-            </Text>
-          </>
-        }
-      </Card>
       <Modal
         centered
         opened={showModalLikes}

@@ -38,19 +38,19 @@ function Header (props) {
             <Link to={{ pathname: '/login' }}>
               <Button
                 size='md'
-                radius='sm'
+                radius='md'
                 color='mublinColor'
-                variant='filled'
+                variant='outline'
                 mr='xs'
               >
                 Entrar
               </Button>
             </Link>
           }
-          {page !== 'signup' &&
+          {/* {page !== 'signup' &&
             <Link to={{ pathname: '/signup' }}>
               <Button
-                size='md'
+                size='sm'
                 radius='sm'
                 color='mublinColor'
                 variant='outline'
@@ -58,7 +58,7 @@ function Header (props) {
                 Cadastro
               </Button>
             </Link>
-          }
+          } */}
         </div>
       </Flex>
     </Container>

@@ -174,7 +174,7 @@ function PricingPublicPage () {
                   component='a'
                   href='/signup'
                 >
-                  Quero ser Mublin PRO
+                  Quero ser PRO
                 </Button>
               </Flex>
             </Card>
