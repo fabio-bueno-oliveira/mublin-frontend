@@ -406,7 +406,7 @@ function Home () {
                 className='lhNormal'
                 style={{whiteSpace:'pre-wrap'}}
               >
-                Hey artista! Bem-vindo ao Mublin, <nobr>a rede dos músicos</nobr>! Nascemos com o intuito de se tornar um hub de soluções para quem lida com música no dia a dia. Esperamos que você crie ótimas conexões e consiga gigs sensacionais! 
+                Hey artista! Bem-vindo ao Mublin, <nobr>a rede dos músicos</nobr>! Nascemos com o intuito de sermos um hub de soluções para quem faz música no dia a dia. Esperamos que você crie conexões e consiga ótimas gigs! 
               </Text>
             </Card>
             <Card

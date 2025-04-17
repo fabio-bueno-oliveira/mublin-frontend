@@ -19,6 +19,8 @@ export const userService = {
     getUserGenresInfoById,
     getUserRolesInfoById,
     getUserGearInfoById,
+    getUserGearSetups,
+    getUserGearSetupItems,
     getUserPartners,
     getUserAvailabilityItemsById,
     getUserProjects,
@@ -63,6 +65,24 @@ async function getUserGearInfoById(id) {
     };
 
     return fetch(`${BASE_URL}/user/${id}/gear`, requestOptions).then(handleResponse);
+}
+
+async function getUserGearSetups() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${BASE_URL}/userInfo/gearSetups`, requestOptions).then(handleResponse);
+}
+
+async function getUserGearSetupItems(setupId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(`${BASE_URL}/userInfo/gearSetupItems/${setupId}`, requestOptions).then(handleResponse);
 }
 
 async function getUserPartners() {

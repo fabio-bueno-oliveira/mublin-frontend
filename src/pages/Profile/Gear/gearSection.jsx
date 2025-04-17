@@ -255,44 +255,44 @@ function GearSection ({ loggedUserId, username }) {
               Setups de {profile.name} {profile.lastname} {!!profile.gear.total && `(${profile.gearSetups.total})`}
             </Title>
             <Splide 
-                options={{
-                  drag: 'free',
-                  snap: false,
-                  perPage: isMobile ? 4 : 6,
-                  autoWidth: false,
-                  arrows: false,
-                  gap: '22px',
-                  dots: true,
-                  pagination: true,
-                }}
-              >
-                {profile.gearSetups.setups.map(setup =>
-                  <SplideSlide key={setup.id}>
-                    <Flex direction='column' gap={2}>
-                      <Center
-                        component='a'
-                        href={`/${username}/setup/${setup.id}`}
-                      >
-                        <Image
-                          src={'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+setup.image}
-                          h={60}
-                          mah={60}
-                          w='auto'
-                          fit='contain'
-                          radius='md'
-                          className='point'
-                        />
-                      </Center>
-                      <Text ta='center' fw={550} size='xs' className='lhNormal'>
-                        {setup.name}
-                      </Text>
-                      <Text ta='center' size='xs' className='lhNormal'>
-                        {setup.totalItems} itens
-                      </Text>
-                    </Flex>
-                  </SplideSlide>
-                )}
-              </Splide>
+              options={{
+                drag: 'free',
+                snap: false,
+                perPage: isMobile ? 4 : 6,
+                autoWidth: false,
+                arrows: false,
+                gap: '22px',
+                dots: true,
+                pagination: true,
+              }}
+            >
+              {profile.gearSetups.setups.map(setup =>
+                <SplideSlide key={setup.id}>
+                  <Flex direction='column' gap={2}>
+                    <Center
+                      component='a'
+                      href={`/${username}/setup/${setup.id}`}
+                    >
+                      <Image
+                        src={'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+setup.image}
+                        h={60}
+                        mah={60}
+                        w='auto'
+                        fit='contain'
+                        radius='md'
+                        className='point'
+                      />
+                    </Center>
+                    <Text ta='center' fw={550} size='xs' className='lhNormal'>
+                      {setup.name}
+                    </Text>
+                    <Text ta='center' size='xs' className='lhNormal'>
+                      {setup.totalItems} itens
+                    </Text>
+                  </Flex>
+                </SplideSlide>
+              )}
+            </Splide>
           </Box>
         }
       </Paper>

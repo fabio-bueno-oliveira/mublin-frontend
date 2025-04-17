@@ -60,6 +60,48 @@ const initialState = {
   ],
   gearLoaded: false,
   gearRequesting: false,
+  gearSetups: {
+    total: 0,
+    success: '',
+    result: [
+      {
+        id: '',
+        name: '',
+        image: '',
+        description: '',
+        totalItems: '',
+        created: '',
+      }
+    ]
+  },
+  gearSetupItemsRequesting: false,
+  gearSetupItems: {
+    total: 0,
+    success: true,
+    items: [
+      {
+        id: '',
+        name: '',
+        picture: '',
+        selectedColorPicture: '',
+        rare: '',
+        brandId: '',
+        brandSlug: '',
+        brandLogo: '',
+        brandName: '',
+        forSale: '',
+        price: '',
+        productComments: '',
+        colorName: '',
+        colorRgb: '',
+        colorSample: '',
+        orderShow: '',
+        itemSetupComments: '',
+        tuning: '',
+        name_ptbr: ''
+      }
+    ]
+  },
   partners: {
     total: 0,
     success: false,
@@ -240,6 +282,46 @@ export function user(state = initialState, action) {
         gearRequesting: false,
         gear: initialState.gear,
         error: "A solicitação da lista dos equipamentos falhou"
+      };
+    // get user´s gear setups
+    case userTypes.GET_USER_GEARSETUPS_REQUEST:
+      return {
+        ...state,
+        requesting: false,
+        gearSetups: initialState.gearSetups
+      };
+    case userTypes.GET_USER_GEARSETUPS_SUCCESS:
+      return {
+        ...state,
+        gearSetups: action.list,
+        requesting: false
+      };
+    case userTypes.GET_USER_GEARSETUPS_FAILURE:
+      return {
+        ...state,
+        requesting: false,
+        gearSetups: initialState.gearSetups,
+        error: "A solicitação da lista de setups falhou"
+      };
+    // get user´s gear setup items
+    case userTypes.GET_USER_GEARSETUPITEMS_REQUEST:
+      return {
+        ...state,
+        gearSetupItemsRequesting: true,
+        gearSetupItems: initialState.gearSetupItems
+      };
+    case userTypes.GET_USER_GEARSETUPITEMS_SUCCESS:
+      return {
+        ...state,
+        gearSetupItemsRequesting: false,
+        gearSetupItems: action.list,
+      };
+    case userTypes.GET_USER_GEARSETUPITEMS_FAILURE:
+      return {
+        ...state,
+        gearSetupItemsRequesting: false,
+        gearSetupItems: initialState.gearSetupItems,
+        error: "A solicitação da lista de itens do setup falhou"
       };
     // get user´s brand partners
     case userTypes.GET_USER_PARTNERS_REQUEST:

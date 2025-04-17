@@ -9,6 +9,8 @@ export const userActions = {
     getUserGenresInfoById: getUserGenresInfoById,
     getUserRolesInfoById: getUserRolesInfoById,
     getUserGearInfoById: getUserGearInfoById,
+    getUserGearSetups: getUserGearSetups,
+    getUserGearSetupItems: getUserGearSetupItems,
     getUserPartners: getUserPartners,
     getUserAvailabilityItemsById: getUserAvailabilityItemsById,
     getUserLastConnectedFriends: getUserLastConnectedFriends
@@ -77,6 +79,38 @@ function getUserGearInfoById(id) {
     function request(id) { return { type: userTypes.GET_USER_GEAR_REQUEST, id } }
     function success(list) { return { type: userTypes.GET_USER_GEAR_SUCCESS, list } }
     function failure(id, error) { return { type: userTypes.GET_USER_GEAR_FAILURE, id, error } }
+}
+
+function getUserGearSetups() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getUserGearSetups()
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userTypes.GET_USER_GEARSETUPS_REQUEST } }
+    function success(list) { return { type: userTypes.GET_USER_GEARSETUPS_SUCCESS, list } }
+    function failure(error) { return { type: userTypes.GET_USER_GEARSETUPS_FAILURE, error } }
+}
+
+function getUserGearSetupItems(setupId) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getUserGearSetupItems(setupId)
+            .then(
+                list => dispatch(success(list)),
+                error => dispatch(failure(error.toString()))
+            );
+    };
+
+    function request() { return { type: userTypes.GET_USER_GEARSETUPITEMS_REQUEST } }
+    function success(list) { return { type: userTypes.GET_USER_GEARSETUPITEMS_SUCCESS, list } }
+    function failure(error) { return { type: userTypes.GET_USER_GEARSETUPITEMS_FAILURE, error } }
 }
 
 function getUserPartners() {

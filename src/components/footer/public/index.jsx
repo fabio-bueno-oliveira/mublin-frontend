@@ -47,7 +47,7 @@ function Footer () {
       {/* <Text mt={10} c='dimmed' size='xs'>
         help@mublin.com
       </Text> */}
-      <Text mt={10} ml={4} c='dimmed' size='xs' opacity={0.4}>
+      <Text mt={10} ml={4} c='dimmed' size='xs' opacity={0.9}>
         © 2025 Mublin
       </Text>
     </Box>

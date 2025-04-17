@@ -111,7 +111,7 @@ function NewPost () {
   }
 
   const handleRemoveImageFromServer = async (fileId) => {
-    const url = 'https://api.imagekit.io/v1/files/'+fileId;
+    const url = `https://api.imagekit.io/v1/files/${fileId}`;
     const options = {
       method: 'DELETE',
       headers: {

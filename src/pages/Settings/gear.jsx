@@ -3,14 +3,18 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Switch, Radio, Text, Title, Avatar, Anchor, Checkbox, TextInput, Textarea, em, Divider } from '@mantine/core'
-import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled } from '@tabler/icons-react'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, TextInput, Textarea, Input, em, Divider } from '@mantine/core'
+import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
+import { isNotEmpty, useForm } from '@mantine/form'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
 import { CurrencyInput } from 'react-currency-mask'
 import { truncateString } from '../../utils/formatter'
+import { IKUpload } from 'imagekitio-react'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css/skyblue'
 
 function SettingsMyGearPage () {
 
@@ -30,97 +34,22 @@ function SettingsMyGearPage () {
 
   useEffect(() => { 
     dispatch(userActions.getUserGearInfoById(loggedUserId))
+    dispatch(userActions.getUserGearSetups())
   }, [dispatch, loggedUserId])
 
+  const [isLoading, setIsLoading] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
-  const [brands, setBrands] = useState([])
   const [tuningTypes, setTuningTypes] = useState([])
-  const [categories, setCategories] = useState([])
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
 
   // Modal Add New Gear
-  const [modalAddNewProductOpen, setModalAddNewProductOpen] = useState(false)
-  const [brandSelected, setBrandSelected] = useState('')
-  const [categorySelected, setCategorySelected] = useState('')
   const [products, setProducts] = useState([])
   const [productSelected, setProductSelected] = useState('')
-  const [loadingAddNewProduct, setLoadingAddNewProduct] = useState(false)
-  const [shareNewProductOnFeed, setShareNewProductOnFeed] = useState(true)
   const productInfo = products.filter((product) => { return product.id === Number(productSelected)}) 
 
-  const selectBrand = (brandId) => {
-      setBrandSelected(brandId)
-      setCategories([])
-      setCategorySelected('')
-      setProducts([])
-      setProductSelected('')
-      getCategories(brandId)
-  }
-  const selectCategory = (categoryId) => {
-      setProductSelected('')
-      setCategorySelected(categoryId)
-      getProducts(brandSelected,categoryId)
-  }
-
-  const sendToFeed = (productId) => {
-    setTimeout(() => {
-      fetch('https://mublin.herokuapp.com/feed/newFeedPostGear', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify({id_item_fk: productId})
-      })
-    }, 300);
-  }
-
-  const addProductToMyGear = (productId, featured, for_sale, price, currently_using) => {
-    setLoadingAddNewProduct(true)
-    setTimeout(() => {
-      fetch('https://mublin.herokuapp.com/user/addGearItem', {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify({productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using})
-      }).then((response) => {
-        dispatch(userActions.getUserGearInfoById(loggedUserId))
-        setLoadingAddNewProduct(false)
-        setModalAddNewProductOpen(false)
-        setBrandSelected('')
-        setCategorySelected('')
-        setProductSelected('')
-        if (shareNewProductOnFeed) {
-          sendToFeed(productId)
-        }
-      }).catch(err => {
-        console.error(err)
-        alert("Ocorreu um erro ao adicionar o produto")
-        setLoadingAddNewProduct(false)
-      })
-    }, 300);
-  }
-
   useEffect(() => {
-    fetch("https://mublin.herokuapp.com/gear/brands")
-      .then(res => res.json())
-      .then(
-        (result) => {
-          setIsLoaded(true)
-          setBrands(result)
-        },
-        (error) => {
-          setIsLoaded(true)
-          console.error(error)
-        }
-      )
-
     fetch("https://mublin.herokuapp.com/gear/tuning")
       .then(res => res.json())
       .then(
@@ -132,38 +61,6 @@ function SettingsMyGearPage () {
         }
       )
   }, [])
-
-  const getCategories = (brandId) => {
-    setIsLoaded(false);
-    fetch("https://mublin.herokuapp.com/gear/brand/"+brandId+"/categories")
-      .then(res => res.json())
-      .then(
-      (result) => {
-        setIsLoaded(true);
-        setCategories(result);
-      },
-      (error) => {
-        setIsLoaded(true);
-        console.error(error);
-      }
-    )
-  }
-
-  const getProducts = (brandId, categoryId) => {
-    setIsLoaded(false);
-    fetch("https://mublin.herokuapp.com/gear/brand/"+brandId+"/"+categoryId+"/products")
-      .then(res => res.json())
-      .then(
-        (result) => {
-            setIsLoaded(true);
-            setProducts(result);
-        },
-        (error) => {
-            setIsLoaded(true);
-            console.error(error);
-        }
-      )
-  }
 
   // Edit item
   const [modalEditItemOpen, setModalEditItemOpen] = useState(false)
@@ -221,9 +118,10 @@ function SettingsMyGearPage () {
     }, 300);
   }
 
+  const [loadingRemove, setLoadingRemove] = useState(false)
+
   // Remove product from list
   const [modalConfirmDelete, setModalConfirmDelete] = useState(false)
-  const [loadingRemove, setLoadingRemove] = useState(false)
   const [itemToRemove, setItemToRemove] = useState({id: '', name: ''})
   const openModalConfirmation = (productId, brandName, productName) => {
     setModalConfirmDelete(true)
@@ -248,6 +146,124 @@ function SettingsMyGearPage () {
       setLoadingRemove(false)
       setModalConfirmDelete(false)
     })
+  }
+
+  // Modal Add New Setup
+  const [modalAddNewSetupOpen, setModalAddNewSetupOpen] = useState(false)
+  const [newSetup, setNewSetup] =  useState({name: '', description: '', image: ''})
+
+  // Upload setup image to ImageKit.io
+  const [fileId, setFileId] = useState('')
+  const [isUploading, setIsUploading] = useState('')
+  const onUploadStart = evt => {
+    console.log('Start uplading', evt)
+    setIsUploading(true)
+  }
+  const onUploadError = err => {
+    alert("Ocorreu um erro. Tente novamente em alguns minutos.")
+    setIsUploading(false)
+  }
+  const onUploadSuccess = res => {
+    let n = res.filePath.lastIndexOf('/')
+    let fileName = res.filePath.substring(n + 1)
+    setFileId(res.fileId)
+    setNewSetup({...newSetup, image: fileName})
+    setIsUploading(false)
+  }
+  const handleRemoveImageFromServer = async (fileId) => {
+    const url = `https://api.imagekit.io/v1/files/${fileId}`
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Basic ' + import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY
+      }
+    }
+
+    try {
+      await fetch(url, options);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  const removeImage = () => {
+    handleRemoveImageFromServer(fileId)
+    setNewSetup({...newSetup, image: ''})
+    document.querySelector('#image').value = null
+  }
+
+  const createNewSetup = () => {
+    setIsLoading(true)
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/user/createNewGearSetup', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ 
+          name: newSetup.name, description: newSetup.description, image: newSetup.image 
+        })
+      }).then((response) => {
+        dispatch(userActions.getUserGearSetups())
+        setIsLoading(false)
+        setModalAddNewSetupOpen(false)
+        setNewSetup({name: '', description: '', image: ''})
+      }).catch(err => {
+        console.error(err)
+        alert("Ocorreu um erro ao criar o setup")
+        setIsLoading(false)
+      })
+    }, 300);
+  }
+
+  // Remove a gear setup
+  const [modalConfirmDeleteSetup, setModalConfirmDeleteSetup] = useState(false)
+  const [setupToRemove, setSetupToRemove] = useState({id: '', name: ''})
+  const openModalConfirmationSetup = (setupId, setupName) => {
+    setModalConfirmDeleteSetup(true)
+    setSetupToRemove({id: setupId, name: setupName})
+  }
+  const deleteSetup = (setupId) => {
+    setLoadingRemove(true)
+    fetch('https://mublin.herokuapp.com/user/'+setupId+'/deleteGearSetup', {
+      method: 'delete',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    }).then((response) => {
+      dispatch(userActions.getUserGearSetups())
+      setLoadingRemove(false)
+      setModalConfirmDeleteSetup(false)
+    }).catch(err => {
+      console.error(err)
+      alert("Ocorreu um erro ao remover este setup. Tente novamente em instantes")
+      setLoadingRemove(false)
+      setModalConfirmDeleteSetup(false)
+    })
+  }
+
+  // Edit setup
+  const formUpdate = useForm({
+    mode: 'uncontrolled',
+    initialValues: {
+      name: '',
+      description: '',
+    },
+
+    validate: {
+      name: isNotEmpty('Insira um nome para o setup'),
+      description: isNotEmpty('Insira uma descrição curta'),
+    },
+  });
+  const [modalEditSetupOpen, setModalEditSetupOpen] = useState(false)
+  const openModalEditSetup = (id, name, description) => {
+    dispatch(userActions.getUserGearSetupItems(id))
+    formUpdate.setValues({ name: name, description: description });
+    setModalEditSetupOpen(true)
   }
 
   return (
@@ -291,27 +307,28 @@ function SettingsMyGearPage () {
                   className='mublinModule'
                 >
                   <Grid>
-                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }} className='showOnlyInLargeScreen'>
-                      <Title order={4} className='showOnlyInLargeScreen'>
-                        Meus Setups
-                      </Title>
-                      <Text size='sm' c='dimmed' mb={14}>
+                    <Grid.Col span={{ base: 12, md: 9, lg: 9 }}>
+                      <Group gap={4} align='center'>
+                        <IconRoute size={16} />
+                        <Title order={4}>
+                          Meus setups ({user.gearSetups.total})
+                        </Title>
+                      </Group>
+                      <Text size='sm' c='dimmed' mb={12}>
                         Grupos de equipamentos utilizados em apresentações
                       </Text>
                     </Grid.Col>
-                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
+                    <Grid.Col span={{ base: 12, md: 3, lg: 3 }} ta={isMobile ? 'left' : 'right'}>
                       {user.plan === 'Pro' ? (
                         <Button
                           leftSection={<IconPlus size={14} />}
                           color='mublinColor'
                           size='sm'
+                          variant='light'
                           fullWidth={isMobile ? true : false}
-                          disabled={!isLoaded}
-                          // onClick={() => setModalAddNewProductOpen(true)}
-                          component='a'
-                          href='/new/gear'
+                          onClick={() => setModalAddNewSetupOpen(true)}
                         >
-                          Adicionar novo item
+                          Criar novo setup
                         </Button>
                       ) : (
                         <Button
@@ -320,11 +337,67 @@ function SettingsMyGearPage () {
                           leftSection={<IconPlus size={14} />}
                           fullWidth={isMobile ? true : false}
                         >
-                          Adicionar novo item
+                          Criar novo setup
                         </Button>
                       )}
                     </Grid.Col>
                   </Grid>
+                  {user.gearSetups.total === 0 ? (
+                    <Text size='sm'>
+                      Nenhum setup cadastrado no momento
+                    </Text>
+                  ) : (
+                    <Splide 
+                      options={{
+                        drag: 'free',
+                        snap: false,
+                        perPage: isMobile ? 4 : 6,
+                        autoWidth: false,
+                        arrows: false,
+                        gap: '22px',
+                        dots: true,
+                        pagination: true,
+                      }}
+                    >
+                      {user.gearSetups.result.map(setup =>
+                        <SplideSlide key={setup.id}>
+                          <Flex direction='column' gap={2}>
+                            <Center>
+                              <Image
+                                src={'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+setup.image}
+                                h={60}
+                                mah={60}
+                                w='auto'
+                                fit='contain'
+                                radius='md'
+                                className='point'
+                              />
+                            </Center>
+                            <Text ta='center' fw={550} size='xs' className='lhNormal'>
+                              {setup.name}
+                            </Text>
+                            <Text ta='center' size='xs' className='lhNormal'>
+                              {setup.totalItems} itens
+                            </Text>
+                            <Center mt={5}>
+                              <ActionIcon.Group>
+                                <ActionIcon variant="default" size="md" aria-label="Editar"
+                                  onClick={() => openModalEditSetup(setup.id, setup.name, setup.description)}
+                                >
+                                  <IconPencil size={15} stroke={1.6} />
+                                </ActionIcon>
+                                <ActionIcon variant="default" size="md" aria-label="Deletar"
+                                  onClick={() => openModalConfirmationSetup(setup.id)}
+                                >
+                                  <IconTrash size={15} stroke={1.6} />
+                                </ActionIcon>
+                              </ActionIcon.Group>
+                            </Center>
+                          </Flex>
+                        </SplideSlide>
+                      )}
+                    </Splide>
+                  )}
                 </Card>
                 <Card 
                   shadow='sm' 
@@ -335,11 +408,14 @@ function SettingsMyGearPage () {
                   className='mublinModule'
                 >
                   <Grid>
-                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }} className='showOnlyInLargeScreen'>
-                      <Title order={4} className='showOnlyInLargeScreen'>
-                        Gerenciar meu equipamento
-                      </Title>
-                      <Text size='sm' c='dimmed' mb={14}>
+                    <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+                      <Group gap={4} align='center'>
+                        <IconPackages size={16} />
+                        <Title order={4}>
+                          Gerenciar meu equipamento ({user.gear.length})
+                        </Title>
+                      </Group>
+                      <Text size='sm' c='dimmed' mb={8}>
                         Adicionar, remover ou editar itens
                       </Text>
                     </Grid.Col>
@@ -348,10 +424,9 @@ function SettingsMyGearPage () {
                         <Button
                           leftSection={<IconPlus size={14} />}
                           color='mublinColor'
+                          variant='light'
                           size='sm'
                           fullWidth={isMobile ? true : false}
-                          disabled={!isLoaded}
-                          // onClick={() => setModalAddNewProductOpen(true)}
                           component='a'
                           href='/new/gear'
                         >
@@ -389,7 +464,7 @@ function SettingsMyGearPage () {
                   }
                   <Divider my={12} />
                   {gear.length === 0 &&
-                    <Text mb={14} size='xs'>
+                    <Text mb={14} size='sm'>
                       Nenhum equipamento adicionado no momento
                     </Text>
                   }
@@ -405,50 +480,58 @@ function SettingsMyGearPage () {
                           mb='4'
                           className='mublinModule'
                         >
-                          <Center mb='md'>
-                            <Image
-                              radius='md'
-                              h={100}
-                              w={100}
-                              src={item.picture ? item.picture : undefined}
-                              className='point'
-                              onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
-                            />
-                          </Center>
-                          <Box>
-                            <Text size='xs' c='dimmed' ta='center' truncate="end">
-                              {item.category} • {item.brandName}
-                            </Text>
-                            <Text size='sm' mb='1' ta='center' truncate="end">
-                              {item.productName}
-                            </Text>
-                            <Divider my={8} />
-                            <Switch
-                              mt={6}
-                              checked={item.featured}
-                              color="mublinColor"
-                              label="Em destaque"
-                              readOnly
-                              size='xs'
-                            />
-                            <Switch
-                              mt={6}
-                              checked={item.currentlyUsing}
-                              color="mublinColor"
-                              label="Em uso atualmente"
-                              readOnly
-                              size='xs'
-                            />
-                            <Switch
-                              mt={6}
-                              checked={item.forSale}
-                              color="mublinColor"
-                              label={!!item.forSale ? 'À venda ('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')' : 'À venda'}
-                              readOnly
-                              size='xs'
-                            />
-                            <Divider my={8} />
-                          </Box> 
+                          <Grid>
+                            <Grid.Col span={{ base: 4, md: 12, lg: 12 }}>
+                              <Center mb='md'>
+                                <Image
+                                  radius='md'
+                                  h={100}
+                                  w={100}
+                                  src={item.picture ? item.picture : undefined}
+                                  className='point'
+                                  onClick={() => openModalItemManagement(item.id, item.productId, item.featured, item.forSale, item.price, item.currentlyUsing, item.tuningId, item.ownerComments, item.macroCategory)}
+                                />
+                              </Center>
+                            </Grid.Col>
+                            <Grid.Col span={{ base: 8, md: 12, lg: 12 }}>
+                              <Box>
+                                <Text size='xs' c='dimmed' ta='center' truncate="end">
+                                  {item.category} • {item.brandName}
+                                </Text>
+                                <Text size='sm' mb='1' ta='center' truncate="end">
+                                  {item.productName}
+                                </Text>
+                                <Divider my={8} />
+                                <Group align='center' gap={3}>
+                                  {item.featured ? (
+                                    <IconSquareCheckFilled size={15} color='green' />
+                                  ) : (
+                                    <IconSquare size={15} color='gray' />
+                                  )}
+                                  <Text fz='xs'>Em destaque</Text>
+                                </Group>
+                                <Group mt={6} align='center' gap={3}>
+                                  {item.currentlyUsing ? (
+                                    <IconSquareCheckFilled size={15} color='green' />
+                                  ) : (
+                                    <IconSquare size={15} color='gray' />
+                                  )}
+                                  <Text fz='xs'>Em uso atualmente</Text>
+                                </Group>
+                                <Group mt={6} align='center' gap={3}>
+                                  {item.forSale ? (
+                                    <IconSquareCheckFilled size={15} color='green' />
+                                  ) : (
+                                    <IconSquare size={15} color='gray' />
+                                  )}
+                                  <Text fz='xs'>
+                                    {!!item.forSale ? 'À venda ('+item.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})+')' : 'À venda'}
+                                  </Text>
+                                </Group>
+                                <Divider my={8} />
+                              </Box> 
+                            </Grid.Col>
+                          </Grid>
                           <Flex mt='10' gap={8} justify='space-between'>
                             <Button 
                               size='sm'
@@ -499,102 +582,8 @@ function SettingsMyGearPage () {
           </Button>
         </Group>
       </Modal>
-      <Modal 
-        title='Adicionar novo equipamento'
-        opened={modalAddNewProductOpen} 
-        onClose={() => setModalAddNewProductOpen(false)} 
-        size='sm'
-      >
-        <NativeSelect
-          withAsterisk
-          label='Marca'
-          onChange={(e) => selectBrand(e.target.options[e.target.selectedIndex].value)}
-          value={brandSelected}
-          defaultValue={brandSelected}
-        >
-          {!brandSelected &&
-            <option>Selecione</option>
-          } 
-          {brands.map((brand,key) =>
-            <option key={key} value={brand.id}>{brand.name}</option>
-          )}
-        </NativeSelect>
-        <NativeSelect
-          withAsterisk
-          label='Categoria'
-          onChange={(e) => selectCategory(e.target.options[e.target.selectedIndex].value)}
-          value={categorySelected}
-          defaultValue={categorySelected}
-        >
-          {!isLoaded && 
-            <option>Carregando...</option>
-          }
-          {!categorySelected && 
-            <option>{!brandSelected ? 'Selecione primeiro a marca' : 'Selecione a categoria'}</option>
-          } 
-          {categories.map((category,key) =>
-            <option key={key} value={category.id}>{category.name}</option>
-          )}
-        </NativeSelect>
-        <NativeSelect
-          withAsterisk
-          label='Produto'
-          onChange={(e) => setProductSelected(e.target.options[e.target.selectedIndex].value)}
-          value={productSelected}
-        >
-          {!isLoaded && 
-            <option>Carregando...</option>
-          }
-          {!productSelected && 
-            <option value=''>{!categorySelected ? 'Selecione primeiro a categoria' : 'Selecione o produto'}</option>
-          }
-          {products.map((product,key) =>
-            <option key={key} value={product.id} disabled={!!gear.filter((x) => { return x.productId === Number(product.id)}).length}>{product.name} {product.colorName && product.colorName} {!!gear.filter((x) => { return x.productId === Number(product.id)}).length && '(adicionado)'}</option>
-          )}
-        </NativeSelect>
-        {loggedUserId === 1 &&
-          <Anchor href='/settings/submit-product' underline='hover'>
-            <Text mt='xs' c='primary' ta='right' size='xs'>
-              Não encontrei meu produto na lista
-            </Text>
-          </Anchor>
-        }
-        {(productSelected && productInfo) ? (
-          <Center p={12}>
-            <Image 
-              radius='md'
-              h={150}
-              w={150}
-              src={productInfo[0].picture} 
-            />
-          </Center>
-        ) : (
-          <Center mt={14} mb={20}>
-            <Card w='120' p={4}>
-              <Text size='sm' ta='center' c='dimmed'>
-                Selecione o produto para carregar a imagem
-              </Text>
-            </Card>
-          </Center>
-        )}
-        <Flex justify='flex-end'>
-          <Checkbox
-            label='Compartilhar no feed'
-            checked={shareNewProductOnFeed ? true : false}
-            onChange={() => setShareNewProductOnFeed(value => !value)}
-          />
-        </Flex>
-        <Group justify='flex-end' gap={7} mt={16}>
-          <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalAddNewProductOpen(false)}>
-            Cancelar
-          </Button>
-          <Button color='mublinColor' size='sm' onClick={() => addProductToMyGear(productSelected, 0, 0, null, 1)} disabled={!productSelected ? true : false} loading={loadingAddNewProduct}>
-            Salvar
-          </Button>
-        </Group>
-      </Modal>
       <Modal
-        title='Editar detalhes do meu item'
+        title='Editar detalhes do item'
         centered
         fullScreen={isMobile}
         opened={modalEditItemOpen}
@@ -652,7 +641,7 @@ function SettingsMyGearPage () {
                 defaultValue={productDetail.tuning}
                 onChange={(e) => setProductDetail({...productDetail, tuning: e.target.options[e.target.selectedIndex].value})}
               >
-                {!brandSelected &&
+                {!productDetail.tuning &&
                   <option>Não informado</option>
                 } 
                 {tuningTypes.map((type) =>
@@ -728,6 +717,173 @@ function SettingsMyGearPage () {
             </Box>
           )}
         </>
+      </Modal>
+      <Modal
+        withCloseButton={false}
+        opened={modalConfirmDeleteSetup}
+        onClose={() => setModalConfirmDeleteSetup(false)}
+        size='xs'
+        centered
+      >
+        <Text>
+          Tem certeza que deseja remover o setup <strong>{setupToRemove.name}</strong> do seu perfil?
+        </Text>
+        <Group justify='flex-end' gap={7} mt={20}>
+          <Button variant='outline' color='gray' size='sm' onClick={() => setModalConfirmDeleteSetup(false)}>
+            Cancelar
+          </Button>
+          <Button color='red' size='sm' onClick={() => deleteSetup(setupToRemove.id)} loading={loadingRemove}>
+            Remover
+          </Button>
+        </Group>
+      </Modal>
+      <Modal
+        title='Criar novo setup'
+        opened={modalAddNewSetupOpen} 
+        onClose={() => setModalAddNewSetupOpen(false)} 
+        size='sm'
+      >
+        <TextInput
+          required
+          label="Nome do setup"
+          placeholder="Ex: Acústico"
+          maxLength={15}
+          value={newSetup.name}
+          onChange={(event) => setNewSetup({...newSetup, name: event.currentTarget.value})}
+          mb={8}
+        />
+        <TextInput
+          required
+          label="Descrição"
+          placeholder="Ex: Para apresentações com violão e voz..."
+          maxLength={45}
+          value={newSetup.description}
+          onChange={(event) => setNewSetup({...newSetup, description: event.currentTarget.value})}
+          mb={8}
+        />
+        <Input.Label required>Imagem</Input.Label>
+        <Input.Description>
+          Escolha uma foto que representa seu setup
+        </Input.Description>
+        {newSetup.image && 
+          <Flex align='flex-end' gap={3} my={8}>
+            <Image 
+              src={'https://ik.imagekit.io/mublin/tr:h-80,cm-pad_resize,bg-FFFFFF/users/gear-setups/'+newSetup.image} 
+              h={80}
+              mah={80}
+              w='auto'
+              fit='contain'
+              radius='md'
+            />
+            <Button 
+              size='xs' 
+              color='red' 
+              onClick={() => removeImage()}
+              leftSection={<IconTrash size={14} />}
+            >
+              Remover
+            </Button>
+          </Flex>
+        }
+        {isUploading ? ( 
+          <Center>
+            <Loader color='mublinColor' mt={6} />
+          </Center>
+        ) : (
+          <Box mt={6} className={newSetup.image ? 'd-none' : ''}>
+            <IKUpload 
+              id='image'
+              style={{fontSize:'13px'}}
+              fileName={loggedUserId+'_setup'}
+              folder='/users/gear-setups/'
+              tags={['setup']}
+              useUniqueFileName={true}
+              isPrivateFile= {false}
+              onUploadStart={onUploadStart}
+              onError={onUploadError}
+              onSuccess={onUploadSuccess}
+              accept='image/x-png,image/gif,image/jpeg'
+              transformation={{
+                pre: "h-300,w-300"
+              }}
+            />
+          </Box>
+        )}
+        <Group justify='flex-end' gap={7} mt={16}>
+          <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalAddNewSetupOpen(false)}>
+            Cancelar
+          </Button>
+          <Button color='mublinColor' size='sm' onClick={() => createNewSetup()} disabled={!newSetup.name || !newSetup.description || !newSetup.image} loading={isLoading}>
+            Salvar
+          </Button>
+        </Group>
+      </Modal>
+      <Modal
+        title='Editar setup'
+        centered
+        fullScreen={isMobile}
+        opened={modalEditSetupOpen}
+        onClose={() => setModalEditSetupOpen(false)}
+        size='sm'
+      >
+        <form onSubmit={formUpdate.onSubmit((values) => console.log(values))}>
+          <TextInput
+            withAsterisk
+            label="Nome do setup"
+            placeholder="Ex: Acústico"
+            maxLength={15}
+            key={formUpdate.key('name')}
+            {...formUpdate.getInputProps('name')}
+          />
+          <TextInput
+            withAsterisk
+            label="Descrição"
+            placeholder="Ex: Para apresentações com violão e voz..."
+            maxLength={45}
+            key={formUpdate.key('description')}
+            {...formUpdate.getInputProps('description')}
+          />
+          <Group justify='flex-end' gap={7} mt={16}>
+            <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditSetupOpen(false)}>
+              Cancelar
+            </Button>
+            <Button type="submit" color='mublinColor' size='sm'>
+              Salvar
+            </Button>
+          </Group>
+        </form>
+        <Text mt={10} size='sm' fw={500}>
+          Editar itens deste setup
+        </Text>
+        <Box my={14}>
+          {user.gearSetupItemsRequesting ? ( 
+            <Loader color='mublinColor' type='dots' />
+          ) : (
+            <>
+              {user.gearSetupItems.items.map(item =>
+                <Group gap={4}>
+                  <Image
+                    src={
+                      item.selectedColorPicture ? (
+                        item.selectedColorPicture ? 'https://ik.imagekit.io/mublin/products/tr:h-100,cm-pad_resize,bg-FFFFFF,fo-x/'+item.selectedColorPicture : undefined
+                      ) : (
+                        item.picture ? 'https://ik.imagekit.io/mublin/products/tr:h-100,cm-pad_resize,bg-FFFFFF,fo-x/'+item.picture : undefined
+                      )
+                    }
+                    h={50}
+                    mah={50}
+                    w='auto'
+                    fit='contain'
+                    mb={10}
+                    radius='md'
+                    className='point'
+                  />
+                  <Text>{item.name}</Text>
+                </Group>
+              )}
+            </>
+          )}
+        </Box>
       </Modal>
       {!modalEditItemOpen && 
         <FooterMenuMobile />
