@@ -7,7 +7,7 @@ import { feedActions } from '../../../store/actions/feed'
 import { Modal, Menu, Card, Skeleton, Flex, Box, Group, Anchor, Text, Badge, Image, Avatar, ScrollArea, TextInput, Button, Spoiler, Indicator, rem, em } from '@mantine/core'
 import { notifications } from '@mantine/notifications'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle, IconPiano } from '@tabler/icons-react'
+import { IconHeart, IconHeartFilled, IconRosetteDiscountCheckFilled, IconShieldCheckFilled, IconDotsVertical, IconTrash, IconUserCircle, IconBrandYoutubeFilled, IconClock, IconSend, IconMessageCircle, IconPiano, IconPlus } from '@tabler/icons-react'
 import { formatDistance, format } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import linkifyStr from "linkify-string"
@@ -177,6 +177,27 @@ function FeedCard ({ item, compact }) {
   //   return console.log(id)
   // }
 
+  const [followedUsers, setFollowedUsers] = useState([888])
+
+  const followUser = (profileId) => {
+    setFollowedUsers([profileId])
+
+    fetch('https://mublin.herokuapp.com/profile/'+profileId+'/follow', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+      .then((response) => {
+        // setIsLoading(false);
+      }).catch(err => {
+        console.error(err);
+        alert("Ocorreu um erro ao tentar seguir o usuário");
+      })
+  }
+
   return (
     <>
       <Card
@@ -186,7 +207,7 @@ function FeedCard ({ item, compact }) {
         px='0'
         py='11'
         mb='10'
-        className='mublinModule'
+        className='mublinModule feedCard'
         width={compact ? {height:'50%'} : undefined}
         style={compact ? {height:'100%'} : undefined}
       >
@@ -214,12 +235,14 @@ function FeedCard ({ item, compact }) {
             </Indicator>
           </Link>
           <Box style={{flexGrow:'1'}}>
-            <Anchor
-              style={{lineHeight:'normal',width:'fit-content',display:'block'}}
-              href={`/${item.relatedUserUsername}`}
-            >
-              <Flex gap={2} align='baseline' mb={2}>
-                <Text size='0.96rem' fw={570}>
+              <Flex gap={2} align='center' mb={2}>
+                <Text 
+                  size='0.96rem' 
+                  fw={570}
+                  style={{lineHeight:'normal',width:'fit-content',display:'block'}}
+                  component='a'
+                  href={`/${item.relatedUserUsername}`}
+                >
                   {item.relatedUserName} {item.relatedUserLastname}
                 </Text>
                 {!!item.relatedUserVerified &&
@@ -231,8 +254,19 @@ function FeedCard ({ item, compact }) {
                 {item.relatedUserPlan === 'Pro' && 
                   <IconPiano className='iconMublinPiano small point' title='Mublin PRO' />
                 }
+                {(!item.followingId && item.relatedUserUsername !== loggedUsername && !followedUsers.find((x) => x === item.relatedUserId)) && 
+                  <Button
+                    color='primary'
+                    variant='light'
+                    size='compact-xs'
+                    ml='3'
+                    leftSection={<IconPlus size={12} />}
+                    onClick={() => followUser(item.relatedUserId)}
+                  >
+                    Seguir
+                  </Button>
+                }
               </Flex>
-            </Anchor>
             <Text size='0.75rem' c='dimmed' fw='420'>
               {item.relatedUserMainRole} {item.relatedUserCity && `• ${item.relatedUserCity}`}{item.relatedUserRegion && `, ${item.relatedUserRegion}`}
             </Text>
@@ -281,7 +315,7 @@ function FeedCard ({ item, compact }) {
             </Menu>
           }
         </Flex>
-        {(item.action && item.categoryId !== 8) && 
+        {(item.action && item.categoryId !== 8 && item.categoryId !== 10) && 
           <Text px='15' fz='0.85em' className='lhNormal' mt='7px'>
             {item.relatedUserName} {item.relatedUserLastname} {item.action} {item.category === 'project' ? item.relatedProjectName : (<a href='/'>{item.relatedEventTitle}</a>)}
           </Text>
@@ -391,6 +425,9 @@ function FeedCard ({ item, compact }) {
                     src={item.relatedGearPicture}
                   />
                   <Box>
+                    <Text fz='0.7rem' fw={500} mb={4}>
+                      {item.relatedUserName} {item.relatedUserLastname} {item.action} {item.category === 'project' ? item.relatedProjectName : (<a href='/'>{item.relatedEventTitle}</a>)}
+                    </Text>
                     <Text size='0.8rem' fw='500'>{item.relatedGearName}</Text>
                     <Text size='xs' c='dimmed'>{item.relatedGearBrand}</Text>
                     {!!item.relatedGearForSale && 

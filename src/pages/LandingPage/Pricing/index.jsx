@@ -28,7 +28,7 @@ function PricingPublicPage () {
       }
       <Box bg='black' c='white' py='14'>
         <Text ta='center' size={isMobile ? '12px' : '15px'} fw='330' c='dimmed'>
-          🚀 40% off no lançamento: Mublin PRO por 3 meses
+          🚀 40% off no lançamento: Mublin PRO
         </Text>
       </Box>
       <Header />

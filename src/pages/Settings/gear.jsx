@@ -3,8 +3,8 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, TextInput, Textarea, Input, em, Divider } from '@mantine/core'
-import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled } from '@tabler/icons-react'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, NumberInput, TextInput, Textarea, Input, em, Divider, ScrollArea } from '@mantine/core'
+import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled, IconDeviceFloppy, IconSend, IconThumbUp } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import { isNotEmpty, useForm } from '@mantine/form'
 import Header from '../../components/header'
@@ -265,6 +265,42 @@ function SettingsMyGearPage () {
     formUpdate.setValues({ name: name, description: description });
     setModalEditSetupOpen(true)
   }
+  const [setupItemEditing, setSetupItemEditing] = useState({
+    id: '', comments: '', orderShow: ''
+  })
+  const closeModalEditSetup = () => {
+    setModalEditSetupOpen(false)
+    setSetupItemEditing({
+      id: '', comments: '', orderShow: ''
+    })
+  }
+  const updateSetupItem = (id, comments, orderShow) => {
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/userInfo/updateSetupGearItem', {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({itemId: id, comments: comments, orderShow: orderShow})
+      }).then((response) => {
+        dispatch(userActions.getUserGearSetupItems(itemId));
+        setIsLoading(false)
+        setSetupItemEditing({
+          id: '', comments: '', orderShow: ''
+        })
+      }).catch(err => {
+        console.error(err)
+        alert('Ocorreu um erro ao editar os dados do item do setup. Tente novamente em instantes.')
+        setIsLoading(false)
+      })
+    }, 300);
+  }
+  const handleUpdateSetupItem = () => {
+    setIsLoading(true)
+    updateSetupItem(setupItemEditing.id, setupItemEditing.comments, setupItemEditing.orderShow)
+  }
 
   return (
     <>
@@ -371,6 +407,7 @@ function SettingsMyGearPage () {
                                 fit='contain'
                                 radius='md'
                                 className='point'
+                                onClick={() => openModalEditSetup(setup.id, setup.name, setup.description)}
                               />
                             </Center>
                             <Text ta='center' fw={550} size='xs' className='lhNormal'>
@@ -381,15 +418,15 @@ function SettingsMyGearPage () {
                             </Text>
                             <Center mt={5}>
                               <ActionIcon.Group>
-                                <ActionIcon variant="default" size="md" aria-label="Editar"
+                                <ActionIcon variant="default" size="lg" aria-label="Editar"
                                   onClick={() => openModalEditSetup(setup.id, setup.name, setup.description)}
                                 >
-                                  <IconPencil size={15} stroke={1.6} />
+                                  <IconPencil size={15} stroke={1.8} />
                                 </ActionIcon>
-                                <ActionIcon variant="default" size="md" aria-label="Deletar"
+                                <ActionIcon variant="default" size="lg" aria-label="Deletar"
                                   onClick={() => openModalConfirmationSetup(setup.id)}
                                 >
-                                  <IconTrash size={15} stroke={1.6} />
+                                  <IconTrash size={15} stroke={1.8} />
                                 </ActionIcon>
                               </ActionIcon.Group>
                             </Center>
@@ -821,10 +858,9 @@ function SettingsMyGearPage () {
       <Modal
         title='Editar setup'
         centered
-        fullScreen={isMobile}
         opened={modalEditSetupOpen}
-        onClose={() => setModalEditSetupOpen(false)}
-        size='sm'
+        onClose={() => closeModalEditSetup()}
+        size='md'
       >
         <form onSubmit={formUpdate.onSubmit((values) => console.log(values))}>
           <TextInput
@@ -844,7 +880,7 @@ function SettingsMyGearPage () {
             {...formUpdate.getInputProps('description')}
           />
           <Group justify='flex-end' gap={7} mt={16}>
-            <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditSetupOpen(false)}>
+            <Button variant='outline' color='mublinColor' size='sm' onClick={() => closeModalEditSetup()}>
               Cancelar
             </Button>
             <Button type="submit" color='mublinColor' size='sm'>
@@ -853,39 +889,104 @@ function SettingsMyGearPage () {
           </Group>
         </form>
         <Text mt={10} size='sm' fw={500}>
-          Editar itens deste setup
+          Editar itens deste setup ({user.gearSetupItems.total} itens)
         </Text>
         <Box my={14}>
           {user.gearSetupItemsRequesting ? ( 
-            <Loader color='mublinColor' type='dots' />
+            <Center>
+              <Loader color='mublinColor' type='bars' size='sm' />
+            </Center>
           ) : (
-            <>
-              {user.gearSetupItems.items.map(item =>
-                <Group gap={4}>
-                  <Image
-                    src={
-                      item.selectedColorPicture ? (
-                        item.selectedColorPicture ? 'https://ik.imagekit.io/mublin/products/tr:h-100,cm-pad_resize,bg-FFFFFF,fo-x/'+item.selectedColorPicture : undefined
-                      ) : (
-                        item.picture ? 'https://ik.imagekit.io/mublin/products/tr:h-100,cm-pad_resize,bg-FFFFFF,fo-x/'+item.picture : undefined
-                      )
-                    }
-                    h={50}
-                    mah={50}
-                    w='auto'
-                    fit='contain'
-                    mb={10}
-                    radius='md'
-                    className='point'
-                  />
-                  <Text>{item.name}</Text>
-                </Group>
-              )}
-            </>
+            <ScrollArea type="always" w='100%' h={200} scrollbars="y" offsetScrollbars>
+              <Flex gap={6} direction='column'>
+                {user.gearSetupItems.items.map(item =>
+                  <Card withBorder radius='md' p={6} key={item.id}>
+                    <Flex justify='space-between'>
+                      <Group gap={4}>
+                        <Anchor
+                          href={`/gear/product/${item.id}`}
+                        >
+                          <Image
+                            src={
+                              item.selectedColorPicture ? (
+                                item.selectedColorPicture ? 'https://ik.imagekit.io/mublin/products/tr:h-100,cm-pad_resize,bg-FFFFFF,fo-x/'+item.selectedColorPicture : undefined
+                              ) : (
+                                item.picture ? 'https://ik.imagekit.io/mublin/products/tr:h-100,cm-pad_resize,bg-FFFFFF,fo-x/'+item.picture : undefined
+                              )
+                            }
+                            h={50}
+                            mah={50}
+                            w='auto'
+                            fit='contain'
+                            radius='md'
+                            className='point'
+                          />
+                        </Anchor>
+                        <Flex gap={3} direction='column' justify='flex-start'>
+                          <Text fz='10px' className='lh1'>{item.brandName}</Text>
+                          <Text fz='sm' className='lh1' fw='500'>{item.name}</Text>
+                          <Text fz='11px' className='lh1' c='dimmed'>{item.category}</Text>
+                        </Flex>
+                      </Group>
+                      <Box>
+                        <ActionIcon.Group>
+                          {setupItemEditing.id !== item.setupItemId && 
+                            <ActionIcon 
+                              variant='default' size='lg' aria-label='Editar'
+                              onClick={() => setSetupItemEditing({
+                                id: item.setupItemId,
+                                comments: item.itemSetupComments,
+                                orderShow: item.orderShow
+                              })}
+                            >
+                              <IconPencil size={15} stroke={1.8} />
+                            </ActionIcon>
+                          }
+                          {setupItemEditing.id === item.setupItemId && 
+                            <ActionIcon 
+                              variant='default' size='lg' aria-label='Salvar' title='Salvar'
+                              onClick={() => handleUpdateSetupItem()}
+                              loading={isLoading}
+                            >
+                              <Text size='xs' fw={550}>OK</Text>
+                            </ActionIcon>
+                          }
+                          <ActionIcon variant='default' size='lg' aria-label='Deletar' title='Remover do setup'
+                            // onClick={() => openModalConfirmationSetup(setup.id)}
+                          >
+                            <IconTrash size={15} stroke={1.8} color='red' />
+                          </ActionIcon>
+                        </ActionIcon.Group>
+                      </Box>
+                    </Flex>
+                    <Group mt={4}>
+                      <TextInput
+                        size='sm'
+                        label='Ordem'
+                        defaultValue={item.orderShow}
+                        onChange={(e) => setSetupItemEditing({...setupItemEditing, orderShow: e.currentTarget.value})}
+                        min={1}
+                        w={80}
+                        disabled={setupItemEditing.id !== item.setupItemId}
+                      />
+                      <TextInput
+                        size='sm'
+                        label='Papel do item no setup'
+                        defaultValue={item.itemSetupComments}
+                        onChange={(e) => setSetupItemEditing({...setupItemEditing, comments: e.currentTarget.value})}
+                        maxLength={300}
+                        w={164}
+                        disabled={setupItemEditing.id !== item.setupItemId}
+                      />
+                    </Group>
+                  </Card>
+                )}
+              </Flex>
+            </ScrollArea>
           )}
         </Box>
       </Modal>
-      {!modalEditItemOpen && 
+      {(!modalEditItemOpen && !modalEditSetupOpen) && 
         <FooterMenuMobile />
       }
     </>

@@ -80,6 +80,7 @@ const initialState = {
     success: true,
     items: [
       {
+        setupItemId: '',
         id: '',
         name: '',
         picture: '',

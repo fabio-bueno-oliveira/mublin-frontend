@@ -128,6 +128,7 @@ function SignupPage () {
               </Grid.Col>
             </Grid>
             <TextInput
+              type='email'
               size="md"
               label="Email"
               placeholder="seu@email.com"

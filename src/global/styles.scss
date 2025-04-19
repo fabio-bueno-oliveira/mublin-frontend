@@ -254,8 +254,17 @@ button[disabled=disabled].mantine-Button-root, button:disabled.mantine-Button-ro
 .lhNormal {
   line-height: normal;
 }
+.lh1 {
+  line-height: 1;
+}
 .fitContent {
   width: fit-content;
+}
+
+.feedCard {
+  .mantine-Button-section {
+    margin-inline-end: 2px;
+  }
 }
 
 .newPost {
