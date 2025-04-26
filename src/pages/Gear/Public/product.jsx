@@ -4,8 +4,8 @@ import { useParams } from 'react-router'
 import { gearInfos } from '../../../store/actions/gear'
 import { Link, Navigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Skeleton, ColorSwatch, Loader } from '@mantine/core'
-import { IconChevronUp, IconDiamond, IconMapPin } from '@tabler/icons-react'
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Skeleton, ColorSwatch, Loader, Button } from '@mantine/core'
+import { IconChevronUp, IconDiamond, IconMapPin, IconRosetteDiscountCheckFilled, IconShieldCheckFilled } from '@tabler/icons-react'
 import Header from '../../../components/header/public'
 
 function ProductPublicPage () {
@@ -100,23 +100,10 @@ function ProductPublicPage () {
         </Flex>
         <Grid mt='20' mb='70'>
           <Grid.Col span={{ base: 12, md: 4, lg: 4 }}>
-            {/* {!!product.rare &&
-              <Group gap={4} align='center' justify='center' mb={10}>
-                <IconDiamond style={{width:'1rem',height:'1rem'}} />
-                <Text
-                  fz='0.75rem'
-                  ta='center'
-                  fw='450'
-                  className='lhNormal'
-                >
-                  Item considerado raro ou limitado
-                </Text>
-              </Group>
-            } */}
             <Box mb={8}>
               {product.requesting ? (
                 <Center mih={100} py={30} className='gearProductImage'>
-                  <Loader size='xl' my={70} color='#868e96' type='bars' opacity={0.4} />
+                  <Loader size='xl' my={70} color='#868e96' type='bars' opacity={0.3} />
                 </Center>
               ) : (
                 <>
@@ -128,7 +115,7 @@ function ProductPublicPage () {
                           radius='md'
                           w={300}
                           h={300}
-                          alt={`Foto de ${product.brandName + ' ' + product.name}`}
+                          // alt={`Foto de ${product.brandName + ' ' + product.name}`}
                         />
                       </Center>
                       {product.colorId && 
@@ -252,8 +239,8 @@ function ProductPublicPage () {
               <>
                 <Text fz='sm' className='lhNormal' mb={12}>
                   {product.owners.total === 1
-                    ? <>{product.owners.total} pessoa usa <Text fz='sm' span fw='640'>{product.brandName} {product.name}</Text></>
-                    : <>{product.owners.total} pessoas usam <Text fz='sm' span fw='640'>{product.brandName} {product.name}</Text></>
+                    ? <>{product.owners.total} pessoa utiliza <Text fz='sm' span fw='640'>{product.brandName} {product.name}</Text></>
+                    : <>{product.owners.total} pessoas utilizam <Text fz='sm' span fw='640'>{product.brandName} {product.name}</Text></>
                   }
                 </Text>
                 {product.owners.total > 0 && (
@@ -270,7 +257,7 @@ function ProductPublicPage () {
                         >
                           <Link to={{ pathname: `/${owner.username}` }}>
                             <Center mb={4}>
-                              <Avatar.Group>
+                              <Avatar.Group className='noTapColor'>
                                 <Avatar size='lg' src={owner.picture} alt={`Foto de ${owner.name+' '+owner.lastname}`} />
                                 <Avatar size='sm'  src={product.picture} alt={`Foto de ${product.brandName + ' ' + product.name}`} />
                               </Avatar.Group>
@@ -283,15 +270,29 @@ function ProductPublicPage () {
                             wrap='wrap'
                             gap={2}
                           >
-                            <Badge size='xs' variant='light' color='primary'>
+                            <Badge size='xs' variant='light' color='primary' title={owner.username}>
                               {owner.username}
                             </Badge>
-                            <Text size='12px' fw={550} ta='center' mb={2}>
-                              {owner.name+' '+owner.lastname}
-                            </Text>
-                            <Group gap={2} align='center'>
-                              <IconMapPin size={13} color='#8d8d8d' />
-                              <Text size='11px' c='dimmed'>
+                            <Flex mb={2} w='100%' gap={2} justify='center' align='center'>
+                              <Text size='12px' fw={550} truncate='end' title={owner.name+' '+owner.lastname}>
+                                {owner.name+' '+owner.lastname}
+                              </Text>
+                              {!!owner.verified && 
+                                <IconRosetteDiscountCheckFilled 
+                                  className='iconVerified small'
+                                  title='Verificado'
+                                />
+                              }
+                              {!!owner.legend && 
+                                <IconShieldCheckFilled
+                                  className='iconLegend small'
+                                  title='Lenda da Música'
+                                />
+                              }
+                            </Flex>
+                            <Group wrap='nowrap' gap={2} align='center' justify='center' w='100%'>
+                              <IconMapPin size={11} color='#8d8d8d' />
+                              <Text size='10px' c='dimmed' className='lhNormal' truncate='end'>
                                 {owner.city && `${owner.city}/${owner.regionUF}`}
                               </Text>
                             </Group>
@@ -299,7 +300,7 @@ function ProductPublicPage () {
                               {!!owner.forSale && 
                                 <Badge size='xs' color='black'>À venda</Badge>
                               } 
-                              {!!owner.price && 
+                              {(owner.forSale && owner.price > 0) && 
                                 <Text size='xs'>
                                   {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
                                 </Text>
@@ -311,12 +312,40 @@ function ProductPublicPage () {
                     )}
                   </Grid>
                 )}
+                <Box id='cta'>
+                  <Center mt={35} mb={4}>
+                    <Box>
+                      <Text align='center'>
+                        Faça login para uma experiência completa!
+                      </Text>
+                    </Box>
+                  </Center>
+                  <Group justify='center' gap={8}>
+                    <Link to={{ pathname: '/login' }}>
+                      <Button 
+                        variant='gradient'
+                        gradient={{ from: 'violet', to: 'indigo', deg: 90 }}
+                      >
+                        Fazer login
+                      </Button>
+                    </Link>
+                    ou
+                    <Link to={{ pathname: '/signup' }}>
+                      <Button 
+                        color='violet' 
+                        variant='outline'
+                      >
+                        Cadastrar
+                      </Button>
+                    </Link>
+                  </Group>
+                </Box>
               </>
             )}
           </Grid.Col>
         </Grid>
       </Container>
-      <Text ta='center' mt={10} c='dimmed' size='xs'>
+      <Text ta='center' my={10} c='dimmed' size='xs'>
         © 2025 Mublin
       </Text>
     </>

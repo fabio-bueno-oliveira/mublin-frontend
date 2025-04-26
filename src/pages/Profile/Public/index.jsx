@@ -13,6 +13,7 @@ import {
 import { IconMapPin, IconLink } from '@tabler/icons-react'
 import { Helmet } from 'react-helmet'
 import { truncateString } from '../../../utils/formatter'
+import './style.scss';
 
 function PublicProfilePage () {
 
@@ -53,7 +54,7 @@ function PublicProfilePage () {
         <meta name='description' content={`${username} está no Mublin! A rede para músicos`} />
       </Helmet>
       <Header />
-      <Container size='lg' mb={50} mih={340}>
+      <Container component='main' id='publicProfile' size='lg' mb={50} mih={340}>
         {profile.requesting &&
           <Flex
             gap='md'

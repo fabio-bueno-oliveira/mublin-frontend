@@ -50,6 +50,8 @@ const initialState = {
         ownerComments: '',
         tuning: '',
         tuningDescription: '',
+        verified: '',
+        legend: ''
       }
     ]
   },

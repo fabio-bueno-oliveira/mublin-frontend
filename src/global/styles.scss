@@ -81,6 +81,10 @@ a.displayBlockLink {
   }
 }
 
+.noTapColor {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .read-more-button {
   cursor: pointer;
   display: table-cell;
