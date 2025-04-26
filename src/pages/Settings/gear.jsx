@@ -7,6 +7,7 @@ import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, 
 import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled, IconDeviceFloppy, IconSend, IconThumbUp } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import { isNotEmpty, useForm } from '@mantine/form'
+import { notifications } from '@mantine/notifications'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import SettingsMenu from './menu'
@@ -38,7 +39,6 @@ function SettingsMyGearPage () {
   }, [dispatch, loggedUserId])
 
   const [isLoading, setIsLoading] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
   const [tuningTypes, setTuningTypes] = useState([])
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
@@ -95,8 +95,10 @@ function SettingsMyGearPage () {
 
   const itemInfo = gear.filter((item) => { return item.productId === modalItemManagementProductId })
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const editGearItem = (itemId, productId, featured, for_sale, price, currently_using, tuning, owner_comments) => {
-    setIsLoaded(false)
+    setIsSubmitting(true)
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/user/updateGearItem', {
         method: 'put',
@@ -108,12 +110,12 @@ function SettingsMyGearPage () {
         body: JSON.stringify({id: itemId, productId: productId, featured: featured, for_sale: for_sale, price: price, currently_using: currently_using, tuning: tuning, owner_comments: owner_comments})
       }).then((response) => {
         dispatch(userActions.getUserGearInfoById(loggedUserId));
-        setIsLoaded(true)
+        setIsSubmitting(false)
         setModalEditItemOpen(false)
       }).catch(err => {
         console.error(err)
+        setIsSubmitting(false)
         alert('Ocorreu um erro ao editar os dados do equipamento')
-        setIsLoaded(true)
       })
     }, 300);
   }
@@ -747,7 +749,7 @@ function SettingsMyGearPage () {
                 <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditItemOpen(false)}>
                   Cancelar
                 </Button>
-                <Button color='mublinColor' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={!isLoaded}>
+                <Button color='mublinColor' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={isSubmitting}>
                   Salvar
                 </Button>
               </Group>
@@ -888,9 +890,22 @@ function SettingsMyGearPage () {
             </Button>
           </Group>
         </form>
-        <Text mt={10} size='sm' fw={500}>
-          Editar itens deste setup ({user.gearSetupItems.total} itens)
-        </Text>
+        <Divider mt={16} mb={12} />
+        <Group mt={10} justify='space-between' align='center'>
+          <Text size='sm' fw={500}>
+            Itens deste setup ({user.gearSetupItems.total} itens)
+          </Text>
+          <ActionIcon variant='light' color='mublinColor' aria-label='Novo item'
+            onClick={() => notifications.show({
+              position: 'bottom-right',
+                color: 'orange',
+                message: 'Para adicionar mais itens a este setup, feche esta edição e selecione o item na sua lista de equipamentos',
+              })
+            }
+          >
+            <IconPlus style={{ width: '70%', height: '70%' }} stroke={1.5} />
+          </ActionIcon>
+        </Group>
         <Box my={14}>
           {user.gearSetupItemsRequesting ? ( 
             <Center>
@@ -971,7 +986,7 @@ function SettingsMyGearPage () {
                       />
                       <TextInput
                         size='sm'
-                        label='Papel do item no setup'
+                        label='Sobre este item no setup'
                         defaultValue={item.itemSetupComments}
                         onChange={(e) => setSetupItemEditing({...setupItemEditing, comments: e.currentTarget.value})}
                         maxLength={300}

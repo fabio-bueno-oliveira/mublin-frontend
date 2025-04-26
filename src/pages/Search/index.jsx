@@ -578,7 +578,7 @@ function Search () {
                               <Flex align='center'>
                                 <IconDiamond color='#4c6ef5' size='0.8rem' />
                                 <Text size='11px' className='lhNormal' variant='gradient' gradient={{ from: 'indigo', to: 'pink', deg: 90 }}>
-                                  Raro
+                                  Limitado
                                 </Text>
                               </Flex>
                             }
