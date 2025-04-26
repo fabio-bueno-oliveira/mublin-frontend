@@ -4,7 +4,7 @@ import { useParams } from 'react-router'
 import { gearInfos } from '../../store/actions/gear'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch, em } from '@mantine/core'
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Modal, ScrollArea, Skeleton, ColorSwatch, ActionIcon, Affix, Transition, Button, em } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import { IconZoom, IconChevronUp, IconDiamond, IconX, IconAlignJustified, IconUser } from '@tabler/icons-react'
 import Header from '../../components/header'
@@ -152,14 +152,19 @@ function GearProductPage () {
                           // onClick={() => navigate("/gear/product/zoom/"+productId)}
                           style={{cursor:'pointer'}}
                         />
-                        <Center>
-                          <Group gap='4'>
-                            <IconZoom size='14' style={{color:'#595959'}} />
-                            <Text ta='center' size='xs' c='#595959'>
-                              Toque na imagem para ampliar
-                            </Text>
-                          </Group>
-                        </Center>
+                        <ActionIcon
+                          mt='sm'
+                          variant='default'
+                          size='md'
+                          radius='xl'
+                          aria-label='Zoom'
+                          onClick={() => setModalZoomOpen(true)}
+                          pos='absolute'
+                          left={10}
+                          bottom={10}
+                        >
+                          <IconZoom style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                        </ActionIcon>
                       </Center>
                       {product.colorId && 
                         <>
@@ -188,14 +193,19 @@ function GearProductPage () {
                         onClick={() => setModalZoomOpen(true)}
                         style={{cursor:'pointer'}}
                       />
-                      <Center>
-                        <Group gap='4'>
-                          <IconZoom size='14' style={{color:'#595959'}} />
-                          <Text ta='center' size='xs' c='#595959'>
-                            Toque na imagem para ampliar
-                          </Text>
-                        </Group>
-                      </Center>
+                      <ActionIcon
+                        mt='sm'
+                        variant='default'
+                        size='md'
+                        radius='xl'
+                        aria-label='Zoom'
+                        onClick={() => setModalZoomOpen(true)}
+                        pos='absolute'
+                        left={10}
+                        bottom={10}
+                      >
+                        <IconZoom style={{ width: '70%', height: '70%' }} stroke={1.5} />
+                      </ActionIcon>
                     </Center>
                   }
                   {product.availableColors.total > 0 && 
@@ -387,17 +397,34 @@ function GearProductPage () {
               <Image 
                 w='auto' 
                 src={selectedColor.largePicture ? selectedColor.largePicture : undefined} 
-                onClick={() => setModalZoomOpen(false)} 
+                // onClick={() => setModalZoomOpen(false)} 
               />
             ) : (
               <Image 
                 w='auto' 
                 src={product.largePicture ? product.largePicture : undefined} 
-                onClick={() => setModalZoomOpen(false)} 
+                // onClick={() => setModalZoomOpen(false)} 
               />
             )}
           </Flex>
         </ScrollArea>
+        <Affix position={{ bottom: 20, right: '50%' }}>
+          <Transition transition='fade-up' mounted={modalZoomOpen}>
+            {(transitionStyles) => (
+              <ActionIcon
+                style={transitionStyles}
+                mt='sm'
+                variant='default'
+                size='xl'
+                radius='xl'
+                aria-label='Fechar zoom'
+                onClick={() => setModalZoomOpen(false)}
+              >
+                <IconX style={{ width: '70%', height: '70%' }} stroke={1.5} />
+              </ActionIcon>
+            )}
+          </Transition>
+        </Affix>
       </Modal>
       {(!modalZoomOpen) &&
         <FooterMenuMobile />
