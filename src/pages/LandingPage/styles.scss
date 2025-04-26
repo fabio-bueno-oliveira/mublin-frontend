@@ -1,19 +1,26 @@
-.featuredImage {
-  position: relative;
-  transform: translatey(0px);
-	animation: float 3s ease-in-out infinite;
+main#landing {
 
-  @keyframes float {
-    0% {
-        transform: translateY(5px);
-    }
+  .rfm-marquee-container {
+    -webkit-tap-highlight-color: transparent;
+  }
 
-    50% {
-        transform: translateX(10px);
-    }
+  .featuredImage {
+    position: relative;
+    transform: translatey(0px);
+    animation: float 3s ease-in-out infinite;
 
-    100% {
-        transform: translateY(5px);
+    @keyframes float {
+      0% {
+          transform: translateY(5px);
+      }
+
+      50% {
+          transform: translateX(10px);
+      }
+
+      100% {
+          transform: translateY(5px);
+      }
     }
-}
+  }
 }
