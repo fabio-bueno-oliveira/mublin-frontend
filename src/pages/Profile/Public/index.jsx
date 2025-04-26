@@ -71,9 +71,19 @@ function PublicProfilePage () {
         }
         {(!profile.requesting && profile.id) && 
           <>
+            <Text size='xl' mb={3} fw={600} className='lhNormal'>
+              {profile.name} {profile.lastname}
+            </Text>
+            <Group gap='2'>
+              {profile.roles.map(role =>
+                <Badge variant='light' py={9} color='primary' size='xs' key={role.id}>
+                  <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
+                </Badge>
+              )}
+            </Group>
             <Flex
               mih={50}
-              gap='md'
+              gap='sm'
               justify='flex-start'
               align='center'
               direction='row'
@@ -83,32 +93,27 @@ function PublicProfilePage () {
               <Avatar
                 h={100}
                 w={100}
-                fit='contain'
+                fit=''
                 radius='lg'
                 src={profile.picture ? profile.picture : undefined}
                 alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
               />
               <Box>
-                <Text size='md' mb={3} fw={600} className='lhNormal'>
-                  {profile.name} {profile.lastname}
+                <Text size='sm' mb={3} fw={600}>
+                  {username}
                 </Text>
-                <Group gap='2' mb={4}>
-                  {profile.roles.map(role =>
-                    <Badge variant='light' py={7} color='gray' size='xs' key={role.id}>
-                      <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
-                    </Badge>
-                  )}
-                </Group>
-                <Group gap='xs'>
-                  <Text size='xs' fw='480'>{`${profile?.followers?.total} seguidores`}</Text>
-                  <Text size='xs' fw='480'>{`${profile?.following?.total} seguindo`}</Text>
-                  <Text size='xs' fw='480'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
+                <Group gap='xs' mb={2}>
+                  <Text size='xs'>{`${profile?.followers?.total} seguidores`}</Text>
+                  <Text size='xs'>{`${profile?.following?.total} seguindo`}</Text>
+                  <Text size='xs'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
                 </Group>
                 {profile.city && 
                   <Flex gap={2} align='center'>
-                    <IconMapPin size={13} style={{color:'#8d8d8d'}} />
-                    <Text c='dimmed' size='10px'>
-                      {profile.city}, {profile.region}, {profile.country}
+                    <IconMapPin size={13} color='#8d8d8d' />
+                    <Text c='dimmed' size='11px'>
+                      <Text span className='comma'>{profile.city}</Text>
+                      <Text span className='comma'>{profile.regionUF}</Text>
+                      <Text span className='comma'>{profile.country}</Text>
                     </Text>
                   </Flex>
                 }
@@ -152,7 +157,7 @@ function PublicProfilePage () {
                 <Flex gap={2} align='center'>
                   <IconLink size={13} />
                   <Text size='sm' className='lhNormal'>
-                    {truncateString(profile.website, 100)}
+                    {truncateString(profile.website, 45)}
                   </Text>
                 </Flex>
               </Anchor>
@@ -195,7 +200,7 @@ function PublicProfilePage () {
                 </Card>
               </Flex>
             }
-            <Center mt={50} mb={4}>
+            <Center mt={35} mb={4}>
               <Box>
                 <Text align='center'>
                   Faça login para visualizar o perfil completo de {profile.name} {profile.lastname}
