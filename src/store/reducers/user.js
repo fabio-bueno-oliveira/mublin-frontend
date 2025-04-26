@@ -99,7 +99,8 @@ const initialState = {
         orderShow: '',
         itemSetupComments: '',
         tuning: '',
-        name_ptbr: ''
+        category: '',
+        setupId: ''
       }
     ]
   },

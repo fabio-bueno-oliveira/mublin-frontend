@@ -268,15 +268,15 @@ function SettingsMyGearPage () {
     setModalEditSetupOpen(true)
   }
   const [setupItemEditing, setSetupItemEditing] = useState({
-    id: '', comments: '', orderShow: ''
+    id: '', comments: '', orderShow: '', setupId: ''
   })
   const closeModalEditSetup = () => {
     setModalEditSetupOpen(false)
     setSetupItemEditing({
-      id: '', comments: '', orderShow: ''
+      id: '', comments: '', orderShow: '', setupId: ''
     })
   }
-  const updateSetupItem = (id, comments, orderShow) => {
+  const updateSetupItem = (id, comments, orderShow, setupId) => {
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/userInfo/updateSetupGearItem', {
         method: 'put',
@@ -287,10 +287,10 @@ function SettingsMyGearPage () {
         },
         body: JSON.stringify({itemId: id, comments: comments, orderShow: orderShow})
       }).then((response) => {
-        dispatch(userActions.getUserGearSetupItems(itemId));
+        dispatch(userActions.getUserGearSetupItems(setupId));
         setIsLoading(false)
         setSetupItemEditing({
-          id: '', comments: '', orderShow: ''
+          id: '', comments: '', orderShow: '', setupId: ''
         })
       }).catch(err => {
         console.error(err)
@@ -301,7 +301,7 @@ function SettingsMyGearPage () {
   }
   const handleUpdateSetupItem = () => {
     setIsLoading(true)
-    updateSetupItem(setupItemEditing.id, setupItemEditing.comments, setupItemEditing.orderShow)
+    updateSetupItem(setupItemEditing.id, setupItemEditing.comments, setupItemEditing.orderShow, setupItemEditing.setupId)
   }
 
   return (
@@ -357,27 +357,16 @@ function SettingsMyGearPage () {
                       </Text>
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, md: 3, lg: 3 }} ta={isMobile ? 'left' : 'right'}>
-                      {user.plan === 'Pro' ? (
-                        <Button
-                          leftSection={<IconPlus size={14} />}
-                          color='mublinColor'
-                          size='sm'
-                          variant='light'
-                          fullWidth={isMobile ? true : false}
-                          onClick={() => setModalAddNewSetupOpen(true)}
-                        >
-                          Criar novo setup
-                        </Button>
-                      ) : (
-                        <Button
-                          size='md'
-                          disabled
-                          leftSection={<IconPlus size={14} />}
-                          fullWidth={isMobile ? true : false}
-                        >
-                          Criar novo setup
-                        </Button>
-                      )}
+                      <Button
+                        leftSection={<IconPlus size={14} />}
+                        color='mublinColor'
+                        size='sm'
+                        fullWidth={isMobile ? true : false}
+                        onClick={user.plan === 'Pro' ? () => setModalAddNewSetupOpen(true) : undefined}
+                        disabled={user.plan === 'Free'}
+                      >
+                        Criar novo setup
+                      </Button>
                     </Grid.Col>
                   </Grid>
                   {user.gearSetups.total === 0 ? (
@@ -463,7 +452,6 @@ function SettingsMyGearPage () {
                         <Button
                           leftSection={<IconPlus size={14} />}
                           color='mublinColor'
-                          variant='light'
                           size='sm'
                           fullWidth={isMobile ? true : false}
                           component='a'
@@ -914,7 +902,7 @@ function SettingsMyGearPage () {
           ) : (
             <ScrollArea type="always" w='100%' h={200} scrollbars="y" offsetScrollbars>
               <Flex gap={6} direction='column'>
-                {user.gearSetupItems.items.map(item =>
+                {user.gearSetupItems.items.sort((a, b) => a.orderShow - b.orderShow).map(item =>
                   <Card withBorder radius='md' p={6} key={item.id}>
                     <Flex justify='space-between'>
                       <Group gap={4}>
@@ -946,20 +934,26 @@ function SettingsMyGearPage () {
                       <Box>
                         <ActionIcon.Group>
                           {setupItemEditing.id !== item.setupItemId && 
-                            <ActionIcon 
-                              variant='default' size='lg' aria-label='Editar'
+                            <ActionIcon
+                              variant='default'
+                              size='lg'
+                              aria-label='Editar'
                               onClick={() => setSetupItemEditing({
                                 id: item.setupItemId,
                                 comments: item.itemSetupComments,
-                                orderShow: item.orderShow
+                                orderShow: item.orderShow,
+                                setupId: item.setupId
                               })}
                             >
                               <IconPencil size={15} stroke={1.8} />
                             </ActionIcon>
                           }
                           {setupItemEditing.id === item.setupItemId && 
-                            <ActionIcon 
-                              variant='default' size='lg' aria-label='Salvar' title='Salvar'
+                            <ActionIcon
+                              variant='default'
+                              size='lg'
+                              aria-label='Salvar'
+                              title='Salvar'
                               onClick={() => handleUpdateSetupItem()}
                               loading={isLoading}
                             >
@@ -982,7 +976,7 @@ function SettingsMyGearPage () {
                         onChange={(e) => setSetupItemEditing({...setupItemEditing, orderShow: e.currentTarget.value})}
                         min={1}
                         w={80}
-                        disabled={setupItemEditing.id !== item.setupItemId}
+                        disabled={(setupItemEditing.id !== item.setupItemId) || isLoading}
                       />
                       <TextInput
                         size='sm'
@@ -991,7 +985,7 @@ function SettingsMyGearPage () {
                         onChange={(e) => setSetupItemEditing({...setupItemEditing, comments: e.currentTarget.value})}
                         maxLength={300}
                         w={164}
-                        disabled={setupItemEditing.id !== item.setupItemId}
+                        disabled={(setupItemEditing.id !== item.setupItemId) || isLoading}
                       />
                     </Group>
                   </Card>
