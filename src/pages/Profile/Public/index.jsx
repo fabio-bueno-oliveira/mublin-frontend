@@ -77,7 +77,7 @@ function PublicProfilePage () {
             <Group gap='2'>
               {profile.roles.map(role =>
                 <Badge variant='light' py={9} color='primary' size='xs' key={role.id}>
-                  <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.name}</span>
+                  <span>{role.icon && <img src={cdnBaseURL+'/icons/music/tr:h-26,w-26,c-maintain_ratio/'+role.icon} width='13' height='13' style={{verticalAlign:'middle'}} />} {role.description}</span>
                 </Badge>
               )}
             </Group>
@@ -99,13 +99,13 @@ function PublicProfilePage () {
                 alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
               />
               <Box>
-                <Text size='sm' mb={3} fw={600}>
+                <Text size='md' mb={3} fw={600}>
                   {username}
                 </Text>
-                <Group gap='xs' mb={2}>
+                <Group gap={8} mb={2}>
                   <Text size='xs'>{`${profile?.followers?.total} seguidores`}</Text>
                   <Text size='xs'>{`${profile?.following?.total} seguindo`}</Text>
-                  <Text size='xs'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text>
+                  {/* <Text size='xs'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text> */}
                 </Group>
                 {profile.city && 
                   <Flex gap={2} align='center'>
@@ -163,7 +163,7 @@ function PublicProfilePage () {
               </Anchor>
             }
             {gearTotal > 0 &&
-              <Flex gap={8} justify='flex-start' align='center' mt={14}>
+              <Flex gap={8} justify='flex-start' align='flex-start' mt={14}>
                 {gear.slice(0, 2).map(item =>
                   <Flex direction='column' key={item.productId}>
                     <Image
@@ -188,9 +188,9 @@ function PublicProfilePage () {
                   </Flex>
                 )}
                 <Card 
-                  shadow='sm' 
+                  shadow={false}
                   p={11}
-                  fz={10}
+                  fz='0.7rem'
                   withBorder
                   radius='md'
                   className='mublinModule'
@@ -203,7 +203,7 @@ function PublicProfilePage () {
             <Center mt={35} mb={4}>
               <Box>
                 <Text align='center'>
-                  Faça login para visualizar o perfil completo de {profile.name} {profile.lastname}
+                  Faça login para ver o perfil completo de <nobr>{profile.name} {profile.lastname}</nobr>
                 </Text>
               </Box>
             </Center>
