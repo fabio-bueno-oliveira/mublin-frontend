@@ -38,6 +38,7 @@ const initialState = {
         picture: '',
         country: '',
         region: '',
+        regionUF: '',
         city: '',
         featured: '',
         currentlyUsing: '',

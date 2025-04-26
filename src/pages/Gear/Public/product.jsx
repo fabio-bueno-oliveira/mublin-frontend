@@ -2,20 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router'
 import { gearInfos } from '../../../store/actions/gear'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Skeleton, ColorSwatch, em } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
-import { IconChevronUp, IconDiamond, IconAlignJustified, IconUser } from '@tabler/icons-react'
+import { Container, Grid, Flex, Paper, Group, Center, Box, Anchor, Title, Text, Image, Avatar, Badge, Skeleton, ColorSwatch, Loader } from '@mantine/core'
+import { IconChevronUp, IconDiamond, IconMapPin } from '@tabler/icons-react'
 import Header from '../../../components/header/public'
-import linkifyStr from "linkify-string"
-import parse from 'html-react-parser'
 
 function ProductPublicPage () {
 
   const params = useParams()
   const productId = params?.productId
   const product = useSelector(state => state.gear)
+  const loggedIn = useSelector(state => state.authentication.loggedIn)
 
   let dispatch = useDispatch()
 
@@ -35,18 +33,19 @@ function ProductPublicPage () {
     }
   }, [product.availableColors.success])
 
-  const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
-
   return (
     <>
       <Helmet>
         <meta charSet='utf-8' />
         <title>{product.requesting ? 'Mublin' : `${product.name} | ${product.brandName} | Mublin`}</title>
-        <link rel='canonical' href={`https://mublin.com/gear/product/${product.id}`} />
-        <meta name='description' content='A rede para quem trabalha com música' />
+        <link rel='canonical' href={`https://mublin.com/product/${product.id}`} />
+        <meta name='description' content={product.description} />
       </Helmet>
+      {loggedIn &&
+        <Navigate to='/home' />
+      }
       <Header />
-      <Container size='lg' mt={isMobile ? 14 : 0}>
+      <Container size='lg'>
         <Flex gap={12} align='center'>
           {product.requesting ? (
             <Skeleton height={75} width={75} radius='md' />
@@ -66,7 +65,7 @@ function ProductPublicPage () {
             {product.requesting ? (
               <Skeleton width={100} height={10} mb={4} radius="md" />
             ) : (
-              <Text classNames='lhNormal' fw='420' size='sm' c='dimmed'>
+              <Text fw='420' size='sm' c='dimmed'>
                 {product.categoryName + ' • ' + product.brandName + (product.seriesName ? ' • ' + product.seriesName : '')}
               </Text>
             )}
@@ -92,11 +91,6 @@ function ProductPublicPage () {
                 </Text>
               </Group>
             }
-            {/* {!product.requesting &&
-              <Anchor mt={10} c='dimmed' fz='xs' href={`/company/${product.brandSlug}`}>
-                Ver produtos {product.brandName}
-              </Anchor>
-            } */}
             {!!product.discontinued &&
               <Text fz='11px' c='dimmed'>
                 Produto descontinuado pelo fabricante
@@ -121,25 +115,20 @@ function ProductPublicPage () {
             } */}
             <Box mb={8}>
               {product.requesting ? (
-                <Center className='gearProductImage'>
-                  <Image
-                    radius='md'
-                    src={null}
-                    w={300}
-                    h={300}
-                    fallbackSrc='https://placehold.co/170x130?text=Carregando...'
-                  />
+                <Center mih={100} py={30} className='gearProductImage'>
+                  <Loader size='xl' my={70} color='#868e96' type='bars' opacity={0.4} />
                 </Center>
               ) : (
                 <>
                   {product.availableColors.total === 0 && 
                     <>
-                      <Center className='gearProductImage'>
+                      <Center mih={100} className='gearProductImage'>
                         <Image 
                           src={product.picture ? product.picture : undefined}
                           radius='md'
                           w={300}
                           h={300}
+                          alt={`Foto de ${product.brandName + ' ' + product.name}`}
                         />
                       </Center>
                       {product.colorId && 
@@ -166,6 +155,7 @@ function ProductPublicPage () {
                         radius='md'
                         w={300}
                         h={300}
+                        alt={`Foto de ${product.brandName + ' ' + product.name}`}
                       />
                     </Center>
                   }
@@ -198,131 +188,130 @@ function ProductPublicPage () {
             </Box>
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 8, lg: 8 }}>
-            <Box mb={20}>
-              <Group gap={4} align='center' mb={10}>
-                <IconAlignJustified style={{width:'1rem',height:'1rem'}} />
-                <Text fz='0.9rem' fw='640' className='lhNormal'>
-                  Sobre o item
-                </Text>
-              </Group>
-              {product.requesting ? (
-                <>
-                  <Skeleton width={240} height={12} mb={6} radius="md" />
-                  <Skeleton width={180} height={12} mb={6} radius="md" />
-                </>
-              ) : (
-                <>
-                  {product.description ? ( 
-                    <>
-                      <Text fz='sm'
-                        className='lhNormal'
-                        style={{whiteSpace:'pre-wrap'}}
-                      >
-                        {product.description}
-                      </Text>
-                      {product.descriptionSource && 
-                        <Text fz='12px' c='dimmed' mt={6} className='lhNormal'>
-                          Fonte: {product.descriptionSource}
-                        </Text>
-                      }
-                      {product.descriptionSourceUrl &&
-                        <Anchor href={product.descriptionSourceUrl} target="_blank" underline="hover" fz='11px' c='dimmed'>
-                          {product.descriptionSourceUrl}
-                        </Anchor>
-                      }
-                      {!!product.discontinued &&
-                        <Text fz='10px' c='dimmed' mt={4}>
-                          *Produto descontinuado pelo fabricante
-                        </Text>
-                      }
-                    </>
-                  ) : (
-                    <Text size='sm' c='dimmed'>
-                      Descrição não disponível
+            {product.requesting ? (
+              <Box mb={20}>
+                <Skeleton width={240} height={12} mb={6} radius="md" />
+                <Skeleton width={180} height={12} mb={6} radius="md" />
+              </Box>
+            ) : (
+              product.description && ( 
+                <Box mb={20}>
+                  <Text fz='sm'
+                    className='lhNormal'
+                    style={{whiteSpace:'pre-wrap'}}
+                  >
+                    {product.description}
+                  </Text>
+                  {product.descriptionSource && 
+                    <Text fz='12px' c='dimmed' mt={6} className='lhNormal'>
+                      Fonte: {product.descriptionSource}
                     </Text>
-                  )}
-                </>
-              )}
-            </Box>
-            <Group gap={4} align='center' mb={10}>
-              <IconUser style={{width:'1rem',height:'1rem'}} />
-              <Text fz='0.9rem' fw='640' className='lhNormal'>
-                Quem utiliza ({product.owners.total})
-              </Text>
-            </Group>
+                  }
+                  {product.descriptionSourceUrl &&
+                    <Anchor href={product.descriptionSourceUrl} target="_blank" underline="hover" fz='11px' c='dimmed'>
+                      {product.descriptionSourceUrl}
+                    </Anchor>
+                  }
+                  {!!product.discontinued &&
+                    <Text fz='10px' c='dimmed' mt={4}>
+                      *Produto descontinuado pelo fabricante
+                    </Text>
+                  }
+                </Box>
+              )
+            )}
             {product.requesting ? (
               <>
                 <Skeleton width={240} height={12} mb={6} radius="md" />
-                <Skeleton width={180} height={12} mb={6} radius="md" />
+                <Skeleton width={180} height={12} radius="md" />
+                <Paper
+                  mt={14}
+                  radius='md'
+                  withBorder
+                  px='12'
+                  py='12'
+                  style={{ backgroundColor: 'transparent' }}
+                  w={150}
+                >
+                  <Center mb={4}>
+                    <Skeleton height={50} circle mb="xl" />
+                  </Center>
+                  <Flex
+                    justify='flex-start'
+                    align='center'
+                    direction='column'
+                    wrap='wrap'
+                    gap={2}
+                  >
+                    <Skeleton width={120} height={12} mb={6} radius="md" />
+                    <Skeleton width={90} height={12} mb={6} radius="md" />
+                  </Flex>
+                </Paper>
               </>
             ) : (
-              <Box mb={30}>
-                {product.owners.total ? ( 
-                  product.owners.result.map(owner => 
-                    <Paper 
-                      key={owner.id}
-                      radius='md'
-                      withBorder
-                      px='12'
-                      py='12'
-                      mb='12'
-                      style={{ backgroundColor: 'transparent' }}
-                    >
-                      <Flex gap={7} mb='xs'>
-                        <Link to={{ pathname: `/${owner.username}` }}>
-                          <Avatar.Group>
-                            <Avatar size='lg' src={owner.picture} />
-                            <Avatar src={product.picture} />
-                          </Avatar.Group>
-                        </Link>
-                        <Flex
-                          justify='flex-start'
-                          align='flex-start'
-                          direction='column'
-                          wrap='wrap'
+              <>
+                <Text fz='sm' className='lhNormal' mb={12}>
+                  {product.owners.total === 1
+                    ? <>{product.owners.total} pessoa usa <Text fz='sm' span fw='640'>{product.brandName} {product.name}</Text></>
+                    : <>{product.owners.total} pessoas usam <Text fz='sm' span fw='640'>{product.brandName} {product.name}</Text></>
+                  }
+                </Text>
+                {product.owners.total > 0 && (
+                  <Grid mb={30}>
+                    {product.owners.result.map(owner => 
+                      <Grid.Col key={owner.id} span={{ base: 4, md: 3, lg: 3 }}>
+                        <Paper
+                          radius='md'
+                          withBorder
+                          px='12'
+                          py='12'
+                          style={{ backgroundColor: 'transparent' }}
+                          w='100%'
                         >
-                          <Text size='sm' fw='550'>
-                            {owner.name+' '+owner.lastname}
-                          </Text>
-                          <Text size='xs' fw='500' c='dimmed'>
-                            {owner.city && <span>{owner.city}/{owner.region}</span>}
-                          </Text>
-                          <Group gap={3}>
-                            {!!owner.currentlyUsing && 
-                              <Badge size='xs' color='green' variant='light'>Em uso</Badge>
-                            } 
-                            {!!owner.forSale && 
-                              <Badge size='xs' color='black'>À venda</Badge>
-                            } 
-                            {!!owner.price && 
-                              <Text size='xs'>
-                                {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                          <Link to={{ pathname: `/${owner.username}` }}>
+                            <Center mb={4}>
+                              <Avatar.Group>
+                                <Avatar size='lg' src={owner.picture} alt={`Foto de ${owner.name+' '+owner.lastname}`} />
+                                <Avatar size='sm'  src={product.picture} alt={`Foto de ${product.brandName + ' ' + product.name}`} />
+                              </Avatar.Group>
+                            </Center>
+                          </Link>
+                          <Flex
+                            justify='flex-start'
+                            align='center'
+                            direction='column'
+                            wrap='wrap'
+                            gap={2}
+                          >
+                            <Badge size='xs' variant='light' color='primary'>
+                              {owner.username}
+                            </Badge>
+                            <Text size='12px' fw={550} ta='center' mb={2}>
+                              {owner.name+' '+owner.lastname}
+                            </Text>
+                            <Group gap={2} align='center'>
+                              <IconMapPin size={13} color='#8d8d8d' />
+                              <Text size='11px' c='dimmed'>
+                                {owner.city && `${owner.city}/${owner.regionUF}`}
                               </Text>
-                            }
-                          </Group>
-                        </Flex>
-                      </Flex>
-                      {owner.ownerComments ? (
-                        <Text 
-                          size='sm'
-                          className='lhNormal'
-                          style={{whiteSpace:'pre-wrap'}}
-                        >
-                          {parse(linkifyStr(owner.ownerComments, {target: '_blank'}))}
-                        </Text>
-                      ) : (
-                        <Text size='sm' c='dimmed'>
-                          Nenhum comentário até o momento
-                        </Text>
-                      )}
-                    </Paper>
-                  )
-                ) : (
-                  <Text mt={10} mb={14} size='sm' c='dimmed'>
-                    Ninguém por aqui
-                  </Text>
+                            </Group>
+                            <Group gap={3}>
+                              {!!owner.forSale && 
+                                <Badge size='xs' color='black'>À venda</Badge>
+                              } 
+                              {!!owner.price && 
+                                <Text size='xs'>
+                                  {owner.price.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                                </Text>
+                              }
+                            </Group>
+                          </Flex>
+                        </Paper>
+                      </Grid.Col>
+                    )}
+                  </Grid>
                 )}
-              </Box>
+              </>
             )}
           </Grid.Col>
         </Grid>

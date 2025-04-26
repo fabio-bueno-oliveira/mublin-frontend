@@ -107,14 +107,14 @@ function PublicProfilePage () {
                   {/* <Text size='xs'>{profile?.projects?.total} {profile?.projects?.total === 1 ? 'projeto' : 'projetos'}</Text> */}
                 </Group>
                 {profile.city && 
-                  <Flex gap={2} align='center'>
+                  <Group gap={2} align='center'>
                     <IconMapPin size={13} color='#8d8d8d' />
                     <Text c='dimmed' size='11px'>
                       <Text span className='comma'>{profile.city}</Text>
                       <Text span className='comma'>{profile.regionUF}</Text>
                       <Text span className='comma'>{profile.country}</Text>
                     </Text>
-                  </Flex>
+                  </Group>
                 }
                 <Flex
                   align='center'
