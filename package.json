@@ -25,7 +25,7 @@
     "dayjs": "^1.11.13",
     "history": "^5.3.0",
     "html-react-parser": "^5.2.3",
-    "imagekitio-react": "^4.1.0",
+    "imagekitio-react": "^4.3.0",
     "jwt-decode": "^4.0.0",
     "linkify-string": "^4.2.0",
     "linkifyjs": "^4.2.0",
