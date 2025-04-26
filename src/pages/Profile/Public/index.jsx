@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { profileInfos } from '../../../store/actions/profile'
 import Header from '../../../components/header/public'
-import Footer from '../../../components/footer/public'
 import {
   Container, Box, Button, Center, Card, 
   Flex, Group, Anchor, Avatar, Image, 
@@ -99,7 +98,7 @@ function PublicProfilePage () {
                 alt={`Foto de perfil de ${profile.name} ${profile.lastname} no Mublin`} 
               />
               <Box>
-                <Text size='md' mb={3} fw={600}>
+                <Text size='lg' fw={600}>
                   {username}
                 </Text>
                 <Group gap={8} mb={2}>
@@ -165,7 +164,12 @@ function PublicProfilePage () {
             {gearTotal > 0 &&
               <Flex gap={8} justify='flex-start' align='flex-start' mt={14}>
                 {gear.slice(0, 2).map(item =>
-                  <Flex direction='column' key={item.productId}>
+                  <Flex 
+                    key={item.productId}
+                    direction='column' 
+                    component='a'
+                    href={`/product/${item.productId}`}
+                  >
                     <Image
                       src={`https://ik.imagekit.io/mublin/products/tr:w-240,h-240,cm-pad_resize,bg-FFFFFF,fo-x/${item.pictureFilename}`}
                       h={60}
@@ -177,11 +181,11 @@ function PublicProfilePage () {
                       withBorder
                       title={`${item.brandName} ${item.productName}`}
                     />
-                    <Text ta='center' size='11px' mb={4} fw={550}>
+                    <Text ta='center' c='primary' size='11px' mb={4} fw={550}>
                       {item.brandName}
                     </Text>
                     <Box w={90}>
-                      <Text ta='center' size='10px' fw={450}>
+                      <Text ta='center' c='primary' size='10px' fw={450}>
                         {item.productName}
                       </Text>
                     </Box>
@@ -231,7 +235,6 @@ function PublicProfilePage () {
           </Center>
         }
       </Container>
-      {/* <Footer /> */}
       <Text ta='center' mt={10} c='dimmed' size='xs'>
         © 2025 Mublin
       </Text>

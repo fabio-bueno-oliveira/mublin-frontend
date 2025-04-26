@@ -39,6 +39,7 @@ import ProfileGearItem from './pages/Profile/Gear/item';
 import ProfileGearSetup from './pages/Profile/Gear/gearSetup';
 import ProfileTimeline from './pages/Profile/Timeline';
 import GearProductPage from './pages/Gear/product';
+import PublicProductPage from './pages/Gear/Public/product';
 import GearZoomPage from './pages/Gear/zoom';
 import GearBrandPage from './pages/Gear/brand';
 import SettingsProfileEdit from './pages/Settings/profile';
@@ -127,6 +128,7 @@ function AppRoutes () {
         </Route>
         <Route path="*" element={<NotFound />} />
         <Route path="/:username" element={loggedIn ? <ProfilePage /> : <PublicProfilePage />} />
+        <Route path="/product/:productId" element={<PublicProductPage />} />
       </Routes>
     </BrowserRouter>
   )
