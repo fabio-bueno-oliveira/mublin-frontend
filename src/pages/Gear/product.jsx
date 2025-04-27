@@ -72,12 +72,13 @@ function GearProductPage () {
             </Anchor>
           )}
           <Flex direction='column'>
-            <Text classNames='lhNormal' fw='420' size='sm' c='dimmed'>
-              {product.requesting 
-                ? <Skeleton width={100} height={10} mb={4} radius="md" /> 
-                : product.categoryName + ' • ' + product.brandName + (product.seriesName ? ' • ' + product.seriesName : '')
-              }
-            </Text>
+            {product.requesting ? ( 
+              <Skeleton width={100} height={10} mb={4} radius='md' />
+            ) : (
+              <Text classNames='lhNormal' fw='420' size='sm' c='dimmed'>
+                {product.categoryName + ' • ' + product.brandName + (product.seriesName ? ' • ' + product.seriesName : '')}
+              </Text>
+            )}
             {product.requesting ? (
               <Skeleton width={220} height={18} radius='md' />
             ) : (
@@ -155,7 +156,7 @@ function GearProductPage () {
                         <ActionIcon
                           mt='sm'
                           variant='default'
-                          size='md'
+                          size='xl'
                           radius='xl'
                           aria-label='Zoom'
                           onClick={() => setModalZoomOpen(true)}
@@ -196,7 +197,7 @@ function GearProductPage () {
                       <ActionIcon
                         mt='sm'
                         variant='default'
-                        size='md'
+                        size='xl'
                         radius='xl'
                         aria-label='Zoom'
                         onClick={() => setModalZoomOpen(true)}
@@ -302,12 +303,12 @@ function GearProductPage () {
                       key={owner.id}
                       radius='md'
                       withBorder
-                      px='12'
-                      py='12'
+                      px='10'
+                      py='10'
                       mb='12'
                       style={{ backgroundColor: 'transparent' }}
                     >
-                      <Flex gap={7} mb='xs'>
+                      <Flex gap={7}>
                         <Link to={{ pathname: `/${owner.username}` }}>
                           <Avatar.Group>
                             <Avatar size='lg' src={owner.picture} />
@@ -341,17 +342,14 @@ function GearProductPage () {
                           </Group>
                         </Flex>
                       </Flex>
-                      {owner.ownerComments ? (
+                      {owner.ownerComments && (
                         <Text 
                           size='sm'
                           className='lhNormal'
                           style={{whiteSpace:'pre-wrap'}}
+                          mt='xs'
                         >
                           {parse(linkifyStr(owner.ownerComments, {target: '_blank'}))}
-                        </Text>
-                      ) : (
-                        <Text size='sm' c='dimmed'>
-                          Nenhum comentário até o momento
                         </Text>
                       )}
                     </Paper>
@@ -392,7 +390,7 @@ function GearProductPage () {
         // scrollAreaComponent={ScrollArea.Autosize}
       >
         <ScrollArea w='auto'>
-          <Flex justify='center'>
+          <Flex justify='center' mb={34}>
             {selectedColor ? (
               <Image 
                 w='auto' 
@@ -408,7 +406,7 @@ function GearProductPage () {
             )}
           </Flex>
         </ScrollArea>
-        <Affix position={{ bottom: 20, right: '50%' }}>
+        <Affix position={{ bottom: 20, right: '48.5%' }}>
           <Transition transition='fade-up' mounted={modalZoomOpen}>
             {(transitionStyles) => (
               <ActionIcon

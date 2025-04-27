@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, NumberInput, TextInput, Textarea, Input, em, Divider, ScrollArea } from '@mantine/core'
-import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled, IconCamera } from '@tabler/icons-react'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, NumberInput, TextInput, Textarea, Input, em, Divider, ScrollArea, Collapse } from '@mantine/core'
+import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled, IconCamera, IconMinus } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import { isNotEmpty, useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
@@ -132,7 +133,7 @@ function SettingsMyGearPage () {
   const deleteGear = (userGearId) => {
     setLoadingRemove(true)
     fetch('https://mublin.herokuapp.com/user/'+userGearId+'/deleteGearItem', {
-      method: 'delete',
+      method: 'DELETE',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
@@ -197,7 +198,7 @@ function SettingsMyGearPage () {
     setIsLoading(true)
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/user/createNewGearSetup', {
-        method: 'post',
+        method: 'POST',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
@@ -356,7 +357,7 @@ function SettingsMyGearPage () {
   const updateSetupItem = (id, comments, orderShow, setupId) => {
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/userInfo/updateSetupGearItem', {
-        method: 'put',
+        method: 'PUT',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
@@ -364,7 +365,8 @@ function SettingsMyGearPage () {
         },
         body: JSON.stringify({itemId: id, comments: comments, orderShow: orderShow})
       }).then((response) => {
-        dispatch(userActions.getUserGearSetupItems(setupId));
+        dispatch(userActions.getUserGearSetupItems(setupId))
+        dispatch(userActions.getUserGearSetups())
         setIsLoading(false)
         setSetupItemEditing({
           id: '', comments: '', orderShow: '', setupId: ''
@@ -414,8 +416,42 @@ function SettingsMyGearPage () {
     })
   }
 
+  // Add item do setup
+  const [showItensToAddOnSetup, setShowItensToAddOnSetup] = useState(false)
+  const [isAddingItemToSetup, setIsAddingItemToSetup] = useState(false)
+  const lastOrderOfSetup = user.gearSetupItems.items.sort((a, b) => a.orderShow - b.orderShow)?.at(-1)?.orderShow
+  const addItemToSetup = (productId, setupId) => {
+    setIsAddingItemToSetup(true)
+    setTimeout(() => {
+      fetch('https://mublin.herokuapp.com/user/addItemToSetup', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ 
+          setupId: setupId, productId: productId, order: lastOrderOfSetup + 1 
+        })
+      }).then((response) => {
+        dispatch(userActions.getUserGearSetupItems(setupId));
+        setShowItensToAddOnSetup(false)
+        setIsAddingItemToSetup(false)
+        dispatch(userActions.getUserGearSetups())
+      }).catch(err => {
+        console.error(err)
+        alert('Ocorreu um erro ao adicionar o item ao setup. Tente novamente em instantes')
+        setIsAddingItemToSetup(false)
+      })
+    }, 300);
+  }
+
   return (
     <>
+      <Helmet>
+        <title>Meu equipamento | Mublin</title>
+        <link rel='canonical' href='https://mublin.com/settings/my-gear' />
+      </Helmet>
       <div className='showOnlyInLargeScreen'>
         <Header reloadUserInfo />
       </div>
@@ -538,7 +574,7 @@ function SettingsMyGearPage () {
                                   <IconPencil size={15} stroke={1.8} />
                                 </ActionIcon>
                                 <ActionIcon variant='default' size='lg' aria-label='Deletar'
-                                  onClick={() => openModalConfirmationDeleteSetup(setup.id)}
+                                  onClick={() => openModalConfirmationDeleteSetup(setup.id, setup.name)}
                                 >
                                   <IconTrash size={15} stroke={1.8} />
                                 </ActionIcon>
@@ -619,8 +655,8 @@ function SettingsMyGearPage () {
                     </Text>
                   }
                   <Grid mt={6}>
-                    {gear.map((item, key) => (
-                      <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={key}>
+                    {gear.map(item => (
+                      <Grid.Col span={{ base: 12, md: 4, lg: 4 }} key={item.id}>
                         <Paper
                           radius='md'
                           withBorder
@@ -826,15 +862,30 @@ function SettingsMyGearPage () {
               value={productDetail.ownerComments}
               onChange={(event) => setProductDetail({...productDetail, ownerComments: event.currentTarget.value})}
             />
-            <Divider mt="xs" label="Sub itens relacionados" labelPosition="left" />
+            <Group justify='flex-end' gap={7} mt={10}>
+              <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditItemOpen(false)}>
+                Cancelar
+              </Button>
+              <Button color='mublinColor' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={isSubmitting}>
+                Salvar
+              </Button>
+            </Group>
+            <Divider mt={10} label="Sub itens relacionados" labelPosition="left" />
             <Flex gap={8}>
               <Avatar
                 size={50}
                 mt={6}
                 color='mublinColor' radius='md'
                 className='point'
-                // onClick={() => navigate('/new/')}
-                >
+                onClick={() => notifications.show({
+                  id: 'addSubItem',
+                  autoClose: 2000,
+                  position: 'top-right',
+                    color: 'red',
+                    message: 'Não é possível adicionar sub itens no momento. Em breve esta funcionalidade estará disponível',
+                  })
+                }
+              >
                 <IconPlus size="1.5rem" />
               </Avatar>
               {subGear.filter((p) => { return p.parent_product_id === item.id }).map(s =>
@@ -854,14 +905,6 @@ function SettingsMyGearPage () {
                 </Flex>
               )}
             </Flex>
-            <Group justify='flex-end' gap={7} mt={20}>
-              <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditItemOpen(false)}>
-                Cancelar
-              </Button>
-              <Button color='mublinColor' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={isSubmitting}>
-                Salvar
-              </Button>
-            </Group>
           </Box>
         )}
       </Modal>
@@ -1052,19 +1095,37 @@ function SettingsMyGearPage () {
           <Text size='sm' fw={500}>
             Itens deste setup ({user.gearSetupItems.total} itens)
           </Text>
-          <ActionIcon variant='light' color='mublinColor' aria-label='Novo item'
-            onClick={() => notifications.show({
-              id: 'newSetupItem',
-              autoClose: 2000,
-              position: 'top-right',
-                color: 'orange',
-                message: 'Para adicionar mais itens a este setup, feche esta edição e selecione o item na sua lista de equipamentos',
-              })
-            }
-          >
-            <IconPlus style={{ width: '70%', height: '70%' }} stroke={1.5} />
-          </ActionIcon>
+          {showItensToAddOnSetup && 
+            <ActionIcon variant='light' color='mublinColor'
+              onClick={() => setShowItensToAddOnSetup(false)}
+            >
+              <IconMinus />
+            </ActionIcon>
+          }
+          {!showItensToAddOnSetup && 
+            <ActionIcon variant='light' color='mublinColor'
+              onClick={() => setShowItensToAddOnSetup(true)}
+            >
+              <IconPlus />
+            </ActionIcon>
+          }
         </Group>
+        <Collapse in={showItensToAddOnSetup}>
+          <NativeSelect
+            mt={8}
+            onChange={(e) => addItemToSetup(e.currentTarget.value, modalEditImage.setupId)}
+            disabled={isAddingItemToSetup}
+          >
+            <option>Selecione o item para adicionar</option>
+            {gear.map(item =>
+              <option key={item.id} value={item.productId}
+                disabled={user.gearSetupItems.items.some(x => x.id === item.productId)}
+              >
+                {item.brandName} {item.productName}
+              </option>
+            )}
+          </NativeSelect>
+        </Collapse>
         <Box my={14}>
           {user.gearSetupItemsRequesting ? ( 
             <Center>

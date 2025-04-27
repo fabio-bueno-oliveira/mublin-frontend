@@ -31,7 +31,9 @@ const initialState = {
       categoryId: '',
       categoryName: '',
       colorName: '',
-      colorNamePTBR: ''
+      colorNamePTBR: '',
+      series: '',
+      seriesId: ''
     }
   ],
   partners: {

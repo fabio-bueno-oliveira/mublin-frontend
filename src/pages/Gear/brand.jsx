@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useParams } from 'react-router';
 import { gearInfos } from '../../store/actions/gear';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, NativeSelect, Grid, Box, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, ColorSwatch, Badge, em } from '@mantine/core';
+import { Container, NativeSelect, Grid, Box, Anchor, Center, BackgroundImage, Flex, Avatar, Card, Image, Text, Group, ColorSwatch, Badge, em, Loader } from '@mantine/core';
 import { IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconUsers, IconLink, IconTagStarred, IconDiamond } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks';
 import Header from '../../components/header';
@@ -206,85 +206,95 @@ function BrandPage () {
             </Splide>
           </>
         }
-        <ResponsiveMasonry
-          columnsCountBreakPoints={{350: 2, 750: 3, 900: 4}}
-          gutterBreakpoints={{350: "8px", 750: "8px", 900: "8px"}}
-          style={{marginTop:'18px'}}
-        >
-          <Masonry>
-            {brand.products.map(product =>
-              <Card
-                withBorder
-                className='mublinModule gearDetailCard'
-                px={10}
-                pb={10}
-                pt={0}
-                key={product.id}
-                w='100%'
-              >
-                <Card.Section>
-                  <Center pt={20}>
+        {brand.requesting ? (
+          <Center pt={60}>
+            <Loader size='lg' color='primary' type='bars' opacity={0.5} />
+          </Center>
+        ) : (
+          <ResponsiveMasonry
+            columnsCountBreakPoints={{350: 2, 750: 3, 900: 4}}
+            gutterBreakpoints={{350: "8px", 750: "8px", 900: "8px"}}
+            style={{marginTop:'18px'}}
+          >
+            <Masonry>
+              {brand.products.map(product =>
+                <Card
+                  withBorder
+                  className='mublinModule gearDetailCard'
+                  px={10}
+                  pb={10}
+                  pt={0}
+                  key={product.id}
+                  w='100%'
+                >
+                  <Card.Section>
+                    <Center pt={20}>
+                      <Link to={{ pathname: `/gear/product/${product.id}` }}>
+                        <Image
+                          src={product.picture}
+                          h={150}
+                          w='auto'
+                          fit='contain'
+                          alt={product.name}
+                        />
+                      </Link>
+                    </Center>
+                  </Card.Section>
+                  {brand.colors.total > 0 &&
                     <Link to={{ pathname: `/gear/product/${product.id}` }}>
-                      <Image
-                        src={product.picture}
-                        h={150}
-                        w='auto'
-                        fit='contain'
-                        alt={product.name}
-                      />
+                      <Group gap={5} mt={14}>
+                        {brand.colors.result
+                          .filter((x) => { return x.productId === product.id })
+                          .sort((a, b) => b.mainColor - a.mainColor)
+                          .map(color => 
+                            <ColorSwatch
+                              color={color.sample ? undefined : color.rgb}
+                              title={color.name}
+                              className={color.sample ? 'removeAlpha' : undefined}
+                              style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+color.sample + ")",width:'14px',minWidth:'14px',height:'14px',minHeight:'14px'}}
+                            />
+                          )
+                        }
+                      </Group>
                     </Link>
-                  </Center>
-                </Card.Section>
-                {brand.colors.total > 0 &&
-                  <Link to={{ pathname: `/gear/product/${product.id}` }}>
-                    <Group gap={5} mt={14}>
-                      {brand.colors.result
-                        .filter((x) => { return x.productId === product.id })
-                        .sort((a, b) => b.mainColor - a.mainColor)
-                        .map(color => 
-                          <ColorSwatch
-                            color={color.sample ? undefined : color.rgb}
-                            title={color.name}
-                            className={color.sample ? 'removeAlpha' : undefined}
-                            style={{backgroundSize:'28px 28px', backgroundImage: "url(" + 'https://ik.imagekit.io/mublin/products/colors/'+color.sample + ")",width:'14px',minWidth:'14px',height:'14px',minHeight:'14px'}}
-                          />
-                        )
+                  }
+                  <Text size='sm' fw={500} mt='xs'>{product.name}</Text>
+                  <Text size='xs' fw={500} c='dimmed'>{product.subtitle}</Text>
+                  <Flex gap={3} mt={4} align='center' justify='space-between'>
+                    <Group gap={2} align='center'>
+                      <Badge size='xs' color='mublinColor' variant='outline' radius='sm'>
+                        {product.categoryName}
+                      </Badge>
+                      {product.seriesId > 0 && 
+                        <Badge size='xs' color='dark' variant='outline' radius='sm'>
+                          {product.series}
+                        </Badge>
+                      }
+                      {!!product.rare &&
+                        <Badge size='xs' variant='gradient' gradient={{ from: 'indigo', to: 'pink', deg: 90 }} radius='sm' leftSection={<IconDiamond style={{width:'0.8rem',height:'0.8rem'}} />}>Limitado</Badge>
                       }
                     </Group>
-                  </Link>
-                }
-                <Group justify='space-between' mt='xs'>
-                  <Text size='sm' fw={500}>{product.name}</Text>
-                </Group>
-                <Flex gap={3} mt={4} align='center' justify='space-between'>
-                  <Group gap={2} align='center'>
-                    <Badge size='xs' color='mublinColor' variant='outline' radius='sm'>
-                      {product.categoryName}
-                    </Badge>
-                    {!!product.rare &&
-                      <Badge size='xs' variant='gradient' gradient={{ from: 'indigo', to: 'pink', deg: 90 }} radius='sm' leftSection={<IconDiamond style={{width:'0.8rem',height:'0.8rem'}} />}>Limitado</Badge>
-                    }
-                  </Group>
-                  <Flex c='dimmed' gap={3} align='center' title={product.totalOwners + ' pessoas possuem'}>
-                    <IconUsers style={{width:'11px',height:'11px'}} />
-                    <Text size='xs' className='lhNormal'>
-                      {product.totalOwners}
-                    </Text>
+                    <Flex opacity={0.6} gap={3} align='center' title={product.totalOwners + ' pessoas possuem'}>
+                      <IconUsers style={{width:'11px',height:'11px'}} />
+                      <Text size='xs' className='lhNormal'>
+                        {product.totalOwners}
+                      </Text>
+                    </Flex>
                   </Flex>
-                </Flex>
-                <Flex justify='flex-end' mt={6}>
-                  <Avatar.Group>
-                    {brand.owners.result.filter(x => x.productId === product.id).map(user =>
-                      <Link to={{ pathname: `/${user.username}` }}>
-                        <Avatar size={35} src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-70,w-70,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} title={user.name + ' ' + user.lastname} />
-                      </Link>
-                    )}
-                  </Avatar.Group>
-                </Flex>
-              </Card>
-            )}
-          </Masonry>
-        </ResponsiveMasonry>
+                  <Flex justify='flex-end' mt={6}>
+                    <Avatar.Group>
+                      {brand.owners.result.filter(x => x.productId === product.id).map(user =>
+                        <Link to={{ pathname: `/${user.username}` }}>
+                          <Avatar size={35} src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-70,w-70,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} title={user.name + ' ' + user.lastname} />
+                        </Link>
+                      )}
+                    </Avatar.Group>
+                  </Flex>
+                </Card>
+              )}
+            </Masonry>
+          </ResponsiveMasonry>
+        )}
       </Container>
       <FooterMenuMobile />
     </>
