@@ -347,6 +347,7 @@ function SettingsMyGearPage () {
           title: 'Certo!',
           message: 'Os detalhes do setup foram atualizados com sucesso',
         })
+        form.resetTouched()
       }).catch(err => {
         console.error(err)
         setIsLoading(false)
@@ -384,8 +385,9 @@ function SettingsMyGearPage () {
     updateSetupItem(setupItemEditing.id, setupItemEditing.comments, setupItemEditing.orderShow, setupItemEditing.setupId)
   }
 
+  const [isDeletingSetupItem, setIsDeletingSetupItem] = useState(0)
   const deleteSetupGearItem = (setupId, itemId) => {
-    setLoadingRemove(true)
+    setIsDeletingSetupItem(itemId)
     fetch('https://mublin.herokuapp.com/user/deleteSetupGearItem', {
       method: 'DELETE',
       headers: {
@@ -397,7 +399,7 @@ function SettingsMyGearPage () {
     }).then((response) => {
       dispatch(userActions.getUserGearSetupItems(setupId))
       dispatch(userActions.getUserGearSetups())
-      setLoadingRemove(false)
+      setIsDeletingSetupItem(0)
       notifications.show({
         position: 'top-right',
         color: 'green',
@@ -412,7 +414,7 @@ function SettingsMyGearPage () {
         title: 'Deu ruim :(',
         message: 'Ocorreu um erro ao remover este item do setup. Tente novamente em instantes',
       })
-      setLoadingRemove(false)
+      setIsDeletingSetupItem(0)
     })
   }
 
@@ -1198,7 +1200,7 @@ function SettingsMyGearPage () {
                             aria-label='Deletar' 
                             title='Remover do setup'
                             onClick={() => deleteSetupGearItem(item.setupId, item.setupItemId)}
-                            loading={loadingRemove}
+                            loading={isDeletingSetupItem === item.setupItemId}
                           >
                             <IconTrash size={15} stroke={1.8} color='red' />
                           </ActionIcon>
