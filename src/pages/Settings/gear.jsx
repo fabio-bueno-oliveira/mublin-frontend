@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
 import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, NumberInput, TextInput, Textarea, Input, em, Divider, ScrollArea } from '@mantine/core'
-import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled, IconDeviceFloppy, IconSend, IconThumbUp } from '@tabler/icons-react'
+import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled, IconCamera } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import { isNotEmpty, useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
@@ -50,7 +50,7 @@ function SettingsMyGearPage () {
   const productInfo = products.filter((product) => { return product.id === Number(productSelected)}) 
 
   useEffect(() => {
-    fetch("https://mublin.herokuapp.com/gear/tuning")
+    fetch('https://mublin.herokuapp.com/gear/tuning')
       .then(res => res.json())
       .then(
         (result) => {
@@ -101,7 +101,7 @@ function SettingsMyGearPage () {
     setIsSubmitting(true)
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/user/updateGearItem', {
-        method: 'put',
+        method: 'PUT',
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ function SettingsMyGearPage () {
       setModalConfirmDelete(false)
     }).catch(err => {
       console.error(err)
-      alert("Ocorreu um erro ao remover o item")
+      alert('Ocorreu um erro ao remover o item')
       setLoadingRemove(false)
       setModalConfirmDelete(false)
     })
@@ -162,7 +162,7 @@ function SettingsMyGearPage () {
     setIsUploading(true)
   }
   const onUploadError = err => {
-    alert("Ocorreu um erro. Tente novamente em alguns minutos.")
+    alert('Ocorreu um erro. Tente novamente em alguns minutos.')
     setIsUploading(false)
   }
   const onUploadSuccess = res => {
@@ -214,7 +214,7 @@ function SettingsMyGearPage () {
         setNewSetup({name: '', description: '', image: ''})
       }).catch(err => {
         console.error(err)
-        alert("Ocorreu um erro ao criar o setup")
+        alert('Ocorreu um erro ao criar o setup')
         setIsLoading(false)
       })
     }, 300);
@@ -223,7 +223,7 @@ function SettingsMyGearPage () {
   // Remove a gear setup
   const [modalConfirmDeleteSetup, setModalConfirmDeleteSetup] = useState(false)
   const [setupToRemove, setSetupToRemove] = useState({id: '', name: ''})
-  const openModalConfirmationSetup = (setupId, setupName) => {
+  const openModalConfirmationDeleteSetup = (setupId, setupName) => {
     setModalConfirmDeleteSetup(true)
     setSetupToRemove({id: setupId, name: setupName})
   }
@@ -252,6 +252,7 @@ function SettingsMyGearPage () {
   const formUpdate = useForm({
     mode: 'uncontrolled',
     initialValues: {
+      id: '',
       name: '',
       description: '',
     },
@@ -260,22 +261,99 @@ function SettingsMyGearPage () {
       name: isNotEmpty('Insira um nome para o setup'),
       description: isNotEmpty('Insira uma descrição curta'),
     },
-  });
+  })
   const [modalEditSetupOpen, setModalEditSetupOpen] = useState(false)
-  const openModalEditSetup = (id, name, description) => {
+
+  // Update setup image
+  const [modalEditImage, setModalEditImage] = useState({setupId: '', filename: ''})
+  const onUploadUpdateStart = evt => {
+    console.log('Start uplading', evt)
+    setIsUploading(true)
+  }
+  const onUploadUpdateError = err => {
+    console.log(err)
+    alert("Ocorreu um erro. Tente novamente em alguns minutos.")
+    setIsUploading(false)
+  }
+  const onUploadUpdateSuccess = res => {
+    let n = res.filePath.lastIndexOf('/')
+    let fileName = res.filePath.substring(n + 1)
+    setModalEditImage({...modalEditImage, filename: fileName})
+    setIsUploading(false)
+    fetch('https://mublin.herokuapp.com/user/updateGearSetupImage', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({
+        setupId: modalEditImage.setupId, image: fileName
+      })
+    })
+      .then(res => res.json())
+      .then((result) => {
+        dispatch(userActions.getUserGearSetups())
+        notifications.show({
+          position: 'top-right',
+          color: 'green',
+          title: 'Boa!',
+          message: 'A imagem do setup foi atualizada!',
+        })
+      }).catch(err => {
+        console.error(err)
+        alert('Ocorreu um erro inesperado ao tentar atualizar a imagem deste setup. Tente novamente em instantes.')
+      })
+  }
+  
+  const openModalEditSetup = (id, name, description, image) => {
     dispatch(userActions.getUserGearSetupItems(id))
-    formUpdate.setValues({ name: name, description: description });
+    formUpdate.setValues({ id: id, name: name, description: description })
     setModalEditSetupOpen(true)
+    setModalEditImage({setupId: id, filename: image})
   }
   const [setupItemEditing, setSetupItemEditing] = useState({
     id: '', comments: '', orderShow: '', setupId: ''
   })
   const closeModalEditSetup = () => {
     setModalEditSetupOpen(false)
+    formUpdate.setValues({ id: '', name: '', description: '' })
+    formUpdate.resetTouched()
     setSetupItemEditing({
       id: '', comments: '', orderShow: '', setupId: ''
     })
+    setModalEditImage({setupId: '', filename: ''})
   }
+
+  const updateSetup = (values) => {
+    setIsLoading(true);
+    fetch('https://mublin.herokuapp.com/user/updateGearSetup', {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({
+        setupId: values.id, name: values.name, description: values.description
+      })
+    })
+      .then(res => res.json())
+      .then((result) => {
+        setIsLoading(false)
+        notifications.show({
+          position: 'top-right',
+          color: 'green',
+          title: 'Certo!',
+          message: 'Os detalhes do setup foram atualizados com sucesso',
+        })
+      }).catch(err => {
+        console.error(err)
+        setIsLoading(false)
+        alert('Ocorreu um erro inesperado ao tentar atualizar os detalhes deste setup. Tente novamente em instantes.')
+      })
+  }
+
   const updateSetupItem = (id, comments, orderShow, setupId) => {
     setTimeout(() => {
       fetch('https://mublin.herokuapp.com/userInfo/updateSetupGearItem', {
@@ -297,8 +375,9 @@ function SettingsMyGearPage () {
         alert('Ocorreu um erro ao editar os dados do item do setup. Tente novamente em instantes.')
         setIsLoading(false)
       })
-    }, 300);
+    }, 300)
   }
+
   const handleUpdateSetupItem = () => {
     setIsLoading(true)
     updateSetupItem(setupItemEditing.id, setupItemEditing.comments, setupItemEditing.orderShow, setupItemEditing.setupId)
@@ -352,11 +431,14 @@ function SettingsMyGearPage () {
                           Meus setups ({user.gearSetups.total})
                         </Title>
                       </Group>
-                      <Text size='sm' c='dimmed' mb={12}>
+                      <Text size='sm' c='dimmed' mb={isMobile ? 0 : 12}>
                         Grupos de equipamentos utilizados em apresentações
                       </Text>
                     </Grid.Col>
-                    <Grid.Col span={{ base: 12, md: 3, lg: 3 }} ta={isMobile ? 'left' : 'right'}>
+                    <Grid.Col 
+                      span={{ base: 12, md: 3, lg: 3 }}
+                      pb={isMobile ? 22 : 0}
+                    >
                       <Button
                         leftSection={<IconPlus size={14} />}
                         color='mublinColor'
@@ -391,14 +473,15 @@ function SettingsMyGearPage () {
                           <Flex direction='column' gap={2}>
                             <Center>
                               <Image
-                                src={'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+setup.image}
+                                src={setup.image ? 'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+setup.image : 'https://ik.imagekit.io/mublin/bg/tr:w-120,h-120/blue-soft_1_.jpg'}
+                                opacity={setup.image ? 1 : 0.5}
                                 h={60}
                                 mah={60}
                                 w='auto'
                                 fit='contain'
                                 radius='md'
                                 className='point'
-                                onClick={() => openModalEditSetup(setup.id, setup.name, setup.description)}
+                                onClick={() => openModalEditSetup(setup.id, setup.name, setup.description, setup.image)}
                               />
                             </Center>
                             <Text ta='center' fw={550} size='xs' className='lhNormal'>
@@ -409,13 +492,15 @@ function SettingsMyGearPage () {
                             </Text>
                             <Center mt={5}>
                               <ActionIcon.Group>
-                                <ActionIcon variant="default" size="lg" aria-label="Editar"
-                                  onClick={() => openModalEditSetup(setup.id, setup.name, setup.description)}
+                                <ActionIcon variant='default' size='lg' aria-label='Editar'
+                                  onClick={() => 
+                                    openModalEditSetup(setup.id, setup.name, setup.description, setup.image)
+                                  }
                                 >
                                   <IconPencil size={15} stroke={1.8} />
                                 </ActionIcon>
-                                <ActionIcon variant="default" size="lg" aria-label="Deletar"
-                                  onClick={() => openModalConfirmationSetup(setup.id)}
+                                <ActionIcon variant='default' size='lg' aria-label='Deletar'
+                                  onClick={() => openModalConfirmationDeleteSetup(setup.id)}
                                 >
                                   <IconTrash size={15} stroke={1.8} />
                                 </ActionIcon>
@@ -443,7 +528,7 @@ function SettingsMyGearPage () {
                           Gerenciar meu equipamento ({user.gear.length})
                         </Title>
                       </Group>
-                      <Text size='sm' c='dimmed' mb={8}>
+                      <Text size='sm' c='dimmed' mb={isMobile ? 0 : 12}>
                         Adicionar, remover ou editar itens
                       </Text>
                     </Grid.Col>
@@ -846,34 +931,83 @@ function SettingsMyGearPage () {
         </Group>
       </Modal>
       <Modal
+        size='md'
         title='Editar setup'
         centered
+        scrollAreaComponent={ScrollArea.Autosize}
         opened={modalEditSetupOpen}
         onClose={() => closeModalEditSetup()}
-        size='md'
       >
-        <form onSubmit={formUpdate.onSubmit((values) => console.log(values))}>
+        <form onSubmit={formUpdate.onSubmit(updateSetup)}>
+          <Center>
+            <Image
+              src={modalEditImage.filename ? 'https://ik.imagekit.io/mublin/users/gear-setups/tr:w-120,h-120/'+modalEditImage.filename : 'https://ik.imagekit.io/mublin/bg/tr:w-120,h-120/blue-soft_1_.jpg'}
+              opacity={modalEditImage.filename ? 1 : 0.5}
+              h={55}
+              mah={55}
+              w='auto'
+              fit='contain'
+              radius='md'
+            />
+          </Center>
+          <Center>
+            <div className='customFileUpload'>
+              <IKUpload 
+                id='setupImage'
+                className='file-input__input'
+                style={{fontSize:'13px'}}
+                fileName={loggedUserId+'_setup'}
+                folder='/users/gear-setups/'
+                tags={['setup']}
+                useUniqueFileName={true}
+                isPrivateFile= {false}
+                onUploadStart={onUploadUpdateStart}
+                onError={onUploadUpdateError}
+                onSuccess={onUploadUpdateSuccess}
+                accept='image/x-png,image/gif,image/jpeg'
+                transformation={{
+                  pre: "h-300,w-300"
+                }}
+              />
+              <Button
+                component='label'
+                htmlFor='setupImage'
+                leftSection={<IconCamera size={14} />}
+                color='mublinColor'
+                size='xs'
+                disabled={isUploading}
+              >
+                {isUploading ? 'Enviando...' : 'Escolher nova imagem'}
+              </Button>
+            </div>
+          </Center>
           <TextInput
             withAsterisk
-            label="Nome do setup"
-            placeholder="Ex: Acústico"
+            label='Nome do setup'
+            placeholder='Ex: Acústico'
             maxLength={15}
             key={formUpdate.key('name')}
             {...formUpdate.getInputProps('name')}
           />
           <TextInput
             withAsterisk
-            label="Descrição"
-            placeholder="Ex: Para apresentações com violão e voz..."
+            label='Descrição'
+            placeholder='Ex: Para apresentações com violão e voz...'
             maxLength={45}
             key={formUpdate.key('description')}
             {...formUpdate.getInputProps('description')}
           />
           <Group justify='flex-end' gap={7} mt={16}>
-            <Button variant='outline' color='mublinColor' size='sm' onClick={() => closeModalEditSetup()}>
+            {/* <Button variant='outline' color='mublinColor' size='sm' onClick={() => closeModalEditSetup()}>
               Cancelar
-            </Button>
-            <Button type="submit" color='mublinColor' size='sm'>
+            </Button> */}
+            <Button 
+              type='submit' 
+              color='mublinColor' 
+              size='sm' 
+              disabled={!formUpdate.isTouched()}
+              loading={isLoading}
+            >
               Salvar
             </Button>
           </Group>
@@ -885,7 +1019,9 @@ function SettingsMyGearPage () {
           </Text>
           <ActionIcon variant='light' color='mublinColor' aria-label='Novo item'
             onClick={() => notifications.show({
-              position: 'bottom-right',
+              id: 'newSetupItem',
+              autoClose: 2000,
+              position: 'top-right',
                 color: 'orange',
                 message: 'Para adicionar mais itens a este setup, feche esta edição e selecione o item na sua lista de equipamentos',
               })
@@ -900,7 +1036,7 @@ function SettingsMyGearPage () {
               <Loader color='mublinColor' type='bars' size='sm' />
             </Center>
           ) : (
-            <ScrollArea type="always" w='100%' h={200} scrollbars="y" offsetScrollbars>
+            user.gearSetupItems.total > 0 ? ( 
               <Flex gap={6} direction='column'>
                 {user.gearSetupItems.items.sort((a, b) => a.orderShow - b.orderShow).map(item =>
                   <Card withBorder radius='md' p={6} key={item.id}>
@@ -927,7 +1063,7 @@ function SettingsMyGearPage () {
                         </Anchor>
                         <Flex gap={3} direction='column' justify='flex-start'>
                           <Text fz='10px' className='lh1'>{item.brandName}</Text>
-                          <Text fz='sm' className='lh1' fw='500'>{item.name}</Text>
+                          <Text fz='xs' className='lh1' fw='500'>{item.name}</Text>
                           <Text fz='11px' className='lh1' c='dimmed'>{item.category}</Text>
                         </Flex>
                       </Group>
@@ -969,11 +1105,11 @@ function SettingsMyGearPage () {
                       </Box>
                     </Flex>
                     <Group mt={4}>
-                      <TextInput
+                      <NumberInput
                         size='sm'
                         label='Ordem'
                         defaultValue={item.orderShow}
-                        onChange={(e) => setSetupItemEditing({...setupItemEditing, orderShow: e.currentTarget.value})}
+                        onChange={(val) => setSetupItemEditing({...setupItemEditing, orderShow: val})}
                         min={1}
                         w={80}
                         disabled={(setupItemEditing.id !== item.setupItemId) || isLoading}
@@ -991,7 +1127,11 @@ function SettingsMyGearPage () {
                   </Card>
                 )}
               </Flex>
-            </ScrollArea>
+            ) : (
+              <Text size='sm' c='dimmed'>
+                Nenhum item adicionado a este setup
+              </Text>
+            )
           )}
         </Box>
       </Modal>
