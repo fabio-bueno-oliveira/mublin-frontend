@@ -181,7 +181,6 @@ function SettingsMyGearPage () {
         Authorization: 'Basic ' + import.meta.env.VITE_IMAGEKIT_PRIVATE_KEY
       }
     }
-
     try {
       await fetch(url, options);
     } catch (error) {
@@ -230,7 +229,7 @@ function SettingsMyGearPage () {
   const deleteSetup = (setupId) => {
     setLoadingRemove(true)
     fetch('https://mublin.herokuapp.com/user/'+setupId+'/deleteGearSetup', {
-      method: 'delete',
+      method: 'DELETE',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
@@ -383,6 +382,38 @@ function SettingsMyGearPage () {
     updateSetupItem(setupItemEditing.id, setupItemEditing.comments, setupItemEditing.orderShow, setupItemEditing.setupId)
   }
 
+  const deleteSetupGearItem = (setupId, itemId) => {
+    setLoadingRemove(true)
+    fetch('https://mublin.herokuapp.com/user/deleteSetupGearItem', {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ setupId: setupId, itemId: itemId })
+    }).then((response) => {
+      dispatch(userActions.getUserGearSetupItems(setupId))
+      dispatch(userActions.getUserGearSetups())
+      setLoadingRemove(false)
+      notifications.show({
+        position: 'top-right',
+        color: 'green',
+        title: 'Sucesso!',
+        message: 'O item foi removido deste setup',
+      })
+    }).catch(err => {
+      console.error(err)
+      notifications.show({
+        position: 'top-right',
+        color: 'red',
+        title: 'Deu ruim :(',
+        message: 'Ocorreu um erro ao remover este item do setup. Tente novamente em instantes',
+      })
+      setLoadingRemove(false)
+    })
+  }
+
   return (
     <>
       <div className='showOnlyInLargeScreen'>
@@ -460,7 +491,7 @@ function SettingsMyGearPage () {
                       options={{
                         drag: 'free',
                         snap: false,
-                        perPage: isMobile ? 4 : 6,
+                        perPage: isMobile ? 3 : 6,
                         autoWidth: false,
                         arrows: false,
                         gap: '22px',
@@ -484,7 +515,14 @@ function SettingsMyGearPage () {
                                 onClick={() => openModalEditSetup(setup.id, setup.name, setup.description, setup.image)}
                               />
                             </Center>
-                            <Text ta='center' fw={550} size='xs' className='lhNormal'>
+                            <Text
+                              w='100%'
+                              truncate='end'
+                              ta='center'
+                              fw={550}
+                              size='xs'
+                              className='lhNormal'
+                            >
                               {setup.name}
                             </Text>
                             <Text ta='center' size='xs' className='lhNormal'>
@@ -525,11 +563,11 @@ function SettingsMyGearPage () {
                       <Group gap={4} align='center'>
                         <IconPackages size={16} />
                         <Title order={4}>
-                          Gerenciar meu equipamento ({user.gear.length})
+                          Meu equipamento ({user.gear.length})
                         </Title>
                       </Group>
                       <Text size='sm' c='dimmed' mb={isMobile ? 0 : 12}>
-                        Adicionar, remover ou editar itens
+                        Adicionar, remover e editar itens
                       </Text>
                     </Grid.Col>
                     <Grid.Col span={{ base: 12, md: 6, lg: 6 }} ta={isMobile ? 'left' : 'right'}>
@@ -646,7 +684,7 @@ function SettingsMyGearPage () {
                           </Grid>
                           <Flex mt='10' gap={8} justify='space-between'>
                             <Button 
-                              size='sm'
+                              size='compact-sm'
                               color='mublinColor'
                               fullWidth
                               fw='440'
@@ -655,7 +693,7 @@ function SettingsMyGearPage () {
                               Editar
                             </Button>
                             <Button 
-                              size='sm'
+                              size='compact-sm'
                               color='primary'
                               variant='outline'
                               fullWidth
@@ -696,139 +734,136 @@ function SettingsMyGearPage () {
       </Modal>
       <Modal
         title='Editar detalhes do item'
+        size='md'
         centered
-        fullScreen={isMobile}
         opened={modalEditItemOpen}
         onClose={() => setModalEditItemOpen(false)}
-        size='sm'
       >
-        <>
-          {modalItemManagementProductId && itemInfo.map((item, key) =>
-            <Box key={key}>
-              <Center>
-                <Image
-                  radius='md'
-                  h={100}
-                  w={100}
-                  src={item.picture ? item.picture : undefined} 
-                />
-              </Center>
-              <Text ta='center' size='sm' c='dimmed' mt={8}>
-                {item.category} • {item.brandName}
-              </Text>
-              <Text ta='center' size='md' fw='500'>
-                {item.productName}
-              </Text>
-              <Radio.Group
-                mt={8}
-                value={String(featured)}
-                onChange={setFeatured}
-                name='editItemFeatured'
-                size='md'
-                label='Em destaque'
-                description='Exibir entre os primeiros'
-              >
-                <Group mt={4}>
-                  <Radio size='sm' color='mublinColor' value='1' label='Sim' />
-                  <Radio size='sm' color='mublinColor' value='0' label='Não' />
-                </Group>
-              </Radio.Group>
-              <Radio.Group
-                mt={8}
-                size='md'
-                value={String(currently_using)}
-                onChange={setCurrentlyUsing}
-                name='editItemUsing'
-                label='Em uso atualmente'
-              >
-                <Group>
+        {modalItemManagementProductId && itemInfo.map((item, key) =>
+          <Box key={key}>
+            <Center>
+              <Image
+                radius='md'
+                h={100}
+                w={100}
+                src={item.picture ? item.picture : undefined} 
+              />
+            </Center>
+            <Text ta='center' size='sm' c='dimmed' mt={8}>
+              {item.category} • {item.brandName}
+            </Text>
+            <Text ta='center' size='md' fw='500'>
+              {item.productName}
+            </Text>
+            <Radio.Group
+              mt={8}
+              value={String(featured)}
+              onChange={setFeatured}
+              name='editItemFeatured'
+              size='md'
+              label='Em destaque'
+              description='Exibir entre os primeiros'
+            >
+              <Group mt={4}>
                 <Radio size='sm' color='mublinColor' value='1' label='Sim' />
                 <Radio size='sm' color='mublinColor' value='0' label='Não' />
-                </Group>
-              </Radio.Group>
-              <NativeSelect
-                className={productDetail.macroCategory !== 'chords' ? 'd-none' : undefined}
-                mt={8}
-                label='Afinação atual'
-                defaultValue={productDetail.tuning}
-                onChange={(e) => setProductDetail({...productDetail, tuning: e.target.options[e.target.selectedIndex].value})}
-              >
-                {!productDetail.tuning &&
-                  <option>Não informado</option>
-                } 
-                {tuningTypes.map((type) =>
-                  <option key={type.id} value={type.id}>{type.namePTBR}</option>
-                )}
-              </NativeSelect>
-              <Radio.Group
-                mt={6}
-                mb={8}
-                value={String(for_sale)}
-                onChange={setForSale}
-                size='md'
-                name='editItemForSale'
-                label='À venda'
-              >
-                <Group>
-                  <Radio size='sm' color='mublinColor' value='1' label='Sim' />
-                  <Radio size='sm' color='mublinColor' value='0' label='Não' />
-                  <CurrencyInput
-                    value={price}
-                    locale='pt-BR'
-                    disabled={(for_sale === '1' || for_sale === 1) ? false : true}
-                    onChangeValue={(event, originalValue, maskedValue) => {
-                      setPrice(originalValue);
-                    }}
-                    InputElement={<TextInput w='155px' placeholder='Preço de venda' />}
-                  />
-                </Group>
-              </Radio.Group>
-              <Textarea
-                mt={8}
-                size='md'
-                label='Meus comentários pessoais'
-                value={productDetail.ownerComments}
-                onChange={(event) => setProductDetail({...productDetail, ownerComments: event.currentTarget.value})}
-              />
-              <Divider mt="xs" label="Sub itens relacionados" labelPosition="left" />
-              <Flex gap={8}>
-                <Avatar
-                  size={50}
-                  mt={6}
-                  color='mublinColor' radius='md'
-                  className='point'
-                  // onClick={() => navigate('/new/')}
-                  >
-                  <IconPlus size="1.5rem" />
-                </Avatar>
-                {subGear.filter((p) => { return p.parent_product_id === item.id }).map(s =>
-                  <Flex gap={4} mt={6} align='center' direction='column' key={s.id}>
-                    <Image
-                      src={s.picture ? s.picture : undefined}
-                      h={50}
-                      mah={50}
-                      w='auto'
-                      fit='contain'
-                      radius='md'
-                    />
-                    <Text size='10px'>
-                      {truncateString(s.productName, 9)}
-                    </Text>
-                    <Text size='9px' c='red' className='point'>Remover</Text>
-                  </Flex>
-                )}
-              </Flex>
-              <Group justify='flex-end' gap={7} mt={20}>
-                <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditItemOpen(false)}>
-                  Cancelar
-                </Button>
-                <Button color='mublinColor' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={isSubmitting}>
-                  Salvar
-                </Button>
               </Group>
-            </Box>
-          )}
-        </>
+            </Radio.Group>
+            <Radio.Group
+              mt={8}
+              size='md'
+              value={String(currently_using)}
+              onChange={setCurrentlyUsing}
+              name='editItemUsing'
+              label='Em uso atualmente'
+            >
+              <Group>
+              <Radio size='sm' color='mublinColor' value='1' label='Sim' />
+              <Radio size='sm' color='mublinColor' value='0' label='Não' />
+              </Group>
+            </Radio.Group>
+            <NativeSelect
+              className={productDetail.macroCategory !== 'chords' ? 'd-none' : undefined}
+              mt={8}
+              label='Afinação atual'
+              defaultValue={productDetail.tuning}
+              onChange={(e) => setProductDetail({...productDetail, tuning: e.target.options[e.target.selectedIndex].value})}
+            >
+              {!productDetail.tuning &&
+                <option>Não informado</option>
+              } 
+              {tuningTypes.map((type) =>
+                <option key={type.id} value={type.id}>{type.namePTBR}</option>
+              )}
+            </NativeSelect>
+            <Radio.Group
+              mt={6}
+              mb={8}
+              value={String(for_sale)}
+              onChange={setForSale}
+              size='md'
+              name='editItemForSale'
+              label='À venda'
+            >
+              <Group>
+                <Radio size='sm' color='mublinColor' value='1' label='Sim' />
+                <Radio size='sm' color='mublinColor' value='0' label='Não' />
+                <CurrencyInput
+                  value={price}
+                  locale='pt-BR'
+                  disabled={(for_sale === '1' || for_sale === 1) ? false : true}
+                  onChangeValue={(event, originalValue, maskedValue) => {
+                    setPrice(originalValue);
+                  }}
+                  InputElement={<TextInput w='155px' placeholder='Preço de venda' />}
+                />
+              </Group>
+            </Radio.Group>
+            <Textarea
+              mt={8}
+              size='md'
+              label='Meus comentários pessoais'
+              value={productDetail.ownerComments}
+              onChange={(event) => setProductDetail({...productDetail, ownerComments: event.currentTarget.value})}
+            />
+            <Divider mt="xs" label="Sub itens relacionados" labelPosition="left" />
+            <Flex gap={8}>
+              <Avatar
+                size={50}
+                mt={6}
+                color='mublinColor' radius='md'
+                className='point'
+                // onClick={() => navigate('/new/')}
+                >
+                <IconPlus size="1.5rem" />
+              </Avatar>
+              {subGear.filter((p) => { return p.parent_product_id === item.id }).map(s =>
+                <Flex gap={4} mt={6} align='center' direction='column' key={s.id}>
+                  <Image
+                    src={s.picture ? s.picture : undefined}
+                    h={50}
+                    mah={50}
+                    w='auto'
+                    fit='contain'
+                    radius='md'
+                  />
+                  <Text size='10px'>
+                    {truncateString(s.productName, 9)}
+                  </Text>
+                  <Text size='9px' c='red' className='point'>Remover</Text>
+                </Flex>
+              )}
+            </Flex>
+            <Group justify='flex-end' gap={7} mt={20}>
+              <Button variant='outline' color='mublinColor' size='sm' onClick={() => setModalEditItemOpen(false)}>
+                Cancelar
+              </Button>
+              <Button color='mublinColor' size='sm' disabled={(for_sale === '1' && !price) ? true : false} onClick={() => editGearItem(itemIdToEdit, modalItemManagementProductId, featured, for_sale, price, currently_using, productDetail.tuning, productDetail.ownerComments)} loading={isSubmitting}>
+                Salvar
+              </Button>
+            </Group>
+          </Box>
+        )}
       </Modal>
       <Modal
         withCloseButton={false}
@@ -1096,8 +1131,13 @@ function SettingsMyGearPage () {
                               <Text size='xs' fw={550}>OK</Text>
                             </ActionIcon>
                           }
-                          <ActionIcon variant='default' size='lg' aria-label='Deletar' title='Remover do setup'
-                            // onClick={() => openModalConfirmationSetup(setup.id)}
+                          <ActionIcon 
+                            variant='default' 
+                            size='lg' 
+                            aria-label='Deletar' 
+                            title='Remover do setup'
+                            onClick={() => deleteSetupGearItem(item.setupId, item.setupItemId)}
+                            loading={loadingRemove}
                           >
                             <IconTrash size={15} stroke={1.8} color='red' />
                           </ActionIcon>
