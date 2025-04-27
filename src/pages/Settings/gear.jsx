@@ -364,7 +364,7 @@ function SettingsMyGearPage () {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify({itemId: id, comments: comments, orderShow: orderShow})
+        body: JSON.stringify({itemId: id, comments: comments ? comments : '', orderShow: orderShow})
       }).then((response) => {
         dispatch(userActions.getUserGearSetupItems(setupId))
         dispatch(userActions.getUserGearSetups())
