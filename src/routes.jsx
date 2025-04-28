@@ -33,6 +33,7 @@ import New from './pages/New';
 import ProjectPage from './pages/ProjectPage';
 import ProjectDashboardPage from './pages/ProjectDashboard';
 import ProjectDashboardTeamPage from './pages/ProjectDashboard/Team';
+import ProjectDashboardSetlistPage from './pages/ProjectDashboard/Setlist';
 import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
 import ProfileGear from './pages/Profile/Gear/gearExpanded';
@@ -94,6 +95,7 @@ function AppRoutes () {
           <Route path="/project/:username" element={<ProjectPage />} />
           <Route path="/dashboard/:username" element={<ProjectDashboardPage />} />
           <Route path="/dashboard/:username/team" element={<ProjectDashboardTeamPage />} />
+          <Route path="/dashboard/:username/setlist" element={<ProjectDashboardSetlistPage />} />
           {/* Gear, products and companies */}
           <Route path="/gear/product/:productId" element={<GearProductPage />} />
           <Route path="/gear/product/zoom/:productId" element={<GearZoomPage />} />

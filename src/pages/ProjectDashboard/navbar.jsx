@@ -50,12 +50,13 @@ function ProjectDashboardMenu (props) {
             <NavLink
               active={props.page === 'team'}
               href={`/dashboard/${username}/team`}
-              label='Time'
+              label='Equipe'
               leftSection={<IconUsersGroup size={16} stroke={1.5} />}
               color='mublinColor'
             />
             <NavLink
-              href={`/dashboard/${username}`}
+              active={props.page === 'setlist'}
+              href={`/dashboard/${username}/setlist`}
               label='Músicas pra tirar'
               leftSection={<IconHeadphones size={16} stroke={1.5} />}
               color='mublinColor'
@@ -73,18 +74,22 @@ function ProjectDashboardMenu (props) {
                   label='Informações'
                   leftSection={<IconPencil size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <NavLink
-                  href='#required-for-focus'
+                  active={props.page === 'adminPicture'}
+                  href={`/dashboard/${username}/admin/picture`}
                   label='Foto de perfil'
                   leftSection={<IconPhoto size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <NavLink
                   href='#required-for-focus'
                   label='Foto de capa'
                   leftSection={<IconPictureInPictureTop size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <Text ml={10} my={8} c='dimmed' size='xs' tt='uppercase'>Pessoas e funções</Text>
                 <NavLink
@@ -92,6 +97,7 @@ function ProjectDashboardMenu (props) {
                   label='Gerenciar pessoas'
                   leftSection={<IconUsersGroup size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <Text ml={10} my={8} c='dimmed' size='xs' tt='uppercase'>Vagas e oportunidades</Text>
                 <NavLink
@@ -99,6 +105,7 @@ function ProjectDashboardMenu (props) {
                   label='Criar nova vaga'
                   leftSection={<IconPlus size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <Text ml={10} my={8} c='dimmed' size='xs' tt='uppercase'>Eventos</Text>
                 <NavLink
@@ -106,12 +113,14 @@ function ProjectDashboardMenu (props) {
                   label='Criar novo evento'
                   leftSection={<IconCalendarPlus size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <NavLink
                   href='#required-for-focus'
                   label='Ver eventos'
                   leftSection={<IconCalendarWeek size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <Text ml={10} my={8} c='dimmed' size='xs' tt='uppercase'>Músicas</Text>
                 <NavLink
@@ -119,22 +128,22 @@ function ProjectDashboardMenu (props) {
                   label='Cadastrar nova música'
                   leftSection={<IconMusicPlus size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <NavLink
                   href='#required-for-focus'
                   label='Ver músicas'
                   leftSection={<IconList size={16} stroke={1.5} />}
                   color='mublinColor'
+                  disabled
                 />
                 <Text ml={10} my={8} c='dimmed' size='xs' tt='uppercase'>Financeiro</Text>
                 <NavLink
-                  // href='#'
-                  opacity={0.9}
-                  style={{cursor:'default'}}
+                  href='#required-for-focus'
                   label='Gerenciar finanças'
                   leftSection={<IconReportMoney size={16} stroke={1.5} />}
-                  rightSection={<Badge size='xs' color='mublinColor'>Em breve</Badge>}
                   color='mublinColor'
+                  disabled
                 />
               </>
             }

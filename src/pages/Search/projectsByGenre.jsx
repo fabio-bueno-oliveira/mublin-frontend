@@ -3,10 +3,11 @@ import { Helmet } from 'react-helmet'
 import { useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { searchInfos } from '../../store/actions/search'
-import { Container, Grid, Flex, Skeleton, Box, Title, Text, BackgroundImage, Avatar, Anchor, em } from '@mantine/core'
+import { Container, Grid, Flex, Skeleton, Box, Title, Text, BackgroundImage, Avatar, Anchor, em, Badge } from '@mantine/core'
 import { useMediaQuery, useFetch } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
+import { IconSearch, IconUserSearch } from '@tabler/icons-react'
 
 function SearchProjectsByGenre () {
 
@@ -20,7 +21,7 @@ function SearchProjectsByGenre () {
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
 
   const { data, loading } = useFetch(
-    'https://mublin.herokuapp.com/music/genre/20'
+    `https://mublin.herokuapp.com/music/genre/${genreId}`
   );
 
   useEffect(() => {
@@ -70,6 +71,7 @@ function SearchProjectsByGenre () {
                       <Avatar 
                         src={project.picture ? project.picture : undefined} 
                         size='lg'
+                        radius='md'
                         component='a'
                         href={`/project/${project.username}`}
                       />
@@ -81,16 +83,23 @@ function SearchProjectsByGenre () {
                         style={{flexGrow:'2'}}
                       >
                         <Anchor href={`/project/${project.username}`}>
-                          <Text size='md' fw={600} className='lhNormal'>
+                          <Text size='sm' fw={600} className='lhNormal'>
                             {project.name}
                           </Text>
                         </Anchor>
-                        <Text size='sm'>
-                          {project.type}
+                        <Text size='xs' className='lhNormal'>
+                          {project.type} {project.city && ' · '+project.city+'/'+project.regionUF}
                         </Text>
-                        <Text size='xs' fw={300} c='dimmed'>
-                          {project.city && project.city+' - '+project.region}
-                        </Text>
+                        {project.opportunityId > 0 &&
+                          <Badge size='sm' variant='light' color='mublinColor' mt={2} radius='sm' leftSection={<IconSearch size={10} />}>
+                            Procurando {project.opportunityRole}
+                          </Badge>
+                        }
+                        {!!project.endYear &&
+                          <Text size='xs' className='lhNormal' c='dimmed'>
+                            Projeto encerrado em {project.endYear}
+                          </Text>
+                        }
                       </Flex>
                     </Flex>
                   )
@@ -101,36 +110,61 @@ function SearchProjectsByGenre () {
             )}
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
-            <Title fz='1.03rem' fw='640' mb={14}>
+            <Title fz='1.03rem' fw='640' mb={18}>
               Encontre projetos por gênero
             </Title>
             <Grid mb={36}>
-              {searchResults.featuredGenres.map(genre => (
-                <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }} key={genre.id}>
-                  <BackgroundImage
-                    src="https://ik.imagekit.io/mublin/misc/music/duotone/rehearsalb_DRyoWy2aE.png?updatedAt=1599615974997"
-                    radius="lg"
-                    w='100%'
-                    h={85}
-                    p={10}
-                    component='a'
-                    href={`/search/projects/genre/${genre.id}`}
-                  >
-                    <Box w={85}>
-                      <Text 
-                        c='white' 
-                        size='sm' 
-                        fw={500} 
-                        truncate="end" 
-                        style={{textWrap:'unset'}}
-                        title={genre.name}
+              {searchResults.requesting ? (
+                <>
+                  <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
+                    <Skeleton width={132} height={88} radius='lg' />
+                  </Grid.Col>
+                  <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
+                    <Skeleton width={132} height={88} radius='lg' />
+                  </Grid.Col>
+                  <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
+                    <Skeleton width={132} height={88} radius='lg' />
+                  </Grid.Col>
+                  <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
+                    <Skeleton width={132} height={88} radius='lg' />
+                  </Grid.Col>
+                  <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
+                    <Skeleton width={132} height={88} radius='lg' />
+                  </Grid.Col>
+                  <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
+                    <Skeleton width={132} height={88} radius='lg' />
+                  </Grid.Col>
+                </>
+              ) : (
+                <>
+                  {searchResults.featuredGenres.map(genre => (
+                    <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }} key={genre.id}>
+                      <BackgroundImage
+                        src="https://ik.imagekit.io/mublin/misc/music/duotone/rehearsalb_DRyoWy2aE.png?updatedAt=1599615974997"
+                        radius="lg"
+                        w='100%'
+                        h={85}
+                        p={10}
+                        component='a'
+                        href={`/search/projects/genre/${genre.id}`}
                       >
-                        {genre.name}
-                      </Text>
-                    </Box>
-                  </BackgroundImage>
-                </Grid.Col>
-              ))}
+                        <Box w={85}>
+                          <Text 
+                            c='white' 
+                            size='sm' 
+                            fw={500} 
+                            truncate="end" 
+                            style={{textWrap:'unset'}}
+                            title={genre.name}
+                          >
+                            {genre.name}
+                          </Text>
+                        </Box>
+                      </BackgroundImage>
+                    </Grid.Col>
+                  ))}
+                </>
+              )}
             </Grid>
           </Grid.Col>
         </Grid>

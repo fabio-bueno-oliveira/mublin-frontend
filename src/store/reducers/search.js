@@ -212,6 +212,7 @@ const initialState = {
         public: '',
         city: '',
         region: '',
+        regionUF: '',
         country: '',
         mainGenre: '',
         secondGenre: '',
@@ -222,13 +223,8 @@ const initialState = {
         labelColor: '',
         foundationYear: '',
         endYear: '',
-        participationStatus: '',
-        participationId: '',
-        relatedUserName: '',
-        relatedUserLastname: '',
-        relatedUserUsername: '',
-        relatedUserPicture: '',
-        relatedUserId: '',
+        opportunityId: '',
+        opportunityRole: ''
       }
     ]
   }

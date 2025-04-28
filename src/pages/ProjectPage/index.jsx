@@ -208,7 +208,7 @@ function ProjectPage () {
                           Geral
                         </Tabs.Tab>
                         {project.spotifyId &&
-                          <Tabs.Tab value='second'>
+                          <Tabs.Tab value='music'>
                             Músicas
                           </Tabs.Tab>
                         }
@@ -256,7 +256,7 @@ function ProjectPage () {
                               Pessoas
                             </Tabs.Tab>
                             {project.spotifyId &&
-                              <Tabs.Tab value='second'>
+                              <Tabs.Tab value='music'>
                                 Músicas
                               </Tabs.Tab>
                             }
@@ -396,9 +396,18 @@ function ProjectPage () {
                     </Card>
                   </>
                 }
-                {activeTab === 'second' &&
-                  <Box>
-                    <iframe style={{borderRadius:'15px'}} src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator&theme=0`} width='100%' height='352' frameBorder='0' allowFullScreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' loading='lazy'></iframe>
+                {activeTab === 'music' &&
+                  <Box px={isMobile ? 10 : 0}>
+                    <iframe 
+                      style={{borderRadius:'15px'}} 
+                      src={`https://open.spotify.com/embed/artist/${project.spotifyId}?utm_source=generator&theme=0`} 
+                      width='100%' 
+                      height='352' 
+                      frameBorder='0' 
+                      allowFullScreen='' 
+                      allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture' 
+                      loading='lazy'
+                    ></iframe>
                   </Box>
                 }
                 {activeTab === 'opportunities' &&
@@ -433,8 +442,8 @@ function ProjectPage () {
                                   fw={650} 
                                   className='lhNormal'
                                   c='primary'
-                                  component='a'
-                                  href={`/job/${item.id}?project=${project.username}`}
+                                  // component='a'
+                                  // href={`/job/${item.id}?project=${project.username}`}
                                 >
                                   {item.rolename}
                                 </Title>
@@ -443,9 +452,9 @@ function ProjectPage () {
                                     <strong>Experiência:</strong> {item.experienceName}
                                   </Text>
                                   <Group gap={1}>
-                                    <IconMusic size='15' />
-                                    <IconMusic size='15' opacity={item.experienceLevel >= 2 ? 1 : 0.4} />
-                                    <IconMusic size='15' opacity={item.experienceLevel === 3 ? 1 : 0.4} />
+                                    <IconMusic size='15' color='blue' />
+                                    <IconMusic size='15' color='blue' opacity={item.experienceLevel >= 2 ? 1 : 0.3} />
+                                    <IconMusic size='15' color='blue' opacity={item.experienceLevel === 3 ? 1 : 0.3} />
                                   </Group>
                                 </Group>
                                 <Text size='xs'>
@@ -483,11 +492,11 @@ function ProjectPage () {
                 }
                 {activeTab === 'pictures' &&
                   <Card padding='lg' radius='md' withBorder className='mublinModule'>
-                    <Title fz='1.0rem' fw='640' mb={8}>Fotos</Title>
-                    {/* <Text size='sm' c='dimmed'>
+                    <Title fz='1.0rem' fw='640' mb={3}>Fotos</Title>
+                    <Text size='sm' c='dimmed'>
                       Nenhuma foto no momento
-                    </Text> */}
-                    <Grid gutter={10}>
+                    </Text>
+                    {/* <Grid gutter={10}>
                       <Grid.Col span={4}>
                         <Image
                           radius='md'
@@ -542,7 +551,7 @@ function ProjectPage () {
                           src='https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-9.png'
                         />
                       </Grid.Col>
-                    </Grid>
+                    </Grid> */}
                   </Card>
                 }
                 {activeTab === 'dashboard' &&

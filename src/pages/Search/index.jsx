@@ -324,7 +324,7 @@ function Search () {
             </Grid.Col>
             <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
 
-              <Title fz='1.03rem' fw='640' mb={14}>
+              <Title fz='1.03rem' fw='640' mb={18}>
                 Encontre projetos por gênero
               </Title>
               <Grid mb={36}>
