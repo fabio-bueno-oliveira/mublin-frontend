@@ -28,6 +28,7 @@ export const searchService = {
     getFeaturedProjects,
     getFeaturedProducts,
     getFeaturedGenres,
+    getProjectsByGenre,
     logout
 };
 
@@ -133,6 +134,14 @@ async function getFeaturedGenres() {
         headers: authHeader()
     };
     return fetch(`${BASE_URL}/search/explore/featuredGenres`, requestOptions).then(handleResponse);
+}
+
+async function getProjectsByGenre(genreId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(`${BASE_URL}/search/projectsByGenre/${genreId}`, requestOptions).then(handleResponse);
 }
 
 function logout() {

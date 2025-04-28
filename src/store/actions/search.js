@@ -16,6 +16,7 @@ export const searchInfos = {
   getFeaturedProjects: getFeaturedProjects,
   getFeaturedProducts: getFeaturedProducts,
   getFeaturedGenres: getFeaturedGenres,
+  getProjectsByGenre: getProjectsByGenre
 };
 
 function getUserLastSearches(query) {
@@ -228,4 +229,20 @@ function getFeaturedGenres() {
   function request(query) { return { type: searchTypes.GET_FEATURED_GENRES_REQUEST, query } }
   function success(results) { return { type: searchTypes.GET_FEATURED_GENRES_SUCCESS, results } }
   function failure(error) { return { type: searchTypes.GET_FEATURED_GENRES_FAILURE, error } }
+}
+
+function getProjectsByGenre(genreId) {
+  return dispatch => {
+    dispatch(request(genreId));
+
+    searchService.getProjectsByGenre(genreId)
+      .then(
+        results => dispatch(success(results)),
+        error => dispatch(failure(genreId, error.toString()))
+      );
+    };
+
+  function request(genreId) { return { type: searchTypes.SEARCH_PROJECTSBYGENRE_REQUEST, genreId } }
+  function success(results) { return { type: searchTypes.SEARCH_PROJECTSBYGENRE_SUCCESS, results } }
+  function failure(error) { return { type: searchTypes.SEARCH_PROJECTSBYGENRE_FAILURE, error } }
 }

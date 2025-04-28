@@ -199,7 +199,39 @@ const initialState = {
       id: '',
       name: ''
     }
-  ]
+  ],
+  projectsByGenre: {
+    total: 0,
+    success: false,
+    result: [
+      {
+        id: '',
+        name: '',
+        username: '',
+        picture: '',
+        public: '',
+        city: '',
+        region: '',
+        country: '',
+        mainGenre: '',
+        secondGenre: '',
+        thirdGenre: '',
+        type: '',
+        labelShow: '',
+        labelText: '',
+        labelColor: '',
+        foundationYear: '',
+        endYear: '',
+        participationStatus: '',
+        participationId: '',
+        relatedUserName: '',
+        relatedUserLastname: '',
+        relatedUserUsername: '',
+        relatedUserPicture: '',
+        relatedUserId: '',
+      }
+    ]
+  }
 }
 
 export function search(state = initialState, action) {
@@ -441,6 +473,28 @@ export function search(state = initialState, action) {
         requesting: false,
         errorLastSearches: 'Nenhuma busca recente encontrada',
         error: ''
+      };
+    // PROJECTS BY GENRE
+    case searchTypes.SEARCH_PROJECTSBYGENRE_REQUEST:
+      return {
+        ...state,
+        projectsByGenre: initialState.projectsByGenre,
+        requesting: true,
+        error: ''
+      };
+    case searchTypes.SEARCH_PROJECTSBYGENRE_SUCCESS:
+      return {
+        ...state,
+        projectsByGenre: action.results,
+        requesting: false,
+        error: ''
+      };
+    case searchTypes.SEARCH_PROJECTSBYGENRE_FAILURE:
+      return {
+        ...state,
+        projectsByGenre: initialState.projects,
+        requesting: false,
+        error: 'Nenhum projeto encontrado'
       };
     default:
       return state

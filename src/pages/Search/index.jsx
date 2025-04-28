@@ -332,18 +332,20 @@ function Search () {
                   <Grid.Col p={4} span={{ base: 4, md: 6, lg: 6 }}>
                     <BackgroundImage
                       key={genre.id}
-                      src="https://ik.imagekit.io/mublin/misc/music/duotone/rehearsalb_DRyoWy2aE.png?updatedAt=1599615974997"
-                      radius="lg"
+                      src='https://ik.imagekit.io/mublin/misc/music/duotone/rehearsalb_DRyoWy2aE.png?updatedAt=1599615974997'
+                      radius='lg'
                       w='100%'
                       h={85}
                       p={10}
+                      component='a'
+                      href={`/search/projects/genre/${genre.id}`}
                     >
                       <Box w={85}>
                         <Text 
                           c='white' 
                           size='sm' 
                           fw={500} 
-                          truncate="end" 
+                          truncate='end' 
                           style={{textWrap:'unset'}}
                           title={genre.name}
                         >
@@ -551,10 +553,10 @@ function Search () {
                           />
                         </Link>
                         <Flex
-                          justify="flex-start"
-                          align="flex-start"
-                          direction="column"
-                          wrap="wrap"
+                          justify='flex-start'
+                          align='flex-start'
+                          direction='column'
+                          wrap='wrap'
                           style={{flexGrow:'2'}}
                         >
                           <Anchor href={`/gear/product/${product.productId}`}>

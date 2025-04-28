@@ -24,6 +24,7 @@ import StartStep3Page from './pages/Start/step3';
 import StartStep4Page from './pages/Start/step4';
 import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search/index';
+import SearchProjectsByGenre from './pages/Search/projectsByGenre';
 import NewPost from './pages/New/post';
 import NewProject from './pages/New/project';
 import JoinProject from './pages/New/join';
@@ -110,6 +111,7 @@ function AppRoutes () {
           <Route path="/settings" element={<SettingsProfileEdit />} />
           {/* Search */}
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/projects/genre/:genreId" element={<SearchProjectsByGenre />} />
           {/* New item */}
           <Route path="/new/post" element={<NewPost />} />
           <Route path="/new/project" element={<NewProject />} />
