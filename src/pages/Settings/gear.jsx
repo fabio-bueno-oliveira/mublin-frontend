@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
-import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, NumberInput, TextInput, Textarea, Input, em, Divider, ScrollArea, Collapse } from '@mantine/core'
+import { Grid, Container, Modal, Card, Paper, Center, Group, Flex, Loader, Box, Image, NativeSelect, Button, Radio, Text, Title, Avatar, Anchor, ActionIcon, NumberInput, TextInput, Textarea, Input, em, Divider, ScrollArea, Drawer, Collapse } from '@mantine/core'
 import { IconPlus, IconChevronLeft, IconLockSquareRoundedFilled, IconRoute, IconPackages, IconPencil, IconTrash, IconSquare, IconSquareCheckFilled, IconCamera, IconMinus } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
 import { isNotEmpty, useForm } from '@mantine/form'
@@ -250,7 +250,7 @@ function SettingsMyGearPage () {
 
   // Edit setup
   const formUpdate = useForm({
-    mode: 'uncontrolled',
+    mode: 'controlled',
     initialValues: {
       id: '',
       name: '',
@@ -347,7 +347,7 @@ function SettingsMyGearPage () {
           title: 'Certo!',
           message: 'Os detalhes do setup foram atualizados com sucesso',
         })
-        form.resetTouched()
+        formUpdate.resetTouched()
       }).catch(err => {
         console.error(err)
         setIsLoading(false)
@@ -1010,13 +1010,11 @@ function SettingsMyGearPage () {
           </Button>
         </Group>
       </Modal>
-      <Modal
-        size='md'
-        title='Editar setup'
-        centered
-        scrollAreaComponent={ScrollArea.Autosize}
-        opened={modalEditSetupOpen}
+      <Drawer 
+        opened={modalEditSetupOpen} 
         onClose={() => closeModalEditSetup()}
+        title='Editar setup'
+        position='right'
       >
         <form onSubmit={formUpdate.onSubmit(updateSetup)}>
           <Center>
@@ -1081,10 +1079,10 @@ function SettingsMyGearPage () {
             {/* <Button variant='outline' color='mublinColor' size='sm' onClick={() => closeModalEditSetup()}>
               Cancelar
             </Button> */}
-            <Button 
-              type='submit' 
-              color='mublinColor' 
-              size='sm' 
+            <Button
+              type='submit'
+              color='mublinColor'
+              size='sm'
               disabled={!formUpdate.isTouched()}
               loading={isLoading}
             >
@@ -1237,7 +1235,7 @@ function SettingsMyGearPage () {
             )
           )}
         </Box>
-      </Modal>
+      </Drawer>
       {(!modalEditItemOpen && !modalEditSetupOpen) && 
         <FooterMenuMobile />
       }
