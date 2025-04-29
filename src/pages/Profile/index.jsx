@@ -994,7 +994,7 @@ function ProfilePage () {
                           fw='440'
                           fz='sm'
                           underline='hover'
-                          href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
+                          href={`https://buy.stripe.com/5kA03s32oeqq1q0147?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
                           target='_blank'
                         >
                           Assinar Mublin PRO ➜
@@ -1350,7 +1350,7 @@ function ProfilePage () {
               fw='440'
               fz='sm'
               underline='hover'
-              href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
+              href={`https://buy.stripe.com/5kA03s32oeqq1q0147?client_reference_id=${profile.id}&prefilled_email=${profile.email}&utm_source=profileGearSection`} 
               target='_blank'
             >
               Assinar Mublin PRO

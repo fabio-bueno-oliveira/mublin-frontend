@@ -191,7 +191,7 @@ function SettingsMyPlan () {
                       fz='md'
                       ta='center'
                       underline='hover'
-                      href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
+                      href={`https://buy.stripe.com/5kA03s32oeqq1q0147?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
                       target='_blank'
                     >
                       Assine o Mublin PRO!
@@ -202,7 +202,7 @@ function SettingsMyPlan () {
                       size='sm'
                       fullWidth
                       component='a'
-                      href={`https://buy.stripe.com/5kA9E2eL68221q08wy?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
+                      href={`https://buy.stripe.com/5kA03s32oeqq1q0147?client_reference_id=${loggedUserId}&prefilled_email=${loggedUserEmail}&utm_source=profileGearSection`} 
                       target='_blank'
                     >
                       Assine o Mublin PRO!
@@ -272,7 +272,7 @@ function SettingsMyPlan () {
                                   </Badge>
                                 </Group>
                                 <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'violet', to: 'yellow', deg: 107 }}>
-                                  R$ 11,90 <Text span fz='xs'>/mês</Text>
+                                  R$ 14,90 <Text span fz='xs'>/mês</Text>
                                 </Text>
                                 <Text size='xs' mb={10}>
                                   Perfil otimizado com todas as funcionalidades da plataforma + selo usuário verificado. Cobrança recorrente, podendo ser cancelada a qualquer momento.

@@ -127,7 +127,7 @@ function PricingPublicPage () {
                       </Badge>
                     </Group>
                     <Text size='1.8rem' fw={600} variant='gradient' gradient={{ from: 'violet', to: 'yellow', deg: 107 }}>
-                      R$ 11,90 <Text span fz='xs'>/mês</Text>
+                      R$ 14,90 <Text span fz='xs'>/mês</Text>
                     </Text>
                     <Text size='sm' mb={10}>
                       Perfil otimizado com todas as funcionalidades da plataforma + selo usuário verificado. Cobrança recorrente, podendo ser cancelada a qualquer momento.
