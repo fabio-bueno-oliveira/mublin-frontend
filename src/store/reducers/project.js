@@ -3,10 +3,10 @@ import { projectTypes } from '../types/project';
 const initialState = {
   requesting: false,
   success: false,
-  adminAccess: 0,
-  confirmed: '',
-  active: '',
-  leader: '',
+  loggedUserIsAdmin: 0,
+  loggedUserIsLeader: '',
+  loggedUserIsConfirmed: '',
+  loggedUserIsActive: '',
   id: '',
   name: '',
   oldName: '',
@@ -140,9 +140,6 @@ export function project(state = initialState, action) {
         ...state,
         requesting: true,
         success: false,
-        confirmed: '',
-        active: '',
-        leader: '',
         id: '',
         name: '',
         oldName: '',
@@ -224,9 +221,6 @@ export function project(state = initialState, action) {
         requesting: false,
         success: false,
         error: "A solicitação falhou",
-        confirmed: '',
-        active: '',
-        leader: '',
         id: '',
         name: '',
         oldName: '',
@@ -271,10 +265,10 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: false,
-        adminAccess: action.info.admin,
-        confirmed: action.info.confirmed,
-        active: action.info.active,
-        leader: action.info.leader
+        loggedUserIsAdmin: action.info.admin,
+        loggedUserIsConfirmed: action.info.confirmed,
+        loggedUserIsActive: action.info.active,
+        loggedUserIsLeader: action.info.leader
       };
     case projectTypes.GET_PROJECT_ADMINACCESS_FAILURE:
       return {

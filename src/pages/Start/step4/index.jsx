@@ -1066,7 +1066,7 @@ function StartFourthStep () {
                     <Text size='13px' fw={500}>{project.name}</Text>
                     <Text size='11px' c="dimmed">{project.ptname}</Text>
                     <Text size='10px' c="dimmed">{project.workTitle}</Text>
-                    {project.confirmed === 2 && 
+                    {project.loggedUserIsConfirmed === 2 && 
                       <Group gap={1} mt={3} mb={1}>
                         <IconClock style={{ width: '9px', height: '9px' }} stroke={3} /> <Text size='10px'>Aguardando aprovação</Text>
                       </Group>

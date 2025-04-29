@@ -18,9 +18,9 @@ function ProjectCard (props) {
   const cdnBaseURL = 'https://ik.imagekit.io/mublin/';
   const cdnProjectPath = cdnBaseURL+'projects/tr:h-200,w-200,c-maintain_ratio/';
   // const cdnProjectPathBlur = cdnBaseURL+'projects/tr:bl-6,h-80,w-410,fo-middle,c-maintain_ratio/';
-  
+
   const currentYear = new Date().getFullYear();
-  const isActiveOnProject = !!(project.active && !project.yearLeftTheProject && !project.yearEnd);
+  const isActiveOnProject = !!(project.loggedUserIsActive && !project.yearLeftTheProject && !project.yearEnd);
 
   const yearText = (yearSum) => {
     return yearSum === 1 ? " ano" : " anos";

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { projectInfos } from '../../store/actions/project'
 import { useParams } from 'react-router'
-import { useMantineColorScheme, Text, Image, Badge, NavLink, Accordion } from '@mantine/core'
+import { useMantineColorScheme, Text, Image, NavLink, Accordion } from '@mantine/core'
 import { IconLayoutDashboard, IconUsersGroup, IconCalendarPlus, IconCalendarWeek, IconPhoto, IconPictureInPictureTop, IconPencil, IconMusicPlus, IconList,  IconReportMoney, IconPlus, IconMusic, IconLock, IconHeadphones } from '@tabler/icons-react'
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
 import MublinLogoWhite from '../../assets/svg/mublin-logo-w.svg'
@@ -12,6 +13,7 @@ function ProjectDashboardMenu (props) {
   const params = useParams()
   const username = params?.username
 
+  let dispatch = useDispatch()
   const token = localStorage.getItem('token')
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
@@ -20,7 +22,9 @@ function ProjectDashboardMenu (props) {
 
   const { colorScheme } = useMantineColorScheme()
 
-  const isAdmin = project.members.some((member) => { return member.id === loggedUserId && member.confirmed === 1 && member.admin === 1 && !member.leftIn })
+  useEffect(() => {
+    dispatch(projectInfos.getProjectAdminAccessInfo(username))
+  }, [])
 
   return (
     <>
@@ -36,7 +40,7 @@ function ProjectDashboardMenu (props) {
         />
       }
 
-      <Accordion defaultValue={props.adminPages ? 'daily' : 'admin'} mt={16}>
+      <Accordion defaultValue={props.adminPages ? 'admin' : 'daily'} mt={16}>
         <Accordion.Item value='daily'>
           <Accordion.Control icon={<IconMusic />}>Funções do Dia a dia</Accordion.Control>
           <Accordion.Panel>
@@ -64,9 +68,9 @@ function ProjectDashboardMenu (props) {
           </Accordion.Panel>
         </Accordion.Item>
         <Accordion.Item value='admin'>
-          <Accordion.Control icon={<IconLock />} disabled={!isAdmin}>Funções administrativas</Accordion.Control>
+          <Accordion.Control icon={<IconLock />} disabled={!project.loggedUserIsAdmin}>Funções administrativas</Accordion.Control>
           <Accordion.Panel>
-            {isAdmin && 
+            {project.loggedUserIsAdmin && 
               <>
                 <Text ml={10} my={8} c='dimmed' size='xs' tt='uppercase'>Dados do projeto</Text>
                 <NavLink
