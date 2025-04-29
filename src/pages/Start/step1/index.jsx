@@ -21,7 +21,7 @@ function StartFirstStep () {
 
   const token = localStorage.getItem('token')
 
-  const userAvatarPath = "/users/avatars/"+user.id+"/"
+  const userAvatarPath = "/users/avatars/"
 
   const updatePicture = (userId, value) => {
     fetch('https://mublin.herokuapp.com/user/'+userId+'/picture', {
@@ -100,7 +100,7 @@ function StartFirstStep () {
                 />
               ) : (
                 <Avatar 
-                  src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture} 
+                  src={'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+user.picture} 
                   size={100} 
                 />
               )}

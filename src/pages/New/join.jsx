@@ -256,7 +256,7 @@ function New () {
               <Flex key={key} direction='column' align='center'>
                 <Avatar 
                   size='sm' 
-                  src={avatarCDNPath+member.id+'/'+member.picture}
+                  src={avatarCDNPath+'/'+member.picture}
                   component='a'
                   href={`/${member.username}`}
                 />

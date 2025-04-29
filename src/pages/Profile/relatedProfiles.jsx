@@ -35,7 +35,7 @@ function RelatedProfiles ({
                 <Avatar
                   w={42}
                   h={42}
-                  src={user.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-84,w-84,c-maintain_ratio/'+user.id+'/'+user.picture : undefined}
+                  src={user.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-84,w-84,c-maintain_ratio/'+user.picture : undefined}
                 />
               </Link>
               <Flex direction='column' justify='flex-start' align='flex-start'>

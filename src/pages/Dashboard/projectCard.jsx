@@ -156,7 +156,7 @@ function ProjectCard (props) {
             mr={7}
             src={
               (user.id && user.picture) ? 
-                cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture
+                cdnBaseURL+'tr:h-66,w-66,r-max,c-maintain_ratio/users/avatars/'+user.picture
               : null
               } 
           /> */}
@@ -169,7 +169,7 @@ function ProjectCard (props) {
               <Image 
                 h={18}
                 w={18} 
-                src={'https://ik.imagekit.io/mublin/tr:h-18,w-18,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture}  
+                src={'https://ik.imagekit.io/mublin/tr:h-18,w-18,r-max,c-maintain_ratio/users/avatars/'+user.picture}  
               />
               <Text size={largeScreen ? "13px" : "13px"} fw={400} lineClamp={1}> 
                 {project.yearLeftTheProject && "ex "}{project.role1}{project.role2 && ', '+project.role2}{project.role3 && ', '+project.role3}
@@ -236,7 +236,7 @@ function ProjectCard (props) {
             {(project.nextEventDateOpening && project.nextEventInvitationId) && 
               <>
                 <Group gap={4} my={6}>
-                  <Image h={18} w={18} src={'https://ik.imagekit.io/mublin/tr:h-18,w-18,r-max,c-maintain_ratio/users/avatars/'+project.nextEventInvitationUserIdWhoInvited+'/'+project.nextEventInvitationPictureWhoInvited} title={project.nextEventInvitationUsernameWhoInvited} />
+                  <Image h={18} w={18} src={'https://ik.imagekit.io/mublin/tr:h-18,w-18,r-max,c-maintain_ratio/users/avatars/'+project.nextEventInvitationPictureWhoInvited} title={project.nextEventInvitationUsernameWhoInvited} />
                   {(user.id !== project.nextEventInvitationUserIdWhoInvited) ? 
                     <Text size='10px'>
                       {project.nextEventInvitationNameWhoInvited} te convidou em {project.nextEventInvitationDate.substr(0,11)}
@@ -306,7 +306,7 @@ function ProjectCard (props) {
                       color={"violet"}
                       src={
                         (member.userId && member.userPicture) ? 
-                          cdnBaseURL+'tr:h-114,w-114/users/avatars/'+member.userId+'/'+member.userPicture
+                          cdnBaseURL+'tr:h-114,w-114/users/avatars/'+member.userPicture
                         : null
                       } 
                     />

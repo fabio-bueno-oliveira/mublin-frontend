@@ -891,7 +891,7 @@ function StartFourthStep () {
               <Flex key={key} direction='column' align='center'>
                 <Avatar 
                   size='sm' 
-                  src={avatarCDNPath+member.id+'/'+member.picture}
+                  src={avatarCDNPath+'/'+member.picture}
                 />
                 <Text size='10px' mt={5} c='dimmed'>{member.name}</Text>
               </Flex>

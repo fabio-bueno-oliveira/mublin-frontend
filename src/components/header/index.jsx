@@ -423,7 +423,7 @@ function Header (props) {
                       w={38}
                       h={38}
                       className='point'
-                      src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                      src={userInfo.picture ? cdnBaseURL+'/tr:h-76,w-76,r-max,c-maintain_ratio/users/avatars/'+userInfo.picture : undefined}
                       alt={userInfo.username}
                       ml={8}
                     />

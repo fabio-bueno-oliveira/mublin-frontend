@@ -29,20 +29,21 @@ function SettingsPicturePage () {
   const user = useSelector(state => state.user)
 
   // Picture upload
-  const userAvatarPath = '/users/avatars/'+loggedUserId+'/'
+  const userAvatarPath = '/users/avatars/'
   const [uploading, setUploading] = useState(false)
 
   const onUploadStart = evt => {
     console.log('Start uplading', evt)
     setUploading(true)
   }
-
   const onUploadSuccess = res => {
     let n = res.filePath.lastIndexOf('/')
     let fileName = res.filePath.substring(n + 1)
     updatePicture(loggedUserId,fileName)
   }
-
+  const onUploadError = err => {
+    alert('Ocorreu um erro. Tente novamente em alguns minutos.')
+  }
   const updatePicture = (userId, value) => {
     fetch('https://mublin.herokuapp.com/user/'+userId+'/picture', {
         method: 'PUT',
@@ -71,8 +72,46 @@ function SettingsPicturePage () {
       })
   }
 
-  const onUploadError = err => {
+  // Cover image upload
+  const userCoverPath = '/users/avatars/'
+  const [uploadingCover, setUploadingCover] = useState(false)
+
+  const onUploadCoverStart = evt => {
+    console.log('Start uplading', evt)
+    setUploading(true)
+  }
+  const onUploadCoverSuccess = res => {
+    let n = res.filePath.lastIndexOf('/')
+    let fileName = res.filePath.substring(n + 1)
+    updateCoverPicture(loggedUserId, fileName)
+  }
+  const onUploadCoverError = err => {
     alert('Ocorreu um erro. Tente novamente em alguns minutos.')
+  }
+  const updateCoverPicture = (userId, filename) => {
+    fetch('https://mublin.herokuapp.com/user/'+userId+'/coverPicture', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({coverPicture: filename})
+      }).then((response) => {
+        response.json().then((response) => {
+          setUploadingCover(false)
+          notifications.show({
+            title: 'Boa!',
+            message: 'A foto de capa foi atualizada com sucesso',
+            color: 'lime',
+            position: 'top-center'
+          })
+        })
+      }).catch(err => {
+        console.error(err)
+        setUploadingCover(false)
+        alert('Ocorreu um erro ao atualizar a foto de capa. Tente novamente em instantes')
+      })
   }
 
   return (
@@ -121,7 +160,7 @@ function SettingsPicturePage () {
                       />
                     ) : (
                       <Avatar
-                        src={'https://ik.imagekit.io/mublin/tr:h-280,w-280,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+picture}
+                        src={'https://ik.imagekit.io/mublin/tr:h-280,w-280,c-maintain_ratio/users/avatars/'+picture}
                         size={140}
                       />
                     )}
@@ -163,7 +202,7 @@ function SettingsPicturePage () {
                   <>
                     {user.picture_cover ? (
                       <Image
-                        src={`https://ik.imagekit.io/mublin/tr:w-380,c-maintain_ratio/users/avatars/${loggedUserId}/${user.picture_cover}`}
+                        src={`https://ik.imagekit.io/mublin/tr:w-380,c-maintain_ratio/users/avatars/${user.picture_cover}`}
                         width={380}
                         alt={`Imagem de capa de ${user.name}`}
                       />
@@ -181,18 +220,18 @@ function SettingsPicturePage () {
               </Center>
               <Center>
                 <div className='customFileUpload'>
-                  <IKUpload 
+                  <IKUpload
                     fileName='cover.jpg'
-                    folder={userAvatarPath}
+                    folder={userCoverPath}
                     tags={['cover','user']}
                     name='file-cover-input'
                     id='userCover'
                     className='file-input__input'
                     useUniqueFileName={true}
                     isPrivateFile= {false}
-                    onError={onUploadError}
-                    onSuccess={onUploadSuccess}
-                    onUploadStart={onUploadStart}
+                    onError={onUploadCoverError}
+                    onSuccess={onUploadCoverSuccess}
+                    onUploadStart={onUploadCoverStart}
                   />
                   <Button
                     component='label'
@@ -200,9 +239,9 @@ function SettingsPicturePage () {
                     leftSection={<IconCamera size={14} />}
                     color='violet'
                     size='sm'
-                    disabled={uploading}
+                    disabled={uploadingCover}
                   >
-                    {uploading ? 'Enviando...' : 'Escolher nova foto de capa'}
+                    {uploadingCover ? 'Enviando...' : 'Escolher nova foto de capa'}
                   </Button>
                 </div>
               </Center>

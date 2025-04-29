@@ -293,7 +293,7 @@ function ProfilePage () {
             <Card hiddenFrom='sm' shadow={false} padding={0} radius={0} mb={14}>
               <Card.Section>
                 <Image
-                  src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
+                  src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'}
                   height={100}
                   alt={`Imagem de capa de ${profile.name}`}
                 />
@@ -319,7 +319,7 @@ function ProfilePage () {
                 >
                   <Card.Section>
                     <Image
-                      src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.id}/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
+                      src={profile.pictureCover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${profile.pictureCover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
                       height={100}
                       alt={`Imagem de capa de ${profile.name}`}
                     />
@@ -760,8 +760,9 @@ function ProfilePage () {
                       fz='0.85rem'
                       fw='570'
                       h={30}
-                      variant='filled'
-                      color='mublinColor'
+                      variant='outline'
+                      // py={14}
+                      color='primary'
                       fullWidth
                       onClick={() => navigate('/settings')}
                     >
@@ -1319,7 +1320,7 @@ function ProfilePage () {
                           href={'/'+vote.username} 
                         >
                           <Group gap={5}>
-                            <Avatar src={vote.picture ? 'https://ik.imagekit.io/mublin/tr:h-40,w-40,c-maintain_ratio/users/avatars/'+vote.userId+'/'+vote.picture : null} size='20px' />
+                            <Avatar src={vote.picture ? 'https://ik.imagekit.io/mublin/tr:h-40,w-40,c-maintain_ratio/users/avatars/'+vote.picture : null} size='20px' />
                             <Text fz='xs'>{vote.username}</Text>
                           </Group>
                         </Anchor>

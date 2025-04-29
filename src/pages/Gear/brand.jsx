@@ -181,7 +181,7 @@ function BrandPage () {
                   <Card className='mublinModule' withBorder py={5} px={7} radius='xl' mt={6}>
                     <Flex gap={5} align='center'>
                       <Link to={{ pathname: `/${user.username}` }}>
-                        <Avatar src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-40,w-40,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} />
+                        <Avatar src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-40,w-40,c-maintain_ratio/users/avatars/'+user.picture : undefined} />
                       </Link>
                       <Flex direction='column'>
                         <Group gap={0}>
@@ -285,7 +285,7 @@ function BrandPage () {
                     <Avatar.Group>
                       {brand.owners.result.filter(x => x.productId === product.id).map(user =>
                         <Link to={{ pathname: `/${user.username}` }}>
-                          <Avatar size={35} src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-70,w-70,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} title={user.name + ' ' + user.lastname} />
+                          <Avatar size={35} src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-70,w-70,c-maintain_ratio/users/avatars/'+user.picture : undefined} title={user.name + ' ' + user.lastname} />
                         </Link>
                       )}
                     </Avatar.Group>

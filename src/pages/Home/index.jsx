@@ -108,7 +108,7 @@ function Home () {
                   >
                     <Card.Section>
                       <Image
-                        src={userInfo.picture_cover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${userInfo.id}/${userInfo.picture_cover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
+                        src={userInfo.picture_cover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${userInfo.picture_cover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
                         height={70}
                         alt={`Imagem de capa de ${userInfo.name}`}
                       />
@@ -117,7 +117,7 @@ function Home () {
                       <Link to={{ pathname: `/${userInfo.username}` }}>
                         <Avatar
                           size='80px'
-                          src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-152,w-152,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                          src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-152,w-152,c-maintain_ratio/users/avatars/'+userInfo.picture : undefined}
                           style={{border:'2px solid white'}}
                         />
                       </Link>
@@ -334,7 +334,7 @@ function Home () {
                 <Link to={{ pathname: `/${userInfo.username}` }}>
                   <Avatar
                     size='40px'
-                    src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-80,w-80,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+                    src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-80,w-80,r-max,c-maintain_ratio/users/avatars/'+userInfo.picture : undefined}
                   />
                 </Link>
                 <Button

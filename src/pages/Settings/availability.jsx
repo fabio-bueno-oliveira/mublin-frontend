@@ -189,7 +189,7 @@ function SettingsAvailability () {
                   onChange={(event) => setShowOpenToWork(event.currentTarget.checked)}
                 />
                 <Indicator position='bottom-center' inline label={<Text size='0.6rem' >{openToWorkText}</Text>} color='lime' size={18} withBorder disabled={!showOpenToWork}>
-                  <Avatar src={user.picture ? cdnBaseURL+'/tr:h-60,w-60,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined} size='60px' />
+                  <Avatar src={user.picture ? cdnBaseURL+'/tr:h-60,w-60,c-maintain_ratio/users/avatars/'+user.picture : undefined} size='60px' />
                 </Indicator>
                 <TextInput
                   label='Texto do selo (até 12 caracteres)'

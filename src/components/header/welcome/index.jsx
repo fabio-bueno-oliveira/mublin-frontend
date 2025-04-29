@@ -50,7 +50,7 @@ function HeaderWelcome () {
         <Flex align="center" justify="flex-end" style={{flex:'1'}}>   
           <Avatar
             size="md"
-            src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : undefined}
+            src={user.picture ? cdnBaseURL+'/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.picture : undefined}
             alt={user.username}
             ml={8}
           />

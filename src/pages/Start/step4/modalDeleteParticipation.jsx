@@ -16,7 +16,7 @@ function ModalDeleteParticipationContent ({
         Tem certeza que deseja encerrar seu vínculo com este projeto? Ele não aparecerá mais no seu perfil e você não terá mais acesso ao painel de controle do projeto. Caso deseje voltar a participar no futuro, você terá que solicitar aprovação novamente.
       </Text>
       <Flex gap={3} direction={'column'} align={'center'}>
-        <Avatar size='sm' src={user?.picture ? `https://ik.imagekit.io/mublin/tr:h-56,w-56,c-maintain_ratio/users/avatars/${user?.id}/${user?.picture}` : undefined} />
+        <Avatar size='sm' src={user?.picture ? `https://ik.imagekit.io/mublin/tr:h-56,w-56,c-maintain_ratio/users/avatars/${user?.picture}` : undefined} />
         {/* <Badge variant="filled" color="gray" size="xs">Administrador</Badge> */}
         <Text size='xs' fw={500}>
           {user.name} {user.lastname} - {!!modalDeleteData?.founder && 'Fundador, '}{modalDeleteData.role1}{modalDeleteData?.role2 && `, ${modalDeleteData?.role2}`} em {modalDeleteData.name}
@@ -36,7 +36,7 @@ function ModalDeleteParticipationContent ({
         <Group gap={9}>
           {adminsModalDelete.map((admin, key) => 
             <Flex key={key} gap={3}>
-              <Avatar size='xs' src={admin.userPicture ? `${avatarCDNPath}${admin.userId}/${admin.userPicture}` : undefined} />
+              <Avatar size='xs' src={admin.userPicture ? `${avatarCDNPath}/${admin.userPicture}` : undefined} />
               <Text size='xs'>{admin.userName}</Text>
             </Flex>
           )}

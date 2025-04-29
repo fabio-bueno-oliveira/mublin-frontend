@@ -20,7 +20,7 @@ function ProjectDashboardHeader (props) {
             w={34}
             h={34}
             className='point'
-            src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-68,w-68,r-max,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+userInfo.picture : undefined}
+            src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-68,w-68,r-max,c-maintain_ratio/users/avatars/'+userInfo.picture : undefined}
             alt={userInfo.username}
             ml={8}
           />

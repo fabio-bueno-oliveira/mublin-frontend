@@ -241,7 +241,7 @@ function MyProjects () {
                           <Avatar
                             size="50px" 
                             name={member.name} 
-                            src={member.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-50,w-50,c-maintain_ratio/'+member.id+'/'+member.picture : undefined} 
+                            src={member.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-50,w-50,c-maintain_ratio/'+member.picture : undefined} 
                           />
                           <Text size="12px">
                             {member.name}

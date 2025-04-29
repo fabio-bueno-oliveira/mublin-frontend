@@ -596,7 +596,7 @@ function FeedCard ({ item, compact }) {
                 className='point'
                 radius='xl'
                 size='35px'
-                src={comment.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-35,w-35,c-maintain_ratio/'+comment.userId+'/'+comment.picture : undefined}
+                src={comment.picture ? 'https://ik.imagekit.io/mublin/users/avatars/tr:h-35,w-35,c-maintain_ratio/'+comment.picture : undefined}
               />
               <Box>
                 <Text size='sm'>

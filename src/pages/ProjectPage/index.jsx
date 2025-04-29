@@ -180,7 +180,7 @@ function ProjectPage () {
                             size='40'
                             name={member.name}
                             title={`${member.name} ${member.lastname} - ${member.role1}`}
-                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-80,w-80,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-80,w-80,c-maintain_ratio/'+member.picture} 
                             component='a'
                             href={`/${member.username}`}
                           />
@@ -584,7 +584,7 @@ function ProjectPage () {
                             <Avatar
                               size='45'
                               name={member.name}
-                              src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                              src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.picture} 
                               component='a'
                               href={`/${member.username}`}
                               title={member.username}
@@ -654,7 +654,7 @@ function ProjectPage () {
                                 <Avatar
                                   size='45'
                                   name={member.name}
-                                  src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                                  src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-90,w-90,c-maintain_ratio/'+member.picture} 
                                   component='a'
                                   href={`/${member.username}`}
                                   title={member.username}

@@ -460,7 +460,7 @@ function Search () {
                           <Group gap={3} mt={2}>
                             <Link to={{ pathname: `/${project.relatedUserUsername}` }}>
                               <Avatar 
-                                src={project.relatedUserPicture ? `https://ik.imagekit.io/mublin/users/avatars/tr:h-30,w-30,c-maintain_ratio/${project.relatedUserId}/${project.relatedUserPicture}` : undefined} 
+                                src={project.relatedUserPicture ? `https://ik.imagekit.io/mublin/users/avatars/tr:h-30,w-30,c-maintain_ratio/${project.relatedUserPicture}` : undefined} 
                                 size='15px'
                               />
                             </Link>

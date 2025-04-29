@@ -151,7 +151,7 @@ function NewPost () {
               <Avatar 
                 w='45px'
                 h='45px'
-                src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-90,w-90,r-max,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+userInfo.picture : null} 
+                src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-90,w-90,r-max,c-maintain_ratio/users/avatars/'+userInfo.picture : null} 
               />
             </Link>
             <Box>

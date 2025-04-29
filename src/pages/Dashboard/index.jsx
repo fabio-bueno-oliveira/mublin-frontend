@@ -82,7 +82,7 @@ function Home () {
                     <Link to={{ pathname: `/${user.username}` }}>
                       <Avatar 
                         size="lg"
-                        src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.id+'/'+user.picture : null} 
+                        src={user.picture ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,r-max,c-maintain_ratio/users/avatars/'+user.picture : null} 
                       />
                     </Link>
                   </Center>

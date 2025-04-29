@@ -173,7 +173,7 @@ function ProjectDashboardTeamPage () {
                             size='45'
                             name={member.name}
                             title={`${member.name} ${member.lastname} - ${member.role1}`}
-                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-82,w-82,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                            src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-82,w-82,c-maintain_ratio/'+member.picture} 
                             component='a'
                             href={`/${member.username}`}
                           />
@@ -232,7 +232,7 @@ function ProjectDashboardTeamPage () {
                             <Avatar
                               size='35'
                               name={member.name}
-                              src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-70,w-70,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                              src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-70,w-70,c-maintain_ratio/'+member.picture} 
                               component='a'
                               href={`/${member.username}`}
                               title={member.username}
@@ -333,7 +333,7 @@ function ProjectDashboardTeamPage () {
             </Alert>
             <Center mb={4}>
               {memberToManage.picture ? (
-                <Image radius='md' src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-200,w-200,c-maintain_ratio/'+memberToManage.id+'/'+memberToManage.picture} w={75} h={75} />
+                <Image radius='md' src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-200,w-200,c-maintain_ratio/'+memberToManage.picture} w={75} h={75} />
               ) : (
                 <Image src='https://ik.imagekit.io/mublin/sample-folder/avatar-undefined_Kblh5CBKPp.jpg' w={100} h={100} />
               )}

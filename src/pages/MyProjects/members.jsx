@@ -225,7 +225,7 @@ function MyProjects () {
                                   <Avatar 
                                     size="26px" 
                                     name={member.name} 
-                                    src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-26,w-26,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                                    src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-26,w-26,c-maintain_ratio/'+member.picture} 
                                   />
                                   {member.name+' '+member.lastname}
                                 </Group>

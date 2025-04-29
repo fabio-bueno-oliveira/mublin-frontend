@@ -15,7 +15,7 @@ function Home () {
       <Container size={'lg'}>
         <Box mb={24}>
           {user.picture ? (
-            <Avatar src={`${imageCDNPath}/users/avatars/${+user.id}/${user.picture}`} alt="Foto de perfil" />
+            <Avatar src={`${imageCDNPath}/users/avatars/${user.picture}`} alt="Foto de perfil" />
           ) : (
             <Avatar src={`${imageCDNPath}/sample-folder/avatar-undefined_Kblh5CBKPp.jpg`} alt="Foto de perfil" />
           )}

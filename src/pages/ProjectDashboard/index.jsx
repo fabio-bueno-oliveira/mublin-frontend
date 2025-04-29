@@ -291,7 +291,7 @@ function ProjectDashboardPage () {
                         size='45'
                         name={member.name}
                         title={`${member.name} ${member.lastname} - ${member.role1}`}
-                        src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-82,w-82,c-maintain_ratio/'+member.id+'/'+member.picture} 
+                        src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-82,w-82,c-maintain_ratio/'+member.picture} 
                         component='a'
                         href={`/${member.username}`}
                       />

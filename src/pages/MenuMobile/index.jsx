@@ -40,7 +40,7 @@ function MenuMobile () {
   }
 
   // Picture upload
-  const userAvatarPath = '/users/avatars/'+loggedUserId+'/'
+  const userAvatarPath = '/users/avatars/'
   const [uploading, setUploading] = useState(false)
   const onUploadStart = evt => {
     console.log('Start uplading', evt)
@@ -101,7 +101,7 @@ function MenuMobile () {
             size='82px'
             src={
               userInfo.picture 
-              ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+loggedUserId+'/'+picture
+              ? 'https://ik.imagekit.io/mublin/tr:h-200,w-200,c-maintain_ratio/users/avatars/'+picture
               : undefined
             }
             alt='Foto de perfil'
@@ -236,7 +236,7 @@ function MenuMobile () {
           ) : (
             <Image
               radius={'md'}
-              src={'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+userInfo.id+'/'+picture}
+              src={'https://ik.imagekit.io/mublin/tr:h-140,w-140,c-maintain_ratio/users/avatars/'+picture}
               w={140}
             />
           )}
