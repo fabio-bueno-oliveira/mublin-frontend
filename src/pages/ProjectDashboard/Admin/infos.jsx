@@ -201,6 +201,7 @@ function ProjectDashboardAdminInfoPage () {
                     <Grid>
                       <Grid.Col span={6}>
                         <NativeSelect
+                          size='md'
                           withAsterisk
                           label='Conteúdo principal'
                           key={form.key('kind')}
@@ -213,6 +214,7 @@ function ProjectDashboardAdminInfoPage () {
                       </Grid.Col>
                       <Grid.Col span={6}>
                         <NativeSelect
+                          size='md'
                           withAsterisk
                           label='Tipo do Projeto'
                           key={form.key('type')}

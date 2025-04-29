@@ -265,23 +265,22 @@ function Header (props) {
               }
             </Group>
             <Flex align='center' className='menuHeader'>
-              <Link to={{ pathname: '/home' }}>
-                <Button 
-                  size='sm'
-                  fw={440}
-                  radius={0}
-                  variant='transparent'
-                  color={menuTextColor}
-                  className={currentPath === '/home' ? 'headerMenuActive' : undefined}
-                  leftSection={<><IconHome size={16} /></>}
-                  px='xs'
-                  mr={10}
-                  h={50}
-                  visibleFrom='md'
-                >
-                  Início
-                </Button>
-              </Link>
+              <Button 
+                size='sm'
+                fw={440}
+                radius={0}
+                variant='transparent'
+                color={menuTextColor}
+                className={currentPath === '/home' ? 'headerMenuActive' : undefined}
+                leftSection={<><IconHome size={16} /></>}
+                px='xs'
+                mr={10}
+                h={50}
+                visibleFrom='md'
+                onClick={(e) => navigate('/home')}
+              >
+                Início
+              </Button>
               <Menu shadow='md' width={200} position='bottom'>
                 <Menu.Target>
                   <Button
@@ -392,29 +391,20 @@ function Header (props) {
                   )}
                 </Menu.Dropdown>
               </Menu>
-              <Link 
-                to={{
-                  pathname: "/search",
-                  search: "?keywords=&tab="
-                }}
+              <Button 
+                size='sm'
+                fw={400}
+                radius='xl'
+                variant='gradient'
+                gradient={{ from: 'mublinColor', to: 'violet', deg: 107 }}
+                leftSection={<IconMicrophone2 size={14} />}
+                p='xs'
+                visibleFrom='md'
+                mr='xs'
+                onClick={(e) => navigate('/projects')}
               >
-                <Button 
-                  size='sm'
-                  fw={400}
-                  radius='xl'
-                  variant='gradient'
-                  gradient={{ from: 'mublinColor', to: 'violet', deg: 107 }}
-                  leftSection={<IconMicrophone2 size={14} />}
-                  p='xs'
-                  visibleFrom='md'
-                  mr='xs'
-                  onClick={(event) => handleChangeSearch(
-                    event, '', null
-                  )}
-                >
-                  Quero tocar
-                </Button>
-              </Link>
+                Quero tocar
+              </Button>
               {isLargeScreen && 
                 <Menu shadow='md' width={200} position='bottom-end' offset={10} withArrow>
                   <Menu.Target>

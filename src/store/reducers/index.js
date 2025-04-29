@@ -17,6 +17,7 @@ import { usernameCheck } from './usernameCheck';
 import { musicGenres } from './musicGenres';
 import { roles } from './roles';
 import { availabilityOptions } from './availabilityOptions';
+import { jobs } from './jobs';
 
 const rootReducer = combineReducers({
   authentication,
@@ -36,7 +37,8 @@ const rootReducer = combineReducers({
   usernameCheck,
   musicGenres,
   roles,
-  availabilityOptions
+  availabilityOptions,
+  jobs
 });
 
 export default rootReducer;
