@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { userActions } from '../../store/actions/user'
 import { Grid, Container, Center, Loader, Box, Flex, Button, Avatar, Image, Text, Divider, Card } from '@mantine/core'
 import { IconChevronLeft, IconCamera } from '@tabler/icons-react'
 import { useMediaQuery } from '@mantine/hooks'
@@ -78,7 +79,7 @@ function SettingsPicturePage () {
 
   const onUploadCoverStart = evt => {
     console.log('Start uplading', evt)
-    setUploading(true)
+    setUploadingCover(true)
   }
   const onUploadCoverSuccess = res => {
     let n = res.filePath.lastIndexOf('/')
@@ -99,6 +100,7 @@ function SettingsPicturePage () {
         body: JSON.stringify({coverPicture: filename})
       }).then((response) => {
         response.json().then((response) => {
+          dispatch(userActions.getInfo())
           setUploadingCover(false)
           notifications.show({
             title: 'Boa!',
@@ -202,8 +204,9 @@ function SettingsPicturePage () {
                   <>
                     {user.picture_cover ? (
                       <Image
-                        src={`https://ik.imagekit.io/mublin/tr:w-380,c-maintain_ratio/users/avatars/${user.picture_cover}`}
+                        src={`https://ik.imagekit.io/mublin/tr:w-380,h-80,c-maintain_ratio/users/avatars/${user.picture_cover}`}
                         width={380}
+                        height={80}
                         alt={`Imagem de capa de ${user.name}`}
                       />
                     ) : (
@@ -232,6 +235,9 @@ function SettingsPicturePage () {
                     onError={onUploadCoverError}
                     onSuccess={onUploadCoverSuccess}
                     onUploadStart={onUploadCoverStart}
+                    // transformation={{
+                    //   pre: "h-300,w-1200"
+                    // }}
                   />
                   <Button
                     component='label'
