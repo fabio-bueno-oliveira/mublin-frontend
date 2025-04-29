@@ -1394,7 +1394,7 @@ function ProfilePage () {
           />
         </Center>
         <Text size='sm' mt='lg'>
-          {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por uma contribuição relevante no mercado musical`}
+          {`${profile.name} ${profile.lastname} possui o selo de 'Lenda da Música' pois é reconhecido por uma grande contribuição no mercado musical`}
         </Text>
         <Text size='xs' mt='lg' c='dimmed'>
           Este selo é atribuído pela equipe do Mublin baseado em critérios internos

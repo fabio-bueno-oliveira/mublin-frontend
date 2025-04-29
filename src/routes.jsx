@@ -25,6 +25,7 @@ import StartStep4Page from './pages/Start/step4';
 import MyProjectsPage from './pages/MyProjects';
 import SearchPage from './pages/Search/index';
 import SearchProjectsByGenre from './pages/Search/projectsByGenre';
+import JobPage from './pages/Job';
 import NewPost from './pages/New/post';
 import NewProject from './pages/New/project';
 import JoinProject from './pages/New/join';
@@ -116,6 +117,7 @@ function AppRoutes () {
           {/* Search */}
           <Route path="/search" element={<SearchPage />} />
           <Route path="/search/projects/genre/:genreId" element={<SearchProjectsByGenre />} />
+          <Route path="/job" element={<JobPage />} />
           {/* New item */}
           <Route path="/new/post" element={<NewPost />} />
           <Route path="/new/project" element={<NewProject />} />

@@ -265,10 +265,9 @@ function Home () {
                     gap='10'
                   >
                      <Avatar 
-                      // size='65px' 
                       h={98}
                       w={65}
-                      color='gray' 
+                      color='mublinColor' 
                       radius='md'
                       className='point'
                       variant='light'
@@ -282,11 +281,11 @@ function Home () {
                   </Flex>
                   {projects.requesting &&
                     <>
-                      <Skeleton height={65} circle />
-                      <Skeleton height={65} circle />
-                      <Skeleton height={65} circle />
-                      <Skeleton height={65} circle />
-                      <Skeleton height={65} circle />
+                      <Skeleton radius='md' width={65} height={100} />
+                      <Skeleton radius='md' width={65} height={100} />
+                      <Skeleton radius='md' width={65} height={100} />
+                      <Skeleton radius='md' width={65} height={100} />
+                      <Skeleton radius='md' width={65} height={100} />
                     </>
                   }
                   {!projects.requesting && projects.list.map(project =>

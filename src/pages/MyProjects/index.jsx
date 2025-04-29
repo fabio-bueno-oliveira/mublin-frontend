@@ -70,127 +70,129 @@ function MyProjects () {
             </option>
           )}
         </NativeSelect>
-        {jobs.requesting ? (
-          <Center mt={30}>
-            <Loader color='mublinColor' />
-          </Center>
-        ) : (
-          <Grid mt={30}>
-            <Grid.Col span={{ base: 12, md: 3, lg: 3 }} className='showOnlyInLargeScreen'>
-              <Card
-                padding={12}
-                radius='lg'
-                withBorder
-                className='mublinModule'
-                mb='10'
+        <Grid mt={30}>
+          <Grid.Col span={{ base: 12, md: 3, lg: 3 }} className='showOnlyInLargeScreen'>
+            <Card
+              padding={12}
+              radius='lg'
+              withBorder
+              className='mublinModule'
+              mb='10'
+            >
+              <Card.Section>
+                <Image
+                  src={userInfo.picture_cover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${userInfo.picture_cover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
+                  height={70}
+                  alt={`Imagem de capa de ${userInfo.name}`}
+                />
+              </Card.Section>
+              <Center style={{marginTop:'-20px'}}>
+                <Avatar
+                  size='80px'
+                  src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-152,w-152,c-maintain_ratio/users/avatars/'+userInfo.picture : undefined}
+                  style={{border:'2px solid white'}}
+                />
+              </Center>
+              <Text size='lg' fw={600} mt={10} ta='center' className='lhNormal'>
+                {userInfo.name} {userInfo.lastname}
+              </Text>
+              <Text
+                ta='center'
+                c='dimmed'
+                fw='400'
+                fz='xs'
+                mb={8}
+                className='lhNormal'
               >
-                <Card.Section>
-                  <Image
-                    src={userInfo.picture_cover ? `https://ik.imagekit.io/mublin/tr:h-200,c-maintain_ratio/users/avatars/${userInfo.picture_cover}` : 'https://ik.imagekit.io/mublin/bg/tr:w-1920,h-200,bg-F3F3F3,fo-bottom/open-air-concert.jpg'} 
-                    height={70}
-                    alt={`Imagem de capa de ${userInfo.name}`}
-                  />
-                </Card.Section>
-                <Center style={{marginTop:'-20px'}}>
-                  <Avatar
-                    size='80px'
-                    src={userInfo.picture ? 'https://ik.imagekit.io/mublin/tr:h-152,w-152,c-maintain_ratio/users/avatars/'+userInfo.picture : undefined}
-                    style={{border:'2px solid white'}}
-                  />
-                </Center>
-                <Text size='lg' fw={600} mt={10} ta='center' className='lhNormal'>
-                  {userInfo.name} {userInfo.lastname}
-                </Text>
-                <Text
-                  ta='center'
-                  c='dimmed'
-                  fw='400'
-                  fz='xs'
-                  mb={8}
-                  className='lhNormal'
-                >
-                  {user.roles.map(role => 
-                    <span className='comma' key={role.id}>{role.description}</span>
-                  )}
-                </Text>
-                {user.plan === 'Pro' ? ( 
-                  <Center>
-                    <Badge
-                      title='Usuário PRO'
-                      radius='sm'
-                      size='sm'
-                      variant="gradient"
-                      gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
-                    >
-                      PRO
-                    </Badge>
-                  </Center>
-                ) : (
-                  <Center>
-                    <Anchor
-                      variant='gradient'
-                      gradient={{ from: 'violet', to: 'blue' }}
-                      fw='420'
-                      fz='xs'
-                      href='/pro'
-                      underline='hover'
-                    >
-                      Assine o Mublin PRO!
-                    </Anchor>
-                  </Center>
+                {user.roles.map(role => 
+                  <span className='comma' key={role.id}>{role.description}</span>
                 )}
-              </Card>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, md: 9, lg: 9 }} pb={40}>
-              <Title fz='1.2rem' fw='600'>
-                Ou busque vagas em novas gigs
-              </Title>
-              <Text size='sm' c='dimmed'>Listamos algumas vagas pra você</Text>
-              {jobs.list.map(job =>
-                <Card 
-                  key={job.id}
-                  px={12} 
-                  py={8} 
-                  mt={22}
-                  radius='md' 
-                  className='mublinModule' 
-                  withBorder 
-                >
-                  <Flex gap={10}>
-                    <Image 
-                      src={`https://ik.imagekit.io/mublin/projects/tr:h-120,w-120,c-maintain_ratio/${job.projectPicture}`} 
-                      radius='sm'
-                      width={60} 
-                      height={60} 
-                    />
-                    <Box>
-                      <Anchor 
-                        href={`/job?id=${job.id}`}
-                        underline='hover'
-                        className='textLink'
-                      >
-                        <Flex gap={5} align='center'>
-                          {job.roleIcon && 
-                            <img src={'https://ik.imagekit.io/mublin/icons/music/tr:h-26,w-26,c-maintain_ratio/'+job.roleIcon} width='13' height='13' className={colorScheme === 'dark' ? 'invertPngColor' : undefined} />
-                          }
-                          <Title order={2} fz='0.95rem' fw={550}>
-                            {job.roleName} em {job.projectName} ({job.projectType})
-                          </Title>
-                        </Flex>
-                      </Anchor>
-                      <Text size='xs' c='dimmed'>
-                        Experiência: Nível {job.experiencePTBR}
-                      </Text>
-                      <Text size='xs' mt={2}>
-                        Oportunidade para tocar em {job.opportunityCityName} · {job.opportunityRegionName} · {job.opportunityCityCountry}
-                      </Text>
-                    </Box>
-                  </Flex>
-                </Card>
+              </Text>
+              {user.plan === 'Pro' ? ( 
+                <Center>
+                  <Badge
+                    title='Usuário PRO'
+                    radius='sm'
+                    size='sm'
+                    variant="gradient"
+                    gradient={{ from: '#969168', to: '#b4ae86', deg: 90 }}
+                  >
+                    PRO
+                  </Badge>
+                </Center>
+              ) : (
+                <Center>
+                  <Anchor
+                    variant='gradient'
+                    gradient={{ from: 'violet', to: 'blue' }}
+                    fw='420'
+                    fz='xs'
+                    href='/pro'
+                    underline='hover'
+                  >
+                    Assine o Mublin PRO!
+                  </Anchor>
+                </Center>
               )}
-            </Grid.Col>
-          </Grid>
-        )}
+            </Card>
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 9, lg: 9 }} pb={40}>
+            <Title fz='1.2rem' fw='600'>
+              Ou busque vagas em novas gigs
+            </Title>
+            <Text size='sm' c='dimmed'>Listamos algumas vagas pra você</Text>
+            {jobs.requesting ? (
+              <Center mt={30}>
+                <Loader color='mublinColor' />
+              </Center>
+            ) : (
+              <>
+                {jobs.list.map(job =>
+                  <Card 
+                    key={job.id}
+                    px={12} 
+                    py={8} 
+                    mt={22}
+                    radius='md' 
+                    className='mublinModule' 
+                    withBorder 
+                  >
+                    <Flex gap={10}>
+                      <Image 
+                        src={`https://ik.imagekit.io/mublin/projects/tr:h-120,w-120,c-maintain_ratio/${job.projectPicture}`} 
+                        radius='sm'
+                        width={60} 
+                        height={60} 
+                      />
+                      <Box>
+                        <Anchor 
+                          href={`/job?id=${job.id}`}
+                          underline='hover'
+                          className='textLink'
+                        >
+                          <Flex gap={5} align='center'>
+                            {job.roleIcon && 
+                              <img src={'https://ik.imagekit.io/mublin/icons/music/tr:h-26,w-26,c-maintain_ratio/'+job.roleIcon} width='13' height='13' className={colorScheme === 'dark' ? 'invertPngColor' : undefined} />
+                            }
+                            <Title order={2} fz='0.95rem' fw={550}>
+                              {job.roleName} em {job.projectName} ({job.projectType})
+                            </Title>
+                          </Flex>
+                        </Anchor>
+                        <Text size='xs' c='dimmed'>
+                          Experiência: Nível {job.experiencePTBR}
+                        </Text>
+                        <Text size='11px' mt={2}>
+                          Oportunidade para tocar em {job.opportunityCityName} · {job.opportunityRegionName} · {job.opportunityCityCountry}
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </Card>
+                )}
+              </>
+            )}
+          </Grid.Col>
+        </Grid>
       </Container>
       <FooterMenuMobile />
     </>
