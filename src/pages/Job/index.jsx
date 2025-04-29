@@ -1,11 +1,11 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useSearchParams } from 'react-router-dom'
-import { useMantineColorScheme, Container, Flex, Group, Box, Title, Text, Card, Loader, Center, Image, Avatar, Anchor, em } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Group, Box, Title, Text, Card, Loader, Center, Image, Avatar, Anchor, em, Button } from '@mantine/core'
 import { useDocumentTitle, useMediaQuery, useFetch } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
-import { IconMapPin } from '@tabler/icons-react'
+import { IconCheck, IconMapPin, IconPlus } from '@tabler/icons-react'
 import { formatDistance } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 
@@ -71,19 +71,19 @@ function Job () {
                       </Anchor>
                       {job?.createdUNIX && 
                         <Text size='xs' c='dimmed'>
-                          Vaga publicada por {job?.authorName} há {formatDistance(new Date(job?.createdUNIX * 1000), new Date(), {locale:pt})}
+                          publicada por {job?.authorName} <Text span c='#01754f'>há {formatDistance(new Date(job?.createdUNIX * 1000), new Date(), {locale:pt})}</Text>
                         </Text>
                       }
                     </Flex>
                   </Flex>
                 </Flex>
                 <Flex gap={5} align='center' mb={12}>
-                  {job?.roleIcon && 
-                    <img src={'https://ik.imagekit.io/mublin/icons/music/tr:h-26,w-26,c-maintain_ratio/'+job?.roleIcon} width='13' height='13' className={colorScheme === 'dark' ? 'invertPngColor' : undefined} />
-                  }
                   <Title order={2} fz='1.5rem' fw={550}>
                     {job?.roleName}
                   </Title>
+                  {job?.roleIcon && 
+                    <img src={'https://ik.imagekit.io/mublin/icons/music/tr:h-26,w-26,c-maintain_ratio/'+job?.roleIcon} width='13' height='13' className={colorScheme === 'dark' ? 'invertPngColor' : undefined} />
+                  }
                 </Flex>
                 <Text size='md' fw={550}>
                   Local da gig:
@@ -106,6 +106,27 @@ function Job () {
                 <Text size='sm'>
                   {job?.info}
                 </Text>
+                <Text size='md' fw={550} mt={8}>
+                  Vínculo do job:
+                </Text>
+                <Flex gap={6} align='center' opacity={job?.relationshipId === 1 ? 1 : 0.5}>
+                  <IconCheck color={job?.relationshipId === 1 ? 'green' : 'gray'} stroke='4' size='14px' />
+                  <Text size='sm'>Integrante</Text>
+                </Flex>
+                <Flex gap={6} align='center' opacity={job?.relationshipId === 2 ? 1 : 0.5}>
+                  <IconCheck color={job?.relationshipId === 2 ? 'green' : 'gray'} stroke='4' size='14px' />
+                  <Text size='sm'>Contrato</Text>
+                </Flex>
+                <Flex gap={6} align='center' opacity={job?.relationshipId === 3 ? 1 : 0.5}>
+                  <IconCheck color={job?.relationshipId === 3 ? 'green' : 'gray'} stroke='4' size='14px' />
+                  <Text size='sm'>Sub</Text>
+                </Flex>
+                <Text size='md' fw={550} mt={8}>
+                  Necessário ensaio presencial prévio?
+                </Text>
+                <Text size='sm'>
+                  {job?.rehearsalInPerson ? 'Sim' : 'Não'}
+                </Text>
                 <Text size='xs' c='dimmed' mt={28}>
                   Publicada em {job?.created}
                 </Text>
@@ -113,6 +134,17 @@ function Job () {
             </Center>
           </Box>
         )}
+        <Center my={30}>
+          <Button 
+            variant='light' 
+            color='primary' 
+            component='a' 
+            href='/projects'
+            leftSection={<IconPlus />}
+          >
+            Ver mais vagas
+          </Button>
+        </Center>
       </Container>
       <FooterMenuMobile />
     </>

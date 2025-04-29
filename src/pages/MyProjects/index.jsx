@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { jobsActions } from '../../store/actions/jobs'
-import { useMantineColorScheme, Container, Grid, Flex, Box, Title, Text, NativeSelect, Card, Loader, Center, Image, Avatar, Anchor, Badge } from '@mantine/core';
+import { Container, Grid, Flex, Box, Title, Text, NativeSelect, Card, Loader, Center, Image, Avatar, Anchor, Badge } from '@mantine/core';
 import { useDocumentTitle, useMediaQuery } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
@@ -23,7 +23,6 @@ function MyProjects () {
   const decoded = jwtDecode(token)
   const loggedUserId = decoded.result.id
 
-  const { colorScheme } = useMantineColorScheme()
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   
   const user = useSelector(state => state.user)
@@ -170,14 +169,9 @@ function MyProjects () {
                           underline='hover'
                           className='textLink'
                         >
-                          <Flex gap={5} align='center'>
-                            {job.roleIcon && 
-                              <img src={'https://ik.imagekit.io/mublin/icons/music/tr:h-26,w-26,c-maintain_ratio/'+job.roleIcon} width='13' height='13' className={colorScheme === 'dark' ? 'invertPngColor' : undefined} />
-                            }
-                            <Title order={2} fz='0.95rem' fw={550}>
-                              {job.roleName} em {job.projectName} ({job.projectType})
-                            </Title>
-                          </Flex>
+                        <Title order={2} fz='0.95rem' fw={550}>
+                          {job.roleName} em {job.projectName} ({job.projectType})
+                        </Title>
                         </Anchor>
                         <Text size='xs' c='dimmed'>
                           Experiência: Nível {job.experiencePTBR}
