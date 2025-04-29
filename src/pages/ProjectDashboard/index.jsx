@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Indicator, Drawer, Button, Modal, Textarea, em } from '@mantine/core'
+import { useMantineColorScheme, Grid, Group, Box, Card, Center, Flex, Title, Text, Image, Skeleton, Avatar, Loader, Indicator, Drawer, Button, Modal, Textarea, em, Alert } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { useForm, isNotEmpty } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
-import { IconMenu2, IconPlus, IconTrash } from '@tabler/icons-react'
+import { IconInfoCircle, IconMenu2, IconPlus, IconTrash } from '@tabler/icons-react'
 import Header from './header'
 import Navbar from './navbar'
 import MublinLogoBlack from '../../assets/svg/mublin-logo.svg'
@@ -181,6 +181,9 @@ function ProjectDashboardPage () {
                 <Title fz='h2'>Painel de {project.name}</Title>
                 <Text size='sm' c='dimmed'>Informações sobre o projeto</Text>
               </Box>
+              <Alert my={16} variant='light' color='pink' icon={<IconInfoCircle size={24} />}>
+                A edição e gerenciamento de projetos está passando por atualizações. Pedimos desculpas pelo transtorno! Em breve todas as funcionalidades estarão disponíveis
+              </Alert>
               <Grid mt={34}>
                 <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
                   <Card withBorder p={10} radius='md' className='mublinModule'>
@@ -314,7 +317,7 @@ function ProjectDashboardPage () {
         <form onSubmit={form.onSubmit(handleSubmitNewNote)}>
           <Textarea
             maxLength={300}
-            placeholder="Escreva aqui o recado para o time do projeto..."
+            placeholder='Escreva aqui o recado para o time do projeto...'
             key={form.key('note')}
             {...form.getInputProps('note')}
           />

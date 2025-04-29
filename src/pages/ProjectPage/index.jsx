@@ -173,6 +173,9 @@ function ProjectPage () {
                       <Text size='sm' c='dimmed' mb={2}>
                         {project.typeName} {project.region && `· ${project.region} · ${project.country}`}
                       </Text>
+                      <Button size='xs' variant='default' my={6} leftSection={<IconSettings size={14} />}>
+                        Gerenciar minha participação neste projeto
+                      </Button>
                       <Avatar.Group spacing={8} mt={8} mb={6}>
                         {members.filter(m => !m.leftIn).map(member =>
                           <Avatar

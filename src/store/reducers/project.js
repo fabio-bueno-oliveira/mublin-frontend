@@ -2,6 +2,7 @@ import { projectTypes } from '../types/project';
 
 const initialState = {
   requesting: false,
+  success: false,
   adminAccess: 0,
   confirmed: '',
   active: '',
@@ -138,6 +139,7 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: true,
+        success: false,
         confirmed: '',
         active: '',
         leader: '',
@@ -180,6 +182,7 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: false,
+        success: true,
         id: action.info.id,
         name: action.info.name,
         oldName: action.info.oldName,
@@ -219,6 +222,7 @@ export function project(state = initialState, action) {
       return {
         ...state,
         requesting: false,
+        success: false,
         error: "A solicitação falhou",
         confirmed: '',
         active: '',

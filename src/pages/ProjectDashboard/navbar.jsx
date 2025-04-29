@@ -36,7 +36,7 @@ function ProjectDashboardMenu (props) {
         />
       }
 
-      <Accordion defaultValue='daily' mt={16}>
+      <Accordion defaultValue={props.adminPages ? 'daily' : 'admin'} mt={16}>
         <Accordion.Item value='daily'>
           <Accordion.Control icon={<IconMusic />}>Funções do Dia a dia</Accordion.Control>
           <Accordion.Panel>
@@ -70,11 +70,11 @@ function ProjectDashboardMenu (props) {
               <>
                 <Text ml={10} my={8} c='dimmed' size='xs' tt='uppercase'>Dados do projeto</Text>
                 <NavLink
-                  href='#required-for-focus'
+                  active={props.page === 'adminInfo'}
+                  href={`/dashboard/${username}/admin/infos`}
                   label='Informações'
                   leftSection={<IconPencil size={16} stroke={1.5} />}
                   color='mublinColor'
-                  disabled
                 />
                 <NavLink
                   active={props.page === 'adminPicture'}

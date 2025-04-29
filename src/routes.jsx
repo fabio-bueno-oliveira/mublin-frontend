@@ -34,6 +34,7 @@ import ProjectPage from './pages/ProjectPage';
 import ProjectDashboardPage from './pages/ProjectDashboard';
 import ProjectDashboardTeamPage from './pages/ProjectDashboard/Team';
 import ProjectDashboardSetlistPage from './pages/ProjectDashboard/Setlist';
+import ProjectDashboardAdminInfos from './pages/ProjectDashboard/Admin/infos';
 import ProfilePage from './pages/Profile';
 import PublicProfilePage from './pages/Profile/Public';
 import ProfileGear from './pages/Profile/Gear/gearExpanded';
@@ -96,6 +97,7 @@ function AppRoutes () {
           <Route path="/dashboard/:username" element={<ProjectDashboardPage />} />
           <Route path="/dashboard/:username/team" element={<ProjectDashboardTeamPage />} />
           <Route path="/dashboard/:username/setlist" element={<ProjectDashboardSetlistPage />} />
+          <Route path="/dashboard/:username/admin/infos" element={<ProjectDashboardAdminInfos />} />
           {/* Gear, products and companies */}
           <Route path="/gear/product/:productId" element={<GearProductPage />} />
           <Route path="/gear/product/zoom/:productId" element={<GearZoomPage />} />
