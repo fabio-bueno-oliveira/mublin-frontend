@@ -1,11 +1,11 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useSearchParams } from 'react-router-dom'
-import { useMantineColorScheme, Container, Flex, Group, Box, Title, Text, Card, Loader, Center, Image, Avatar, Anchor, em, Button } from '@mantine/core'
+import { useMantineColorScheme, Container, Flex, Group, Box, Title, Text, Card, Loader, Center, Image, Avatar, Anchor, em, Button, Stack, Paper } from '@mantine/core'
 import { useDocumentTitle, useMediaQuery, useFetch } from '@mantine/hooks'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
-import { IconCheck, IconMapPin, IconPlus } from '@tabler/icons-react'
+import { IconCheck, IconMapPin, IconMusic, IconPlus } from '@tabler/icons-react'
 import { formatDistance } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 
@@ -32,16 +32,16 @@ function Job () {
       <Header page='myProjects' reloadUserInfo />
       <Container
         size='lg'
-        mb={isMobile ? 82 : 30}
+        mb={130}
         pt={isMobile ? 0 : 20}
         className='myProjectsPage'
       >
         {loadingJobInfo ? (
-          <Center mt={30}>
+          <Center mt={60}>
             <Loader color='mublinColor' />
           </Center>
         ) : (
-          <Box mt={20}>
+          <Box>
             <Center>
               <Card
                 w={isMobile ? '100%' : 500}
@@ -67,13 +67,18 @@ function Job () {
                     </Title>
                     <Flex gap={3} align='center'>
                       <Anchor href={`/${job?.authorUsername}`}>
-                        <Avatar src={job?.authorPicture ? 'https://ik.imagekit.io/mublin/tr:h-40,w-40,c-maintain_ratio/users/avatars/'+job?.authorPicture : null} size='20px' />
+                        <Avatar src={job?.authorPicture ? 'https://ik.imagekit.io/mublin/tr:h-50,w-50,c-maintain_ratio/users/avatars/'+job?.authorPicture : null} size='25px' title={`${job?.authorName} ${job?.authorLastname}`} />
                       </Anchor>
-                      {job?.createdUNIX && 
+                      <Flex direction='column'>
                         <Text size='xs' c='dimmed'>
-                          publicada por {job?.authorName} <Text span c='#01754f'>há {formatDistance(new Date(job?.createdUNIX * 1000), new Date(), {locale:pt})}</Text>
+                          Vaga publicada por {job?.authorName} {job?.authorLastname}
                         </Text>
-                      }
+                        {job?.createdUNIX && 
+                          <Text size='xs' c='dimmed'>
+                            <Text span c='#01754f'>há {formatDistance(new Date(job?.createdUNIX * 1000), new Date(), {locale:pt})}</Text>
+                          </Text>
+                        }
+                      </Flex>
                     </Flex>
                   </Flex>
                 </Flex>
@@ -88,6 +93,9 @@ function Job () {
                 <Text size='md' fw={550}>
                   Local da gig:
                 </Text>
+                <Text size='sm'>
+                  Estabelecimento: {job?.venue ? job?.venue : <Text span size='sm' c='dimmed'>Nome não informado</Text>}
+                </Text>
                 <Group wrap='nowrap' gap={2} align='center' w='100%'>
                   <IconMapPin size={16} color='#8d8d8d' />
                   <Text size='sm' className='lhNormal' truncate='end'>
@@ -97,15 +105,24 @@ function Job () {
                 <Text size='md' fw={550} mt={8}>
                   Experiência sugerida:
                 </Text>
-                <Text size='sm'>
-                  Nível {job?.experiencePTBR}
-                </Text>
+                <Group gap={4}>
+                  <Text size='sm'>
+                    Nível {job?.experiencePTBR}
+                  </Text>
+                  <Group gap={1}>
+                    <IconMusic size='15' color='green' />
+                    <IconMusic size='15' color='green' opacity={job?.experienceId >= 2 ? 1 : 0.3} />
+                    <IconMusic size='15' color='green' opacity={job?.experienceId === 3 ? 1 : 0.3} />
+                  </Group>
+                </Group>
                 <Text size='md' fw={550} mt={8}>
                   Sobre o job:
                 </Text>
-                <Text size='sm'>
-                  {job?.info}
-                </Text>
+                <Paper shadow='sm' p='xs'>
+                  <Text size='sm'>
+                    {job?.info}
+                  </Text>
+                </Paper>
                 <Text size='md' fw={550} mt={8}>
                   Vínculo do job:
                 </Text>
@@ -127,24 +144,67 @@ function Job () {
                 <Text size='sm'>
                   {job?.rehearsalInPerson ? 'Sim' : 'Não'}
                 </Text>
-                <Text size='xs' c='dimmed' mt={28}>
-                  Publicada em {job?.created}
+                <Text size='md' fw={550} mt={8}>
+                  Recorrência do trabalho:
                 </Text>
+                <Flex gap={6} align='center' opacity={job?.oneTimeJob === 1 ? 1 : 0.5}>
+                  <IconCheck color={job?.oneTimeJob === 1 ? 'green' : 'gray'} stroke='4' size='14px' />
+                  <Text size='sm'>Apenas uma apresentação</Text>
+                </Flex>
+                <Flex gap={6} align='center' opacity={job?.oneTimeJob === 0 ? 1 : 0.5}>
+                  <IconCheck color={job?.oneTimeJob === 0 ? 'green' : 'gray'} stroke='4' size='14px' />
+                  <Text size='sm'>Mais de uma apresentação</Text>
+                </Flex>
+                <Text size='md' fw={550} mt={8}>
+                  Cachê por ensaio:
+                </Text>
+                {job?.feePerRehearsal > 0 ? ( 
+                  <Text size='sm'>
+                    {job?.feePerRehearsal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                  </Text>
+                ) : (
+                  <Text size='sm' c='dimmed'>
+                    Não informado
+                  </Text>
+                )}
+                <Text size='md' fw={550} mt={8}>
+                  Cachê por apresentação:
+                </Text>
+                {job?.feePerConcert > 0 ? ( 
+                  <Text size='sm'>
+                    {job?.feePerConcert.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}
+                  </Text>
+                ) : (
+                  <Text size='sm' c='dimmed'>
+                    Não informado
+                  </Text>
+                )}
+                <Stack
+                  align='stretch'
+                  justify='center'
+                  gap='sm'
+                  mt={22}
+                >
+                  <Button 
+                    variant='filled' 
+                    color='mublinColor'
+                    component='a' 
+                    href={`/project/${job?.authorUsername}`}
+                  >
+                    Ver página do projeto
+                  </Button>
+                  <Button 
+                    variant='default'
+                    component='a' 
+                    href='/projects'
+                  >
+                    Ver mais vagas
+                  </Button>
+                </Stack>
               </Card>
             </Center>
           </Box>
         )}
-        <Center my={30}>
-          <Button 
-            variant='light' 
-            color='primary' 
-            component='a' 
-            href='/projects'
-            leftSection={<IconPlus />}
-          >
-            Ver mais vagas
-          </Button>
-        </Center>
       </Container>
       <FooterMenuMobile />
     </>

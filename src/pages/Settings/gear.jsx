@@ -939,7 +939,7 @@ function SettingsMyGearPage () {
           required
           label="Nome do setup"
           placeholder="Ex: Acústico"
-          maxLength={15}
+          maxLength={50}
           value={newSetup.name}
           onChange={(event) => setNewSetup({...newSetup, name: event.currentTarget.value})}
           mb={8}
@@ -948,7 +948,7 @@ function SettingsMyGearPage () {
           required
           label="Descrição"
           placeholder="Ex: Para apresentações com violão e voz..."
-          maxLength={45}
+          maxLength={200}
           value={newSetup.description}
           onChange={(event) => setNewSetup({...newSetup, description: event.currentTarget.value})}
           mb={8}
@@ -1063,7 +1063,7 @@ function SettingsMyGearPage () {
             withAsterisk
             label='Nome do setup'
             placeholder='Ex: Acústico'
-            maxLength={15}
+            maxLength={50}
             key={formUpdate.key('name')}
             {...formUpdate.getInputProps('name')}
           />
@@ -1071,7 +1071,7 @@ function SettingsMyGearPage () {
             withAsterisk
             label='Descrição'
             placeholder='Ex: Para apresentações com violão e voz...'
-            maxLength={45}
+            maxLength={200}
             key={formUpdate.key('description')}
             {...formUpdate.getInputProps('description')}
           />
