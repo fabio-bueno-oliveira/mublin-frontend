@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../store/actions/user'
 import { Grid, Container, Center, Loader, Box, Flex, Button, Avatar, Image, Text, Divider, Card } from '@mantine/core'
 import { IconChevronLeft, IconCamera } from '@tabler/icons-react'
@@ -19,6 +19,8 @@ function SettingsPicturePage () {
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
   const token = localStorage.getItem('token')
+
+  let dispatch = useDispatch()
 
   let navigate = useNavigate()
   const decoded = jwtDecode(token)
@@ -150,6 +152,7 @@ function SettingsPicturePage () {
               </Text>
             </Flex>
             <Box pos='relative' p={10}>
+            <Divider label='Foto de Perfil' mt={14} mb={20} />
               <Center>
                 {uploading ? ( 
                   <Loader color='violet' />
@@ -196,7 +199,7 @@ function SettingsPicturePage () {
                   </Button>
                 </div>
               </Center>
-              <Divider mt={14} mb={20} />
+              <Divider label='Imagem de Capa' mt={14} mb={20} />
               <Center>
                 {uploading ? ( 
                   <Loader color='violet' />
