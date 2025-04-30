@@ -119,8 +119,10 @@ function ProjectDashboardAdminTeamPage () {
         </>
       ) : (
         <>
-          <Card withBorder p={10} mt={14} radius='md' className='mublinModule'>
-            <Title fz='h6' fw={450} mb={6}>Pessoas aguardando aprovação:</Title>
+          <Box my={14}>
+            <Title size='md' fw={600} mb={8}>
+              Pessoas aguardando aprovação:
+            </Title>
             {pendingMembers.length ? (
               <Flex gap={10}>
                 {pendingMembers.map(member =>
@@ -168,108 +170,113 @@ function ProjectDashboardAdminTeamPage () {
             ) : (
               <Text size='sm' c='dimmed'>Ninguém aguardando aprovação no momento</Text>
             )}
-          </Card>
-          <Text mt={12} size='md' mb={6} fw={600}>Pessoas deste projeto:</Text>
-          <Table>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>Nome</Table.Th>
-                <Table.Th>Atribuição</Table.Th>
-                <Table.Th>Vínculo</Table.Th>
-                <Table.Th>Período</Table.Th>
-                <Table.Th></Table.Th>
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {members.map(member =>
-                <Table.Tr key={member.id}>
-                  <Table.Td>
-                    <Group gap={3}>
-                      <Avatar
-                        size='35'
-                        name={member.name}
-                        src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-70,w-70,c-maintain_ratio/'+member.picture} 
-                        component='a'
-                        href={`/${member.username}`}
-                        title={member.username}
-                      />
-                      <Text 
-                        component='a' 
-                        href={`/${member.username}`} 
-                        size='sm' 
-                        className='lhNormal'
-                      >
-                        {member.name} {member.lastname}
-                      </Text>
-                      {member.verified &&
-                        <IconRosetteDiscountCheckFilled
-                          color='#0977ff'
-                          style={iconVerifiedStyle}
-                          title='Verificado'
-                        />
-                      }
-                      {member.legend &&
-                        <IconShieldCheckFilled
-                          style={iconLegendStyle}
-                          title='Lenda da música'
-                        />
-                      }
-                    </Group>
-                  </Table.Td>
-                  <Table.Td>
-                    <Text size='xs' className='lhNormal'>
-                      {member.role1 &&
-                        <Text className='comma' span>
-                          {member.role1}
-                        </Text>
-                      }
-                      {member.role2 &&
-                        <Text className='comma' span>
-                          {member.role2}
-                        </Text>
-                      }
-                      {member.role3 &&
-                        <Text className='comma' span>
-                          {member.role3}
-                        </Text>
-                      }
-                    </Text>
-                    <Group gap={4}>
-                      {!!member.founder &&
-                        <Badge size='xs' radius='sm' color='dark'>
-                          {member.gender === 'f' ? 'Fundadora' : 'Fundador'}
-                        </Badge>
-                      }
-                      {!!member.admin && 
-                        <Badge size='xs' radius='sm' color='dark'>
-                          Admini
-                        </Badge>
-                      }
-                    </Group>
-                  </Table.Td>
-                  <Table.Td>
-                    {member.statusName}
-                  </Table.Td>
-                  <Table.Td>
-                    {`${member.joinedIn} › `}
-                    {project.endDate
-                      ? (!member.leftIn) ? project.endDate : member.leftIn
-                      : (member.leftIn) ? member.leftIn : 'Atualmente'
-                    }
-                  </Table.Td>
-                  <Table.Td>
-                    <IconDotsVertical
-                      size={13}
-                      className='point'
-                      onClick={() =>
-                        openModalMemberManagement(member.id, member.admin, member.active, member.leader
-                      )}
-                    />
-                  </Table.Td>
+          </Box>
+          <Title size='md' fw={600} mb={8}>
+            Pessoas deste projeto:
+          </Title>
+          <Table.ScrollContainer minWidth={500}>
+            <Table>
+              <Table.Thead>
+                <Table.Tr>
+                  <Table.Th>Nome</Table.Th>
+                  <Table.Th>Atribuição</Table.Th>
+                  <Table.Th>Vínculo</Table.Th>
+                  <Table.Th>Período</Table.Th>
+                  <Table.Th></Table.Th>
                 </Table.Tr>
-              )}
-            </Table.Tbody>
-          </Table>
+              </Table.Thead>
+              <Table.Tbody>
+                {members.map(member =>
+                  <Table.Tr key={member.id}>
+                    <Table.Td>
+                      <Group gap={3} wrap='nowrap'>
+                        <Avatar
+                          size='35'
+                          name={member.name}
+                          src={'https://ik.imagekit.io/mublin/users/avatars/tr:h-70,w-70,c-maintain_ratio/'+member.picture} 
+                          component='a'
+                          href={`/${member.username}`}
+                          title={member.username}
+                        />
+                        <Text 
+                          component='a' 
+                          href={`/${member.username}`} 
+                          size='sm' 
+                          className='lhNormal'
+                          truncate='end'
+                        >
+                          {member.name} {member.lastname}
+                        </Text>
+                        {member.verified &&
+                          <IconRosetteDiscountCheckFilled
+                            color='#0977ff'
+                            style={iconVerifiedStyle}
+                            title='Verificado'
+                          />
+                        }
+                        {member.legend &&
+                          <IconShieldCheckFilled
+                            style={iconLegendStyle}
+                            title='Lenda da música'
+                          />
+                        }
+                      </Group>
+                    </Table.Td>
+                    <Table.Td>
+                      <Text size='xs' className='lhNormal'>
+                        {member.role1 &&
+                          <Text className='comma' span>
+                            {member.role1}
+                          </Text>
+                        }
+                        {member.role2 &&
+                          <Text className='comma' span>
+                            {member.role2}
+                          </Text>
+                        }
+                        {member.role3 &&
+                          <Text className='comma' span>
+                            {member.role3}
+                          </Text>
+                        }
+                      </Text>
+                      <Group gap={4}>
+                        {!!member.founder &&
+                          <Badge size='xs' radius='sm' color='dark'>
+                            {member.gender === 'f' ? 'Fundadora' : 'Fundador'}
+                          </Badge>
+                        }
+                        {!!member.admin && 
+                          <Badge size='xs' radius='sm' color='dark'>
+                            Admini
+                          </Badge>
+                        }
+                      </Group>
+                    </Table.Td>
+                    <Table.Td>
+                      {member.statusName}
+                    </Table.Td>
+                    <Table.Td>
+                      {`${member.joinedIn} › `}
+                      {project.endDate
+                        ? (!member.leftIn) ? project.endDate : member.leftIn
+                        : (member.leftIn) ? member.leftIn : 'Atualmente'
+                      }
+                    </Table.Td>
+                    <Table.Td>
+                      <IconDotsVertical
+                        size={13}
+                        className='point'
+                        onClick={() =>
+                          openModalMemberManagement(member.id, member.admin, member.active, member.leader
+                        )}
+                      />
+                    </Table.Td>
+                  </Table.Tr>
+                )}
+              </Table.Tbody>
+            </Table>
+          </Table.ScrollContainer>
         </>
       )}
       <Modal

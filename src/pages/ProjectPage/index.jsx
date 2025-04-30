@@ -4,8 +4,8 @@ import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, ScrollArea, Tabs, em, rem } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
-import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconPencil, IconUsersGroup, IconCamera } from '@tabler/icons-react'
+import { useMediaQuery, useScrollIntoView } from '@mantine/hooks'
+import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconLockSquareRoundedFilled } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
@@ -40,6 +40,10 @@ function ProjectPage () {
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) }
 
   const [activeTab, setActiveTab] = useState('about')
+
+  const { scrollIntoView, targetRef } = useScrollIntoView({
+    offset: 60,
+  });
 
   return (
     <>
@@ -87,7 +91,7 @@ function ProjectPage () {
                         alt={`Imagem de capa de ${project.picture}`}
                       />
                     </Card.Section>
-                    <Box style={{marginTop:'-64px'}}>
+                    <Flex gap={10} align='end' style={{marginTop:'-64px'}}>
                       <Image
                         radius={false}
                         h={120}
@@ -97,7 +101,20 @@ function ProjectPage () {
                         src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-240,w-240,c-maintain_ratio/'+project.picture : undefined}
                         style={{border:'3px solid white'}}
                       />
-                    </Box>
+                      <Button
+                        size='xs'
+                        mb={2}
+                        variant='filled'
+                        color='mublinColor'
+                        onClick={() => {
+                          setActiveTab('dashboard');
+                          scrollIntoView({alignment: 'start'})
+                        }}
+                        leftSection={<IconSettings size={12} />}
+                      >
+                        Painel de Controle
+                      </Button>
+                    </Flex>
                     <Box ml={isMobile ? 18 : 0}>
                       <Group gap={0} justify='space-between' mt='sm'>
                         <Title order={1} fz='1.5rem' fw={650} className='lhNormal op90'>
@@ -231,7 +248,7 @@ function ProjectPage () {
                       </Tabs.List>
                     </Tabs>
                     <ScrollArea w='100%' h={38} type='never' className='showOnlyInMobile'>
-                      <Box className='fitContent'>
+                      <Box className='fitContent' ref={targetRef}>
                         <Tabs
                           value={activeTab}
                           onChange={setActiveTab}
@@ -546,17 +563,25 @@ function ProjectPage () {
                   && (project.loggedUserIsActive && project.loggedUserIsAdmin)
                 ) &&
                   <Card mih={400} padding='lg' radius='md' withBorder className='mublinModule'>
-                    <Title fz='1.1rem' fw='580' mb={6}>Painel de Controle</Title>
+                    <Group gap={3} mb={8}>
+                      <Title fz='0.9rem' fw='620'>
+                        Painel de Controle
+                      </Title>
+                      <IconLockSquareRoundedFilled size={22} color="gray" /> 
+                    </Group>
                     <Tabs mt={12} variant='outline' defaultValue='settings'>
                       <Tabs.List>
-                        <Tabs.Tab value='settings' leftSection={<IconPencil size={12} />}>
-                          Editar dados
+                        <Tabs.Tab value='settings'>
+                          Dados
                         </Tabs.Tab>
-                        <Tabs.Tab value='members' leftSection={<IconUsersGroup size={12} />}>
+                        <Tabs.Tab value='members'>
                           Equipe
                         </Tabs.Tab>
-                        <Tabs.Tab value='pictures' leftSection={<IconCamera size={12} />}>
-                          Foto de perfil
+                        <Tabs.Tab value='pictures'>
+                          Foto
+                        </Tabs.Tab>
+                        <Tabs.Tab value='other'>
+                          Outros
                         </Tabs.Tab>
                       </Tabs.List>
 
@@ -571,6 +596,12 @@ function ProjectPage () {
                       <Tabs.Panel value='pictures' pt={12}>
                         <Text size='sm' c='dimmed' mt={12}>
                           Não é possível atualizar a foto de perfil no momento
+                        </Text>
+                      </Tabs.Panel>
+
+                      <Tabs.Panel value='other' pt={12}>
+                        <Text size='sm' c='dimmed' mt={12}>
+                          Outras configurações:
                         </Text>
                       </Tabs.Panel>
                     </Tabs>
