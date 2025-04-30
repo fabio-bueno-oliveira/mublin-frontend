@@ -41,6 +41,7 @@ const initialState = {
   activityStatus: '',
   activityStatusId: '',
   activityStatusColor: '',
+  website: '',
   members: [
     {
       id: '',
@@ -173,7 +174,8 @@ export function project(state = initialState, action) {
         public: '',
         activityStatus: '',
         activityStatusId: '',
-        activityStatusColor: ''
+        activityStatusColor: '',
+        website: ''
       };
     case projectTypes.GET_PROJECT_INFO_SUCCESS:
       return {
@@ -213,7 +215,8 @@ export function project(state = initialState, action) {
         public: action.info.public,
         activityStatus: action.info.activityStatus,
         activityStatusId: action.info.activityStatusId,
-        activityStatusColor: action.info.activityStatusColor
+        activityStatusColor: action.info.activityStatusColor,
+        website: action.info.website,
       };
     case projectTypes.GET_PROJECT_INFO_FAILURE:
       return {
@@ -254,7 +257,8 @@ export function project(state = initialState, action) {
         public: '',
         activityStatus: '',
         activityStatusId: '',
-        activityStatusColor: ''
+        activityStatusColor: '',
+        website: ''
       };
     case projectTypes.GET_PROJECT_ADMINACCESS_REQUEST:
       return {

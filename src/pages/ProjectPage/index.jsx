@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { jwtDecode } from 'jwt-decode'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, Affix, ScrollArea, Tabs, Center, em, rem } from '@mantine/core'
+import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, ScrollArea, Tabs, em, rem } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconExternalLink } from '@tabler/icons-react'
+import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconPencil, IconUsersGroup, IconCamera } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
 import { formatDistance } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
+import ProjectAdminEditInfos from './editInfos'
+import ProjectDashboardAdminTeamPage from './members'
 import './styles.scss'
 
 function ProjectPage () {
@@ -19,10 +20,6 @@ function ProjectPage () {
   const params = useParams()
   const username = params?.username
   const project = useSelector(state => state.project)
-
-  const token = localStorage.getItem('token')
-  const decoded = jwtDecode(token)
-  const loggedUserId = decoded.result.id
 
   const isLargeScreen = useMediaQuery('(min-width: 60em)')
   const isMobile = useMediaQuery(`(max-width: ${em(750)})`)
@@ -33,12 +30,11 @@ function ProjectPage () {
     dispatch(projectInfos.getProjectInfo(username))
     dispatch(projectInfos.getProjectMembers(username))
     dispatch(projectInfos.getProjectOpportunities(username))
+    dispatch(projectInfos.getProjectAdminAccessInfo(username))
   }, [])
 
   const members = project.members.filter((member) => { return member.confirmed === 1 && !member.leftIn })
   const pastMembers = project.members.filter((member) => { return member.confirmed === 1 && member.leftIn })
-
-  const isActiveMember = project.members.some((member) => { return member.id === loggedUserId && member.confirmed === 1 && member.active === 1 && !member.leftIn })
 
   const iconVerifiedStyle = { width: rem(15), height: rem(15), marginLeft: '3px' }
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15) }
@@ -55,24 +51,6 @@ function ProjectPage () {
       <Box className='showOnlyInLargeScreen'>
         <Header page='project' />
       </Box>
-      {isActiveMember &&
-        <Affix position={{ bottom: 20, right: 20 }}>
-          <Button
-            color='primary'
-            leftSection={<IconSettings size={16} />}
-            rightSection={<Avatar
-              size='20'
-              fit='contain'
-              src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-40,w-40,c-maintain_ratio/'+project.picture : undefined}
-            />}
-            component='a'
-            href={`/dashboard/${project.username}`}
-            target='_blank'
-          >
-            Painel de Controle
-          </Button>
-        </Affix>
-      }
       <Container size='lg' px={isMobile ? 0 : undefined}>
         {!project.requesting && 
           <>
@@ -173,18 +151,19 @@ function ProjectPage () {
                       <Text size='sm' c='dimmed' mb={2}>
                         {project.typeName} {project.region && `· ${project.region} · ${project.country}`}
                       </Text>
-                      {isActiveMember &&
+                      {project.instagram &&
                         <Button 
                           size='xs' 
-                          variant='default' 
+                          variant='light'
+                          color='violet' 
                           mt={6} 
                           mb={2} 
-                          leftSection={<IconSettings size={14} />}
+                          leftSection={<IconBrandInstagram size={18} stroke={1.6} />}
                           component='a'
-                          href={`/dashboard/${project.username}`}
+                          href={`https://instagram.com/${project.instagram}`}
                           target='_blank'
                         >
-                          Gerenciar minha participação neste projeto
+                          Instagram
                         </Button>
                       }
                       <Avatar.Group spacing={8} mt={8} mb={6}>
@@ -202,7 +181,7 @@ function ProjectPage () {
                         {/* <Avatar size='30'>+5</Avatar> */}
                       </Avatar.Group>
                       {project.endDate && 
-                        <Alert mt={10} px={10} py={8} variant='light' color='red'>
+                        <Alert mt={10} px={10} py={8} variant='light' color='violet'>
                           <Text size='xs'>
                             {project.name} encerrou as atividades em {project.endDate}
                           </Text>
@@ -232,22 +211,19 @@ function ProjectPage () {
                         <Tabs.Tab value='opportunities'>
                           Oportunidades ({project.opportunities.total})
                         </Tabs.Tab>
-                        <Tabs.Tab value='events'>
+                        {/* <Tabs.Tab value='events'>
                           Eventos
-                        </Tabs.Tab>
-                        <Tabs.Tab value='videos'>
+                        </Tabs.Tab> */}
+                        {/* <Tabs.Tab value='videos'>
                           Videos
-                        </Tabs.Tab>
-                        <Tabs.Tab value='pictures'>
+                        </Tabs.Tab> */}
+                        {/* <Tabs.Tab value='pictures'>
                           Fotos
-                        </Tabs.Tab>
-                        {isActiveMember &&
+                        </Tabs.Tab> */}
+                        {(project.loggedUserIsActive && project.loggedUserIsAdmin) &&
                           <Tabs.Tab 
-                            value='dashboard' 
+                            value='dashboard'
                             leftSection={<IconSettings size={12} />}
-                            component='a'
-                            href={`/dashboard/${project.username}`}
-                            target='_blank'
                           >
                             Painel de Controle
                           </Tabs.Tab>
@@ -277,22 +253,19 @@ function ProjectPage () {
                             <Tabs.Tab value='opportunities'>
                               Oportunidades ({project.opportunities.total})
                             </Tabs.Tab>
-                            <Tabs.Tab value='events'>
+                            {/* <Tabs.Tab value='events'>
                               Eventos
-                            </Tabs.Tab>
-                            <Tabs.Tab value='videos'>
+                            </Tabs.Tab> */}
+                            {/* <Tabs.Tab value='videos'>
                               Videos
-                            </Tabs.Tab>
-                            <Tabs.Tab value='pictures'>
+                            </Tabs.Tab> */}
+                            {/* <Tabs.Tab value='pictures'>
                               Fotos
-                            </Tabs.Tab>
-                            {isActiveMember &&
+                            </Tabs.Tab> */}
+                            {(project.loggedUserIsActive && project.loggedUserIsAdmin) &&
                               <Tabs.Tab
                                 value='dashboard'
                                 leftSection={<IconSettings size={12} />}
-                                component='a'
-                                href={`/dashboard/${project.username}`}
-                                target='_blank'
                               >
                                 Painel de Controle
                               </Tabs.Tab>
@@ -568,22 +541,39 @@ function ProjectPage () {
                     </Grid> */}
                   </Card>
                 }
-                {activeTab === 'dashboard' &&
-                  <Card padding='lg' radius='md' withBorder className='mublinModule'>
-                    <Text ta='center' size='xs' mb='lg'>
-                      O Painel de Controle foi aberto em uma nova janelra
-                    </Text>
-                    <Center>
-                      <Button
-                        color='mublinColor'
-                        component='a'
-                        href={`/dashboard/${project.username}`}
-                        target='_blank'
-                        rightSection={<IconExternalLink size={14} />}
-                      >
-                        Abrir Painel de Controle
-                      </Button>
-                    </Center>
+                {(
+                  activeTab === 'dashboard' 
+                  && (project.loggedUserIsActive && project.loggedUserIsAdmin)
+                ) &&
+                  <Card mih={400} padding='lg' radius='md' withBorder className='mublinModule'>
+                    <Title fz='1.1rem' fw='580' mb={6}>Painel de Controle</Title>
+                    <Tabs mt={12} variant='outline' defaultValue='settings'>
+                      <Tabs.List>
+                        <Tabs.Tab value='settings' leftSection={<IconPencil size={12} />}>
+                          Editar dados
+                        </Tabs.Tab>
+                        <Tabs.Tab value='members' leftSection={<IconUsersGroup size={12} />}>
+                          Equipe
+                        </Tabs.Tab>
+                        <Tabs.Tab value='pictures' leftSection={<IconCamera size={12} />}>
+                          Foto de perfil
+                        </Tabs.Tab>
+                      </Tabs.List>
+
+                      <Tabs.Panel value='settings' pt={12}>
+                        <ProjectAdminEditInfos />
+                      </Tabs.Panel>
+
+                      <Tabs.Panel value='members' pt={12}>
+                        <ProjectDashboardAdminTeamPage />
+                      </Tabs.Panel>
+
+                      <Tabs.Panel value='pictures' pt={12}>
+                        <Text size='sm' c='dimmed' mt={12}>
+                          Não é possível atualizar a foto de perfil no momento
+                        </Text>
+                      </Tabs.Panel>
+                    </Tabs>
                   </Card>
                 }
               </Grid.Col>
