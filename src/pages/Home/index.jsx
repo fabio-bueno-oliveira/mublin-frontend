@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Link } from 'react-router-dom'
 import { miscInfos } from '../../store/actions/misc'
 import { userActions } from '../../store/actions/user'
-import { eventsActions } from '../../store/actions/events'
+// import { eventsActions } from '../../store/actions/events'
 import { searchInfos } from '../../store/actions/search'
 import { feedActions } from '../../store/actions/feed'
 import { userProjectsInfos } from '../../store/actions/userProjects'
 import { Container, ScrollArea, Center, Box, Flex, Card, Button, Title, Badge, Text, Grid, Skeleton, Avatar, Image, Anchor, Modal, rem, em } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { useDocumentTitle, useMediaQuery } from '@mantine/hooks'
 import { IconHexagonPlus, IconRosetteDiscountCheckFilled, IconClock } from '@tabler/icons-react'
 import UserCard from '../../components/userCard'
 import FeedCard from './FeedCard'
@@ -19,10 +19,11 @@ import HeaderMobile from '../../components/header/mobile'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import UserCardLoading from '../../components/userCard/loading'
 import NewPost from '../../pages/New/postStandalone'
-import { Helmet } from 'react-helmet'
 import { truncateString } from '../../utils/formatter'
 
 function Home () {
+
+  useDocumentTitle('Home | Mublin')
 
   let dispatch = useDispatch()
   let navigate = useNavigate()
@@ -40,7 +41,7 @@ function Home () {
   const projects = useSelector(state => state.userProjects)
   const search = useSelector(state => state.search)
   const feed = useSelector(state => state.feed)
-  const events = useSelector(state => state.events)
+  // const events = useSelector(state => state.events)
 
   // Modal New Post
   const openModalNewPost = () => {
@@ -54,7 +55,7 @@ function Home () {
     dispatch(userProjectsInfos.getUserProjects(loggedUserId, 'all'))
     dispatch(miscInfos.getFeed())
     dispatch(userActions.getUserRolesInfoById(loggedUserId))
-    dispatch(eventsActions.getUserEvents(loggedUserId))
+    // dispatch(eventsActions.getUserEvents(loggedUserId))
     dispatch(searchInfos.getSuggestedFeaturedUsers())
     dispatch(searchInfos.getSuggestedNewUsers())
     if (user.success && user.first_access !== 0) {
@@ -70,10 +71,6 @@ function Home () {
 
   return (
     <>
-      <Helmet>
-        <title>Home | Mublin</title>
-        <link rel='canonical' href='https://mublin.com/home' />
-      </Helmet>
       {isMobile && 
         <HeaderMobile page='home' reloadUserInfo />
       }
