@@ -1,17 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { miscInfos } from '../../store/actions/misc'
+import { projectInfos } from '../../store/actions/project'
 import { Grid, Group, Box, Center, Text, Skeleton, Loader, Button, TextInput, Textarea, NativeSelect, NumberInput, Checkbox } from '@mantine/core'
 import { useFetch } from '@mantine/hooks'
-import { useForm, isNotEmpty, isEmail, hasLength } from '@mantine/form'
+import { useForm, isNotEmpty, hasLength } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { IconBrandInstagram, IconBrandSoundcloud, IconBrandSpotify, IconLink } from '@tabler/icons-react'
 
-function ProjectAdminEditInfos () {
+function ProjectAdminEditInfos (props) {
 
+  const token = localStorage.getItem('token')
+  const dispatch = useDispatch()
   const project = useSelector(state => state.project)
+  const genresCategories = useSelector(state => state.musicGenres.categories)
+  const genres = useSelector(state => state.musicGenres)
+
+  const musicGenresList = genres?.list
+    .map(genre => ({ 
+      label: genre.name,
+      value: Number(genre.id),
+      categoryId: genre.categoryId
+    }));
 
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => { 
+    dispatch(miscInfos.getMusicGenres())
+    dispatch(miscInfos.getMusicGenresCategories())
+  }, [])
 
   const { data: projectTypes, loading: loadingProjectTypes } = useFetch(
     'https://mublin.herokuapp.com/projects/types'
@@ -75,9 +93,9 @@ function ProjectAdminEditInfos () {
         email: project.email,
         spotifyId: project.spotifyId,
         soundcloud: project.soundcloud,
-        genre1: project.genre1,
-        genre2: project.genre2,
-        genre3: project.genre3,
+        genre1: project.genre1Id,
+        genre2: project.genre2Id,
+        genre3: project.genre3Id,
         country: project.country,
         region: project.region,
         city: project.city, 
@@ -99,9 +117,9 @@ function ProjectAdminEditInfos () {
         email: project.email,
         spotifyId: project.spotifyId,
         soundcloud: project.soundcloud,
-        genre1: project.genre1,
-        genre2: project.genre2,
-        genre3: project.genre3,
+        genre1: project.genre1Id,
+        genre2: project.genre2Id,
+        genre3: project.genre3Id,
         country: project.country,
         region: project.region,
         city: project.city, 
@@ -112,42 +130,41 @@ function ProjectAdminEditInfos () {
   }, [project.success])
 
   const handleSubmit = (values) => {
-    // setIsLoading(true)
+    setIsLoading(true)
     setError(false)
-    // console.log(values)
-    notifications.show({
-      position: 'top-center',
-      color: 'red',
-      title: 'Ops!',
-      message: 'Não foi possível atualizar os dados no momento. Tente novamente em instantes!',
-    });
-    // fetch('https://mublin.herokuapp.com/user/updateProfile', {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Accept': 'application/json, text/plain, */*',
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer ' + token
-    //   },
-    //   body: JSON.stringify({userId: loggedUserId, name: values.name, lastname: values.lastname ? values.lastname : '', email: values.email, phone_mobile: values.phone ? values.phone : '', phone_mobile_public: values.phoneIsPublic ? 1 : 0, website: values.website ? values.website : '', instagram: values.instagram ? values.instagram : '', tiktok: values.tiktok ? values.tiktok : '', gender: values.gender, bio: values.bio ? values.bio : '', id_country_fk: Number(values.country), id_region_fk: Number(values.region), id_city_fk: Number(values.city), public: values.public ? 1 : 0})
-    // }).then((response) => {
-    //   response.json().then((response) => {
-    //     window.scrollTo(0, 0);
-    //     setError(false);
-    //     setIsLoading(false);
-    //     dispatch(userActions.getInfo());
-    //     notifications.show({
-    //       position: 'top-center',
-    //       color: 'green',
-    //       title: 'Pronto!',
-    //       message: 'Dados atualizados com sucesso',
-    //     });
-    //   })
-    // }).catch(err => {
-    //   window.scrollTo(0, 0);
-    //   setError(true);
-    //   setIsLoading(false);
-    //   console.error(err);
-    // })
+    fetch(`https://mublin.herokuapp.com/project/${props.username}/updateProjectInfos`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({projectId: project.id, activityStatus: values.activityStatus, kind: values.kind, type: values.type, name: values.name, slug: values.slug, foundationYear: values.foundationYear, endYear: values.endDate, bio: values.bio, purpose: values.purpose, website: values.website, instagram: values.instagram, email: values.email, spotifyId: values.spotifyId, soundcloud: values.soundcloud, genre1: Number(values.genre1), genre2: Number(values.genre2), genre3: Number(values.genre3), country: project.countryId, region: project.regionId, city: project.cityId, public: values.public ? 1 : 0, currentlyOnTour: values.currentlyOnTour ? 1 : 0})
+    }).then((response) => {
+      response.json().then((response) => {
+        window.scrollTo(0, 0);
+        setError(false);
+        setIsLoading(false);
+        dispatch(projectInfos.getProjectInfo(props.username))
+        notifications.show({
+          position: 'top-center',
+          color: 'green',
+          title: 'Pronto!',
+          message: 'Dados do projeto atualizados com sucesso',
+        });
+      })
+    }).catch(err => {
+      window.scrollTo(0, 0);
+      setError(true);
+      setIsLoading(false);
+      console.error(err);
+      notifications.show({
+        position: 'top-center',
+        color: 'red',
+        title: 'Ops!',
+        message: `Não foi possível atualizar os dados no momento. Tente novamente em instantes!. Detalhes: ${err}`,
+      });
+    })
   }
 
   const currentYear = new Date().getFullYear()
@@ -188,7 +205,7 @@ function ProjectAdminEditInfos () {
                 </NativeSelect>
                 <Checkbox
                   my={8}
-                  size='xs'
+                  size='sm'
                   color='mublinColor'
                   label='Em turnê atualmente'
                   disabled={form.getValues().activityStatus === 2 || form.getValues().activityStatus === "2"}
@@ -335,6 +352,77 @@ function ProjectAdminEditInfos () {
                   key={form.key('purpose')}
                   {...form.getInputProps('purpose')}
                 />
+                <Grid mt={8}>
+                  <Grid.Col span={4}>
+                    <NativeSelect
+                      withAsterisk
+                      label='Gênero 1'
+                      key={form.key('genre1')}
+                      {...form.getInputProps('genre1')}
+                    >
+                      <option value=''>
+                        {genres.requesting ? "Carregando..." : "Selecione"}
+                      </option>
+                      {genresCategories.map((category, key) => 
+                        <optgroup label={category.name_ptbr} key={key}>
+                          {musicGenresList
+                            .filter(e => e.categoryId === category.id)
+                            .map((genre, key) => 
+                              <option key={key} disabled={genre.disabled} value={genre.value}>
+                                {genre.label}
+                              </option>
+                          )}
+                        </optgroup>
+                      )}
+                    </NativeSelect>
+                  </Grid.Col>
+                  <Grid.Col span={4}>
+                    <NativeSelect
+                      withAsterisk
+                      label='Gênero 2'
+                      key={form.key('genre2')}
+                      {...form.getInputProps('genre2')}
+                    >
+                      <option value=''>
+                        {genres.requesting ? "Carregando..." : "Selecione"}
+                      </option>
+                      {genresCategories.map((category, key) => 
+                        <optgroup label={category.name_ptbr} key={key}>
+                          {musicGenresList
+                            .filter(e => e.categoryId === category.id)
+                            .map((genre, key) => 
+                              <option key={key} disabled={genre.disabled} value={genre.value}>
+                                {genre.label}
+                              </option>
+                          )}
+                        </optgroup>
+                      )}
+                    </NativeSelect>
+                  </Grid.Col>
+                  <Grid.Col span={4}>
+                    <NativeSelect
+                      withAsterisk
+                      label='Gênero 3'
+                      key={form.key('genre3')}
+                      {...form.getInputProps('genre3')}
+                    >
+                      <option value=''>
+                        {genres.requesting ? "Carregando..." : "Selecione"}
+                      </option>
+                      {genresCategories.map((category, key) => 
+                        <optgroup label={category.name_ptbr} key={key}>
+                          {musicGenresList
+                            .filter(e => e.categoryId === category.id)
+                            .map((genre, key) => 
+                              <option key={key} disabled={genre.disabled} value={genre.value}>
+                                {genre.label}
+                              </option>
+                          )}
+                        </optgroup>
+                      )}
+                    </NativeSelect>
+                  </Grid.Col>
+                </Grid>
                 <Grid mt={8}>
                   <Grid.Col span={4}>
                     <TextInput

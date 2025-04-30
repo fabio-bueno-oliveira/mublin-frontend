@@ -85,9 +85,9 @@ const theme = createTheme({
       },
     }),
   },
-  fontFamily: 'Geist, Helvetica, Arial, sans-serif',
-  fontFamilyMonospace: 'Geist, Helvetica, Arial, monospace',
-  headings: { fontFamily: 'Geist, Helvetica, Arial, sans-serif' }
+  fontFamily: '"Source Sans 3", Helvetica, Arial, sans-serif',
+  fontFamilyMonospace: '"Source Sans 3", Helvetica, Arial, monospace',
+  headings: { fontFamily: '"Lexend Deca", Helvetica, Arial, sans-serif' }
 })
 
 function App() {

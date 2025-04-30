@@ -5,7 +5,7 @@ import { projectInfos } from '../../store/actions/project'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, ScrollArea, Tabs, em, rem } from '@mantine/core'
 import { useMediaQuery, useScrollIntoView } from '@mantine/hooks'
-import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconLockSquareRoundedFilled } from '@tabler/icons-react'
+import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconLockSquareRounded } from '@tabler/icons-react'
 import Header from '../../components/header'
 import FooterMenuMobile from '../../components/footerMenuMobile'
 import { truncateString } from '../../utils/formatter'
@@ -103,9 +103,10 @@ function ProjectPage () {
                       />
                       <Button
                         size='xs'
+                        hiddenFrom='sm'
                         mb={2}
                         variant='filled'
-                        color='mublinColor'
+                        color='primary'
                         onClick={() => {
                           setActiveTab('dashboard');
                           scrollIntoView({alignment: 'start'})
@@ -172,7 +173,7 @@ function ProjectPage () {
                         <Button 
                           size='xs' 
                           variant='light'
-                          color='violet' 
+                          color='pink' 
                           mt={6} 
                           mb={2} 
                           leftSection={<IconBrandInstagram size={18} stroke={1.6} />}
@@ -181,6 +182,22 @@ function ProjectPage () {
                           target='_blank'
                         >
                           Instagram
+                        </Button>
+                      }
+                      {project.soundcloud &&
+                        <Button 
+                          size='xs' 
+                          variant='light'
+                          color='orange' 
+                          mt={6}
+                          mb={2}
+                          ml={4}
+                          leftSection={<IconBrandSoundcloud size={18} stroke={1.6} />}
+                          component='a'
+                          href={`https://soundcloud.com/${project.soundcloud}`}
+                          target='_blank'
+                        >
+                          Soundcloud
                         </Button>
                       }
                       <Avatar.Group spacing={8} mt={8} mb={6}>
@@ -198,7 +215,7 @@ function ProjectPage () {
                         {/* <Avatar size='30'>+5</Avatar> */}
                       </Avatar.Group>
                       {project.endDate && 
-                        <Alert mt={10} px={10} py={8} variant='light' color='violet'>
+                        <Alert mt={10} px={10} py={8} variant='light' color='primary'>
                           <Text size='xs'>
                             {project.name} encerrou as atividades em {project.endDate}
                           </Text>
@@ -240,7 +257,6 @@ function ProjectPage () {
                         {(project.loggedUserIsActive && project.loggedUserIsAdmin) &&
                           <Tabs.Tab 
                             value='dashboard'
-                            leftSection={<IconSettings size={12} />}
                           >
                             Painel de Controle
                           </Tabs.Tab>
@@ -420,23 +436,31 @@ function ProjectPage () {
                       Oportunidades em {project.name}
                     </Title>
                     <Text size='sm' mb={18}>
-                      Participações em aberto neste projeto
+                      Vagas em aberto para participar de gigs com este projeto
                     </Text>
                     {project.opportunities.total === 0 ? (
                       <Text size='sm' c='dimmed'>
                         Nenhuma oportunidade no momento
                       </Text>
                     ) : (
-                      <Flex direction='column' gap={10}>
+                      <Flex direction='column' gap={8}>
                         {project.opportunities.result.map(item => 
-                          <Card key={item.id} radius='md' withBorder p='xs' bg='transparent'>
-                            <Flex gap={10}>
+                          <Card 
+                            key={item.id} 
+                            radius='md' 
+                            withBorder 
+                            p='xs' 
+                            bg='transparent'
+                            component='a'
+                            href={`/job?id=${item.id}`}
+                          >
+                            <Flex gap={6}>
                               <Image
                                 radius='md'
-                                h={70}
+                                h={50}
                                 w='auto'
                                 fit='contain'
-                                src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-140,w-140,c-maintain_ratio/'+project.picture : undefined}
+                                src={project.picture ? 'https://ik.imagekit.io/mublin/projects/tr:h-100,w-100,c-maintain_ratio/'+project.picture : undefined}
                                 style={{border:'3px solid white'}}
                               />
                               <Flex direction='column'>
@@ -567,7 +591,7 @@ function ProjectPage () {
                       <Title fz='0.9rem' fw='620'>
                         Painel de Controle
                       </Title>
-                      <IconLockSquareRoundedFilled size={22} color="gray" /> 
+                      <IconLockSquareRounded size={28} stroke={1.5} /> 
                     </Group>
                     <Tabs mt={12} variant='outline' defaultValue='settings'>
                       <Tabs.List>
@@ -586,11 +610,11 @@ function ProjectPage () {
                       </Tabs.List>
 
                       <Tabs.Panel value='settings' pt={12}>
-                        <ProjectAdminEditInfos />
+                        <ProjectAdminEditInfos username={username} />
                       </Tabs.Panel>
 
                       <Tabs.Panel value='members' pt={12}>
-                        <ProjectDashboardAdminTeamPage />
+                        <ProjectDashboardAdminTeamPage username={username} />
                       </Tabs.Panel>
 
                       <Tabs.Panel value='pictures' pt={12}>
