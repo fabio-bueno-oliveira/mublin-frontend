@@ -47,7 +47,7 @@ function ProjectDashboardAdminTeamPage () {
   }
 
   const [isLoading, setIsLoading] = useState(null)
-  const updateMemberRequest = (memberId, responseToRequest) => {
+  const updateMemberRequest = (idRequest, memberId, responseToRequest) => {
     setIsLoading(responseToRequest)
     fetch(`https://mublin.herokuapp.com/project/${project.id}/updateMemberRequest`, {
       method: 'PUT',
@@ -56,7 +56,9 @@ function ProjectDashboardAdminTeamPage () {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({userId: memberId, requestResponse: responseToRequest})
+      body: JSON.stringify(
+        {requestId: idRequest, userId: memberId, requestResponse: responseToRequest}
+      )
     }).then((response) => {
         response.json().then((response) => {
           dispatch(projectInfos.getProjectMembers(username))
@@ -107,9 +109,46 @@ function ProjectDashboardAdminTeamPage () {
     })
   }
 
+  const [isRemovingMember, setIsRemovingMember] = useState(false)
+  const removeMemberFromProject = (memberId) => {
+    setIsRemovingMember(true)
+    fetch(`https://mublin.herokuapp.com/projects/${project.id}/removeMember`, {
+      method: 'DELETE',
+      headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({userId: memberId})
+    })
+      .then((response) => {
+        setIsRemovingMember(false)
+        setModalMemberManagementOpen(false)
+        dispatch(projectInfos.getProjectMembers(username))
+        notifications.show({
+          autoClose: 3000,
+          position: 'top-center',
+          color: 'red',
+          title: 'Beleza!',
+          message: `O usuário foi removido do projeto`,
+        })
+      }).catch(err => {
+        setIsRemovingMember(false)
+        setModalMemberManagementOpen(false)
+        console.error(err)
+        notifications.show({
+          autoClose: 3000,
+          position: 'top-center',
+          color: 'red',
+          title: 'Deu ruim...',
+          message: `Não foi possível remover o usuário no momento. Tente novamente em instantes`,
+        })
+      })
+  }
+
   return (
     <>
-      {project.requesting ? (
+      {project.requestingMembers ? (
         <>
           <Skeleton w={280} h={26} radius='xl' />
           <Skeleton w={190} h={18} radius='xl' mt={6} />
@@ -124,7 +163,7 @@ function ProjectDashboardAdminTeamPage () {
               Pessoas aguardando aprovação:
             </Title>
             {pendingMembers.length ? (
-              <Flex gap={10}>
+              <Flex direction='column' gap={10}>
                 {pendingMembers.map(member =>
                   <Card key={member.id} radius='md' withBorder p={10} w='100%' className='mublinModule'>
                     <Group gap={10}>
@@ -146,7 +185,7 @@ function ProjectDashboardAdminTeamPage () {
                             color='lime'
                             leftSection={<IconCheck size={14} />}
                             disabled={!project.loggedUserIsAdmin ? true : false}
-                            onClick={() => updateMemberRequest(member.id, 1)}
+                            onClick={() => updateMemberRequest(member.idFk, member.id, 1)}
                             loading={isLoading === 1}
                           >
                             Aprovar
@@ -156,7 +195,7 @@ function ProjectDashboardAdminTeamPage () {
                             color='red'
                             leftSection={<IconX size={14} />}
                             disabled={!project.loggedUserIsAdmin ? true : false}
-                            onClick={() => updateMemberRequest(member.id, 0)}
+                            onClick={() => updateMemberRequest(member.idFk, member.id, 0)}
                             loading={isLoading === 0}
                           >
                             Declinar
@@ -284,7 +323,6 @@ function ProjectDashboardAdminTeamPage () {
         opened={modalMemberManagement}
         onClose={() => setModalMemberManagementOpen(false)}
         title='Gerenciar membro do projeto'
-        d
       >
         {memberInfo.map(memberToManage => 
           <Box key={memberToManage.id}>
@@ -351,8 +389,17 @@ function ProjectDashboardAdminTeamPage () {
             }
             {memberToManage.id !== user.id && 
               <>
-                <Divider mt={22} mb={8} />
-                <Button variant='light' fullWidth size='xs' color='red' mt={4} disabled={(project.loggedUserIsAdmin) ? false : true}>
+                <Divider label='Remover este usuário' mt={22} mb={8} />
+                <Button
+                  variant='light'
+                  fullWidth
+                  size='xs'
+                  color='red'
+                  mt={4}
+                  disabled={(project.loggedUserIsAdmin) ? false : true}
+                  onClick={() => removeMemberFromProject(memberToManage.id)}
+                  loading={isRemovingMember}
+                >
                   Desassociar {memberToManage.name+' '+memberToManage.lastname}
                 </Button>
               </>

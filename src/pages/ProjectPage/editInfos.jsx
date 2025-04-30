@@ -139,31 +139,43 @@ function ProjectAdminEditInfos (props) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({projectId: project.id, activityStatus: values.activityStatus, kind: values.kind, type: values.type, name: values.name, slug: values.slug, foundationYear: values.foundationYear, endYear: values.endDate, bio: values.bio, purpose: values.purpose, website: values.website, instagram: values.instagram, email: values.email, spotifyId: values.spotifyId, soundcloud: values.soundcloud, genre1: Number(values.genre1), genre2: Number(values.genre2), genre3: Number(values.genre3), country: project.countryId, region: project.regionId, city: project.cityId, public: values.public ? 1 : 0, currentlyOnTour: values.currentlyOnTour ? 1 : 0})
+      body: JSON.stringify({projectId: project.id, activityStatus: values.activityStatus, kind: values.kind, type: values.type, name: values.name, slug: values.slug ? values.slug.toLowerCase() : '', foundationYear: values.foundationYear, endYear: values.endDate, bio: values.bio, purpose: values.purpose, website: values.website, instagram: values.instagram, email: values.email, spotifyId: values.spotifyId, soundcloud: values.soundcloud, genre1: Number(values.genre1), genre2: Number(values.genre2), genre3: Number(values.genre3), country: project.countryId, region: project.regionId, city: project.cityId, public: values.public ? 1 : 0, currentlyOnTour: values.currentlyOnTour ? 1 : 0})
     }).then((response) => {
       response.json().then((response) => {
-        window.scrollTo(0, 0);
-        setError(false);
-        setIsLoading(false);
+        window.scrollTo(0, 0)
+        setError(false)
+        setIsLoading(false)
         dispatch(projectInfos.getProjectInfo(props.username))
-        notifications.show({
-          position: 'top-center',
-          color: 'green',
-          title: 'Pronto!',
-          message: 'Dados do projeto atualizados com sucesso',
-        });
+        if (response?.success) {
+          notifications.show({
+            autoClose: 3000,
+            position: 'top-center',
+            color: 'green',
+            title: 'Pronto!',
+            message: 'Dados do projeto atualizados com sucesso',
+          })
+        } else {
+          notifications.show({
+            autoClose: 3000,
+            position: 'top-center',
+            color: 'red',
+            title: 'Ops...',
+            message: `Algo deu errado. Tente novamente em instantes. [Detalhes do erro: ${response?.error}. Código do erro: ${response?.errorCode}]`,
+          })
+        }
       })
     }).catch(err => {
-      window.scrollTo(0, 0);
-      setError(true);
-      setIsLoading(false);
-      console.error(err);
+      window.scrollTo(0, 0)
+      setError(true)
+      setIsLoading(false)
+      console.error(err)
       notifications.show({
+        autoClose: 3000,
         position: 'top-center',
         color: 'red',
         title: 'Ops!',
         message: `Não foi possível atualizar os dados no momento. Tente novamente em instantes!. Detalhes: ${err}`,
-      });
+      })
     })
   }
 

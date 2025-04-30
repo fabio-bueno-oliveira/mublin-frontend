@@ -2,6 +2,7 @@ import { projectTypes } from '../types/project';
 
 const initialState = {
   requesting: false,
+  requestingMembers: false,
   success: false,
   loggedUserIsAdmin: 0,
   loggedUserIsLeader: '',
@@ -50,6 +51,7 @@ const initialState = {
   website: '',
   members: [
     {
+      idFk: '',
       id: '',
       joinedIn: '',
       leftIn: '',
@@ -308,20 +310,20 @@ export function project(state = initialState, action) {
     case projectTypes.GET_PROJECT_MEMBERS_REQUEST:
       return {
         ...state,
-        requesting: true,
+        requestingMembers: true,
         error: '',
         members: initialState.members
       };
     case projectTypes.GET_PROJECT_MEMBERS_SUCCESS:
       return {
         ...state,
-        requesting: false,
+        requestingMembers: false,
         members: action.list,
       };
     case projectTypes.GET_PROJECT_MEMBERS_FAILURE:
       return {
         ...state,
-        requesting: false,
+        requestingMembers: false,
         error: "A solicitação falhou",
         members: initialState.members
       };
