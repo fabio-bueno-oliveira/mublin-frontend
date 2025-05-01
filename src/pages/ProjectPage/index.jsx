@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
+import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { projectInfos } from '../../store/actions/project'
 import { miscInfos } from '../../store/actions/misc'
 import { useDispatch, useSelector } from 'react-redux'
-import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, ScrollArea, Tabs, em, rem, Drawer, Divider, Center, Radio, NativeSelect, NumberInput, Checkbox } from '@mantine/core'
+import { Container, Grid, Card, Box, Flex, Group, Badge, Alert, Title, Spoiler, Text, Image, Skeleton, Avatar, Anchor, Button, Indicator, ScrollArea, Tabs, em, rem, Modal, Drawer, Divider, Center, Radio, NativeSelect, NumberInput, Checkbox } from '@mantine/core'
 import { useForm, isNotEmpty } from '@mantine/form'
 import { useMediaQuery, useScrollIntoView } from '@mantine/hooks'
 import { IconSettings, IconBrandInstagram, IconBrandSoundcloud, IconShieldCheckFilled, IconRosetteDiscountCheckFilled, IconMusic, IconMail, IconPhone, IconLockSquareRounded, IconClock, IconUserUp, IconIdBadge2 } from '@tabler/icons-react'
@@ -22,6 +23,8 @@ function ProjectPage () {
   const token = localStorage.getItem('token')
   const params = useParams()
   const username = params?.username
+  const navigate = useNavigate()
+
   const project = useSelector(state => state.project)
   const user = useSelector(state => state.user)
   const roles = useSelector(state => state.roles)
@@ -135,12 +138,50 @@ function ProjectPage () {
     }).then((response) => {
       dispatch(projectInfos.getProjectInfo(username))
       dispatch(projectInfos.getProjectMembers(username))
+      dispatch(projectInfos.getProjectAdminAccessInfo(username))
       setIsSubmitting(false)
       setModalParticipationOpen(false)
     }).catch(err => {
       console.error(err)
       setIsSubmitting(false)
       alert("Ocorreu um erro ao solicitar associação a este projeto. Tente novamente em alguns minutos.")
+    })
+  }
+
+  // Delete project
+  const [modalConfirmDeleteProject, setModalConfirmDeleteProject] = useState(false)
+
+  const handleDeleteProject = () => {
+    setIsSubmitting(true)
+    fetch(`https://mublin.herokuapp.com/projects/${project.id}/delete`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      }
+    })
+    .then((response) => {
+      setIsSubmitting(false)
+      setModalConfirmDeleteProject(false)
+      notifications.show({
+        autoClose: 2000,
+        title: 'Certo!',
+        message: 'O projeto foi deletado',
+        color: 'lime',
+        position: 'top-center'
+      })
+      navigate("/home")
+    }).catch(err => {
+      console.error(err)
+      setIsSubmitting(false)
+      notifications.show({
+        autoClose: 2000,
+        title: 'Ops',
+        message: 'Ocorreu um erro ao deletar a nota',
+        color: 'red',
+        position: 'top-center'
+      })
     })
   }
 
@@ -378,7 +419,7 @@ function ProjectPage () {
                         {/* <Tabs.Tab value='pictures'>
                           Fotos
                         </Tabs.Tab> */}
-                        {!!(project.loggedUserIsActive && project.loggedUserIsAdmin) &&
+                        {!!project.loggedUserIsAdmin &&
                           <Tabs.Tab 
                             value='dashboard'
                           >
@@ -419,7 +460,7 @@ function ProjectPage () {
                             {/* <Tabs.Tab value='pictures'>
                               Fotos
                             </Tabs.Tab> */}
-                            {(project.loggedUserIsActive && project.loggedUserIsAdmin) &&
+                            {!!project.loggedUserIsAdmin &&
                               <Tabs.Tab
                                 value='dashboard'
                                 leftSection={<IconSettings size={12} />}
@@ -707,8 +748,7 @@ function ProjectPage () {
                   </Card>
                 }
                 {(
-                  activeTab === 'dashboard' 
-                  && (project.loggedUserIsActive && project.loggedUserIsAdmin)
+                  activeTab === 'dashboard' && project.loggedUserIsAdmin
                 ) &&
                   <Card mih={400} padding='lg' radius='md' withBorder className='mublinModule'>
                     <Group gap={3} mb={8}>
@@ -751,6 +791,9 @@ function ProjectPage () {
                         <Text size='sm' c='dimmed' mt={12}>
                           Outras configurações:
                         </Text>
+                        <Button color='red' onClick={() => setModalConfirmDeleteProject(true)}>
+                          Deletar este projeto
+                        </Button>
                       </Tabs.Panel>
                     </Tabs>
                   </Card>
@@ -760,7 +803,7 @@ function ProjectPage () {
                 <Grid.Col span={{ base: 12, md: 3, lg: 3 }}>
                   <Card px='md' py='md' radius='md' withBorder className='mublinModule'>
                     <Title fz='1.0rem' fw='640' mb={16}>Pessoas neste projeto</Title>
-                    {members.length > 0 ? ( 
+                    {(members.length > 0 || pastMembers.length > 0) ? ( 
                       <Flex direction='column' gap={18}>
                         {members.map(member => 
                           <Box key={member.id}>
@@ -1038,6 +1081,31 @@ function ProjectPage () {
           </Group>
         </form>
       </Drawer>
+      <Modal
+        withCloseButton={false}
+        opened={modalConfirmDeleteProject}
+        onClose={() => setModalConfirmDeleteProject(false)}
+        size='sm'
+        centered
+      >
+        <Text fw={600}>
+          Tem certeza que deseja deletar este projeto?
+        </Text>
+        <Text size='sm' my={10}>
+          Esta ação não poderá ser desfeita. Você perderá todos os dados do projeto, além de informações relacionadas. O projeto irá ser removido do Mublin.
+        </Text>
+        <Text size='xs'>
+          Caso mude de ideia, outro cadastro com este mesmo nome poderá ser feito futuramente
+        </Text>
+        <Group justify='flex-end' gap={7} mt={20}>
+          <Button variant='outline' color='gray' size='sm' onClick={() => setModalConfirmDeleteProject(false)}>
+            Cancelar
+          </Button>
+          <Button color='red' size='sm' onClick={() => handleDeleteProject(noteToDelete)} loading={isSubmitting}>
+            {`Deletar ${project.name}`}
+          </Button>
+        </Group>
+      </Modal>
     </>
   )
 }
