@@ -4,12 +4,12 @@ import { useSelector } from 'react-redux'
 import Header from '../../components/header/public'
 import Footer from '../../components/footer/public'
 import { useMantineColorScheme, Container, Center, Avatar, Flex, Box, Text, Title, Button, Grid, Image, Anchor, rem, em } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { useMediaQuery, useFetch } from '@mantine/hooks'
 import { Helmet } from 'react-helmet'
 import { 
   IconAutomaticGearbox,
   IconCalendarSmile,
-  IconPlaylist,
+  IconGuitarPick,
   IconUserSearch,
   IconLayoutDashboard,
   IconArrowRight,
@@ -33,6 +33,10 @@ function LandingPage () {
   const iconLegendStyle = { color: '#DAA520', width: rem(15), height: rem(15), marginLeft: '1px' }
 
   const [featuredUsers, setFeaturedUsers] = useState([])
+  
+  const { data: featuredBrands, loading: loadingFeaturedBrands } = useFetch(
+    'https://mublin.herokuapp.com/home/featuredBrands'
+  );
 
   useEffect(() => {
     setColorScheme('light');
@@ -57,7 +61,7 @@ function LandingPage () {
         <link rel='canonical' href='https://mublin.com' />
         <meta 
           name='description' 
-          content='Gerencie seus projetos de música e conecte-se com artistas e produtores do mercado musical' 
+          content='Gerencie seus projetos de música, cadastre seus equipamentos e conecte-se com artistas e produtores do mercado musical' 
         />
       </Helmet>
       {loggedIn &&
@@ -72,14 +76,14 @@ function LandingPage () {
       </Box>
       <Header />
       <Box component='main' id='landing'>
-        <Container size='sm' my={50}>
+        <Container size='xs' my={50}>
           <Title 
             size='1.9rem'
             fw='750'
             ta='center'
             mb={8}
           >
-            Gerencie seus projetos de <Text span variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 90 }} size='2rem' fw='750'>música</Text>
+            Cadastre seus equipamentos e <nobr>projetos de <Text span variant="gradient" gradient={{ from: 'indigo', to: 'grape', deg: 90 }} size='2rem' fw='750'>música</Text></nobr>
           </Title>
           <Text 
             size='md'
@@ -87,7 +91,7 @@ function LandingPage () {
             ta='center' 
             fw='400'
           >
-            Cadastre seus projetos e equipamentos. Consiga novas gigs e conecte com produtores, artistas e pessoas do mercado musical
+            Compartilhe seus setups, toque em mais gigs e conecte com produtores, artistas e pessoas do mercado musical
           </Text>
           <Center>
             <Link to={{ pathname: '/signup' }}>
@@ -110,6 +114,42 @@ function LandingPage () {
             </Text>
           </Anchor>
         </Container>
+        <Title 
+          size='1.2rem'
+          fw='600'
+          ta='center'
+          mb={14}
+          mt={30}
+        >
+          Centenas de marcas cadastradas
+        </Title>
+        <Marquee speed={30}>
+          {featuredBrands?.map(brand =>
+            <Flex
+              key={brand.id}
+              w='110px'
+              h='110px'
+              direction='column'
+            >
+              <Center mb={5}>
+                <Image
+                  src={brand.logo ? `https://ik.imagekit.io/mublin/products/brands/tr:h-120,w-120,cm-pad_resize,bg-FFFFFF/${brand.logo}` : 'https://placehold.co/110x110?text=Carregando...'}
+                  style={{boxShadow:'2px 2px 7px rgba(0,0,0,0.15)',}}
+                  withBorder
+                  radius='lg'
+                  h={60}
+                  w={60}
+                  alt={brand.name}
+                />
+              </Center>
+              <Flex gap={0} align='center' justify='center' mb={0}>
+                <Text c='black' size='12px' fw='500' ta='center'>
+                  {brand.name}
+                </Text>
+              </Flex>
+            </Flex>
+          )}
+        </Marquee>
         <Marquee>
           {featuredUsers?.map((user, key) =>
             <Flex 
@@ -170,8 +210,8 @@ function LandingPage () {
             </Grid.Col>
             <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
               <Flex align='center' gap={4}>
-                <IconPlaylist size={40} color="#252525" />
-                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Confira a playlist dos eventos</Text>
+                <IconGuitarPick size={40} color="#252525" />
+                <Text c="#252525" size={isMobile ? "13px" : "16px"}>Veja setups dos seus ídolos</Text>
               </Flex>
             </Grid.Col>
             <Grid.Col span={{ base: 6, md: 6, lg: 4 }}>
