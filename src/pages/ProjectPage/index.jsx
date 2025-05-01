@@ -14,7 +14,7 @@ import { truncateString } from '../../utils/formatter'
 import { formatDistance } from 'date-fns'
 import pt from 'date-fns/locale/pt-BR'
 import ProjectAdminEditInfos from './editInfos'
-import ProjectDashboardAdminTeamPage from './members'
+import ProjectDashboardAdminTeamPage from './editMembers'
 import './styles.scss'
 
 function ProjectPage () {
